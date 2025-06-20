@@ -1,97 +1,407 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nikit Hamal - Portfolio</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Nikit Hamal</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons: Material Symbols & Feather Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Font: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-light': '#7C3AED', // Light mode primary (Vibrant Purple)
+                        'secondary-light': '#64748B', // Light mode secondary text
+                        'background-light': '#F8FAFC', // Light mode background
+                        'card-light': '#FFFFFF', // Light mode card background
+
+                        'primary-dark': '#A78BFA', // Dark mode primary (Lighter Purple)
+                        'secondary-dark': '#94A3B8', // Dark mode secondary text
+                        'background-dark': '#0F172A', // Dark mode background
+                        'card-dark': '#1E293B', // Dark mode card background
+                        'border-dark': '#334155',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        backgroundShine: {
+                           'from': { backgroundPosition: '0 0' },
+                           'to': { backgroundPosition: '-200% 0' }
+                        }
+                    },
+                    animation: {
+                        'fadeInUp': 'fadeInUp 0.8s ease-out forwards',
+                        'background-shine': 'backgroundShine 2s linear infinite'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* General styling for smooth transitions and modern look */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            margin-top: 12px;
+            border-radius: 2px;
+            background-color: theme('colors.primary-light');
+        }
+
+        .dark .section-title::after {
+            background-color: theme('colors.primary-dark');
+        }
+
+        /* Gradient shine effect for buttons */
+        .btn-shine {
+            background: linear-gradient(110deg, #1E293B 25%, #334155 50%, #1E293B 75%);
+            background-size: 200% 100%;
+            animation: backgroundShine 3s linear infinite;
+        }
+
+        .light .btn-shine {
+            background: linear-gradient(110deg, #FFFFFF 25%, #F1F5F9 50%, #FFFFFF 75%);
+            background-size: 200% 100%;
+            animation: backgroundShine 3s linear infinite;
+        }
+
+        /* Mobile Nav Transition */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>Nikit Hamal</h1>
-        <nav>
-            <ul>
-                <li><a href="#home"><span class="material-icons">home</span> Home</a></li>
-                <li><a href="#about"><span class="material-icons">person</span> About Me</a></li>
-                <li><a href="#projects"><span class="material-icons">work</span> Projects</a></li>
-                <li><a href="#skills"><span class="material-icons">construction</span> Skills</a></li>
-                <li><a href="#contact"><span class="material-icons">email</span> Contact</a></li>
-            </ul>
+
+<body class="bg-background-light dark:bg-background-dark text-secondary-light dark:text-secondary-dark font-sans transition-colors duration-300">
+
+    <!-- ===== HEADER ===== -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="header">
+        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-slate-800 dark:text-white">
+                N<span class="text-primary-light dark:text-primary-dark">.</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors">About</a>
+                <a href="#skills" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors">Skills</a>
+                <a href="#work" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors">Work</a>
+                <a href="#contact" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors">Contact</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <i data-feather="moon" class="dark:hidden"></i>
+                    <i data-feather="sun" class="hidden dark:block"></i>
+                </button>
+                <button id="menu-toggle" class="md:hidden p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <i data-feather="menu"></i>
+                </button>
+            </div>
         </nav>
     </header>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-background-light dark:bg-background-dark z-40 transform -translate-x-full md:hidden">
+        <div class="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
+            <a href="#about" class="mobile-link hover:text-primary-light dark:hover:text-primary-dark transition-colors">About</a>
+            <a href="#skills" class="mobile-link hover:text-primary-light dark:hover:text-primary-dark transition-colors">Skills</a>
+            <a href="#work" class="mobile-link hover:text-primary-light dark:hover:text-primary-dark transition-colors">Work</a>
+            <a href="#contact" class="mobile-link hover:text-primary-light dark:hover:text-primary-dark transition-colors">Contact</a>
+             <button id="close-menu" class="absolute top-7 right-6 p-2">
+                 <i data-feather="x"></i>
+             </button>
+        </div>
+    </div>
 
-    <main>
-        <section id="home">
-            <h2>Welcome to My Portfolio</h2>
-            <p>Creative & Innovative Developer | 18 Years Old | From Nepal</p>
-            <a href="#projects" class="cta-button">View My Work</a>
-        </section>
 
-        <section id="about">
-            <h2>About Me</h2>
-            <p>My name is Nikit Hamal, an 18-year-old aspiring developer from Nepal. I am passionate about creating modern and innovative solutions. I am constantly learning and exploring new technologies to build amazing things.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </section>
-
-        <section id="projects">
-            <h2><span class="material-icons">work</span> My Projects</h2>
-            <div class="project-cards-container">
-                <div class="project-card">
-                    <h3>Project Title 1</h3>
-                    <p>Brief description of the project. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    <a href="#">View Project</a> | <a href="#">GitHub Repo</a>
+    <main class="container mx-auto px-6">
+        <!-- ===== HERO ===== -->
+        <section id="home" class="min-h-screen flex items-center pt-24">
+            <div class="w-full text-center md:text-left">
+                <div class="animate-fadeInUp" style="animation-delay: 100ms;">
+                    <h2 class="text-xl md:text-2xl text-primary-light dark:text-primary-dark font-medium">Hello, I'm Nikit Hamal.</h2>
                 </div>
-                <div class="project-card">
-                    <h3>Project Title 2</h3>
-                    <p>Brief description of the project. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    <a href="#">View Project</a> | <a href="#">GitHub Repo</a>
+                <div class="animate-fadeInUp" style="animation-delay: 300ms;">
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 dark:text-white mt-2">
+                        Creative Technologist
+                    </h1>
                 </div>
-                <div class="project-card">
-                    <h3>Project Title 3</h3>
-                    <p>Brief description of the project. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    <a href="#">View Project</a> | <a href="#">GitHub Repo</a>
+                 <div class="animate-fadeInUp" style="animation-delay: 500ms;">
+                    <p class="max-w-3xl mx-auto md:mx-0 mt-6 text-lg md:text-xl text-secondary-light dark:text-secondary-dark">
+                       I design and build beautiful, responsive, and meaningful digital experiences. Blending technology with art, philosophy, and creative writing from my home in Nepal.
+                    </p>
+                </div>
+                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start animate-fadeInUp" style="animation-delay: 700ms;">
+                     <a href="#work" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-primary-light rounded-xl overflow-hidden transition-all duration-300 ease-in-out hover:bg-primary-light/90">
+                        View My Work
+                    </a>
+                    <a href="#contact" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-slate-800 dark:text-white bg-card-light dark:bg-card-dark border border-slate-200 dark:border-border-dark rounded-xl transition-all duration-300 ease-in-out hover:bg-slate-100 dark:hover:bg-slate-800">
+                        Get In Touch
+                    </a>
                 </div>
             </div>
         </section>
 
-        <section id="skills">
-            <h2>Skills</h2>
-            <p>I have experience with the following technologies:</p>
-            <ul>
-                <li><span class="material-icons">settings_ethernet</span> HTML5</li>
-                <li><span class="material-icons">brush</span> CSS3</li>
-                <li><span class="material-icons">code</span> JavaScript</li>
-                <li><span class="material-icons">terminal</span> Python</li>
-                <li><span class="material-icons">emoji_objects</span> Problem Solving</li>
-                <li><span class="material-icons">palette</span> Creativity</li>
-            </ul>
+        <!-- ===== ABOUT ===== -->
+        <section id="about" class="py-24">
+            <div class="animate-fadeInUp">
+                <h2 class="section-title text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-16">About Me</h2>
+            </div>
+            <div class="grid md:grid-cols-5 gap-12 items-start">
+                <div class="md:col-span-3 animate-fadeInUp" style="animation-delay: 200ms;">
+                    <div class="space-y-4 text-lg">
+                        <p>I'm Nikit Hamal, an 18-year-old creative technologist, writer, and philosopher. As a multidisciplinary creator, I bridge the worlds of technology and art to build meaningful digital experiences.</p>
+                        <p>My journey began with a curiosity about how things work, evolving into a passion for crafting elegant solutions to complex problems. I specialize in web and Android development, with a keen eye for UI/UX design and a love for creating things that are not only functional but also beautiful and intuitive.</p>
+                        <p>Beyond code, I explore the intersection of technology and humanity, pondering philosophical questions through poetry and prose. I believe technology should serve humanity, and I strive to create work that reflects that belief.</p>
+                    </div>
+                </div>
+                <div class="md:col-span-2 animate-fadeInUp" style="animation-delay: 400ms;">
+                    <div class="w-full h-80 rounded-2xl bg-slate-200 dark:bg-card-dark p-4">
+                        <img src="https://placehold.co/400x320/7C3AED/FFFFFF?text=Nikit+H.&font=jakarta" alt="Nikit Hamal" class="w-full h-full object-cover rounded-xl"/>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section id="contact">
-            <h2>Get in Touch</h2>
-            <p>Feel free to reach out! You can contact me via <a href="mailto:nikit.hamal.np@gmail.com"><span class="material-icons">email</span> nikit.hamal.np@gmail.com</a> or connect with me on social media.</p>
-
-            <form action="#" method="POST" class="contact-form">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
+        <!-- ===== SKILLS ===== -->
+        <section id="skills" class="py-24">
+            <div class="animate-fadeInUp">
+                <h2 class="section-title text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-16">My Toolkit</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Languages -->
+                <div class="bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark animate-fadeInUp" style="animation-delay: 200ms;">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="material-symbols-outlined text-primary-light dark:text-primary-dark text-3xl">code</span>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Languages</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="skill-badge">HTML5</span><span class="skill-badge">CSS3</span><span class="skill-badge">JavaScript (ES6+)</span><span class="skill-badge">Java</span><span class="skill-badge">Python</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                <!-- Frameworks -->
+                <div class="bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark animate-fadeInUp" style="animation-delay: 400ms;">
+                     <div class="flex items-center gap-4 mb-4">
+                        <span class="material-symbols-outlined text-primary-light dark:text-primary-dark text-3xl">layers</span>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Frameworks</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="skill-badge">React</span><span class="skill-badge">Node.js</span><span class="skill-badge">Tailwind CSS</span><span class="skill-badge">Android SDK</span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
+                <!-- Tools -->
+                <div class="bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark animate-fadeInUp" style="animation-delay: 600ms;">
+                     <div class="flex items-center gap-4 mb-4">
+                        <span class="material-symbols-outlined text-primary-light dark:text-primary-dark text-3xl">construction</span>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Tools & Platforms</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="skill-badge">Git & GitHub</span><span class="skill-badge">Firebase</span><span class="skill-badge">Figma</span><span class="skill-badge">Android Studio</span><span class="skill-badge">VS Code</span>
+                    </div>
                 </div>
-                <button type="submit" class="cta-button">Send Message</button>
-            </form>
+            </div>
+            <style>.skill-badge { background-color: rgba(124, 58, 237, 0.1); color: #6D28D9; padding: 6px 14px; border-radius: 9999px; font-weight: 500; font-size: 0.9rem;} .dark .skill-badge { background-color: rgba(167, 139, 250, 0.1); color: #A78BFA;}</style>
         </section>
+
+
+        <!-- ===== WORK ===== -->
+        <section id="work" class="py-24">
+             <div class="animate-fadeInUp">
+                <h2 class="section-title text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-16">Selected Work</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Project 1 -->
+                <a href="#" class="group block bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fadeInUp" style="animation-delay: 200ms;">
+                    <div class="flex justify-between items-start">
+                        <span class="material-symbols-outlined text-4xl text-primary-light dark:text-primary-dark">map</span>
+                        <span class="material-symbols-outlined text-slate-400 group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors">arrow_outward</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-4">Nepal Travel Guide</h3>
+                    <p class="mt-2">Android application featuring destinations, cultures, and travel tips for Nepal.</p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <span class="skill-badge">Java</span><span class="skill-badge">XML</span><span class="skill-badge">Maps API</span>
+                    </div>
+                </a>
+                 <!-- Project 2 -->
+                <a href="#" class="group block bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fadeInUp" style="animation-delay: 400ms;">
+                    <div class="flex justify-between items-start">
+                        <span class="material-symbols-outlined text-4xl text-primary-light dark:text-primary-dark">spa</span>
+                         <span class="material-symbols-outlined text-slate-400 group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors">arrow_outward</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-4">Mindful Meditation App</h3>
+                    <p class="mt-2">Web application with guided meditations and mindfulness exercises.</p>
+                     <div class="flex flex-wrap gap-3 mt-4">
+                        <span class="skill-badge">React</span><span class="skill-badge">Node.js</span><span class="skill-badge">Firebase</span>
+                    </div>
+                </a>
+                <!-- Project 3 -->
+                <a href="#" class="group block bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fadeInUp" style="animation-delay: 200ms;">
+                    <div class="flex justify-between items-start">
+                        <span class="material-symbols-outlined text-4xl text-primary-light dark:text-primary-dark">psychology</span>
+                         <span class="material-symbols-outlined text-slate-400 group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors">arrow_outward</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-4">AI Story Generator</h3>
+                    <p class="mt-2">Web-based tool that generates creative stories using machine learning.</p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <span class="skill-badge">Python</span><span class="skill-badge">TensorFlow</span><span class="skill-badge">JS</span>
+                    </div>
+                </a>
+                 <!-- Project 4 -->
+                <a href="#" class="group block bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-slate-200 dark:border-border-dark transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fadeInUp" style="animation-delay: 400ms;">
+                    <div class="flex justify-between items-start">
+                        <span class="material-symbols-outlined text-4xl text-primary-light dark:text-primary-dark">draw</span>
+                         <span class="material-symbols-outlined text-slate-400 group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors">arrow_outward</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-4">Poetry Explorer</h3>
+                    <p class="mt-2">Interactive web platform for discovering and sharing poetry.</p>
+                     <div class="flex flex-wrap gap-3 mt-4">
+                        <span class="skill-badge">Vue.js</span><span class="skill-badge">MongoDB</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT ===== -->
+        <section id="contact" class="py-24">
+            <div class="bg-card-light dark:bg-card-dark p-8 md:p-16 rounded-3xl border border-slate-200 dark:border-border-dark text-center animate-fadeInUp">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Have a project in mind?</h2>
+                <p class="max-w-2xl mx-auto mt-4 text-lg">
+                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision. Let's build something amazing together.
+                </p>
+                 <a href="mailto:nikit.hamal@example.com" class="inline-block mt-8 text-xl font-bold text-primary-light dark:text-primary-dark hover:underline underline-offset-4">
+                    nikit.hamal@example.com
+                </a>
+                <div class="flex justify-center space-x-6 mt-8">
+                     <a href="#" class="text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"><i data-feather="github" class="w-7 h-7"></i></a>
+                     <a href="#" class="text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"><i data-feather="linkedin" class="w-7 h-7"></i></a>
+                     <a href="#" class="text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors"><i data-feather="twitter" class="w-7 h-7"></i></a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer>
-        <p>&copy; 2024 Nikit Hamal. All rights reserved.</p>
+    <!-- ===== FOOTER ===== -->
+    <footer class="py-12 border-t border-slate-200 dark:border-border-dark">
+        <div class="container mx-auto px-6 text-center text-secondary-light dark:text-secondary-dark">
+            <p>&copy; 2024 Nikit Hamal. Crafted with passion in Nepal.</p>
+        </div>
     </footer>
+
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Theme Toggler
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlEl.classList.add('dark');
+        } else {
+            htmlEl.classList.remove('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlEl.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            feather.replace(); // Re-render icons for color change
+        });
+        
+        // Mobile Menu
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('-translate-x-full');
+        });
+
+        const closeMobileMenu = () => {
+            mobileMenu.classList.add('-translate-x-full');
+        };
+
+        closeMenu.addEventListener('click', closeMobileMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('bg-white/80', 'dark:bg-background-dark/80', 'backdrop-blur-lg', 'shadow-sm');
+            } else {
+                header.classList.remove('bg-white/80', 'dark:bg-background-dark/80', 'backdrop-blur-lg', 'shadow-sm');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                     window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Offset for fixed header
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Animate on scroll
+        const animatedElements = document.querySelectorAll('.animate-fadeInUp');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animatedElements.forEach(el => {
+            el.style.opacity = '0'; // Initially hide elements
+            observer.observe(el);
+        });
+
+    </script>
 </body>
 </html>
