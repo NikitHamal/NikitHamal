@@ -1,4 +1,3 @@
-```md
 # 👋 Hi, I’m Nikit Hamal (NikitHamal)
 
 > Adaptable Person • Exploring  
@@ -90,5 +89,3 @@ If you'd like, I can:
 - Pull your real top repos and fill the Projects section automatically (reply "scan again" or give me permission to fetch public repos).  
 - Replace the placeholder project entries with the exact repos you want showcased (send name + URL + 1-line description).  
 - Add a downloadable resume, badges, or a different theme for the stats cards.
-
-```
