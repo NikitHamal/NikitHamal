@@ -73,19 +73,4 @@ I’m open to chat, collaborate, or answer a curious question — feel free to r
 - Instagram: https://www.instagram.com/nikithamal  
 - Facebook: https://www.facebook.com/thenikithamal
 
-Prefered CTA: [Contact me](mailto:your-email@example.com) — replace the email above with your preferred contact address.
-
----
-
-## 🧾 More
-- Tone: friendly, witty, minimal — you’ll see it in my code comments and README entries 😉  
-- Visitor counter: included ✅  
-- Dynamic GitHub cards: included ✅  
-- Emojis: sprinkled throughout ✅
-
----
-
-If you'd like, I can:
-- Pull your real top repos and fill the Projects section automatically (reply "scan again" or give me permission to fetch public repos).  
-- Replace the placeholder project entries with the exact repos you want showcased (send name + URL + 1-line description).  
-- Add a downloadable resume, badges, or a different theme for the stats cards.
+Prefered CTA: [Contact me](mailto: iamnikithamal@gmail.com)
