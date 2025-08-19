@@ -73,4 +73,5 @@ I’m open to chat, collaborate, or answer a curious question — feel free to r
 - Instagram: https://www.instagram.com/nikithamal  
 - Facebook: https://www.facebook.com/thenikithamal
 
-Prefered CTA: [Contact me](mailto: iamnikithamal@gmail.com)
+Contact: iamnikithamal@gmail.com
+
