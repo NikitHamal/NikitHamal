@@ -27,17 +27,19 @@
   <meta name="twitter:image:alt" content="Nikit Hamal — Building on the web — exploring code, apps, and ideas." />
   <title>Nikit Hamal — Developer • Writer • AI Explorer</title>
 
-  <!-- Poppins font -->
+  <!-- Inter font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%236dd6ff"/><stop offset="1" stop-color="%23a17eff"/></linearGradient></defs><rect rx="14" width="64" height="64" fill="%230b0d10"/><circle cx="16" cy="16" r="4" fill="url(%23g)"/><text x="28" y="40" font-family="Poppins, Arial" font-weight="700" font-size="28" fill="white">NH</text></svg>' />
   <!-- Canonical (update if your domain differs) -->
   <link rel="canonical" href="https://nikithamal.com/" />
 
-  <!-- Feather Icons -->
+  <!-- Feather Icons (kept for Skills section) -->
   <script defer src="https://unpkg.com/feather-icons"></script>
+  <!-- Remix Icon for general UI icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
   <!-- GSAP + ScrollTrigger -->
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -78,7 +80,7 @@
       </a>
       <nav class="nav" aria-label="Primary">
         <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
-          <i data-feather="menu"></i>
+          <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
         <ul id="nav-menu" class="nav__list" role="menubar">
           <li role="none"><a role="menuitem" href="#about">About</a></li>
@@ -100,27 +102,27 @@
           <h1 class="hero__title">Building on the web — exploring code, apps, and ideas.</h1>
           <p class="hero__subtitle">Web Developer · Android App Developer · Writer · Thinker · AI Explorer</p>
           <div class="hero__cta">
-            <a class="btn primary" href="#projects"><i data-feather="zap"></i><span>See Work</span></a>
-            <a class="btn ghost" href="#contact"><i data-feather="send"></i><span>Contact</span></a>
+            <a class="btn primary" href="#projects"><i class="ri-rocket-2-fill" aria-hidden="true"></i><span>See Work</span></a>
+            <a class="btn ghost" href="#contact"><i class="ri-send-plane-2-fill" aria-hidden="true"></i><span>Contact</span></a>
           </div>
           <div class="social">
             <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <i data-feather="linkedin"></i>
+              <i class="ri-linkedin-box-fill" aria-hidden="true"></i>
             </a>
-            <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener" aria-label="Twitter">
-              <i data-feather="twitter"></i>
+            <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener" aria-label="Twitter/X">
+              <i class="ri-twitter-x-fill" aria-hidden="true"></i>
             </a>
             <a href="https://www.instagram.com/nikithamal" target="_blank" rel="noopener" aria-label="Instagram">
-              <i data-feather="instagram"></i>
+              <i class="ri-instagram-line" aria-hidden="true"></i>
             </a>
             <a href="mailto:iamnikithamal@gmail.com" aria-label="Email">
-              <i data-feather="mail"></i>
+              <i class="ri-mail-line" aria-hidden="true"></i>
             </a>
           </div>
         </div>
         <div class="hero__visual">
           <div class="card glass profile">
-            <div class="avatar">NH</div>
+            <img src="assets/nikit.jpg" alt="Portrait of Nikit Hamal" class="avatar" />
             <div class="meta">
               <h3>Nikit Hamal</h3>
               <p>Curious builder. Writer. Explorer.</p>
@@ -179,7 +181,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Selected Work</h2>
-          <a class="link" href="https://github.com/NikitHamal" target="_blank" rel="noopener">All on GitHub <i data-feather="external-link"></i></a>
+          <a class="link" href="https://github.com/NikitHamal" target="_blank" rel="noopener">Github <i class="ri-external-link-line" aria-hidden="true"></i></a>
         </div>
         <div class="grid-3 cards">
           <article class="card project">
@@ -240,9 +242,9 @@
           <h2>Let’s build something</h2>
           <p>Open to collaborations, questions, and ideas. I read every message.</p>
           <div class="contact__ways">
-            <a class="contact__way" href="mailto:iamnikithamal@gmail.com"><i data-feather="mail"></i> iamnikithamal@gmail.com</a>
-            <a class="contact__way" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener"><i data-feather="linkedin"></i> LinkedIn</a>
-            <a class="contact__way" href="https://twitter.com/nikithamal" target="_blank" rel="noopener"><i data-feather="twitter"></i> Twitter</a>
+            <a class="contact__way" href="mailto:iamnikithamal@gmail.com"><i class="ri-mail-line" aria-hidden="true"></i> iamnikithamal@gmail.com</a>
+            <a class="contact__way" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener"><i class="ri-linkedin-box-fill" aria-hidden="true"></i> LinkedIn</a>
+            <a class="contact__way" href="https://twitter.com/nikithamal" target="_blank" rel="noopener"><i class="ri-twitter-x-fill" aria-hidden="true"></i> Twitter</a>
           </div>
         </div>
         <form class="card contact__form" onsubmit="event.preventDefault(); alert('Thanks! I\'ll get back soon.');">
@@ -258,7 +260,7 @@
             <span>Message</span>
             <textarea required rows="4" placeholder="Say hello..."></textarea>
           </label>
-          <button class="btn primary" type="submit"><i data-feather="send"></i><span>Send</span></button>
+          <button class="btn primary" type="submit"><i class="ri-send-plane-2-fill" aria-hidden="true"></i><span>Send</span></button>
         </form>
       </div>
     </section>
@@ -267,7 +269,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© <span id="year"></span> Nikit Hamal. Built with care and curiosity.</p>
-      <a class="top" href="#home" aria-label="Back to top"><i data-feather="arrow-up"></i></a>
+      <a class="top" href="#home" aria-label="Back to top"><i class="ri-arrow-up-line" aria-hidden="true"></i></a>
     </div>
   </footer>
 
