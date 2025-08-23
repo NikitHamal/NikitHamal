@@ -10,6 +10,73 @@
     if (window.feather) window.feather.replace();
   });
 
+  // Photo/Profile dialogs
+  document.addEventListener('DOMContentLoaded', () => {
+    const avatar = document.getElementById('avatarImg');
+    const card = document.getElementById('profileCard');
+    const photoDialog = document.getElementById('photoDialog');
+    const profileDialog = document.getElementById('profileDialog');
+
+    if (!photoDialog || !profileDialog) return;
+
+    const openDialog = (dlg) => {
+      if (typeof dlg.showModal === 'function') dlg.showModal();
+      else dlg.setAttribute('open', '');
+    };
+    const closeDialog = (dlg) => {
+      if (typeof dlg.close === 'function') dlg.close();
+      else dlg.removeAttribute('open');
+    };
+
+    // Close buttons
+    [photoDialog, profileDialog].forEach((dlg) => {
+      const btn = dlg.querySelector('[data-close]');
+      if (btn) btn.addEventListener('click', () => closeDialog(dlg));
+      // Backdrop click to close
+      dlg.addEventListener('click', (e) => {
+        const rect = dlg.getBoundingClientRect();
+        const inDialog = (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        );
+        if (!inDialog) closeDialog(dlg);
+      });
+      // Escape (native for dialog, but fallback for non-support)
+      dlg.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDialog(dlg);
+      });
+    });
+
+    if (avatar) {
+      avatar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openDialog(photoDialog);
+      });
+      // Keyboard accessibility
+      avatar.setAttribute('tabindex', '0');
+      avatar.setAttribute('role', 'button');
+      avatar.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openDialog(photoDialog);
+        }
+      });
+    }
+
+    if (card) {
+      card.addEventListener('click', () => openDialog(profileDialog));
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openDialog(profileDialog);
+        }
+      });
+    }
+  });
+
   // Current year
   document.addEventListener('DOMContentLoaded', () => {
     const y = new Date().getFullYear();

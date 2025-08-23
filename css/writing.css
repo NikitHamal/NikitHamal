@@ -1,0 +1,51 @@
+/* Writing page styles — follows minimal black accents + 12px padding rule */
+:root {
+  --feature-purple: #3b116f;
+  --feature-green: #08372e;
+  --rose-50: #ffe3f0;
+}
+
+/* Quote hero */
+.quote-hero { padding-top: 24px; }
+.quote {
+  background: var(--rose-50);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  color: #4a154b;
+}
+.quote p { font-size: clamp(20px, 3.6vw, 36px); line-height: 1.15; margin: 0 0 16px; font-weight: 600; }
+.quote footer { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.avatar-sm { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+
+/* Feature cards (two-up) */
+.features__grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.feature { display: flex; flex-direction: column; justify-content: space-between; min-height: 180px; padding: 24px; border-radius: 16px; border: 1px solid var(--line); color: #fff; text-decoration: none; }
+.feature .eyebrow { display: inline-block; background: rgba(255,255,255,0.12); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; letter-spacing: .02em; }
+.feature h3 { margin: 12px 0 0; font-size: 24px; font-weight: 600; }
+.feature .cta { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #fff; opacity: .9; }
+.feature--dev { background: var(--feature-purple); }
+.feature--ideas { background: var(--feature-green); }
+
+@media (min-width: 768px) {
+  .features__grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Posts grid (featured + side list) */
+.posts__grid { display: grid; gap: 16px; grid-template-columns: 1fr; align-items: start; }
+.post { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.post__link { color: inherit; text-decoration: none; display: grid; }
+.post__media.banner { height: 220px; background: linear-gradient(135deg, #0a5cff 0%, #7a33ff 100%); }
+.post .thumb { width: 100%; height: 96px; background: linear-gradient(135deg, #0a5cff 0%, #7a33ff 100%); border-radius: 10px; }
+.post__body { padding: 16px; }
+.post__body h3 { margin: 8px 0 4px; font-size: 22px; }
+.post__body h4 { margin: 4px 0; font-size: 16px; }
+.badge { display: inline-block; background: #000; color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; }
+.badge.muted { background: #000; opacity: .75; }
+.meta { color: var(--muted); font-size: 12px; display: flex; gap: 8px; align-items: center; }
+
+.posts__grid .side { display: grid; gap: 12px; }
+
+@media (min-width: 992px) {
+  .posts__grid { grid-template-columns: 2fr 1fr; }
+}

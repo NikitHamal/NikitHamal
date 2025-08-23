@@ -18,8 +18,9 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://nikithamal.com/#writing</loc>
-    <priority>0.6</priority>
+    <loc>https://nikithamal.com/writing</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://nikithamal.com/#contact</loc>
