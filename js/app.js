@@ -52,57 +52,7 @@
   });
 
   // Active nav highlighting on scroll
-  document.addEventListener('DOMContentLoaded', () => {
-    const links = $$('#nav-menu a');
-    if (!links.length) return;
-    const byHash = new Map(links.map((a) => [a.getAttribute('href'), a]));
-
-    const setActive = (id) => {
-      links.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === `#${id}`));
-    };
-
-    const sections = ['home','about','skills','projects','writing','contact']
-      .map((id) => ({ id, el: id === 'home' ? document.querySelector('main#home') : document.getElementById(id) }))
-      .filter((s) => s.el);
-
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id || 'home';
-            setActive(id);
-          }
-        });
-      }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.1 });
-
-      sections.forEach((s) => io.observe(s.el));
-    } else if (window.ScrollTrigger) {
-      // Fallback to ScrollTrigger if available
-      sections.forEach((s) => {
-        ScrollTrigger.create({
-          trigger: s.el,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => setActive(s.id),
-          onEnterBack: () => setActive(s.id)
-        });
-      });
-    } else {
-      // Last-resort scroll listener
-      const onScroll = () => {
-        const y = window.scrollY + window.innerHeight * 0.35;
-        let current = 'home';
-        sections.forEach((s) => {
-          const rect = s.el.getBoundingClientRect();
-          const top = rect.top + window.scrollY;
-          if (y >= top) current = s.id;
-        });
-        setActive(current);
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    }
-  });
+  // (Removed) Active nav highlighting on scroll
 
   // GSAP animations
   function initGSAP() {
@@ -151,9 +101,14 @@
     }
   }
 
+  const schedule = (cb) => {
+    if ('requestIdleCallback' in window) return requestIdleCallback(cb, { timeout: 1000 });
+    return setTimeout(cb, 0);
+  };
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGSAP);
+    document.addEventListener('DOMContentLoaded', () => schedule(initGSAP));
   } else {
-    initGSAP();
+    schedule(initGSAP);
   }
 })();
