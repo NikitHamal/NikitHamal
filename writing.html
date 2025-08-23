@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Writing by Nikit Hamal — essays, notes, and posts on building, learning, and ideas." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Nikit Hamal" />
+  <meta name="theme-color" content="#0b0d10" />
+  <title>Writing — Nikit Hamal</title>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="assets/nikit.jpg" />
+  <link rel="apple-touch-icon" href="assets/nikit.jpg" />
+
+  <!-- Icons -->
+  <script defer src="https://unpkg.com/feather-icons"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Base styles + page styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/writing.css" />
+</head>
+<body>
+  <a class="skip-link" href="#writing">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html#home" aria-label="Home">
+        <span class="logo-dot" aria-hidden="true"></span>
+        <span class="brand-text">Nikit<span class="muted">Hamal</span></span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
+          <i class="ri-menu-line" aria-hidden="true"></i>
+        </button>
+        <ul id="nav-menu" class="nav__list" role="menubar">
+          <li role="none"><a role="menuitem" href="index.html#about">About</a></li>
+          <li role="none"><a role="menuitem" href="index.html#skills">Skills</a></li>
+          <li role="none"><a role="menuitem" href="index.html#projects">Projects</a></li>
+          <li role="none"><a role="menuitem" class="pill" href="writing.html">Writing</a></li>
+          <li role="none"><a role="menuitem" href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="writing">
+    <!-- Quote Hero -->
+    <section class="section quote-hero" aria-label="Quote Hero">
+      <div class="container">
+        <blockquote class="quote">
+          <p>“Write clearly so ideas travel farther.”</p>
+          <footer>
+            <img src="assets/nikit.jpg" alt="Nikit Hamal" class="avatar-sm" />
+            <span>Nikit Hamal • Notes on building and learning</span>
+          </footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- Feature Cards -->
+    <section class="section features" aria-label="Writing Sections">
+      <div class="container features__grid">
+        <a class="feature feature--dev" href="#posts">
+          <span class="eyebrow">For Developers</span>
+          <h3>Code without friction.</h3>
+          <span class="cta">Learn more <i class="ri-arrow-right-line" aria-hidden="true"></i></span>
+        </a>
+        <a class="feature feature--ideas" href="#posts">
+          <span class="eyebrow">For Everyone</span>
+          <h3>Simple ideas, useful notes.</h3>
+          <span class="cta">Explore <i class="ri-arrow-right-line" aria-hidden="true"></i></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Posts Grid -->
+    <section id="posts" class="section posts" aria-label="Latest posts">
+      <div class="container posts__grid">
+        <article class="post featured">
+          <a class="post__link" href="#">
+            <div class="post__media banner" aria-hidden="true"></div>
+            <div class="post__body">
+              <span class="badge">Featured</span>
+              <h3>Windsurfing through work — focus, tools, and tiny wins</h3>
+              <div class="meta"><span>Jul 2025</span><span>•</span><span>4 min read</span></div>
+            </div>
+          </a>
+        </article>
+        <div class="side">
+          <article class="post card-sm">
+            <a class="post__link" href="#">
+              <div class="thumb" aria-hidden="true"></div>
+              <div class="post__body">
+                <span class="badge muted">Product</span>
+                <h4>Just keep shipping</h4>
+                <div class="meta"><span>Jul 2025</span><span>•</span><span>3 min read</span></div>
+              </div>
+            </a>
+          </article>
+          <article class="post card-sm">
+            <a class="post__link" href="#">
+              <div class="thumb" aria-hidden="true"></div>
+              <div class="post__body">
+                <span class="badge muted">Note</span>
+                <h4>Clarity beats complexity</h4>
+                <div class="meta"><span>Jun 2025</span><span>•</span><span>2 min read</span></div>
+              </div>
+            </a>
+          </article>
+          <article class="post card-sm">
+            <a class="post__link" href="#">
+              <div class="thumb" aria-hidden="true"></div>
+              <div class="post__body">
+                <span class="badge muted">Essay</span>
+                <h4>Learning fast by building small</h4>
+                <div class="meta"><span>May 2025</span><span>•</span><span>5 min read</span></div>
+              </div>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p> 2024 Nikit Hamal.</p>
+      <a class="top" href="#writing" aria-label="Back to top"><i class="ri-arrow-up-line" aria-hidden="true"></i></a>
+    </div>
+  </footer>
+
+  <script defer src="js/app.js"></script>
+</body>
+</html>
