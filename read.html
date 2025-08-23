@@ -3,30 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Writing by Nikit Hamal — essays, notes, and posts on building, learning, and ideas." />
+  <meta name="description" content="Read post — Nikit Hamal" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Nikit Hamal" />
   <meta name="theme-color" content="#0b0d10" />
-  <title>Writing — Nikit Hamal</title>
+  <title>Read — Nikit Hamal</title>
 
-  <!-- Inter font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/jpeg" href="assets/nikit.jpg" />
   <link rel="apple-touch-icon" href="assets/nikit.jpg" />
 
-  <!-- Icons -->
   <script defer src="https://unpkg.com/feather-icons"></script>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-  <!-- Base styles + page styles -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/writing.css" />
 </head>
-<body>
-  <a class="skip-link" href="#writing">Skip to content</a>
-
+<body class="read-page">
+  <a class="skip-link" href="#read">Skip to content</a>
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html#home" aria-label="Home">
@@ -38,44 +34,39 @@
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
         <ul id="nav-menu" class="nav__list" role="menubar">
-          <li role="none"><a role="menuitem" href="index.html#about">About</a></li>
-          <li role="none"><a role="menuitem" href="index.html#skills">Skills</a></li>
+          <li role="none"><a role="menuitem" href="index.html#home">Home</a></li>
+          <li role="none"><a role="menuitem" href="writing.html" class="pill">Writing</a></li>
           <li role="none"><a role="menuitem" href="index.html#projects">Projects</a></li>
-          <li role="none"><a role="menuitem" class="pill" href="writing.html">Writing</a></li>
           <li role="none"><a role="menuitem" href="index.html#contact">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main id="writing">
-    <!-- Quote Hero -->
-    <section class="section quote-hero" aria-label="Quote Hero">
+  <main id="read">
+    <section class="section read-hero">
       <div class="container">
-        <blockquote class="quote">
-          <p>“Write clearly so ideas travel farther.”</p>
-          <footer>
-            <img src="assets/nikit.jpg" alt="Nikit Hamal" class="avatar-sm" />
-            <span>Nikit Hamal • Notes on building and learning</span>
-          </footer>
-        </blockquote>
+        <a class="back-link" href="writing.html" aria-label="Back to writing list">
+          <i class="ri-arrow-left-line" aria-hidden="true"></i>
+        </a>
+        <div class="banner" id="readBanner" aria-hidden="true"></div>
+        <div class="read-head">
+          <span class="badge" id="readCategory">Post</span>
+          <h1 id="readTitle">Loading…</h1>
+          <div class="meta" id="readMeta"></div>
+        </div>
       </div>
     </section>
-
-    
-
-    <!-- Posts Grid -->
-    <section id="posts" class="section posts" aria-label="Latest posts">
-      <div class="container posts__grid" id="postsGrid"></div>
+    <section class="section">
+      <div class="container">
+        <article class="read-body" id="readBody">
+          <p>Loading content…</p>
+        </article>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p> 2024 Nikit Hamal.</p>
-      <a class="top" href="#writing" aria-label="Back to top"><i class="ri-arrow-up-line" aria-hidden="true"></i></a>
-    </div>
-  </footer>
+  
 
   <script defer src="js/app.js"></script>
 </body>

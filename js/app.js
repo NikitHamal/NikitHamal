@@ -178,4 +178,209 @@
   } else {
     schedule(initGSAP);
   }
+  // Initialize writing/read pages after DOM ready
+  function htmlToText(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html || '';
+    return (tmp.textContent || tmp.innerText || '').trim();
+  }
+  function estimateReadingTime(html) {
+    const words = htmlToText(html).split(/\s+/).filter(Boolean).length;
+    const mins = Math.max(1, Math.round(words / 220));
+    return { mins, words };
+  }
+  function resolveImagePath(src) {
+    if (!src) return null;
+    if (/^https?:\/\//i.test(src)) return src;
+    if (src.startsWith('/') || src.startsWith('assets/')) return src;
+    return `assets/${src}`;
+  }
+  function svgPlaceholder(text = 'No image') {
+    const svg = encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#e5e7eb'/><stop offset='100%' stop-color='#cbd5e1'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='42' fill='#475569' opacity='0.6'>${text}</text></svg>`);
+    return `url("data:image/svg+xml,${svg}")`;
+  }
+  function svgDataURI(text = 'No image') {
+    const svg = encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#e5e7eb'/><stop offset='100%' stop-color='#cbd5e1'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-size='42' fill='#475569' opacity='0.6'>${text}</text></svg>`);
+    return `data:image/svg+xml,${svg}`;
+  }
+  function preloadImage(url) {
+    return new Promise((resolve) => {
+      if (!url) return resolve(false);
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
+  }
+  async function hydrateMedia(root = document) {
+    const nodes = Array.from(root.querySelectorAll('[data-bg]'));
+    await Promise.all(nodes.map(async (el) => {
+      const src = el.getAttribute('data-bg');
+      if (!src) return; // leave gradient placeholder
+      const ok = await preloadImage(src);
+      if (ok) {
+        el.style.backgroundImage = `url('${src}')`;
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+      } else {
+        el.style.backgroundImage = svgPlaceholder('Image unavailable');
+        el.style.backgroundSize = 'cover';
+      }
+    }));
+  }
+  async function fetchJSON(url) {
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      return await res.json();
+    } catch (e) {
+      console.warn('Failed to fetch', url, e);
+      return null;
+    }
+  }
+  async function loadAllPosts() {
+    const idx = await fetchJSON('posts/index.json');
+    if (!idx || !Array.isArray(idx.posts)) return [];
+    const posts = await Promise.all(idx.posts.map(async (slug) => {
+      const data = await fetchJSON(`posts/${slug}.json`);
+      return data;
+    }));
+    return posts.filter(Boolean).sort((a,b) => new Date(b.date) - new Date(a.date));
+  }
+  function renderWritingPage(posts) {
+    const grid = document.getElementById('postsGrid');
+    if (!grid) return;
+    if (!posts.length) { grid.innerHTML = '<p class="muted">No posts yet.</p>'; return; }
+    const featured = posts.find(p => p.featured) || posts[0];
+    const rest = posts.filter(p => p.slug !== featured.slug).slice(0, 6);
+    const featImg = resolveImagePath(featured.image);
+    const featRT = estimateReadingTime(featured.contentHtml).mins;
+    const featCard = `
+<article class="post featured">
+  <a class="post__link" href="read.html?slug=${featured.slug}">
+    <div class="post__media banner" aria-hidden="true" data-bg="${featImg || ''}"></div>
+    <div class="post__body">
+      <span class="badge">Featured</span>
+      <h3>${featured.title}</h3>
+      <div class="meta"><span>${new Date(featured.date).toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'})}</span><span>•</span><span>${featRT} min read</span></div>
+    </div>
+  </a>
+</article>`;
+    const sideCards = rest.map(p => {
+      const img = resolveImagePath(p.image);
+      const rt = estimateReadingTime(p.contentHtml).mins;
+      return `
+<article class="post card-sm">
+  <a class="post__link" href="read.html?slug=${p.slug}">
+    <div class="thumb" aria-hidden="true" data-bg="${img || ''}"></div>
+    <div class="post__body">
+      <span class="badge muted">${p.category || 'Post'}</span>
+      <h4>${p.title}</h4>
+      <div class="meta"><span>${new Date(p.date).toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'})}</span><span>•</span><span>${rt} min read</span></div>
+    </div>
+  </a>
+</article>`;
+    }).join('');
+    grid.innerHTML = featCard + `\n<div class="side">${sideCards}</div>`;
+    hydrateMedia(grid);
+  }
+  async function initWriting() {
+    if (!document.getElementById('postsGrid')) return;
+    const posts = await loadAllPosts();
+    renderWritingPage(posts);
+  }
+  async function initRead() {
+    const body = document.getElementById('readBody');
+    if (!body) return;
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('slug');
+    const data = slug ? await fetchJSON(`posts/${slug}.json`) : null;
+    const post = data || (await loadAllPosts())[0];
+    if (!post) return;
+    const img = resolveImagePath(post.image);
+    const meta = document.getElementById('readMeta');
+    const titleEl = document.getElementById('readTitle');
+    const catEl = document.getElementById('readCategory');
+    const banner = document.getElementById('readBanner');
+    titleEl.textContent = post.title;
+    catEl.textContent = post.category || 'Post';
+    const rt = estimateReadingTime(post.contentHtml).mins;
+    meta.textContent = `${new Date(post.date).toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'})} • ${rt} min read`;
+    if (banner) {
+      banner.setAttribute('data-bg', img || '');
+      hydrateMedia(document);
+    }
+    body.innerHTML = post.contentHtml;
+
+    // Generate Table of Contents from h2/h3
+    buildTOC();
+    // Enhance inline images in article
+    enhanceContentImages(body);
+  }
+  function slugify(text) {
+    return (text || '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+  function buildTOC() {
+    const container = document.getElementById('readBody');
+    const list = document.getElementById('tocList');
+    if (!container || !list) return;
+    list.innerHTML = '';
+    const headings = Array.from(container.querySelectorAll('h2, h3'));
+    const tocWrap = document.getElementById('toc');
+    if (!headings.length) { if (tocWrap) tocWrap.style.display = 'none'; return; } else { if (tocWrap) tocWrap.style.display = ''; }
+    headings.forEach((h) => {
+      if (!h.id) h.id = slugify(h.textContent);
+      const depth = h.tagName.toLowerCase() === 'h3' ? 2 : 1;
+      const li = document.createElement('li');
+      if (depth === 2) li.classList.add('depth-2');
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    // Scrollspy
+    const links = Array.from(list.querySelectorAll('a'));
+    const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          links.forEach((l) => l.classList.remove('active'));
+          const active = map.get(id);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
+    headings.forEach((h) => io.observe(h));
+    // Smooth scroll
+    list.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      e.preventDefault();
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+  function enhanceContentImages(container) {
+    const imgs = Array.from(container.querySelectorAll('img'));
+    imgs.forEach((img) => {
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      const fallback = svgDataURI(img.alt || 'Image');
+      img.addEventListener('error', () => { img.src = fallback; });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { schedule(initWriting); schedule(initRead); });
+  } else {
+    schedule(initWriting); schedule(initRead);
+  }
 })();
