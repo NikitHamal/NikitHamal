@@ -21,7 +21,7 @@
 /* Feature cards (two-up) */
 .features__grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
 .feature { display: flex; flex-direction: column; justify-content: space-between; min-height: 180px; padding: 24px; border-radius: 16px; border: 1px solid var(--line); color: #fff; text-decoration: none; }
-.feature .eyebrow { display: inline-block; background: rgba(255,255,255,0.12); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; letter-spacing: .02em; }
+.feature .eyebrow { display: inline-block; background: rgba(255,255,255,0.12); color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 12px; letter-spacing: .02em; width: fit-content; }
 .feature h3 { margin: 12px 0 0; font-size: 24px; font-weight: 600; }
 .feature .cta { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #fff; opacity: .9; }
 .feature--dev { background: var(--feature-purple); }
@@ -35,8 +35,8 @@
 .posts__grid { display: grid; gap: 16px; grid-template-columns: 1fr; align-items: start; }
 .post { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
 .post__link { color: inherit; text-decoration: none; display: grid; }
-.post__media.banner { height: 220px; background: linear-gradient(135deg, #0a5cff 0%, #7a33ff 100%); }
-.post .thumb { width: 100%; height: 96px; background: linear-gradient(135deg, #0a5cff 0%, #7a33ff 100%); border-radius: 10px; }
+.post__media.banner { height: 220px; background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #c026d3 100%); }
+.post .thumb { width: 100%; height: 96px; background: linear-gradient(135deg, #1e40af 0%, #c026d3 100%); border-radius: 10px 10px 0 0; }
 .post__body { padding: 16px; }
 .post__body h3 { margin: 8px 0 4px; font-size: 22px; }
 .post__body h4 { margin: 4px 0; font-size: 16px; }
@@ -49,3 +49,65 @@
 @media (min-width: 992px) {
   .posts__grid { grid-template-columns: 2fr 1fr; }
 }
+
+/* Subtle hovers */
+.feature { transition: transform .2s ease, box-shadow .2s ease; }
+.feature:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,0.12); }
+.post { transition: box-shadow .2s ease, transform .2s ease; }
+.post:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,0.10); }
+
+/* Read page */
+.read-hero { margin-top: 8px; }
+.read-hero .banner { height: 280px; background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #c026d3 100%); border-radius: 16px; border: 1px solid var(--line); }
+.read-head { margin-top: 16px; }
+.read-head h1 { font-size: clamp(28px, 4.8vw, 44px); margin: 8px 0; }
+.read-head .meta { font-size: 13px; }
+.read-body { margin-top: 8px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+.read-body p { line-height: 1.75; margin: 14px 0; }
+.read-body img { width: 100%; border-radius: 12px; border: 1px solid var(--line); }
+.read-body h2 { margin: 20px 0 8px; font-size: 22px; }
+
+/* TOC removed on read page; legacy layout rules removed */
+
+/* Anchor offset inside article */
+.read-body [id] { scroll-margin-top: calc(var(--header-h) + 32px); }
+
+/* Read page overrides: exact UI per spec */
+/* 1) Read page: remove header entirely */
+.read-page .site-header { display: none; }
+.read-page main { padding-top: 0; }
+
+/* 2) Constrain page width to 60% on desktop, centered */
+/* Ensure header stays full-width; only main content gets 60% */
+@media (min-width: 992px) {
+  .read-page main .container { width: 60%; max-width: none; }
+  .read-page .site-header .container { width: 100%; max-width: var(--container); }
+}
+
+
+/* 4) Make article images square, center-cropped, and 45% of total width (i.e., 90% of 50% container), centered */
+.read-page .read-body img { width: 90%; margin: 12px auto; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; border: 0; border-radius: 12px; display: block; }
+
+/* 5) Remove strokes/cards look from read content and TOC */
+.read-page .read-body { background: transparent; border: 0; padding: 0; margin-top: 4px; }
+.read-page .toc { background: transparent; border: 0; padding: 0; position: sticky; }
+.read-page .read-hero .banner { border: 0; }
+
+/* 6) Adjust anchor offsets since header is absent */
+.read-page .read-body [id] { scroll-margin-top: 16px; }
+
+/* Back link (arrow) before title */
+.read-page .back-link { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--line); color: var(--text); text-decoration: none; background: #fff; margin-bottom: 12px; }
+.read-page .back-link:hover { background: #f7f7f7; }
+
+/* Reduce gap between title and content on read page */
+.read-page .read-head { margin-top: 8px; }
+.read-page .read-head h1 { margin: 6px 0; }
+.read-page .read-hero.section { padding-bottom: 12px; }
+.read-page .section + .section { padding-top: 12px; }
+
+/* Remove TOC completely on read page */
+.read-page #toc, .read-page .toc, .read-page #tocList { display: none !important; }
+
+/* Hide footer on read page */
+.read-page .site-footer { display: none; }
