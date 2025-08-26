@@ -378,9 +378,53 @@
       img.addEventListener('error', () => { img.src = fallback; });
     });
   }
+  async function initWritingPreview() {
+    const container = document.getElementById('writing-preview');
+    if (!container) return;
+
+    const posts = await loadAllPosts();
+    if (!posts || posts.length === 0) {
+      container.innerHTML = '<p class="muted" style="text-align: center;">No posts yet. Check back soon!</p>';
+      return;
+    }
+
+    const recentPosts = posts.slice(0, 2);
+    const html = recentPosts.map(post => {
+      const imagePath = resolveImagePath(post.image);
+      const readingTime = estimateReadingTime(post.contentHtml).mins;
+      const excerpt = htmlToText(post.contentHtml).substring(0, 100) + '...';
+
+      return `
+      <article class="writing-card">
+        <a href="read.html?slug=${post.slug}" class="writing-card__link">
+          <div class="writing-card__media" style="background-image: ${imagePath ? `url('${imagePath}')` : svgPlaceholder(post.title)}"></div>
+          <div class="writing-card__body">
+            <span class="writing-card__category">${post.category || 'Essay'}</span>
+            <h3 class="writing-card__title">${post.title}</h3>
+            <p class="writing-card__excerpt">${excerpt}</p>
+            <div class="writing-card__meta">
+              <time datetime="${post.date}">${new Date(post.date).toLocaleDateString('en-US',{month:'short', year:'numeric'})}</time>
+              <span>&bull;</span>
+              <span>${readingTime} min read</span>
+            </div>
+          </div>
+        </a>
+      </article>
+    `;
+    }).join('');
+
+    container.innerHTML = html;
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { schedule(initWriting); schedule(initRead); });
+    document.addEventListener('DOMContentLoaded', () => {
+      schedule(initWriting);
+      schedule(initRead);
+      schedule(initWritingPreview);
+    });
   } else {
-    schedule(initWriting); schedule(initRead);
+    schedule(initWriting);
+    schedule(initRead);
+    schedule(initWritingPreview);
   }
 })();

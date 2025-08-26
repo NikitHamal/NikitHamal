@@ -138,25 +138,70 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
+    <!-- ABOUT (UPDATED) -->
     <section id="about" class="section about" aria-label="About">
-      <div class="container grid-2">
-        <div>
-          <h2>About</h2>
-          <p>Friendly, curious, and a little witty — I tinker with web tech, write (and prompt), and enjoy building small projects that teach me something new every week. Exploring to find where I can make the biggest impact.</p>
-          <ul class="chips">
-            <li class="chip"><i data-feather="map-pin"></i>Nepal</li>
-            <li class="chip"><i data-feather="code"></i>Web & Android</li>
-            <li class="chip"><i data-feather="pen-tool"></i>Writing</li>
-            <li class="chip"><i data-feather="cpu"></i>AI Explorer</li>
-          </ul>
+      <div class="container">
+        <div class="about-image-container">
+          <img src="assets/nikit.jpg" alt="Portrait of Nikit Hamal" class="about-image" />
+          <div class="about-image-overlay">
+            <h2>I'm Nikit Hamal.</h2>
+            <p>A creative developer with a passion for building beautiful & functional web experiences.</p>
+          </div>
         </div>
-        <div class="card gradient">
-          <h3 class="card__title">What I’m exploring now</h3>
-          <ul class="card__list">
-            <li>Delightful front-end interactions with GSAP</li>
-            <li>Clean architecture for small Android apps</li>
-            <li>Clear, useful writing that explains ideas simply</li>
+        
+        <p class="about-description">
+          I'm a friendly, curious, and a little witty tinkerer who loves to explore the ever-evolving world of web tech. I find joy in writing (code and prose) and building small projects that teach me something new every week. My goal is to find where I can make the biggest impact.
+        </p>
+        
+        <div class="about-chips-grid">
+          <div class="about-chip">
+            <i class="ri-map-pin-line"></i>
+            <span>Nepal</span>
+          </div>
+          <div class="about-chip">
+            <i class="ri-code-line"></i>
+            <span>Web & Android</span>
+          </div>
+          <div class="about-chip">
+            <i class="ri-edit-line"></i>
+            <span>Writing</span>
+          </div>
+          <div class="about-chip">
+            <i class="ri-cpu-line"></i>
+            <span>AI Explorer</span>
+          </div>
+        </div>
+        
+        <div class="about-exploring-section">
+          <h3>What I'm exploring now</h3>
+          <ul class="exploring-list">
+            <li class="exploring-item">
+              <div class="exploring-icon">
+                <i class="ri-slideshow-line"></i>
+              </div>
+              <div>
+                <h4>Delightful front-end interactions</h4>
+                <p>Crafting smooth and engaging user experiences with GSAP.</p>
+              </div>
+            </li>
+            <li class="exploring-item">
+              <div class="exploring-icon">
+                <i class="ri-node-tree"></i>
+              </div>
+              <div>
+                <h4>Clean architecture</h4>
+                <p>Structuring small Android apps for scalability and maintainability.</p>
+              </div>
+            </li>
+            <li class="exploring-item">
+              <div class="exploring-icon">
+                <i class="ri-lightbulb-flash-line"></i>
+              </div>
+              <div>
+                <h4>Clear & useful writing</h4>
+                <p>Explaining complex ideas in a simple and effective way.</p>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -165,14 +210,46 @@
     <!-- SKILLS -->
     <section id="skills" class="section skills" aria-label="Skills">
       <div class="container">
-        <h2>Skills</h2>
-        <div class="skills__grid">
-          <div class="skill"><i data-feather="layout"></i>HTML</div>
-          <div class="skill"><i data-feather="sliders"></i>CSS</div>
-          <div class="skill"><i data-feather="code"></i>JavaScript</div>
-          <div class="skill"><i data-feather="smartphone"></i>Android (XML + Java)</div>
-          <div class="skill"><i data-feather="pen-tool"></i>Writing</div>
-          <div class="skill"><i data-feather="box"></i>Problem Solving</div>
+        <div class="section-head">
+          <h2 class="section-title">My Toolkit</h2>
+          <p class="section-subtitle">I'm passionate about using the right tools to build great products. Here's what I'm proficient with, and I'm always eager to learn more.</p>
+        </div>
+        <div class="skills-container">
+          <div class="skill-category">
+            <div class="skill-category__header">
+              <div class="skill-category__icon"><i class="ri-layout-line"></i></div>
+              <h3 class="skill-category__title">Frontend Development</h3>
+            </div>
+            <ul class="skill-list">
+              <li>HTML5</li>
+              <li>CSS3 (Sass, Responsive Design)</li>
+              <li>JavaScript (ES6+)</li>
+              <li>GSAP for animations</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <div class="skill-category__header">
+              <div class="skill-category__icon"><i class="ri-android-line"></i></div>
+              <h3 class="skill-category__title">Mobile Development</h3>
+            </div>
+            <ul class="skill-list">
+              <li>Android App Development (Java)</li>
+              <li>XML Layouts</li>
+              <li>Clean Architecture Basics</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <div class="skill-category__header">
+              <div class="skill-category__icon"><i class="ri-tools-line"></i></div>
+              <h3 class="skill-category__title">General &amp; Tools</h3>
+            </div>
+            <ul class="skill-list">
+              <li>Git &amp; GitHub</li>
+              <li>Creative &amp; Technical Writing</li>
+              <li>Problem Solving</li>
+              <li>AI Prompt Engineering</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -216,53 +293,57 @@
     <!-- WRITING -->
     <section id="writing" class="section writing" aria-label="Writing">
       <div class="container">
-        <h2>Writing</h2>
-        <div class="list">
-          <article class="item">
-            <a href="#" class="item__link">
-              <span class="eyebrow">Essay</span>
-              <h3>Learning fast by building small</h3>
-              <time datetime="2025-01-01">Jan 2025</time>
-            </a>
-          </article>
-          <article class="item">
-            <a href="#" class="item__link">
-              <span class="eyebrow">Note</span>
-              <h3>On clarity and good prompts</h3>
-              <time datetime="2024-12-10">Dec 2024</time>
-            </a>
-          </article>
+        <div class="section-head">
+          <h2>Recent Thoughts</h2>
+          <a class="link" href="writing.html">View All <i class="ri-arrow-right-line" aria-hidden="true"></i></a>
+        </div>
+        <div id="writing-preview" class="writing-grid">
+          <!-- Posts will be dynamically inserted here by app.js -->
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" class="section contact" aria-label="Contact">
-      <div class="container grid-2">
-        <div>
-          <h2>Let’s build something</h2>
-          <p>Open to collaborations, questions, and ideas. I read every message.</p>
-          <div class="contact__ways">
-            <a class="contact__way" href="mailto:iamnikithamal@gmail.com"><i class="ri-mail-line" aria-hidden="true"></i> iamnikithamal@gmail.com</a>
-            <a class="contact__way" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener"><i class="ri-linkedin-box-fill" aria-hidden="true"></i> LinkedIn</a>
-            <a class="contact__way" href="https://twitter.com/nikithamal" target="_blank" rel="noopener"><i class="ri-twitter-x-fill" aria-hidden="true"></i> Twitter</a>
+      <div class="container">
+        <div class="contact-wrapper">
+          <div class="contact-text">
+            <h2 class="contact-title">Let's Connect</h2>
+            <p class="contact-subtitle">Have a project in mind, a question, or just want to say hi? I'd love to hear from you. I read and reply to every message.</p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:iamnikithamal@gmail.com">
+                <i class="ri-mail-line"></i>
+                <span>iamnikithamal@gmail.com</span>
+              </a>
+              <a class="contact-link" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
+                <i class="ri-linkedin-box-fill"></i>
+                <span>LinkedIn</span>
+              </a>
+              <a class="contact-link" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
+                <i class="ri-twitter-x-fill"></i>
+                <span>Twitter / X</span>
+              </a>
+            </div>
+          </div>
+          <div class="contact-form-container">
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Thanks! I'll get back to you soon.');">
+              <p class="form-title">Send a direct message</p>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" name="name" required type="text" placeholder="Your name" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" required type="email" placeholder="you@example.com" />
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required rows="4" placeholder="What's on your mind?"></textarea>
+              </div>
+              <button class="btn primary" type="submit"><i class="ri-send-plane-2-fill" aria-hidden="true"></i><span>Send Message</span></button>
+            </form>
           </div>
         </div>
-        <form class="card contact__form" onsubmit="event.preventDefault(); alert('Thanks! I\'ll get back soon.');">
-          <label>
-            <span>Name</span>
-            <input required type="text" placeholder="Your name" />
-          </label>
-          <label>
-            <span>Email</span>
-            <input required type="email" placeholder="you@example.com" />
-          </label>
-          <label>
-            <span>Message</span>
-            <textarea required rows="4" placeholder="Say hello..."></textarea>
-          </label>
-          <button class="btn primary" type="submit"><i class="ri-send-plane-2-fill" aria-hidden="true"></i><span>Send</span></button>
-        </form>
       </div>
     </section>
   </main>
