@@ -1,2 +1,19 @@
-/* All styles for the writing page are now inherited from css/styles.css */
-/* This file is kept to avoid 404 errors. */
+/* Writing page styles — follows minimal black accents + 12px padding rule */
+:root {
+  --feature-purple: #3b116f;
+  --feature-green: #08372e;
+  --rose-50: #ffe3f0;
+}
+
+/* Quote hero */
+.quote-hero { padding-top: 24px; }
+.quote {
+  background: var(--rose-50);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  color: #4a154b;
+}
+.quote p { font-size: clamp(20px, 3.6vw, 36px); line-height: 1.15; margin: 0 0 16px; font-weight: 600; }
+.quote footer { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.avatar-sm { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
