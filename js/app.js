@@ -250,39 +250,36 @@
   function renderWritingPage(posts) {
     const grid = document.getElementById('postsGrid');
     if (!grid) return;
-    if (!posts.length) { grid.innerHTML = '<p class="muted">No posts yet.</p>'; return; }
-    const featured = posts.find(p => p.featured) || posts[0];
-    const rest = posts.filter(p => p.slug !== featured.slug).slice(0, 6);
-    const featImg = resolveImagePath(featured.image);
-    const featRT = estimateReadingTime(featured.contentHtml).mins;
-    const featCard = `
-<article class="post featured">
-  <a class="post__link" href="read.html?slug=${featured.slug}">
-    <div class="post__media banner" aria-hidden="true" data-bg="${featImg || ''}"></div>
-    <div class="post__body">
-      <span class="badge">Featured</span>
-      <h3>${featured.title}</h3>
-      <div class="meta"><span>${new Date(featured.date).toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'})}</span><span>•</span><span>${featRT} min read</span></div>
-    </div>
-  </a>
-</article>`;
-    const sideCards = rest.map(p => {
-      const img = resolveImagePath(p.image);
-      const rt = estimateReadingTime(p.contentHtml).mins;
+    if (!posts || posts.length === 0) {
+      grid.innerHTML = '<p class="muted" style="text-align: center;">No posts yet. Check back soon!</p>';
+      return;
+    }
+
+    const html = posts.map(post => {
+      const imagePath = resolveImagePath(post.image);
+      const readingTime = estimateReadingTime(post.contentHtml).mins;
+      const excerpt = htmlToText(post.contentHtml).substring(0, 100) + '...';
+
       return `
-<article class="post card-sm">
-  <a class="post__link" href="read.html?slug=${p.slug}">
-    <div class="thumb" aria-hidden="true" data-bg="${img || ''}"></div>
-    <div class="post__body">
-      <span class="badge muted">${p.category || 'Post'}</span>
-      <h4>${p.title}</h4>
-      <div class="meta"><span>${new Date(p.date).toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'})}</span><span>•</span><span>${rt} min read</span></div>
-    </div>
-  </a>
-</article>`;
+      <article class="writing-card">
+        <a href="read.html?slug=${post.slug}" class="writing-card__link">
+          <div class="writing-card__media" style="background-image: ${imagePath ? `url('${imagePath}')` : svgPlaceholder(post.title)}"></div>
+          <div class="writing-card__body">
+            <span class="writing-card__category">${post.category || 'Essay'}</span>
+            <h3 class="writing-card__title">${post.title}</h3>
+            <p class="writing-card__excerpt">${excerpt}</p>
+            <div class="writing-card__meta">
+              <time datetime="${post.date}">${new Date(post.date).toLocaleDateString('en-US',{month:'short', year:'numeric'})}</time>
+              <span>&bull;</span>
+              <span>${readingTime} min read</span>
+            </div>
+          </div>
+        </a>
+      </article>
+    `;
     }).join('');
-    grid.innerHTML = featCard + `\n<div class="side">${sideCards}</div>`;
-    hydrateMedia(grid);
+
+    grid.innerHTML = html;
   }
   async function initWriting() {
     if (!document.getElementById('postsGrid')) return;
