@@ -157,8 +157,38 @@ img.avatar { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; 
 .ri, i { font-weight: 400; }
 .link:hover { opacity: 1; }
 
-.cards .project { overflow: hidden; padding: 0; }
-.card__media { height: 160px; background: #f2f4f7; border-bottom: 1px solid var(--line); will-change: transform; backface-visibility: hidden; }
+.cards .project {
+  overflow: hidden;
+  padding: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cards .project:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+/* This makes the entire card a clickable link and removes underline */
+.cards .project .card__link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.card__media {
+  height: 160px;
+  background: #f2f4f7;
+  border-bottom: 1px solid var(--line);
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: transform 0.2s ease; /* Add subtle zoom on hover */
+}
+
+.cards .project:hover .card__media {
+  transform: scale(1.03);
+}
+
 .card__body { padding: 12px; }
 .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .tags span { font-size: 11px; padding: 12px; border-radius: 999px; background: #000; border: 1px solid #000; color: #fff; }
