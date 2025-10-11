@@ -1,100 +1,69 @@
-# 👋 Hi, I’m Nikit Hamal (NikitHamal)
+# Nikit Hamal
 
-> Adaptable Person • Exploring  
-> "do what you want to do, what you have to do, and what you must do — prioritizing yourself first." ✨
+### *Developer • Writer • AI Explorer*
 
-- 🔭 Role: Exploring
-- 📍 Location: Nepal
-- 🧑‍💻 Age: 18
-- 🗣️ Languages: Nepali (native), Hindi, English
-- ⚧ Gender: Male
-- 📫 Contact: [LinkedIn](https://www.linkedin.com/in/nikithamal) · [Twitter](https://twitter.com/nikithamal) · [Instagram](https://www.instagram.com/nikithamal) · [Facebook](https://www.facebook.com/thenikithamal)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/NikitHamal/NikitHamal/main/assets/banner.png" alt="Nikit Hamal Banner" width="800"/>
+</p>
+
+A friendly, curious, and a little witty tinkerer from **Nepal**, exploring the ever-evolving world of technology. I find joy in writing (both code and prose) and building small projects that teach me something new every week. My goal is to find where I can make the biggest impact.
 
 ---
 
-## 🚀 About me
-Friendly, curious, and a little witty — I tinker with web tech, write (and prompt), and enjoy building small projects that teach me something new every week. Currently exploring different areas to find where I can make the biggest impact.
+### 📬 Connect with me
 
----
-
-## 🛠️ Skills & Tech Stack
-- Frontend: HTML, CSS, JavaScript
-- Mobile / Markup: XML
-- Languages: Java
-- Other: writing, prompts, problem solving
-
----
-
-## ✨ Featured projects
-I couldn't automatically discover your repositories (I tried to scan your GitHub but couldn't complete the scan from here). Add the projects you want highlighted, or reply "scan again" and I'll try to fetch them.
-
-- Project A — Short description here.  
-  Role: Creator / Contributor · Tech: HTML, CSS, JS  
-  Repo / Live: https://github.com/NikitHamal/REPO-A
-
-- Project B — Short description here.  
-  Role: Creator / Contributor · Tech: Java, XML  
-  Repo / Live: https://github.com/NikitHamal/REPO-B
-
-(Replace the placeholders above with your favourite projects or say "scan my GitHub" and I’ll attempt an automated fetch again.)
-
----
-
-## 📊 GitHub Stats & Visuals
-<!-- GitHub readme stats -->
 <p align="left">
-  <a href="https://github.com/NikitHamal">
-    <img src="https://github-readme-stats.vercel.app/api?username=NikitHamal&show_icons=true&theme=tokyonight" alt="Nikit's GitHub stats" />
+  <a href="https://www.linkedin.com/in/nikithamal" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
   </a>
-  <a href="https://github.com/NikitHamal">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=NikitHamal&layout=compact&theme=tokyonight" alt="Top Languages" />
+  <a href="https://twitter.com/nikithamal" target="_blank">
+    <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter"/>
+  </a>
+  <a href="mailto:iamnikithamal@gmail.com">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"/>
   </a>
 </p>
 
-<!-- Visitor counter -->
-<p>
-  <img src="https://komarev.com/ghpvc/?username=NikitHamal&color=brightgreen" alt="visitor count" />
+---
+
+### 🛠️ My Tech Stack
+
+Here are some of the technologies and tools I'm proficient with:
+
+| Category              | Technologies                                       |
+| --------------------- | -------------------------------------------------- |
+| **Frontend**          | `HTML5` `CSS3` `JavaScript (ES6+)` `GSAP`          |
+| **Mobile**            | `Android (Java)` `XML`                             |
+| **Languages**         | `Java` `Python` `JavaScript`                       |
+| **Tools & General**   | `Git & GitHub` `AI Prompt Engineering` `Problem Solving` |
+
+---
+
+### ✨ Featured Projects
+
+Here are some of the projects I'm proud of. You can find more on my [repositories tab](https://github.com/NikitHamal?tab=repositories).
+
+| Project                                             | Description                                                               | Tech Stack                        |
+| --------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------- |
+| [**VibeChat**](https://github.com/NikitHamal/VibeChat) | A real-time chat application for Android.                                 | `Java` `XML` `Firebase`           |
+| [**CodeX**](https://github.com/NikitHamal/CodeX)       | A powerful, extensible code editor built with Python.                     | `Python` `Tkinter`                |
+| [**PdfAI**](https://github.com/NikitHamal/PdfAI)       | An intelligent Android app to summarize and chat with your PDF documents. | `Java` `AI/ML` `Android`          |
+
+---
+
+### 📊 My GitHub Stats
+
+<p align="center">
+  <a href="https://github.com/NikitHamal">
+    <img src="https://github-readme-stats.vercel.app/api?username=NikitHamal&show_icons=true&theme=tokyonight&count_private=true&hide_border=true" alt="Nikit's GitHub stats" width="48%"/>
+  </a>
+  <a href="https://github.com/NikitHamal">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=NikitHamal&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages" width="48%"/>
+  </a>
+</p>
+
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=NikitHamal&color=brightgreen" alt="visitor count"/>
 </p>
 
 ---
-
-## 📚 Highlights & Accomplishments
-- Always experimenting and learning — currently exploring new areas across web and software.
-- Strong interest in writing and crafting clear prompts.
-- Open to collaboration and learning opportunities.
-
----
-
-## 📬 Contact / Let's connect
-I’m open to chat, collaborate, or answer a curious question — feel free to reach out!
-
-- LinkedIn: https://www.linkedin.com/in/nikithamal  
-- Twitter: https://twitter.com/nikithamal  
-- Instagram: https://www.instagram.com/nikithamal  
-- Facebook: https://www.facebook.com/thenikithamal
-
-Contact: iamnikithamal@gmail.com
-
----
-
-## ⚡ Site Quick Start (Portfolio Landing Page)
-
-This repository now includes a modern, minimal landing page for your portfolio in the project root.
-
-- __Open locally__: double-click `index.html` to open in your browser.
-- __Edit content__: update text and links inside `index.html` sections: `Hero`, `About`, `Skills`, `Projects`, `Writing`, `Contact`.
-- __Styles__: tweak colors and spacing in `css/styles.css` (variables at the top under `:root`).
-- __Animations__: GSAP interactions live in `js/app.js` (ScrollTrigger + subtle blob/parallax motion).
-- __Icons/Fonts__: Poppins (Google Fonts) and Feather Icons are loaded via CDN in `index.html`.
-
-### Customize
-- __Projects__: replace the three cards in `#projects` with your real work; update titles, descriptions and tags.
-- __Writing__: replace `#writing` list items with real posts/notes and link out.
-- __Branding__: change gradient and brand colors in `:root` (e.g., `--brand`, `--brand-2`).
-- __Social__: adjust links in the Hero `.social` block and in `#contact`.
-
-### Deploy
-- __GitHub Pages__: push to a repo, enable Pages with the root folder; it will serve `index.html`.
-- __Netlify/Vercel__: drag-and-drop or connect the repo; no build needed (pure HTML/CSS/JS).
-
-If you want additional sections, components, or theme variants, open an issue or ask in chat.
