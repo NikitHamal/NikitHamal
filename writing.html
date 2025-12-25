@@ -2,88 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="description" content="Writing by Nikit Hamal — essays, notes, and posts on building, learning, and ideas." />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Nikit Hamal" />
-  <meta name="theme-color" content="#0b0d10" />
+  <meta name="theme-color" content="#0a0a0a" />
   <title>Writing — Nikit Hamal</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Outfit', 'system-ui', 'sans-serif'],
+            body: ['Space Grotesk', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            lime: '#BFFF00',
+            electric: '#00F5FF',
+            hot: '#FF006E',
+            sunny: '#FFD000',
+            grape: '#8B5CF6',
+            mint: '#00FF94',
+            coral: '#FF6B6B',
+            dark: '#0a0a0a',
+          }
+        }
+      }
+    }
+  </script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/nikit.jpg" />
   <link rel="apple-touch-icon" href="assets/nikit.jpg" />
 
-  <!-- Remix Icon for UI icons -->
+  <!-- Remix Icon -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-
-  <!-- GSAP + ScrollTrigger for animations -->
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/writing.css" />
 </head>
-<body>
+<body class="bg-dark text-white font-body overflow-x-hidden">
   <a class="skip-link" href="#writing">Skip to content</a>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html#home" aria-label="Home">
-        <span class="logo-dot" aria-hidden="true"></span>
-        <span class="brand-text">Nikit<span class="muted">Hamal</span></span>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand-dot"></span>
+        <span class="brand-text">Nikit<span class="brand-muted">Hamal</span></span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
-          <i class="ri-menu-line" aria-hidden="true"></i>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
+          <i class="ri-menu-4-line"></i>
         </button>
-        <ul id="nav-menu" class="nav__list" role="menubar">
-          <li role="none"><a role="menuitem" href="index.html#about">About</a></li>
-          <li role="none"><a role="menuitem" href="index.html#skills">Skills</a></li>
-          <li role="none"><a role="menuitem" href="index.html#projects">Projects</a></li>
-          <li role="none"><a role="menuitem" class="pill" href="writing.html">Writing</a></li>
-          <li role="none"><a role="menuitem" href="index.html#contact">Contact</a></li>
+        <ul id="nav-menu" class="nav-list">
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#skills">Skills</a></li>
+          <li><a href="index.html#projects">Projects</a></li>
+          <li><a href="writing.html" class="nav-cta">Writing</a></li>
+          <li><a href="index.html#contact">Let's Talk</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main id="writing">
-    <!-- Quote Hero -->
-    <section class="section quote-hero" aria-label="Quote Hero">
+    <!-- WRITING HERO -->
+    <section class="writing-hero" aria-label="Writing Hero">
+      <div class="writing-hero__bg">
+        <div class="writing-hero__shape writing-hero__shape-1"></div>
+        <div class="writing-hero__shape writing-hero__shape-2"></div>
+      </div>
       <div class="container">
-        <blockquote class="quote">
-          <p>✍️ "Code is poetry. Writing is the soul that brings it to life."</p>
-          <footer>
-            <img src="assets/nikit.jpg" alt="Nikit Hamal" class="avatar-sm" />
-            <span>Nikit Hamal • Tales of tech, code, and endless curiosity</span>
-          </footer>
-        </blockquote>
+        <div class="writing-hero__content">
+          <div class="writing-hero__badge">
+            <i class="ri-quill-pen-fill"></i>
+            <span>Blog & Thoughts</span>
+          </div>
+          <h1 class="writing-hero__title">
+            <span class="writing-hero__line">Words That</span>
+            <span class="writing-hero__line writing-hero__highlight">Inspire</span>
+          </h1>
+          <p class="writing-hero__subtitle">
+            Tales of tech, code, and endless curiosity. Exploring ideas one post at a time.
+          </p>
+        </div>
+        <div class="writing-hero__quote">
+          <blockquote class="quote-card">
+            <div class="quote-card__icon">
+              <i class="ri-double-quotes-l"></i>
+            </div>
+            <p class="quote-card__text">Code is poetry. Writing is the soul that brings it to life.</p>
+            <footer class="quote-card__footer">
+              <img src="assets/nikit.jpg" alt="Nikit Hamal" class="quote-card__avatar" />
+              <span class="quote-card__author">Nikit Hamal</span>
+            </footer>
+          </blockquote>
+        </div>
       </div>
     </section>
 
-
-
-    <!-- Posts Grid -->
-    <section id="posts" class="section posts" aria-label="Latest posts">
+    <!-- POSTS GRID -->
+    <section id="posts" class="section posts-section" aria-label="Latest posts">
       <div class="container">
-        <div class="writing-grid" id="postsGrid"></div>
+        <div class="section-header">
+          <span class="section-badge">
+            <i class="ri-article-fill"></i>
+          </span>
+          <h2 class="section-title">All Posts</h2>
+        </div>
+        <div class="writing-grid" id="postsGrid">
+          <!-- Posts loaded dynamically -->
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container footer-inner">
-      <p>&copy; 2024 Nikit Hamal. All rights reserved.</p>
-      <a class="top" href="#writing" aria-label="Back to top"><i class="ri-arrow-up-line" aria-hidden="true"></i></a>
+      <p class="footer-text">&copy; 2024 Nikit Hamal. Crafted with passion.</p>
+      <a class="back-to-top" href="#writing" aria-label="Back to top">
+        <i class="ri-arrow-up-line"></i>
+      </a>
     </div>
   </footer>
 
