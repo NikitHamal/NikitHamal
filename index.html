@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="description" content="Portfolio of Nikit Hamal — Web Developer, Android App Developer, Writer, Thinker, AI Explorer from Nepal." />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Nikit Hamal" />
-  <meta name="theme-color" content="#0b0d10" />
+  <meta name="theme-color" content="#0a0a0a" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -17,23 +17,43 @@
   <meta property="og:image" content="https://nikithamal.com/assets/og-image.svg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Nikit Hamal — Building on the web — exploring code, apps, and ideas." />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Nikit Hamal — Developer • Writer • AI Explorer" />
   <meta name="twitter:description" content="Portfolio of Nikit Hamal — Web Developer, Android App Developer, Writer, Thinker, AI Explorer from Nepal." />
   <meta name="twitter:image" content="https://nikithamal.com/assets/og-image.svg" />
-  <meta name="twitter:image:alt" content="Nikit Hamal — Building on the web — exploring code, apps, and ideas." />
   <title>Nikit Hamal — Developer • Writer • AI Explorer</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Outfit', 'system-ui', 'sans-serif'],
+            body: ['Space Grotesk', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            lime: '#BFFF00',
+            electric: '#00F5FF',
+            hot: '#FF006E',
+            sunny: '#FFD000',
+            grape: '#8B5CF6',
+            mint: '#00FF94',
+            coral: '#FF6B6B',
+            dark: '#0a0a0a',
+          }
+        }
+      }
+    }
+  </script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/nikit.jpg" />
@@ -42,16 +62,12 @@
   <!-- Canonical -->
   <link rel="canonical" href="https://nikithamal.com/" />
 
-  <!-- Remix Icon for UI icons -->
+  <!-- Remix Icon -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-
-  <!-- GSAP + ScrollTrigger for animations -->
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/styles.css" />
-  
+
   <!-- JSON-LD Person Schema -->
   <script type="application/ld+json">
   {
@@ -69,30 +85,26 @@
   }
   </script>
 </head>
-<body>
+<body class="bg-dark text-white font-body overflow-x-hidden">
   <a class="skip-link" href="#home">Skip to content</a>
-  <!-- Background gradient blobs -->
-  <div class="bg">
-    <div class="blob blob-a"></div>
-    <div class="blob blob-b"></div>
-  </div>
 
-  <header class="site-header">
-    <div class="container header-inner">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
       <a class="brand" href="#home" aria-label="Home">
-        <span class="logo-dot" aria-hidden="true"></span>
-        <span class="brand-text">Nikit<span class="muted">Hamal</span></span>
+        <span class="brand-dot"></span>
+        <span class="brand-text">Nikit<span class="brand-muted">Hamal</span></span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
-          <i class="ri-menu-line" aria-hidden="true"></i>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
+          <i class="ri-menu-4-line"></i>
         </button>
-        <ul id="nav-menu" class="nav__list" role="menubar">
-          <li role="none"><a role="menuitem" href="#about">About</a></li>
-          <li role="none"><a role="menuitem" href="#skills">Skills</a></li>
-          <li role="none"><a role="menuitem" href="#projects">Projects</a></li>
-          <li role="none"><a role="menuitem" href="writing.html">Writing</a></li>
-          <li role="none"><a role="menuitem" href="#contact" class="pill">Contact</a></li>
+        <ul id="nav-menu" class="nav-list">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="writing.html">Writing</a></li>
+          <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
         </ul>
       </nav>
     </div>
@@ -100,113 +112,156 @@
 
   <main id="home">
     <!-- HERO -->
-    <section class="section hero" aria-label="Hero">
-      <div class="container hero__inner">
-        <div class="hero__copy">
-          <p class="kicker">🇳🇵 From Nepal · Age 18 · Creative Coder</p>
-          <h1 class="hero__title">Crafting Digital Experiences That Break Boundaries</h1>
-          <p class="hero__subtitle">Full-Stack Web Developer · Android Architect · AI Enthusiast · Technical Writer · Problem Solver Extraordinaire</p>
-          <div class="hero__cta">
-            <a class="btn primary" href="#projects"><i class="ri-rocket-2-fill" aria-hidden="true"></i><span>See Work</span></a>
-            <a class="btn ghost" href="#contact"><i class="ri-send-plane-2-fill" aria-hidden="true"></i><span>Contact</span></a>
+    <section class="hero" aria-label="Hero">
+      <div class="hero-bg">
+        <div class="hero-shape hero-shape-1"></div>
+        <div class="hero-shape hero-shape-2"></div>
+        <div class="hero-shape hero-shape-3"></div>
+      </div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span>Available for projects</span>
           </div>
-          <div class="social">
-            <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <i class="ri-linkedin-box-fill" aria-hidden="true"></i>
+          <h1 class="hero-title">
+            <span class="hero-line">Creative</span>
+            <span class="hero-line hero-highlight">Developer</span>
+            <span class="hero-line">& Builder</span>
+          </h1>
+          <p class="hero-subtitle">
+            I'm Nikit Hamal — an 18-year-old from Nepal crafting digital experiences through code, apps, and words.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">
+              <span>View My Work</span>
+              <i class="ri-arrow-right-line"></i>
             </a>
-            <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener" aria-label="Twitter/X">
-              <i class="ri-twitter-x-fill" aria-hidden="true"></i>
+            <a class="btn btn-outline" href="#contact">
+              <span>Get in Touch</span>
             </a>
-            <a href="https://www.instagram.com/nikithamal" target="_blank" rel="noopener" aria-label="Instagram">
-              <i class="ri-instagram-line" aria-hidden="true"></i>
+          </div>
+          <div class="hero-social">
+            <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-link">
+              <i class="ri-linkedin-fill"></i>
             </a>
-            <a href="mailto:iamnikithamal@gmail.com" aria-label="Email">
-              <i class="ri-mail-line" aria-hidden="true"></i>
+            <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener" aria-label="Twitter" class="social-link">
+              <i class="ri-twitter-x-fill"></i>
+            </a>
+            <a href="https://github.com/NikitHamal" target="_blank" rel="noopener" aria-label="GitHub" class="social-link">
+              <i class="ri-github-fill"></i>
+            </a>
+            <a href="mailto:iamnikithamal@gmail.com" aria-label="Email" class="social-link">
+              <i class="ri-mail-fill"></i>
             </a>
           </div>
         </div>
-        <div class="hero__visual">
-          <div class="card glass profile" id="profileCard">
-            <img src="assets/nikit.jpg" alt="Portrait of Nikit Hamal" class="avatar" id="avatarImg" />
-            <div class="meta">
-              <h3>Nikit Hamal</h3>
-              <p>Curious builder. Writer. Explorer.</p>
+        <div class="hero-card">
+          <div class="card-inner" id="profileCard">
+            <img src="assets/nikit.jpg" alt="Nikit Hamal" class="card-avatar" id="avatarImg" />
+            <div class="card-info">
+              <h3 class="card-name">Nikit Hamal</h3>
+              <p class="card-role">Full-Stack Developer</p>
+              <div class="card-tags">
+                <span class="tag tag-lime">Web</span>
+                <span class="tag tag-electric">Android</span>
+                <span class="tag tag-hot">AI</span>
+              </div>
             </div>
-          </div>
-          <div class="stats">
-            <div class="stat"><span class="num">3+</span><span class="label">Years tinkering</span></div>
-            <div class="stat"><span class="num">15+</span><span class="label">Mini projects</span></div>
-            <div class="stat"><span class="num">∞</span><span class="label">Ideas</span></div>
+            <div class="card-stats">
+              <div class="stat">
+                <span class="stat-value">3+</span>
+                <span class="stat-label">Years</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">15+</span>
+                <span class="stat-label">Projects</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">∞</span>
+                <span class="stat-label">Ideas</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <i class="ri-arrow-down-line"></i>
+      </div>
     </section>
 
-    <!-- ABOUT (UPDATED) -->
+    <!-- ABOUT -->
     <section id="about" class="section about" aria-label="About">
       <div class="container">
-        <div class="about-image-container">
-          <img src="assets/nikit.jpg" alt="Portrait of Nikit Hamal" class="about-image" />
-          <div class="about-image-overlay">
-            <h2>Hey! I'm Nikit Hamal 👋</h2>
-            <p>A bold creator building the future, one pixel at a time.</p>
+        <div class="section-header">
+          <span class="section-badge">01</span>
+          <h2 class="section-title">About Me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-content">
+            <p class="about-intro">
+              I'm a passionate technologist who thrives on pushing creative boundaries. From crafting elegant web interfaces to architecting scalable Android apps, I live for turning wild ideas into reality.
+            </p>
+            <p class="about-text">
+              Whether it's diving deep into AI, penning technical articles, or experimenting with cutting-edge frameworks — I'm all in. My mission? Create digital experiences that don't just work, but inspire.
+            </p>
+            <div class="about-chips">
+              <div class="chip chip-lime">
+                <i class="ri-map-pin-2-fill"></i>
+                <span>Nepal</span>
+              </div>
+              <div class="chip chip-electric">
+                <i class="ri-code-s-slash-fill"></i>
+                <span>Full-Stack</span>
+              </div>
+              <div class="chip chip-hot">
+                <i class="ri-quill-pen-fill"></i>
+                <span>Writer</span>
+              </div>
+              <div class="chip chip-grape">
+                <i class="ri-robot-fill"></i>
+                <span>AI Explorer</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-visual">
+            <div class="visual-card">
+              <img src="assets/nikit.jpg" alt="Nikit Hamal" class="visual-image" />
+              <div class="visual-overlay">
+                <span class="visual-text">Building the future</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        <p class="about-description">
-          I'm a passionate technologist who thrives on pushing creative boundaries. From crafting elegant web interfaces to architecting scalable Android apps, I live for the thrill of turning wild ideas into reality. Whether it's diving deep into AI, penning technical articles, or experimenting with cutting-edge frameworks—I'm all in. My mission? Create digital experiences that don't just work, but inspire.
-        </p>
-        
-        <div class="about-chips-grid">
-          <div class="about-chip">
-            <i class="ri-map-pin-line"></i>
-            <span>Nepal</span>
+        <div class="exploring-section">
+          <h3 class="exploring-title">
+            <i class="ri-rocket-2-fill"></i>
+            Currently Exploring
+          </h3>
+          <div class="exploring-grid">
+            <div class="explore-card">
+              <div class="explore-icon explore-icon-lime">
+                <i class="ri-palette-fill"></i>
+              </div>
+              <h4 class="explore-title">UI Animations</h4>
+              <p class="explore-desc">Creating smooth, performant animations with CSS and modern techniques</p>
+            </div>
+            <div class="explore-card">
+              <div class="explore-icon explore-icon-electric">
+                <i class="ri-brain-fill"></i>
+              </div>
+              <h4 class="explore-title">AI Applications</h4>
+              <p class="explore-desc">Building intelligent systems with machine learning and LLMs</p>
+            </div>
+            <div class="explore-card">
+              <div class="explore-icon explore-icon-hot">
+                <i class="ri-speed-fill"></i>
+              </div>
+              <h4 class="explore-title">Performance</h4>
+              <p class="explore-desc">Optimizing every millisecond for blazing-fast experiences</p>
+            </div>
           </div>
-          <div class="about-chip">
-            <i class="ri-code-line"></i>
-            <span>Web & Android</span>
-          </div>
-          <div class="about-chip">
-            <i class="ri-edit-line"></i>
-            <span>Writing</span>
-          </div>
-          <div class="about-chip">
-            <i class="ri-cpu-line"></i>
-            <span>AI Explorer</span>
-          </div>
-        </div>
-        
-        <div class="about-exploring-section">
-          <h3>🚀 Current Explorations</h3>
-          <ul class="exploring-list">
-            <li class="exploring-item">
-              <div class="exploring-icon">
-                <i class="ri-magic-line"></i>
-              </div>
-              <div>
-                <h4>Mind-Blowing UI Animations</h4>
-                <p>Creating jaw-dropping interactions with GSAP, Framer Motion, and cutting-edge CSS transforms that make users say "WOW!"</p>
-              </div>
-            </li>
-            <li class="exploring-item">
-              <div class="exploring-icon">
-                <i class="ri-brain-line"></i>
-              </div>
-              <div>
-                <h4>AI-Powered Applications</h4>
-                <p>Building intelligent systems that leverage machine learning and LLMs to solve real-world problems in innovative ways.</p>
-              </div>
-            </li>
-            <li class="exploring-item">
-              <div class="exploring-icon">
-                <i class="ri-rocket-2-line"></i>
-              </div>
-              <div>
-                <h4>Performance-Obsessed Code</h4>
-                <p>Optimizing every millisecond, every byte—creating blazing-fast experiences that users love and search engines reward.</p>
-              </div>
-            </li>
-          </ul>
         </div>
       </div>
     </section>
@@ -214,44 +269,52 @@
     <!-- SKILLS -->
     <section id="skills" class="section skills" aria-label="Skills">
       <div class="container">
-        <div class="section-head">
+        <div class="section-header">
+          <span class="section-badge">02</span>
           <h2 class="section-title">My Toolkit</h2>
-          <p class="section-subtitle">I'm passionate about using the right tools to build great products. Here's what I'm proficient with, and I'm always eager to learn more.</p>
         </div>
-        <div class="skills-container">
-          <div class="skill-category">
-            <div class="skill-category__header">
-              <div class="skill-category__icon"><i class="ri-layout-line"></i></div>
-              <h3 class="skill-category__title">Frontend Development</h3>
+        <p class="section-subtitle">Technologies and tools I use to bring ideas to life</p>
+        <div class="skills-grid">
+          <div class="skill-card skill-card-lime">
+            <div class="skill-header">
+              <div class="skill-icon">
+                <i class="ri-layout-4-fill"></i>
+              </div>
+              <h3 class="skill-title">Frontend</h3>
             </div>
             <ul class="skill-list">
-              <li>HTML5</li>
-              <li>CSS3 (Sass, Responsive Design)</li>
-              <li>JavaScript (ES6+)</li>
-              <li>GSAP for animations</li>
+              <li><span class="skill-dot"></span>HTML5 & Semantic Markup</li>
+              <li><span class="skill-dot"></span>CSS3 & Modern Layouts</li>
+              <li><span class="skill-dot"></span>JavaScript (ES6+)</li>
+              <li><span class="skill-dot"></span>Tailwind CSS</li>
             </ul>
           </div>
-          <div class="skill-category">
-            <div class="skill-category__header">
-              <div class="skill-category__icon"><i class="ri-android-line"></i></div>
-              <h3 class="skill-category__title">Mobile Development</h3>
+          <div class="skill-card skill-card-electric">
+            <div class="skill-header">
+              <div class="skill-icon">
+                <i class="ri-smartphone-fill"></i>
+              </div>
+              <h3 class="skill-title">Mobile</h3>
             </div>
             <ul class="skill-list">
-              <li>Android App Development (Java)</li>
-              <li>XML Layouts</li>
-              <li>Clean Architecture Basics</li>
+              <li><span class="skill-dot"></span>Android Development</li>
+              <li><span class="skill-dot"></span>Java & Kotlin</li>
+              <li><span class="skill-dot"></span>XML Layouts</li>
+              <li><span class="skill-dot"></span>Clean Architecture</li>
             </ul>
           </div>
-          <div class="skill-category">
-            <div class="skill-category__header">
-              <div class="skill-category__icon"><i class="ri-tools-line"></i></div>
-              <h3 class="skill-category__title">General &amp; Tools</h3>
+          <div class="skill-card skill-card-hot">
+            <div class="skill-header">
+              <div class="skill-icon">
+                <i class="ri-tools-fill"></i>
+              </div>
+              <h3 class="skill-title">Tools & More</h3>
             </div>
             <ul class="skill-list">
-              <li>Git &amp; GitHub</li>
-              <li>Creative &amp; Technical Writing</li>
-              <li>Problem Solving</li>
-              <li>AI Prompt Engineering</li>
+              <li><span class="skill-dot"></span>Git & GitHub</li>
+              <li><span class="skill-dot"></span>Technical Writing</li>
+              <li><span class="skill-dot"></span>AI & Prompt Engineering</li>
+              <li><span class="skill-dot"></span>Problem Solving</li>
             </ul>
           </div>
         </div>
@@ -261,38 +324,65 @@
     <!-- PROJECTS -->
     <section id="projects" class="section projects" aria-label="Projects">
       <div class="container">
-        <div class="section-head">
-          <h2>Selected Work</h2>
-          <a class="link" href="https://github.com/NikitHamal?tab=repositories" target="_blank" rel="noopener">View All on Github <i class="ri-external-link-line" aria-hidden="true"></i></a>
+        <div class="section-header">
+          <span class="section-badge">03</span>
+          <h2 class="section-title">Selected Work</h2>
+          <a class="section-link" href="https://github.com/NikitHamal?tab=repositories" target="_blank" rel="noopener">
+            View All on GitHub
+            <i class="ri-external-link-line"></i>
+          </a>
         </div>
-        <div class="grid-3 cards">
-          <article class="card project">
-            <a href="https://github.com/NikitHamal/VibeChat" target="_blank" rel="noopener" class="card__link" aria-label="View VibeChat on GitHub">
-              <div class="card__media" aria-hidden="true"></div>
-              <div class="card__body">
-                <h3>VibeChat</h3>
-                <p>A real-time chat application for Android, allowing users to connect and communicate instantly.</p>
-                <div class="tags"><span>Java</span><span>XML</span><span>Firebase</span></div>
+        <div class="projects-grid">
+          <article class="project-card">
+            <a href="https://github.com/NikitHamal/VibeChat" target="_blank" rel="noopener" class="project-link">
+              <div class="project-media project-media-lime">
+                <div class="project-icon">
+                  <i class="ri-chat-3-fill"></i>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">VibeChat</h3>
+                <p class="project-desc">Real-time chat application for Android with instant messaging capabilities</p>
+                <div class="project-tags">
+                  <span class="project-tag">Java</span>
+                  <span class="project-tag">Firebase</span>
+                  <span class="project-tag">Android</span>
+                </div>
               </div>
             </a>
           </article>
-          <article class="card project">
-            <a href="https://github.com/NikitHamal/CodeX" target="_blank" rel="noopener" class="card__link" aria-label="View CodeX on GitHub">
-              <div class="card__media" aria-hidden="true"></div>
-              <div class="card__body">
-                <h3>CodeX</h3>
-                <p>A powerful and extensible code editor built with Python, designed for simplicity and efficiency.</p>
-                <div class="tags"><span>Python</span><span>Tkinter</span></div>
+          <article class="project-card">
+            <a href="https://github.com/NikitHamal/CodeX" target="_blank" rel="noopener" class="project-link">
+              <div class="project-media project-media-electric">
+                <div class="project-icon">
+                  <i class="ri-code-box-fill"></i>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">CodeX</h3>
+                <p class="project-desc">Powerful code editor built with Python, designed for simplicity and efficiency</p>
+                <div class="project-tags">
+                  <span class="project-tag">Python</span>
+                  <span class="project-tag">Tkinter</span>
+                </div>
               </div>
             </a>
           </article>
-          <article class="card project">
-            <a href="https://github.com/NikitHamal/PdfAI" target="_blank" rel="noopener" class="card__link" aria-label="View PdfAI on GitHub">
-              <div class="card__media" aria-hidden="true"></div>
-              <div class="card__body">
-                <h3>PdfAi</h3>
-                <p>An intelligent Android app to summarize and chat with your PDF documents using AI.</p>
-                <div class="tags"><span>Java</span><span>AI</span><span>Android</span></div>
+          <article class="project-card">
+            <a href="https://github.com/NikitHamal/PdfAI" target="_blank" rel="noopener" class="project-link">
+              <div class="project-media project-media-hot">
+                <div class="project-icon">
+                  <i class="ri-file-pdf-2-fill"></i>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3 class="project-title">PdfAI</h3>
+                <p class="project-desc">AI-powered Android app to summarize and chat with PDF documents</p>
+                <div class="project-tags">
+                  <span class="project-tag">Java</span>
+                  <span class="project-tag">AI</span>
+                  <span class="project-tag">Android</span>
+                </div>
               </div>
             </a>
           </article>
@@ -303,12 +393,16 @@
     <!-- WRITING -->
     <section id="writing" class="section writing" aria-label="Writing">
       <div class="container">
-        <div class="section-head">
-          <h2>Recent Thoughts</h2>
-          <a class="link" href="writing.html">View All <i class="ri-arrow-right-line" aria-hidden="true"></i></a>
+        <div class="section-header">
+          <span class="section-badge">04</span>
+          <h2 class="section-title">Recent Thoughts</h2>
+          <a class="section-link" href="writing.html">
+            View All
+            <i class="ri-arrow-right-line"></i>
+          </a>
         </div>
         <div id="writing-preview" class="writing-grid">
-          <!-- Posts will be dynamically inserted here by app.js -->
+          <!-- Posts loaded dynamically -->
         </div>
       </div>
     </section>
@@ -316,66 +410,67 @@
     <!-- CONTACT -->
     <section id="contact" class="section contact" aria-label="Contact">
       <div class="container">
-        <div class="contact-wrapper">
-          <div class="contact-text">
-            <h2 class="contact-title">Let's Connect</h2>
-            <p class="contact-subtitle">Have a project in mind, a question, or just want to say hi? I'd love to hear from you. I read and reply to every message.</p>
-            <div class="contact-links">
-              <a class="contact-link" href="mailto:iamnikithamal@gmail.com">
-                <i class="ri-mail-line"></i>
-                <span>iamnikithamal@gmail.com</span>
-              </a>
-              <a class="contact-link" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
-                <i class="ri-linkedin-box-fill"></i>
-                <span>LinkedIn</span>
-              </a>
-              <a class="contact-link" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
-                <i class="ri-twitter-x-fill"></i>
-                <span>Twitter / X</span>
-              </a>
-              <a class="contact-link" href="https://wa.me/9779765324034?text=Hi%20Nikit%20%E2%80%94%20I%20saw%20your%20portfolio!" target="_blank" rel="noopener">
-                <i class="ri-whatsapp-line"></i>
-                <span>WhatsApp</span>
-              </a>
-            </div>
+        <div class="contact-content">
+          <div class="contact-header">
+            <span class="section-badge section-badge-light">05</span>
+            <h2 class="contact-title">Let's Create<br/>Something Amazing</h2>
+            <p class="contact-subtitle">Have a project in mind or just want to say hi? I'd love to hear from you.</p>
+          </div>
+          <div class="contact-links">
+            <a class="contact-link contact-link-lime" href="mailto:iamnikithamal@gmail.com">
+              <i class="ri-mail-fill"></i>
+              <span>iamnikithamal@gmail.com</span>
+            </a>
+            <a class="contact-link contact-link-electric" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
+              <i class="ri-linkedin-fill"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a class="contact-link contact-link-hot" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
+              <i class="ri-twitter-x-fill"></i>
+              <span>Twitter / X</span>
+            </a>
+            <a class="contact-link contact-link-mint" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">
+              <i class="ri-whatsapp-fill"></i>
+              <span>WhatsApp</span>
+            </a>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Photo Lightbox Dialog -->
+  <!-- Photo Modal -->
   <dialog id="photoDialog" class="modal" aria-label="Photo of Nikit Hamal">
-    <button class="modal__close" data-close aria-label="Close">
-      <i class="ri-close-line" aria-hidden="true"></i>
+    <button class="modal-close" data-close aria-label="Close">
+      <i class="ri-close-line"></i>
     </button>
-    <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal__image" />
+    <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-image" />
   </dialog>
 
-  <!-- Profile Dialog -->
+  <!-- Profile Modal -->
   <dialog id="profileDialog" class="modal" aria-labelledby="profileDialogTitle">
-    <button class="modal__close" data-close aria-label="Close">
-      <i class="ri-close-line" aria-hidden="true"></i>
+    <button class="modal-close" data-close aria-label="Close">
+      <i class="ri-close-line"></i>
     </button>
-    <div class="modal__content profile">
-      <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal__avatar" />
-      <div class="modal__info">
-        <h3 id="profileDialogTitle">Nikit Hamal</h3>
-        <p class="muted">Age 18 • From Nepal</p>
-        <div class="modal__actions">
-          <a class="btn pill whatsapp" href="https://wa.me/9779765324034?text=Hi%20Nikit%20%E2%80%94%20I%20saw%20your%20portfolio!" target="_blank" rel="noopener" aria-label="Message on WhatsApp">
-            <i class="ri-whatsapp-line" aria-hidden="true"></i>
-            Message me
-          </a>
-        </div>
+    <div class="modal-profile">
+      <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-avatar" />
+      <div class="modal-info">
+        <h3 id="profileDialogTitle" class="modal-name">Nikit Hamal</h3>
+        <p class="modal-meta">Age 18 • Nepal</p>
+        <a class="btn btn-mint" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">
+          <i class="ri-whatsapp-fill"></i>
+          <span>Message me</span>
+        </a>
       </div>
     </div>
   </dialog>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container footer-inner">
-      <p>&copy; 2024 Nikit Hamal. All rights reserved.</p>
-      <a class="top" href="#home" aria-label="Back to top"><i class="ri-arrow-up-line" aria-hidden="true"></i></a>
+      <p class="footer-text">&copy; 2024 Nikit Hamal. Crafted with passion.</p>
+      <a class="back-to-top" href="#home" aria-label="Back to top">
+        <i class="ri-arrow-up-line"></i>
+      </a>
     </div>
   </footer>
 
