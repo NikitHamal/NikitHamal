@@ -298,31 +298,58 @@
   }
 
   async function loadAllPosts() {
-    const idx = await fetchJSON('posts/index.json');
-    if (!idx || !Array.isArray(idx.posts)) return [];
+    const { apiKey, blogId } = window.BLOGGER_CONFIG || {};
+    if (!apiKey || !blogId || apiKey === 'YOUR_API_KEY_HERE') {
+      console.warn('Blogger API config missing or placeholders used. Falling back to local posts.');
 
-    const posts = await Promise.all(
-      idx.posts.map(slug => fetchJSON(`posts/${slug}.json`))
-    );
+      const idx = await fetchJSON('posts/index.json');
+      if (!idx || !Array.isArray(idx.posts)) return [];
 
-    return posts
-      .filter(Boolean)
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+      const posts = await Promise.all(
+        idx.posts.map(slug => fetchJSON(`posts/${slug}.json`))
+      );
+
+      return posts
+        .filter(Boolean)
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+
+    const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?key=${apiKey}&maxResults=12`;
+    const data = await fetchJSON(url);
+
+    if (!data || !data.items) {
+      console.warn('No posts found from Blogger.');
+      return [];
+    }
+
+    return data.items.map(post => ({
+      id: post.id,
+      slug: post.id,
+      title: post.title,
+      date: post.published,
+      category: 'Blogger', // Default category
+      image: post.images ? post.images[0].url : null,
+      contentHtml: post.content,
+      isBlogger: true
+    }));
   }
 
   function renderWritingCard(post) {
-    const imagePath = resolveImagePath(post.image);
+    const isBlogger = post.isBlogger;
+    const imagePath = isBlogger ? post.image : resolveImagePath(post.image);
     const readingTime = estimateReadingTime(post.contentHtml).mins;
-    const excerpt = htmlToText(post.contentHtml).substring(0, 120) + '...';
+    const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 120) + '...');
     const date = new Date(post.date).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric'
     });
 
+    const link = `read.html?${isBlogger ? 'id' : 'slug'}=${post.slug}`;
+
     return `
       <article class="writing-card">
-        <a href="read.html?slug=${post.slug}" class="writing-card__link">
+        <a href="${link}" class="writing-card__link">
           <div class="writing-card__media" style="background-image: ${imagePath ? `url('${imagePath}')` : svgPlaceholder(post.title)}"></div>
           <div class="writing-card__body">
             <span class="writing-card__category">${post.category || 'Article'}</span>
@@ -462,12 +489,45 @@
 
     const params = new URLSearchParams(location.search);
     const slug = params.get('slug');
-    const data = slug ? await fetchJSON(`posts/${slug}.json`) : null;
-    const post = data || (await loadAllPosts())[0];
+    const id = params.get('id');
 
-    if (!post) return;
+    let post = null;
 
-    const img = resolveImagePath(post.image);
+    if (id) {
+      // Fetch from Blogger
+      const { apiKey, blogId } = window.BLOGGER_CONFIG || {};
+      if (apiKey && blogId && apiKey !== 'YOUR_API_KEY_HERE') {
+        const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/${id}?key=${apiKey}`;
+        const data = await fetchJSON(url);
+        if (data) {
+          post = {
+            id: data.id,
+            title: data.title,
+            date: data.published,
+            category: 'Blogger',
+            image: data.images ? data.images[0].url : null,
+            contentHtml: data.content,
+            isBlogger: true
+          };
+        }
+      }
+    } else if (slug) {
+      // Fetch from Local
+      post = await fetchJSON(`posts/${slug}.json`);
+    }
+
+    // Fallback to first available post if nothing found
+    if (!post) {
+      const allPosts = await loadAllPosts();
+      post = allPosts[0];
+    }
+
+    if (!post) {
+      body.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--gray);">Post not found.</p>';
+      return;
+    }
+
+    const img = post.isBlogger ? post.image : resolveImagePath(post.image);
     const meta = $('#readMeta');
     const titleEl = $('#readTitle');
     const catEl = $('#readCategory');
@@ -486,8 +546,13 @@
     if (meta) meta.textContent = `${date} • ${rt} min read`;
 
     if (banner) {
-      banner.setAttribute('data-bg', img || '');
-      hydrateMedia(document);
+      if (img) {
+        banner.style.backgroundImage = `url('${img}')`;
+        banner.style.backgroundSize = 'cover';
+        banner.style.backgroundPosition = 'center';
+      } else {
+        banner.style.display = 'none';
+      }
     }
 
     body.innerHTML = post.contentHtml;
