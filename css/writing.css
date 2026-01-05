@@ -175,6 +175,72 @@
 .posts-section {
   background: var(--dark-light);
   border-top: 1px solid var(--gray-dark);
+  padding-bottom: 80px;
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  animation: slideUp 0.8s ease forwards;
+}
+
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: var(--dark-lighter);
+  border: var(--border-width) solid var(--sunny);
+  color: var(--sunny);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background: var(--sunny);
+  color: var(--dark);
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--white);
+}
+
+.load-more-btn:active:not(:disabled) {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--gray-dark);
+  color: var(--gray);
+}
+
+.load-more-btn i {
+  font-size: 1.25rem;
+  transition: transform 0.5s ease;
+}
+
+.load-more-btn.loading i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ============================================
@@ -671,6 +737,7 @@
    PRINT STYLES
    ============================================ */
 @media print {
+
   .writing-hero__bg,
   .back-link,
   .read-sidebar,

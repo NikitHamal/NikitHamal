@@ -11,6 +11,10 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
+  // Pagination State
+  let nextPageToken = null;
+  let isFetching = false;
+
   // ============================================
   // UTILITY FUNCTIONS
   // ============================================
@@ -297,37 +301,45 @@
     }
   }
 
-  async function loadAllPosts() {
+  async function loadAllPosts(pageToken = null) {
     const { apiKey, blogId } = window.BLOGGER_CONFIG || {};
     if (!apiKey || !blogId || apiKey === 'YOUR_API_KEY_HERE') {
-      console.warn('Blogger API config missing or placeholders used. Falling back to local posts.');
+      if (!pageToken) {
+        console.warn('Blogger API config missing or placeholders used. Falling back to local posts.');
 
-      const idx = await fetchJSON('posts/index.json');
-      if (!idx || !Array.isArray(idx.posts)) return [];
+        const idx = await fetchJSON('posts/index.json');
+        if (!idx || !Array.isArray(idx.posts)) return [];
 
-      const posts = await Promise.all(
-        idx.posts.map(slug => fetchJSON(`posts/${slug}.json`))
-      );
+        const posts = await Promise.all(
+          idx.posts.map(slug => fetchJSON(`posts/${slug}.json`))
+        );
 
-      return posts
-        .filter(Boolean)
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
+        return posts
+          .filter(Boolean)
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+      return [];
     }
 
-    const url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?key=${apiKey}&maxResults=12`;
+    let url = `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts?key=${apiKey}&maxResults=9`;
+    if (pageToken) url += `&pageToken=${pageToken}`;
+
     const data = await fetchJSON(url);
 
     if (!data || !data.items) {
       console.warn('No posts found from Blogger.');
+      nextPageToken = null;
       return [];
     }
+
+    nextPageToken = data.nextPageToken || null;
 
     return data.items.map(post => ({
       id: post.id,
       slug: post.id,
       title: post.title,
       date: post.published,
-      category: 'Blogger', // Default category
+      category: 'Blogger',
       image: post.images ? post.images[0].url : null,
       contentHtml: post.content,
       isBlogger: true
@@ -401,6 +413,65 @@
     }
 
     grid.innerHTML = posts.map(renderWritingCard).join('');
+    updatePaginationControls();
+  }
+
+  function updatePaginationControls() {
+    const container = $('#paginationContainer');
+    if (!container) return;
+
+    if (nextPageToken) {
+      container.innerHTML = `
+        <button id="loadMoreBtn" class="load-more-btn">
+          <span>Load More Posts</span>
+          <i class="ri-refresh-line"></i>
+        </button>
+      `;
+      $('#loadMoreBtn').addEventListener('click', handleLoadMore);
+    } else {
+      container.innerHTML = '';
+    }
+  }
+
+  async function handleLoadMore() {
+    if (isFetching || !nextPageToken) return;
+
+    const btn = $('#loadMoreBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.querySelector('span').textContent = 'Loading...';
+    }
+
+    isFetching = true;
+    const newPosts = await loadAllPosts(nextPageToken);
+    isFetching = false;
+
+    if (newPosts.length > 0) {
+      const grid = $('#postsGrid');
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = newPosts.map(renderWritingCard).join('');
+
+      // Append nodes individually to trigger animations if necessary
+      while (tempDiv.firstChild) {
+        const el = tempDiv.firstChild;
+        grid.appendChild(el);
+        // Refresh intersection observer for new elements
+        if (window.IntersectionObserver) {
+          const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                obs.unobserve(entry.target);
+              }
+            });
+          });
+          if (el.nodeType === 1) observer.observe(el);
+        }
+      }
+    }
+
+    updatePaginationControls();
   }
 
   // ============================================
