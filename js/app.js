@@ -425,13 +425,16 @@
     list.innerHTML = '';
     const headings = $$('h2, h3', container);
     const tocWrap = $('#toc');
+    const layout = $('.read-layout');
 
     if (!headings.length) {
       if (tocWrap) tocWrap.style.display = 'none';
+      if (layout) layout.classList.add('no-sidebar');
       return;
     }
 
     if (tocWrap) tocWrap.style.display = '';
+    if (layout) layout.classList.remove('no-sidebar');
 
     headings.forEach((h) => {
       if (!h.id) h.id = slugify(h.textContent);
