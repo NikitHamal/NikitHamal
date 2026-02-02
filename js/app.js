@@ -632,6 +632,26 @@
     body.innerHTML = post.contentHtml;
     buildTOC();
     enhanceContentImages(body);
+
+    // Update Meta Tags and Title
+    const fullTitle = `${post.title} — Nikit Hamal`;
+    document.title = fullTitle;
+
+    const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 160) + '...');
+    const postUrl = window.location.href;
+    const postImage = img ? (img.startsWith('http') ? img : `https://nikit.is-a.dev/${img}`) : 'https://nikit.is-a.dev/assets/nikit.jpg';
+
+    // Update Open Graph
+    if ($('#og-title')) $('#og-title').setAttribute('content', fullTitle);
+    if ($('#og-desc')) $('#og-desc').setAttribute('content', excerpt);
+    if ($('#og-url')) $('#og-url').setAttribute('content', postUrl);
+    if ($('#og-image')) $('#og-image').setAttribute('content', postImage);
+
+    // Update Twitter
+    if ($('#twitter-title')) $('#twitter-title').setAttribute('content', fullTitle);
+    if ($('#twitter-desc')) $('#twitter-desc').setAttribute('content', excerpt);
+    if ($('#twitter-url')) $('#twitter-url').setAttribute('content', postUrl);
+    if ($('#twitter-image')) $('#twitter-image').setAttribute('content', postImage);
   }
 
   // ============================================
