@@ -432,6 +432,8 @@ button {
 .hero-card {
   animation: slideUp 0.8s ease 0.3s forwards;
   opacity: 0;
+  max-width: 450px;
+  margin: 0 auto;
 }
 
 .card-inner {
@@ -737,6 +739,8 @@ button {
 /* About Visual */
 .about-visual {
   position: relative;
+  max-width: 450px;
+  margin: 0 auto;
 }
 
 .visual-card {
