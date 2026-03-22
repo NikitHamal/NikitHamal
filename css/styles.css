@@ -1002,6 +1002,7 @@ button {
 .project-media-lime { background: linear-gradient(135deg, var(--lime) 0%, #8BC34A 100%); }
 .project-media-electric { background: linear-gradient(135deg, var(--electric) 0%, #00A8CC 100%); }
 .project-media-hot { background: linear-gradient(135deg, var(--hot) 0%, #FF4081 100%); }
+.project-media-grape { background: linear-gradient(135deg, var(--grape) 0%, #6D28D9 100%); }
 
 .project-icon {
   width: 80px;
