@@ -1272,6 +1272,8 @@ button {
    ============================================ */
 .modal {
   position: fixed;
+  inset: 0;
+  margin: auto;
   border: var(--border-thick) solid var(--gray-dark);
   background: var(--dark-lighter);
   padding: 0;
