@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -27,31 +27,6 @@
   <meta name="twitter:image" content="https://nikit.is-a.dev/assets/nikit.jpg" />
   <title>Writing — Nikit Hamal</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['Outfit', 'system-ui', 'sans-serif'],
-            body: ['Space Grotesk', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            lime: '#BFFF00',
-            electric: '#00F5FF',
-            hot: '#FF006E',
-            sunny: '#FFD000',
-            grape: '#8B5CF6',
-            mint: '#00FF94',
-            coral: '#FF6B6B',
-            dark: '#0a0a0a',
-          }
-        }
-      }
-    }
-  </script>
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,9 +44,14 @@
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/writing.css" />
+
+  <!-- Theme Init -->
+  <script>
+    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0a0a0a':'#fafafa')})();
+  </script>
 </head>
 
-<body class="bg-dark text-white font-body overflow-x-hidden">
+<body class="font-body overflow-x-hidden">
   <a class="skip-link" href="#writing">Skip to content</a>
 
   <!-- HEADER -->
@@ -93,6 +73,11 @@
           <li><a href="index.html#contact">Let's Talk</a></li>
         </ul>
       </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i class="ri-sun-line"></i>
+        </button>
+      </div>
     </div>
   </header>
 

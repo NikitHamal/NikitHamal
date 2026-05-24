@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -28,31 +28,6 @@
   <meta name="twitter:image" content="https://nikit.is-a.dev/assets/nikit.jpg" />
   <title>Nikit Hamal — Developer • Writer • AI Explorer</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['Outfit', 'system-ui', 'sans-serif'],
-            body: ['Space Grotesk', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            lime: '#BFFF00',
-            electric: '#00F5FF',
-            hot: '#FF006E',
-            sunny: '#FFD000',
-            grape: '#8B5CF6',
-            mint: '#00FF94',
-            coral: '#FF6B6B',
-            dark: '#0a0a0a',
-          }
-        }
-      }
-    }
-  </script>
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,6 +48,11 @@
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/styles.css" />
 
+  <!-- Theme Init (prevent flash) -->
+  <script>
+    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0a0a0a':'#fafafa')})();
+  </script>
+
   <!-- JSON-LD Person Schema -->
   <script type="application/ld+json">
   {
@@ -91,7 +71,7 @@
   </script>
 </head>
 
-<body class="bg-dark text-white font-body overflow-x-hidden">
+<body class="font-body overflow-x-hidden">
   <a class="skip-link" href="#home">Skip to content</a>
 
   <!-- HEADER -->
@@ -113,6 +93,11 @@
           <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
         </ul>
       </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i class="ri-sun-line"></i>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -187,7 +172,7 @@
                 <span class="stat-label">Projects</span>
               </div>
               <div class="stat">
-                <span class="stat-value">∞</span>
+                <span class="stat-value">&infin;</span>
                 <span class="stat-label">Ideas</span>
               </div>
             </div>
@@ -393,22 +378,20 @@
             <p class="contact-subtitle">Have a project in mind or just want to say hi? I'd love to hear from you.</p>
           </div>
           <div class="contact-links">
-            <a class="contact-link contact-link-lime" href="mailto:iamnikithamal@gmail.com">
+            <a class="contact-link" href="mailto:iamnikithamal@gmail.com">
               <i class="ri-mail-fill"></i>
               <span>iamnikithamal@gmail.com</span>
             </a>
-            <a class="contact-link contact-link-electric" href="https://www.linkedin.com/in/nikithamal" target="_blank"
-              rel="noopener">
+            <a class="contact-link" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
               <i class="ri-linkedin-fill"></i>
               <span>LinkedIn</span>
             </a>
-            <a class="contact-link contact-link-hot" href="https://twitter.com/nikithamal" target="_blank"
-              rel="noopener">
+            <a class="contact-link" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
               <i class="ri-twitter-x-fill"></i>
               <span>Twitter / X</span>
             </a>
-            <a class="contact-link contact-link-mint" href="https://wa.me/9779765324034?text=Hi%20Nikit!"
-              target="_blank" rel="noopener">
+            <a class="contact-link" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank"
+              rel="noopener">
               <i class="ri-whatsapp-fill"></i>
               <span>WhatsApp</span>
             </a>
@@ -435,7 +418,7 @@
       <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-avatar" />
       <div class="modal-info">
         <h3 id="profileDialogTitle" class="modal-name">Nikit Hamal</h3>
-        <p class="modal-meta">Age 18 • Nepal</p>
+        <p class="modal-meta">Age 18 &bull; Nepal</p>
         <a class="btn btn-mint" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">
           <i class="ri-whatsapp-fill"></i>
           <span>Message me</span>
