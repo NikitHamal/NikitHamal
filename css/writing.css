@@ -422,6 +422,47 @@
   color: var(--white);
 }
 
+/* Ensure nested children in Blogger imports inherit correct theme colors and backgrounds */
+.read-body.prose span,
+.read-body.prose p,
+.read-body.prose div,
+.read-body.prose font {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: inherit !important;
+  font-family: inherit !important;
+}
+
+/* Ensure code blocks, tables, and blockquotes retain their themed styles */
+.read-body.prose blockquote,
+.read-body.prose blockquote * {
+  background-color: var(--dark-lighter) !important;
+  color: var(--gray) !important;
+}
+
+.read-body.prose code {
+  background-color: var(--dark-lighter) !important;
+  color: var(--lime) !important;
+}
+
+.read-body.prose pre,
+.read-body.prose pre code {
+  background-color: var(--dark-lighter) !important;
+  color: var(--lime) !important;
+}
+
+.read-body.prose th,
+.read-body.prose th * {
+  background-color: var(--dark-lighter) !important;
+  color: var(--lime) !important;
+}
+
+.read-body.prose td,
+.read-body.prose td * {
+  background-color: var(--dark) !important;
+  color: inherit !important;
+}
+
 .read-body.prose h2 {
   font-family: var(--font-display);
   font-size: 1.75rem;

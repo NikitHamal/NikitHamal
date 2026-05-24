@@ -548,6 +548,51 @@
     });
   }
 
+  function cleanBloggerStyles(container) {
+    // Blogger posts often contain nested divs, spans, and paragraphs with inline styles
+    // (e.g. background-color: white; color: black; font-family: ...)
+    // We want to remove these styles to make sure the site's dark mode design works perfectly.
+    const styledElements = $$('[style]', container);
+    styledElements.forEach((el) => {
+      // Keep style on elements that genuinely need it (like maps, custom charts, videos or iframes)
+      const tagName = el.tagName.toLowerCase();
+      if (tagName === 'iframe' || tagName === 'video' || tagName === 'embed') return;
+      
+      // Let's remove typical blogger override properties from the style attribute
+      el.style.background = '';
+      el.style.backgroundColor = '';
+      el.style.color = '';
+      el.style.fontFamily = '';
+      el.style.fontSize = '';
+      el.style.lineHeight = '';
+      
+      // If the style attribute is now empty or only contains whitespace, remove it entirely
+      if (!el.getAttribute('style') || el.getAttribute('style').trim() === '') {
+        el.removeAttribute('style');
+      }
+    });
+
+    // Blogger also uses bgcolor attribute on tables or divs sometimes
+    $$('[bgcolor]', container).forEach(el => el.removeAttribute('bgcolor'));
+    
+    // Also remove legacy font styling attributes
+    $$('font', container).forEach((font) => {
+      font.removeAttribute('color');
+      font.removeAttribute('face');
+      font.removeAttribute('size');
+    });
+
+    // Remove empty paragraphs or spans that blogger might have generated for spacing
+    // which can create huge gaps in the article
+    $$('p, span', container).forEach((el) => {
+      if (el.innerHTML.trim() === '&nbsp;' || el.innerHTML.trim() === '<br>') {
+        el.style.margin = '0';
+        el.style.padding = '0';
+        el.style.height = '0';
+      }
+    });
+  }
+
   function enhanceContentImages(container) {
     $$('img', container).forEach((img) => {
       img.loading = 'lazy';
@@ -630,6 +675,7 @@
     }
 
     body.innerHTML = post.contentHtml;
+    cleanBloggerStyles(body);
     buildTOC();
     enhanceContentImages(body);
 
