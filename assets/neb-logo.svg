@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+<title id="title">N logo square icon SVG</title>
+<desc id="desc">Clean vector recreation of the uploaded blue N logo; transparent background and no embedded raster image.</desc>
+
+<defs>
+  <linearGradient id="frontGrad" x1="40" y1="220" x2="800" y2="1350" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#0058df"/>
+    <stop offset="0.48" stop-color="#004bd4"/>
+    <stop offset="1" stop-color="#003cc3"/>
+  </linearGradient>
+  <linearGradient id="darkGrad" x1="505" y1="30" x2="960" y2="1290" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#07337f"/>
+    <stop offset="0.55" stop-color="#052566"/>
+    <stop offset="1" stop-color="#021b54"/>
+  </linearGradient>
+  <linearGradient id="innerGrad" x1="435" y1="180" x2="780" y2="890" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#06327c"/>
+    <stop offset="1" stop-color="#04215e"/>
+  </linearGradient>
+  <linearGradient id="lightGrad" x1="305" y1="320" x2="615" y2="705" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#a8c5ff"/>
+    <stop offset="0.52" stop-color="#90b4fb"/>
+    <stop offset="1" stop-color="#82a8f5"/>
+  </linearGradient>
+  <linearGradient id="frontShadowGrad" x1="690" y1="780" x2="780" y2="1050" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#0030a5" stop-opacity="0.35"/>
+    <stop offset="1" stop-color="#001e77" stop-opacity="0"/>
+  </linearGradient>
+</defs>
+<g transform="translate(210.601 86.137) scale(0.610119)">
+
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.78" stroke-width="13" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M500 42 L501 135 L856 370 L858 1287 L943 1219 L943 331 Z"/>
+    <path d="M441 191 L441 282 L691 447 L691 799 L774 886 L775 408 Z"/>
+    <path d="M306 320 L307 377 L613 706 L613 485 Z"/>
+    <path d="M51 228 L51 1132 L263 1346 L267 812 L775 1353 L775 887 L691 800 L685 902 Z"/>
+  </g>
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <path d="M500 42 L501 135 L856 370 L858 1287 L943 1219 L943 331 Z" fill="url(#darkGrad)" stroke="#eef5ff" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M441 191 L441 282 L691 447 L691 799 L774 886 L775 408 Z" fill="url(#innerGrad)" stroke="#eef5ff" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M306 320 L307 377 L613 706 L613 485 Z" fill="url(#lightGrad)" stroke="#eef5ff" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M51 228 L51 1132 L263 1346 L267 812 L775 1353 L775 887 L691 800 L685 902 Z" fill="url(#frontGrad)" stroke="#eef5ff" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M691 800 L775 887 L775 1052 L691 958 Z" fill="url(#frontShadowGrad)" stroke="none"/>
+  </g>
+</g>
+</svg>
