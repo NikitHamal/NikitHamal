@@ -1,5 +1,4 @@
-# robots.txt for https://nikithamal.com/
 User-agent: *
 Allow: /
 
-Sitemap: https://nikithamal.com/sitemap.xml
+Sitemap: https://nikit.is-a.dev/sitemap.xml

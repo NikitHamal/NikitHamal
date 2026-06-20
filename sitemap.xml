@@ -1,29 +1,176 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nikithamal.com/</loc>
+    <loc>https://nikit.is-a.dev/</loc>
     <priority>1.0</priority>
+    <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/writing.html</loc>
+    <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://nikithamal.com/#about</loc>
-    <priority>0.8</priority>
+    <loc>https://nikit.is-a.dev/read.html?slug=a-love-that-never-hurts</loc>
+    <lastmod>2024-12-14</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nikithamal.com/#skills</loc>
-    <priority>0.7</priority>
+    <loc>https://nikit.is-a.dev/read.html?slug=blessed</loc>
+    <lastmod>2024-11-30</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nikithamal.com/#projects</loc>
-    <priority>0.8</priority>
+    <loc>https://nikit.is-a.dev/read.html?slug=dolakha-bhimsen-the-deity-who-predicts-disaster</loc>
+    <lastmod>2026-01-20</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nikithamal.com/writing</loc>
-    <priority>0.7</priority>
-    <changefreq>weekly</changefreq>
+    <loc>https://nikit.is-a.dev/read.html?slug=effort-clouds-effortless</loc>
+    <lastmod>2025-02-27</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://nikithamal.com/#contact</loc>
-    <priority>0.8</priority>
+    <loc>https://nikit.is-a.dev/read.html?slug=everything-is-thought</loc>
+    <lastmod>2024-11-30</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=god-and-the-ocean</loc>
+    <lastmod>2024-11-23</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=how-to-be-happy-2</loc>
+    <lastmod>2026-01-01</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=how-to-be-happy</loc>
+    <lastmod>2024-12-05</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=i-and-you-cannot-love</loc>
+    <lastmod>2024-11-23</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=i-offer-my-curse-to-god</loc>
+    <lastmod>2024-11-25</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=in-relationship-there-is-no-love</loc>
+    <lastmod>2025-02-27</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=interconnectedness</loc>
+    <lastmod>2024-12-14</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=love-is-acceptance</loc>
+    <lastmod>2025-02-27</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=perfect</loc>
+    <lastmod>2024-11-30</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=take-me-as-i-am</loc>
+    <lastmod>2025-02-27</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=the-non-dual-relationship</loc>
+    <lastmod>2024-12-21</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=the-wrong-guy-trying-to-wake-up</loc>
+    <lastmod>2026-02-14</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=there-is-only-one-step</loc>
+    <lastmod>2024-12-15</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=unity-is-a-lie</loc>
+    <lastmod>2025-10-02</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=we-came-out-of-this-world</loc>
+    <lastmod>2024-12-14</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=we-never-met</loc>
+    <lastmod>2024-11-22</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=what-is-divine-self</loc>
+    <lastmod>2024-12-15</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=where-is-god</loc>
+    <lastmod>2025-02-27</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=wisdom-cannot-be-taught</loc>
+    <lastmod>2025-02-26</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=you-have-never-trusted-anyone-or-anything-your-entire-life</loc>
+    <lastmod>2024-11-22</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=you-never-trusted-anyone-2</loc>
+    <lastmod>2026-01-23</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://nikit.is-a.dev/read.html?slug=you</loc>
+    <lastmod>2024-12-03</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
   </url>
 </urlset>
+
