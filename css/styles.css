@@ -175,12 +175,10 @@ img {
   height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  filter: grayscale(100%);
-  transition: filter var(--transition-smooth), transform var(--transition-smooth);
+  transition: transform var(--transition-smooth);
 }
 
 .avatar-container:hover .profile-avatar {
-  filter: grayscale(0%);
   transform: scale(1.05);
 }
 
