@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <meta name="description"
-    content="Portfolio of Nikit Hamal — Android App Developer and Full-Stack Developer from Nepal." />
+    content="Nikit Hamal — Head of Operations at Consica Labs, Android App Developer and Full-Stack Engineer from Nepal." />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Nikit Hamal" />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#faf9f6" />
+  <meta name="application-name" content="Nikit Hamal" />
+  <meta name="apple-mobile-web-app-title" content="Nikit Hamal" />
 
   <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Nikit Hamal" />
   <meta property="og:url" content="https://nikit.is-a.dev/" />
-  <meta property="og:title" content="Nikit Hamal — Android & Full-Stack Developer" />
+  <meta property="og:title" content="Nikit Hamal — Head of Operations @ Consica Labs &amp; Developer" />
   <meta property="og:description"
-    content="Portfolio of Nikit Hamal — Android App Developer and Full-Stack Developer from Nepal." />
+    content="Head of Operations at Consica Labs. Android App Developer and Full-Stack Engineer from Nepal." />
   <meta property="og:image" content="https://nikit.is-a.dev/assets/nikit.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="1200" />
@@ -22,17 +26,17 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://nikit.is-a.dev/" />
-  <meta name="twitter:title" content="Nikit Hamal — Android & Full-Stack Developer" />
+  <meta name="twitter:title" content="Nikit Hamal — Head of Operations @ Consica Labs &amp; Developer" />
   <meta name="twitter:description"
-    content="Portfolio of Nikit Hamal — Android App Developer and Full-Stack Developer from Nepal." />
+    content="Head of Operations at Consica Labs. Android App Developer and Full-Stack Engineer from Nepal." />
   <meta name="twitter:image" content="https://nikit.is-a.dev/assets/nikit.jpg" />
-  <title>Nikit Hamal — Android & Full-Stack Developer</title>
+  <title>Nikit Hamal — Head of Operations @ Consica Labs &amp; Developer</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Newsreader (Serif), JetBrains Mono (Monospace), Plus Jakarta Sans (Sans-serif) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Favicon -->
@@ -50,442 +54,291 @@
 
   <!-- Theme Init (prevent flash) -->
   <script>
-    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0a0a0a':'#fafafa')})();
+    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0e0e10':'#faf9f6')})();
   </script>
 
-  <!-- JSON-LD Person Schema -->
+  <!-- JSON-LD WebSite & Person Schema (Google Search Site Name requirement) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Nikit Hamal",
+    "alternateName": ["Nikit Hamal Portfolio", "nikit.is-a.dev", "nikithamal"],
+    "url": "https://nikit.is-a.dev/"
+  }
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Nikit Hamal",
-    "jobTitle": "Android & Full-Stack Developer",
+    "jobTitle": "Head of Operations & Full-Stack Engineer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Consica Labs",
+      "url": "https://consicalabs.com/"
+    },
+    "url": "https://nikit.is-a.dev/",
     "address": { "@type": "PostalAddress", "addressCountry": "NP" },
     "sameAs": [
+      "https://consicalabs.com/",
       "https://www.linkedin.com/in/nikithamal",
       "https://twitter.com/nikithamal",
-      "https://www.instagram.com/nikithamal",
+      "https://github.com/NikitHamal",
       "mailto:iamnikithamal@gmail.com"
     ]
   }
   </script>
 </head>
 
-<body class="font-body overflow-x-hidden">
-  <a class="skip-link" href="#home">Skip to content</a>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand" href="#home" aria-label="Home">
-        <span class="brand-dot"></span>
-        <span class="brand-text">Nikit<span class="brand-muted">Hamal</span></span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
-          <i class="ri-menu-4-line"></i>
+  <div class="minimal-wrapper" id="main-content">
+    <!-- TOP CONTROLS -->
+    <div class="top-bar">
+      <div></div>
+      <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="theme-icon">*</span>
+      </button>
+    </div>
+
+    <!-- PROFILE / HEADER -->
+    <header class="profile-header">
+      <div class="avatar-container" id="avatarContainer">
+        <img src="assets/nikit.jpg" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" />
+      </div>
+
+      <h1 class="profile-name">Nikit Hamal</h1>
+
+      <p class="profile-bio">
+        Head of Operations at <a href="https://consicalabs.com/" target="_blank" rel="noopener" class="bio-link">Consica Labs</a>. Android App Developer &amp; Full-Stack Engineer from Nepal. Building Android apps (<a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="bio-link">NEBians</a>, <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="bio-link">Lami Nepal</a>), Django backends, SvelteKit web apps (<a href="https://astroweb-bsi.pages.dev/" target="_blank" rel="noopener" class="bio-link">AstroWeb</a>), and writing about philosophy.
+      </p>
+    </header>
+
+    <!-- ACCORDION SECTIONS LIST -->
+    <main class="accordion-list">
+
+      <!-- 1. ABOUT -->
+      <div class="accordion-item" data-accordion="about">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="header-left">
+            <span class="accordion-prefix">&gt;</span>
+            <span class="accordion-title">ABOUT</span>
+          </span>
+          <span class="accordion-icon"><i class="ri-add-line"></i></span>
         </button>
-        <ul id="nav-menu" class="nav-list">
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="writing.html">Writing</a></li>
-          <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
-        </ul>
-      </nav>
-      <div class="nav-actions">
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <i class="ri-sun-line"></i>
+        <div class="accordion-body">
+          <div class="accordion-inner">
+            <p>
+              I'm Nikit Hamal — a <span data-age="2007-02-27">19</span>-year-old developer based in Nepal and Head of Operations at <a href="https://consicalabs.com/" target="_blank" rel="noopener" class="bio-link">Consica Labs</a>. I specialize in native Android app development with Kotlin and Jetpack Compose, paired with robust Python/Django backend architectures and clean, responsive web frontends.
+            </p>
+            <p style="margin-top: 12px;">
+              Beyond software engineering and operations, I dedicate time to exploring non-duality, self-observation, and writing essays on philosophy, human connection, and consciousness.
+            </p>
+            <div class="chip-group">
+              <span class="mini-chip"><i class="ri-briefcase-line"></i> Head of Operations @ Consica Labs</span>
+              <span class="mini-chip"><i class="ri-map-pin-2-line"></i> Nepal</span>
+              <span class="mini-chip"><i class="ri-android-line"></i> Android &amp; Kotlin</span>
+              <span class="mini-chip"><i class="ri-code-s-slash-line"></i> Django &amp; Python</span>
+              <span class="mini-chip"><i class="ri-quill-pen-line"></i> Philosophy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SKILLS & EXPERIENCE -->
+      <div class="accordion-item" data-accordion="skills">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="header-left">
+            <span class="accordion-prefix">&gt;</span>
+            <span class="accordion-title">SKILLS &amp; EXPERIENCE</span>
+          </span>
+          <span class="accordion-icon"><i class="ri-add-line"></i></span>
         </button>
+        <div class="accordion-body">
+          <div class="accordion-inner">
+            <div class="skills-mini-grid">
+              <div class="skill-mini-group">
+                <h4 class="skill-mini-heading">Mobile Development</h4>
+                <p class="skill-mini-list">Android (Kotlin), Jetpack Compose, Material 3, Flutter (Dart), Room DB, Hilt DI</p>
+              </div>
+              <div class="skill-mini-group">
+                <h4 class="skill-mini-heading">Backend &amp; APIs</h4>
+                <p class="skill-mini-list">Python, Django, Django REST Framework, WebSockets (Channels), Redis, MySQL</p>
+              </div>
+              <div class="skill-mini-group">
+                <h4 class="skill-mini-heading">Frontend &amp; Web</h4>
+                <p class="skill-mini-list">HTML5, CSS3, JavaScript, TypeScript, SvelteKit, HTMX, Tailwind CSS</p>
+              </div>
+              <div class="skill-mini-group">
+                <h4 class="skill-mini-heading">Cloud &amp; Infrastructure</h4>
+                <p class="skill-mini-list">Firebase (FCM, Auth), Pusher WebSockets, JWT / OAuth, PWAs, Git &amp; GitHub</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. SELECTED PROJECTS -->
+      <div class="accordion-item" data-accordion="projects">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="header-left">
+            <span class="accordion-prefix">&gt;</span>
+            <span class="accordion-title">SIDE PROJECTS &amp; WORK</span>
+          </span>
+          <span class="accordion-icon"><i class="ri-add-line"></i></span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-inner">
+            <div class="projects-list">
+
+              <div class="project-mini-item">
+                <div class="project-mini-header">
+                  <h3 class="project-mini-title">Lami Nepal</h3>
+                  <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="project-mini-link">Play Store <i class="ri-arrow-up-right-line"></i></a>
+                </div>
+                <p class="project-mini-desc">Matrimonial &amp; spiritual services mobile application featuring real-time chat, FCM push notifications, Google sign-in, and full Nepali language localization.</p>
+                <div class="project-mini-tags">
+                  <span>Flutter</span><span>Firebase</span><span>Pusher</span><span>WebView</span>
+                </div>
+              </div>
+
+              <div class="project-mini-item">
+                <div class="project-mini-header">
+                  <h3 class="project-mini-title">NEBians</h3>
+                  <a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="project-mini-link">Website <i class="ri-arrow-up-right-line"></i></a>
+                </div>
+                <p class="project-mini-desc">Material 3 Android app + Django backend created for Nepali NEB students. Includes interactive study tools, AI chat arena, real-time community forums, and exam result checker.</p>
+                <div class="project-mini-tags">
+                  <span>Kotlin</span><span>Jetpack Compose</span><span>Django</span><span>WebSockets</span>
+                </div>
+              </div>
+
+              <div class="project-mini-item">
+                <div class="project-mini-header">
+                  <h3 class="project-mini-title">AstroWeb</h3>
+                  <a href="https://astroweb-bsi.pages.dev/" target="_blank" rel="noopener" class="project-mini-link">Live Web App <i class="ri-arrow-up-right-line"></i></a>
+                </div>
+                <p class="project-mini-desc">Free Vedic astrology web application delivering accurate Kundali, Dasha calculations, and astrological insights.</p>
+                <div class="project-mini-tags">
+                  <span>SvelteKit</span><span>TypeScript</span><span>PWA</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ESSAYS & WRITING -->
+      <div class="accordion-item" data-accordion="writing">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="header-left">
+            <span class="accordion-prefix">&gt;</span>
+            <span class="accordion-title">ESSAYS &amp; WRITING</span>
+          </span>
+          <span class="accordion-icon"><i class="ri-add-line"></i></span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-inner">
+            <div id="writing-preview" class="writing-mini-list">
+              <!-- Dynamically loaded posts -->
+            </div>
+            <div style="margin-top: 18px;">
+              <a href="writing.html" class="inline-more-link">View all essays on Writing page &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. CONTACT -->
+      <div class="accordion-item" data-accordion="contact">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="header-left">
+            <span class="accordion-prefix">&gt;</span>
+            <span class="accordion-title">CONTACT</span>
+          </span>
+          <span class="accordion-icon"><i class="ri-add-line"></i></span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-inner">
+            <p style="margin-bottom: 14px;">I'm always open to discussing new projects, technical ideas, or collaborations. Reach out through any channel below:</p>
+            <ul class="contact-mini-list">
+              <li><i class="ri-mail-line"></i> <strong>Email:</strong> <a href="mailto:iamnikithamal@gmail.com">iamnikithamal@gmail.com</a></li>
+              <li><i class="ri-linkedin-line"></i> <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">linkedin.com/in/nikithamal</a></li>
+              <li><i class="ri-twitter-x-line"></i> <strong>Twitter / X:</strong> <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener">@nikithamal</a></li>
+              <li><i class="ri-github-line"></i> <strong>GitHub:</strong> <a href="https://github.com/NikitHamal" target="_blank" rel="noopener">github.com/NikitHamal</a></li>
+              <li><i class="ri-whatsapp-line"></i> <strong>WhatsApp:</strong> <a href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">+977 9765324034</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- PILL ACTION BUTTON -->
+    <div class="pill-action-container">
+      <button class="pill-btn" id="helpBtn">
+        Let's work together
+      </button>
+    </div>
+
+    <!-- FOOTER LINKS -->
+    <footer class="minimal-footer">
+      <div class="footer-links">
+        <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/NikitHamal" target="_blank" rel="noopener">GitHub</a>
+        <a href="writing.html">Writing</a>
+        <a href="mailto:iamnikithamal@gmail.com">Email</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- HELP / WORK TOGETHER MODAL DIALOG -->
+  <dialog id="helpModal" class="minimal-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Let's work together</h3>
+        <button class="modal-close-btn" id="closeHelpModal" aria-label="Close"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-intro">Have a project in mind, need mobile &amp; backend expertise, or want to collaborate?</p>
+        <div class="modal-options">
+          <a href="mailto:iamnikithamal@gmail.com?subject=Project%20Inquiry" class="modal-option-btn">
+            <i class="ri-mail-send-line"></i>
+            <div>
+              <strong>Send an Email</strong>
+              <span>iamnikithamal@gmail.com</span>
+            </div>
+          </a>
+          <a href="https://wa.me/9779765324034?text=Hi%20Nikit,%20I'd%20like%20to%20discuss%20a%20project" target="_blank" rel="noopener" class="modal-option-btn">
+            <i class="ri-whatsapp-line"></i>
+            <div>
+              <strong>Quick Chat on WhatsApp</strong>
+              <span>+977 9765324034</span>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener" class="modal-option-btn">
+            <i class="ri-linkedin-line"></i>
+            <div>
+              <strong>Connect on LinkedIn</strong>
+              <span>linkedin.com/in/nikithamal</span>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
-  </header>
-
-  <main id="home">
-    <!-- HERO -->
-    <section class="hero" aria-label="Hero">
-      <div class="hero-bg">
-        <div class="hero-shape hero-shape-1"></div>
-        <div class="hero-shape hero-shape-2"></div>
-        <div class="hero-shape hero-shape-3"></div>
-      </div>
-      <div class="container">
-        <div class="hero-content">
-          <div class="hero-badge">
-            <span class="badge-dot"></span>
-            <span>Available for projects</span>
-          </div>
-          <h1 class="hero-title">
-            <span class="hero-line">Creative</span>
-            <span class="hero-line hero-highlight">Developer</span>
-            <span class="hero-line">& Builder</span>
-          </h1>
-          <p class="hero-subtitle">
-            I'm Nikit Hamal — a <span data-age="2007-02-27"></span>-year-old developer from Nepal building Android apps, Django backends, and writing about philosophy.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#projects">
-              <span>View My Work</span>
-              <i class="ri-arrow-right-line"></i>
-            </a>
-            <a class="btn btn-outline" href="#contact">
-              <span>Get in Touch</span>
-            </a>
-          </div>
-          <div class="hero-social">
-            <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener" aria-label="LinkedIn"
-              class="social-link">
-              <i class="ri-linkedin-fill"></i>
-            </a>
-            <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener" aria-label="Twitter"
-              class="social-link">
-              <i class="ri-twitter-x-fill"></i>
-            </a>
-            <a href="https://github.com/NikitHamal" target="_blank" rel="noopener" aria-label="GitHub"
-              class="social-link">
-              <i class="ri-github-fill"></i>
-            </a>
-            <a href="mailto:iamnikithamal@gmail.com" aria-label="Email" class="social-link">
-              <i class="ri-mail-fill"></i>
-            </a>
-          </div>
-        </div>
-        <div class="hero-card">
-          <div class="card-inner" id="profileCard">
-            <img src="assets/nikit.jpg" alt="Nikit Hamal" class="card-avatar" id="avatarImg" />
-            <div class="card-info">
-              <h3 class="card-name">Nikit Hamal</h3>
-              <p class="card-role">Full-Stack Developer</p>
-              <div class="card-tags">
-                <span class="tag tag-lime">Web</span>
-                <span class="tag tag-electric">Android</span>
-                <span class="tag tag-electric">Flutter</span>
-              </div>
-            </div>
-            <div class="card-stats">
-              <div class="stat">
-                <span class="stat-value">3+</span>
-                <span class="stat-label">Years</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">5+</span>
-                <span class="stat-label">Projects</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">&infin;</span>
-                <span class="stat-label">Ideas</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="scroll-indicator">
-        <span>Scroll</span>
-        <i class="ri-arrow-down-line"></i>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section about" aria-label="About">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">01</span>
-          <h2 class="section-title">About Me</h2>
-        </div>
-        <div class="about-grid">
-          <div class="about-content">
-            <p class="about-intro">
-              I'm a passionate technologist who thrives on pushing creative boundaries. From crafting elegant web
-              interfaces to architecting scalable Android apps, I live for turning wild ideas into reality.
-            </p>
-            <p class="about-text">
-              Whether it's architecting full-stack apps with Django, crafting Android UIs with Jetpack Compose, or writing philosophical essays — I'm all in. My mission? Create digital experiences that don't just work, but inspire.
-            </p>
-            <div class="about-chips">
-              <div class="chip chip-lime">
-                <i class="ri-map-pin-2-fill"></i>
-                <span>Nepal</span>
-              </div>
-              <div class="chip chip-electric">
-                <i class="ri-code-s-slash-fill"></i>
-                <span>Full-Stack</span>
-              </div>
-              <div class="chip chip-hot">
-                <i class="ri-quill-pen-fill"></i>
-                <span>Writing</span>
-              </div>
-              <div class="chip chip-grape">
-                <i class="ri-fire-fill"></i>
-                <span>Philosophy</span>
-              </div>
-            </div>
-          </div>
-          <div class="about-visual">
-            <div class="visual-card">
-              <img src="assets/nikit.jpg" alt="Nikit Hamal" class="visual-image" />
-              <div class="visual-overlay">
-                <span class="visual-text">Building the future</span>
-              </div>
-            </div>
-          </div>
-        </div>
-          <div class="exploring-section">
-            <h3 class="exploring-title">
-              <i class="ri-rocket-2-fill"></i>
-              Currently Exploring
-            </h3>
-            <div class="exploring-grid">
-              <div class="explore-card">
-                <div class="explore-icon explore-icon-electric">
-                  <i class="ri-android-fill"></i>
-                </div>
-                <h4 class="explore-title">Android Apps</h4>
-                <p class="explore-desc">Building modern Android apps with Kotlin and Jetpack Compose</p>
-              </div>
-              <div class="explore-card">
-                <div class="explore-icon explore-icon-lime">
-                  <i class="ri-flask-fill"></i>
-                </div>
-                <h4 class="explore-title">Django Backends</h4>
-                <p class="explore-desc">Crafting REST APIs, WebSockets, and real-time systems</p>
-              </div>
-              <div class="explore-card">
-                <div class="explore-icon explore-icon-hot">
-                  <i class="ri-quill-pen-fill"></i>
-                </div>
-                <h4 class="explore-title">Philosophy</h4>
-                <p class="explore-desc">Writing essays on non-duality, trust, love, and self-observation</p>
-              </div>
-            </div>
-          </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills" class="section skills" aria-label="Skills">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">02</span>
-          <h2 class="section-title">My Toolkit</h2>
-        </div>
-        <p class="section-subtitle">Technologies and tools I have used</p>
-        <div class="skills-grid">
-          <div class="skill-card skill-card-lime">
-            <div class="skill-header">
-              <div class="skill-icon">
-                <i class="ri-layout-4-fill"></i>
-              </div>
-              <h3 class="skill-title">Frontend</h3>
-            </div>
-            <ul class="skill-list">
-              <li><span class="skill-dot"></span>HTML5 & CSS3</li>
-              <li><span class="skill-dot"></span>JavaScript & TypeScript</li>
-              <li><span class="skill-dot"></span>SvelteKit</li>
-              <li><span class="skill-dot"></span>HTMX</li>
-            </ul>
-          </div>
-          <div class="skill-card skill-card-electric">
-            <div class="skill-header">
-              <div class="skill-icon">
-                <i class="ri-smartphone-fill"></i>
-              </div>
-              <h3 class="skill-title">Mobile</h3>
-            </div>
-            <ul class="skill-list">
-              <li><span class="skill-dot"></span>Android with Kotlin</li>
-              <li><span class="skill-dot"></span>Jetpack Compose & M3</li>
-              <li><span class="skill-dot"></span>Flutter & Dart</li>
-              <li><span class="skill-dot"></span>Room DB & Hilt</li>
-            </ul>
-          </div>
-          <div class="skill-card skill-card-grape">
-            <div class="skill-header">
-              <div class="skill-icon">
-                <i class="ri-server-fill"></i>
-              </div>
-              <h3 class="skill-title">Backend</h3>
-            </div>
-            <ul class="skill-list">
-              <li><span class="skill-dot"></span>Django & DRF</li>
-              <li><span class="skill-dot"></span>Python & REST APIs</li>
-              <li><span class="skill-dot"></span>WebSockets & Channels</li>
-              <li><span class="skill-dot"></span>Redis & MySQL</li>
-            </ul>
-          </div>
-          <div class="skill-card skill-card-hot">
-            <div class="skill-header">
-              <div class="skill-icon">
-                <i class="ri-tools-fill"></i>
-              </div>
-              <h3 class="skill-title">Tools & More</h3>
-            </div>
-            <ul class="skill-list">
-              <li><span class="skill-dot"></span>Firebase & FCM</li>
-              <li><span class="skill-dot"></span>Pusher & WebSockets</li>
-              <li><span class="skill-dot"></span>JWT & OAuth</li>
-              <li><span class="skill-dot"></span>PWA</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="section projects" aria-label="Projects">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">03</span>
-          <h2 class="section-title">Selected Work</h2>
-          <a class="section-link" href="https://github.com/NikitHamal" target="_blank" rel="noopener">
-            View GitHub
-            <i class="ri-github-fill"></i>
-          </a>
-        </div>
-        <div class="projects-grid">
-          <article class="project-card">
-            <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="project-link">
-              <div class="project-media project-media-hot">
-                <div class="project-icon" style="background: transparent;">
-                  <img src="assets/lami-logo.png" alt="Lami Nepal Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" />
-                </div>
-              </div>
-              <div class="project-content">
-                <h3 class="project-title">Lami Nepal</h3>
-                <p class="project-desc">Matrimonial and spiritual services app with real-time chat, push notifications, Google sign-in, and Nepali language support.</p>
-                <div class="project-tags">
-                  <span class="project-tag">Flutter</span>
-                  <span class="project-tag">Firebase</span>
-                  <span class="project-tag">Pusher</span>
-                  <span class="project-tag">WebView</span>
-                </div>
-              </div>
-            </a>
-          </article>
-          <article class="project-card">
-            <a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="project-link">
-              <div class="project-media project-media-electric">
-                <div class="project-icon" style="background: transparent;">
-                  <img src="assets/neb-logo.svg" alt="NEBians Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" />
-                </div>
-              </div>
-              <div class="project-content">
-                <h3 class="project-title">NEBians</h3>
-                <p class="project-desc">Material 3 Android app + Django backend for Nepali NEB students — interactive study tools, AI chat arena, real-time forums, and exam result checker.</p>
-                <div class="project-tags">
-                  <span class="project-tag">Kotlin</span>
-                  <span class="project-tag">Jetpack Compose</span>
-                  <span class="project-tag">Django</span>
-                  <span class="project-tag">WebSockets</span>
-                </div>
-              </div>
-            </a>
-          </article>
-          <article class="project-card">
-            <a href="https://astroweb-bsi.pages.dev/" target="_blank" rel="noopener" class="project-link">
-              <div class="project-media project-media-grape">
-                <div class="project-icon" style="background: transparent;">
-                  <img src="https://astroweb-bsi.pages.dev/assets/logo.svg" alt="AstroWeb Icon" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" />
-                </div>
-              </div>
-              <div class="project-content">
-                <h3 class="project-title">AstroWeb</h3>
-                <p class="project-desc">Free Vedic astrology web app with accurate Kundali, Dasha, and predictive insights.</p>
-                <div class="project-tags">
-                  <span class="project-tag">SvelteKit</span>
-                  <span class="project-tag">TypeScript</span>
-                  <span class="project-tag">PWA</span>
-                </div>
-              </div>
-            </a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- WRITING -->
-    <section id="writing" class="section writing" aria-label="Writing">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-badge">04</span>
-          <h2 class="section-title">Recent Thoughts</h2>
-          <a class="section-link" href="writing.html">
-            View All
-            <i class="ri-arrow-right-line"></i>
-          </a>
-        </div>
-        <div id="writing-preview" class="writing-grid">
-          <!-- Posts loaded dynamically -->
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section contact" aria-label="Contact">
-      <div class="container">
-        <div class="contact-content">
-          <div class="contact-header">
-            <span class="section-badge section-badge-light">05</span>
-            <h2 class="contact-title">Let's Create<br />Something Amazing</h2>
-            <p class="contact-subtitle">Have a project in mind or just want to say hi? I'd love to hear from you.</p>
-          </div>
-          <div class="contact-links">
-            <a class="contact-link" href="mailto:iamnikithamal@gmail.com">
-              <i class="ri-mail-fill"></i>
-              <span>iamnikithamal@gmail.com</span>
-            </a>
-            <a class="contact-link" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
-              <i class="ri-linkedin-fill"></i>
-              <span>LinkedIn</span>
-            </a>
-            <a class="contact-link" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
-              <i class="ri-twitter-x-fill"></i>
-              <span>Twitter / X</span>
-            </a>
-            <a class="contact-link" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank"
-              rel="noopener">
-              <i class="ri-whatsapp-fill"></i>
-              <span>WhatsApp</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+  </dialog>
 
   <!-- Photo Modal -->
-  <dialog id="photoDialog" class="modal" aria-label="Photo of Nikit Hamal">
-    <button class="modal-close" data-close aria-label="Close">
-      <i class="ri-close-line"></i>
-    </button>
-    <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-image" />
-  </dialog>
-
-  <!-- Profile Modal -->
-  <dialog id="profileDialog" class="modal" aria-labelledby="profileDialogTitle">
-    <button class="modal-close" data-close aria-label="Close">
-      <i class="ri-close-line"></i>
-    </button>
-    <div class="modal-profile">
-      <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-avatar" />
-      <div class="modal-info">
-        <h3 id="profileDialogTitle" class="modal-name">Nikit Hamal</h3>
-        <p class="modal-meta">Age <span data-age="2007-02-27"></span> &bull; Nepal</p>
-        <a class="btn btn-mint" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">
-          <i class="ri-whatsapp-fill"></i>
-          <span>Message me</span>
-        </a>
-      </div>
+  <dialog id="photoDialog" class="minimal-modal">
+    <div class="modal-card modal-photo-card">
+      <button class="modal-close-btn" data-close aria-label="Close"><i class="ri-close-line"></i></button>
+      <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-full-photo" />
     </div>
   </dialog>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p class="footer-text">&copy; 2025 Nikit Hamal. Crafted with passion.</p>
-      <a class="back-to-top" href="#home" aria-label="Back to top">
-        <i class="ri-arrow-up-line"></i>
-      </a>
-    </div>
-  </footer>
 
   <script src="js/config.js"></script>
   <script defer src="js/app.js"></script>

@@ -1,7 +1,6 @@
 /**
  * MINIMALIST PORTFOLIO - Nikit Hamal
- * Clean, modern JavaScript
- * Dual theme support
+ * Clean, modern JavaScript with Accordion & Minimal Aesthetics
  */
 
 (function () {
@@ -31,7 +30,7 @@
 
     document.querySelectorAll('.theme-toggle').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'dark' ? 'light' : 'dark';
         applyTheme(next);
         localStorage.setItem('theme', next);
@@ -43,13 +42,84 @@
     document.documentElement.setAttribute('data-theme', theme);
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) {
-      metaTheme.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#fafafa');
+      metaTheme.setAttribute('content', theme === 'dark' ? '#0e0e10' : '#faf9f6');
     }
-    document.querySelectorAll('.theme-toggle').forEach((btn) => {
-      const icon = btn.querySelector('i');
-      if (icon) {
-        icon.className = theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+  }
+
+  // ============================================
+  // ACCORDION NAVIGATION
+  // ============================================
+
+  function initAccordions() {
+    const items = $$('.accordion-item');
+    items.forEach((item, index) => {
+      const btn = item.querySelector('.accordion-header');
+      if (!btn) return;
+
+      // Expand ABOUT section by default
+      if (index === 0) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
       }
+
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+  }
+
+  // ============================================
+  // MODALS & DIALOGS
+  // ============================================
+
+  function initModals() {
+    const helpBtn = $('#helpBtn');
+    const helpModal = $('#helpModal');
+    const closeHelpBtn = $('#closeHelpModal');
+    const avatarContainer = $('#avatarContainer');
+    const avatarImg = $('#avatarImg');
+    const photoDialog = $('#photoDialog');
+
+    const openDlg = (dlg) => {
+      if (!dlg) return;
+      if (typeof dlg.showModal === 'function') dlg.showModal();
+      else dlg.setAttribute('open', '');
+    };
+
+    const closeDlg = (dlg) => {
+      if (!dlg) return;
+      if (typeof dlg.close === 'function') dlg.close();
+      else dlg.removeAttribute('open');
+    };
+
+    if (helpBtn && helpModal) {
+      helpBtn.addEventListener('click', () => openDlg(helpModal));
+    }
+    if (closeHelpBtn && helpModal) {
+      closeHelpBtn.addEventListener('click', () => closeDlg(helpModal));
+    }
+
+    if (avatarContainer && photoDialog) {
+      avatarContainer.addEventListener('click', () => openDlg(photoDialog));
+    } else if (avatarImg && photoDialog) {
+      avatarImg.addEventListener('click', () => openDlg(photoDialog));
+    }
+
+    $$('.minimal-modal, .modal').forEach((dlg) => {
+      const closeBtn = dlg.querySelector('[data-close]');
+      if (closeBtn) closeBtn.addEventListener('click', () => closeDlg(dlg));
+
+      dlg.addEventListener('click', (e) => {
+        const rect = dlg.getBoundingClientRect();
+        const inDialog = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+        if (!inDialog) closeDlg(dlg);
+      });
+
+      dlg.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeDlg(dlg);
+      });
     });
   }
 
@@ -77,193 +147,11 @@
   }
 
   function svgPlaceholder(text = 'No image') {
-    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
     const bg = theme === 'dark' ? '%23161616' : '%23f5f5f5';
     const fg = theme === 'dark' ? '%23999' : '%23525252';
-    const svg = encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='${bg}'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Outfit,Arial,sans-serif' font-size='48' font-weight='900' fill='${fg}'>${text}</text></svg>`);
+    const svg = encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='${bg}'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='48' font-weight='700' fill='${fg}'>${text}</text></svg>`);
     return `url("data:image/svg+xml,${svg}")`;
-  }
-
-  function svgDataURI(text = 'No image') {
-    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-    const bg = theme === 'dark' ? '%23161616' : '%23f5f5f5';
-    const fg = theme === 'dark' ? '%23999' : '%23525252';
-    const svg = encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='${bg}'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Outfit,Arial,sans-serif' font-size='48' font-weight='900' fill='${fg}'>${text}</text></svg>`);
-    return `data:image/svg+xml,${svg}`;
-  }
-
-  async function preloadImage(url) {
-    return new Promise((resolve) => {
-      if (!url) return resolve(false);
-      const img = new Image();
-      img.onload = () => resolve(true);
-      img.onerror = () => resolve(false);
-      img.src = url;
-    });
-  }
-
-  async function hydrateMedia(root = document) {
-    const nodes = $$('[data-bg]', root);
-    await Promise.all(nodes.map(async (el) => {
-      const src = el.getAttribute('data-bg');
-      if (!src) return;
-      const ok = await preloadImage(src);
-      if (ok) {
-        el.style.backgroundImage = `url('${src}')`;
-        el.style.backgroundSize = 'cover';
-        el.style.backgroundPosition = 'center';
-      } else {
-        el.style.backgroundImage = svgPlaceholder('Image unavailable');
-        el.style.backgroundSize = 'cover';
-      }
-    }));
-  }
-
-  // ============================================
-  // HEADER SCROLL
-  // ============================================
-
-  function initHeaderScroll() {
-    const header = $('.header');
-    if (!header) return;
-
-    let ticking = false;
-    function updateHeader() {
-      header.classList.toggle('scrolled', window.scrollY > 50);
-      ticking = false;
-    }
-
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(updateHeader);
-        ticking = true;
-      }
-    }, { passive: true });
-  }
-
-  // ============================================
-  // MOBILE NAV
-  // ============================================
-
-  function initMobileNav() {
-    const toggle = $('.nav-toggle');
-    const menu = $('#nav-menu');
-    if (!toggle || !menu) return;
-
-    const setState = (open) => {
-      toggle.setAttribute('aria-expanded', String(open));
-      menu.classList.toggle('open', open);
-      document.body.style.overflow = open ? 'hidden' : '';
-      const icon = toggle.querySelector('i');
-      if (icon) icon.className = open ? 'ri-close-line' : 'ri-menu-4-line';
-    };
-
-    toggle.addEventListener('click', () => {
-      setState(!menu.classList.contains('open'));
-    });
-
-    $$('#nav-menu a').forEach((link) => {
-      link.addEventListener('click', () => setState(false));
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!menu.classList.contains('open')) return;
-      if (!menu.contains(e.target) && !toggle.contains(e.target)) setState(false);
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menu.classList.contains('open')) setState(false);
-    });
-  }
-
-  // ============================================
-  // MODALS
-  // ============================================
-
-  function initModals() {
-    const avatar = $('#avatarImg');
-    const card = $('#profileCard');
-    const photoDialog = $('#photoDialog');
-    const profileDialog = $('#profileDialog');
-    if (!photoDialog || !profileDialog) return;
-
-    const openDialog = (dlg) => {
-      if (typeof dlg.showModal === 'function') dlg.showModal();
-      else dlg.setAttribute('open', '');
-      document.body.style.overflow = 'hidden';
-    };
-
-    const closeDialog = (dlg) => {
-      if (typeof dlg.close === 'function') dlg.close();
-      else dlg.removeAttribute('open');
-      document.body.style.overflow = '';
-    };
-
-    [photoDialog, profileDialog].forEach((dlg) => {
-      const btn = dlg.querySelector('[data-close]');
-      if (btn) btn.addEventListener('click', () => closeDialog(dlg));
-
-      dlg.addEventListener('click', (e) => {
-        const rect = dlg.getBoundingClientRect();
-        const inDialog = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
-        if (!inDialog) closeDialog(dlg);
-      });
-
-      dlg.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeDialog(dlg);
-      });
-    });
-
-    if (avatar) {
-      avatar.addEventListener('click', (e) => { e.stopPropagation(); openDialog(photoDialog); });
-      avatar.setAttribute('tabindex', '0');
-      avatar.setAttribute('role', 'button');
-      avatar.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDialog(photoDialog); } });
-    }
-
-    if (card) {
-      card.addEventListener('click', () => openDialog(profileDialog));
-      card.setAttribute('tabindex', '0');
-      card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDialog(profileDialog); } });
-    }
-  }
-
-  // ============================================
-  // SCROLL ANIMATIONS
-  // ============================================
-
-  function initScrollAnimations() {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
-
-    $$('.section, .skill-card, .project-card, .writing-card, .explore-card, .contact-link').forEach(el => {
-      el.classList.add('animate-ready');
-      observer.observe(el);
-    });
-  }
-
-  // ============================================
-  // SMOOTH SCROLL
-  // ============================================
-
-  function initSmoothScroll() {
-    $$('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const targetId = link.getAttribute('href');
-        if (targetId === '#') return;
-        const target = $(targetId);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
   }
 
   // ============================================
@@ -312,6 +200,20 @@
     }));
   }
 
+  function renderMinimalWritingItem(post) {
+    const isBlogger = post.isBlogger;
+    const link = `read.html?${isBlogger ? 'id' : 'slug'}=${post.slug}`;
+    const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const readingTime = estimateReadingTime(post.contentHtml).mins;
+
+    return `
+      <a href="${link}" class="writing-mini-item">
+        <div class="writing-mini-title">${post.title}</div>
+        <div class="writing-mini-meta">${date} &bull; ${readingTime} min read</div>
+      </a>
+    `;
+  }
+
   function renderWritingCard(post) {
     const isBlogger = post.isBlogger;
     const imagePath = isBlogger ? post.image : resolveImagePath(post.image);
@@ -344,10 +246,10 @@
     if (!container) return;
     const posts = await loadAllPosts();
     if (!posts || posts.length === 0) {
-      container.innerHTML = '<p style="text-align:center;padding:40px 20px;color:var(--text-muted);">Amazing content coming soon!</p>';
+      container.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;">Essays coming soon.</p>';
       return;
     }
-    container.innerHTML = posts.slice(0, 2).map(renderWritingCard).join('');
+    container.innerHTML = posts.slice(0, 4).map(renderMinimalWritingItem).join('');
   }
 
   async function initWritingPage() {
@@ -355,7 +257,7 @@
     if (!grid) return;
     const posts = await loadAllPosts();
     if (!posts || posts.length === 0) {
-      grid.innerHTML = '<p style="text-align:center;padding:60px 20px;color:var(--text-muted);grid-column:1/-1;">No posts yet. Epic content coming soon!</p>';
+      grid.innerHTML = '<p style="text-align:center;padding:60px 20px;color:var(--text-muted);grid-column:1/-1;">No posts yet.</p>';
       return;
     }
     grid.innerHTML = posts.map(renderWritingCard).join('');
@@ -430,65 +332,24 @@
       li.appendChild(a);
       list.appendChild(li);
     });
+  }
 
-    const links = $$('a', list);
-    const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          const id = e.target.id;
-          links.forEach((l) => l.classList.remove('active'));
-          const active = map.get(id);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 1] });
-
-    headings.forEach((h) => io.observe(h));
-
-    list.addEventListener('click', (e) => {
-      const a = e.target.closest('a');
-      if (!a) return;
-      e.preventDefault();
-      const target = document.getElementById(a.getAttribute('href').slice(1));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function cleanBloggerStyles(element) {
+    if (!element) return;
+    const styledEls = $$('[style]', element);
+    styledEls.forEach(el => {
+      el.removeAttribute('style');
     });
   }
 
-  function cleanBloggerStyles(container) {
-    $$('[style]', container).forEach((el) => {
-      const tagName = el.tagName.toLowerCase();
-      if (tagName === 'iframe' || tagName === 'video' || tagName === 'embed') return;
-      el.style.background = '';
-      el.style.backgroundColor = '';
-      el.style.color = '';
-      el.style.fontFamily = '';
-      el.style.fontSize = '';
-      el.style.lineHeight = '';
-      if (!el.getAttribute('style') || el.getAttribute('style').trim() === '') el.removeAttribute('style');
-    });
-    $$('[bgcolor]', container).forEach(el => el.removeAttribute('bgcolor'));
-    $$('font', container).forEach((font) => {
-      font.removeAttribute('color');
-      font.removeAttribute('face');
-      font.removeAttribute('size');
-    });
-    $$('p, span', container).forEach((el) => {
-      if (el.innerHTML.trim() === '&nbsp;' || el.innerHTML.trim() === '<br>') {
-        el.style.margin = '0';
-        el.style.padding = '0';
-        el.style.height = '0';
+  function enhanceContentImages(element) {
+    if (!element) return;
+    const images = $$('img', element);
+    images.forEach(img => {
+      const src = img.getAttribute('src');
+      if (src && !src.startsWith('data:')) {
+        img.loading = 'lazy';
       }
-    });
-  }
-
-  function enhanceContentImages(container) {
-    $$('img', container).forEach((img) => {
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      const fallback = svgDataURI(img.alt || 'Image');
-      img.addEventListener('error', () => { img.src = fallback; });
     });
   }
 
@@ -496,7 +357,7 @@
     const body = $('#readBody');
     if (!body) return;
 
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
     const id = params.get('id');
     let post = null;
@@ -563,10 +424,6 @@
     if ($('#og-desc')) $('#og-desc').setAttribute('content', excerpt);
     if ($('#og-url')) $('#og-url').setAttribute('content', postUrl);
     if ($('#og-image')) $('#og-image').setAttribute('content', postImage);
-    if ($('#twitter-title')) $('#twitter-title').setAttribute('content', fullTitle);
-    if ($('#twitter-desc')) $('#twitter-desc').setAttribute('content', excerpt);
-    if ($('#twitter-url')) $('#twitter-url').setAttribute('content', postUrl);
-    if ($('#twitter-image')) $('#twitter-image').setAttribute('content', postImage);
   }
 
   function initAge() {
@@ -586,11 +443,8 @@
 
   function init() {
     initTheme();
-    initHeaderScroll();
-    initMobileNav();
+    initAccordions();
     initModals();
-    initSmoothScroll();
-    initScrollAnimations();
     initWritingPreview();
     initWritingPage();
     initReadPage();

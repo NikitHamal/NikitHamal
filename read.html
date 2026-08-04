@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,14 +7,26 @@
   <meta name="description" content="Read post — Nikit Hamal" />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Nikit Hamal" />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#faf9f6" />
+  <meta name="application-name" content="Nikit Hamal" />
+  <meta name="apple-mobile-web-app-title" content="Nikit Hamal" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Nikit Hamal" />
   <meta property="og:url" id="og-url" content="https://nikit.is-a.dev/read.html" />
   <meta property="og:title" id="og-title" content="Read — Nikit Hamal" />
   <meta property="og:description" id="og-desc" content="Read post — Nikit Hamal" />
   <meta property="og:image" id="og-image" content="https://nikit.is-a.dev/assets/nikit.jpg" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Nikit Hamal",
+    "url": "https://nikit.is-a.dev/"
+  }
+  </script>
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -24,11 +36,11 @@
   <meta name="twitter:image" id="twitter-image" content="https://nikit.is-a.dev/assets/nikit.jpg" />
   <title>Read — Nikit Hamal</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Newsreader (Serif), JetBrains Mono (Monospace), Plus Jakarta Sans (Sans-serif) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Favicon -->
@@ -42,87 +54,57 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/writing.css" />
 
-  <!-- Theme Init -->
+  <!-- Theme Init (prevent flash) -->
   <script>
-    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0a0a0a':'#fafafa')})();
+    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0e0e10':'#faf9f6')})();
   </script>
 </head>
 
-<body class="font-body overflow-x-hidden read-page">
-  <a class="skip-link" href="#read">Skip to content</a>
+<body>
+  <a class="skip-link" href="#read-content">Skip to content</a>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Home">
-        <span class="brand-dot"></span>
-        <span class="brand-text">Nikit<span class="brand-muted">Hamal</span></span>
+  <div class="minimal-wrapper">
+    <!-- TOP CONTROLS -->
+    <div class="top-bar">
+      <a href="writing.html" class="nav-back-link">
+        <i class="ri-arrow-left-line"></i> Back to Writing
       </a>
-      <nav class="nav" aria-label="Primary">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu">
-          <i class="ri-menu-4-line"></i>
-        </button>
-        <ul id="nav-menu" class="nav-list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="writing.html" class="nav-cta">Writing</a></li>
-          <li><a href="index.html#projects">Projects</a></li>
-          <li><a href="index.html#contact">Contact</a></li>
-        </ul>
-      </nav>
-      <div class="nav-actions">
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <i class="ri-sun-line"></i>
-        </button>
-      </div>
+      <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <span class="theme-icon">*</span>
+      </button>
     </div>
-  </header>
 
-  <main id="read">
-    <!-- READ HERO -->
-    <section class="read-hero" aria-label="Article Header">
-      <div class="container">
-        <a class="back-link" href="writing.html" aria-label="Back to writing list">
-          <i class="ri-arrow-left-line"></i>
-          <span>Back to Writing</span>
-        </a>
-        <div class="read-banner" id="readBanner" aria-hidden="true"></div>
-        <div class="read-header">
-          <span class="read-category" id="readCategory">Post</span>
-          <h1 class="read-title" id="readTitle">Loading...</h1>
-          <div class="read-meta" id="readMeta"></div>
-        </div>
+    <!-- READ HEADER -->
+    <header class="read-article-header">
+      <span class="read-category" id="readCategory">ESSAY</span>
+      <h1 class="read-title" id="readTitle">Loading...</h1>
+      <div class="read-meta" id="readMeta"></div>
+    </header>
+
+    <!-- ARTICLE BODY CONTENT -->
+    <main id="read-content" class="read-article-container">
+      <aside class="toc-sidebar" id="toc" style="display:none;">
+        <h4 class="toc-heading">Contents</h4>
+        <ul class="toc-list" id="tocList"></ul>
+      </aside>
+      
+      <article class="read-prose-body" id="readBody">
+        <p style="color:var(--text-muted);padding:20px 0;">Loading essay...</p>
+      </article>
+    </main>
+
+    <!-- FOOTER LINKS -->
+    <footer class="minimal-footer">
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="writing.html">Writing</a>
+        <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/NikitHamal" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:iamnikithamal@gmail.com">Email</a>
       </div>
-    </section>
-
-    <!-- ARTICLE CONTENT -->
-    <section class="read-content">
-      <div class="container">
-        <div class="read-layout">
-          <aside class="read-sidebar" id="toc">
-            <div class="toc-card">
-              <h3 class="toc-title">
-                <i class="ri-list-check-2"></i>
-                <span>Contents</span>
-              </h3>
-              <ul class="toc-list" id="tocList"></ul>
-            </div>
-          </aside>
-          <article class="read-body prose" id="readBody">
-            <p>Loading content...</p>
-          </article>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p class="footer-text">&copy; 2025 Nikit Hamal. Crafted with passion.</p>
-      <a class="back-to-top" href="#read" aria-label="Back to top">
-        <i class="ri-arrow-up-line"></i>
-      </a>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <script src="js/config.js"></script>
   <script defer src="js/app.js"></script>
