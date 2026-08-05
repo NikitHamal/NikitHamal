@@ -5,7 +5,6 @@
 
 - 🔭 Role: Exploring
 - 📍 Location: Nepal
-- 🧑‍💻 Age: 19
 - 🗣️ Languages: Nepali (native), Hindi, English
 - ⚧ Gender: Male
 - 📫 Contact: [LinkedIn](https://www.linkedin.com/in/nikithamal) · [Twitter](https://twitter.com/nikithamal) · [Instagram](https://www.instagram.com/nikithamal) · [Facebook](https://www.facebook.com/thenikithamal)

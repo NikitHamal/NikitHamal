@@ -426,17 +426,6 @@
     if ($('#og-image')) $('#og-image').setAttribute('content', postImage);
   }
 
-  function initAge() {
-    document.querySelectorAll('[data-age]').forEach(el => {
-      const birth = new Date(el.getAttribute('data-age'));
-      const now = new Date();
-      let age = now.getFullYear() - birth.getFullYear();
-      const m = now.getMonth() - birth.getMonth();
-      if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
-      el.textContent = age;
-    });
-  }
-
   // ============================================
   // INIT
   // ============================================
@@ -448,7 +437,6 @@
     initWritingPreview();
     initWritingPage();
     initReadPage();
-    initAge();
   }
 
   if (document.readyState === 'loading') {
