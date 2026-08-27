@@ -219,14 +219,15 @@ img {
 .bio-inline-icon {
   width: 18px;
   height: 18px;
-  border-radius: 4px;
-  object-fit: cover;
+  border-radius: 3px;
+  object-fit: contain;
   display: inline-block;
   flex-shrink: 0;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   vertical-align: middle;
+}
+
+[data-theme="dark"] .bio-inline-icon[src*="consica-logo"] {
+  filter: brightness(0) invert(1);
 }
 
 /* ============================================
