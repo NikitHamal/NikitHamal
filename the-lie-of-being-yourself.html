@@ -9,11 +9,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-<meta name="description" content="The lie of being yourself. An essay by Nikit, in a quiet, self-contained reading edition.">
-<title>The lie of “being yourself” · Nikit</title>
+<meta name="description" content="You say, “I just want to be myself.” What do you mean by that? An essay by Nikit Hamal.">
+<title>The lie of “being yourself” — Nikit Hamal</title>
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Nikit Hamal">
+<meta property="og:url" content="https://nikit.is-a.dev/the-lie-of-being-yourself.html">
+<meta property="og:title" content="The lie of “being yourself” — Nikit Hamal">
+<meta property="og:description" content="You say, “I just want to be myself.” What do you mean by that? An essay by Nikit Hamal.">
+<meta property="og:image" content="https://nikit.is-a.dev/assets/og/the-lie-of-being-yourself.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://nikit.is-a.dev/the-lie-of-being-yourself.html">
+<meta name="twitter:title" content="The lie of “being yourself” — Nikit Hamal">
+<meta name="twitter:description" content="You say, “I just want to be myself.” What do you mean by that? An essay by Nikit Hamal.">
+<meta name="twitter:image" content="https://nikit.is-a.dev/assets/og/the-lie-of-being-yourself.png">
 <style>
-:root{--paper:#faf9f6;--ink:#18181b;--muted:#52525b;--faint:rgba(0,0,0,.09);--accent:#18181b;--panel:#ffffff;--shade:rgba(24,24,27,.06);--text-size:20px;--leading:1.78;--measure:632px;--progress:0; color-scheme:light}
+:root{--paper:#faf9f6;--ink:#18181b;--muted:#52525b;--faint:rgba(0,0,0,.09);--accent:#18181b;--panel:#ffffff;--shade:rgba(24,24,27,.06);--text-size:16px;--leading:1.78;--measure:632px;--progress:0; color-scheme:light}
 html[data-theme="dark"]{--paper:#0e0e10;--ink:#f4f4f5;--muted:#a1a1aa;--faint:rgba(255,255,255,.12);--accent:#f4f4f5;--panel:#161618;--shade:rgba(0,0,0,.5);color-scheme:dark}
 html[data-theme="sepia"]{--paper:#f2ecdf;--ink:#302d26;--muted:#716859;--faint:rgba(63,45,20,.2);--accent:#965738;--panel:#f8f3e9;--shade:rgba(63,45,20,.1);color-scheme:light}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Newsreader',Georgia,serif;-webkit-font-smoothing:antialiased;transition:background .6s,color .6s;overflow-wrap:break-word}
@@ -135,7 +149,7 @@ html[data-theme="sepia"]{--paper:#f2ecdf;--ink:#302d26;--muted:#716859;--faint:r
 <section class="settings" id="settings" role="dialog" aria-label="Reading settings" hidden>
 <div class="settings-title"><h2>Reading settings</h2><button class="icon-button" id="close-settings" aria-label="Close reading settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>
 <div class="setting-label ui" id="font-label">Typeface</div><div class="themes" role="group" aria-labelledby="font-label"><button class="theme-option font-option" data-set-font="serif" aria-pressed="false">Serif</button><button class="theme-option font-option" data-set-font="sans" aria-pressed="true">Sans</button></div>
-<label class="setting-label ui" for="font-size">Letter size <output id="font-size-value" for="font-size">20</output></label><input class="range" id="font-size" type="range" min="18" max="30" step="1" value="20">
+<label class="setting-label ui" for="font-size">Letter size <output id="font-size-value" for="font-size">16</output></label><input class="range" id="font-size" type="range" min="13" max="28" step="1" value="16">
 <label class="setting-label ui" for="line-height">Breathing room <output id="line-height-value" for="line-height">1.78</output></label><input class="range" id="line-height" type="range" min="1.5" max="2.2" step=".02" value="1.78">
 <label class="toggle-row" for="motion-toggle">Gentle movement <input class="switch" id="motion-toggle" type="checkbox" checked></label>
 <p class="settings-help"><kbd>←</kbd> / <kbd>→</kbd> move between passages<br><kbd>F</kbd> focus · <kbd>T</kbd> change the page<br>Settings stay in this browser when local storage is available. Nothing is sent anywhere.</p>
@@ -146,9 +160,9 @@ html[data-theme="sepia"]{--paper:#f2ecdf;--ink:#302d26;--muted:#716859;--faint:r
 (()=>{'use strict';
 const root=document.documentElement;root.classList.add('js');
 const $=id=>document.getElementById(id), passages=[...document.querySelectorAll('.passage')], total=passages.length;
-const storageKey='nikit-being-yourself-reader-v1';const reduced=matchMedia('(prefers-reduced-motion: reduce)');const defaults={theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light',size:20,leading:1.78,motion:!reduced.matches,font:'sans'};let stored={};
+const storageKey='nikit-being-yourself-reader-v2';const reduced=matchMedia('(prefers-reduced-motion: reduce)');const defaults={theme:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light',size:16,leading:1.78,motion:!reduced.matches,font:'sans'};let stored={};
 try{const parsed=JSON.parse(localStorage.getItem(storageKey)||'{}');if(parsed&&typeof parsed==='object')stored=parsed;}catch(e){}
-const settings={...defaults,...stored};if(!['light','sepia','dark'].includes(settings.theme))settings.theme=defaults.theme;if(!['serif','sans'].includes(settings.font))settings.font='sans';settings.size=Math.min(30,Math.max(18,Number(settings.size)||defaults.size));settings.leading=Math.min(2.2,Math.max(1.5,Number(settings.leading)||1.78));settings.motion=typeof settings.motion==='boolean'?settings.motion:defaults.motion;
+const settings={...defaults,...stored};if(!['light','sepia','dark'].includes(settings.theme))settings.theme=defaults.theme;if(!['serif','sans'].includes(settings.font))settings.font='sans';settings.size=Math.min(28,Math.max(13,Number(settings.size)||defaults.size));settings.leading=Math.min(2.2,Math.max(1.5,Number(settings.leading)||1.78));settings.motion=typeof settings.motion==='boolean'?settings.motion:defaults.motion;
 let current=0,focus=false,toastTimer,quietTimer,ticking=false,lastOpener=$('settings-toggle');const panel=$('settings');
 function save(){try{localStorage.setItem(storageKey,JSON.stringify(settings));return true}catch(e){return false}}
 function notify(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('shown');toastTimer=setTimeout(()=>$('toast').classList.remove('shown'),3400)}

@@ -230,34 +230,46 @@
     }));
   }
 
+  function ogThumbFor(post, cls) {
+    const slug = (post.slug || '').trim();
+    const src = slug ? `assets/og/${slug}.png` : 'assets/og-image.png';
+    const alt = String(post.title || '').replace(/"/g, '&quot;');
+    return `<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" onerror="this.onerror=null;this.src='assets/og-image.png'" />`;
+  }
+
   function renderMinimalWritingItem(post) {
     const isBlogger = post.isBlogger;
+    const cardVisual = ogThumbFor(post, 'writing-mini-thumb');
     const link = `read.html?${isBlogger ? 'id' : 'slug'}=${post.slug}`;
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const readingTime = estimateReadingTime(post.contentHtml).mins;
 
     return `
       <a href="${link}" class="writing-mini-item">
-        <div class="writing-mini-title">${post.title}</div>
-        <div class="writing-mini-meta">${date} &bull; ${readingTime} min read</div>
+        <div class="writing-mini-thumb-wrap">
+          ${cardVisual}
+        </div>
+        <div class="writing-mini-content">
+          <div class="writing-mini-title">${post.title}</div>
+          <div class="writing-mini-meta">${date} &bull; ${readingTime} min read</div>
+        </div>
       </a>
     `;
   }
 
   function renderWritingCard(post) {
     const isBlogger = post.isBlogger;
-    const imagePath = isBlogger ? post.image : resolveImagePath(post.image);
+    const cardVisual = ogThumbFor(post, 'writing-card__thumb');
     const readingTime = estimateReadingTime(post.contentHtml).mins;
-    const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 120) + '...');
+    const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 140) + '...');
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const link = `read.html?${isBlogger ? 'id' : 'slug'}=${post.slug}`;
 
     return `
       <article class="writing-card">
         <a href="${link}" class="writing-card__link">
-          <div class="writing-card__media" style="background-image: ${imagePath ? `url('${imagePath}')` : svgPlaceholder(post.title)}"></div>
           <div class="writing-card__body">
-            <span class="writing-card__category">${post.category || 'Article'}</span>
+            <span class="writing-card__category">${post.category || 'Essay'}</span>
             <h3 class="writing-card__title">${post.title}</h3>
             <p class="writing-card__excerpt">${excerpt}</p>
             <div class="writing-card__meta">
@@ -265,6 +277,9 @@
               <span>&middot;</span>
               <span>${readingTime} min read</span>
             </div>
+          </div>
+          <div class="writing-card__thumb-wrap">
+            ${cardVisual}
           </div>
         </a>
       </article>
@@ -427,6 +442,31 @@
             }).join('');
           }
         }
+
+        // 3. If still <= 1 <p> and the paragraph is long, split on sentence clusters
+        const finalCheckParas = Array.from(body.querySelectorAll('p')).filter(p => p.textContent.trim().length > 10);
+        if (finalCheckParas.length === 1 && finalCheckParas[0].textContent.trim().length > 320) {
+          const singleP = finalCheckParas[0];
+          const text = singleP.innerHTML.trim();
+          // Split by sentence terminators followed by spaces and opening quotes/caps
+          const sentences = text.split(/(?<=[.?!])\s+(?=[A-Z“"‘'—])/g);
+          if (sentences.length > 1) {
+            const frag = document.createDocumentFragment();
+            let chunk = '';
+            for (let i = 0; i < sentences.length; i++) {
+              chunk += (chunk ? ' ' : '') + sentences[i];
+              if (chunk.length >= 280 || i === sentences.length - 1) {
+                const newP = document.createElement('p');
+                newP.innerHTML = chunk;
+                frag.appendChild(newP);
+                chunk = '';
+              }
+            }
+            if (frag.childNodes.length > 1) {
+              singleP.parentNode.replaceChild(frag, singleP);
+            }
+          }
+        }
       }
     }
 
@@ -557,14 +597,20 @@
     const fullTitle = `${post.title} \u2014 Nikit Hamal`;
     document.title = fullTitle;
 
-    const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 160) + '...');
+    const postSlug = post.slug || slug || '';
+    const postOgCard = postSlug ? `https://nikit.is-a.dev/assets/og/${postSlug}.png` : 'https://nikit.is-a.dev/assets/og-image.png';
+    const postImage = img ? (img.startsWith('http') ? img : `https://nikit.is-a.dev/${img}`) : postOgCard;
+    const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 150) + '...');
     const postUrl = window.location.href;
-    const postImage = img ? (img.startsWith('http') ? img : `https://nikit.is-a.dev/${img}`) : 'https://nikit.is-a.dev/assets/nikit.jpg';
 
     if ($('#og-title')) $('#og-title').setAttribute('content', fullTitle);
     if ($('#og-desc')) $('#og-desc').setAttribute('content', excerpt);
     if ($('#og-url')) $('#og-url').setAttribute('content', postUrl);
     if ($('#og-image')) $('#og-image').setAttribute('content', postImage);
+    if ($('#twitter-title')) $('#twitter-title').setAttribute('content', fullTitle);
+    if ($('#twitter-desc')) $('#twitter-desc').setAttribute('content', excerpt);
+    if ($('#twitter-url')) $('#twitter-url').setAttribute('content', postUrl);
+    if ($('#twitter-image')) $('#twitter-image').setAttribute('content', postImage);
   }
 
   // ============================================
@@ -607,17 +653,24 @@
     let toastTimer = null;
     let ticking = false;
 
-    const storageKey = 'nikit-reader-settings-v2';
+    const storageKey = 'nikit-reader-settings-v3';
     const defaults = {
       font: root.getAttribute('data-font') || 'sans',
-      size: 20,
+      size: 16,
       leading: 1.8,
       motion: !matchMedia('(prefers-reduced-motion: reduce)').matches
     };
 
     let settings = { ...defaults };
     try {
-      const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      let saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+      if (!saved) {
+        const v2 = JSON.parse(localStorage.getItem('nikit-reader-settings-v2') || 'null');
+        if (v2 && typeof v2 === 'object') {
+          saved = { ...v2 };
+          if (saved.size === 20) saved.size = 16;
+        }
+      }
       if (saved && typeof saved === 'object') settings = { ...defaults, ...saved };
     } catch (e) {}
 

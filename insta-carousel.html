@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram Carousel Studio — Nikit Hamal</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- JSZip for 1-click bulk download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <style>
+    :root {
+      --bg-studio: #f4f3ef;
+      --panel-bg: #ffffff;
+      --text-main: #18181b;
+      --text-muted: #766358;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --accent: #18181b;
+      --paper-bg: #fbf5ed;
+      --paper-ink: #1c1512;
+      --paper-body: #2d221c;
+      --paper-line: rgba(75, 45, 25, 0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg-studio: #121214;
+      --panel-bg: #1a1a1e;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent: #ffffff;
+      --paper-bg: #1c1816;
+      --paper-ink: #f7f3ee;
+      --paper-body: #dcd3cb;
+      --paper-line: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg-studio);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Studio Header */
+    .studio-header {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .studio-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      background: rgba(0,0,0,0.06);
+      padding: 2px 8px;
+      border-radius: 999px;
+      color: var(--text-muted);
+    }
+
+    [data-theme="dark"] .brand-tag {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--panel-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.18);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--panel-bg);
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      background: var(--accent);
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .select-input, .range-input {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-studio);
+      color: var(--text-main);
+      font-size: 0.82rem;
+    }
+
+    .view-toggle {
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .toggle-btn {
+      padding: 6px 12px;
+      background: var(--panel-bg);
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      color: var(--panel-bg);
+    }
+
+    /* Workspace */
+    .workspace {
+      flex: 1;
+      padding: 40px 28px 80px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: auto;
+    }
+
+    /* Grid Layout */
+    .slides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 32px;
+      width: 100%;
+      max-width: 1600px;
+    }
+
+    /* Carousel Single View */
+    .slides-carousel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .carousel-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .carousel-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    /* Slide Card Preview Box */
+    .slide-wrapper {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .slide-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .slide-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #10b981;
+      font-weight: 500;
+    }
+
+    /* The 1080x1350 scaled container */
+    .canvas-viewport {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+      background: #faf9f6;
+    }
+
+    /* Actual 1080x1350 canvas placed inside and scaled with CSS transform */
+    .canvas-content {
+      width: 1080px;
+      height: 1350px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top left;
+      background: var(--paper-bg);
+      color: var(--paper-ink);
+      font-family: 'Newsreader', Georgia, serif;
+      padding: 96px 96px 92px 96px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: text;
+    }
+
+    .canvas-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #71717a;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--paper-line);
+    }
+
+    .canvas-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--para-gap, 24px);
+      padding: 24px 0;
+    }
+
+    .canvas-body p {
+      font-size: var(--body-size, 23.2px);
+      line-height: var(--body-lh, 1.58);
+      color: var(--paper-body);
+      font-weight: 400;
+      text-wrap: pretty;
+      letter-spacing: -0.005em;
+    }
+
+    .canvas-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      color: #8e8e93;
+      padding-top: 24px;
+      border-top: 1px solid var(--paper-line);
+    }
+
+    /* Cover Slide Specifics */
+    .cover-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px 20px;
+      gap: 36px;
+    }
+
+    .cover-art {
+      width: 230px;
+      height: 230px;
+      color: var(--paper-ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.88;
+    }
+
+    .cover-art svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .cover-title-group {
+      max-width: 840px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .cover-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 64px;
+      line-height: 1.14;
+      font-weight: 500;
+      color: var(--paper-ink);
+      letter-spacing: -0.025em;
+    }
+
+    .cover-hook {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.5;
+      color: #52525b;
+      font-style: italic;
+      max-width: 680px;
+    }
+
+    .cover-byline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #71717a;
+      margin-top: 8px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.08);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+    }
+
+    /* Actions bottom bar for each card */
+    .slide-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+    }
+
+    .download-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.04);
+      transition: background 0.15s;
+    }
+
+    .download-link-btn:hover {
+      background: rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Studio Header -->
+  <header class="studio-header">
+    <div class="studio-brand">
+      <a href="writing.html" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;font-size:0.9rem;margin-right:8px;">
+        <i class="ri-arrow-left-line"></i> Writing
+      </a>
+      <h1 class="brand-title">Instagram Carousel Studio</h1>
+      <span class="brand-tag">1080 × 1350 px · 4:5</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+        <i class="ri-sun-line" id="themeIcon"></i>
+      </button>
+      <button class="btn btn-primary" onclick="downloadAllZip()">
+        <i class="ri-download-cloud-line"></i> Download All 10 PNGs (ZIP)
+      </button>
+    </div>
+  </header>
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <div class="control-group">
+      <span class="control-label">Essay Set:</span>
+      <select class="select-input" id="modeSelect" onchange="switchMode(this.value)">
+        <option value="part1" selected>Part 1 (10 Slides · 32px Mobile-Optimized)</option>
+        <option value="part2">Part 2 (10 Slides · 32px Mobile-Optimized)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <span class="control-label">Font Size:</span>
+      <input type="range" class="range-input" id="fontSizeSlider" min="26" max="38" step="0.5" value="32" oninput="updateTypography()" />
+      <span id="fontSizeVal" style="font-family:'JetBrains Mono';font-size:0.8rem;">32px</span>
+    </div>
+
+    <div class="control-group">
+      <span class="control-label">Line Height:</span>
+      <input type="range" class="range-input" id="lineHeightSlider" min="1.45" max="1.85" step="0.02" value="1.64" oninput="updateTypography()" />
+      <span id="lineHeightVal" style="font-family:'JetBrains Mono';font-size:0.8rem;">1.64</span>
+    </div>
+
+    <div class="control-group">
+      <span class="control-label">View:</span>
+      <div class="view-toggle">
+        <button class="toggle-btn active" id="btnGrid" onclick="setViewMode('grid')">
+          <i class="ri-grid-fill"></i> Grid (All 10)
+        </button>
+        <button class="toggle-btn" id="btnCarousel" onclick="setViewMode('carousel')">
+          <i class="ri-slideshow-3-line"></i> Carousel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace -->
+  <main class="workspace" id="workspace">
+    <div class="slides-grid" id="slidesContainer">
+      <!-- Injected via JavaScript -->
+    </div>
+  </main>
+
+  <!-- Motion forms & posts data -->
+  <script src="js/motion-forms.js"></script>
+
+  <script>
+    let currentMode = 'part1';
+    let currentSlideIndex = 0;
+    let viewMode = 'grid';
+
+    let essayData = null;
+    let paragraphs = [];
+
+    // Pre-rendered PNG file links for 100% instant reliable downloads
+    const preRenderedPngs = [
+      'assets/insta/the-lie-of-being-yourself/slide-01.png',
+      'assets/insta/the-lie-of-being-yourself/slide-02.png',
+      'assets/insta/the-lie-of-being-yourself/slide-03.png',
+      'assets/insta/the-lie-of-being-yourself/slide-04.png',
+      'assets/insta/the-lie-of-being-yourself/slide-05.png',
+      'assets/insta/the-lie-of-being-yourself/slide-06.png',
+      'assets/insta/the-lie-of-being-yourself/slide-07.png',
+      'assets/insta/the-lie-of-being-yourself/slide-08.png',
+      'assets/insta/the-lie-of-being-yourself/slide-09.png',
+      'assets/insta/the-lie-of-being-yourself/slide-10.png'
+    ];
+
+    async function init() {
+      try {
+        const res = await fetch('posts/the-lie-of-being-yourself.json');
+        essayData = await res.json();
+        
+        // Parse paragraphs
+        const rawParas = essayData.contentHtml.match(/<p>([\s\S]*?)<\/p>/g) || [];
+        paragraphs = rawParas.map(p => {
+          return p.replace(/<[^>]+>/g, '').replace(/~Proofread by.*/, '').trim();
+        }).filter(Boolean);
+
+        renderSlides();
+        setupResizeObserver();
+      } catch (err) {
+        console.error('Failed to load essay data:', err);
+      }
+    }
+
+    function getSlidesData() {
+      if (currentMode === 'full') {
+        return [
+          { type: 'cover' },
+          { type: 'text', index: 2, paras: paragraphs.slice(0, 4) },
+          { type: 'text', index: 3, paras: paragraphs.slice(4, 8) },
+          { type: 'text', index: 4, paras: paragraphs.slice(8, 12) },
+          { type: 'text', index: 5, paras: paragraphs.slice(12, 16) },
+          { type: 'text', index: 6, paras: paragraphs.slice(16, 20) },
+          { type: 'text', index: 7, paras: paragraphs.slice(20, 24) },
+          { type: 'text', index: 8, paras: paragraphs.slice(24, 28) },
+          { type: 'text', index: 9, paras: paragraphs.slice(28, 31) },
+          { type: 'text', index: 10, paras: paragraphs.slice(31, 35), isLast: true }
+        ];
+      } else if (currentMode === 'part1') {
+        // Part 1: First 18 paragraphs (2 per slide)
+        const slides = [{ type: 'cover', part: 'Part 1' }];
+        for (let i = 0; i < 9; i++) {
+          slides.push({
+            type: 'text',
+            index: i + 2,
+            paras: paragraphs.slice(i * 2, i * 2 + 2),
+            isLast: i === 8
+          });
+        }
+        return slides;
+      } else {
+        // Part 2: Next 17 paragraphs
+        const slides = [{ type: 'cover', part: 'Part 2' }];
+        for (let i = 0; i < 9; i++) {
+          slides.push({
+            type: 'text',
+            index: i + 2,
+            paras: paragraphs.slice(18 + i * 2, 18 + i * 2 + 2),
+            isLast: i === 8
+          });
+        }
+        return slides;
+      }
+    }
+
+    function renderSlides() {
+      const container = document.getElementById('slidesContainer');
+      const slides = getSlidesData();
+
+      if (viewMode === 'grid') {
+        container.className = 'slides-grid';
+        container.innerHTML = slides.map((slide, idx) => generateSlideCardHtml(slide, idx)).join('');
+      } else {
+        container.className = 'slides-carousel';
+        const slide = slides[currentSlideIndex];
+        container.innerHTML = `
+          <div class="carousel-nav">
+            <button class="btn" onclick="prevSlide()"><i class="ri-arrow-left-s-line"></i> Prev</button>
+            <span class="carousel-indicator">Slide ${String(currentSlideIndex + 1).padStart(2, '0')} of 10</span>
+            <button class="btn" onclick="nextSlide()">Next <i class="ri-arrow-right-s-line"></i></button>
+          </div>
+          ${generateSlideCardHtml(slide, currentSlideIndex)}
+        `;
+      }
+
+      scaleCanvases();
+    }
+
+    function generateCuteSvg(isCover = false) {
+      return `
+        <svg class="cute-bg" viewBox="0 0 1080 1350" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:1080px;height:1350px;pointer-events:none;z-index:1;">
+          <g transform="rotate(12, 48, 52)">
+            <circle cx="48" cy="35.8" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="64.4" cy="46.3" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="58.1" cy="65.7" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="37.9" cy="65.7" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="31.6" cy="46.3" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="48" cy="52" r="7.3" fill="#ba4867" fill-opacity="0.85" />
+            <circle cx="46" cy="50" r="2.5" fill="#ffffff" fill-opacity="0.95" />
+          </g>
+          <g transform="rotate(35, 105, 42)">
+            <circle cx="105" cy="31.6" r="8.3" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="115.5" cy="38.4" r="8.3" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="111.5" cy="50.8" r="8.3" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="98.5" cy="50.8" r="8.3" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="94.5" cy="38.4" r="8.3" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="105" cy="42" r="4.7" fill="#c98a32" fill-opacity="0.85" />
+          </g>
+          <g transform="rotate(25, 1032, 50)">
+            <circle cx="1032" cy="33.8" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1048.4" cy="44.3" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1042.1" cy="63.7" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1021.9" cy="63.7" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1015.6" cy="44.3" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1032" cy="50" r="7.3" fill="#ba4867" fill-opacity="0.85" />
+          </g>
+          <g transform="rotate(30, 50, 1300)">
+            <circle cx="50" cy="1283.8" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="66.4" cy="1294.3" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="60.1" cy="1313.7" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="39.9" cy="1313.7" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="33.6" cy="1294.3" r="12.9" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="50" cy="1300" r="7.3" fill="#ba4867" fill-opacity="0.85" />
+          </g>
+          <g transform="rotate(42, 1030, 1298)">
+            <circle cx="1030" cy="1280.6" r="13.8" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1047.6" cy="1291.9" r="13.8" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1040.8" cy="1312.7" r="13.8" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1019.2" cy="1312.7" r="13.8" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1012.4" cy="1291.9" r="13.8" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1030" cy="1298" r="7.8" fill="#ba4867" fill-opacity="0.85" />
+          </g>
+          <g transform="translate(38, 420) rotate(20)">
+            <circle cx="38" cy="407.2" r="10.1" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="50.8" cy="415.5" r="10.1" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="45.9" cy="430.6" r="10.1" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="30.1" cy="430.6" r="10.1" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="25.2" cy="415.5" r="10.1" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="38" cy="420" r="5.7" fill="#c98a32" fill-opacity="0.85" />
+          </g>
+          <g transform="translate(1042, 400) rotate(15)">
+            <circle cx="1042" cy="386.1" r="11.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1055.9" cy="395.1" r="11.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1050.6" cy="411.5" r="11.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1033.4" cy="411.5" r="11.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1028.1" cy="395.1" r="11.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1042" cy="400" r="6.2" fill="#ba4867" fill-opacity="0.85" />
+          </g>
+          <g transform="translate(44, 760) rotate(45)">
+            <circle cx="44" cy="744.9" r="12.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="59.1" cy="754.8" r="12.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="53.3" cy="772.6" r="12.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="34.7" cy="772.6" r="12.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="28.9" cy="754.8" r="12.0" fill="#f8c2ce" fill-opacity="0.45" stroke="#ba4867" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="44" cy="760" r="6.8" fill="#ba4867" fill-opacity="0.85" />
+          </g>
+          <g transform="translate(1036, 750) rotate(55)">
+            <circle cx="1036" cy="734.9" r="12.0" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1051.1" cy="744.8" r="12.0" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1045.3" cy="762.6" r="12.0" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1026.7" cy="762.6" r="12.0" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1020.9" cy="744.8" r="12.0" fill="#fae4b5" fill-opacity="0.45" stroke="#c98a32" stroke-width="1.6" stroke-opacity="0.65" />
+            <circle cx="1036" cy="750" r="6.8" fill="#c98a32" fill-opacity="0.85" />
+          </g>
+          <!-- Sparkles -->
+          <g transform="translate(540, 42)" opacity="0.45"><path d="M 0,-13 Q 0,0 13,0 Q 0,0 0,13 Q 0,0 -13,0 Q 0,0 0,-13 Z" fill="#916d4e" /></g>
+          <g transform="translate(42, 230) rotate(25)" opacity="0.40"><path d="M 0,-12 Q 0,0 12,0 Q 0,0 0,12 Q 0,0 -12,0 Q 0,0 0,-12 Z" fill="#916d4e" /></g>
+          <g transform="translate(1038, 230) rotate(15)" opacity="0.40"><path d="M 0,-12 Q 0,0 12,0 Q 0,0 0,12 Q 0,0 -12,0 Q 0,0 0,-12 Z" fill="#916d4e" /></g>
+          <g transform="translate(40, 920) rotate(30)" opacity="0.40"><path d="M 0,-13 Q 0,0 13,0 Q 0,0 0,13 Q 0,0 -13,0 Q 0,0 0,-13 Z" fill="#916d4e" /></g>
+          <g transform="translate(1040, 910) rotate(10)" opacity="0.40"><path d="M 0,-13 Q 0,0 13,0 Q 0,0 0,13 Q 0,0 -13,0 Q 0,0 0,-13 Z" fill="#916d4e" /></g>
+        </svg>
+      `;
+    }
+
+    function generateSlideCardHtml(slide, idx) {
+      const slideNum = String(idx + 1).padStart(2, '0');
+      const motionSvg = window.getMotionFormSvg ? window.getMotionFormSvg('the-lie-of-being-yourself') : '';
+      const pngPath = preRenderedPngs[idx] || `assets/insta/the-lie-of-being-yourself/slide-${slideNum}.png`;
+      const cuteBg = generateCuteSvg(slide.type === 'cover');
+
+      let innerContent = '';
+      if (slide.type === 'cover') {
+        innerContent = `
+          ${cuteBg}
+          <div class="cover-center" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;">
+            <div class="cover-art" style="width:250px;height:250px;">
+              ${motionSvg}
+            </div>
+            <div class="cover-title-group" style="gap:28px;">
+              <h1 class="cover-title" style="font-size:72px;line-height:1.12;">The lie of<br>“being yourself”</h1>
+              <p class="cover-hook" style="font-size:26px;line-height:1.52;max-width:720px;">“You say, ‘I just want to be myself.’ What do you mean by that? Which self are you talking about?”</p>
+            </div>
+          </div>
+        `;
+      } else {
+        innerContent = `
+          ${cuteBg}
+          <div class="canvas-body" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;gap:48px;padding:40px 10px;">
+            ${slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('')}
+            ${slide.isFinal ? `<div style="font-family:'JetBrains Mono';font-size:14px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-top:16px;">— Nikit Hamal · nikit.is-a.dev</div>` : ''}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="slide-wrapper" id="slide-wrapper-${idx}">
+          <div class="slide-topbar">
+            <span>SLIDE ${slideNum}</span>
+            <span class="slide-status"><i class="ri-checkbox-circle-fill"></i> Ready</span>
+          </div>
+          
+          <div class="canvas-viewport" id="viewport-${idx}">
+            <div class="canvas-content" id="canvas-${idx}">
+              ${innerContent}
+            </div>
+          </div>
+
+          <div class="slide-actions">
+            <span style="font-family:'JetBrains Mono';font-size:0.75rem;color:var(--text-muted);">1080 × 1350 PNG</span>
+            <a href="${pngPath}" download="the-lie-of-being-yourself-slide-${slideNum}.png" class="download-link-btn">
+              <i class="ri-download-line"></i> Download PNG
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function scaleCanvases() {
+      const viewports = document.querySelectorAll('.canvas-viewport');
+      viewports.forEach(vp => {
+        const width = vp.offsetWidth;
+        const scale = width / 1080;
+        const canvas = vp.querySelector('.canvas-content');
+        if (canvas) {
+          canvas.style.transform = `scale(${scale})`;
+        }
+      });
+    }
+
+    function updateTypography() {
+      const fontSize = document.getElementById('fontSizeSlider').value;
+      const lineHeight = document.getElementById('lineHeightSlider').value;
+      document.getElementById('fontSizeVal').textContent = fontSize + 'px';
+      document.getElementById('lineHeightVal').textContent = lineHeight;
+
+      document.querySelectorAll('.canvas-content').forEach(canvas => {
+        canvas.style.setProperty('--body-size', fontSize + 'px');
+        canvas.style.setProperty('--body-lh', lineHeight);
+      });
+    }
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      document.getElementById('btnGrid').classList.toggle('active', mode === 'grid');
+      document.getElementById('btnCarousel').classList.toggle('active', mode === 'carousel');
+      renderSlides();
+    }
+
+    function switchMode(val) {
+      currentMode = val;
+      renderSlides();
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        renderSlides();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < 9) {
+        currentSlideIndex++;
+        renderSlides();
+      }
+    }
+
+    function toggleTheme() {
+      const doc = document.documentElement;
+      const isDark = doc.getAttribute('data-theme') === 'dark';
+      doc.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      const icon = document.getElementById('themeIcon');
+      icon.className = isDark ? 'ri-sun-line' : 'ri-moon-line';
+    }
+
+    async function downloadAllZip() {
+      const btn = event.currentTarget;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Bundling ZIP...`;
+      btn.disabled = true;
+
+      try {
+        const zip = new JSZip();
+        const folder = zip.folder("the-lie-of-being-yourself-instagram");
+
+        for (let i = 0; i < preRenderedPngs.length; i++) {
+          const num = String(i + 1).padStart(2, '0');
+          const resp = await fetch(preRenderedPngs[i]);
+          const blob = await resp.blob();
+          folder.file(`slide-${num}.png`, blob);
+        }
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        const downloadUrl = URL.createObjectURL(zipBlob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = "the-lie-of-being-yourself-instagram-carousel.zip";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(downloadUrl);
+
+        btn.innerHTML = `<i class="ri-check-line"></i> Downloaded!`;
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }, 2500);
+      } catch (err) {
+        console.error('Error generating zip:', err);
+        btn.innerHTML = `Error creating zip`;
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }, 2000);
+      }
+    }
+
+    function setupResizeObserver() {
+      window.addEventListener('resize', () => {
+        scaleCanvases();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (viewMode === 'carousel') {
+          if (e.key === 'ArrowLeft') prevSlide();
+          if (e.key === 'ArrowRight') nextSlide();
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

@@ -152,14 +152,14 @@
 }
 
 :root {
-  --text-size: 20px;
+  --text-size: 16px;
   --leading: 1.8;
 }
 
 /* Read Article Body (Prose) */
 .read-prose-body {
   font-family: var(--font-sans);
-  font-size: var(--text-size, 20px);
+  font-size: var(--text-size, 16px);
   line-height: var(--leading, 1.8);
   color: var(--text-primary);
   margin-top: 0;
@@ -179,7 +179,7 @@
 .read-prose-body p,
 .read-prose-body li,
 .read-prose-body blockquote {
-  font-size: var(--text-size, 20px) !important;
+  font-size: var(--text-size, 16px) !important;
   line-height: var(--leading, 1.8) !important;
 }
 
@@ -343,41 +343,82 @@
 }
 
 .writing-card {
-  padding-bottom: 24px;
+  padding-bottom: 36px;
+  margin-bottom: 36px;
   border-bottom: 1px solid var(--border-line);
 }
 
 .writing-card__link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.writing-card__thumb-wrap {
+  width: 200px;
+  aspect-ratio: 1200 / 630;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--border-line);
   display: block;
+  background: var(--bg-hover, rgba(0, 0, 0, 0.02));
+  transition: border-color var(--transition-fast);
+}
+
+.writing-card__thumb-wrap img,
+img.writing-card__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.writing-card:hover .writing-card__thumb-wrap {
+  border-color: var(--border-strong);
+}
+
+.writing-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .writing-card__category {
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: 4px;
   display: block;
 }
 
 .writing-card__title {
   font-family: var(--font-sans);
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 600;
+  line-height: 1.3;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin: 2px 0 4px;
   transition: opacity var(--transition-fast);
 }
 
 .writing-card:hover .writing-card__title {
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 .writing-card__excerpt {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 10px;
+  line-height: 1.62;
+  margin-bottom: 8px;
 }
 
 .writing-card__meta {
@@ -735,4 +776,365 @@ html[data-font="sans"] .read-prose-body {
   .toast {
     bottom: 78px;
   }
+  .writing-card__link {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .writing-card__thumb-wrap {
+    width: 132px;
+    aspect-ratio: 1200 / 630;
+    height: auto;
+    border-radius: 6px;
+  }
+}
+
+/* ============================================
+   CUSTOM TEXT SELECTION HIGHLIGHT ACROSS ALL THEMES
+   ============================================ */
+*::selection {
+  background: var(--selection-bg) !important;
+  color: var(--selection-text) !important;
+}
+
+*::-moz-selection {
+  background: var(--selection-bg) !important;
+  color: var(--selection-text) !important;
+}
+
+/* ============================================
+   DYNAMIC CODE-GENERATED CARD THUMBNAILS
+   ============================================ */
+
+.dynamic-card-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.writing-card:hover .dynamic-card-thumb {
+  opacity: 0.9;
+}
+
+/* 1. POEM PALETTE & ART (Floral Pink) */
+.dynamic-card-thumb--poem .card-art-bg {
+  fill: #fff0f3;
+  transition: fill 0.3s ease;
+}
+.dynamic-card-thumb--poem .card-art-border {
+  stroke: rgba(225, 112, 140, 0.28);
+  stroke-width: 0.8px;
+}
+.dynamic-card-thumb--poem .card-art-crosshairs path {
+  stroke: rgba(225, 112, 140, 0.45);
+  stroke-width: 0.9px;
+}
+.dynamic-card-thumb--poem .card-art-tag-bg {
+  fill: rgba(225, 112, 140, 0.14);
+}
+.dynamic-card-thumb--poem .card-art-tag-text {
+  fill: #be185d;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.dynamic-card-thumb--poem .flower-petal {
+  fill: rgba(244, 114, 182, 0.24);
+  stroke: #db2777;
+  stroke-width: 1.15px;
+}
+.dynamic-card-thumb--poem .flower-inner-ring {
+  stroke: rgba(219, 39, 119, 0.45);
+  stroke-width: 0.8px;
+}
+.dynamic-card-thumb--poem .flower-center {
+  fill: #be185d;
+}
+.dynamic-card-thumb--poem .sparkle-star {
+  fill: #db2777;
+  opacity: 0.85;
+}
+.dynamic-card-thumb--poem .orbit-guide {
+  stroke: rgba(219, 39, 119, 0.3);
+  stroke-width: 0.75px;
+}
+.dynamic-card-thumb--poem .cute-dot {
+  fill: #db2777;
+  opacity: 0.65;
+}
+
+/* Dark mode for Poem */
+[data-theme="dark"] .dynamic-card-thumb--poem .card-art-bg {
+  fill: #241219;
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .card-art-border {
+  stroke: rgba(244, 114, 182, 0.22);
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .card-art-crosshairs path {
+  stroke: rgba(244, 114, 182, 0.35);
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .card-art-tag-bg {
+  fill: rgba(244, 114, 182, 0.18);
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .card-art-tag-text {
+  fill: #f472b6;
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .flower-petal {
+  fill: rgba(244, 114, 182, 0.24);
+  stroke: #f472b6;
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .flower-inner-ring {
+  stroke: rgba(244, 114, 182, 0.5);
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .flower-center {
+  fill: #fbcfe8;
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .sparkle-star {
+  fill: #f472b6;
+}
+[data-theme="dark"] .dynamic-card-thumb--poem .cute-dot {
+  fill: #f472b6;
+}
+
+/* 2. ESSAY PALETTE & ART (Warm Archival Linen / Cream) */
+.dynamic-card-thumb--essay .card-art-bg {
+  fill: #faf8f4;
+  transition: fill 0.3s ease;
+}
+.dynamic-card-thumb--essay .card-art-border {
+  stroke: rgba(120, 100, 70, 0.18);
+  stroke-width: 0.8px;
+}
+.dynamic-card-thumb--essay .card-art-crosshairs path {
+  stroke: rgba(120, 100, 70, 0.4);
+  stroke-width: 0.9px;
+}
+.dynamic-card-thumb--essay .card-art-tag-bg {
+  fill: rgba(0, 0, 0, 0.05);
+}
+.dynamic-card-thumb--essay .card-art-tag-text {
+  fill: #52525b;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.dynamic-card-thumb--essay .geo-axis {
+  stroke: rgba(0, 0, 0, 0.18);
+  stroke-width: 0.7px;
+  stroke-dasharray: 2 4;
+}
+.dynamic-card-thumb--essay .geo-ring-subtle {
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 0.75px;
+}
+.dynamic-card-thumb--essay .geo-ring {
+  stroke: #27272a;
+  stroke-width: 0.9px;
+  fill: none;
+}
+.dynamic-card-thumb--essay .geo-ring-bold {
+  stroke: #18181b;
+  stroke-width: 1.3px;
+  fill: none;
+}
+.dynamic-card-thumb--essay .geo-shape {
+  stroke: #27272a;
+  stroke-width: 0.95px;
+  fill: rgba(0, 0, 0, 0.03);
+}
+.dynamic-card-thumb--essay .geo-shape-bold {
+  stroke: #18181b;
+  stroke-width: 1.3px;
+  fill: rgba(0, 0, 0, 0.05);
+}
+.dynamic-card-thumb--essay .geo-wave {
+  stroke: #27272a;
+  stroke-width: 1.1px;
+  fill: none;
+}
+.dynamic-card-thumb--essay .geo-node {
+  fill: #18181b;
+}
+.dynamic-card-thumb--essay .sparkle-star {
+  fill: #3f3f46;
+  opacity: 0.85;
+}
+
+/* Dark mode for Essay */
+[data-theme="dark"] .dynamic-card-thumb--essay .card-art-bg {
+  fill: #181716;
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .card-art-border {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .card-art-crosshairs path {
+  stroke: rgba(255, 255, 255, 0.25);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .card-art-tag-bg {
+  fill: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .card-art-tag-text {
+  fill: #a1a1aa;
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-axis {
+  stroke: rgba(255, 255, 255, 0.15);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-ring-subtle {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-ring {
+  stroke: #d4d4d8;
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-ring-bold {
+  stroke: #fafafa;
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-shape {
+  stroke: #d4d4d8;
+  fill: rgba(255, 255, 255, 0.03);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-shape-bold {
+  stroke: #f4f4f5;
+  fill: rgba(255, 255, 255, 0.06);
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-wave {
+  stroke: #e4e4e7;
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .geo-node {
+  fill: #f4f4f5;
+}
+[data-theme="dark"] .dynamic-card-thumb--essay .sparkle-star {
+  fill: #e4e4e7;
+}
+
+/* 3. REFLECTION PALETTE & ART (Tranquil Sage Green) */
+.dynamic-card-thumb--reflection .card-art-bg {
+  fill: #f2f7f4;
+  transition: fill 0.3s ease;
+}
+.dynamic-card-thumb--reflection .card-art-border {
+  stroke: rgba(45, 106, 79, 0.2);
+  stroke-width: 0.8px;
+}
+.dynamic-card-thumb--reflection .card-art-crosshairs path {
+  stroke: rgba(45, 106, 79, 0.4);
+  stroke-width: 0.9px;
+}
+.dynamic-card-thumb--reflection .card-art-tag-bg {
+  fill: rgba(45, 106, 79, 0.1);
+}
+.dynamic-card-thumb--reflection .card-art-tag-text {
+  fill: #1b4332;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.dynamic-card-thumb--reflection .zen-aura {
+  stroke: rgba(45, 106, 79, 0.28);
+  stroke-width: 0.75px;
+  fill: none;
+}
+.dynamic-card-thumb--reflection .zen-ring {
+  stroke: #2d6a4f;
+  stroke-width: 0.9px;
+  fill: none;
+}
+.dynamic-card-thumb--reflection .zen-ring-bold {
+  stroke: #1b4332;
+  stroke-width: 1.3px;
+  fill: none;
+}
+.dynamic-card-thumb--reflection .zen-ripple {
+  stroke: #2d6a4f;
+  stroke-width: 0.85px;
+  fill: none;
+}
+.dynamic-card-thumb--reflection .zen-ripple-bold {
+  stroke: #1b4332;
+  stroke-width: 1.3px;
+  fill: rgba(45, 106, 79, 0.05);
+}
+.dynamic-card-thumb--reflection .zen-drop {
+  fill: #2d6a4f;
+}
+.dynamic-card-thumb--reflection .zen-drop-shape {
+  fill: #2d6a4f;
+}
+.dynamic-card-thumb--reflection .zen-moon {
+  fill: rgba(45, 106, 79, 0.15);
+  stroke: #1b4332;
+  stroke-width: 1.1px;
+}
+.dynamic-card-thumb--reflection .zen-mobius {
+  stroke: #1b4332;
+  stroke-width: 1.2px;
+}
+.dynamic-card-thumb--reflection .zen-pearl {
+  fill: #1b4332;
+}
+.dynamic-card-thumb--reflection .zen-dot {
+  fill: #2d6a4f;
+  opacity: 0.6;
+}
+.dynamic-card-thumb--reflection .sparkle-star {
+  fill: #2d6a4f;
+  opacity: 0.85;
+}
+
+/* Dark mode for Reflection */
+[data-theme="dark"] .dynamic-card-thumb--reflection .card-art-bg {
+  fill: #121c15;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .card-art-border {
+  stroke: rgba(116, 198, 157, 0.2);
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .card-art-crosshairs path {
+  stroke: rgba(116, 198, 157, 0.35);
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .card-art-tag-bg {
+  fill: rgba(116, 198, 157, 0.15);
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .card-art-tag-text {
+  fill: #74c69d;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-aura {
+  stroke: rgba(116, 198, 157, 0.25);
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-ring {
+  stroke: #74c69d;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-ring-bold {
+  stroke: #b7e4c7;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-ripple {
+  stroke: #74c69d;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-ripple-bold {
+  stroke: #b7e4c7;
+  fill: rgba(116, 198, 157, 0.08);
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-drop {
+  fill: #74c69d;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-drop-shape {
+  fill: #74c69d;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-moon {
+  fill: rgba(116, 198, 157, 0.18);
+  stroke: #95d5b2;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-mobius {
+  stroke: #b7e4c7;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-pearl {
+  fill: #d8f3dc;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .zen-dot {
+  fill: #74c69d;
+}
+[data-theme="dark"] .dynamic-card-thumb--reflection .sparkle-star {
+  fill: #74c69d;
 }
