@@ -691,6 +691,24 @@
       section.appendChild(num);
       section.appendChild(el);
     });
+
+    // If the opening paragraph starts with a quote mark, pull it out of the
+    // ::first-letter drop cap and render it as a hanging serif drop-quote.
+    const firstPara = body.querySelector('.passage p');
+    if (firstPara && firstPara.parentElement.classList.contains('passage') &&
+        firstPara.parentElement === body.querySelector('.passage')) {
+      const firstNode = firstPara.firstChild;
+      const leadMatch = firstPara.textContent.match(/^\s*(["“'])/);
+      if (leadMatch && firstNode && firstNode.nodeType === 3) {
+        firstNode.textContent = firstNode.textContent.replace(/^\s*["“']/, '');
+        const dropQuote = document.createElement('span');
+        dropQuote.className = 'dropcap-quote';
+        dropQuote.setAttribute('aria-hidden', 'true');
+        dropQuote.textContent = leadMatch[1] === "'" ? '\u2018' : '\u201C';
+        firstPara.prepend(dropQuote);
+        firstPara.classList.add('has-drop-quote');
+      }
+    }
   }
 
   function enhanceContentImages(element) {

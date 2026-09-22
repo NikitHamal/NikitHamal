@@ -233,6 +233,7 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: clip;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -1071,6 +1072,13 @@ body[data-decor="reflection"] .decor[data-decor="reflection"] {
 @media (max-width: 700px) {
   .decor {
     opacity: 0.8;
+  }
+  /* Read pages: the narrow column leaves nowhere for fixed motifs to sit
+     without colliding with text, so hide them on phones. */
+  body[data-decor="poem"] .decor[data-decor="poem"],
+  body[data-decor="essay"] .decor[data-decor="essay"],
+  body[data-decor="reflection"] .decor[data-decor="reflection"] {
+    display: none;
   }
 }
 

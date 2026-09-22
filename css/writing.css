@@ -224,6 +224,28 @@
   font-weight: 500;
 }
 
+/* Hanging drop-quote: when the opening paragraph starts with a quote mark,
+   JS pulls it out of ::first-letter so the cap stays a clean single letter. */
+.dropcap-quote {
+  font-family: var(--font-serif);
+  float: left;
+  font-size: 4.2em;
+  line-height: 0.8;
+  padding: 10px 2px 0 0;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.read-prose-body .passage:first-of-type p:first-of-type.has-drop-quote::first-letter {
+  font-family: inherit;
+  float: none;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  color: inherit;
+  font-weight: inherit;
+}
+
 @media (max-width: 650px) {
   .passage-number {
     left: -28px;
@@ -765,6 +787,7 @@ html[data-font="sans"] .read-prose-body {
   .reader-dock {
     bottom: max(16px, env(safe-area-inset-bottom));
     padding: 4px 6px;
+    max-width: calc(100vw - 24px);
   }
   .reader-dock .icon-button {
     width: 36px;
@@ -775,6 +798,32 @@ html[data-font="sans"] .read-prose-body {
   }
   .toast {
     bottom: 78px;
+  }
+  /* Read view: keep the narrow column clean on phones */
+  .passage-number {
+    display: none;
+  }
+  body[data-decor] .minimal-wrapper {
+    padding-bottom: 120px;
+  }
+  .read-title {
+    font-size: 1.7rem;
+    line-height: 1.28;
+  }
+  .read-meta {
+    font-size: 0.72rem;
+  }
+  .read-prose-body {
+    text-align: left;
+    word-spacing: normal;
+  }
+  .read-prose-body .passage:first-of-type p:first-of-type::first-letter {
+    font-size: 3.4em;
+    padding: 6px 10px 0 0;
+  }
+  .dropcap-quote {
+    font-size: 3.4em;
+    padding: 6px 2px 0 0;
   }
   .writing-card__link {
     flex-direction: row;
