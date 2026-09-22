@@ -774,17 +774,35 @@
             </div>
           </div>
         `;
-      } else {
         const isExcerpts = currentMode === 'excerpts';
-        const parasHtml = isExcerpts
-          ? slide.paras.map((p, i) => {
-              const showSep = (i < slide.paras.length - 1) && slide.continuous === false;
+        let parasHtml;
+        if (isExcerpts) {
+          if (slide.continuous !== false) {
+            if (slide.paras.length === 1) {
+              parasHtml = `<p style="font-size:var(--body-size, 33px);line-height:var(--body-lh, 1.64);">\u201c${slide.paras[0]}\u201d</p>`;
+            } else {
+              parasHtml = slide.paras.map((p, i) => {
+                if (i === 0) {
+                  return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">\u201c${p}</p>`;
+                } else if (i === slide.paras.length - 1) {
+                  return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">${p}\u201d</p>`;
+                } else {
+                  return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">${p}</p>`;
+                }
+              }).join('');
+            }
+          } else {
+            parasHtml = slide.paras.map((p, i) => {
+              const showSep = i < slide.paras.length - 1;
               const sep = showSep
-                ? `<div style="font-family:'Newsreader',Georgia,serif;font-size:26px;letter-spacing:0.28em;color:var(--text-muted);text-align:center;opacity:0.65;margin:4px 0;">· · ·</div>`
+                ? `<div style="font-family:'Newsreader',Georgia,serif;font-size:24px;letter-spacing:0.08em;color:var(--text-muted);text-align:center;opacity:0.70;margin:4px 0;">[...]</div>`
                 : '';
               return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">\u201c${p}\u201d</p>${sep}`;
-            }).join('')
-          : slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('');
+            }).join('');
+          }
+        } else {
+          parasHtml = slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('');
+        }
 
         innerContent = `
           ${cuteBg}
