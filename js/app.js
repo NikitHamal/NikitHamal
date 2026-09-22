@@ -9,6 +9,41 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
+  // ============================================
+  // CLEAN TRACKING PARAMS (fbclid, gclid, utm_*, …)
+  // Social/ad redirects append junk like ?slug=x&fbclid=…. The post still
+  // loads (URLSearchParams ignores extras), but the junk stays in the
+  // address bar and leaks into og:url / copied links. Strip it in place.
+  // ============================================
+
+  const TRACKING_PARAMS = new Set([
+    'fbclid', 'gclid', 'gbraid', 'wbraid', 'msclkid', 'dclid',
+    'ttclid', 'twclid', 'igshid', 'yclid', 'zanpid', 'scop',
+    'mc_cid', 'mc_eid', '_ga', '_gl', '_openstat',
+    'vero_conv', 'vero_id', 'mkt_tok', 'fb_action_ids',
+    'fb_action_types', 'fb_source', 'fb_ref'
+  ]);
+
+  function isTrackingParam(name) {
+    const n = name.toLowerCase();
+    return TRACKING_PARAMS.has(n) || n.startsWith('utm_');
+  }
+
+  function stripTrackingParams() {
+    try {
+      const url = new URL(window.location.href);
+      // Collect first: deleting inside forEach skips entries.
+      const junk = [];
+      url.searchParams.forEach((_, name) => {
+        if (isTrackingParam(name)) junk.push(name);
+      });
+      if (junk.length) {
+        junk.forEach((name) => url.searchParams.delete(name));
+        window.history.replaceState(null, '', url.toString());
+      }
+    } catch (e) {}
+  }
+
   let nextPageToken = null;
   let isFetching = false;
 
@@ -606,6 +641,7 @@
     if ($('#og-title')) $('#og-title').setAttribute('content', fullTitle);
     if ($('#og-desc')) $('#og-desc').setAttribute('content', excerpt);
     if ($('#og-url')) $('#og-url').setAttribute('content', postUrl);
+    if ($('#canonical-url')) $('#canonical-url').setAttribute('href', postUrl);
     if ($('#og-image')) $('#og-image').setAttribute('content', postImage);
     if ($('#twitter-title')) $('#twitter-title').setAttribute('content', fullTitle);
     if ($('#twitter-desc')) $('#twitter-desc').setAttribute('content', excerpt);
@@ -926,6 +962,7 @@
   // ============================================
 
   function init() {
+    stripTrackingParams();
     initTheme();
     initAccordions();
     initModals();
