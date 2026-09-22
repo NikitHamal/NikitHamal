@@ -1,69 +1,38 @@
-# Nikit Hamal — Portfolio & Writing
+# Hi, I'm Nikit Hamal
 
-Static portfolio and essays site, live at <https://nikit.is-a.dev/> (GitHub Pages, custom domain via `CNAME`). Plain HTML/CSS/JS — no build step, no dependencies.
+Head of Operations at [Consica Labs](https://consicalabs.com/). Android App Developer & Full-Stack Engineer from Nepal. I build Android apps, Django backends, and SvelteKit web apps — and I write essays on philosophy, consciousness, and being human.
 
-## Pages
+Portfolio & writing: <https://nikit.is-a.dev/>
 
-- `/` (`index.html`) — profile header, accordion sections (about, skills, projects, writing preview, contact), sticky site header, light/dark toggle.
-- `/writings` (`writing.html` + generated `writings/index.html`) — essays listing with live search (`/` to focus), category chips (All / Essays / Reflections / Poems with counts), and numbered pagination (6 per page).
-- `/writings/<slug>` (`read.html` + generated `writings/<slug>/index.html`) — reader view with per-category decor and baked OG/meta tags.
-- Old URLs keep working: `/writing.html`, `/read.html?slug=…`, `/<slug>.html`. Canonicals and `og:url` point at the pretty versions.
+---
 
-## Content: posts
+## What I do
 
-- `posts/index.json` — the slug list (source of truth for listing order and page generation).
-- `posts/<slug>.json` — title, excerpt, `category` (`essay` | `reflection` | `poem`), date, read time, `contentHtml`.
-- Category drives the card art, the reader-page decor group, and the filter chips.
+- **Mobile** — Android (Kotlin, Jetpack Compose, Material 3), Flutter
+- **Backend** — Python, Django, Django REST Framework, WebSockets, Redis
+- **Frontend & Web** — TypeScript, SvelteKit, Tailwind CSS, PWAs
+- **Currently** — leading operations at Consica Labs while shipping NEBians, Lami Nepal, and AstroWeb
 
-To add or edit a post: update the JSON, then regenerate (below).
+## Selected work
 
-## Theming & decor
+- **Lami Nepal** — matrimonial & spiritual services app with real-time chat, FCM push, and full Nepali localization ([Play Store](https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en))
+- **NEBians** — Material 3 Android app + Django backend for Nepali NEB students: study tools, AI chat arena, community forums ([nebians.consica.com.np](https://nebians.consica.com.np/))
+- **AstroWeb** — free Vedic astrology web app: Kundali, Dasha calculations, and insights ([astroweb-bsi.pages.dev](https://astroweb-bsi.pages.dev/))
+- **Essays** — 28 pieces on self-observation, non-duality, and everyday philosophy ([nikit.is-a.dev/writings](https://nikit.is-a.dev/writings))
 
-- The `*` toggle flips `data-theme` light/dark; palettes (`data-palette`: default / sepia / slate) recolor the whole site.
-- Decor ink and bloom accents (`--decor-ink`, `--bloom-fill/stroke/core` in `css/styles.css`) are tuned per theme so the fixed micro-motifs (sparkle, plus, bloom, pebble, ripple, ring, moon, diamond, tri-dots, wave) hold even contrast in every mode.
-- Read pages show only the current post's category decor group.
+## Stats
 
-## Social / OG cards
+<p align="left">
+  <a href="https://github.com/NikitHamal">
+    <img src="https://github-readme-stats.vercel.app/api?username=NikitHamal&show_icons=true&theme=tokyonight" alt="Nikit's GitHub stats" />
+  </a>
+  <a href="https://github.com/NikitHamal">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=NikitHamal&layout=compact&theme=tokyonight" alt="Top Languages" />
+  </a>
+</p>
 
-- `assets/og/<slug>.png` (1200x630) per post, `assets/og-image.png` as the home/writings fallback. Card thumbnails on the site reuse the same PNGs.
-
-## Local preview
-
-```bash
-python3 -m http.server 8000
-# open http://localhost:8000/ and http://localhost:8000/writings
-```
-
-## Generators (local-only, gitignored under `tools/`)
-
-```bash
-node tools/build_pretty_urls.js       # rebuild writings/, per-post meta/OG/canonical, sitemap.xml
-node tools/generate_post_og_cards.js  # rebuild the 1200x630 OG PNGs (motifs from cute_elements.js)
-```
-
-Re-run the pretty-URL builder after adding, removing, or editing posts.
-
-## Repo map
-
-```text
-index.html / writing.html / read.html   page shells (sources for generated pages)
-writings/                               generated pretty URLs (do not hand-edit)
-posts/                                  post JSON + index.json
-assets/og/                              per-post OG cards + og-image.png fallback
-css/  js/                               styles, app logic, card visuals, motion forms
-tools/                                  local generators (gitignored, not deployed)
-sitemap.xml  robots.txt  CNAME          SEO + domain (keep committed)
-google88efa99d76dbf62a.html            Google Search Console verification (keep committed)
-the-lie-of-being-yourself.html         legacy per-post page (keep for old links)
-```
-
-## Deployment
-
-Push to `main` and GitHub Pages serves it. Nothing to build.
-
-## Contact
+## Reach me
 
 - Email: iamnikithamal@gmail.com
 - LinkedIn: <https://www.linkedin.com/in/nikithamal>
 - X: <https://twitter.com/nikithamal>
-- GitHub: <https://github.com/NikitHamal>
