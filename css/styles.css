@@ -1070,11 +1070,9 @@ body[data-decor="reflection"] .decor[data-decor="reflection"] {
 }
 
 @media (max-width: 700px) {
-  .decor {
-    opacity: 0.8;
-  }
-  /* Read pages: the narrow column leaves nowhere for fixed motifs to sit
-     without colliding with text, so hide them on phones. */
+  /* Cute elements stay desktop-only: on narrow screens there is no room
+     for fixed motifs without them colliding with content. */
+  .decor,
   body[data-decor="poem"] .decor[data-decor="poem"],
   body[data-decor="essay"] .decor[data-decor="essay"],
   body[data-decor="reflection"] .decor[data-decor="reflection"] {
@@ -1231,6 +1229,6 @@ body[data-decor="reflection"] .decor[data-decor="reflection"] {
   }
 
   .site-nav-link {
-    display: none;
+    font-size: 0.85rem;
   }
 }
