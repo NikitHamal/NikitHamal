@@ -1,76 +1,69 @@
-# 👋 Hi, I’m Nikit Hamal (NikitHamal)
+# Nikit Hamal — Portfolio & Writing
 
-> Adaptable Person • Exploring
-> "do what you want to do, what you have to do, and what you must do — prioritizing yourself first." ✨
+Static portfolio and essays site, live at <https://nikit.is-a.dev/> (GitHub Pages, custom domain via `CNAME`). Plain HTML/CSS/JS — no build step, no dependencies.
 
-- 🔭 Role: Exploring
-- 📍 Location: Nepal
-- 🗣️ Languages: Nepali (native), Hindi, English
-- ⚧ Gender: Male
-- 📫 Contact: [LinkedIn](https://www.linkedin.com/in/nikithamal) · [Twitter](https://twitter.com/nikithamal) · [Instagram](https://www.instagram.com/nikithamal) · [Facebook](https://www.facebook.com/thenikithamal)
+## Pages
 
----
+- `/` (`index.html`) — profile header, accordion sections (about, skills, projects, writing preview, contact), sticky site header, light/dark toggle.
+- `/writings` (`writing.html` + generated `writings/index.html`) — essays listing with live search (`/` to focus), category chips (All / Essays / Reflections / Poems with counts), and numbered pagination (6 per page).
+- `/writings/<slug>` (`read.html` + generated `writings/<slug>/index.html`) — reader view with per-category decor and baked OG/meta tags.
+- Old URLs keep working: `/writing.html`, `/read.html?slug=…`, `/<slug>.html`. Canonicals and `og:url` point at the pretty versions.
 
-## 🚀 About me
-Friendly, curious, and a little witty — I tinker with web tech, write (and prompt), and enjoy building small projects that teach me something new every week. Currently exploring different areas to find where I can make the biggest impact.
+## Content: posts
 
----
+- `posts/index.json` — the slug list (source of truth for listing order and page generation).
+- `posts/<slug>.json` — title, excerpt, `category` (`essay` | `reflection` | `poem`), date, read time, `contentHtml`.
+- Category drives the card art, the reader-page decor group, and the filter chips.
 
-## 🛠️ Skills & Tech Stack
-- Frontend: HTML, CSS, JavaScript
-- Mobile / Markup: XML
-- Languages: Java
-- Other: writing, prompts, problem solving
+To add or edit a post: update the JSON, then regenerate (below).
 
----
+## Theming & decor
 
-## ✨ Featured projects
+- The `*` toggle flips `data-theme` light/dark; palettes (`data-palette`: default / sepia / slate) recolor the whole site.
+- Decor ink and bloom accents (`--decor-ink`, `--bloom-fill/stroke/core` in `css/styles.css`) are tuned per theme so the fixed micro-motifs (sparkle, plus, bloom, pebble, ripple, ring, moon, diamond, tri-dots, wave) hold even contrast in every mode.
+- Read pages show only the current post's category decor group.
 
-- **VibeChat** — A real-time chat application for Android.
-  Tech: `Java`, `XML`, `Firebase`
-  Repo: https://github.com/NikitHamal/VibeChat
+## Social / OG cards
 
-- **CodeX** — A powerful and extensible code editor built with Python.
-  Tech: `Python`, `Tkinter`
-  Repo: https://github.com/NikitHamal/CodeX
+- `assets/og/<slug>.png` (1200x630) per post, `assets/og-image.png` as the home/writings fallback. Card thumbnails on the site reuse the same PNGs.
 
-- **PdfAI** — An intelligent Android app to summarize and chat with your PDF documents.
-  Tech: `Java`, `AI/ML`, `Android`
-  Repo: https://github.com/NikitHamal/PdfAI
+## Local preview
 
----
+```bash
+python3 -m http.server 8000
+# open http://localhost:8000/ and http://localhost:8000/writings
+```
 
-## 📊 GitHub Stats & Visuals
-<!-- GitHub readme stats -->
-<p align="left">
-  <a href="https://github.com/NikitHamal">
-    <img src="https://github-readme-stats.vercel.app/api?username=NikitHamal&show_icons=true&theme=tokyonight" alt="Nikit's GitHub stats" />
-  </a>
-  <a href="https://github.com/NikitHamal">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=NikitHamal&layout=compact&theme=tokyonight" alt="Top Languages" />
-  </a>
-</p>
+## Generators (local-only, gitignored under `tools/`)
 
-<!-- Visitor counter -->
-<p>
-  <img src="https://komarev.com/ghpvc/?username=NikitHamal&color=brightgreen" alt="visitor count" />
-</p>
+```bash
+node tools/build_pretty_urls.js       # rebuild writings/, per-post meta/OG/canonical, sitemap.xml
+node tools/generate_post_og_cards.js  # rebuild the 1200x630 OG PNGs (motifs from cute_elements.js)
+```
 
----
+Re-run the pretty-URL builder after adding, removing, or editing posts.
 
-## 📚 Highlights & Accomplishments
-- Always experimenting and learning — currently exploring new areas across web and software.
-- Strong interest in writing and crafting clear prompts.
-- Open to collaboration and learning opportunities.
+## Repo map
 
----
+```text
+index.html / writing.html / read.html   page shells (sources for generated pages)
+writings/                               generated pretty URLs (do not hand-edit)
+posts/                                  post JSON + index.json
+assets/og/                              per-post OG cards + og-image.png fallback
+css/  js/                               styles, app logic, card visuals, motion forms
+tools/                                  local generators (gitignored, not deployed)
+sitemap.xml  robots.txt  CNAME          SEO + domain (keep committed)
+google88efa99d76dbf62a.html            Google Search Console verification (keep committed)
+the-lie-of-being-yourself.html         legacy per-post page (keep for old links)
+```
 
-## 📬 Contact / Let's connect
-I’m open to chat, collaborate, or answer a curious question — feel free to reach out!
+## Deployment
 
-- LinkedIn: https://www.linkedin.com/in/nikithamal
-- Twitter: https://twitter.com/nikithamal
-- Instagram: https://www.instagram.com/nikithamal
-- Facebook: https://www.facebook.com/thenikithamal
+Push to `main` and GitHub Pages serves it. Nothing to build.
 
-Contact: iamnikithamal@gmail.com
+## Contact
+
+- Email: iamnikithamal@gmail.com
+- LinkedIn: <https://www.linkedin.com/in/nikithamal>
+- X: <https://twitter.com/nikithamal>
+- GitHub: <https://github.com/NikitHamal>

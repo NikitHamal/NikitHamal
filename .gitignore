@@ -2,5 +2,10 @@ tools/
 *-preview.html
 all-posts.txt
 export_posts.py
+# internal experiments / scratch work
+pixel-avatar/
+.kilo/
+.vscode/
+*.log
 .DS_Store
 Thumbs.db
