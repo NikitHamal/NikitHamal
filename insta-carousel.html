@@ -452,8 +452,8 @@
       <button class="btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
         <i class="ri-sun-line" id="themeIcon"></i>
       </button>
-      <button class="btn btn-primary" onclick="downloadAllZip()">
-        <i class="ri-download-cloud-line"></i> Download All 10 PNGs (ZIP)
+      <button class="btn btn-primary" id="downloadZipBtn" onclick="downloadAllZip()">
+        <i class="ri-download-cloud-line"></i> Download All (ZIP)
       </button>
     </div>
   </header>
@@ -463,8 +463,10 @@
     <div class="control-group">
       <span class="control-label">Essay Set:</span>
       <select class="select-input" id="modeSelect" onchange="switchMode(this.value)">
-        <option value="part1" selected>Part 1 (10 Slides · 32px Mobile-Optimized)</option>
-        <option value="part2">Part 2 (10 Slides · 32px Mobile-Optimized)</option>
+        <option value="excerpts" selected>Excerpts Only (8 Slides · Quick Read & CTA)</option>
+        <option value="complete19">Complete Essay (19 Slides · Full 3,098 words)</option>
+        <option value="part1">Part 1 (10 Slides · Mobile 32px)</option>
+        <option value="part2">Part 2 (10 Slides · Mobile 32px)</option>
       </select>
     </div>
 
@@ -504,26 +506,52 @@
   <script src="js/motion-forms.js"></script>
 
   <script>
-    let currentMode = 'part1';
+    let currentMode = 'excerpts';
     let currentSlideIndex = 0;
     let viewMode = 'grid';
 
     let essayData = null;
     let paragraphs = [];
 
-    // Pre-rendered PNG file links for 100% instant reliable downloads
-    const preRenderedPngs = [
-      'assets/insta/the-lie-of-being-yourself/slide-01.png',
-      'assets/insta/the-lie-of-being-yourself/slide-02.png',
-      'assets/insta/the-lie-of-being-yourself/slide-03.png',
-      'assets/insta/the-lie-of-being-yourself/slide-04.png',
-      'assets/insta/the-lie-of-being-yourself/slide-05.png',
-      'assets/insta/the-lie-of-being-yourself/slide-06.png',
-      'assets/insta/the-lie-of-being-yourself/slide-07.png',
-      'assets/insta/the-lie-of-being-yourself/slide-08.png',
-      'assets/insta/the-lie-of-being-yourself/slide-09.png',
-      'assets/insta/the-lie-of-being-yourself/slide-10.png'
+    const fullUrl = 'https://nikit.is-a.dev/read.html?slug=the-lie-of-being-yourself';
+
+    const excerptParas = [
+      [
+        "We say these things so easily. Be yourself. Find yourself. Know who you really are. As if somewhere inside you there is a person who has been sitting quietly, waiting for you to discover him. The world covered him with expectations, your parents covered him with their ambitions, your relationships covered him with hurts, and now your job is to remove all of this and bring the original person out. It is a comforting idea. There is something real underneath, something untouched, and whatever happens on the surface, at least that thing is still yours. But have you actually found such a thing, or do you only hope it is there?"
+      ],
+      [
+        "You are quiet around some people and talk endlessly around others. With someone you feel no need to impress, words come easily. With someone whose approval you want, even saying a simple thing becomes a small performance. You go home and ask, why couldn't I be myself there? But both situations tell you something. Your ease tells you something, and so does your fear. Why must one be you and the other not you? Can't you look at the fear without first pushing it outside your identity?",
+        "Of course there is pretending. You laugh when you don't find something funny. You agree because you are afraid of being disliked. You act interested while wishing you could leave. There is a difference between what you feel and what you show, and it can be tiring to live like that. But to notice this doesn't require the discovery of an eternal, original you. It requires honesty about what is happening. “I don't agree, but I want this person to like me.” That is already much closer to the fact than “I have lost my true self.”"
+      ],
+      [
+        "The fact may be quite ordinary and uncomfortable. The story of the lost self is more attractive. It gives you a journey. You can go somewhere, read something, become someone who is working on himself. Meanwhile, the simple thing remains untouched: you are afraid to disappoint this person. You want approval. Can that be looked at without immediately turning it into a project of becoming fearless?",
+        "Even your rebellion deserves a little attention. You say you are finished living according to others. Now you will do the opposite of what they wanted. But if everything you do is still a reply to them, in what sense have you stopped being directed by them? Their approval used to guide you. Now their disapproval guides you. I am not saying don't leave, don't refuse, don't change your life. Those things may be necessary. I am asking whether opposition, by itself, is the discovery of something independent."
+      ],
+      [
+        "And why should being shaped make you false? This is another assumption we hardly question. If a friend introduced you to something and you came to love it, is your love less real? If someone treated you gently and you became a little less afraid, is that openness fake because it came through a relationship? We want to remove every influence to find what is purely our own. But perhaps there is no person left over after every relationship with life has been removed. Perhaps we have mistaken dependence on life for a kind of contamination.",
+        "You didn't first exist as a complete person and then begin having experiences. The experiencing, the learning, the being hurt, the responding, all of this is involved in what you call a person. There isn't a finished you underneath, receiving additions. What you are is taking shape in the very living of it. And this taking shape has not stopped just because you have found a few words that seem to describe you well."
+      ],
+      [
+        "You are a process. But please don't make the word sound grand. It means this ordinary movement of being affected and responding, carrying something forward, forgetting something, discovering that what mattered so much no longer matters in the same way. Sometimes the movement is so repetitive that it feels completely still. You meet a new person and bring the same fear. You enter a new situation and expect the same rejection. The repetition is real. But a pattern repeating is not proof of an unchanging person inside it. It may only mean that the conditions which keep the pattern going are still there.",
+        "And this is where “being yourself” can become an excuse. “This is just how I am. Take me as I am.” What do you mean? Do you mean, see what is actually here, without demanding that I fit your imagination? Or do you mean, don't question what I do, because I have decided it is permanent? Those are very different things. Accepting that you are angry now doesn't mean declaring anger your lifelong nature. Seeing a fact doesn't require you to promise that the fact will never change."
+      ],
+      [
+        "If you hurt someone, “I am a process” doesn't make the hurt disappear. You still have to hear what they are saying. You may have to apologize, repair something, change how you behave. There is no need for an eternal self in order for actions to have consequences. In fact, the insistence that “I am not that kind of person” can prevent you from taking responsibility. You become so occupied with defending who you are that you barely listen to what you have done.",
+        "We do this to other people too. We decide who they are, then keep meeting our decision. Someone who has usually been strong comes to you frightened, and you tell them this isn't like them (I do this a lot). Someone who has always adjusted to you finally refuses, and you say they have changed. Maybe they have. Maybe something was happening all along that your image didn't allow you to see. Knowing someone cannot mean that they are no longer allowed to surprise you."
+      ]
     ];
+
+    function getPngPath(idx) {
+      const num = String(idx + 1).padStart(2, '0');
+      if (currentMode === 'excerpts') {
+        return `assets/insta/the-lie-of-being-yourself/excerpts/slide-${num}.png`;
+      } else if (currentMode === 'complete19') {
+        return `assets/insta/the-lie-of-being-yourself/complete-19/slide-${num}.png`;
+      } else if (currentMode === 'part2') {
+        return `assets/insta/the-lie-of-being-yourself/part2/slide-${num}.png`;
+      }
+      return `assets/insta/the-lie-of-being-yourself/slide-${num}.png`;
+    }
 
     async function init() {
       try {
@@ -536,6 +564,7 @@
           return p.replace(/<[^>]+>/g, '').replace(/~Proofread by.*/, '').trim();
         }).filter(Boolean);
 
+        updateDownloadBtnText();
         renderSlides();
         setupResizeObserver();
       } catch (err) {
@@ -544,43 +573,59 @@
     }
 
     function getSlidesData() {
-      if (currentMode === 'full') {
-        return [
-          { type: 'cover' },
-          { type: 'text', index: 2, paras: paragraphs.slice(0, 4) },
-          { type: 'text', index: 3, paras: paragraphs.slice(4, 8) },
-          { type: 'text', index: 4, paras: paragraphs.slice(8, 12) },
-          { type: 'text', index: 5, paras: paragraphs.slice(12, 16) },
-          { type: 'text', index: 6, paras: paragraphs.slice(16, 20) },
-          { type: 'text', index: 7, paras: paragraphs.slice(20, 24) },
-          { type: 'text', index: 8, paras: paragraphs.slice(24, 28) },
-          { type: 'text', index: 9, paras: paragraphs.slice(28, 31) },
-          { type: 'text', index: 10, paras: paragraphs.slice(31, 35), isLast: true }
+      if (currentMode === 'excerpts') {
+        const slides = [
+          { type: 'cover', subtitle: '“Some excerpts on non-duality, self-observation, and identity”' }
         ];
+        excerptParas.forEach(paras => {
+          slides.push({ type: 'text', paras });
+        });
+        slides.push({ type: 'cta', url: fullUrl });
+        return slides;
+      } else if (currentMode === 'complete19') {
+        const slides = [{ type: 'cover', subtitle: '“You say, ‘I just want to be myself.’ What do you mean by that? Which self are you talking about?”' }];
+        // 17 slides of 2 paragraphs each (34 paragraphs)
+        for (let i = 0; i < 17; i++) {
+          slides.push({
+            type: 'text',
+            paras: paragraphs.slice(i * 2, i * 2 + 2)
+          });
+        }
+        // Slide 19: Final paragraph + clean link
+        slides.push({
+          type: 'text',
+          paras: paragraphs.slice(34, 35),
+          isFinal: true
+        });
+        return slides;
       } else if (currentMode === 'part1') {
-        // Part 1: First 18 paragraphs (2 per slide)
-        const slides = [{ type: 'cover', part: 'Part 1' }];
+        const slides = [{ type: 'cover', subtitle: '“You say, ‘I just want to be myself.’ What do you mean by that? Which self are you talking about?”' }];
         for (let i = 0; i < 9; i++) {
           slides.push({
             type: 'text',
-            index: i + 2,
             paras: paragraphs.slice(i * 2, i * 2 + 2),
-            isLast: i === 8
+            isFinal: i === 8
           });
         }
         return slides;
       } else {
-        // Part 2: Next 17 paragraphs
-        const slides = [{ type: 'cover', part: 'Part 2' }];
+        const slides = [{ type: 'cover', subtitle: '“Part 2 · The lie of ‘being yourself’”' }];
         for (let i = 0; i < 9; i++) {
           slides.push({
             type: 'text',
-            index: i + 2,
             paras: paragraphs.slice(18 + i * 2, 18 + i * 2 + 2),
-            isLast: i === 8
+            isFinal: i === 8
           });
         }
         return slides;
+      }
+    }
+
+    function updateDownloadBtnText() {
+      const slides = getSlidesData();
+      const btn = document.getElementById('downloadZipBtn');
+      if (btn) {
+        btn.innerHTML = `<i class="ri-download-cloud-line"></i> Download All ${slides.length} PNGs (ZIP)`;
       }
     }
 
@@ -593,11 +638,12 @@
         container.innerHTML = slides.map((slide, idx) => generateSlideCardHtml(slide, idx)).join('');
       } else {
         container.className = 'slides-carousel';
+        if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
         const slide = slides[currentSlideIndex];
         container.innerHTML = `
           <div class="carousel-nav">
             <button class="btn" onclick="prevSlide()"><i class="ri-arrow-left-s-line"></i> Prev</button>
-            <span class="carousel-indicator">Slide ${String(currentSlideIndex + 1).padStart(2, '0')} of 10</span>
+            <span class="carousel-indicator">Slide ${String(currentSlideIndex + 1).padStart(2, '0')} of ${String(slides.length).padStart(2, '0')}</span>
             <button class="btn" onclick="nextSlide()">Next <i class="ri-arrow-right-s-line"></i></button>
           </div>
           ${generateSlideCardHtml(slide, currentSlideIndex)}
@@ -696,8 +742,8 @@
     function generateSlideCardHtml(slide, idx) {
       const slideNum = String(idx + 1).padStart(2, '0');
       const motionSvg = window.getMotionFormSvg ? window.getMotionFormSvg('the-lie-of-being-yourself') : '';
-      const pngPath = preRenderedPngs[idx] || `assets/insta/the-lie-of-being-yourself/slide-${slideNum}.png`;
-      const cuteBg = generateCuteSvg(slide.type === 'cover');
+      const pngPath = getPngPath(idx);
+      const cuteBg = generateCuteSvg(slide.type === 'cover' || slide.type === 'cta');
 
       let innerContent = '';
       if (slide.type === 'cover') {
@@ -709,7 +755,22 @@
             </div>
             <div class="cover-title-group" style="gap:28px;">
               <h1 class="cover-title" style="font-size:72px;line-height:1.12;">The lie of<br>“being yourself”</h1>
-              <p class="cover-hook" style="font-size:26px;line-height:1.52;max-width:720px;">“You say, ‘I just want to be myself.’ What do you mean by that? Which self are you talking about?”</p>
+              <p class="cover-hook" style="font-size:26px;line-height:1.52;max-width:720px;">${slide.subtitle || '“You say, ‘I just want to be myself.’ What do you mean by that? Which self are you talking about?”'}</p>
+            </div>
+          </div>
+        `;
+      } else if (slide.type === 'cta') {
+        innerContent = `
+          ${cuteBg}
+          <div class="cover-center" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;text-align:center;">
+            <div class="cover-art" style="width:200px;height:200px;">
+              ${motionSvg}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:24px;max-width:760px;">
+              <h2 style="font-family:'Newsreader',Georgia,serif;font-size:52px;font-weight:500;letter-spacing:-0.02em;">Continue Reading</h2>
+              <p style="font-family:'Newsreader',Georgia,serif;font-size:26px;line-height:1.5;font-style:italic;color:var(--paper-body);">Wrote a long piece of text on “the lie of being yourself”. If it interests you, can read the full text here:</p>
+              <div style="margin-top:8px;padding:16px 28px;background:rgba(186, 72, 103, 0.08);border:1px solid rgba(186, 72, 103, 0.25);border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:16px;letter-spacing:0.06em;color:#992e4a;font-weight:600;">${slide.url}</div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;">Nikit Hamal</span>
             </div>
           </div>
         `;
@@ -718,7 +779,11 @@
           ${cuteBg}
           <div class="canvas-body" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;gap:48px;padding:40px 10px;">
             ${slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('')}
-            ${slide.isFinal ? `<div style="font-family:'JetBrains Mono';font-size:14px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-top:16px;">— Nikit Hamal · nikit.is-a.dev</div>` : ''}
+            ${slide.isFinal ? `
+            <div style="margin-top:16px;padding:18px 24px;border:1px dashed rgba(186, 72, 103, 0.35);border-radius:12px;background:rgba(186, 72, 103, 0.04);display:flex;flex-direction:column;gap:6px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Read the full essay online:</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:500;color:var(--paper-ink);word-break:break-all;">${fullUrl}</span>
+            </div>` : ''}
           </div>
         `;
       }
@@ -738,7 +803,7 @@
 
           <div class="slide-actions">
             <span style="font-family:'JetBrains Mono';font-size:0.75rem;color:var(--text-muted);">1080 × 1350 PNG</span>
-            <a href="${pngPath}" download="the-lie-of-being-yourself-slide-${slideNum}.png" class="download-link-btn">
+            <a href="${pngPath}" download="the-lie-of-being-yourself-${currentMode}-slide-${slideNum}.png" class="download-link-btn">
               <i class="ri-download-line"></i> Download PNG
             </a>
           </div>
@@ -779,6 +844,8 @@
 
     function switchMode(val) {
       currentMode = val;
+      currentSlideIndex = 0;
+      updateDownloadBtnText();
       renderSlides();
     }
 
@@ -790,7 +857,8 @@
     }
 
     function nextSlide() {
-      if (currentSlideIndex < 9) {
+      const slides = getSlidesData();
+      if (currentSlideIndex < slides.length - 1) {
         currentSlideIndex++;
         renderSlides();
       }
@@ -805,27 +873,32 @@
     }
 
     async function downloadAllZip() {
-      const btn = event.currentTarget;
+      const btn = document.getElementById('downloadZipBtn');
       const originalText = btn.innerHTML;
       btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Bundling ZIP...`;
       btn.disabled = true;
 
       try {
+        const slides = getSlidesData();
         const zip = new JSZip();
-        const folder = zip.folder("the-lie-of-being-yourself-instagram");
+        const folderName = `the-lie-of-being-yourself-${currentMode}`;
+        const folder = zip.folder(folderName);
 
-        for (let i = 0; i < preRenderedPngs.length; i++) {
+        for (let i = 0; i < slides.length; i++) {
           const num = String(i + 1).padStart(2, '0');
-          const resp = await fetch(preRenderedPngs[i]);
-          const blob = await resp.blob();
-          folder.file(`slide-${num}.png`, blob);
+          const path = getPngPath(i);
+          const resp = await fetch(path);
+          if (resp.ok) {
+            const blob = await resp.blob();
+            folder.file(`slide-${num}.png`, blob);
+          }
         }
 
         const zipBlob = await zip.generateAsync({ type: "blob" });
         const downloadUrl = URL.createObjectURL(zipBlob);
         const a = document.createElement("a");
         a.href = downloadUrl;
-        a.download = "the-lie-of-being-yourself-instagram-carousel.zip";
+        a.download = `${folderName}.zip`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
