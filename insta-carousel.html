@@ -781,7 +781,7 @@
               const sep = (i < slide.paras.length - 1)
                 ? `<div style="font-family:'Newsreader',Georgia,serif;font-size:26px;letter-spacing:0.28em;color:var(--text-muted);text-align:center;opacity:0.65;margin:4px 0;">· · ·</div>`
                 : '';
-              return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">${p}</p>${sep}`;
+              return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">\u201c${p}\u201d</p>${sep}`;
             }).join('')
           : slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('');
 
