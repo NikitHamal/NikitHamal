@@ -775,16 +775,27 @@
           </div>
         `;
       } else {
+        const isExcerpts = currentMode === 'excerpts';
+        const parasHtml = isExcerpts
+          ? slide.paras.map((p, i) => {
+              const sep = (i < slide.paras.length - 1)
+                ? `<div style="font-family:'Newsreader',Georgia,serif;font-size:26px;letter-spacing:0.28em;color:var(--text-muted);text-align:center;opacity:0.65;margin:4px 0;">· · ·</div>`
+                : '';
+              return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">${p}</p>${sep}`;
+            }).join('')
+          : slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('');
+
         innerContent = `
           ${cuteBg}
-          <div class="canvas-body" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;gap:48px;padding:40px 10px;">
-            ${slide.paras.map(p => `<p style="font-size:var(--body-size, 32px);line-height:var(--body-lh, 1.64);">${p}</p>`).join('')}
+          <div class="canvas-body" style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;gap:${isExcerpts ? '38px' : '48px'};padding:40px 10px ${isExcerpts ? '60px' : '10px'} 10px;">
+            ${parasHtml}
             ${slide.isFinal ? `
             <div style="margin-top:16px;padding:18px 24px;border:1px dashed rgba(186, 72, 103, 0.35);border-radius:12px;background:rgba(186, 72, 103, 0.04);display:flex;flex-direction:column;gap:6px;">
               <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);">Read the full essay online:</span>
               <span style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:500;color:var(--paper-ink);word-break:break-all;">${fullUrl}</span>
             </div>` : ''}
           </div>
+          ${isExcerpts ? `<div style="position:absolute;bottom:38px;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);opacity:0.55;z-index:3;">Excerpts · Non-continuous</div>` : ''}
         `;
       }
 

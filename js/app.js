@@ -207,8 +207,9 @@
   function resolveImagePath(src) {
     if (!src) return null;
     if (/^https?:\/\//i.test(src)) return src;
-    if (src.startsWith('/') || src.startsWith('assets/')) return src;
-    return `assets/${src}`;
+    if (src.startsWith('/')) return src;
+    if (src.startsWith('assets/')) return `/${src}`;
+    return `/assets/${src}`;
   }
 
   function svgPlaceholder(text = 'No image') {
@@ -238,9 +239,9 @@
     const { apiKey, blogId } = window.BLOGGER_CONFIG || {};
     if (!apiKey || !blogId || apiKey === 'YOUR_API_KEY_HERE') {
       if (!pageToken) {
-        const idx = await fetchJSON('posts/index.json');
+        const idx = await fetchJSON('/posts/index.json');
         if (!idx || !Array.isArray(idx.posts)) return [];
-        const posts = await Promise.all(idx.posts.map(slug => fetchJSON(`posts/${slug}.json`)));
+        const posts = await Promise.all(idx.posts.map(slug => fetchJSON(`/posts/${slug}.json`)));
         return posts.filter(Boolean).sort((a, b) => new Date(b.date) - new Date(a.date));
       }
       return [];
@@ -267,15 +268,21 @@
 
   function ogThumbFor(post, cls) {
     const slug = (post.slug || '').trim();
-    const src = slug ? `assets/og/${slug}.png` : 'assets/og-image.png';
+    const src = slug ? `/assets/og/${slug}.png` : '/assets/og-image.png';
     const alt = String(post.title || '').replace(/"/g, '&quot;');
-    return `<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" onerror="this.onerror=null;this.src='assets/og-image.png'" />`;
+    return `<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" onerror="this.onerror=null;this.src='/assets/og-image.png'" />`;
+  }
+
+  // Canonical link target for a post. Local posts use the pretty
+  // /writings/<slug> URL; Blogger posts (no static page) keep read.html?id=.
+  function postLink(post) {
+    if (post.isBlogger) return `/read.html?id=${post.slug}`;
+    return `/writings/${post.slug}`;
   }
 
   function renderMinimalWritingItem(post) {
-    const isBlogger = post.isBlogger;
     const cardVisual = ogThumbFor(post, 'writing-mini-thumb');
-    const link = `read.html?${isBlogger ? 'id' : 'slug'}=${post.slug}`;
+    const link = postLink(post);
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const readingTime = estimateReadingTime(post.contentHtml).mins;
 
@@ -293,12 +300,11 @@
   }
 
   function renderWritingCard(post) {
-    const isBlogger = post.isBlogger;
     const cardVisual = ogThumbFor(post, 'writing-card__thumb');
     const readingTime = estimateReadingTime(post.contentHtml).mins;
     const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 140) + '...');
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const link = `read.html?${isBlogger ? 'id' : 'slug'}=${post.slug}`;
+    const link = postLink(post);
 
     return `
       <article class="writing-card">
@@ -552,7 +558,9 @@
     if (!body) return;
 
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get('slug');
+    // Pretty URLs look like /writings/<slug> (served from writings/<slug>/index.html).
+    const pathSlug = (window.location.pathname.match(/^\/writings\/([^/]+)\/?$/) || [])[1];
+    const slug = (pathSlug ? decodeURIComponent(pathSlug) : null) || params.get('slug');
     const id = params.get('id');
     let post = null;
 
@@ -566,7 +574,7 @@
         }
       }
     } else if (slug) {
-      post = await fetchJSON(`posts/${slug}.json`);
+      post = await fetchJSON(`/posts/${slug}.json`);
     }
 
     if (!post) {
@@ -636,7 +644,14 @@
     const postOgCard = postSlug ? `https://nikit.is-a.dev/assets/og/${postSlug}.png` : 'https://nikit.is-a.dev/assets/og-image.png';
     const postImage = img ? (img.startsWith('http') ? img : `https://nikit.is-a.dev/${img}`) : postOgCard;
     const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 150) + '...');
-    const postUrl = window.location.href;
+    // The canonical + address-bar URL is always the pretty one for local posts,
+    // so old-style read.html?slug= links (incl. fbclid variants) present cleanly.
+    const postUrl = (!post.isBlogger && postSlug)
+      ? `https://nikit.is-a.dev/writings/${postSlug}`
+      : window.location.href;
+    if (postUrl !== window.location.href) {
+      try { window.history.replaceState(null, '', postUrl); } catch (e) {}
+    }
 
     if ($('#og-title')) $('#og-title').setAttribute('content', fullTitle);
     if ($('#og-desc')) $('#og-desc').setAttribute('content', excerpt);
