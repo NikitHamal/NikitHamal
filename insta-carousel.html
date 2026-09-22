@@ -516,29 +516,29 @@
     const fullUrl = 'https://nikit.is-a.dev/read.html?slug=the-lie-of-being-yourself';
 
     const excerptParas = [
-      [
+      { continuous: true, paras: [
         "We say these things so easily. Be yourself. Find yourself. Know who you really are. As if somewhere inside you there is a person who has been sitting quietly, waiting for you to discover him. The world covered him with expectations, your parents covered him with their ambitions, your relationships covered him with hurts, and now your job is to remove all of this and bring the original person out. It is a comforting idea. There is something real underneath, something untouched, and whatever happens on the surface, at least that thing is still yours. But have you actually found such a thing, or do you only hope it is there?"
-      ],
-      [
+      ]},
+      { continuous: true, paras: [  // P9 → P10, adjacent
         "You are quiet around some people and talk endlessly around others. With someone you feel no need to impress, words come easily. With someone whose approval you want, even saying a simple thing becomes a small performance. You go home and ask, why couldn't I be myself there? But both situations tell you something. Your ease tells you something, and so does your fear. Why must one be you and the other not you? Can't you look at the fear without first pushing it outside your identity?",
-        "Of course there is pretending. You laugh when you don't find something funny. You agree because you are afraid of being disliked. You act interested while wishing you could leave. There is a difference between what you feel and what you show, and it can be tiring to live like that. But to notice this doesn't require the discovery of an eternal, original you. It requires honesty about what is happening. “I don't agree, but I want this person to like me.” That is already much closer to the fact than “I have lost my true self.”"
-      ],
-      [
+        "Of course there is pretending. You laugh when you don't find something funny. You agree because you are afraid of being disliked. You act interested while wishing you could leave. There is a difference between what you feel and what you show, and it can be tiring to live like that. But to notice this doesn't require the discovery of an eternal, original you. It requires honesty about what is happening. “I don’t agree, but I want this person to like me.” That is already much closer to the fact than “I have lost my true self.”"
+      ]},
+      { continuous: true, paras: [  // P11 → P12, adjacent
         "The fact may be quite ordinary and uncomfortable. The story of the lost self is more attractive. It gives you a journey. You can go somewhere, read something, become someone who is working on himself. Meanwhile, the simple thing remains untouched: you are afraid to disappoint this person. You want approval. Can that be looked at without immediately turning it into a project of becoming fearless?",
         "Even your rebellion deserves a little attention. You say you are finished living according to others. Now you will do the opposite of what they wanted. But if everything you do is still a reply to them, in what sense have you stopped being directed by them? Their approval used to guide you. Now their disapproval guides you. I am not saying don't leave, don't refuse, don't change your life. Those things may be necessary. I am asking whether opposition, by itself, is the discovery of something independent."
-      ],
-      [
+      ]},
+      { continuous: true, paras: [  // P14 → P15, adjacent
         "And why should being shaped make you false? This is another assumption we hardly question. If a friend introduced you to something and you came to love it, is your love less real? If someone treated you gently and you became a little less afraid, is that openness fake because it came through a relationship? We want to remove every influence to find what is purely our own. But perhaps there is no person left over after every relationship with life has been removed. Perhaps we have mistaken dependence on life for a kind of contamination.",
         "You didn't first exist as a complete person and then begin having experiences. The experiencing, the learning, the being hurt, the responding, all of this is involved in what you call a person. There isn't a finished you underneath, receiving additions. What you are is taking shape in the very living of it. And this taking shape has not stopped just because you have found a few words that seem to describe you well."
-      ],
-      [
+      ]},
+      { continuous: true, paras: [  // P19 → P20, adjacent
         "You are a process. But please don't make the word sound grand. It means this ordinary movement of being affected and responding, carrying something forward, forgetting something, discovering that what mattered so much no longer matters in the same way. Sometimes the movement is so repetitive that it feels completely still. You meet a new person and bring the same fear. You enter a new situation and expect the same rejection. The repetition is real. But a pattern repeating is not proof of an unchanging person inside it. It may only mean that the conditions which keep the pattern going are still there.",
-        "And this is where “being yourself” can become an excuse. “This is just how I am. Take me as I am.” What do you mean? Do you mean, see what is actually here, without demanding that I fit your imagination? Or do you mean, don't question what I do, because I have decided it is permanent? Those are very different things. Accepting that you are angry now doesn't mean declaring anger your lifelong nature. Seeing a fact doesn't require you to promise that the fact will never change."
-      ],
-      [
-        "If you hurt someone, “I am a process” doesn't make the hurt disappear. You still have to hear what they are saying. You may have to apologize, repair something, change how you behave. There is no need for an eternal self in order for actions to have consequences. In fact, the insistence that “I am not that kind of person” can prevent you from taking responsibility. You become so occupied with defending who you are that you barely listen to what you have done.",
-        "We do this to other people too. We decide who they are, then keep meeting our decision. Someone who has usually been strong comes to you frightened, and you tell them this isn't like them (I do this a lot). Someone who has always adjusted to you finally refuses, and you say they have changed. Maybe they have. Maybe something was happening all along that your image didn't allow you to see. Knowing someone cannot mean that they are no longer allowed to surprise you."
-      ]
+        "And this is where “being yourself” can become an excuse. “This is just how I am. Take me as I am.” What do you mean? Do you mean, see what is actually here, without demanding that I fit your imagination? Or do you mean, don’t question what I do, because I have decided it is permanent? Those are very different things. Accepting that you are angry now doesn’t mean declaring anger your lifelong nature. Seeing a fact doesn’t require you to promise that the fact will never change."
+      ]},
+      { continuous: false, paras: [  // P21 → P27, NON-adjacent — show · · ·
+        "If you hurt someone, “I am a process” doesn’t make the hurt disappear. You still have to hear what they are saying. You may have to apologize, repair something, change how you behave. There is no need for an eternal self in order for actions to have consequences. In fact, the insistence that “I am not that kind of person” can prevent you from taking responsibility. You become so occupied with defending who you are that you barely listen to what you have done.",
+        "We do this to other people too. We decide who they are, then keep meeting our decision. Someone who has usually been strong comes to you frightened, and you tell them this isn’t like them (I do this a lot). Someone who has always adjusted to you finally refuses, and you say they have changed. Maybe they have. Maybe something was happening all along that your image didn’t allow you to see. Knowing someone cannot mean that they are no longer allowed to surprise you."
+      ]}
     ];
 
     function getPngPath(idx) {
@@ -577,8 +577,8 @@
         const slides = [
           { type: 'cover', title: 'Wrote a long piece of text on<br>“the lie of being yourself”.', subtitle: 'Some excerpts:', titleSize: '58px' }
         ];
-        excerptParas.forEach(paras => {
-          slides.push({ type: 'text', paras });
+        excerptParas.forEach(entry => {
+          slides.push({ type: 'text', paras: entry.paras, continuous: entry.continuous });
         });
         slides.push({ type: 'cta', url: fullUrl });
         return slides;
@@ -778,7 +778,8 @@
         const isExcerpts = currentMode === 'excerpts';
         const parasHtml = isExcerpts
           ? slide.paras.map((p, i) => {
-              const sep = (i < slide.paras.length - 1)
+              const showSep = (i < slide.paras.length - 1) && slide.continuous === false;
+              const sep = showSep
                 ? `<div style="font-family:'Newsreader',Georgia,serif;font-size:26px;letter-spacing:0.28em;color:var(--text-muted);text-align:center;opacity:0.65;margin:4px 0;">· · ·</div>`
                 : '';
               return `<p style="font-size:var(--body-size, 31.5px);line-height:var(--body-lh, 1.64);">\u201c${p}\u201d</p>${sep}`;
