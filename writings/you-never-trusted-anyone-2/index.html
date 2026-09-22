@@ -72,9 +72,25 @@ there is certainty, there's no need..." />
   </script>
 </head>
 
-<body>
+<body data-decor="essay">
   <div class="topline" aria-hidden="true"></div>
   <a class="skip-link" href="#read-content">Skip to content</a>
+
+  <!-- Category decor: the pretty-URL builder keeps only the matching group per post;
+       old-style read.html?slug= visits get the right one via JS (body[data-decor]). -->
+  <!-- DECOR:essay -->
+  <div class="decor" data-decor="essay" aria-hidden="true">
+    <svg class="decor-m" style="--dx:7%;--dy:22vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:32vh;--s:1.1;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:6%;--dy:60vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:94%;--dy:72vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:8%;--dy:42vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:92%;--dy:52vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:7%;--dy:84vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:5%;--dy:8vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><rect x="-6" y="-6" width="12" height="12" transform="rotate(45)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:86vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><circle cx="0" cy="0" r="7" stroke="currentColor" stroke-width="1.5" /></svg>
+  </div>
+  <!-- /DECOR:essay -->
 
   <div class="minimal-wrapper">
     <!-- TOP CONTROLS -->

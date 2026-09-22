@@ -63,9 +63,24 @@
   </script>
 </head>
 
-<body>
+<body data-decor="reflection">
   <div class="topline" aria-hidden="true"></div>
   <a class="skip-link" href="#read-content">Skip to content</a>
+
+  <!-- Category decor: the pretty-URL builder keeps only the matching group per post;
+       old-style read.html?slug= visits get the right one via JS (body[data-decor]). -->
+  <!-- DECOR:reflection -->
+  <div class="decor" data-decor="reflection" aria-hidden="true">
+    <svg class="decor-m" style="--dx:7%;--dy:24vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><ellipse cx="0" cy="0" rx="9" ry="6.5" transform="rotate(25)" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" /></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:34vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><ellipse cx="0" cy="0" rx="9" ry="6.5" transform="rotate(-20)" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" /></svg>
+    <svg class="decor-m" style="--dx:6%;--dy:62vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><ellipse cx="0" cy="0" rx="9" ry="6.5" transform="rotate(40)" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" /></svg>
+    <svg class="decor-m" style="--dx:94%;--dy:72vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><ellipse cx="0" cy="0" rx="9" ry="6.5" transform="rotate(-35)" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" /></svg>
+    <svg class="decor-m" style="--dx:8%;--dy:44vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><circle cx="0" cy="0" r="10.5" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" opacity="0.5" /><circle cx="0" cy="0" r="6.5" stroke="currentColor" stroke-width="1" opacity="0.4" /></svg>
+    <svg class="decor-m" style="--dx:92%;--dy:54vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><circle cx="0" cy="0" r="10.5" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" opacity="0.5" /><circle cx="0" cy="0" r="6.5" stroke="currentColor" stroke-width="1" opacity="0.4" /></svg>
+    <svg class="decor-m" style="--dx:7%;--dy:8vh;--s:0.95;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-8 A8,8 0 1,0 0,8 A8,8 0 1,0 0,-8 M3,-6 A6,6 0 1,1 3,6 A6,6 0 1,1 3,-6" fill="currentColor" fill-rule="evenodd" /></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:86vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><g fill="currentColor"><circle cx="0" cy="-5" r="1.7" /><circle cx="-4.6" cy="3.4" r="1.7" /><circle cx="4.6" cy="3.4" r="1.7" /></g></svg>
+  </div>
+  <!-- /DECOR:reflection -->
 
   <div class="minimal-wrapper">
     <!-- TOP CONTROLS -->

@@ -89,14 +89,34 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
+  <!-- Subtle page decor: micro sparkles + plus marks + mini blooms -->
+  <div class="decor" aria-hidden="true">
+    <svg class="decor-m" style="--dx:6%;--dy:16vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:92%;--dy:24vh;--s:1.15;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:90%;--dy:74vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:5%;--dy:86vh;--s:0.8;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:8%;--dy:64vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:94%;--dy:52vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:9%;--dy:40vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><g><circle cx="0" cy="-5.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="0" cy="0" r="2.4" class="bl-core" fill-opacity="0.7" /></g></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:88vh;--s:0.85;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><g><circle cx="0" cy="-5.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="0" cy="0" r="2.4" class="bl-core" fill-opacity="0.7" /></g></svg>
+    <svg class="decor-m" style="--dx:4%;--dy:27vh;--s:0.85;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><circle cx="0" cy="0" r="7" stroke="currentColor" stroke-width="1.5" /></svg>
+    <svg class="decor-m" style="--dx:95%;--dy:63vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-8,0 Q-4,-5 0,0 T8,0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+  </div>
+
   <div class="minimal-wrapper" id="main-content">
-    <!-- TOP CONTROLS -->
-    <div class="top-bar">
-      <div></div>
-      <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
-        <span class="theme-icon">*</span>
-      </button>
-    </div>
+    <!-- STICKY SITE HEADER -->
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/writings" class="site-nav-link">Writing</a>
+        <button type="button" class="site-nav-link site-nav-btn" id="navContact">Contact</button>
+        <span class="site-divider" aria-hidden="true"></span>
+        <span class="site-controls">
+          <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+            <span class="theme-icon">*</span>
+          </button>
+        </span>
+      </nav>
+    </header>
 
     <!-- PROFILE / HEADER -->
     <header class="profile-header">

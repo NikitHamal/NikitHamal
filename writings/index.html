@@ -69,24 +69,56 @@
 <body>
   <a class="skip-link" href="#writing-content">Skip to content</a>
 
+  <!-- Subtle page decor: neutral mix for the mixed-category listing -->
+  <div class="decor" aria-hidden="true">
+    <svg class="decor-m" style="--dx:6%;--dy:20vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:94%;--dy:30vh;--s:1.1;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
+    <svg class="decor-m" style="--dx:8%;--dy:55vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:68vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <svg class="decor-m" style="--dx:7%;--dy:82vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><g><circle cx="0" cy="-5.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="0" cy="0" r="2.4" class="bl-core" fill-opacity="0.7" /></g></svg>
+    <svg class="decor-m" style="--dx:94%;--dy:86vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><ellipse cx="0" cy="0" rx="9" ry="6.5" transform="rotate(-20)" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1" stroke-opacity="0.35" /></svg>
+    <svg class="decor-m" style="--dx:93%;--dy:12vh;--s:0.95;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-8 A8,8 0 1,0 0,8 A8,8 0 1,0 0,-8 M3,-6 A6,6 0 1,1 3,6 A6,6 0 1,1 3,-6" fill="currentColor" fill-rule="evenodd" /></svg>
+    <svg class="decor-m" style="--dx:5%;--dy:40vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-8,0 Q-4,-5 0,0 T8,0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+  </div>
+
   <div class="minimal-wrapper">
-    <!-- TOP CONTROLS -->
-    <div class="top-bar">
-      <a href="/" class="nav-back-link">
-        <i class="ri-arrow-left-line"></i> Home
-      </a>
-      <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
-        <span class="theme-icon">*</span>
-      </button>
-    </div>
+    <!-- STICKY SITE HEADER (same component as home; Home replaces the Writing link) -->
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/" class="site-nav-link">Home</a>
+        <button type="button" class="site-nav-link site-nav-btn" id="navContact">Contact</button>
+        <span class="site-divider" aria-hidden="true"></span>
+        <span class="site-controls">
+          <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+            <span class="theme-icon">*</span>
+          </button>
+        </span>
+      </nav>
+    </header>
 
     <!-- WRITING HEADER -->
     <header class="writing-page-header">
       <h1 class="writing-page-title">Essays &amp; Writing</h1>
     </header>
 
+    <!-- SEARCH + FILTER -->
+    <div class="writing-tools">
+      <label class="writing-search">
+        <i class="ri-search-line" aria-hidden="true"></i>
+        <input id="writingSearch" type="search" placeholder="Search essays..." autocomplete="off" />
+        <kbd>/</kbd>
+      </label>
+      <div class="chip-row" id="filterChips" role="group" aria-label="Filter by category">
+        <button type="button" class="filter-chip is-active" data-cat="all">All</button>
+        <button type="button" class="filter-chip" data-cat="essay">Essays</button>
+        <button type="button" class="filter-chip" data-cat="reflection">Reflections</button>
+        <button type="button" class="filter-chip" data-cat="poem">Poems</button>
+      </div>
+    </div>
+
     <!-- POSTS GRID / LIST -->
     <main id="writing-content" class="writing-posts-container">
+      <p class="results-meta" id="resultsMeta"></p>
       <div id="postsGrid" class="writing-posts-list">
         <p style="text-align:center;padding:40px;color:var(--text-muted);">Loading essays...</p>
       </div>

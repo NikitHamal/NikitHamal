@@ -338,16 +338,167 @@
     container.innerHTML = posts.slice(0, 4).map(renderMinimalWritingItem).join('');
   }
 
+  const WRITING_PAGE_SIZE = 6;
+  const WRITING_CATS = [
+    { key: 'all', label: 'All' },
+    { key: 'essay', label: 'Essays' },
+    { key: 'reflection', label: 'Reflections' },
+    { key: 'poem', label: 'Poems' },
+  ];
+
+  function isBloggerMode() {
+    const { apiKey, blogId } = window.BLOGGER_CONFIG || {};
+    return Boolean(apiKey && blogId && apiKey !== 'YOUR_API_KEY_HERE');
+  }
+
   async function initWritingPage() {
     const grid = $('#postsGrid');
     if (!grid) return;
-    const posts = await loadAllPosts();
-    if (!posts || posts.length === 0) {
+
+    // Legacy Blogger path (API-driven with Load More) — unchanged behavior.
+    if (isBloggerMode()) {
+      const posts = await loadAllPosts();
+      if (!posts || posts.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;padding:60px 20px;color:var(--text-muted);grid-column:1/-1;">No posts yet.</p>';
+        return;
+      }
+      grid.innerHTML = posts.map(renderWritingCard).join('');
+      updatePaginationControls();
+      return;
+    }
+
+    const all = await loadAllPosts();
+    if (!all || all.length === 0) {
       grid.innerHTML = '<p style="text-align:center;padding:60px 20px;color:var(--text-muted);grid-column:1/-1;">No posts yet.</p>';
       return;
     }
-    grid.innerHTML = posts.map(renderWritingCard).join('');
-    updatePaginationControls();
+
+    const searchInput = $('#writingSearch');
+    const chipsBox = $('#filterChips');
+    const pager = $('#paginationContainer');
+    const meta = $('#resultsMeta');
+    const state = { q: '', cat: 'all', page: 1 };
+
+    // Chip counts.
+    const counts = { all: all.length, essay: 0, reflection: 0, poem: 0 };
+    all.forEach((p) => {
+      const c = String(p.category || '').toLowerCase();
+      if (counts[c] !== undefined) counts[c]++;
+    });
+    if (chipsBox) {
+      chipsBox.querySelectorAll('.filter-chip').forEach((chip) => {
+        const c = chip.dataset.cat;
+        const def = WRITING_CATS.find((d) => d.key === c);
+        const label = def ? def.label : c;
+        chip.innerHTML = '';
+        const t = document.createElement('span');
+        t.textContent = label;
+        const n = document.createElement('span');
+        n.className = 'chip-count';
+        n.textContent = counts[c] !== undefined ? counts[c] : 0;
+        chip.append(t, n);
+      });
+      chipsBox.addEventListener('click', (e) => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        state.cat = chip.dataset.cat;
+        state.page = 1;
+        chipsBox.querySelectorAll('.filter-chip').forEach((b) => b.classList.toggle('is-active', b === chip));
+        render(true);
+      });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        state.q = searchInput.value;
+        state.page = 1;
+        render(true);
+      });
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchInput.value) {
+          searchInput.value = '';
+          state.q = '';
+          state.page = 1;
+          render(true);
+        }
+      });
+      // "/" or Ctrl/Cmd+K focuses the filter from anywhere on this page.
+      document.addEventListener('keydown', (e) => {
+        const tag = (e.target.tagName || '').toUpperCase();
+        if (/INPUT|TEXTAREA|SELECT/.test(tag) || e.target.isContentEditable) return;
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          searchInput.focus();
+        } else if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+      });
+    }
+
+    function filtered() {
+      const q = state.q.trim().toLowerCase();
+      return all.filter((p) => {
+        if (state.cat !== 'all' && String(p.category || '').toLowerCase() !== state.cat) return false;
+        if (q) {
+          const hay = `${p.title || ''} ${(p.excerpt || '')}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderPager(pages) {
+      if (!pager) return;
+      if (pages <= 1) { pager.innerHTML = ''; return; }
+      const nums = [];
+      for (let i = 1; i <= pages; i++) {
+        if (pages <= 7 || i === 1 || i === pages || Math.abs(i - state.page) <= 1) nums.push(i);
+        else if (nums[nums.length - 1] !== '…') nums.push('…');
+      }
+      let html = '<nav class="page-nav" aria-label="Pages">';
+      html += `<button type="button" class="page-btn" data-page="${state.page - 1}"${state.page <= 1 ? ' disabled' : ''} aria-label="Previous page">←</button>`;
+      nums.forEach((n) => {
+        if (n === '…') html += '<span class="page-ellipsis">…</span>';
+        else html += `<button type="button" class="page-btn${n === state.page ? ' is-current' : ''}" data-page="${n}"${n === state.page ? ' aria-current="page"' : ''}>${n}</button>`;
+      });
+      html += `<button type="button" class="page-btn" data-page="${state.page + 1}"${state.page >= pages ? ' disabled' : ''} aria-label="Next page">→</button>`;
+      html += '</nav>';
+      pager.innerHTML = html;
+      pager.querySelectorAll('.page-btn[data-page]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const p = +btn.dataset.page;
+          if (!p || p === state.page) return;
+          state.page = p;
+          render(false);
+          const anchor = $('#writing-content');
+          if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    function render(fromFilter) {
+      void fromFilter;
+      const list = filtered();
+      const pages = Math.max(1, Math.ceil(list.length / WRITING_PAGE_SIZE));
+      state.page = Math.min(Math.max(1, state.page), pages);
+      const start = (state.page - 1) * WRITING_PAGE_SIZE;
+      const slice = list.slice(start, start + WRITING_PAGE_SIZE);
+      if (!slice.length) {
+        grid.innerHTML = '<p style="text-align:center;padding:60px 20px;color:var(--text-muted);grid-column:1/-1;">Nothing matches. Try a different search or category.</p>';
+      } else {
+        grid.innerHTML = slice.map(renderWritingCard).join('');
+      }
+      if (meta) {
+        const catLabel = state.cat === 'all' ? '' : ` in ${(WRITING_CATS.find((d) => d.key === state.cat) || {}).label || state.cat}`;
+        meta.textContent = list.length === all.length && !state.q
+          ? `${all.length} posts`
+          : `${list.length} of ${all.length}${catLabel}`;
+      }
+      renderPager(pages);
+    }
+
+    render(false);
   }
 
   function updatePaginationControls() {
@@ -595,6 +746,12 @@
 
     if (titleEl) titleEl.textContent = post.title;
     if (catEl) catEl.textContent = post.category || 'Article';
+
+    // Show only this post's category decor (poem blooms / essay sparkles / reflection pebbles).
+    const decorCat = String(post.category || '').toLowerCase();
+    if (['poem', 'essay', 'reflection'].includes(decorCat)) {
+      document.body.dataset.decor = decorCat;
+    }
 
     const rt = estimateReadingTime(post.contentHtml).mins;
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -973,13 +1130,44 @@
   }
 
   // ============================================
+  // SITE HEADER (sticky nav, contact shortcut, command palette)
+  // ============================================
+
+  function openContactSection() {
+    const item = $('.accordion-item[data-accordion="contact"]');
+    if (!item) {
+      // No contact section on this view (e.g. /writings shares the same
+      // header) — take the user home and open it there.
+      location.href = '/#contact';
+      return;
+    }
+    const btn = item.querySelector('.accordion-header');
+    if (btn && !item.classList.contains('open')) btn.click();
+    item.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function initSiteHeader() {
+    const header = $('.site-header');
+    if (header) {
+      const onScroll = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    const contactBtn = $('#navContact');
+    if (contactBtn) contactBtn.addEventListener('click', openContactSection);
+  }
+
+  // ============================================
   // INIT
   // ============================================
 
   function init() {
     stripTrackingParams();
     initTheme();
+    initSiteHeader();
     initAccordions();
+    if (location.hash === '#contact') openContactSection();
     initModals();
     initWritingPreview();
     initWritingPage();
