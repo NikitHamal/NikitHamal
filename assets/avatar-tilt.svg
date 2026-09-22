@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" role="img" aria-labelledby="original-tilt-title original-tilt-desc">
+<title id="original-tilt-title">Clean avatar — original tilt, transparent background</title>
+<desc id="original-tilt-desc">Smooth editable vector recreation of the supplied avatar with clean skin, soft shading and no background. No embedded images, bitmap textures, external resources or scripts. The original head angle and composition are preserved.</desc>
+<defs>
+  <linearGradient id="original-tilt-face-base" x1="350" y1="550" x2="1100" y2="1400" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#dda28a" /><stop offset="0.6" stop-color="#e5ac94" /><stop offset="1" stop-color="#e7ad95" />
+  </linearGradient>
+  <linearGradient id="original-tilt-skin" x1="390" y1="550" x2="1060" y2="1300" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#edbba4" /><stop offset="0.55" stop-color="#edbea8" /><stop offset="1" stop-color="#edb8a0" />
+  </linearGradient>
+  <linearGradient id="original-tilt-neck-skin" x1="320" y1="1340" x2="490" y2="1510" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#e5ac93" /><stop offset="1" stop-color="#edbba5" />
+  </linearGradient>
+  <linearGradient id="original-tilt-hair-shading" x1="920" y1="290" x2="1300" y2="1400" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#1c1c1c" /><stop offset="0.52" stop-color="#1b1b1b" /><stop offset="1" stop-color="#1e1e1e" />
+  </linearGradient>
+  <radialGradient id="original-tilt-blush"><stop offset="0" stop-color="#e48f87" stop-opacity="0.21" /><stop offset="1" stop-color="#e48f87" stop-opacity="0" /></radialGradient>
+</defs>
+<path id="original-tilt-back-hair" fill="#000" d="M0 777 C32 800 77 791 101 766 C134 734 147 700 141 655 C127 557 190 459 287 437 C364 423 427 387 466 335 C568 191 754 198 877 248 C918 265 944 282 956 295 C1020 338 1092 422 1134 507 C1198 637 1159 947 1160 1034 C1190 1074 1195 1123 1183 1177 C1176 1226 1157 1261 1129 1289 C1105 1345 1050 1370 995 1375 C870 1395 795 1500 832 1600 L733 1600 C648 1543 573 1504 499 1484 L308 1388 C240 1361 181 1346 122 1340 C46 1271 24 1204 44 1121 C57 1071 81 1034 113 994 C63 1001 18 975 0 936 Z" />
+<path id="original-tilt-shirt" fill="#192b43" d="M0 1340 C102 1331 205 1345 308 1388 L499 1484 C580 1505 658 1546 734 1600 H0 Z" />
+<path id="original-tilt-neck" fill="url(#original-tilt-neck-skin)" d="M354 1304 C346 1335 326 1363 307 1388 C292 1447 334 1492 384 1510 C430 1525 482 1519 499 1483 C507 1458 518 1431 531 1411 C459 1383 406 1345 354 1304 Z" />
+<path id="original-tilt-neck-shadow" fill="#d49b7c" d="M354 1304 C405 1347 460 1385 531 1411 C501 1437 459 1446 418 1433 C376 1421 345 1392 340 1344 C347 1331 351 1317 354 1304 Z" />
+<path id="original-tilt-face-outline" fill="url(#original-tilt-face-base)" d="M370 668 C448 664 511 624 552 560 C598 493 661 454 729 447 C798 439 884 472 948 516 C1009 558 1069 614 1105 675 C1097 720 1079 773 1079 823 C1076 905 1106 974 1160 1034 C1126 1090 1071 1160 1019 1223 C947 1321 865 1385 757 1417 C610 1460 463 1408 354 1305 C268 1218 230 1111 234 998 C236 881 284 790 370 668 Z" />
+<path id="original-tilt-smooth-face" fill="url(#original-tilt-skin)" d="M394 712 C464 690 520 642 552 588 C595 518 664 461 736 448 C814 445 909 486 972 535 C1026 586 1044 646 1043 716 C1045 754 1032 789 1037 830 C1038 914 1064 973 1120 1026 C1136 1041 1141 1055 1138 1070 C1104 1121 1062 1175 1019 1223 C951 1306 853 1365 751 1386 C610 1413 480 1364 397 1284 C319 1208 281 1113 281 1015 C281 902 328 814 376 742 C383 730 389 721 394 712 Z" />
+<ellipse id="original-tilt-left-cheek" cx="435" cy="924" rx="157" ry="173" fill="url(#original-tilt-blush)" transform="rotate(35 435 924)" />
+<ellipse id="original-tilt-right-cheek" cx="852" cy="1180" rx="161" ry="171" fill="url(#original-tilt-blush)" transform="rotate(35 852 1180)" />
+<g id="original-tilt-eyes" fill="none" stroke="#000" stroke-width="80" stroke-linecap="round">
+<path id="original-tilt-left-eye" d="M621.4353 731.4926 L550.1153 833.4666" />
+<path id="original-tilt-right-eye" d="M938.2976 953.0770 L866.9776 1055.0510" />
+</g>
+<path id="original-tilt-front-hair" fill="url(#original-tilt-hair-shading)" d="M918 494 C906 452 903 402 914 358 C927 303 971 270 1030 285 C1140 307 1238 387 1298 474 C1359 564 1394 663 1389 766 C1387 837 1367 898 1335 959 C1313 1001 1309 1047 1318 1100 C1324 1139 1340 1169 1332 1219 C1323 1280 1290 1344 1248 1384 C1219 1413 1183 1427 1142 1437 C1105 1446 1085 1470 1090 1504 C1095 1534 1125 1553 1155 1566 C1178 1576 1189 1583 1183 1600 L990 1600 C970 1587 955 1569 941 1555 C923 1535 911 1557 903 1568 C894 1582 891 1594 889 1600 L807 1600 C781 1550 786 1494 810 1452 C852 1383 926 1352 990 1349 C1051 1347 1096 1325 1129 1288 C1175 1238 1193 1171 1187 1110 C1184 1082 1174 1058 1160 1034 C1106 973 1076 906 1079 823 C1079 771 1096 719 1105 675 C1117 615 1110 554 1087 516 C1056 464 1013 454 980 466 C957 472 937 483 918 494 Z" />
+</svg>

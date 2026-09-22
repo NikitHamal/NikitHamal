@@ -13,10 +13,48 @@
   let isFetching = false;
 
   // ============================================
-  // THEME TOGGLE
+  // THEMES & PALETTES (Default, Sepia, Slate)
   // ============================================
 
+  const PALETTE_COLORS = {
+    default: { light: '#faf9f6', dark: '#0e0e10' },
+    sepia: { light: '#f4ede2', dark: '#181512' },
+    slate: { light: '#f1f4f8', dark: '#0c121e' }
+  };
+
+  function applyPalette(palette, save = true) {
+    const valid = ['default', 'sepia', 'slate'].includes(palette) ? palette : 'default';
+    document.documentElement.setAttribute('data-palette', valid);
+    if (save) {
+      try {
+        localStorage.setItem('reader-palette', valid);
+      } catch (e) {}
+    }
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      const colors = PALETTE_COLORS[valid] || PALETTE_COLORS.default;
+      metaTheme.setAttribute('content', currentTheme === 'dark' ? colors.dark : colors.light);
+    }
+    document.querySelectorAll('[data-set-palette]').forEach(b => {
+      b.setAttribute('aria-pressed', String(b.dataset.setPalette === valid));
+    });
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const currentPalette = document.documentElement.getAttribute('data-palette') || 'default';
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      const colors = PALETTE_COLORS[currentPalette] || PALETTE_COLORS.default;
+      metaTheme.setAttribute('content', theme === 'dark' ? colors.dark : colors.light);
+    }
+  }
+
   function initTheme() {
+    const storedPalette = localStorage.getItem('reader-palette') || 'default';
+    applyPalette(storedPalette, false);
+
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme = stored || (prefersDark ? 'dark' : 'light');
@@ -36,14 +74,6 @@
         localStorage.setItem('theme', next);
       });
     });
-  }
-
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) {
-      metaTheme.setAttribute('content', theme === 'dark' ? '#0e0e10' : '#faf9f6');
-    }
   }
 
   // ============================================
@@ -342,6 +372,95 @@
     });
   }
 
+  function structureProseSections(body) {
+    if (!body || body.querySelector('.passage')) return;
+
+    // Normalize unformatted prose (e.g. posts with double <br> or <div> blocks instead of <p>)
+    const initialParas = Array.from(body.querySelectorAll('p')).filter(p => p.textContent.trim().length > 10);
+    if (initialParas.length <= 1) {
+      // 1. If any <p> contains double <br>, split into separate <p> tags
+      initialParas.forEach(p => {
+        if (/<br\s*\/?>\s*<br\s*\/?>/i.test(p.innerHTML)) {
+          const parts = p.innerHTML.split(/<br\s*\/?>\s*<br\s*\/?>/gi);
+          if (parts.length > 1) {
+            const frag = document.createDocumentFragment();
+            for (let i = 0; i < parts.length; i++) {
+              const part = parts[i].trim();
+              if (!part) continue;
+              if (i === parts.length - 1 && /^~?\s*proofread/i.test(part.replace(/<[^>]+>/g, '').trim()) && frag.lastChild) {
+                frag.lastChild.innerHTML += `<br><br>${part}`;
+                continue;
+              }
+              const newP = document.createElement('p');
+              newP.innerHTML = part;
+              frag.appendChild(newP);
+            }
+            if (frag.childNodes.length > 0) {
+              p.parentNode.replaceChild(frag, p);
+            }
+          }
+        }
+      });
+
+      // 2. If still <= 1 <p>, check for content divs or loose double <br> in body
+      const remainingParas = Array.from(body.querySelectorAll('p')).filter(p => p.textContent.trim().length > 10);
+      if (remainingParas.length <= 1) {
+        const divs = Array.from(body.querySelectorAll('div')).filter(d => {
+          if (d.classList.contains('separator') || d.querySelector('img, figure, svg, iframe')) return false;
+          return d.textContent.trim().length > 15;
+        });
+        if (divs.length > 1) {
+          divs.forEach(d => {
+            const p = document.createElement('p');
+            p.innerHTML = d.innerHTML;
+            d.parentNode.replaceChild(p, d);
+          });
+        } else if (/<br\s*\/?>\s*<br\s*\/?>/i.test(body.innerHTML)) {
+          const rawHTML = body.innerHTML;
+          const parts = rawHTML.split(/<br\s*\/?>\s*<br\s*\/?>/gi);
+          if (parts.length > 1) {
+            body.innerHTML = parts.map((pt) => {
+              const trimmed = pt.trim();
+              if (!trimmed) return '';
+              if (/^<(p|figure|div|blockquote|h[1-6])/i.test(trimmed)) return trimmed;
+              return `<p>${trimmed}</p>`;
+            }).join('');
+          }
+        }
+      }
+    }
+
+    // Find all readable paragraphs and blockquotes
+    const elements = Array.from(body.querySelectorAll('p, blockquote')).filter(el => {
+      if (el.tagName.toLowerCase() === 'p' && el.parentElement && el.parentElement.tagName.toLowerCase() === 'blockquote') {
+        return false;
+      }
+      return el.textContent.trim().length > 10;
+    });
+
+    const total = elements.length;
+    if (total === 0) return;
+
+    elements.forEach((el, index) => {
+      const idx = index + 1;
+      const numStr = String(idx).padStart(2, '0');
+
+      const section = document.createElement('section');
+      section.className = 'passage';
+      section.id = `passage-${idx}`;
+      section.setAttribute('aria-label', `Passage ${idx} of ${total}`);
+
+      const num = document.createElement('span');
+      num.className = 'passage-number ui';
+      num.setAttribute('aria-hidden', 'true');
+      num.textContent = numStr;
+
+      el.parentNode.insertBefore(section, el);
+      section.appendChild(num);
+      section.appendChild(el);
+    });
+  }
+
   function enhanceContentImages(element) {
     if (!element) return;
     const images = $$('img', element);
@@ -398,6 +517,17 @@
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     if (meta) meta.textContent = `${date} \u2022 ${rt} min read`;
 
+    // Assigned motion form hero
+    const coverArt = $('#readCoverArt');
+    if (coverArt) {
+      if (typeof window.getMotionFormSvg === 'function') {
+        coverArt.innerHTML = window.getMotionFormSvg(post.slug || post.id || post.title);
+        coverArt.style.display = 'block';
+      } else {
+        coverArt.style.display = 'none';
+      }
+    }
+
     if (banner) {
       if (img) {
         banner.style.backgroundImage = `url('${img}')`;
@@ -410,8 +540,19 @@
 
     body.innerHTML = post.contentHtml;
     cleanBloggerStyles(body);
+    structureProseSections(body);
     buildTOC();
     enhanceContentImages(body);
+    initReaderDock();
+
+    // Reading progress line
+    window.addEventListener('scroll', () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight > 0) {
+        const progress = Math.min(1, Math.max(0, window.scrollY / scrollHeight));
+        document.documentElement.style.setProperty('--progress', progress);
+      }
+    }, { passive: true });
 
     const fullTitle = `${post.title} \u2014 Nikit Hamal`;
     document.title = fullTitle;
@@ -424,6 +565,307 @@
     if ($('#og-desc')) $('#og-desc').setAttribute('content', excerpt);
     if ($('#og-url')) $('#og-url').setAttribute('content', postUrl);
     if ($('#og-image')) $('#og-image').setAttribute('content', postImage);
+  }
+
+  // ============================================
+  // READER DOCK & READING MODE
+  // ============================================
+
+  function initReaderDock() {
+    const dock = $('#readerDock');
+    if (!dock) return;
+
+    const body = $('#readBody');
+    if (!body) return;
+
+    const prevBtn = $('#dockPrev');
+    const nextBtn = $('#dockNext');
+    const countEl = $('#dockCount');
+    const focusBtn = $('#dockFocus');
+    const settingsBtn = $('#dockSettings');
+    const panel = $('#readSettingsPanel');
+    const closeBtn = $('#closeSettings');
+    const toast = $('#readToast');
+    const root = document.documentElement;
+
+    // Find readable sections/passages in body
+    let passages = Array.from(body.querySelectorAll('.passage'));
+    if (!passages.length) {
+      passages = Array.from(body.querySelectorAll('p, h2, h3, blockquote, figure')).filter(el => {
+        return el.textContent.trim().length > 15;
+      });
+    }
+
+    if (!passages.length) {
+      passages = [body];
+    }
+
+    const total = passages.length;
+    let current = 0;
+    let focus = false;
+    let quietTimer = null;
+    let toastTimer = null;
+    let ticking = false;
+
+    const storageKey = 'nikit-reader-settings-v2';
+    const defaults = {
+      font: root.getAttribute('data-font') || 'sans',
+      size: 20,
+      leading: 1.8,
+      motion: !matchMedia('(prefers-reduced-motion: reduce)').matches
+    };
+
+    let settings = { ...defaults };
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      if (saved && typeof saved === 'object') settings = { ...defaults, ...saved };
+    } catch (e) {}
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(settings));
+      } catch (e) {}
+    }
+
+    function showToast(text) {
+      if (!toast) return;
+      clearTimeout(toastTimer);
+      toast.textContent = text;
+      toast.classList.add('shown');
+      toastTimer = setTimeout(() => toast.classList.remove('shown'), 3200);
+    }
+
+    function applySettings() {
+      root.setAttribute('data-font', settings.font);
+      root.style.setProperty('--text-size', settings.size + 'px');
+      root.style.setProperty('--leading', settings.leading);
+      root.classList.toggle('motion-off', !settings.motion);
+
+      if (body) {
+        body.style.setProperty('--text-size', settings.size + 'px');
+        body.style.setProperty('--leading', settings.leading);
+      }
+
+      const activePalette = root.getAttribute('data-palette') || 'default';
+      $$('[data-set-palette]').forEach(b => {
+        b.setAttribute('aria-pressed', String(b.dataset.setPalette === activePalette));
+      });
+
+      const sizeInput = $('#fontSizeRange');
+      const sizeOutput = $('#fontSizeValue');
+      if (sizeInput) sizeInput.value = settings.size;
+      if (sizeOutput) sizeOutput.textContent = settings.size;
+
+      const leadingInput = $('#lineHeightRange');
+      const leadingOutput = $('#lineHeightValue');
+      if (leadingInput) leadingInput.value = settings.leading;
+      if (leadingOutput) leadingOutput.textContent = Number(settings.leading).toFixed(2);
+
+      const motionInput = $('#motionToggle');
+      if (motionInput) motionInput.checked = settings.motion;
+
+      $$('[data-set-font]').forEach(b => {
+        b.setAttribute('aria-pressed', String(b.dataset.setFont === settings.font));
+      });
+    }
+
+    function update() {
+      ticking = false;
+      const target = window.innerHeight * 0.32;
+      let best = 0;
+      for (let i = 0; i < total; i++) {
+        const top = passages[i].getBoundingClientRect().top;
+        if (top <= target) {
+          best = i;
+        } else {
+          break;
+        }
+      }
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 6) {
+        best = total - 1;
+      }
+      current = best;
+      passages.forEach((p, i) => p.classList.toggle('is-current', i === current));
+
+      if (countEl) {
+        const label = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+        countEl.textContent = label;
+        countEl.setAttribute('aria-label', `Section ${current + 1} of ${total}`);
+      }
+
+      if (prevBtn) prevBtn.disabled = current === 0;
+      if (nextBtn) nextBtn.disabled = current === total - 1;
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    function goTo(index) {
+      const i = Math.max(0, Math.min(total - 1, index));
+      const target = passages[i];
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.22;
+      window.scrollTo({ top, behavior: settings.motion ? 'smooth' : 'instant' });
+      wake();
+      if (focus) showToast(`Section ${i + 1} of ${total}`);
+    }
+
+    function wake() {
+      dock.classList.remove('quiet');
+      clearTimeout(quietTimer);
+      quietTimer = setTimeout(() => {
+        if (!panel || panel.hidden) {
+          dock.classList.add('quiet');
+        }
+      }, 4200);
+    }
+
+    function toggleFocus() {
+      focus = !focus;
+      document.body.classList.toggle('focus-mode', focus);
+      if (focusBtn) focusBtn.setAttribute('aria-pressed', String(focus));
+      showToast(focus ? 'Focus on. Use arrows to move between sections.' : 'All sections restored.');
+      wake();
+      if (focus) goTo(current);
+    }
+
+    function openSettings() {
+      if (!panel) return;
+      panel.hidden = false;
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'true');
+      wake();
+    }
+
+    function closeSettings() {
+      if (!panel) return;
+      panel.hidden = true;
+      if (settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+      wake();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+    if (focusBtn) focusBtn.addEventListener('click', toggleFocus);
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', () => {
+        if (panel && !panel.hidden) closeSettings();
+        else openSettings();
+      });
+    }
+    if (closeBtn) closeBtn.addEventListener('click', closeSettings);
+
+    document.addEventListener('pointerdown', (e) => {
+      if (panel && !panel.hidden && !panel.contains(e.target) && !e.target.closest('#dockSettings')) {
+        closeSettings();
+      }
+    });
+
+
+
+    $$('[data-set-palette]').forEach(b => {
+      b.addEventListener('click', () => {
+        const pal = b.dataset.setPalette;
+        applyPalette(pal);
+        showToast(`${pal.charAt(0).toUpperCase() + pal.slice(1)} palette`);
+      });
+    });
+
+    $$('[data-set-font]').forEach(b => {
+      b.addEventListener('click', () => {
+        settings.font = b.dataset.setFont;
+        applySettings();
+        saveSettings();
+        showToast(settings.font === 'serif' ? 'Serif typeface' : 'Sans typeface');
+      });
+    });
+
+    const sizeInput = $('#fontSizeRange');
+    if (sizeInput) {
+      sizeInput.addEventListener('input', (e) => {
+        settings.size = Number(e.target.value);
+        applySettings();
+        saveSettings();
+      });
+    }
+
+    const leadingInput = $('#lineHeightRange');
+    if (leadingInput) {
+      leadingInput.addEventListener('input', (e) => {
+        settings.leading = Number(e.target.value);
+        applySettings();
+        saveSettings();
+      });
+    }
+
+    const motionInput = $('#motionToggle');
+    if (motionInput) {
+      motionInput.addEventListener('change', (e) => {
+        settings.motion = e.target.checked;
+        applySettings();
+        saveSettings();
+      });
+    }
+
+    const resetBtn = $('#resetReadingSettings');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        settings = { ...defaults };
+        applyPalette('default');
+        applySettings();
+        saveSettings();
+        showToast('Reading settings restored.');
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      const tag = e.target.tagName;
+      if (e.key === 'Escape') {
+        if (panel && !panel.hidden) closeSettings();
+        else if (focus) toggleFocus();
+        return;
+      }
+      if (/INPUT|TEXTAREA|SELECT/.test(tag) || e.target.isContentEditable || e.ctrlKey || e.metaKey || e.altKey) {
+        return;
+      }
+      if (panel && !panel.hidden) return;
+
+      const key = e.key.toLowerCase();
+      if (key === 'arrowright') {
+        e.preventDefault();
+        goTo(current + 1);
+      } else if (key === 'arrowleft') {
+        e.preventDefault();
+        goTo(current - 1);
+      } else if (key === 'f') {
+        e.preventDefault();
+        toggleFocus();
+      } else if (key === 't') {
+        e.preventDefault();
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(nextTheme);
+        localStorage.setItem('theme', nextTheme);
+        showToast(nextTheme === 'dark' ? 'Dark mode' : 'Light mode');
+      }
+      wake();
+    });
+
+    window.addEventListener('scroll', () => {
+      requestTick();
+      wake();
+    }, { passive: true });
+
+    window.addEventListener('resize', requestTick, { passive: true });
+    dock.addEventListener('pointerenter', wake);
+    dock.addEventListener('focusin', wake);
+
+    applySettings();
+    update();
+    wake();
   }
 
   // ============================================

@@ -44,7 +44,7 @@
     rel="stylesheet">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="assets/nikit.jpg" />
+  <link rel="icon" type="image/svg+xml" href="assets/avatar-tilt.svg" />
   <link rel="apple-touch-icon" href="assets/nikit.jpg" />
 
   <!-- Remix Icon -->
@@ -61,6 +61,7 @@
 </head>
 
 <body>
+  <div class="topline" aria-hidden="true"></div>
   <a class="skip-link" href="#read-content">Skip to content</a>
 
   <div class="minimal-wrapper">
@@ -80,6 +81,9 @@
       <h1 class="read-title" id="readTitle">Loading...</h1>
       <div class="read-meta" id="readMeta"></div>
     </header>
+
+    <!-- MOTION FORM HERO / COVER ART -->
+    <figure class="cover-art read-cover-art" id="readCoverArt" aria-hidden="true"></figure>
 
     <!-- ARTICLE BODY CONTENT -->
     <main id="read-content" class="read-article-container">
@@ -106,7 +110,59 @@
     </footer>
   </div>
 
+  <!-- BOTTOM READER PILL DOCK -->
+  <nav class="reader-dock" id="readerDock" aria-label="Reading controls">
+    <button class="icon-button" id="dockPrev" aria-label="Previous section" title="Previous section (left arrow)">
+      <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>
+    </button>
+    <span class="dock-count ui" id="dockCount" aria-label="Current section">01 / 01</span>
+    <button class="icon-button" id="dockNext" aria-label="Next section" title="Next section (right arrow)">
+      <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg>
+    </button>
+    <span class="dock-divider"></span>
+    <button class="icon-button" id="dockFocus" aria-label="Focus mode" aria-pressed="false" title="Focus mode (F)">
+      <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4M8 12h8"/></svg>
+    </button>
+    <button class="icon-button" id="dockSettings" aria-label="Reading settings" aria-controls="readSettingsPanel" aria-expanded="false" title="Reading settings">
+      <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 18 5-12 5 12M5 14h6m4-4h6m-3 0v8m-3 0h6"/></svg>
+    </button>
+  </nav>
+
+  <!-- READING SETTINGS MODAL -->
+  <section class="settings" id="readSettingsPanel" role="dialog" aria-label="Reading settings" hidden>
+    <div class="settings-title">
+      <h2>Reading settings</h2>
+      <button class="icon-button" id="closeSettings" aria-label="Close reading settings">
+        <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+      </button>
+    </div>
+
+    <div class="setting-label ui" id="paletteLabel">Palette</div>
+    <div class="themes" role="group" aria-labelledby="paletteLabel">
+      <button class="theme-option" data-set-palette="default" aria-pressed="true">Default</button>
+      <button class="theme-option" data-set-palette="sepia" aria-pressed="false">Sepia</button>
+      <button class="theme-option" data-set-palette="slate" aria-pressed="false">Slate</button>
+    </div>
+
+    <div class="setting-label ui" id="fontLabel">Typeface</div>
+    <div class="themes" role="group" aria-labelledby="fontLabel">
+      <button class="theme-option font-option" data-set-font="sans" aria-pressed="true">Sans</button>
+      <button class="theme-option font-option" data-set-font="serif" aria-pressed="false">Serif</button>
+    </div>
+    <label class="setting-label ui" for="fontSizeRange">Letter size <output id="fontSizeValue" for="fontSizeRange">20</output></label>
+    <input class="range" id="fontSizeRange" type="range" min="16" max="28" step="1" value="20">
+    <label class="setting-label ui" for="lineHeightRange">Breathing room <output id="lineHeightValue" for="lineHeightRange">1.80</output></label>
+    <input class="range" id="lineHeightRange" type="range" min="1.5" max="2.2" step="0.02" value="1.80">
+    <label class="toggle-row" for="motionToggle">Gentle movement <input class="switch" id="motionToggle" type="checkbox" checked></label>
+    <p class="settings-help"><kbd>←</kbd> / <kbd>→</kbd> move sections<br><kbd>F</kbd> focus · <kbd>T</kbd> change theme<br>Settings stay in this browser locally.</p>
+    <button class="reset-btn" id="resetReadingSettings">Reset reading settings</button>
+  </section>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="readToast" role="status" aria-live="polite"></div>
+
   <script src="js/config.js"></script>
+  <script src="js/motion-forms.js"></script>
   <script defer src="js/app.js"></script>
 </body>
 
