@@ -479,11 +479,28 @@ img {
 .mini-chip {
   font-family: var(--font-mono);
   font-size: 0.76rem;
+  font-weight: 500;
   padding: 4px 10px;
-  background: var(--bg-hover);
-  border: 1px solid var(--border-line);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-chip .chip-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .mini-chip .chip-icon[src*="consica-logo"],
+[data-theme="dark"] .mini-chip .chip-icon-django {
+  filter: brightness(0) invert(1);
 }
 
 /* Skills mini grid */
@@ -504,13 +521,48 @@ img {
   font-weight: 600;
   text-transform: uppercase;
   color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .skill-mini-list {
   font-size: 0.85rem;
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+.skill-tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 3px 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.4;
+}
+
+.skill-tag img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .skill-tag .tag-icon-dark {
+  filter: brightness(0) invert(1);
 }
 
 /* Projects mini list */

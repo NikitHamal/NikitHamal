@@ -40,8 +40,8 @@
     rel="stylesheet">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/avatar-tilt.svg" />
-  <link rel="apple-touch-icon" href="assets/avatar-tilt.svg" />
+  <link rel="icon" type="image/svg+xml" href="assets/avatar-upright.svg" />
+  <link rel="apple-touch-icon" href="assets/avatar-upright.svg" />
 
   <!-- Canonical -->
   <link rel="canonical" href="https://nikit.is-a.dev/" />
@@ -121,7 +121,7 @@
     <!-- PROFILE / HEADER -->
     <header class="profile-header">
       <div class="avatar-container" id="avatarContainer">
-        <img src="assets/avatar-upright.svg" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" />
+        <img src="assets/nikit.jpg" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" fetchpriority="high" decoding="async" />
       </div>
 
       <h1 class="profile-name">Nikit Hamal</h1>
@@ -152,10 +152,9 @@
               Beyond software engineering and operations, I dedicate time to exploring non-duality, self-observation, and writing essays on philosophy, human connection, and consciousness.
             </p>
             <div class="chip-group">
-              <span class="mini-chip"><i class="ri-briefcase-line"></i> Head of Operations @ Consica Labs</span>
-              <span class="mini-chip"><i class="ri-map-pin-2-line"></i> Nepal</span>
-              <span class="mini-chip"><i class="ri-android-line"></i> Android &amp; Kotlin</span>
-              <span class="mini-chip"><i class="ri-code-s-slash-line"></i> Django &amp; Python</span>
+              <span class="mini-chip"><img src="assets/consica-logo.png" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"> Head of Operations</span>
+              <span class="mini-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"> Android &amp; Kotlin</span>
+              <span class="mini-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="chip-icon chip-icon-django" width="16" height="16" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"> Django &amp; Python</span>
               <span class="mini-chip"><i class="ri-quill-pen-line"></i> Philosophy</span>
             </div>
           </div>
@@ -175,20 +174,49 @@
           <div class="accordion-inner">
             <div class="skills-mini-grid">
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading">Mobile Development</h4>
-                <p class="skill-mini-list">Android (Kotlin), Jetpack Compose, Material 3, Flutter (Dart), Room DB, Hilt DI</p>
+                <h4 class="skill-mini-heading"><i class="ri-smartphone-line"></i> Mobile Development</h4>
+                <div class="skill-tag-group">
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Android (Kotlin)</span>
+                  <span class="skill-tag"><i class="ri-layout-masonry-line"></i> Jetpack Compose</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Material 3</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Flutter (Dart)</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Room DB</span>
+                  <span class="skill-tag"><i class="ri-tools-line"></i> Hilt DI</span>
+                </div>
               </div>
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading">Backend &amp; APIs</h4>
-                <p class="skill-mini-list">Python, Django, Django REST Framework, WebSockets (Channels), Redis, MySQL</p>
+                <h4 class="skill-mini-heading"><i class="ri-server-line"></i> Backend &amp; APIs</h4>
+                <div class="skill-tag-group">
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Python</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="14" height="14" loading="lazy" decoding="async"> Django</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="14" height="14" loading="lazy" decoding="async"> DRF</span>
+                  <span class="skill-tag"><i class="ri-swap-line"></i> WebSockets</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Redis</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> MySQL</span>
+                </div>
               </div>
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading">Frontend &amp; Web</h4>
-                <p class="skill-mini-list">HTML5, CSS3, JavaScript, TypeScript, SvelteKit, HTMX, Tailwind CSS</p>
+                <h4 class="skill-mini-heading"><i class="ri-global-line"></i> Frontend &amp; Web</h4>
+                <div class="skill-tag-group">
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> HTML5</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> CSS3</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> JavaScript</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> TypeScript</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> SvelteKit</span>
+                  <span class="skill-tag"><i class="ri-code-s-slash-line"></i> HTMX</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Tailwind</span>
+                </div>
               </div>
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading">Cloud &amp; Infrastructure</h4>
-                <p class="skill-mini-list">Firebase (FCM, Auth), Pusher WebSockets, JWT / OAuth, PWAs, Git &amp; GitHub</p>
+                <h4 class="skill-mini-heading"><i class="ri-cloud-line"></i> Cloud &amp; Infrastructure</h4>
+                <div class="skill-tag-group">
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Firebase</span>
+                  <span class="skill-tag"><i class="ri-send-plane-line"></i> Pusher</span>
+                  <span class="skill-tag"><i class="ri-key-2-line"></i> JWT / OAuth</span>
+                  <span class="skill-tag"><i class="ri-apps-2-line"></i> PWA</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Git</span>
+                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" class="tag-icon-dark" width="14" height="14" loading="lazy" decoding="async"> GitHub</span>
+                </div>
               </div>
             </div>
           </div>
