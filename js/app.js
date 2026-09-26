@@ -1233,82 +1233,6 @@
     });
   }
 
-  // ============================================
-  // PIXEL PUP — shudder-crouch, snap awake, stare, yap-yap-yap, flop
-  // ============================================
-
-  function initPup() {
-    const pup = $('.pixel-pup');
-    if (!pup) return;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const SLEEP_LABEL = 'Pixel-art dog sleeping peacefully. Activate to wake him up.';
-    let busy = false;
-
-    function activate() {
-      if (busy) return;
-      busy = true;
-      // Phase 1: shudder-crouch while still asleep (anticipation)
-      pup.classList.add('is-startled');
-      pup.setAttribute('aria-label', 'Pixel-art dog, startled awake!');
-      const startleMs = reduceMotion ? 70 : 140;
-      const alertMs = reduceMotion ? 250 : 520;
-      const settleMs = reduceMotion ? 60 : 260;
-      setTimeout(() => {
-        // Phase 2: snap awake — head up, ears perked, "!" pops, hard stare
-        pup.classList.remove('is-startled');
-        pup.classList.add('is-awake', 'is-alert');
-        pup.setAttribute('aria-label', 'Pixel-art dog, wide awake and staring!');
-        if (reduceMotion) {
-          setTimeout(() => finish(), alertMs);
-        } else {
-          setTimeout(() => bark(), alertMs);
-        }
-      }, startleMs);
-
-      // Phase 3: bark — 4 yaps, mouth chomping open/shut per yap
-      function bark() {
-        pup.classList.remove('is-alert');
-        pup.classList.add('is-barking');
-        pup.setAttribute('aria-label', 'Pixel-art dog barking!');
-        const OPEN_MS = 230;
-        const SHUT_MS = 130;
-        const YAPS = 4;
-        let yaps = 0;
-        (function yap(open) {
-          pup.classList.toggle('yap-open', open);
-          if (open) {
-            yaps += 1;
-            setTimeout(() => {
-              if (yaps >= YAPS) finish();
-              else yap(false);
-            }, OPEN_MS);
-          } else {
-            setTimeout(() => yap(true), SHUT_MS);
-          }
-        })(true);
-      }
-
-      // Phase 4: flop back to sleep
-      function finish() {
-        pup.classList.remove('is-awake', 'is-alert', 'is-barking', 'yap-open');
-        pup.classList.add('is-settling');
-        setTimeout(() => {
-          pup.classList.remove('is-settling');
-          pup.setAttribute('aria-label', SLEEP_LABEL);
-          busy = false;
-        }, settleMs);
-      }
-    }
-
-    pup.addEventListener('click', activate);
-    pup.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        activate();
-      }
-    });
-  }
-
   function init() {
     stripTrackingParams();
     initSkillReadouts();
@@ -1317,7 +1241,6 @@
     initAccordions();
     if (location.hash === '#contact') openContactSection();
     initModals();
-    initPup();
     initWritingPreview();
     initWritingPage();
     initReadPage();

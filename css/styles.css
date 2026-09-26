@@ -413,13 +413,6 @@ img {
   padding-bottom: 6px;
   line-height: 0;
   flex-shrink: 0;
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.pixel-pup:focus-visible {
-  outline: 1px solid var(--text-tertiary);
-  outline-offset: 4px;
 }
 
 .pixel-pup svg {
@@ -427,80 +420,9 @@ img {
   height: auto;
   overflow: visible;
   shape-rendering: crispEdges;
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
 }
 
-/* ---------- state layers: sleep / alert stare / open-mouth bark ---------- */
-.pixel-pup .pup-head-alert,
-.pixel-pup .pup-head-open,
-.pixel-pup .pup-ear-awake,
-.pixel-pup .pup-fx-alert,
-.pixel-pup .pup-fx-bark {
-  opacity: 0;
-}
-
-.pixel-pup .pup-head-sleep,
-.pixel-pup .pup-head-alert,
-.pixel-pup .pup-head-open,
-.pixel-pup .pup-ear-awake,
-.pixel-pup .pup-fx-alert,
-.pixel-pup .pup-fx-bark {
-  transition: opacity 0.1s ease;
-}
-
-/* Awake stare: closed-mouth alert head + perked ear, zzz gone */
-.pixel-pup.is-awake .pup-head-sleep {
-  opacity: 0;
-}
-
-.pixel-pup.is-awake .pup-head-alert,
-.pixel-pup.is-awake .pup-ear-awake {
-  opacity: 1;
-}
-
-.pixel-pup.is-awake .pixel-zzz {
-  opacity: 0;
-}
-
-.pixel-pup .pixel-zzz {
-  transition: opacity 0.2s ease;
-}
-
-.pixel-pup.is-alert .pup-fx-alert {
-  opacity: 1;
-}
-
-/* Barking: JS toggles .yap-open per yap — open mouth + arcs + lifted body.
-   Transitions off here so the chomp is snappy 2-frame pixel motion. */
-.pixel-pup.is-barking .pup-head-sleep,
-.pixel-pup.is-barking .pup-head-alert,
-.pixel-pup.is-barking .pup-head-open,
-.pixel-pup.is-barking .pup-fx-bark {
-  transition: none;
-}
-
-.pixel-pup.is-barking.yap-open .pup-head-alert {
-  opacity: 0;
-}
-
-.pixel-pup.is-barking.yap-open .pup-head-open,
-.pixel-pup.is-barking.yap-open .pup-fx-bark {
-  opacity: 1;
-}
-
-/* ---------- idle life: breath, ear twitch, tail sway, drifting zzz ---------- */
-.pixel-pup .pup-dog {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  animation: dogBreathe 4.6s ease-in-out infinite;
-}
-
-@keyframes dogBreathe {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(1.018); }
-}
-
+/* Sleeping-idle life: twitching ear, swaying tail, drifting zzz */
 .pixel-pup .pup-ear-sleep {
   transform-box: fill-box;
   transform-origin: 50% 0%;
@@ -543,122 +465,11 @@ img {
   100% { opacity: 0; transform: translate(2px, -4px); }
 }
 
-/* ---------- dramatic wake: shudder-crouch, overshoot snap, yaps, flop ---------- */
-.pixel-pup.is-startled svg {
-  animation: pupSquash 0.13s ease-in;
-}
-
-@keyframes pupSquash {
-  0% { transform: scale(1, 1) translateX(0); }
-  50% { transform: scale(1.04, 0.94) translateX(-1px); }
-  100% { transform: scale(1.08, 0.88) translateX(1px); }
-}
-
-.pixel-pup.is-awake svg {
-  animation: pupSnap 0.26s ease-out;
-}
-
-@keyframes pupSnap {
-  0% { transform: scale(1.08, 0.88) translateX(1px); }
-  45% { transform: scale(0.94, 1.1) translateX(-1px); }
-  70% { transform: scale(1.02, 0.98) translateX(1px); }
-  100% { transform: scale(1, 1) translateX(0); }
-}
-
-.pixel-pup.is-awake .pup-ear-awake {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  animation: earPerk 0.3s ease-out;
-}
-
-@keyframes earPerk {
-  0% { transform: scaleY(0.5); }
-  60% { transform: scaleY(1.12); }
-  100% { transform: scaleY(1); }
-}
-
-.pixel-pup.is-alert .pup-fx-alert {
-  transform-box: fill-box;
-  transform-origin: 0% 100%;
-  animation: fxPop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes fxPop {
-  0% { opacity: 0; transform: scale(0.4); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* Yap bounce: body lifts on the open-mouth beat, drops on the shut beat */
-.pixel-pup .pup-dog {
-  transition: transform 0.07s ease;
-}
-
-.pixel-pup.is-barking .pup-dog {
-  animation: none;
-}
-
-.pixel-pup.is-barking.yap-open .pup-dog {
-  transform: translateY(-2px);
-}
-
-/* Arcs breathe with each yap */
-.pixel-pup .pup-fx-bark {
-  transform-box: fill-box;
-  transform-origin: 0% 50%;
-  transform: scale(0.9);
-}
-
-.pixel-pup.is-barking.yap-open .pup-fx-bark {
-  transform: scale(1.06);
-}
-
-.pixel-pup.is-barking .pup-fx-bark {
-  transition: transform 0.07s ease;
-}
-
-.pixel-pup.is-barking .pup-tail {
-  animation: tailWag 0.24s ease-in-out infinite;
-}
-
-@keyframes tailWag {
-  0%, 100% { transform: rotate(-11deg); }
-  50% { transform: rotate(12deg); }
-}
-
-/* Flop back to sleep */
-.pixel-pup.is-settling svg {
-  animation: pupSettle 0.26s ease;
-}
-
-@keyframes pupSettle {
-  0% { transform: scale(1, 1); }
-  40% { transform: scale(1.06, 0.92); }
-  100% { transform: scale(1, 1); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .pixel-pup .pup-dog,
   .pixel-pup .pup-ear-sleep,
   .pixel-pup .pup-tail,
-  .pixel-pup .pixel-z,
-  .pixel-pup.is-startled svg,
-  .pixel-pup.is-awake svg,
-  .pixel-pup.is-awake .pup-ear-awake,
-  .pixel-pup.is-alert .pup-fx-alert,
-  .pixel-pup.is-barking .pup-tail,
-  .pixel-pup.is-settling svg {
+  .pixel-pup .pixel-z {
     animation: none;
-  }
-  .pixel-pup .pup-head-sleep,
-  .pixel-pup .pup-head-alert,
-  .pixel-pup .pup-head-open,
-  .pixel-pup .pup-ear-awake,
-  .pixel-pup .pup-fx-alert,
-  .pixel-pup .pup-fx-bark,
-  .pixel-pup .pixel-zzz,
-  .pixel-pup .pup-dog,
-  .pixel-pup .pup-fx-bark {
-    transition: none;
   }
   .pixel-pup .pixel-z1 { opacity: 0.9; }
 }
