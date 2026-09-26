@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" role="img" aria-labelledby="neutral-navy-title neutral-navy-desc" class="avatar-root" data-expression="neutral" data-motion="none" data-paused="false" data-once="none" data-palette="navy" data-gaze="eyes-only" style="--shirt-color:#192b43">
-<title id="neutral-navy-title">Avatar — neutral navy</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600" role="img" aria-labelledby="neutral-navy-title neutral-navy-desc" class="avatar-root" data-expression="neutral" data-motion="none" data-paused="false" data-once="none" data-palette="plum" data-gaze="eyes-only" style="--shirt-color:#8e4585">
+<title id="neutral-navy-title">Avatar — neutral plum</title>
 <desc id="neutral-navy-desc">Smooth transparent avatar. Editable hair, face, neck, shirt and eye layers. No embedded bitmap or external resources. Neutral identity has no mouth or nose.</desc>
 <defs>
   <linearGradient id="neutral-navy-face-base" x1="350" y1="550" x2="1100" y2="1400" gradientUnits="userSpaceOnUse">
@@ -16,11 +16,13 @@
     <stop offset="0" stop-color="#1c1c1c" /><stop offset="0.52" stop-color="#1b1b1b" /><stop offset="1" stop-color="#1e1e1e" />
   </linearGradient>
   <radialGradient id="neutral-navy-blush"><stop offset="0" stop-color="#e48f87" stop-opacity="0.21" /><stop offset="1" stop-color="#e48f87" stop-opacity="0" /></radialGradient>
+  <linearGradient id="neutral-navy-bg" x1="0" y1="0" x2="1600" y2="1600" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#faf3f9" /><stop offset="1" stop-color="#f0dcef" /></linearGradient>
 </defs>
+<rect x="0" y="0" width="1600" height="1600" rx="340" fill="url(#neutral-navy-bg)" />
 <g id="neutral-navy-avatar-motion" data-part="avatar-motion" class="avatar-motion"><g id="neutral-navy-back-hair-upright-tracker" data-part="head-tracker"><g id="neutral-navy-back-hair-upright" transform="translate(800 690) scale(0.90) rotate(-34.965414598) translate(-744.206438622 -893.271788254)">
 <path id="neutral-navy-back-hair" fill="#000" d="M0 777 C32 800 77 791 101 766 C134 734 147 700 141 655 C127 557 190 459 287 437 C364 423 427 387 466 335 C568 191 754 198 877 248 C918 265 944 282 956 295 C1020 338 1092 422 1134 507 C1198 637 1159 947 1160 1034 C1190 1074 1195 1123 1183 1177 C1176 1226 1157 1261 1129 1289 C1105 1345 1050 1370 995 1375 C870 1395 795 1500 832 1600 C786 1658 733 1682 679 1640 C621 1595 553 1538 499 1484 L308 1388 C240 1361 181 1346 122 1340 C46 1271 24 1204 44 1121 C57 1071 81 1034 113 994 C63 1001 18 975 0 936 C-28 913 -56 880 -58 845 C-65 793 -46 753 0 777 Z" />
 </g>
-</g><path id="neutral-navy-shirt" fill="#192b43" d="M95 1600 L95 1518 C99 1395 259 1335 515 1289 C655 1263 743 1254 845 1254 C948 1254 1034 1267 1158 1293 C1387 1341 1502 1410 1505 1520 L1505 1600 Z" style="fill:var(--shirt-color,#192b43)" data-part="shirt" />
+</g><path id="neutral-navy-shirt" fill="#8e4585" d="M95 1600 L95 1518 C99 1395 259 1335 515 1289 C655 1263 743 1254 845 1254 C948 1254 1034 1267 1158 1293 C1387 1341 1502 1410 1505 1520 L1505 1600 Z" style="fill:var(--shirt-color,#8e4585)" data-part="shirt" />
 <g id="neutral-navy-upright-head-tracker" data-part="head-tracker"><g id="neutral-navy-upright-head" transform="translate(800 690) scale(0.90) rotate(-34.965414598) translate(-744.206438622 -893.271788254)">
 <path id="neutral-navy-neck" fill="url(#neutral-navy-neck-skin)" d="M354 1304 C346 1335 326 1363 307 1388 C292 1447 334 1492 384 1510 C430 1525 482 1519 499 1483 C507 1458 518 1431 531 1411 C459 1383 406 1345 354 1304 Z" />
 <path id="neutral-navy-neck-shadow" fill="#d49b7c" d="M354 1304 C405 1347 460 1385 531 1411 C501 1437 459 1446 418 1433 C376 1421 345 1392 340 1344 C347 1331 351 1317 354 1304 Z" />

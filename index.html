@@ -32,11 +32,11 @@
   <meta name="twitter:image" content="https://nikit.is-a.dev/assets/og-image.png" />
   <title>Nikit Hamal — Android &amp; Full-Stack Developer</title>
 
-  <!-- Google Fonts: Newsreader (Serif), JetBrains Mono (Monospace), Plus Jakarta Sans (Sans-serif) -->
+  <!-- Google Fonts: Newsreader (Serif), JetBrains Mono (Monospace), Plus Jakarta Sans (Sans-serif), Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap"
     rel="stylesheet">
 
   <!-- Favicon -->
@@ -121,10 +121,68 @@
     <!-- PROFILE / HEADER -->
     <header class="profile-header">
       <div class="avatar-container" id="avatarContainer">
-        <img src="assets/nikit.jpg" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" fetchpriority="high" decoding="async" />
+        <img src="assets/avatar-upright.svg" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" fetchpriority="high" decoding="async" />
       </div>
 
-      <h1 class="profile-name">Nikit Hamal</h1>
+      <div class="profile-name-row">
+        <h1 class="profile-name">Nikit Hamal</h1>
+        <figure class="pixel-pup" role="img" tabindex="0" aria-label="Pixel-art dog sleeping peacefully. Activate to wake him up.">
+          <svg viewBox="0 0 40 22" aria-hidden="true">
+            <path class="pup-shadow" fill="#4a3423" opacity="0.15" d="M4 20h31v1H4z"/>
+            <g class="pup-dog">
+              <g class="pup-body">
+                <path fill="#4a3423" d="M5 10h17v1H5z M3 11h1v1H3z M23 11h1v1H23z M2 12h1v1H2z M24 12h1v1H24z M2 13h1v1H2z M25 13h1v1H25z M1 14h1v1H1z M25 14h1v1H25z M1 15h1v1H1z M26 15h1v1H26z M2 16h1v1H2z M26 16h1v1H26z M3 17h1v1H3z M12 17h1v1H12z M21 17h1v1H21z M30 17h1v1H30z M35 17h1v1H35z M3 18h33v1H3z"/>
+                <path fill="#d9a45b" d="M4 11h19v1H4z M3 12h21v1H3z M3 13h8v1H3z M21 13h4v1H21z M2 14h8v1H2z M22 14h3v1H22z M2 15h8v1H2z M22 15h4v1H22z M3 16h23v1H3z"/>
+                <path fill="#b56f2e" d="M11 13h10v1H11z M10 14h12v1H10z M10 15h12v1H10z"/>
+                <path fill="#f3e3c3" d="M4 17h8v1H4z M13 17h8v1H13z M22 17h8v1H22z M31 17h4v1H31z"/>
+              </g>
+              <g class="pup-tail">
+                <path fill="#4a3423" d="M0 15h1v1H0z M3 15h1v1H3z M0 16h1v1H0z"/>
+                <path fill="#d9a45b" d="M1 15h2v1H1z M1 16h1v1H1z"/>
+              </g>
+              <g class="pup-head-sleep">
+                <g class="pup-ear-sleep">
+                  <path fill="#4a3423" d="M23 10h1v1H23z M23 11h1v1H23z M23 12h1v1H23z M23 13h1v1H23z M24 14h1v1H24z"/>
+                  <path fill="#8a5a2b" d="M24 10h1v1H24z M24 11h1v1H24z M24 12h1v1H24z M24 13h1v1H24z M23 14h1v1H23z"/>
+                </g>
+                <path fill="#4a3423" d="M27 8h3v1H27z M25 9h1v1H25z M30 9h1v1H30z M25 10h1v1H25z M31 10h1v1H31z M25 11h1v1H25z M31 11h1v1H31z M25 12h1v1H25z M34 12h1v1H34z M25 13h1v1H25z M33 14h1v1H33z M27 16h7v1H27z"/>
+                <path fill="#d9a45b" d="M26 9h4v1H26z M26 10h5v1H26z M26 11h2v1H26z M30 11h1v1H30z M26 12h3v1H26z M26 13h3v1H26z M26 14h7v1H26z M27 15h7v1H27z"/>
+                <path fill="#2b1d12" d="M28 11h2v1H28z M32 13h1v1H32z M34 13h2v1H34z"/>
+                <path fill="#f3e3c3" d="M29 12h5v1H29z M29 13h3v1H29z M33 13h1v1H33z"/>
+              </g>
+              <g class="pup-head-alert">
+                <path fill="#4a3423" d="M23 4h1v1H23z M31 4h1v1H31z M23 5h1v1H23z M31 5h1v1H31z M23 6h1v1H23z M23 7h1v1H23z M24 8h1v1H24z M34 8h1v1H34z M24 9h1v1H24z M34 9h1v1H34z M24 10h1v1H24z M34 10h1v1H34z M25 11h1v1H25z M31 11h1v1H31z M25 12h1v1H25z M30 12h1v1H30z M25 13h1v1H25z M30 13h1v1H30z M25 14h1v1H25z M29 14h1v1H29z"/>
+                <path fill="#d9a45b" d="M24 4h4v1H24z M30 4h1v1H30z M24 5h4v1H24z M30 5h1v1H30z M24 6h11v1H24z M24 7h11v1H24z M25 8h9v1H25z M25 9h5v1H25z M25 10h3v1H25z M26 11h5v1H26z M26 12h4v1H26z M26 13h4v1H26z M26 14h3v1H26z M27 15h2v1H27z"/>
+                <path fill="#2b1d12" d="M28 4h1v1H28z M28 5h2v1H28z M35 6h1v1H35z M35 7h1v1H35z M30 9h4v1H30z"/>
+                <path fill="#f3e3c3" d="M29 4h1v1H29z M28 10h6v1H28z"/>
+              </g>
+              <g class="pup-head-open">
+                <path fill="#4a3423" d="M23 4h1v1H23z M31 4h1v1H31z M23 5h1v1H23z M31 5h1v1H31z M23 6h1v1H23z M23 7h1v1H23z M24 8h1v1H24z M35 8h1v1H35z M24 9h1v1H24z M34 9h1v1H34z M24 10h1v1H24z M34 10h1v1H34z M25 11h1v1H25z M31 11h1v1H31z M25 12h1v1H25z M30 12h1v1H30z M25 13h1v1H25z M30 13h1v1H30z M25 14h1v1H25z M29 14h1v1H29z"/>
+                <path fill="#d9a45b" d="M24 4h4v1H24z M30 4h1v1H30z M24 5h4v1H24z M30 5h1v1H30z M24 6h11v1H24z M24 7h11v1H24z M25 8h6v1H25z M25 9h6v1H25z M25 10h3v1H25z M26 11h5v1H26z M26 12h4v1H26z M26 13h4v1H26z M26 14h3v1H26z M27 15h2v1H27z"/>
+                <path fill="#2b1d12" d="M28 4h1v1H28z M28 5h2v1H28z M35 6h1v1H35z M35 7h1v1H35z M31 8h4v1H31z M31 9h3v1H31z"/>
+                <path fill="#f3e3c3" d="M29 4h1v1H29z M28 10h3v1H28z M32 10h2v1H32z"/>
+                <path fill="#e07856" d="M31 10h1v1H31z"/>
+              </g>
+              <g class="pup-ear-awake">
+                <path fill="#4a3423" d="M26 0h2v1H26z M25 1h1v1H25z M28 1h1v1H28z M25 2h1v1H25z M29 2h1v1H29z M24 3h1v1H24z M30 3h1v1H30z"/>
+                <path fill="#d9a45b" d="M29 3h1v1H29z"/>
+                <path fill="#8a5a2b" d="M26 1h2v1H26z M26 2h3v1H26z M25 3h4v1H25z"/>
+              </g>
+              <g class="pup-fx-alert">
+                <path fill="#4a3423" d="M22 1h1v1H22z M37 1h1v1H37z M23 2h1v1H23z M37 2h1v1H37z M37 3h1v1H37z M20 4h2v1H20z M37 4h1v1H37z M37 6h1v1H37z"/>
+              </g>
+              <g class="pup-fx-bark">
+                <path fill="#4a3423" d="M38 6h1v1H38z M36 7h1v1H36z M38 7h1v1H38z M36 8h1v1H36z M38 8h1v1H38z M36 9h1v1H36z M38 9h1v1H38z M36 10h1v1H36z M38 10h1v1H38z M38 11h1v1H38z"/>
+              </g>
+            </g>
+            <g class="pixel-zzz">
+              <text x="30" y="7" font-size="3.2" class="pixel-z pixel-z1">z</text>
+              <text x="33" y="4.8" font-size="2.5" class="pixel-z pixel-z2">z</text>
+              <text x="35.5" y="2.8" font-size="1.9" class="pixel-z pixel-z3">Z</text>
+            </g>
+          </svg>
+        </figure>
+      </div>
 
       <p class="profile-bio">
         Head of Operations at <a href="https://consicalabs.com/" target="_blank" rel="noopener" class="bio-link"><img src="assets/consica-logo.png" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">Consica Labs</a>. Android App Developer &amp; Full-Stack Engineer from Nepal. Building Android apps (<a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="bio-link"><img src="assets/neb-logo.svg" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">NEBians</a>, <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="bio-link"><img src="assets/lami-logo-32.png" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">Lami Nepal</a>), Django backends, SvelteKit web apps (<a href="https://astroweb-bsi.pages.dev/" target="_blank" rel="noopener" class="bio-link"><img src="assets/astroweb-logo.png" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">AstroWeb</a>), and writing about philosophy.
@@ -151,11 +209,13 @@
             <p style="margin-top: 12px;">
               Beyond software engineering and operations, I dedicate time to exploring non-duality, self-observation, and writing essays on philosophy, human connection, and consciousness.
             </p>
-            <div class="chip-group">
-              <span class="mini-chip"><img src="assets/consica-logo.png" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"> Head of Operations</span>
-              <span class="mini-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"> Android &amp; Kotlin</span>
-              <span class="mini-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="chip-icon chip-icon-django" width="16" height="16" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" class="chip-icon" width="16" height="16" loading="lazy" decoding="async"> Django &amp; Python</span>
-              <span class="mini-chip"><i class="ri-quill-pen-line"></i> Philosophy</span>
+            <div class="skill-logos about-orbs">
+              <span class="skill-orb" title="Head of Operations at Consica Labs" aria-label="Head of Operations at Consica Labs"><img src="assets/consica-logo.png" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
+              <span class="skill-orb" title="Android" aria-label="Android"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
+              <span class="skill-orb" title="Kotlin" aria-label="Kotlin"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
+              <span class="skill-orb" title="Django" aria-label="Django"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="20" height="20" loading="lazy" decoding="async"></span>
+              <span class="skill-orb" title="Python" aria-label="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
+              <span class="skill-orb" title="Philosophy" aria-label="Philosophy"><i class="ri-quill-pen-line"></i></span>
             </div>
           </div>
         </div>
@@ -174,48 +234,47 @@
           <div class="accordion-inner">
             <div class="skills-mini-grid">
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading"><i class="ri-smartphone-line"></i> Mobile Development</h4>
-                <div class="skill-tag-group">
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Android (Kotlin)</span>
-                  <span class="skill-tag"><i class="ri-layout-masonry-line"></i> Jetpack Compose</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Material 3</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Flutter (Dart)</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Room DB</span>
-                  <span class="skill-tag"><i class="ri-tools-line"></i> Hilt DI</span>
+                <div class="skill-stage" data-default="Android">
+                  <span class="skill-readout" aria-live="polite">Android</span>
+                  <div class="skill-logos">
+                    <button type="button" class="skill-orb" data-name="Android" aria-label="Android"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="Kotlin" aria-label="Kotlin"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="Jetpack Compose" aria-label="Jetpack Compose"><i class="ri-layout-masonry-line"></i></button>
+                    <button type="button" class="skill-orb" data-name="Flutter" aria-label="Flutter"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                  </div>
                 </div>
               </div>
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading"><i class="ri-server-line"></i> Backend &amp; APIs</h4>
-                <div class="skill-tag-group">
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Python</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="14" height="14" loading="lazy" decoding="async"> Django</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="14" height="14" loading="lazy" decoding="async"> DRF</span>
-                  <span class="skill-tag"><i class="ri-swap-line"></i> WebSockets</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Redis</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> MySQL</span>
+                <div class="skill-stage" data-default="Python">
+                  <span class="skill-readout" aria-live="polite">Python</span>
+                  <div class="skill-logos">
+                    <button type="button" class="skill-orb" data-name="Python" aria-label="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="Django" aria-label="Django"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="Redis" aria-label="Redis"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="MySQL" aria-label="MySQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                  </div>
                 </div>
               </div>
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading"><i class="ri-global-line"></i> Frontend &amp; Web</h4>
-                <div class="skill-tag-group">
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> HTML5</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> CSS3</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> JavaScript</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> TypeScript</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> SvelteKit</span>
-                  <span class="skill-tag"><i class="ri-code-s-slash-line"></i> HTMX</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Tailwind</span>
+                <div class="skill-stage" data-default="JavaScript">
+                  <span class="skill-readout" aria-live="polite">JavaScript</span>
+                  <div class="skill-logos">
+                    <button type="button" class="skill-orb" data-name="JavaScript" aria-label="JavaScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="TypeScript" aria-label="TypeScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="SvelteKit" aria-label="SvelteKit"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="Tailwind CSS" aria-label="Tailwind CSS"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                  </div>
                 </div>
               </div>
               <div class="skill-mini-group">
-                <h4 class="skill-mini-heading"><i class="ri-cloud-line"></i> Cloud &amp; Infrastructure</h4>
-                <div class="skill-tag-group">
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Firebase</span>
-                  <span class="skill-tag"><i class="ri-send-plane-line"></i> Pusher</span>
-                  <span class="skill-tag"><i class="ri-key-2-line"></i> JWT / OAuth</span>
-                  <span class="skill-tag"><i class="ri-apps-2-line"></i> PWA</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-plain.svg" alt="" width="14" height="14" loading="lazy" decoding="async"> Git</span>
-                  <span class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" class="tag-icon-dark" width="14" height="14" loading="lazy" decoding="async"> GitHub</span>
+                <div class="skill-stage" data-default="Firebase">
+                  <span class="skill-readout" aria-live="polite">Firebase</span>
+                  <div class="skill-logos">
+                    <button type="button" class="skill-orb" data-name="Firebase" aria-label="Firebase"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="Pusher" aria-label="Pusher"><i class="ri-send-plane-line"></i></button>
+                    <button type="button" class="skill-orb" data-name="Git" aria-label="Git"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
+                    <button type="button" class="skill-orb" data-name="GitHub" aria-label="GitHub"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" class="tag-icon-dark" width="20" height="20" loading="lazy" decoding="async"></button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -234,40 +293,63 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-inner">
-            <div class="projects-list">
+            <div class="project-cards">
 
-              <div class="project-mini-item">
-                <div class="project-mini-header">
-                  <h3 class="project-mini-title">Lami Nepal</h3>
-                  <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="project-mini-link">Play Store <i class="ri-arrow-up-right-line"></i></a>
+              <article class="project-card project-card-lami">
+                <div class="project-card-visual" aria-hidden="true">
+                  <span class="project-card-icon"><img src="assets/lami-logo.png" alt="" loading="lazy" decoding="async"></span>
                 </div>
-                <p class="project-mini-desc">Matrimonial &amp; spiritual services mobile application featuring real-time chat, FCM push notifications, Google sign-in, and full Nepali language localization.</p>
-                <div class="project-mini-tags">
-                  <span>Flutter</span><span>Firebase</span><span>Pusher</span><span>WebView</span>
+                <div class="project-card-body">
+                  <h3 class="project-card-title">Lami Nepal</h3>
+                  <p class="project-card-desc">Matrimonial &amp; spiritual services app with real-time chat, FCM push notifications, Google sign-in, and full Nepali localization.</p>
+                  <div class="project-card-foot">
+                    <div class="project-stack">
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><i class="ri-send-plane-line"></i></span>
+                      <span class="project-stack-icon"><i class="ri-global-line"></i></span>
+                    </div>
+                    <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="project-card-link">View Project <i class="ri-arrow-right-line"></i></a>
+                  </div>
                 </div>
-              </div>
+              </article>
 
-              <div class="project-mini-item">
-                <div class="project-mini-header">
-                  <h3 class="project-mini-title">NEBians</h3>
-                  <a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="project-mini-link">Website <i class="ri-arrow-up-right-line"></i></a>
+              <article class="project-card project-card-neb">
+                <div class="project-card-visual" aria-hidden="true">
+                  <span class="project-card-icon"><img src="assets/neb-logo.svg" alt="" loading="lazy" decoding="async"></span>
                 </div>
-                <p class="project-mini-desc">Material 3 Android app + Django backend created for Nepali NEB students. Includes interactive study tools, AI chat arena, real-time community forums, and exam result checker.</p>
-                <div class="project-mini-tags">
-                  <span>Kotlin</span><span>Jetpack Compose</span><span>Django</span><span>WebSockets</span>
+                <div class="project-card-body">
+                  <h3 class="project-card-title">NEBians</h3>
+                  <p class="project-card-desc">Material 3 Android app + Django backend for Nepali NEB students. Study tools, AI chat arena, community forums, and result checker.</p>
+                  <div class="project-card-foot">
+                    <div class="project-stack">
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><i class="ri-swap-line"></i></span>
+                    </div>
+                    <a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="project-card-link">View Project <i class="ri-arrow-right-line"></i></a>
+                  </div>
                 </div>
-              </div>
+              </article>
 
-              <div class="project-mini-item">
-                <div class="project-mini-header">
-                  <h3 class="project-mini-title">AstroWeb</h3>
-                  <a href="https://astroweb-bsi.pages.dev/" target="_blank" rel="noopener" class="project-mini-link">Live Web App <i class="ri-arrow-up-right-line"></i></a>
+              <article class="project-card project-card-astro">
+                <div class="project-card-visual" aria-hidden="true">
+                  <span class="project-card-icon"><img src="assets/astroweb-logo.png" alt="" loading="lazy" decoding="async"></span>
                 </div>
-                <p class="project-mini-desc">Free Vedic astrology web application delivering accurate Kundali, Dasha calculations, and astrological insights.</p>
-                <div class="project-mini-tags">
-                  <span>SvelteKit</span><span>TypeScript</span><span>PWA</span>
+                <div class="project-card-body">
+                  <h3 class="project-card-title">AstroWeb</h3>
+                  <p class="project-card-desc">Free Vedic astrology web app with accurate Kundali, Dasha calculations, and astrological insights.</p>
+                  <div class="project-card-foot">
+                    <div class="project-stack">
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
+                      <span class="project-stack-icon"><i class="ri-apps-2-line"></i></span>
+                    </div>
+                    <a href="https://astroweb-bsi.pages.dev/" target="_blank" rel="noopener" class="project-card-link">View Project <i class="ri-arrow-right-line"></i></a>
+                  </div>
                 </div>
-              </div>
+              </article>
 
             </div>
           </div>
@@ -306,26 +388,38 @@
         </button>
         <div class="accordion-body">
           <div class="accordion-inner">
-            <p style="margin-bottom: 14px;">I'm always open to discussing new projects, technical ideas, or collaborations. Reach out through any channel below:</p>
-            <ul class="contact-mini-list">
-              <li><i class="ri-mail-line"></i> <strong>Email:</strong> <a href="mailto:iamnikithamal@gmail.com">iamnikithamal@gmail.com</a></li>
-              <li><i class="ri-linkedin-line"></i> <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">linkedin.com/in/nikithamal</a></li>
-              <li><i class="ri-twitter-x-line"></i> <strong>Twitter / X:</strong> <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener">@nikithamal</a></li>
-              <li><i class="ri-github-line"></i> <strong>GitHub:</strong> <a href="https://github.com/NikitHamal" target="_blank" rel="noopener">github.com/NikitHamal</a></li>
-              <li><i class="ri-whatsapp-line"></i> <strong>WhatsApp:</strong> <a href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">+977 9765324034</a></li>
-            </ul>
+            <div class="contact-rows">
+              <a class="contact-row" href="mailto:iamnikithamal@gmail.com">
+                <span class="contact-orb"><i class="ri-mail-line"></i></span>
+                <span class="contact-meta"><strong>Email</strong><span>iamnikithamal@gmail.com</span></span>
+                <i class="ri-arrow-right-up-line contact-go"></i>
+              </a>
+              <a class="contact-row" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
+                <span class="contact-orb"><i class="ri-linkedin-line"></i></span>
+                <span class="contact-meta"><strong>LinkedIn</strong><span>linkedin.com/in/nikithamal</span></span>
+                <i class="ri-arrow-right-up-line contact-go"></i>
+              </a>
+              <a class="contact-row" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
+                <span class="contact-orb"><i class="ri-twitter-x-line"></i></span>
+                <span class="contact-meta"><strong>X</strong><span>@nikithamal</span></span>
+                <i class="ri-arrow-right-up-line contact-go"></i>
+              </a>
+              <a class="contact-row" href="https://github.com/NikitHamal" target="_blank" rel="noopener">
+                <span class="contact-orb"><i class="ri-github-line"></i></span>
+                <span class="contact-meta"><strong>GitHub</strong><span>github.com/NikitHamal</span></span>
+                <i class="ri-arrow-right-up-line contact-go"></i>
+              </a>
+              <a class="contact-row" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">
+                <span class="contact-orb"><i class="ri-whatsapp-line"></i></span>
+                <span class="contact-meta"><strong>WhatsApp</strong><span>+977 9765324034</span></span>
+                <i class="ri-arrow-right-up-line contact-go"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
     </main>
-
-    <!-- PILL ACTION BUTTON -->
-    <div class="pill-action-container">
-      <button class="pill-btn" id="helpBtn">
-        Let's work together
-      </button>
-    </div>
 
     <!-- FOOTER LINKS -->
     <footer class="minimal-footer">
@@ -338,42 +432,6 @@
       </div>
     </footer>
   </div>
-
-  <!-- HELP / WORK TOGETHER MODAL DIALOG -->
-  <dialog id="helpModal" class="minimal-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">Let's work together</h3>
-        <button class="modal-close-btn" id="closeHelpModal" aria-label="Close"><i class="ri-close-line"></i></button>
-      </div>
-      <div class="modal-body">
-        <p class="modal-intro">Have a project in mind, need mobile &amp; backend expertise, or want to collaborate?</p>
-        <div class="modal-options">
-          <a href="mailto:iamnikithamal@gmail.com?subject=Project%20Inquiry" class="modal-option-btn">
-            <i class="ri-mail-send-line"></i>
-            <div>
-              <strong>Send an Email</strong>
-              <span>iamnikithamal@gmail.com</span>
-            </div>
-          </a>
-          <a href="https://wa.me/9779765324034?text=Hi%20Nikit,%20I'd%20like%20to%20discuss%20a%20project" target="_blank" rel="noopener" class="modal-option-btn">
-            <i class="ri-whatsapp-line"></i>
-            <div>
-              <strong>Quick Chat on WhatsApp</strong>
-              <span>+977 9765324034</span>
-            </div>
-          </a>
-          <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener" class="modal-option-btn">
-            <i class="ri-linkedin-line"></i>
-            <div>
-              <strong>Connect on LinkedIn</strong>
-              <span>linkedin.com/in/nikithamal</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </dialog>
 
   <!-- Photo Modal -->
   <dialog id="photoDialog" class="minimal-modal">

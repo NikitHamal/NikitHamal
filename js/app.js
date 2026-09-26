@@ -105,8 +105,38 @@
       btn.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'dark' ? 'light' : 'dark';
-        applyTheme(next);
-        localStorage.setItem('theme', next);
+        const swap = () => {
+          applyTheme(next);
+          localStorage.setItem('theme', next);
+        };
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (document.startViewTransition && !reduceMotion) {
+          const rect = btn.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          );
+          const transition = document.startViewTransition(swap);
+          transition.ready.then(() => {
+            document.documentElement.animate(
+              {
+                clipPath: [
+                  `circle(0px at ${x}px ${y}px)`,
+                  `circle(${endRadius}px at ${x}px ${y}px)`
+                ]
+              },
+              {
+                duration: 550,
+                easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                pseudoElement: '::view-transition-new(root)'
+              }
+            );
+          }).catch(() => {});
+        } else {
+          swap();
+        }
       });
     });
   }
@@ -140,9 +170,6 @@
   // ============================================
 
   function initModals() {
-    const helpBtn = $('#helpBtn');
-    const helpModal = $('#helpModal');
-    const closeHelpBtn = $('#closeHelpModal');
     const avatarContainer = $('#avatarContainer');
     const avatarImg = $('#avatarImg');
     const photoDialog = $('#photoDialog');
@@ -158,13 +185,6 @@
       if (typeof dlg.close === 'function') dlg.close();
       else dlg.removeAttribute('open');
     };
-
-    if (helpBtn && helpModal) {
-      helpBtn.addEventListener('click', () => openDlg(helpModal));
-    }
-    if (closeHelpBtn && helpModal) {
-      closeHelpBtn.addEventListener('click', () => closeDlg(helpModal));
-    }
 
     if (avatarContainer && photoDialog) {
       avatarContainer.addEventListener('click', () => openDlg(photoDialog));
@@ -1180,13 +1200,124 @@
   // INIT
   // ============================================
 
+  function initSkillReadouts() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    $$('.skill-stage').forEach((stage) => {
+      const readout = $('.skill-readout', stage);
+      if (!readout) return;
+      const fallback = stage.getAttribute('data-default') || readout.textContent;
+      let timer = null;
+      const show = (name) => {
+        if (!name || readout.textContent === name) return;
+        if (reduceMotion) {
+          readout.textContent = name;
+          return;
+        }
+        readout.classList.add('is-fading');
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          readout.textContent = name;
+          readout.classList.remove('is-fading');
+        }, 140);
+      };
+      stage.addEventListener('mouseover', (e) => {
+        const orb = e.target.closest('.skill-orb');
+        if (orb) show(orb.getAttribute('data-name'));
+      });
+      stage.addEventListener('focusin', (e) => {
+        const orb = e.target.closest('.skill-orb');
+        if (orb) show(orb.getAttribute('data-name'));
+      });
+      stage.addEventListener('mouseleave', () => show(fallback));
+      stage.addEventListener('focusout', () => show(fallback));
+    });
+  }
+
+  // ============================================
+  // PIXEL PUP — shudder-crouch, snap awake, stare, yap-yap-yap, flop
+  // ============================================
+
+  function initPup() {
+    const pup = $('.pixel-pup');
+    if (!pup) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SLEEP_LABEL = 'Pixel-art dog sleeping peacefully. Activate to wake him up.';
+    let busy = false;
+
+    function activate() {
+      if (busy) return;
+      busy = true;
+      // Phase 1: shudder-crouch while still asleep (anticipation)
+      pup.classList.add('is-startled');
+      pup.setAttribute('aria-label', 'Pixel-art dog, startled awake!');
+      const startleMs = reduceMotion ? 70 : 140;
+      const alertMs = reduceMotion ? 250 : 520;
+      const settleMs = reduceMotion ? 60 : 260;
+      setTimeout(() => {
+        // Phase 2: snap awake — head up, ears perked, "!" pops, hard stare
+        pup.classList.remove('is-startled');
+        pup.classList.add('is-awake', 'is-alert');
+        pup.setAttribute('aria-label', 'Pixel-art dog, wide awake and staring!');
+        if (reduceMotion) {
+          setTimeout(() => finish(), alertMs);
+        } else {
+          setTimeout(() => bark(), alertMs);
+        }
+      }, startleMs);
+
+      // Phase 3: bark — 4 yaps, mouth chomping open/shut per yap
+      function bark() {
+        pup.classList.remove('is-alert');
+        pup.classList.add('is-barking');
+        pup.setAttribute('aria-label', 'Pixel-art dog barking!');
+        const OPEN_MS = 230;
+        const SHUT_MS = 130;
+        const YAPS = 4;
+        let yaps = 0;
+        (function yap(open) {
+          pup.classList.toggle('yap-open', open);
+          if (open) {
+            yaps += 1;
+            setTimeout(() => {
+              if (yaps >= YAPS) finish();
+              else yap(false);
+            }, OPEN_MS);
+          } else {
+            setTimeout(() => yap(true), SHUT_MS);
+          }
+        })(true);
+      }
+
+      // Phase 4: flop back to sleep
+      function finish() {
+        pup.classList.remove('is-awake', 'is-alert', 'is-barking', 'yap-open');
+        pup.classList.add('is-settling');
+        setTimeout(() => {
+          pup.classList.remove('is-settling');
+          pup.setAttribute('aria-label', SLEEP_LABEL);
+          busy = false;
+        }, settleMs);
+      }
+    }
+
+    pup.addEventListener('click', activate);
+    pup.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate();
+      }
+    });
+  }
+
   function init() {
     stripTrackingParams();
+    initSkillReadouts();
     initTheme();
     initSiteHeader();
     initAccordions();
     if (location.hash === '#contact') openContactSection();
     initModals();
+    initPup();
     initWritingPreview();
     initWritingPage();
     initReadPage();
