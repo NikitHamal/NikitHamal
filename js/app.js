@@ -797,7 +797,7 @@
 
     // Assigned motion form hero
     const coverArt = $('#readCoverArt');
-    if (coverArt) {
+    if (coverArt && !coverArt.firstElementChild) {
       if (typeof window.getMotionFormSvg === 'function') {
         coverArt.innerHTML = window.getMotionFormSvg(post.slug || post.id || post.title);
         coverArt.style.display = 'block';

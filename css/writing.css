@@ -1187,3 +1187,86 @@ html[data-font="sans"] .read-prose-body {
 [data-theme="dark"] .dynamic-card-thumb--reflection .sparkle-star {
   fill: #74c69d;
 }
+
+/* Pixel sakura cover: 56px grid at exactly 2x so pixels stay even. */
+.cover-art .pixel-sakura,
+.read-cover-art .pixel-sakura {
+  width: 112px;
+  height: auto;
+  margin: 0 auto;
+  shape-rendering: crispEdges;
+  image-rendering: pixelated;
+}
+
+/* The canopy leans while the trunk stands: origin at the foot, under a
+   degree of sway. Petals are plain spans; CSS does the falling. */
+.cover-art .pixel-sakura {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: treeSway 7.5s ease-in-out infinite;
+}
+
+@keyframes treeSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(0.7deg); }
+}
+
+.cover-art .petal {
+  position: absolute;
+  top: -6px;
+  width: 4px;
+  height: 3px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.petals-pink .petal { background: #eba9c4; }
+.petals-plum .petal { background: #c99acb; }
+
+.cover-art .p1 { left: 16%; animation: petalFall 8s linear infinite; }
+.cover-art .p2 { left: 36%; animation: petalFall 10.5s linear infinite 2.1s; }
+.cover-art .p3 { left: 58%; animation: petalFall 9s linear infinite 4.3s; }
+.cover-art .p4 { left: 78%; animation: petalFall 11.5s linear infinite 1.2s; }
+
+@keyframes petalFall {
+  0% { transform: translate(0, -4px) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.95; }
+  50% { transform: translate(7px, 38px) rotate(40deg); }
+  100% { transform: translate(-4px, 78px) rotate(-30deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-art .pixel-sakura { animation: none; }
+  .cover-art .petal { display: none; }
+}
+
+/* Poems: no drop cap, no passage numbers. Scoped to poem pages only. */
+body[data-decor="poem"] .read-prose-body > p:first-of-type::first-letter,
+body[data-decor="poem"] .read-prose-body .passage:first-of-type p:first-of-type::first-letter {
+  font-family: inherit;
+  float: none;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  color: inherit;
+  font-weight: inherit;
+}
+
+body[data-decor="poem"] .dropcap-quote {
+  font-family: inherit;
+  float: none;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  color: inherit;
+  font-weight: inherit;
+}
+
+body[data-decor="poem"] .passage-number {
+  display: none;
+}
+
+body[data-decor="poem"] .read-prose-body p {
+  line-height: 1.55 !important;
+  margin-bottom: 0.55em;
+}
