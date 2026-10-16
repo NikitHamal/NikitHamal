@@ -400,82 +400,35 @@ img {
   display: flex;
   align-items: flex-end;
   flex-wrap: wrap;
-  gap: 6px 18px;
-  margin: 20px 0 16px 0;
+  gap: 6px 8px;
+  /* Pull up: the dog canvas is ~118px tall but the name text is ~46px,
+     so ~72px of transparent sky inflates the row. Negative top margin
+     lands the text ~14px under the photo. */
+  margin: -58px 0 16px 0;
 }
 
 .profile-name-row .profile-name {
   margin: 0;
 }
 
-.pixel-pup {
-  margin: 0;
-  padding-bottom: 6px;
-  line-height: 0;
+/* Pixel dog beside the name: plain pixels, never a box (no outline, no border).
+   Click-through: all presses arrive via document forwarding, so the tall
+   transparent canvas never swallows avatar clicks. */
+.profile-name-row pixel-dog {
   flex-shrink: 0;
-}
-
-.pixel-pup svg {
-  width: 88px;
-  height: auto;
-  overflow: visible;
-  shape-rendering: crispEdges;
-}
-
-/* Sleeping-idle life: twitching ear, swaying tail, drifting zzz */
-.pixel-pup .pup-ear-sleep {
-  transform-box: fill-box;
-  transform-origin: 50% 0%;
-  animation: earTwitch 6.4s ease-in-out infinite;
-}
-
-@keyframes earTwitch {
-  0%, 68%, 100% { transform: rotate(0deg); }
-  72% { transform: rotate(7deg); }
-  76% { transform: rotate(-3deg); }
-  80% { transform: rotate(0deg); }
-}
-
-.pixel-pup .pup-tail {
-  transform-box: fill-box;
-  transform-origin: 85% 55%;
-  animation: tailSway 4.6s ease-in-out infinite;
-}
-
-@keyframes tailSway {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(4deg); }
-}
-
-.pixel-pup .pixel-z {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  fill: var(--text-muted);
-  opacity: 0;
-  transform-box: fill-box;
-  animation: zFloat 4.6s ease-in-out infinite;
-}
-
-.pixel-pup .pixel-z2 { animation-delay: 1.5s; }
-.pixel-pup .pixel-z3 { animation-delay: 3s; }
-
-@keyframes zFloat {
-  0% { opacity: 0; transform: translate(0, 3px); }
-  30% { opacity: 0.9; }
-  100% { opacity: 0; transform: translate(2px, -4px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pixel-pup .pup-ear-sleep,
-  .pixel-pup .pup-tail,
-  .pixel-pup .pixel-z {
-    animation: none;
-  }
-  .pixel-pup .pixel-z1 { opacity: 0.9; }
+  line-height: 0;
+  padding: 0;
+  pointer-events: none;
+  /* Feet sit ~10px above canvas bottom (transparent) at 1.4x; lift the
+     canvas so the paws land on the name text baseline ("Nikit Hamal"
+     has no descenders, so glyph bottom == baseline). */
+  margin: 0 0 3px -4px;
 }
 
 @media (max-width: 480px) {
-  .pixel-pup svg { width: 72px; }
+  .profile-name-row pixel-dog {
+    margin-left: -2px;
+  }
 }
 
 .profile-bio {
@@ -1193,6 +1146,94 @@ img.writing-mini-thumb {
   color: var(--text-primary);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* ============================================
+   KOI POND (full-bleed band at page bottom)
+   ============================================ */
+
+.pond-section {
+  margin-top: 72px;
+}
+
+.pond-head {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-mono);
+}
+
+.pond-prefix {
+  color: var(--text-tertiary, rgba(140, 140, 140, 0.65));
+}
+
+.pond-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text-secondary);
+}
+
+.pond-hint {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--text-tertiary, rgba(140, 140, 140, 0.65));
+}
+
+/* Fullscreen pond band closing the page: exactly 100svh, so when it fills
+   your screen the scrollbar is genuinely done — no leftover runway. */
+.pond-frame {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  background: #06080a;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#pond-c {
+  position: absolute;
+  left: 0;
+  top: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: none;
+  touch-action: none;
+  display: block;
+}
+
+#pond-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+  touch-action: none;
+  transition: opacity 0.7s ease;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.38));
+}
+
+#pond-bar.idle { opacity: 0.22; }
+#pond-bar.idle:hover { opacity: 1; }
+#pond-bar.hid { opacity: 0; }
+#pond-bar.hid:hover { opacity: 0.5; }
+
+@media (max-width: 640px) {
+  .pond-hint { display: none; }
+}
+
+@media (pointer: coarse) {
+  /* Touch: let vertical page scroll pass through the pond (it pins for
+     220vh — users must be able to scroll past it). Taps still feed,
+     horizontal drags still ripple. */
+  #pond-c { touch-action: pan-y; }
 }
 
 /* ============================================
