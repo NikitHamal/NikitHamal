@@ -566,11 +566,12 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
     if(this.free||!this.sc) return 0;
     const wCss=this.clientWidth; // exact post-layout width (shrink/wrap aware)
     if(wCss>10) return clamp(Math.round(wCss/this.sc),120,2000);
-    // pre-layout fallback: row minus name
+    // pre-layout fallback: row minus name, with slack so the basis can
+    // never exceed the leftover (an overshoot wraps/shrinks the row)
     const row=this.parentElement; if(!row) return 0;
     const nm=row.querySelector('.profile-name');
     const nw=nm?nm.getBoundingClientRect().width:0;
-    return clamp(Math.floor((row.clientWidth-nw-10)/this.sc),120,2000);
+    return clamp(Math.floor((row.clientWidth-nw-14)/this.sc),120,2000);
   }
   fitRow(){
     if(this.free) return;

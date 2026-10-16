@@ -399,7 +399,9 @@ img {
 .profile-name-row {
   display: flex;
   align-items: flex-end;
-  flex-wrap: wrap;
+  /* Never wrap on desktop: a wrapped canvas shortens line one and rides
+     the name up under the avatar. Shrink absorbs any slack instead. */
+  flex-wrap: nowrap;
   gap: 6px 8px;
   /* Pull up: the dog canvas is ~118px tall but the name text is ~46px,
      so ~72px of transparent sky inflates the row. Negative top margin
@@ -409,6 +411,8 @@ img {
 
 .profile-name-row .profile-name {
   margin: 0;
+  /* The name never squeezes — only the dog canvas absorbs slack. */
+  flex-shrink: 0;
 }
 
 /* Pixel dog beside the name: plain pixels, never a box (no outline, no border).
@@ -429,6 +433,11 @@ img {
 }
 
 @media (max-width: 480px) {
+  .profile-name-row {
+    /* Phones only: name on its own line, dog band below — full width each,
+       so nothing squeezes or overlaps. */
+    flex-wrap: wrap;
+  }
   .profile-name-row pixel-dog {
     margin-left: -2px;
     /* Own line, full width — name above, dog band below, zero overflow. */
@@ -1232,6 +1241,12 @@ img.writing-mini-thumb {
 
 @media (max-width: 640px) {
   .pond-hint { display: none; }
+  /* Phones: a shorter finale band — 100svh is a long dark scroll-trap on
+     small screens. Sim + toolbar follow the frame height automatically. */
+  .pond-frame { height: 82vh; height: 82svh; }
+  /* Mobile footer keeps GitHub / Writing / Email only. */
+  .footer-links a[href*="twitter.com"],
+  .footer-links a[href*="linkedin.com"] { display: none; }
 }
 
 @media (pointer: coarse) {

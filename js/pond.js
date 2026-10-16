@@ -336,11 +336,11 @@ function genPads(){
 const BFC=[[[248,246,236],[40,40,44]],[[250,222,90],[170,116,30]],[[160,196,250],[60,80,150]]];
 function genEntities(){
   fish=[];pellets=[];leaves=[];bubbles=[];drops=[];sinkers=[];scares=[];hoverFish=null;mouse.grab=null;
-  const sc=SC();
-  for(let k=0,nf=clamp(Math.round(waterCount/1500),8,22);k<nf;k++){const p=randWater(0.35,1)||randWater(0.1,1);if(p)fish.push(new Fish(p.x,p.y));}
+  const sc=SC(), small=innerWidth<760;
+  for(let k=0,nf=clamp(Math.round(waterCount/1500),small?5:8,small?12:22);k<nf;k++){const p=randWater(0.35,1)||randWater(0.1,1);if(p)fish.push(new Fish(p.x,p.y));}
   genPads();
   plants=[];
-  for(let k=0,np=clamp(Math.round(waterCount/700),8,40);k<np;k++){const p=randWater(0.18,0.85);if(!p)continue;const blades=[];
+  for(let k=0,np=clamp(Math.round(waterCount/700),small?5:8,small?18:40);k<np;k++){const p=randWater(0.18,0.85);if(!p)continue;const blades=[];
     for(let j=0,nb=RI(3,6);j<nb;j++)blades.push({a:R(TAU),len:R(5,13)*sc,o:R(TAU),c:pick([[54,96,44],[70,116,48],[44,84,52],[88,120,52]])});
     plants.push({x:p.x,y:p.y,ph:R(TAU),blades});}
   reeds=[];const rb=[];
@@ -699,7 +699,7 @@ function updateFlies(dt){
 function feed(x,y,n){if(depthAt(x,y)<0)return;const sc=SC();for(let k=0;k<n;k++){if(pellets.length>150)break;
   pellets.push({x:x+R(-3,3)*sc,y:y+R(-3,3)*sc,vx:0,vy:0,air:R(4,16),life:0,sink:0});}}
 function dropPebble(x,y){sinkers.push({x,y,h:1,z:0,r:R(1.4,2.6)*SC(),c:stoneBase(),st:0});}
-function addFish(){if(fish.length>=40)return;const p=randWater(0.3,1);if(!p)return;const f=new Fish(p.x,p.y);f.z=0.05;f.tz=0.4;fish.push(f);
+function addFish(){if(fish.length>=(innerWidth<760?24:40))return;const p=randWater(0.3,1);if(!p)return;const f=new Fish(p.x,p.y);f.z=0.05;f.tz=0.4;fish.push(f);
   disturb(p.x,p.y,3,3);for(let k=0;k<10;k++){const a=R(TAU),v=R(0.3,0.9);drops.push({x:p.x,y:p.y,z:0.5,vx:Math.cos(a)*v,vy:Math.sin(a)*v,vz:R(0.6,1.4)});}
   Snd.splash(0.6,p.x/W*2-1);}
 
