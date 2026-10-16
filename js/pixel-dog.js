@@ -323,18 +323,20 @@ class PixelDog extends HTMLElement{
     if(this._on) return; this._on=true;
     this.free=this.hasAttribute('fixed');
     const sc=this.sc=Math.max(1,parseFloat(this.getAttribute('scale'))||2);
-    const W=this.W=this.free?Math.max(160,Math.ceil(innerWidth/sc)):Math.max(120,parseInt(this.getAttribute('width'))||180);
-    if(this.free) H=Math.max(120,Math.ceil(innerHeight/sc));
+    let W=this.free?Math.max(160,Math.ceil(innerWidth/sc)):Math.max(120,parseInt(this.getAttribute('width'))||180);
+    if(this.free){ H=Math.max(120,Math.ceil(innerHeight/sc)); }
+    else { H=84; const fw=this.measureRow(); if(fw) W=fw; }
+    this.W=W;
     this.applyLook();
     const root=this.shadowRoot||this.attachShadow({mode:'open'});
     root.innerHTML=`<style>
 :host{display:inline-block;line-height:0;vertical-align:bottom;max-width:100%;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
-:host([fixed]){position:fixed;left:0;top:0;z-index:30;pointer-events:none;max-width:none}
+:host([fixed]){position:fixed;left:0;top:var(--dog-top,0px);z-index:30;pointer-events:none;max-width:none}
 :host([fixed]) canvas{pointer-events:none}
 :host([fixed]) canvas:focus-visible{outline:none}
 canvas{width:${W*sc}px;max-width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:pan-y;cursor:pointer;outline:none;border-radius:4px}
 canvas:focus-visible{outline:none}</style>
-<canvas width="${W}" height="${H}" tabindex="0" role="img" aria-label="Interactive pixel dog. Click to boop, hold or rub to pet, drag to carry, double-click to roll over, click empty space to throw a ball."></canvas>`;
+<canvas width="${W}" height="${H}" tabindex="0" role="img" aria-label="Interactive pixel dog. Click him to boop, hold or rub to pet, drag to carry, double-click to send home to sleep, click open space to throw a ball from there."></canvas>`;
     const cv=this.cv=root.querySelector('canvas');
     this.ctx=cv.getContext('2d'); this.alloc();
     Object.assign(this,{time:0,lastAct:0,parts:[],rub:0,lastRub:-9,clicks:[],turnT:0,blinkT:2,blinkOn:0,twT:5,twOn:0,
@@ -342,6 +344,8 @@ canvas:focus-visible{outline:none}</style>
     this.ptr={x:0,y:0,t:-99,ok:false,sp:0}; this.hov={x:-99,y:-99}; this.dv={x:0,z:0};
     this.ball={on:false,held:false,x:0,y:0,vx:0,vy:0};
     this.home=clamp(parseFloat(this.getAttribute('home'))||M+6,M,W-M);
+    this.minX=M; // left fence: raised to the name's last letter in free mode
+    if(this.free){ this.placeFixed(); this.syncHome(); }
     this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hr=new Date().getHours(), sa=parseFloat(this.getAttribute('sleep-after'));
     this.sleepAfter=(sa>0)?sa:((hr>=22||hr<6)?16:38);
@@ -359,15 +363,30 @@ canvas:focus-visible{outline:none}</style>
         this.W=Math.max(160,Math.ceil(innerWidth/this.sc));
         H=Math.max(120,Math.ceil(innerHeight/this.sc));
         this.home=clamp(this.home*this.W/Math.max(1,oW),M,this.W-M);
-        this.d.x=clamp(this.d.x,M,this.W-M);
+        this.minX=clamp(this.minX,M,this.W-M);
+        this.d.x=this.clampX(this.d.x);
         this.ball.x=clamp(this.ball.x,4,this.W-4);
+        this.placeFixed(); this.reHome();
         this.alloc();
       },250); };
       window.addEventListener('resize',this._rz);
+      let sto=0;
+      this._sc=()=>{ if(sto) return; sto=setTimeout(()=>{ sto=0; this.syncHome(); },300); };
+      window.addEventListener('scroll',this._sc,{passive:true});
+      // Webfonts can widen the name after first paint (text grows under a
+      // placed dog) — re-pin ground+home once type settles.
+      if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(this._on) this.reHome(); });
     }
+    else{
+      let fto=0;
+      this._fr=()=>{ clearTimeout(fto); fto=setTimeout(()=>{ if(this._on) this.fitRow(); },200); };
+      window.addEventListener('resize',this._fr);
+      if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(this._on) this.fitRow(); });
+    }
+    requestAnimationFrame(()=>{ if(this._on) this.fitRow(); });
     this._loop=this.loop.bind(this); this.raf=requestAnimationFrame(this._loop);
   }
-  disconnectedCallback(){ cancelAnimationFrame(this.raf); window.removeEventListener('pointermove',this._wm); document.removeEventListener('click',this._docClick); if(this._docDown){ document.removeEventListener('pointerdown',this._docDown); document.removeEventListener('pointermove',this._docMove); document.removeEventListener('pointerup',this._docUp); document.removeEventListener('pointercancel',this._docUp); } if(this._rz) window.removeEventListener('resize',this._rz); if(this.io) this.io.disconnect(); clearTimeout(this.ct); this._on=false; }
+  disconnectedCallback(){ cancelAnimationFrame(this.raf); window.removeEventListener('pointermove',this._wm); document.removeEventListener('click',this._docClick); if(this._docDown){ document.removeEventListener('pointerdown',this._docDown); document.removeEventListener('pointermove',this._docMove); document.removeEventListener('pointerup',this._docUp); document.removeEventListener('pointercancel',this._docUp); } if(this._rz) window.removeEventListener('resize',this._rz); if(this._sc) window.removeEventListener('scroll',this._sc); if(this._fr) window.removeEventListener('resize',this._fr); if(this.io) this.io.disconnect(); clearTimeout(this.ct); this._on=false; }
 
   /* ----- input ----- */
   bind(){
@@ -379,21 +398,30 @@ canvas:focus-visible{outline:none}</style>
       if(Math.abs(p.x-this.d.x)<55&&p.y>-30&&p.y<H+20){ this.act(); if(pt.sp>260) this.excite+=1; }
     };
     window.addEventListener('pointermove',this._wm,{passive:true});
-    // Page-wide throw: clicks on empty areas (text/background, above the
-    // footer) throw the ball at the mapped spot — even to the far right end.
-    // Links, buttons, dialogs, the pond and the dog itself keep their own behavior.
+    // Throw zone (free mode: no box, canvas IS the viewport):
+    //   left  = 8px right of the name's last letter (name itself excluded),
+    //   right = the line exactly below the theme toggle,
+    //   bottom = his feet (above-feet clicks only, like before).
+    // Clicks outside are ignored completely: no wake, no timer reset, no
+    // throw. Only a press on his own body (press/up) wakes him.
     this._docClick=e=>{
       if(e.button>0||e.defaultPrevented||!this.pageTargetOk(e)) return;
-      const r=cv.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width*this.W, y=(e.clientY-r.top)/r.height*H;
-      if(this.hit(x,y)) return; // presses on the dog itself are handled via press/up, not here
+      const p=toL(e);
+      if(this.hit(p.x,p.y)) return; // presses on the dog itself are handled via press/up, not here
       if(this.time<(this.noThrowUntil||0)) return;
-      Object.assign(this.ptr,{x:clamp(x,0,this.W),y:clamp(y,0,H),t:this.time,ok:true});
+      const s=this.d.st;
+      if(s==='sleep'||s==='drag'||s==='fall'||s==='dizzy') return; // a ball never wakes him — only his body does
+      const c=this.cv.getBoundingClientRect();
+      let L=c.left+(this.d.x-70)*this.sc, R=innerWidth; // fallbacks when anchors off-screen
+      const nEl=document.querySelector('.profile-name');
+      if(nEl){ const n=nEl.getBoundingClientRect(); if(n.bottom>-50&&n.top<innerHeight+50) L=n.right+8; }
+      const tEl=document.querySelector('.theme-toggle');
+      if(tEl){ const t=tEl.getBoundingClientRect(); R=t.left+t.width/2; }
+      if(e.clientX<L||e.clientX>R) return;
+      if(p.y>G-2) return; // below his feet: don't bother him
+      Object.assign(this.ptr,{x:clamp(p.x,0,this.W),y:clamp(p.y,0,H),t:this.time,ok:true});
       this.act();
-      if(this.d.st==='sleep'){ this.go('wake'); return; }
-      if(this.d.st==='drag'||this.d.st==='fall'||this.d.st==='dizzy') return;
-      const b=this.ball;
-      if(b.on&&!b.held&&Math.hypot(x-b.x,y-b.y)<6) this.kickBall(x); else this.throwBall(x,y);
+      this.throwBall(p.x,Math.min(p.y,G-3));
     };
     document.addEventListener('click',this._docClick);
     cv.addEventListener('pointerdown',e=>{
@@ -476,6 +504,7 @@ canvas:focus-visible{outline:none}</style>
     this.ct=setTimeout(()=>{ this.ct=0; this.boop(); },240);
   }
   goHomeToSleep(){
+    this.syncHome();
     if(Math.abs(this.d.x-this.home)>6) this.go('walk',{tx:this.home,sp:20,then:'sleep'});
     else this.go('sleep');
   }
@@ -492,9 +521,13 @@ canvas:focus-visible{outline:none}</style>
   }
   release(){ const d=this.d; d.vx=clamp(this.dv.x,-110,110); d.vz=clamp(this.dv.z,-40,110); this.go('fall'); }
   throwBall(x,y){
+    // Spawn at the click point, straight drop to the ground line — the ball
+    // is free of any box, anywhere in the open zone.
     const b=this.ball; if(this.d.st==='drag') return;
-    Object.assign(b,{on:true,held:false,x:clamp(x,4,this.W-4),y:clamp(y,4,G-3),vx:rand(-25,25),vy:-30});
-    this.spawn('spark',b.x,b.y,{max:0.4}); this.go('fetch',{ph:'see'});
+    const sx=clamp(x==null?this.d.x+this.d.f*10:x,4,this.W-4);
+    const sy=clamp(y==null?4:y,4,G-3);
+    Object.assign(b,{on:true,held:false,x:sx,y:sy,vx:0,vy:10});
+    this.spawn('spark',sx,Math.max(4,sy),{max:0.4}); this.go('fetch',{ph:'see'});
   }
   kickBall(px){ const b=this.ball; b.vx=(b.x>=px?1:-1)*rand(70,110); b.vy=-rand(90,130); this.go('fetch',{ph:'see'}); }
   trigger(n){
@@ -527,13 +560,65 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
   bang(k='bang',max=0.8){ const [hx,hy]=this.headW(); this.spawn(k,hx,above(hy,20),{max}); }
   puff(x,y,m=0.45){ this.spawn('puff',x,y,{vx:rand(-6,6),vy:-4,max:m}); }
   say(){ const [hx,hy]=this.headW(); this.spawn('say',hx+this.d.f*15,clamp(hy-5,10,H),{txt:WORDS[Math.random()*WORDS.length|0],max:0.55,vy:-4}); }
-  moveTo(tx,sp,dt){ const d=this.d, dx=tx-d.x; if(Math.abs(dx)<=sp*dt+0.01){ d.x=tx; return true; } d.f=Math.sign(dx); d.x+=d.f*sp*dt; return false; }
-  randX(){ let x=this.d.x; for(let i=0;i<8;i++){ x=rand(M,this.W-M); if(Math.abs(x-this.d.x)>20) break; } return x; }
-  farX(){ return this.d.x<this.W/2?rand(this.W-M-15,this.W-M):rand(M,M+15); }
+  moveTo(tx,sp,dt){ tx=this.clampX(tx); const d=this.d, dx=tx-d.x; if(Math.abs(dx)<=sp*dt+0.01){ d.x=tx; return true; } d.f=Math.sign(dx); d.x+=d.f*sp*dt; return false; }
+  clampX(x){ return clamp(x,this.minX==null?M:this.minX,this.W-M); }
+  measureRow(){ // in-flow canvas fills the row's leftover width (name end → content edge)
+    if(this.free||!this.sc) return 0;
+    const row=this.parentElement; if(!row) return 0;
+    const nm=row.querySelector('.profile-name');
+    const nw=nm?nm.getBoundingClientRect().width:0;
+    return clamp(Math.floor((row.clientWidth-nw-10)/this.sc),180,2000);
+  }
+  fitRow(){
+    if(this.free) return;
+    const w=this.measureRow(); if(!w||Math.abs(w-this.W)<2) return;
+    this.W=w; this.d.x=this.clampX(this.d.x); this.ball.x=clamp(this.ball.x,4,this.W-4);
+    this.alloc();
+  }
+  randX(){ let x=this.d.x; for(let i=0;i<8;i++){ x=rand(this.minX,this.W-M); if(Math.abs(x-this.d.x)>20) break; } return x; }
+  farX(){ return this.d.x<this.W/2?rand(this.W-M-15,this.W-M):rand(this.minX,this.minX+15); }
   returnX(){
     const p=this.ptr, d=this.d;
-    if(p.ok&&this.time-p.t<4&&p.x>0&&p.x<this.W){ const dir=Math.sign(p.x-d.x)||d.f; return clamp(p.x-dir*20,M,this.W-M); }
+    if(p.ok&&this.time-p.t<4&&p.x>0&&p.x<this.W){ const dir=Math.sign(p.x-d.x)||d.f; return this.clampX(p.x-dir*20); }
     return this.home;
+  }
+  // Free mode: no box — the canvas is the viewport. Ground line stays glued
+  // to the name's baseline (measured at load/resize); home-x tracks the name
+  // while it's on screen, else the dog keeps his last home.
+  placeFixed(){
+    if(!this.free) return;
+    const n=document.querySelector('.profile-name'); if(!n) return;
+    // Exact text baseline via a zero-size inline-block probe (its bottom
+    // margin edge IS the baseline) — no font-metric guessing, so paws sit
+    // pixel-true on the glyph bottoms whatever webfont loads.
+    let base=null;
+    try{
+      const s=document.createElement('span');
+      s.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline;';
+      n.appendChild(s);
+      base=s.getBoundingClientRect().bottom;
+      s.remove();
+    }catch(_){ base=null; }
+    if(base==null){ const r=n.getBoundingClientRect(); base=r.bottom-11; }
+    const T=clamp(base-G*this.sc,-1200,innerHeight-120);
+    if(this.style&&this.style.setProperty) this.style.setProperty('--dog-top',T+'px');
+  }
+  syncHome(){
+    if(!this.free) return;
+    const n=document.querySelector('.profile-name'); if(!n) return;
+    const r=n.getBoundingClientRect(), c=this.cv.getBoundingClientRect();
+    if(r.bottom<-50||r.top>innerHeight+50) return; // name off-screen: keep last home
+    // Dog center 64px right of the name end — exactly the old inline slot
+    // (8px flex gap + 40×1.4 home), so his rear clears the last letter.
+    // Same line fences him in: he never roams left of the name's end.
+    this.home=clamp((r.right+64-c.left)/this.sc,M,this.W-M);
+    this.minX=clamp((r.right+8-c.left)/this.sc,M,this.W-M);
+  }
+  reHome(){
+    if(!this.free) return;
+    const wasHome=Math.abs(this.d.x-this.home)<8, resting=SLEEPABLE.has(this.d.st);
+    this.placeFixed(); this.syncHome();
+    if(wasHome&&resting) this.d.x=this.home; // asleep at home: ride along, never left overlapping
   }
   shift(P,dx,dy){
     for(const k of ['b','th','ne','ch','hd','tl']){ P[k][0]+=dx; P[k][1]+=dy; }
@@ -800,7 +885,7 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
       case 'drag': {
         const dn=this.down, p=this.ptr;
         if(!dn){ this.release(); P=cp(STAND); break; }
-        const nx=clamp(dn.x0+(p.x-dn.x),M,W-M), nz=clamp(dn.z0+(dn.y-p.y),0,14);
+        const nx=this.clampX(dn.x0+(p.x-dn.x)), nz=clamp(dn.z0+(dn.y-p.y),0,14);
         this.dv.x+=((nx-d.x)/dt-this.dv.x)*0.35; this.dv.z+=((nz-d.z)/dt-this.dv.z)*0.35;
         d.x=nx; d.z=nz; d.vz=0;
         P=cp(STAND); const sw=clamp(-this.dv.x*0.03,-3,3);
@@ -810,7 +895,7 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
       }
       case 'fall':
         d.x+=d.vx*dt;
-        if(d.x<M){ d.x=M; d.vx=Math.abs(d.vx)*0.5; }
+        if(d.x<this.minX){ d.x=this.minX; d.vx=Math.abs(d.vx)*0.5; }
         if(d.x>W-M){ d.x=W-M; d.vx=-Math.abs(d.vx)*0.5; }
         P=d.z>0.5?cp(JUMP):cp(STAND); P.eye='wide'; P.ears=[-2,2,-2,2]; P.noTw=1; P.tau=0.04;
         if(this.landed||(d.z<=0&&d.vz<=0)){
@@ -881,7 +966,8 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
       b.vy+=380*dt; b.x+=b.vx*dt; b.y+=b.vy*dt; const gy=G-1.9;
       if(b.y>=gy){ b.y=gy; if(b.vy>28){ b.vy=-b.vy*0.55; b.vx*=0.85; } else b.vy=0; }
       if(b.y>=gy&&b.vy===0) b.vx*=Math.exp(-dt*2.5);
-      if(b.x<3){ b.x=3; b.vx=Math.abs(b.vx)*0.6; }
+      const bL=this.free?this.minX+2:3;
+      if(b.x<bL){ b.x=bL; b.vx=Math.abs(b.vx)*0.6; }
       if(b.x>W-3){ b.x=W-3; b.vx=-Math.abs(b.vx)*0.6; }
     }
     for(const p of this.parts){ p.life+=dt; if(p.g) p.vy+=150*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; if(p.k==='bit'&&p.y>G){ p.y=G; p.vx*=0.5; p.vy=0; } }
@@ -894,10 +980,12 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
       }
     if(this.excite>25&&(d.st==='idle'||d.st==='sit')&&now-this.exT>12&&!this.reduced){ this.exT=now; this.excite=0; this.go('bow',{dur:1.1,then:'zoomies'}); }
     if(SLEEPABLE.has(d.st)&&this.sleepy()&&d.t>2.5){
+      this.syncHome();
       if(Math.abs(d.x-this.home)>6) this.go('walk',{tx:this.home,sp:20,then:'sleepy'});
       else this.go('lie',{dur:rand(2,4)});
     }
     const P=this.think(dt)||cp(STAND);
+    d.x=this.clampX(d.x); // safety net: no state escapes the left fence
     if(P.eye==='open'&&this.blinkOn>0) P.eye='blink';
     if(this.twOn>0&&!P.noTw) P.ears=[P.ears[0]+0.8,P.ears[1]-1.2,P.ears[2],P.ears[3]];
     this.pose=lerpPose(this.pose,P,1-Math.exp(-dt/(P.tau||0.05)));

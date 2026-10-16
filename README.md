@@ -17,7 +17,7 @@ Portfolio & writing: <https://nikit.is-a.dev/>
 
 - **Lami Nepal** — matrimonial & spiritual services app with real-time chat, FCM push, and full Nepali localization ([Play Store](https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en))
 - **NEBians** — Material 3 Android app + Django backend for Nepali NEB students: study tools, AI chat arena, community forums ([nebians.consica.com.np](https://nebians.consica.com.np/))
-- **AstroWeb** — free Vedic astrology web app: Kundali, Dasha calculations, and insights ([astroweb-bsi.pages.dev](https://astroweb-bsi.pages.dev/))
+- **AstroWeb** — free Vedic astrology web app: Kundali, Dasha calculations, and insights ([astroweb.consicalabs.com](https://astroweb.consicalabs.com/))
 - **Essays** — 28 pieces on self-observation, non-duality, and everyday philosophy ([nikit.is-a.dev/writings](https://nikit.is-a.dev/writings))
 
 ## Stats
