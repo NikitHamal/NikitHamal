@@ -415,7 +415,10 @@ img {
    Click-through: all presses arrive via document forwarding, so the tall
    transparent canvas never swallows avatar clicks. */
 .profile-name-row pixel-dog {
-  flex-shrink: 0;
+  /* Fill the leftover row width, but shrink (never overflow) on narrow
+     screens — the canvas caps itself via max-width:100%. */
+  flex: 1 1 auto;
+  min-width: 0;
   line-height: 0;
   padding: 0;
   pointer-events: none;
@@ -428,6 +431,8 @@ img {
 @media (max-width: 480px) {
   .profile-name-row pixel-dog {
     margin-left: -2px;
+    /* Own line, full width — name above, dog band below, zero overflow. */
+    flex: 1 1 100%;
   }
 }
 

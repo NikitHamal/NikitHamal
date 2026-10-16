@@ -562,12 +562,15 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
   say(){ const [hx,hy]=this.headW(); this.spawn('say',hx+this.d.f*15,clamp(hy-5,10,H),{txt:WORDS[Math.random()*WORDS.length|0],max:0.55,vy:-4}); }
   moveTo(tx,sp,dt){ tx=this.clampX(tx); const d=this.d, dx=tx-d.x; if(Math.abs(dx)<=sp*dt+0.01){ d.x=tx; return true; } d.f=Math.sign(dx); d.x+=d.f*sp*dt; return false; }
   clampX(x){ return clamp(x,this.minX==null?M:this.minX,this.W-M); }
-  measureRow(){ // in-flow canvas fills the row's leftover width (name end → content edge)
+  measureRow(){ // in-flow canvas fills the host's flex-resolved width (name end → content edge, or full line when wrapped)
     if(this.free||!this.sc) return 0;
+    const wCss=this.clientWidth; // exact post-layout width (shrink/wrap aware)
+    if(wCss>10) return clamp(Math.round(wCss/this.sc),120,2000);
+    // pre-layout fallback: row minus name
     const row=this.parentElement; if(!row) return 0;
     const nm=row.querySelector('.profile-name');
     const nw=nm?nm.getBoundingClientRect().width:0;
-    return clamp(Math.floor((row.clientWidth-nw-10)/this.sc),180,2000);
+    return clamp(Math.floor((row.clientWidth-nw-10)/this.sc),120,2000);
   }
   fitRow(){
     if(this.free) return;
