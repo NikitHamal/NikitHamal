@@ -445,6 +445,9 @@ img {
     margin-left: -2px;
     /* Own line, full width — name above, dog band below, zero overflow. */
     flex: 1 1 100%;
+    /* The canvas is mostly transparent sky above the dog; pull the band up
+       so he tucks under the name instead of floating far below it. */
+    margin-top: -60px;
   }
 }
 
