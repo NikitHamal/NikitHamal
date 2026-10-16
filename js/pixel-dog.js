@@ -400,6 +400,8 @@ canvas:focus-visible{outline:none}</style>
     window.addEventListener('pointermove',this._wm,{passive:true});
     // Throw zone (free mode: no box, canvas IS the viewport):
     //   left  = 8px right of the name's last letter (name itself excluded),
+    //           or the canvas edge when tapping below the name (wrapped
+    //           mobile line: the full band throws, even left of the name),
     //   right = the line exactly below the theme toggle,
     //   bottom = his feet (above-feet clicks only, like before).
     // Clicks outside are ignored completely: no wake, no timer reset, no
@@ -414,7 +416,7 @@ canvas:focus-visible{outline:none}</style>
       const c=this.cv.getBoundingClientRect();
       let L=c.left+(this.d.x-70)*this.sc, R=innerWidth; // fallbacks when anchors off-screen
       const nEl=document.querySelector('.profile-name');
-      if(nEl){ const n=nEl.getBoundingClientRect(); if(n.bottom>-50&&n.top<innerHeight+50) L=n.right+8; }
+      if(nEl){ const n=nEl.getBoundingClientRect(); if(n.bottom>-50&&n.top<innerHeight+50) L=e.clientY>n.bottom?c.left+8:n.right+8; }
       const tEl=document.querySelector('.theme-toggle');
       if(tEl){ const t=tEl.getBoundingClientRect(); R=t.left+t.width/2; }
       if(e.clientX<L||e.clientX>R) return;
