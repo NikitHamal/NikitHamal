@@ -132,7 +132,7 @@ body.playing #hud { display: block; }
 .hud-trc { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .minimap { width: 144px; height: 144px; image-rendering: pixelated; background: #1a2a3a; box-shadow: 0 0 0 var(--u) var(--ink), 0 0 0 calc(var(--u) * 2.5) #8a5a34, 0 0 0 calc(var(--u) * 3.5) var(--ink), 0 calc(var(--u) * 4) 0 rgba(0,0,0,.3); cursor: pointer; transition: opacity .3s; }
 .minimap.off { opacity: 0; }
-@media (max-width: 760px) { .minimap { width: 96px; height: 96px; } }
+@media (max-width: 760px) { .minimap { width: 96px; height: 96px; } .hud-tr { flex-direction: column; align-items: flex-end; } .clock canvas { width: 32px; height: 32px; } body.touch .t-top { top: 230px; } }
 .clock { display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; background: rgba(36,23,28,.72); color: #fff4e8; box-shadow: 0 0 0 var(--u) rgba(0,0,0,.4); }
 .clock canvas { width: 44px; height: 44px; image-rendering: pixelated; }
 .clock-t { display: flex; flex-direction: column; line-height: 1.05; } .clock-t b { font-size: 16px; } .clock-t span { font-size: 14px; color: #ffd8e4; }
