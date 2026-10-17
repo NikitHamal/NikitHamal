@@ -127,7 +127,7 @@ function startNew(st) {
   launch(new Game(opts));
   setTimeout(() => {
     ui.banner('Hanomi', `Welcome home. ${opts.dogName} is happy to see you.`);
-    const tips = Input.touch ? ['Drag the left pad to move · A to use · B to interact', 'Open your bag to craft. Punch trees for wood.', `Tap B near ${opts.dogName} to give pets.`] : ['WASD to move · Click to use your tool · E to interact', 'Tab opens your satchel & crafting · M map · N realm', `Press E near ${opts.dogName} to give pets.`];
+    const tips = Input.touch ? ['Drag the left pad to move · A to use · B to interact', 'Open your bag to craft. Punch trees for wood.', `Tap B near ${opts.dogName} to give pets.`] : ['WASD to move · Click to use your tool · E to interact', 'Tab satchel & crafting · M map · N realm · J journal', `Press E near ${opts.dogName} to give pets.`];
     tips.forEach((t, i) => setTimeout(() => ui.toast(t, 'hint'), 2500 + i * 3600));
   }, 600);
 }
@@ -159,22 +159,23 @@ function thumb() { try { const c = document.createElement('canvas'); c.width = 1
 function hotkey(k) {
   if (!game || !ui) return;
   if (k === 'Escape') { if (ui.held) return ui.returnHeld(); if (ui.modal) ui.close(); else ui.open('pause'); return; }
-  if (ui.modal && ui.modal !== 'inv' && ui.modal !== 'map' && ui.modal !== 'realm') return;
+  if (ui.modal && !['inv', 'map', 'realm', 'journal'].includes(ui.modal)) return;
   if (k === 'Tab' || k === 'i') ui.modal === 'inv' ? ui.close() : ui.open('inv');
   else if (k === 'm') ui.modal === 'map' ? ui.close() : ui.open('map');
   else if (k === 'n') ui.modal === 'realm' ? ui.close() : ui.open('realm');
+  else if (k === 'j') ui.modal === 'journal' ? ui.close() : ui.open('journal');
 }
 function loop(ts) {
   requestAnimationFrame(loop);
   const dt = Math.min(0.05, Math.max(0.001, (ts - (last || ts)) / 1000)); last = ts;
   if (!game) { Input.endFrame(); return; }
-  for (const k of ['Escape', 'Tab', 'i', 'm', 'n']) if (Input.hit.has(k)) hotkey(k);
+  for (const k of ['Escape', 'Tab', 'i', 'm', 'n', 'j']) if (Input.hit.has(k)) hotkey(k);
   game.update(dt);
   renderer.render(game, game.paused ? 0 : dt);
   ui.frame(dt);
   // audio direction
   const p = game.player, near = (b) => game.world.biomeAt(p.tx, p.ty) === b;
-  if (ui.modal !== 'koi') Audio.music(game.mood || 'day');
+  Audio.music(game.mood || 'day');
   Audio.ambient({ rain: game.weather.rain, wind: near('snow') || near('rock') ? 0.6 : 0.25, night: 1 - game.daylight, water: p.inWater() || near('water') || near('beach') ? 0.7 : 0.15 });
   Input.endFrame();
 }

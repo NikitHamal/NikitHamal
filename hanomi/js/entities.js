@@ -18,7 +18,7 @@ export class Ent {
   constructor(g, x, y) {
     this.g = g; this.x = x; this.y = y; this.vx = 0; this.vy = 0; this.z = 0; this.vz = 0; this.r = 4; this.hp = this.maxHp = 10;
     this.dead = false; this.dir = 0; this.t = 0; this.flash = 0; this.kbx = 0; this.kby = 0; this.id = nextId(); this.team = 'nature';
-    this.speed = 40; this.solidEnt = true; this.persist = false; this.atkCd = 0; this.target = null; this.path = null; this.stuck = 0; this.inv = 0;
+    this.speed = 40; this.solidEnt = true; this.persist = false; this.atkCd = 0; this.target = null; this.path = null; this.stuck = 0; this.ifr = 0;
   }
   get tx() { return Math.floor(this.x / TS); } get ty() { return Math.floor(this.y / TS); }
   blocked(px, py) {
@@ -36,10 +36,10 @@ export class Ent {
   physics(dt) {
     if (this.kbx || this.kby) { this.move(this.kbx * dt, this.kby * dt); const d = Math.pow(0.002, dt); this.kbx *= d; this.kby *= d; if (Math.abs(this.kbx) + Math.abs(this.kby) < 2) this.kbx = this.kby = 0; }
     if (this.z > 0 || this.vz) { this.vz -= 300 * dt; this.z += this.vz * dt; if (this.z <= 0) { this.z = 0; this.vz = 0; } }
-    if (this.flash > 0) this.flash -= dt; if (this.atkCd > 0) this.atkCd -= dt; if (this.inv > 0) this.inv -= dt;
+    if (this.flash > 0) this.flash -= dt; if (this.atkCd > 0) this.atkCd -= dt; if (this.ifr > 0) this.ifr -= dt;
   }
   hurt(dmg, src, kb = 90) {
-    if (this.dead || this.inv > 0) return false;
+    if (this.dead || this.ifr > 0) return false;
     this.hp -= dmg; this.flash = 0.18;
     if (src) { const dx = this.x - src.x, dy = this.y - src.y, d = Math.hypot(dx, dy) || 1; this.kbx = dx / d * kb; this.kby = dy / d * kb; }
     this.g.fx.burst(this.x, this.y - 8, 5, this.bloodCols || ['#e8e0d0', '#c8b8a8'], { sp0: 20, sp1: 60, l0: 0.25, l1: 0.5 });
@@ -118,12 +118,13 @@ export class Villager extends Human {
   update(dt) {
     this.physics(dt);
     const g = this.g, night = g.hour >= 20 || g.hour < 6;
-    if (this.inside) { if (!night || this.role !== 'villager') { this.inside = false; } else return; }
+    if (this.inside) { if (!night || this.role !== 'villager') { this.inside = false; if (this.inRoom && this.homeDoor) { this.x = this.homeDoor.x * TS + 8; this.y = (this.homeDoor.y + 1) * TS + 10; } this.inRoom = null; } else { this.moving = false; return; } }
     // flee from nearby undead
     const z = g.nearest(this.x, this.y, 80, e => e.team === 'undead' || (e.hostileTo && e.hostileTo(this)));
     if (z && this.role !== 'chief') { const dx = this.x - z.x, dy = this.y - z.y, d = Math.hypot(dx, dy) || 1; this.move(dx / d * 42 * dt, dy / d * 42 * dt); this.dir = dirOf(-dx, -dy); this.moving = true; if (Math.random() < 0.01) this.say(pick(['Help!', 'Zombies!', 'Aaah!'])); return; }
     if (night && this.role === 'villager' && this.homeDoor) {
-      if (this.seek(this.homeDoor.x * TS + 8, (this.homeDoor.y + 1) * TS + 8, this.speed * 1.3, dt, 6)) { this.inside = true; this.moving = false; }
+      if (this.seek(this.homeDoor.x * TS + 8, (this.homeDoor.y + 1) * TS + 8, this.speed * 1.3, dt, 6)) { this.inside = true; this.moving = false;
+        const rec = g.interiorOf(this.vid, this.homeSi); if (rec) { this.inRoom = rec.key; this.x = (rec.x + 2 + ((this.id * 3) % (rec.w - 4))) * TS + 8; this.y = (rec.y + 3 + (this.id % 2)) * TS + 8; this.dir = 0; } }
       return;
     }
     if (this.role === 'merchant' || this.role === 'chief') { if (dist2(this.x, this.y, this.hx, this.hy) > 400) this.seek(this.hx, this.hy, this.speed, dt); else { this.moving = false; const p = g.player; if (dist2(p.x, p.y, this.x, this.y) < 4000) this.dir = dirOf(p.x - this.x, p.y - this.y); } return; }
@@ -131,9 +132,9 @@ export class Villager extends Human {
     else { this.moving = false; if ((this.wanderT -= dt) <= 0) { const a = rand(TAU), r = rand(16, 80); this.goal = { x: this.hx + Math.cos(a) * r, y: this.hy + Math.sin(a) * r }; this.path = null; } }
     if (!this.bubble && Math.random() < 0.0008 && dist2(g.player.x, g.player.y, this.x, this.y) < 9000) this.say(pick(CHAT), 3.5);
   }
-  shadow() { return this.inside ? null : [this.x, this.y, 5, 2]; }
-  draw(ctx, ox, oy) { if (!this.inside) super.draw(ctx, ox, oy); }
-  save() { return { k: 'villager', x: this.x, y: this.y, hp: this.hp, role: this.role, vid: this.vid, seed: this.seed, hx: this.hx, hy: this.hy, name: this.name, door: this.homeDoor }; }
+  shadow() { return this.inside && !this.inRoom ? null : [this.x, this.y, 5, 2]; }
+  draw(ctx, ox, oy) { if (!this.inside || this.inRoom) super.draw(ctx, ox, oy); }
+  save() { return { k: 'villager', x: this.x, y: this.y, hp: this.hp, role: this.role, vid: this.vid, seed: this.seed, hx: this.hx, hy: this.hy, name: this.name, door: this.homeDoor, homeSi: this.homeSi }; }
 }
 
 /* ---------- soldiers: nation guards and the player's army ---------- */
@@ -246,8 +247,11 @@ export class Dog extends Ent {
     }
     const d = Math.hypot(p.x - this.x, p.y - this.y);
     if (d > 520) { this.x = p.x - 12; this.y = p.y + 6; }
-    if (this.fetch) { // chase a thrown stick... simple sniff target
-      if (this.seek(this.fetch.x, this.fetch.y, this.speed, dt, 4)) this.fetch = null; this.state = 'run'; this.f = this.vxSign(); return;
+    if (this.fetch) { // play fetch: run to the stick, carry it back, drop it at your feet
+      const st = this.fetch;
+      if (!this.carry) { if (st.dead) { this.fetch = null; return; } if (st.z <= 0 && this.seek(st.x, st.y, this.speed * 1.2, dt, 6)) { st.dead = true; this.carry = true; Audio.play('pet', { vol: 0.4 }); } else if (st.z > 0) { this.seek(st.x, st.y, this.speed * 1.2, dt, 6); } this.state = 'run'; return; }
+      if (this.seek(p.x + 10, p.y + 4, this.speed, dt, 10)) { const d = g.drop('stick', 1, this.x + this.f * 6, this.y); d.vz = 20; d.pickDelay = 0.2; this.fetch = null; this.carry = false; this.pet(); this.love = Math.min(100, this.love + 3); g.stats.fetches = (g.stats.fetches || 0) + 1; }
+      this.state = 'run'; return;
     }
     if (d > 56) { const sp = d > 110 ? this.speed * 1.25 : this.speed * 0.7; this.seek(p.x - 14 * Math.sign(p.x - this.x || 1), p.y + 4, sp, dt, 4); this.state = d > 110 ? 'run' : 'walk'; this.f = p.x > this.x ? 1 : -1; this.st = 0; return; }
     // idle near the player
@@ -288,6 +292,7 @@ export class Dog extends Ent {
     const x = Math.round(this.x - ox - (this.f < 0 ? sp.w - sp.ox : sp.ox)), y = Math.round(this.y - oy - sp.oy - this.z);
     ctx.drawImage(img, x, y);
     if (this.flash > 0) drawFlash(ctx, img, x, y);
+    if (this.carry) { ctx.fillStyle = '#8a5a34'; ctx.fillRect(Math.round(this.x - ox + this.f * 8) - 4, Math.round(this.y - oy - 13 - this.z), 9, 2); ctx.fillStyle = '#b07c48'; ctx.fillRect(Math.round(this.x - ox + this.f * 8) - 4, Math.round(this.y - oy - 13 - this.z), 9, 1); }
     if (this.state === 'sleep' && Math.random() < 0.01) this.g.fx.spawn({ x: this.x + this.f * 8, y: this.y, z: 16, vz: 8, vx: 4, life: 1.6, c: '#e8e8f8', k: 'z', g: 0 });
   }
   shadow() { return [this.x - this.f * 1, this.y, 8, 2]; }

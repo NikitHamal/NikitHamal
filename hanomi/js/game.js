@@ -14,7 +14,7 @@ export class Game {
   constructor(opts, data) {
     this.opts = opts; this.world = new World(opts.seed); this.fx = new FX(); this.ents = []; this.grid = new Map(); this.dmg = new Map(); this.shakeTiles = new Map();
     this.clock = DAY_LEN * (2 / 24); this.day = 1; this.weather = { rain: 0, target: 0, t: rand(200, 500) }; this.nations = new Map(); this.stats = { zombies: 0, fish: 0, built: 0, eaten: 0, born: 0, harvested: 0, mined: 0, chopped: 0 };
-    this.target = null; this.hitstop = 0; this.paused = false; this.lastHour = 0; this.raid = null; this.playTime = 0; this.saveId = opts.saveId; this.spawnPoint = null; this.koiT = 0;
+    this.target = null; this.hitstop = 0; this.paused = false; this.lastHour = 0; this.raid = null; this.playTime = 0; this.saveId = opts.saveId; this.spawnPoint = null; this.koiT = 0; this.interiors = {}; this.inside = null;
     this.diff = { peaceful: 0, normal: 1, hard: 1.6 }[opts.difficulty || 'normal'];
     if (data) this.load(data); else this.fresh();
   }
@@ -23,7 +23,7 @@ export class Game {
     const home = this.world.villageForRegion(0, 0);
     const sp = home.spawn;
     this.player = new Player(this, sp.x * TS + 8, sp.y * TS + 8, this.opts.look);
-    for (const [id, n] of [['axe_wood', 1], ['pick_wood', 1], ['hoe_wood', 1], ['sword_wood', 1], ['wheat_seeds', 6], ['carrot', 3], ['rod', 1], ['bread', 3], ['torch', 6], ['dog_treat', 3]]) this.player.add(id, n);
+    for (const [id, n] of [['axe_wood', 1], ['pick_wood', 1], ['hoe_wood', 1], ['sword_wood', 1], ['wheat_seeds', 6], ['carrot', 3], ['rod', 1], ['bread', 3], ['torch', 6], ['dog_treat', 3], ['stick', 3]]) this.player.add(id, n);
     this.player.coins = 30;
     this.nationState(home);
     this.activateVillages(true);
@@ -46,7 +46,7 @@ export class Game {
         const x = s.x * TS + 8, y = s.y * TS + 8;
         if (s.k === 'villager' || s.k === 'merchant' || s.k === 'chief') {
           const e = this.add(new Villager(this, x, y, { vid: v.id, role: s.k, seed: hash2(s.x, s.y, 5) * 1e6 | 0 }));
-          if (s.home != null && v.structs[s.home]) e.homeDoor = v.structs[s.home].door;
+          if (s.home != null && v.structs[s.home]) { e.homeDoor = v.structs[s.home].door; e.homeSi = s.home; }
           if (s.k === 'chief') e.name = v.ruler;
         } else if (s.k === 'guard') this.add(new Soldier(this, x, y, { vid: v.id, color: v.color, archer: Math.random() < 0.3, post: { x: v.x * TS, y: v.y * TS + 32 } }));
         else if (s.k === 'dog') this.add(new Dog(this, x, y, { breed: this.opts.breed, name: this.opts.dogName, owned: true, love: 50 }));
@@ -123,6 +123,7 @@ export class Game {
     const w = this.world, gr = w.ground(tx, ty), b = w.block(tx, ty), o = w.obj(tx, ty), m = w.meta(tx, ty);
     const tool = it ? it.tool : null;
     if (o && OBJ[o].crop) { if ((m & 3) === 3) { this.harvest(tx, ty); return false; } if (tool === 'hoe' || !tool) return false; }
+    if (o === O.DIG) { if (tool !== 'hoe') { this.toastOnce('Something glints in the soil… dig it with a hoe.'); return false; } this.dig(tx, ty); return true; }
     if (tool === 'hoe' && !b && (!o || OBJ[o].tool === 'any' && !OBJ[o].crop) && [G.GRASS, G.DIRT, G.FOREST, G.SAKURA, G.SNOW, G.PATH, G.MARSH].includes(gr)) {
       if (o) this.breakObj(tx, ty, o, m);
       w.set(tx, ty, { g: G.TILLED, o: 0 }); Audio.play('till'); this.fx.burst(tx * TS + 8, ty * TS + 10, 6, ['#6a472f', '#88603f', '#5a3b27'], {}); return true;
@@ -207,9 +208,11 @@ export class Game {
   structAt(tx, ty) { for (const v of this.world.villagesNear(tx, ty, 4)) for (const s of v.structs) if (tx >= s.x && ty >= s.y && tx < s.x + s.w && ty < s.y + s.h) return [v, s]; return null; }
   interactTile(tx, ty) {
     const w = this.world, o = w.obj(tx, ty), m = w.meta(tx, ty), b = w.block(tx, ty), p = this.player;
+    if (!o) { const r = this.structAt(tx, ty); if (r && r[1].kind === 'koi') return this.feedKoi(r[1]); }
     if (b === B.BLDG) { const r = this.structAt(tx, ty); if (!r) return false; const [v, s] = r;
-      if (s.kind === 'koi') { this.ui.openKoi(); return true; }
-      if (s.home) { this.ui.open('home'); return true; }
+      if (s.kind === 'koi') { this.feedKoi(s); return true; }
+      if (s.door && tx === s.door.x && ty === s.door.y) { this.enterHouse(v, s); return true; }
+      if (s.home) { this.ui.toast('Your home. Walk in through the door.', 'hint'); return true; }
       if (s.kind === 'hall') { this.ui.toast(`${v.ruler}'s hall. The chief is usually out front.`, 'hint'); return true; }
       this.ui.toast(pick(['Nobody answers the door.', 'You hear a kettle whistling inside.', 'A cat watches you from the window.', 'Shoes are neatly lined by the door.']), 'hint'); return true; }
     if (!o) return false;
@@ -224,9 +227,81 @@ export class Game {
     if (o === O.BANNER) { const r = this.world.villagesNear(tx, ty, 4).find(v => v.banner && v.banner.x === tx && v.banner.y === ty); if (r) this.ui.open('banner', r); return true; }
     if (o === O.STALL) { const v = this.world.villagesNear(tx, ty, 4)[0]; const mer = v && this.ents.find(e => e.role === 'merchant' && e.vid === v.id && !e.dead); if (mer) this.interactEnt(mer); else this.ui.toast('The stall is empty.', 'hint'); return true; }
     if (o === O.GRAVE) { const k = tx + ',' + ty, inv = w.chests.get(k); if (inv) { for (const s of inv) if (s) { const left = p.add(s.id, s.n); if (left) this.drop(s.id, left, p.x, p.y); } w.chests.delete(k); } w.set(tx, ty, { o: 0 }); this.ui.toast('You recovered your satchel.', 'good'); Audio.play('pickup'); return true; }
+    if (o === O.SHRINE) { this.pray(tx, ty); return true; }
+    if (o === O.DIG) { this.ui.toast('Something glints in the soil… dig it with a hoe.', 'hint'); return true; }
     if (o === O.SIGN) { this.ui.toast('"Hanomi — where the sakura never stop falling."', 'hint'); return true; }
     if (o === O.TORII) { this.ui.toast('A torii gate. You feel watched over.', 'hint'); return true; }
     return false;
+  }
+  dig(tx, ty) {
+    const w = this.world, cx = tx * TS + 8, cy = ty * TS + 10, r = Math.random();
+    w.set(tx, ty, { o: 0 }); Audio.play('till'); this.fx.burst(cx, cy, 10, ['#9a7048', '#7a5434', '#fff6c0'], {});
+    this.drop('coin', randi(8, 25 + this.day * 2), cx, cy);
+    const loot = r < 0.08 ? ['jade', 1] : r < 0.25 ? ['gold', randi(1, 2)] : r < 0.5 ? ['iron', randi(1, 3)] : r < 0.7 ? [pick(['pumpkin_seeds', 'tomato_seeds', 'sakura_sapling']), randi(2, 4)] : r < 0.85 ? ['arrow', randi(6, 12)] : ['lotus', 1];
+    this.drop(loot[0], loot[1], cx, cy); this.ui.toast('Buried treasure!', 'good', loot[0]); Audio.play('levelup'); this.stats.dug = (this.stats.dug || 0) + 1;
+  }
+  pray(tx, ty) {
+    const p = this.player, k = tx + ',' + ty; this.prayed = this.prayed || {};
+    if (this.prayed[k] === this.day) { this.ui.toast('The shrine is quiet. Return tomorrow.', 'hint'); return; }
+    this.prayed[k] = this.day; p.hp = p.maxHp; p.food = Math.min(20, p.food + 6); p.buff = Math.max(p.buff, 180); this.ui.dirty();
+    for (let i = 0; i < 18; i++) this.fx.spawn({ x: tx * TS + 8 + rand(-10, 10), y: ty * TS + 10, z: rand(6, 24), vz: rand(10, 24), life: rand(1, 2), c: pick(['#fff6c0', '#f6b8ca', '#ffffff']), k: 'spark', g: 0, top: true });
+    Audio.play('bell'); this.ui.toast('A gentle warmth fills you. (Healed · Blessed)', 'good', 'lotus'); this.stats.prayed = (this.stats.prayed || 0) + 1;
+  }
+  throwStick(tx, ty) {
+    const p = this.player, dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy) || 1, k = Math.min(1, 90 / d);
+    const st = this.drop('stick', 1, p.x, p.y - 8); st.vx = dx * k * 1.6; st.vy = dy * k * 1.6; st.vz = 90; st.z = 10; st.pickDelay = 3; st.fetch = true;
+    p.remove('stick', 1); p.swing(0.3); Audio.play('swing');
+    const dog = this.nearest(p.x, p.y, 200, e => e.isDog && e.owned && !e.dead && !(e.down > 0)); if (dog) { dog.fetch = st; dog.carry = false; Audio.play('bark', { vol: 0.5 }); }
+  }
+  feedKoi(s) {
+    const P = this.renderer && this.renderer.pond, p = this.player; if (!P) return;
+    const lx = p.x - s.x * TS, ly = p.y - 8 - s.y * TS, pt = P.nearestWater(lx, ly, s.w * 8, s.h * 8);
+    if (!pt || !P.feed(pt.x, pt.y)) return;
+    p.swing(0.25); Audio.play('splash', { vol: 0.25 }); p.dir = Math.abs(pt.x - lx) > Math.abs(pt.y - ly) ? (pt.x > lx ? 1 : 3) : (pt.y > ly ? 0 : 2);
+    const today = this.koiDay === this.day; this.koiFeeds = today ? (this.koiFeeds || 0) + 1 : 1; this.koiDay = this.day;
+    if (this.koiFeeds === 4) { p.buff = 300; this.ui.dirty(); this.ui.toast('Serenity — the koi calm your heart. (+regen, +damage)', 'good', 'lotus'); Audio.play('levelup'); for (let k = 0; k < 14; k++) this.fx.spawn({ x: p.x + rand(-12, 12), y: p.y, z: rand(4, 20), vz: 16, life: 1.4, c: pick(['#f6b8ca', '#ffd8e4', '#ffffff']), k: 'petal', g: 0 }); }
+    return true;
+  }
+  /* ---------- house interiors ---------- */
+  doorAt(tx, ty) { const r = this.structAt(tx, ty); if (r && r[1].door && r[1].door.x === tx && r[1].door.y === ty && r[1].kind !== 'koi') return r; return null; }
+  interiorOf(vid, si) { return this.interiors[vid + ':' + si] || null; }
+  enterHouse(v, s) {
+    const si = v.structs.indexOf(s), key = v.id + ':' + si;
+    let rec = this.interiors[key];
+    if (!rec) { const n = Object.keys(this.interiors).length; rec = this.interiors[key] = { key, vid: v.id, si, x: 20000 + n * 24, y: 20000, w: Math.max(9, Math.min(15, s.w * 2 + (s.kind === 'hall' ? 3 : 1))), h: Math.max(8, Math.min(11, s.h * 2 + 2)), kind: s.home ? 'home' : s.kind }; this.buildInterior(rec, v); }
+    rec.ret = { x: s.door.x * TS + 8, y: (s.door.y + 1) * TS + 10 };
+    this.ui.fade(() => {
+      const p = this.player; this.inside = rec; p.x = (rec.x + (rec.w >> 1)) * TS + 8; p.y = (rec.y + rec.h - 2) * TS + 8; p.dir = 2; p.path = null;
+      for (const d of this.ents) if (d.isDog && d.owned && !d.dead && dist2(d.x, d.y, rec.ret.x, rec.ret.y) < (10 * TS) ** 2) { d.x = p.x - 14; d.y = p.y; d.indoor = rec.key; }
+      Audio.play('door');
+    });
+  }
+  exitHouse() {
+    const rec = this.inside; if (!rec) return;
+    this.ui.fade(() => { const p = this.player; p.x = rec.ret.x; p.y = rec.ret.y; p.dir = 0; this.inside = null;
+      for (const d of this.ents) if (d.isDog && d.owned && !d.dead && d.indoor === rec.key) { d.x = p.x + 12; d.y = p.y + 4; d.indoor = null; }
+      Audio.play('door'); });
+  }
+  buildInterior(rec, v) {
+    const w = this.world, { x, y, w: W, h: H } = rec, r = (k) => hash2(x + k, y, 77 + k), home = rec.kind === 'home', hall = rec.kind === 'hall';
+    const dx = x + (W >> 1);
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+      const X = x + i, Y = y + j, edge = i <= 0 || i >= W - 1 || j <= 1 || j >= H - 1;
+      let b = edge ? B.IWALL : 0, g = j >= H - 2 ? G.WOOD : G.TATAMI, o = 0;
+      if (X === dx && j === H - 1) { b = 0; g = G.WOOD; o = O.EXIT; }
+      w.set(X, Y, { g, b, o, m: 0 });
+    }
+    const put = (i, j, o, m = 0) => w.set(x + i, y + j, { o, m });
+    // back wall decor (second wall row)
+    put(2, 1, O.WINDOW); put(W - 3, 1, O.WINDOW); put(W >> 1, 1, O.SCROLL); if (W > 11) { put(4, 1, O.WINDOW); put(W - 5, 1, O.WINDOW); }
+    // furniture
+    const cx = W >> 1, cy = 2 + ((H - 4) >> 1);
+    if (home || r(1) < 0.6) { put(cx, cy, O.HEARTH); put(cx - 1, cy + 1, O.CUSHION, 0); put(cx + 1, cy + 1, O.CUSHION, 1); }
+    else { put(cx, cy, O.TABLE); put(cx - 1, cy, O.CUSHION, 2); put(cx + 1, cy, O.CUSHION, 3); }
+    put(1, 2, O.BED); put(W - 2, 2, O.SHELF); put(W - 2, H - 3, O.BONSAI); put(1, H - 3, O.ANDON); put(W - 3, 2, O.ANDON);
+    if (home) { put(2, 2, O.CHEST); put(1, H - 4, O.STOVE); put(3, H - 3, O.BENCH); }
+    else if (r(2) < 0.5) put(2, H - 3, O.STOVE);
+    if (hall) { put(cx, 2, O.SCREEN); put(cx - 2, 3, O.ANDON); put(cx + 2, 3, O.ANDON); }
   }
   trySleep(at) {
     const h = this.hour;
@@ -351,7 +426,7 @@ export class Game {
     for (let r = 0; r < 4 && (w.solid(gx, gy) || w.obj(gx, gy) || isWater(w.ground(gx, gy))); r++) { gx = tx + randi(-r, r); gy = ty + randi(-r, r); }
     const bag = p.inv.slice(8).filter(Boolean); if (bag.length) { w.set(gx, gy, { o: O.GRAVE }); w.chests.set(gx + ',' + gy, bag.map(s => ({ ...s }))); for (let i = 8; i < 32; i++) p.inv[i] = null; }
     p.coins = Math.floor(p.coins / 2);
-    this.ui.death(() => { const sp = this.spawnPoint || (() => { const s = this.home().spawn; return { x: s.x * TS + 8, y: s.y * TS + 8 }; })(); p.x = sp.x; p.y = sp.y; p.hp = p.maxHp; p.food = Math.max(p.food, 12); p.dead = false; p.alive = true; p.inv = 0; p.cancelFish(); p.inv2 = 0; this.ui.dirty(); });
+    this.ui.death(() => { const sp = this.spawnPoint || (() => { const s = this.home().spawn; return { x: s.x * TS + 8, y: s.y * TS + 8 }; })(); p.x = sp.x; p.y = sp.y; p.hp = p.maxHp; p.food = Math.max(p.food, 12); p.dead = false; p.alive = true; p.ifr = 1.5; p.cancelFish(); this.ui.dirty(); });
   }
   /* ---------- realm ---------- */
   army() { return this.ents.filter(e => e instanceof Soldier && e.mine && !e.dead); }
@@ -379,6 +454,9 @@ export class Game {
     this.playTime += dt; this.tickTime(dt); this.tickWeather(dt);
     this.rebuildGrid();
     this.player.update(dt);
+    { const p = this.player, w = this.world, ptx = Math.floor(p.x / TS), pty = Math.floor(p.y / TS);
+      if (this.inside) { if (w.obj(ptx, pty) === O.EXIT && p.dir === 0 && !this._fading) this.exitHouse(); }
+      else if (p.moving && p.dir === 2 && !this._fading) { const r = this.doorAt(ptx, Math.floor((p.y - 6) / TS)); if (r) this.enterHouse(r[0], r[1]); } }
     for (const e of this.ents) { if (e.dead) continue; const far = dist2(e.x, e.y, this.player.x, this.player.y) > (60 * TS) ** 2; if (far && e.persist) continue; e.update(dt); }
     for (const e of this.ents) if (e.solidEnt !== false && !e.dead && e.team !== 'item' && e.team !== 'proj') { // soft separation
       const others = this.query(e.x, e.y, 10, o => o !== e && o.solidEnt !== false && o.team !== 'item' && o.team !== 'proj');
@@ -389,7 +467,11 @@ export class Game {
     for (const [k, d] of this.dmg) { d.t -= dt; if (d.t <= 0) this.dmg.delete(k); }
     for (const [k, t] of this.shakeTiles) { if (t - dt <= 0) this.shakeTiles.delete(k); else this.shakeTiles.set(k, t - dt); }
     this.randomTicks(dt);
-    this._sp = (this._sp || 0) + dt; if (this._sp > 1.5) { this._sp = 0; this.tickSpawns(); this.activateVillages(); this.world.unloadFar(this.player.x / TS, this.player.y / TS, 7); }
+    this._gl = (this._gl || 0) + dt; if (this._gl > 1) { this._gl = 0; const G0 = GOALS[this.goal || 0];
+      if (G0 && G0.ok(this)) { this.goal = (this.goal || 0) + 1; this.player.coins += G0.r; Audio.play('levelup'); this.ui.toast(`Goal complete: ${G0.t} (+${G0.r} coins)`, 'good', 'coin'); this.ui.dirty(); } }
+    this._vs = (this._vs || 0) + dt; if (this._vs > 2) { this._vs = 0; const night = this.hour >= 20 || this.hour < 6;
+      for (const e of this.ents) if (e instanceof Villager && e.inside && !night) { e.inside = false; if (e.inRoom && e.homeDoor) { e.x = e.homeDoor.x * TS + 8; e.y = (e.homeDoor.y + 1) * TS + 10; } e.inRoom = null; } }
+    this._sp = (this._sp || 0) + dt; if (this._sp > 1.5 && !this.inside) { this._sp = 0; this.tickSpawns(); this.activateVillages(); this.world.unloadFar(this.player.x / TS, this.player.y / TS, 7); }
     this._as = (this._as || 0) + dt; if (this._as > 120) { this._as = 0; this.save(true); }
     if (this.raid) this.raid.t += dt;
     // music mode
@@ -399,7 +481,7 @@ export class Game {
   /* ---------- persistence ---------- */
   serialize() {
     return { v: VERSION, opts: this.opts, world: this.world.serialize(), player: this.player.save(), ents: this.ents.map(e => e.save()).filter(Boolean), nations: [...this.nations.values()],
-      clock: this.clock, weather: this.weather, spawnPoint: this.spawnPoint, stats: this.stats, playTime: this.playTime };
+      clock: this.clock, weather: this.weather, goal: this.goal || 0, prayed: this.prayed, koiFeeds: this.koiFeeds, koiDay: this.koiDay, interiors: this.interiors, inside: this.inside ? this.inside.key : null, spawnPoint: this.spawnPoint, stats: this.stats, playTime: this.playTime };
   }
   save(auto) {
     if (!this.onSave) return; this.onSave(this.serialize(), auto);
@@ -407,10 +489,11 @@ export class Game {
   load(d) {
     this.world.load(d.world); this.clock = d.clock; this.day = Math.floor(this.clock / DAY_LEN) + 1; this.weather = d.weather || this.weather; this.spawnPoint = d.spawnPoint; this.stats = Object.assign(this.stats, d.stats || {}); this.playTime = d.playTime || 0;
     for (const n of d.nations || []) this.nations.set(n.id, n);
-    const P = d.player; this.player = new Player(this, P.x, P.y, P.look); Object.assign(this.player, { hp: P.hp, food: P.food, sel: P.sel, armor: P.armor, coins: P.coins, buff: P.buff || 0 }); this.player.inv = P.inv;
+    this.interiors = d.interiors || {}; this.goal = d.goal || 0; this.prayed = d.prayed || {}; this.koiFeeds = d.koiFeeds || 0; this.koiDay = d.koiDay; this.inside = d.inside ? this.interiors[d.inside] || null : null;
+    const P = d.player; this.player = new Player(this, P.x, P.y, P.look); Object.assign(this.player, { hp: P.hp, food: P.food, sel: P.sel, armor: P.armor, coins: P.coins, buff: P.buff || 0 }); this.player.inv = Array.isArray(P.inv) ? P.inv : new Array(32).fill(null); while (this.player.inv.length < 32) this.player.inv.push(null);
     for (const e of d.ents || []) {
       let o = null;
-      if (e.k === 'villager') { o = new Villager(this, e.x, e.y, { vid: e.vid, role: e.role, seed: e.seed, hx: e.hx, hy: e.hy, name: e.name }); o.homeDoor = e.door; }
+      if (e.k === 'villager') { o = new Villager(this, e.x, e.y, { vid: e.vid, role: e.role, seed: e.seed, hx: e.hx, hy: e.hy, name: e.name }); o.homeDoor = e.door; o.homeSi = e.homeSi; }
       else if (e.k === 'soldier') o = new Soldier(this, e.x, e.y, e);
       else if (e.k === 'dog') o = new Dog(this, e.x, e.y, e);
       else if (e.k === 'animal') o = new Animal(this, e.x, e.y, e);
@@ -419,4 +502,26 @@ export class Game {
     this.lastHour = this.hour;
   }
 }
+export const GOALS = [
+  { t: 'Gather 10 wood', ok: g => g.player.count('wood') >= 10 || g.stats.chopped >= 3, r: 10 },
+  { t: 'Craft a workbench', ok: g => made(g, 'bench'), r: 10 },
+  { t: 'Throw a stick for your dog', ok: g => (g.stats.fetches || 0) >= 1, r: 10 },
+  { t: 'Craft a stone pickaxe', ok: g => made(g, 'pick_stone'), r: 15 },
+  { t: 'Harvest a crop', ok: g => g.stats.harvested >= 1, r: 15 },
+  { t: 'Catch a fish', ok: g => g.stats.fish >= 1, r: 15 },
+  { t: 'Feed the koi in Hanomi', ok: g => (g.koiFeeds || 0) >= 1, r: 10 },
+  { t: 'Survive your first night', ok: g => g.day >= 2, r: 20 },
+  { t: 'Pray at a wayside shrine', ok: g => (g.stats.prayed || 0) >= 1, r: 20 },
+  { t: 'Find buried treasure', ok: g => (g.stats.dug || 0) >= 1, r: 20 },
+  { t: 'Meet a neighbouring clan', ok: g => [...g.nations.values()].some(n => n.met && n.status !== 'home'), r: 20 },
+  { t: 'Complete a chief\'s task', ok: g => (g.stats.tasks || 0) >= 1, r: 30 },
+  { t: 'Smelt an iron ingot', ok: g => made(g, 'iron'), r: 25 },
+  { t: 'Recruit a soldier', ok: g => g.army().length >= 1, r: 25 },
+  { t: 'Survive a Blood Moon', ok: g => g.day >= 6, r: 50 },
+  { t: 'Forge an iron sword', ok: g => made(g, 'sword_iron'), r: 40 },
+  { t: 'Form an alliance', ok: g => [...g.nations.values()].some(n => n.status === 'ally'), r: 60 },
+  { t: 'Claim a village for Hanomi', ok: g => [...g.nations.values()].some(n => n.status === 'vassal'), r: 100 },
+  { t: 'Forge the Jade katana', ok: g => made(g, 'katana'), r: 150 },
+];
+const made = (g, id) => !!(g.stats.made && g.stats.made[id]);
 export const cap = s => s ? s[0].toUpperCase() + s.slice(1) : s;

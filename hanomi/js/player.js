@@ -42,7 +42,7 @@ export class Player extends Human {
     }
     const ml = Math.hypot(mx, my); if (ml > 1) { mx /= ml; my /= ml; }
     if (this.fish && (mx || my)) this.cancelFish();
-    if (this.rollT > 0) { this.rollT -= dt; this.move(this.rollVx * dt, this.rollVy * dt); this.inv2 = 0.1; this.moving = true; if (Math.random() < 0.5) g.fx.spawn({ x: this.x, y: this.y, z: 1, vz: 6, life: 0.4, c: '#d8c8a8', k: 'smoke', s: 2 }); }
+    if (this.rollT > 0) { this.rollT -= dt; this.move(this.rollVx * dt, this.rollVy * dt); this.moving = true; if (Math.random() < 0.5) g.fx.spawn({ x: this.x, y: this.y, z: 1, vz: 6, life: 0.4, c: '#d8c8a8', k: 'smoke', s: 2 }); }
     else if (mx || my) {
       const sprint = (Input.down('Shift') || (Input.joy.on && ml > 0.95)) && this.food > 2;
       let sp = this.speed * (sprint ? 1.45 : 1) * (this.inWater() ? 0.55 : 1) * (this.actT > 0 ? 0.55 : 1);
@@ -53,7 +53,7 @@ export class Player extends Human {
     } else { this.moving = false; this.idleT += dt; }
     // roll
     if (!busy && (Input.pressed(' ') || Input.tbtnHit.roll) && this.rollCd <= 0 && this.rollT <= 0 && !this.fish) {
-      const [dx, dy] = (mx || my) ? [mx, my] : DIRV[this.dir]; const l = Math.hypot(dx, dy) || 1; this.rollVx = dx / l * 170; this.rollVy = dy / l * 170; this.rollT = 0.22; this.rollCd = 0.75; this.inv = 0.3; Audio.play('swing', { vol: 0.5, pitch: 0.7 });
+      const [dx, dy] = (mx || my) ? [mx, my] : DIRV[this.dir]; const l = Math.hypot(dx, dy) || 1; this.rollVx = dx / l * 170; this.rollVy = dy / l * 170; this.rollT = 0.22; this.rollCd = 0.75; this.ifr = 0.3; Audio.play('swing', { vol: 0.5, pitch: 0.7 });
     }
     // aim
     this.facingLock = false;
@@ -104,6 +104,7 @@ export class Player extends Human {
     if (it && (it.tool === 'shears' || it.tool === 'bucket') && fresh) return this.animalTool(it.tool);
     if (it && it.k === 'armor' && fresh) { const a = this.armor; this.armor = s; this.inv[this.sel] = a; g.toast(`Equipped ${it.n}`); Audio.play('place'); g.ui.dirty(); return; }
     if (it && it.k === 'misc' && fresh) return this.interact();
+    if (s && s.id === 'stick' && fresh && g.ents.some(e => e.isDog && e.owned && !e.dead)) { const a = g.aimWorld(); const [dx, dy] = DIRV[this.dir]; return g.throwStick(a && !Input.touch ? a.x : this.x + dx * 80, a && !Input.touch ? a.y : this.y + dy * 80); }
     // swing (tools, weapons, hands)
     this.swing(it && it.tool === 'spear' ? 0.38 : 0.3); this.useCd = it && it.k === 'weapon' ? 0.36 : 0.32; this.swingHit = false; this.swingK = 1;
     Audio.play('swing', { vol: 0.35 });
@@ -154,7 +155,7 @@ export class Player extends Human {
   place(T, it) {
     const g = this.g, w = g.world, P = it.place, gr = w.ground(T.x, T.y);
     const tileFree = !w.block(T.x, T.y) && !w.obj(T.x, T.y) && !isWater(gr);
-    if (P.g != null) { if (w.block(T.x, T.y) || isWater(gr) || gr === P.g) return; if (w.obj(T.x, T.y) && OBJ[w.obj(T.x, T.y)].solid) return; w.set(T.x, T.y, { g: P.g }); }
+    if (P.g != null) { if (w.block(T.x, T.y) || gr === P.g || (isWater(gr) && P.g !== G.WOOD)) return; if (isWater(gr) && w.obj(T.x, T.y)) w.set(T.x, T.y, { o: 0 }); if (isWater(gr)) { g.toast('Bridge plank laid.', 'hint'); } if (w.obj(T.x, T.y) && OBJ[w.obj(T.x, T.y)].solid) return; w.set(T.x, T.y, { g: P.g }); }
     else if (P.b != null) { if (!tileFree || g.entAtTile(T.x, T.y, true)) { g.toast("Can't build there."); Audio.play('error'); return; } w.set(T.x, T.y, { b: P.b }); }
     else if (P.o != null) {
       if (!tileFree) { g.toast("Can't place there."); Audio.play('error'); return; }
@@ -190,7 +191,7 @@ export class Player extends Human {
     // entities near the cursor / in front
     const px = aim && !Input.touch && dist2(aim.x, aim.y, this.x, this.y) < 60 * 60 ? aim.x : this.x + DIRV[this.dir][0] * 14;
     const py = aim && !Input.touch && dist2(aim.x, aim.y, this.x, this.y) < 60 * 60 ? aim.y + 6 : this.y + DIRV[this.dir][1] * 14;
-    const e = g.nearest(px, py, 18, e => e !== this && !e.dead && (e instanceof Villager || e instanceof Soldier || e instanceof Dog || e instanceof Animal) && !e.inside && !e.wild);
+    const e = g.nearest(px, py, 18, e => e !== this && !e.dead && (e instanceof Villager || e instanceof Soldier || e instanceof Dog || e instanceof Animal) && (!e.inside || e.inRoom) && !e.wild);
     if (e) { this.dir = dirOf(e.x - this.x, e.y - this.y); return g.interactEnt(e); }
     if (T) return g.interactTile(T.x, T.y);
     return false;
@@ -232,7 +233,7 @@ export class Player extends Human {
     if (this.rollT > 0) return false;
     const def = this.armor ? ITEMS[this.armor.id].def : 0; d = Math.max(1, Math.round(d * (1 - def / (def + 6))));
     const r = super.hurt(d, src, kb);
-    if (r) { this.inv = 0.6; this.g.fx.shake(3, 0.18); Audio.play('hurt'); this.g.ui.dirty(); this.g.ui.hurtFlash(); if (this.armor && Math.random() < 0.3) { this.armor.d = (this.armor.d || 200) - 1; } }
+    if (r) { this.ifr = 0.6; this.g.fx.shake(3, 0.18); Audio.play('hurt'); this.g.ui.dirty(); this.g.ui.hurtFlash(); if (this.armor && Math.random() < 0.3) { this.armor.d = (this.armor.d || 200) - 1; } }
     return r;
   }
   die() { this.alive = false; }

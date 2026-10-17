@@ -82,6 +82,7 @@ export class World {
       else if (r < 0.05) o = O.BUSH; else if (r < 0.06) o = O.BERRY; else if (r < (dry ? 0.16 : 0.11)) o = O.TALLGRASS;
       else if (r < 0.14) o = O.FLOWERS; else if (r < 0.147) o = O.BOULDER; else if (r < 0.152) o = O.PEBBLE;
     }
+    if (!o && !b && (g === G.GRASS || g === G.FOREST || g === G.SAKURA || g === G.SAND || g === G.SNOW)) { const q = H(31); if (q < 0.0009 && g !== G.SAND) o = O.SHRINE; else if (q < 0.0026) o = O.DIG; }
     if (o && OBJ[o] && OBJ[o].tree) m = hash2i(x, y, 77) & 3;
     if (o === O.FLOWERS || o === O.MUSHROOM || o === O.BOULDER || o === O.PEBBLE) m = hash2i(x, y, 78) & 7;
     return { g, b, o, m };
@@ -151,11 +152,15 @@ export class World {
     const doorPath = s => { const dx = s.x + (s.w >> 1); for (let yy = s.y + s.h; yy <= s.y + s.h + 1; yy++) { path(dx, yy); used.add(dx + ',' + yy); } s.door = { x: dx, y: s.y + s.h - 1 }; };
     if (home) {
       // koi pond east of the plaza, the player's home north-west, farm plot south-west
-      const px0 = cx + 6, py0 = cy - 7;
-      struct('koi', px0, py0, 7, 5); v.koi = { x: px0, y: py0, w: 7, h: 5 };
-      for (let j = 0; j < 5; j++) for (let i = 0; i < 7; i++) set(px0 + i, py0 + j, G.GRASS, B.BLDG, 0, 0);
-      set(px0 - 1, py0 + 5, null, 0, O.LANTERN, 0); set(px0 + 7, py0 + 5, null, 0, O.LANTERN, 0);
-      set(px0 + 8, py0 - 1, null, 0, O.SAKURA, 1); set(px0 - 2, py0 - 2, null, 0, O.SAKURA, 2); set(px0 + 9, py0 + 3, null, 0, O.SAKURA, 0);
+      const KW = 12, KH = 8, px0 = cx + 5, py0 = cy - 11;
+      struct('koi', px0, py0, KW, KH); v.koi = { x: px0, y: py0, w: KW, h: KH };
+      // collision follows the pond's rounded shoreline (same superellipse the pond is carved with)
+      for (let j = 0; j < KH; j++) for (let i = 0; i < KW; i++) {
+        const u = ((i + 0.5) * TS - KW * 8) / (KW * 8 - 4), q = ((j + 0.5) * TS - KH * 8) / (KH * 8 - 4);
+        set(px0 + i, py0 + j, G.SAKURA, Math.pow(Math.abs(u), 2.6) + Math.pow(Math.abs(q), 2.6) < 0.8 ? B.BLDG : 0, 0, 0);
+      }
+      set(px0 - 1, py0 + KH, null, 0, O.LANTERN, 0); set(px0 + KW, py0 + KH - 1, null, 0, O.LANTERN, 0);
+      set(px0 + KW + 1, py0 + 1, null, 0, O.SAKURA, 1); set(px0 - 2, py0 - 1, null, 0, O.SAKURA, 2); set(px0 + KW + 2, py0 + 5, null, 0, O.SAKURA, 0); set(px0 + 3, py0 - 2, null, 0, O.SAKURA, 3);
       const hs = struct('house', cx - 11, cy - 9, 6, 4, { style: 0, home: true }); doorPath(hs); v.homeHouse = hs;
       set(hs.x + hs.w + 1, hs.y + hs.h, null, 0, O.CHEST, 0); set(hs.x - 1, hs.y + hs.h, null, 0, O.BENCH, 0);
       for (let j = 0; j < 4; j++) for (let i = 0; i < 6; i++) set(cx - 11 + i, cy + 5 + j, G.TILLED, 0, (j === 1 || j === 2) && i < 4 ? O.WHEAT : 0, 1);
@@ -285,6 +290,11 @@ export class World {
   solid(x, y) {
     const [c, i] = this._at(x, y); if (c.b[i]) return true;
     const g = c.g[i]; if (g === G.DEEP) return true;
+    if (g === G.WATER) { // wade only along the shore; open water needs a bridge
+      let shore = false;
+      for (let dy = -1; dy <= 1 && !shore; dy++) for (let dx = -1; dx <= 1; dx++) { if (!dx && !dy) continue; if (!isWater(this.ground(x + dx, y + dy))) { shore = true; break; } }
+      if (!shore) return true;
+    }
     const o = c.o[i]; if (o && OBJ[o] && OBJ[o].solid) { if (o === O.GATE && c.m[i] & 1) return false; return true; }
     return false;
   }
