@@ -41,8 +41,15 @@
   <div class="grid" id="alive"></div>
 </section>
 
+<section class="block mascot-block">
+  <p class="kicker">04 · mini me</p><h2>The mascot, all grown up</h2>
+  <p class="note">My site mascot, now with a whole body, drawn and animated in code. Click anywhere on the floor and he walks over. Tap him to make him hop, and drag him to pick him up. Leave him alone and he'll look around, stretch, sit down and doze off.</p>
+  <div class="mascot-stage" id="mascotStage"></div>
+  <div class="row mascot-ctl"><button class="btn" data-mascot="wave">wave</button><button class="btn" data-mascot="hop">hop</button><button class="btn" data-mascot="dance">dance</button><button class="btn" data-mascot="sit">nap</button></div>
+</section>
+
 <section class="block alt how">
-  <p class="kicker">04 · how</p><h2>How it's drawn</h2>
+  <p class="kicker">05 · how</p><h2>How it's drawn</h2>
   <ol>
     <li>Code finds the face (478 points) and separates hair, skin and clothes. Tilted heads are levelled, and props like the garland are painted out.</li>
     <li>The photo's light is turned into target pencil values, with skin kept airy, hair dark and features crisp.</li>
@@ -55,5 +62,6 @@
 
 <div class="lightbox" id="lb" hidden><div class="lb-inner"><div class="art" id="lbArt"></div><div class="lb-bar"><b id="lbTitle"></b><button class="btn" id="lbClose">close</button></div></div></div>
 <script src="js/preview.js"></script>
+<script src="js/mascot.js" defer></script>
 </body>
 </html>

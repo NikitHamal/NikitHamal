@@ -42,25 +42,41 @@ async function mountEyes(el, id) {
   live.add(el); return ov;
 }
 
-// ---- interaction: gaze, blink, wink on tap, gentle tilt toward the pointer
+// ---- interaction: gaze (pointer, phone tilt, or idle wandering), drowsiness, blink, wink, tilt
 const live = new Set();
-let px = innerWidth / 2, py = innerHeight / 3, pq = false;
-function look() {
-  pq = false;
+let px = innerWidth / 2, py = innerHeight / 3, lastMove = performance.now(), asleep = false;
+const wakeUp = () => { lastMove = performance.now(); if (asleep) { asleep = false; for (const el of live) { el.classList.remove('drowsy'); blink(el); setTimeout(() => blink(el), 240); } } };
+addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; wakeUp(); }, { passive: true });
+addEventListener('scroll', wakeUp, { passive: true });
+addEventListener('deviceorientation', e => { if (e.gamma == null) return; px = innerWidth / 2 + e.gamma / 30 * innerWidth / 2; py = innerHeight / 2 + (e.beta - 45) / 30 * innerHeight / 2; wakeUp(); }, { passive: true });
+const askLook = () => {};
+// ~30 fps, only touching portraits that are on screen
+let lt = performance.now();
+setInterval(() => {
+  if (document.hidden || !live.size) return;
+  const now = performance.now(), dt = Math.min(0.1, (now - lt) / 1000), idle = (now - lastMove) / 1000; lt = now;
+  if (idle > 20 && !asleep) { asleep = true; for (const el of live) el.classList.add('drowsy'); }
   for (const el of live) {
     if (!el.isConnected) { live.delete(el); continue; }
     const r = el.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) continue;
-    const dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height * 0.36), m = Math.hypot(dx, dy) || 1, k = Math.min(1, m / (r.width * 1.2));
-    const ix = dx / m * 6 * k, iy = dy / m * 3.5 * k;
-    el.querySelectorAll('.iris').forEach(i => (i.style.transform = `translate(${ix.toFixed(1)}px,${iy.toFixed(1)}px)`));
-    if (el.classList.contains('tilt')) el.style.transform = `perspective(900px) rotateY(${(dx / innerWidth * 3).toFixed(2)}deg) rotateX(${(-dy / innerHeight * 2).toFixed(2)}deg)`;
+    let tx, ty;
+    if (idle < 3.5) {
+      const dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height * 0.36), m = Math.hypot(dx, dy) || 1, k = Math.min(1, m / (r.width * 1.2));
+      tx = dx / m * k; ty = dy / m * k;
+    } else {   // idle: the eyes drift around on their own, each portrait to its own rhythm
+      const s = (el._seed = el._seed || Math.random() * 100), t = now / 1000;
+      tx = Math.sin(t * 0.37 + s) * 0.7 + Math.sin(t * 0.91 + s * 2) * 0.3; ty = Math.sin(t * 0.29 + s * 3) * 0.35 + (asleep ? 0.5 : 0);
+      if (Math.sin(t * 0.21 + s) > 0.92) { tx = Math.sign(tx) * 0.95; }   // a sudden sideways glance now and then
+    }
+    const g = el._g || (el._g = { x: 0, y: 0 }), f = 1 - Math.pow(idle < 3.5 ? 0.0004 : 0.08, dt);
+    g.x += (tx - g.x) * f; g.y += (ty - g.y) * f;
+    const tfm = `translate(${(g.x * 6).toFixed(2)}px,${(g.y * 3.5).toFixed(2)}px)`;
+    if (el._last !== tfm) { el._last = tfm; el.querySelectorAll('.iris').forEach(i => (i.style.transform = tfm)); }
+    if (el.classList.contains('tilt')) el.style.transform = `perspective(900px) rotateY(${(g.x * 2.4).toFixed(2)}deg) rotateX(${(-g.y * 1.6).toFixed(2)}deg)`;
   }
-}
-const askLook = () => { if (!pq) { pq = true; requestAnimationFrame(look); } };
-addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; askLook(); }, { passive: true });
-addEventListener('scroll', askLook, { passive: true });
-function blink(el, which = '.eye') { const e = el.querySelectorAll(which); e.forEach(x => x.classList.add('shut')); setTimeout(() => e.forEach(x => x.classList.remove('shut')), which === '.eye' ? 130 : 320); }
-(function blinker() { for (const el of live) { const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < 0.35) { blink(el); if (Math.random() < 0.15) setTimeout(() => blink(el), 260); } } setTimeout(blinker, 1400 + Math.random() * 1600); })();
+}, 33);
+function blink(el, which = '.eye', ms) { const e = el.querySelectorAll(which); e.forEach(x => x.classList.add('shut')); setTimeout(() => e.forEach(x => x.classList.remove('shut')), ms || (which === '.eye' ? 130 : 320)); }
+(function blinker() { for (const el of live) { const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < (asleep ? 0.12 : 0.35)) { blink(el, '.eye', asleep ? 700 : 130); if (!asleep && Math.random() < 0.15) setTimeout(() => blink(el), 260); } } setTimeout(blinker, 1400 + Math.random() * 1600); })();
 function interactive(el) {
   el.addEventListener('pointerdown', e => { const r = el.getBoundingClientRect(); blink(el, (e.clientX - r.left) < r.width / 2 ? '.eye-l' : '.eye-r'); }); // wink
 }
