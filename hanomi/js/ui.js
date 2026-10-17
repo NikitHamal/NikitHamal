@@ -1,4 +1,4 @@
-// Hanomi — DOM interface: HUD, panels, dialogs, toasts, bubbles, map, koi overlay.
+// Hanomi — DOM interface: HUD, panels, dialogs, toasts, bubbles, map.
 import { TS, CS, G, B, O, OBJ, isWater } from './defs.js';
 import { ITEMS, RECIPES, STATION_NAME } from './items.js';
 import { ICON } from './art/icons.js';
@@ -7,7 +7,7 @@ import { Audio } from './audio.js';
 import { Input } from './input.js';
 import { Saves } from './save.js';
 import { Villager, Soldier, Dog, Animal } from './entities.js';
-import { cap } from './game.js';
+import { cap, GOALS } from './game.js';
 import { clamp, hexCss, fmtTime, pick, dist2 } from './util.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -30,13 +30,15 @@ export class UI {
   /* ================= HUD ================= */
   buildHud() {
     this.hud.innerHTML = `
-      <div class="hud-tl"><div class="hearts"></div><div class="foods"></div><div class="buffs"></div></div>
-      <div class="hud-tr"><div class="clock"><canvas width="22" height="22"></canvas><div class="clock-t"><b class="day">Day 1</b><span class="hr">08:00</span></div></div><div class="coins">${'<img class="ico" src="' + iconUrl('coin') + '">'}<span>0</span></div></div>
+      <div class="hud-tl"><div class="hearts"></div><div class="foods"></div><div class="buffs"></div><div class="goal"></div></div>
+      <div class="hud-tr"><canvas class="minimap" width="72" height="72"></canvas><div class="hud-trc"><div class="clock"><canvas width="22" height="22"></canvas><div class="clock-t"><b class="day">Day 1</b><span class="hr">08:00</span></div></div><div class="coins">${'<img class="ico" src="' + iconUrl('coin') + '">'}<span>0</span></div></div></div>
       <div class="hotbar"></div>
       <div class="army-pill"></div>`;
     this.hb = $('.hotbar', this.hud);
     for (let i = 0; i < 8; i++) { const s = h('div', 'slot', `<i class="k">${i + 1}</i>`); s.dataset.i = i; s.addEventListener('pointerdown', e => { e.stopPropagation(); this.g.player.sel = i; this.g.player.cancelFish(); this.dirty(); Audio.play('click', { vol: 0.4 }); }); this.hb.appendChild(s); }
-    this.clockCv = $('.clock canvas', this.hud);
+    this.clockCv = $('.clock canvas', this.hud); this.mini = $('.minimap', this.hud); this.miniT = 0;
+    this.mini.style.pointerEvents = 'auto'; this.mini.onclick = () => this.open('map');
+    this.g.world.onChange = (x, y) => this.mapCache.delete(Math.floor(x / CS) + ',' + Math.floor(y / CS));
   }
   slotHtml(s) { if (!s) return ''; const it = ITEMS[s.id]; let bar = ''; if (it.dur && s.d < it.dur) bar = `<i class="dur"><i style="width:${Math.max(0, s.d / it.dur * 100)}%;background:${s.d / it.dur < 0.25 ? '#e8504a' : s.d / it.dur < 0.5 ? '#f2c23a' : '#7ad86a'}"></i></i>`; return ico(s.id) + (s.n > 1 ? `<b class="n">${s.n}</b>` : '') + bar; }
   updateHud() {
@@ -49,6 +51,7 @@ export class UI {
       [...this.hb.children].forEach((el, i) => { el.classList.toggle('sel', i === p.sel); const html = `<i class="k">${i + 1}</i>` + this.slotHtml(p.inv[i]); if (el._h !== html) { el.innerHTML = html; el._h = html; } });
       const it = p.item; const nm = it ? ITEMS[it.id].n : ''; if (this._nm !== nm) { this._nm = nm; this.flashName(nm); }
       const buffs = $('.buffs', this.hud); buffs.innerHTML = (p.buff > 0 ? `<span class="buff">${ico('lotus')} Serenity</span>` : '') + (p.armor ? `<span class="buff">${ico(p.armor.id)}</span>` : '');
+      const G0 = GOALS[g.goal || 0], gl = $('.goal', this.hud); gl.innerHTML = G0 ? `<i>◆</i> ${G0.t}` : ''; gl.classList.toggle('on', !!G0);
       const army = g.army().length; $('.army-pill', this.hud).innerHTML = army ? `<span>⚑ ${army}/${g.armyCap()}</span>` : '';
     }
     // clock (every frame cheap)
@@ -74,8 +77,10 @@ export class UI {
     for (const e of [g.player, ...g.ents]) {
       if (!e.bubble || e.dead || e.inside) continue; seen.add(e.id);
       let b = this.bubbles.get(e.id); if (!b) { b = h('div', 'bubble'); this.bubbleLayer.appendChild(b); this.bubbles.set(e.id, b); }
-      if (b._t !== e.bubble) { b.textContent = e.bubble; b._t = e.bubble; b.classList.toggle('bang', e.bubble === '!'); }
-      b.style.transform = `translate(${Math.round((e.x - cam.x) * k)}px,${Math.round((e.y - 34 - cam.y) * k)}px) translate(-50%,-100%)`;
+      if (b._t !== e.bubble) { b._t = e.bubble; b._at = performance.now(); b.classList.toggle('bang', e.bubble === '!'); b.innerHTML = (e.name && e.bubble !== '!' && !e.isPlayer ? `<b></b>` : '') + '<span></span>'; if (b.firstChild.tagName === 'B') b.firstChild.textContent = e.name; b._n = -1; }
+      { const n = Math.min(e.bubble.length, Math.floor((performance.now() - b._at) / 28)); if (n !== b._n) { b._n = n; b.lastChild.textContent = e.bubble.slice(0, n) + (n < e.bubble.length ? '' : ''); } }
+      b.classList.toggle('fade', e.bubbleT < 0.35);
+      b.style.left = Math.round((e.x - cam.x) * k) + 'px'; b.style.top = Math.round((e.y - 34 - cam.y) * k) + 'px';
     }
     for (const [id, b] of this.bubbles) if (!seen.has(id)) { b.remove(); this.bubbles.delete(id); }
     // prompt for interactables
@@ -87,17 +92,34 @@ export class UI {
     const pcx = Math.floor(g.player.x / TS / CS), pcy = Math.floor(g.player.y / TS / CS);
     for (let y = -2; y <= 2; y++) for (let x = -3; x <= 3; x++) this.explored.add((pcx + x) + ',' + (pcy + y));
     if (this.modal === 'map' && this.mapDraw) this.mapDraw();
+    if ((this.miniT -= dt) <= 0) { this.miniT = 0.25; this.drawMini(); }
+  }
+  drawMini() {
+    const g = this.g, c = this.mini.getContext('2d'), N = 72, p = g.player; c.imageSmoothingEnabled = false;
+    this.mini.classList.toggle('off', !!g.inside); if (g.inside) return;
+    const px = p.x / TS, py = p.y / TS, x0 = px - N / 2, y0 = py - N / 2;
+    c.fillStyle = '#1a2a3a'; c.fillRect(0, 0, N, N);
+    let budget = 2;
+    for (let ky = Math.floor(y0 / CS); ky <= Math.floor((y0 + N) / CS); ky++) for (let kx = Math.floor(x0 / CS); kx <= Math.floor((x0 + N) / CS); kx++) {
+      const k = kx + ',' + ky; if (!this.explored.has(k) && !g.world.peek(kx, ky)) continue;
+      const img = this.mapChunk(kx, ky, budget > 0); if (!img) continue; if (img.fresh) { img.fresh = false; budget--; }
+      c.drawImage(img, Math.round(kx * CS - x0), Math.round(ky * CS - y0)); }
+    for (const v of g.world.villagesNear(px, py, N)) { const n = g.nations.get(v.id); if (!n || !n.met) continue; const vx = Math.round(v.x - x0), vy = Math.round(v.y - y0); c.fillStyle = '#fff'; c.fillRect(vx - 2, vy - 2, 5, 5); c.fillStyle = hexCss(n.color); c.fillRect(vx - 1, vy - 1, 3, 3); }
+    for (const e of g.ents) { if (e.dead || e.inside || e.team === 'item' || e.team === 'proj') continue; const ex = Math.round(e.x / TS - x0), ey = Math.round(e.y / TS - y0); if (ex < 0 || ey < 0 || ex >= N || ey >= N) continue;
+      const col = e.team === 'undead' || e.team === 'wild' || g.hostile(e, p) ? '#ff4a4a' : e.isDog && e.owned ? '#ffd04a' : e.team === 'player' ? '#8ad8ff' : e.livestock ? '#f2e2c2' : e.team && e.team.startsWith('v:') ? '#ffffff' : null; if (col) { c.fillStyle = col; c.fillRect(ex, ey, 1, 1); } }
+    const blink = (performance.now() / 400 | 0) % 2; c.fillStyle = '#ff6a8a'; c.fillRect(N / 2 - 1, N / 2 - 1, 3, 3); if (blink) { c.fillStyle = '#fff'; const [dx, dy] = [[0, 1], [1, 0], [0, -1], [-1, 0]][p.dir]; c.fillRect(N / 2 + dx * 2, N / 2 + dy * 2, 1, 1); }
   }
   updatePrompt(k, cam) {
     const g = this.g, p = g.player; let label = null, at = null;
     if (!this.modal && !p.fish) {
-      const e = g.nearest(p.x + [0, 12, 0, -12][p.dir], p.y + [12, 0, -12, 0][p.dir], 20, e => e !== p && !e.dead && !e.inside && !e.wild && (e instanceof Villager || (e instanceof Soldier && (e.mine || !g.hostile(e, p))) || e instanceof Dog || (e instanceof Animal && g.holding(e.def.food))));
+      const e = g.nearest(p.x + [0, 12, 0, -12][p.dir], p.y + [12, 0, -12, 0][p.dir], 20, e => e !== p && !e.dead && (!e.inside || e.inRoom) && !e.wild && (e instanceof Villager || (e instanceof Soldier && (e.mine || !g.hostile(e, p))) || e instanceof Dog || (e instanceof Animal && g.holding(e.def.food))));
       if (e) { at = { x: e.x, y: e.y - 34 }; label = e instanceof Dog ? (e.owned ? 'Pet' : (g.holding(['dog_treat']) ? 'Adopt' : 'Pet')) : e instanceof Animal ? 'Feed' : e.role === 'merchant' ? 'Trade' : e.role === 'chief' ? 'Audience' : e instanceof Soldier ? 'Command' : 'Talk'; }
       else if (g.target) {
         const T = g.target, w = g.world, o = w.obj(T.x, T.y), m = w.meta(T.x, T.y), b = w.block(T.x, T.y);
         const L = { [O.CHEST]: 'Open', [O.BED]: 'Sleep', [O.GATE]: (m & 1) ? 'Close' : 'Open', [O.BENCH]: 'Craft', [O.FURNACE]: 'Smelt', [O.ANVIL]: 'Forge', [O.CAMPFIRE]: 'Cook', [O.POT]: 'Cook', [O.WELL]: 'Draw water', [O.BANNER]: 'Banner', [O.STALL]: 'Trade', [O.GRAVE]: 'Recover' };
         if (o && L[o]) label = L[o]; else if (o && OBJ[o].crop && (m & 3) === 3) label = 'Harvest'; else if (o === O.BERRY && !m) label = 'Pick';
-        else if (b === B.BLDG) { const r = g.structAt(T.x, T.y); if (r) label = r[1].kind === 'koi' ? 'Feed the koi' : r[1].home ? 'Home' : null; }
+        else if (b === B.BLDG || !o) { const r = g.structAt(T.x, T.y); if (r) label = r[1].kind === 'koi' ? 'Feed the koi' : g.doorAt(T.x, T.y) ? 'Enter' : null; }
+        if (o === O.SHRINE) label = 'Pray'; else if (o === O.DIG) label = 'Dig (hoe)';
         if (label) at = { x: T.x * TS + 8, y: T.y * TS - 10 };
       }
     }
@@ -133,7 +155,6 @@ export class UI {
   }
   close(silent) {
     if (!this.modal) return; if (this.held) this.returnHeld();
-    if (this.modal === 'koi') this.closeKoi();
     this.modal = null; this.g.paused = false; this.modalBox.className = ''; this.modalBox.innerHTML = ''; this.tip.classList.remove('on'); this.mapDraw = null;
     if (!silent) Audio.play('close', { vol: 0.5 }); this.dirty();
   }
@@ -172,7 +193,7 @@ export class UI {
     rs.sort((a, b) => (can(b) - can(a)) || ((st.has(b.at) ? 1 : 0) - (st.has(a.at) ? 1 : 0)));
     box.innerHTML = rs.map((r, i) => { const ok = can(r), here = st.has(r.at);
       return `<div class="rec ${ok ? 'ok' : ''} ${here ? '' : 'far'}" data-r="${this.g.recipes.indexOf(r)}"><div class="out">${ico(r.out)}${r.n > 1 ? `<b class="n">${r.n}</b>` : ''}</div><div class="mid"><b>${ITEMS[r.out].n}</b><span class="ing">${Object.entries(r.in).map(([id, n]) => `<span class="${p.count(id) >= n ? '' : 'miss'}">${ico(id, 'sm')}${n}</span>`).join('')}${r.at ? `<em>${STATION_NAME[r.at]}</em>` : ''}</span></div><button class="btn sm" data-craft="${this.g.recipes.indexOf(r)}" ${ok ? '' : 'disabled'}>Craft</button></div>`; }).join('');
-    box.onclick = e => { const b = e.target.closest('[data-craft]'); if (!b || b.disabled) return; const r = this.g.recipes[+b.dataset.craft]; const times = e.shiftKey ? 5 : 1; let made = 0; for (let k = 0; k < times && can(r); k++) { for (const [id, n] of Object.entries(r.in)) p.remove(id, n); const left = p.add(r.out, r.n); if (left) this.g.drop(r.out, left, p.x, p.y); made++; } if (made) { Audio.play('craft'); this.toast(`Crafted ${ITEMS[r.out].n}${made * r.n > 1 ? ' ×' + made * r.n : ''}`, 'item', r.out); this.g.stats.crafted = (this.g.stats.crafted || 0) + made; } this.refreshInv(panel, st); };
+    box.onclick = e => { const b = e.target.closest('[data-craft]'); if (!b || b.disabled) return; const r = this.g.recipes[+b.dataset.craft]; const times = e.shiftKey ? 5 : 1; let made = 0; for (let k = 0; k < times && can(r); k++) { for (const [id, n] of Object.entries(r.in)) p.remove(id, n); const left = p.add(r.out, r.n); if (left) this.g.drop(r.out, left, p.x, p.y); made++; } if (made) { const M = this.g.stats.made || (this.g.stats.made = {}); M[r.out] = (M[r.out] || 0) + made; this.dirty(); Audio.play('craft'); this.toast(`Crafted ${ITEMS[r.out].n}${made * r.n > 1 ? ' ×' + made * r.n : ''}`, 'item', r.out); this.g.stats.crafted = (this.g.stats.crafted || 0) + made; } this.refreshInv(panel, st); };
     box.onpointerover = e => { const el = e.target.closest('.rec'); if (el) this.showTip({ id: this.g.recipes[+el.dataset.r].out, n: 1 }); };
     box.onpointerout = () => this.tip.classList.remove('on');
   }
@@ -269,7 +290,7 @@ export class UI {
       gift: () => { p.coins -= 25; n.rel = Math.min(100, n.rel + 7); Audio.play('coin'); chief.say('Most generous.'); render(); this.dirty(); },
       gift4: () => { p.coins -= 100; n.rel = Math.min(100, n.rel + 30); Audio.play('coin'); chief.say('You honour us greatly!'); render(); this.dirty(); },
       task: () => { const opts = [['wood', 20, 40], ['stone', 20, 40], ['bread', 4, 60], ['cooked_fish', 4, 55], ['iron', 3, 70], ['wheat', 12, 45], ['leather', 4, 50], ['wool', 5, 55], ['torch', 10, 35], ['carrot', 8, 40], ['sushi', 2, 70], ['lantern', 2, 60]]; const [id, k, r] = pick(opts); n.quest = { id, n: k, reward: r }; Audio.play('open'); render(); },
-      turnin: () => { const q = n.quest; if (p.count(q.id) < q.n) return; p.remove(q.id, q.n); p.coins += q.reward; n.rel = Math.min(100, n.rel + 15); n.quest = null; Audio.play('levelup'); this.toast(`Task complete! +${q.reward} coins`, 'good', 'coin'); render(); this.dirty(); },
+      turnin: () => { const q = n.quest; if (p.count(q.id) < q.n) return; p.remove(q.id, q.n); p.coins += q.reward; g.stats.tasks = (g.stats.tasks || 0) + 1; n.rel = Math.min(100, n.rel + 15); n.quest = null; Audio.play('levelup'); this.toast(`Task complete! +${q.reward} coins`, 'good', 'coin'); render(); this.dirty(); },
       ally: () => { n.status = 'ally'; Audio.play('levelup'); this.banner(`Alliance with ${n.name}`, `${n.ruler}'s soldiers will stand with Hanomi.`); render(); },
       troops: () => { n.troopsDay = g.day; for (let k = 0; k < 3; k++) { const s = g.add(new Soldier(g, chief.x + k * 8, chief.y + 14, { mine: true, color: n.color, archer: k === 2, slot: g.army().length, temp: g.day + 2 })); s.name = s.name + ' of ' + n.name; } Audio.play('drum'); this.toast(`3 soldiers of ${n.name} join you for two days.`, 'good'); render(); },
       war: () => { if (!this._warConfirm) { this._warConfirm = true; this.toast('Click again to confirm war.', 'bad'); setTimeout(() => this._warConfirm = false, 2500); return; } n.status = 'war'; n.rel = 0; Audio.play('horn'); this.banner(`War with ${n.name}`, 'Defeat their guards, then claim their banner.'); this.close(); },
@@ -361,8 +382,14 @@ export class UI {
     bindSettings(panel, s, () => { this.g.applySettings(); });
     this.wire(panel, { back: () => this.open('pause') });
   }
+  m_journal(panel) {
+    const g = this.g, cur = g.goal || 0;
+    panel.innerHTML = this.head('Journal', `${Math.min(cur, GOALS.length)} of ${GOALS.length} goals`) + `<div class="journal">${GOALS.map((G0, i) => `<div class="jg ${i < cur ? 'done' : i === cur ? 'cur' : ''}"><i>${i < cur ? '✔' : i === cur ? '◆' : '·'}</i><span>${G0.t}</span><b>${ico('coin', 'sm')}${G0.r}</b></div>`).join('')}</div>`;
+    this.wire(panel, {});
+  }
   m_help(panel) { panel.innerHTML = this.head('How to play') + HELP_HTML; this.wire(panel, {}); }
   /* ---------- sleep / death fades ---------- */
+  fade(cb) { const f = $('#fade'); this.g._fading = true; f.innerHTML = ''; f.className = 'on quick'; setTimeout(() => { cb(); setTimeout(() => { f.className = ''; this.g._fading = false; }, 60); }, 260); }
   sleep(cb) {
     const f = $('#fade'); f.innerHTML = '<b>Z z z…</b>'; f.className = 'on'; this.g.paused = true;
     setTimeout(() => { cb(); this.g.paused = false; f.innerHTML = `<b>Day ${this.g.day}</b>`; setTimeout(() => { f.className = ''; Audio.play('bell'); }, 1200); }, 1600);
@@ -370,19 +397,6 @@ export class UI {
   death(cb) {
     const f = $('#fade'); f.className = 'on death'; f.innerHTML = `<b>You fell</b><span>Your satchel lies where you fell. Half your coins are lost.</span><button class="btn">Wake up</button>`;
     this.g.paused = true; f.querySelector('button').onclick = () => { cb(); this.g.paused = false; f.className = ''; f.innerHTML = ''; };
-  }
-  /* ---------- koi pond overlay (the portfolio's real pond) ---------- */
-  openKoi() {
-    this.close(true); this.modal = 'koi'; this.g.paused = true; Audio.music('off');
-    const ov = $('#koi'), pond = $('#pond'); ov.classList.add('on'); $('.koi-frame', ov).appendChild(pond); pond.classList.add('in-game');
-    this.koiFeeds = 0; this._kf = e => { this.koiFeeds++; if (this.koiFeeds === 6) { this.g.player.buff = 240; this.dirty(); this.toast('Serenity — you feel calm and strong.', 'good', 'lotus'); Audio.play('levelup'); } };
-    $('#pond-c').addEventListener('pointerdown', this._kf);
-    $('.koi-close', ov).onclick = () => this.close();
-    window.dispatchEvent(new Event('resize'));
-  }
-  closeKoi() {
-    const ov = $('#koi'), pond = $('#pond'); ov.classList.remove('on'); pond.classList.remove('in-game'); $('#title-pond').appendChild(pond);
-    $('#pond-c').removeEventListener('pointerdown', this._kf); this.g.paused = false;
   }
 }
 const STATION_LIST = st => { const n = [...st].filter(Boolean).map(s => STATION_NAME[s]); return n.length ? 'Near: ' + [...new Set(n)].join(', ') : 'Crafting by hand'; };
@@ -410,12 +424,12 @@ export function bindSettings(panel, s, apply) {
 }
 export const HELP_HTML = `<div class="help"><div class="keys">
 <span><kbd>WASD</kbd>Move</span><span><kbd>Shift</kbd>Sprint</span><span><kbd>Space</kbd>Dodge roll</span><span><kbd>Click</kbd>Use tool / attack / place</span><span><kbd>Right-click</kbd> / <kbd>E</kbd>Interact</span>
-<span><kbd>1-8</kbd> / <kbd>Wheel</kbd>Hotbar</span><span><kbd>Tab</kbd> / <kbd>I</kbd>Satchel &amp; crafting</span><span><kbd>M</kbd>Map</span><span><kbd>N</kbd>Realm &amp; army</span><span><kbd>Q</kbd>Drop item</span><span><kbd>Esc</kbd>Pause</span></div>
+<span><kbd>1-8</kbd> / <kbd>Wheel</kbd>Hotbar</span><span><kbd>Tab</kbd> / <kbd>I</kbd>Satchel &amp; crafting</span><span><kbd>M</kbd>Map</span><span><kbd>N</kbd>Realm &amp; army</span><span><kbd>J</kbd>Journal</span><span><kbd>Q</kbd>Drop item</span><span><kbd>Esc</kbd>Pause</span></div>
 <ul><li><b>Survive.</b> Keep your rice bowls full; a full belly heals you. Zombies rise at night and burn at dawn — light keeps them away.</li>
 <li><b>Gather &amp; craft.</b> Punch trees for wood, make a workbench, then tools. Furnaces smelt ore from the grey hills; anvils forge iron and jade.</li>
 <li><b>Farm &amp; fish.</b> Till soil with a hoe, plant, water (rain helps). Cast your rod into water and keep the fish in the zone.</li>
 <li><b>Rear.</b> Hold wheat or seeds and animals follow; feed two to breed. Shear sheep, milk cows, collect eggs.</li>
-<li><b>Your dog</b> follows and fights beside you. Pet often. Strays can be adopted with dog treats.</li>
+<li><b>Your dog</b> follows and fights beside you. Pet often, and throw a stick to play fetch. Strays can be adopted with dog treats.</li><li><b>Explore.</b> Wayside shrines bless travellers once a day. Glinting soil hides buried treasure — dig it with a hoe. Walk into any house to step inside.</li>
 <li><b>Nations.</b> Every village is a clan. Trade, gift, take on tasks, ally — or declare war, defeat their guards and claim their banner.</li>
 <li><b>Army.</b> Recruit soldiers at your banner. Every fifth night the Blood Moon brings a horde to Hanomi. Defend it.</li>
-<li><b>The koi pond</b> in Hanomi calms the soul. Feed the koi for the Serenity blessing.</li></ul></div>`;
+<li><b>The koi pond</b> in Hanomi calms the soul. Stand at its edge and feed the koi for the Serenity blessing.</li></ul></div>`;
