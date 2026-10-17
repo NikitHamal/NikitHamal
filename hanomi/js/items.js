@@ -6,7 +6,7 @@ export const ITEMS = {
   fiber: { n: 'Plant fiber', k: 'mat', v: 1 }, rope: { n: 'Rope', k: 'mat', v: 4 }, coal: { n: 'Coal', k: 'mat', v: 3 },
   iron_ore: { n: 'Iron ore', k: 'mat', v: 5 }, iron: { n: 'Iron ingot', k: 'mat', v: 12 }, gold_ore: { n: 'Gold ore', k: 'mat', v: 10 }, gold: { n: 'Gold ingot', k: 'mat', v: 25 },
   jade: { n: 'Jade', k: 'mat', v: 40 }, leather: { n: 'Leather', k: 'mat', v: 6 }, wool: { n: 'Wool', k: 'mat', v: 5 }, feather: { n: 'Feather', k: 'mat', v: 1 },
-  bone: { n: 'Bone', k: 'mat', v: 2 }, petals: { n: 'Sakura petals', k: 'mat', v: 2 }, flower: { n: 'Wildflower', k: 'mat', v: 1 }, lotus: { n: 'Lotus', k: 'mat', v: 6 },
+  bone: { n: 'Bone', k: 'mat', v: 2 }, bamboo: { n: 'Bamboo', k: 'mat', v: 3 }, petals: { n: 'Sakura petals', k: 'mat', v: 2 }, flower: { n: 'Wildflower', k: 'mat', v: 1 }, lotus: { n: 'Lotus', k: 'mat', v: 6 },
   egg: { n: 'Egg', k: 'mat', v: 3 }, wheat: { n: 'Wheat', k: 'mat', v: 3 }, rice: { n: 'Rice', k: 'mat', v: 4 }, rotten: { n: 'Rotten flesh', k: 'mat', v: 0 },
   berries: { n: 'Berries', k: 'food', v: 2, food: 2 }, apple: { n: 'Apple', k: 'food', v: 3, food: 3 }, carrot: { n: 'Carrot', k: 'food', v: 3, food: 3, plant: O.CARROT },
   tomato: { n: 'Tomato', k: 'food', v: 4, food: 3 }, pumpkin: { n: 'Pumpkin', k: 'food', v: 8, food: 4 }, mushroom: { n: 'Mushroom', k: 'food', v: 2, food: 2 },

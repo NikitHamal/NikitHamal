@@ -5,6 +5,7 @@ import { S as NS } from './art/nature.js';
 import { S as SS, houseSprite, bannerSprite, stallSprite } from './art/structures.js';
 import { Spr } from './pix.js';
 import { createKoiPond } from './koipond.js';
+import { Audio } from './audio.js';
 import { clamp, hash2, hash2i, rand, pick, bayer, mulberry32, TAU } from './util.js';
 
 const WALLS = new Set([B.STONE, B.DARK, B.COAL, B.IRON, B.GOLD, B.GEM, B.WOODWALL, B.STONEWALL]);
@@ -72,6 +73,7 @@ export class Renderer {
     for (const c of vis) if (c.wcv) ctx.fillRect(c.cx * CPX - ox + (ox % 64) + 64, c.cy * CPX - oy + (oy % 64) + 64, CPX, CPX);
     ctx.restore();
     for (const c of vis) if (c.cv) ctx.drawImage(c.cv, c.cx * CPX - ox, c.cy * CPX - oy);
+    if (!g.inside) this.fishLife(g, dt, ox, oy, vw, vh);
     // ---- collect drawables ----
     const dl = this.dl; dl.length = 0; const shadows = [];
     const tx0 = Math.floor(ox / TS) - 2, tx1 = Math.floor((ox + vw) / TS) + 2, ty0 = Math.floor(oy / TS) - 1, ty1 = Math.floor((oy + vh) / TS) + 4;
@@ -130,6 +132,7 @@ export class Renderer {
       ctx.fillRect(0, 0, vw, Math.max(0, ry)); ctx.fillRect(0, ry + rh, vw, vh); ctx.fillRect(0, ry, Math.max(0, rx), rh); ctx.fillRect(rx + rw, ry, vw, rh); }
     // target reticle
     if (g.target && !g.ui.modal && g.showTarget()) this.drawTarget(ctx, g.target.x * TS - ox, (g.target.y * TS - oy) - 0);
+    if (!room) this.birdLife(g, dt, ox, oy, vw, vh);
     // rain
     if (!room) this.drawRain(g, ctx, vw, vh, dt);
     // lighting
@@ -244,6 +247,38 @@ export class Renderer {
       if (this._win) { ctx.globalAlpha = Math.min(1, (1 - d) * 1.2); for (const [x, y, w, hh, lan] of this._win) { ctx.fillStyle = lan ? '#ff6a4a' : '#ffd88a'; ctx.globalAlpha = (lan ? 0.6 : 0.85) * Math.min(1, (1 - d) * 1.3); ctx.fillRect(Math.round(x), Math.round(y), w, hh); } ctx.globalAlpha = 1; }
     }
     this._win = null;
+  }
+  // living water: fish shadows glide under the surface and dart away from you
+  fishLife(g, dt, ox, oy, vw, vh) {
+    const F = this.fish || (this.fish = []), w = g.world, p = g.player, ctx = this.ctx;
+    if (F.length < 7 && Math.random() < dt * 2) { const x = ox + Math.random() * vw, y = oy + Math.random() * vh; if (isWater(w.ground(Math.floor(x / TS), Math.floor(y / TS))) && w.ground(Math.floor(x / TS), Math.floor(y / TS)) !== G.ONSEN) F.push({ x, y, a: rand(TAU), sp: rand(6, 12), len: rand(4, 7) | 0, t: 0, turn: 0 }); }
+    for (let i = F.length - 1; i >= 0; i--) { const f = F[i]; f.t += dt;
+      const dx = f.x - p.x, dy = f.y - p.y, d = Math.hypot(dx, dy); let sp = f.sp;
+      if (d < 34) { f.a = Math.atan2(dy, dx) + rand(-0.4, 0.4); sp = 48; } else { f.turn += (Math.random() - 0.5) * dt * 3; f.turn *= 0.97; f.a += f.turn * dt; }
+      const nx = f.x + Math.cos(f.a) * sp * dt, ny = f.y + Math.sin(f.a) * sp * dt;
+      if (!isWater(w.ground(Math.floor((nx + Math.cos(f.a) * 6) / TS), Math.floor((ny + Math.sin(f.a) * 6) / TS)))) f.a += Math.PI * 0.6; else { f.x = nx; f.y = ny; }
+      if (f.x < ox - 40 || f.y < oy - 40 || f.x > ox + vw + 40 || f.y > oy + vh + 40) { F.splice(i, 1); continue; }
+      ctx.fillStyle = 'rgba(10,30,50,0.32)'; const ca = Math.cos(f.a), sa = Math.sin(f.a), wig = Math.sin(f.t * 10) * 0.6;
+      for (let k = 0; k < f.len; k++) { const bx = f.x - ca * k + (-sa) * wig * k / f.len, by = f.y - sa * k + ca * wig * k / f.len; ctx.fillRect(Math.round(bx - ox), Math.round(by - oy), k < f.len - 2 ? 2 : 1, k > 0 && k < f.len - 2 ? 2 : 1); }
+      if (Math.random() < dt * 0.15) g.fx.spawn({ x: f.x, y: f.y, life: 0.8, k: 'ring', s: 4, c: '#e8fbff' });
+    }
+  }
+  // sparrows hop about on grass and flutter off when you come near
+  birdLife(g, dt, ox, oy, vw, vh) {
+    const B = this.birds || (this.birds = []), w = g.world, p = g.player, ctx = this.ctx;
+    if (!this.birdSpr) { const mk = (fl, up) => { const s = new Spr(9, 8); s.ell(4, 4.5, 3, 2.2, (u, v) => v > 0.3 ? 0xe8d8c0 : u > 0.3 ? 0x6a4a32 : 0x8a6440); s.ell(6.5, 3, 1.8, 1.6, 0x7a5236); s.set(8, 3, 0xd8a040); s.set(6, 2, 0x101010); s.set(1, 4, 0x5a3a24); s.set(0, 3, 0x5a3a24);
+        if (fl) { s.ell(4, up ? 1.5 : 6, 2.6, 1.2, 0x5a3a24); } else { s.set(4, 7, 0xb8885a); s.set(5, 7, 0xb8885a); } s.outline(0x2a1a10); return { n: s.canvas(), f: s.flipX().canvas() }; };
+      this.birdSpr = [mk(0), mk(1, 1), mk(1, 0)]; }
+    if (g.daylight > 0.6 && !g.raining && B.length < 6 && Math.random() < dt * 0.6) { const x = ox + Math.random() * vw, y = oy + Math.random() * vh, gr = w.ground(Math.floor(x / TS), Math.floor(y / TS));
+      if ((gr === G.GRASS || gr === G.SAKURA || gr === G.PATH || gr === G.PLAZA) && Math.hypot(x - p.x, y - p.y) > 70 && !w.solid(Math.floor(x / TS), Math.floor(y / TS))) { const n = 1 + (Math.random() * 3 | 0); for (let k = 0; k < n; k++) B.push({ x: x + rand(-14, 14), y: y + rand(-10, 10), z: 0, f: Math.random() < 0.5 ? 1 : -1, t: rand(2), fly: 0, vx: 0, vy: 0 }); } }
+    for (let i = B.length - 1; i >= 0; i--) { const b = B[i]; b.t += dt;
+      if (!b.fly && Math.hypot(b.x - p.x, b.y - p.y) < 40) { b.fly = 1; const a = Math.atan2(b.y - p.y, b.x - p.x); b.vx = Math.cos(a) * 70; b.vy = Math.sin(a) * 40; b.f = b.vx > 0 ? 1 : -1; if (Math.random() < 0.5) Audio.play('chicken', { pitch: 2.4, vol: 0.12 }); }
+      if (b.fly) { b.x += b.vx * dt; b.y += b.vy * dt; b.z += 45 * dt; if (b.z > 90) { B.splice(i, 1); continue; } }
+      else if (Math.random() < dt * 1.5) { b.x += b.f * rand(2, 5); b.z = 2; } else b.z = Math.max(0, b.z - dt * 20);
+      if (!b.fly && Math.random() < dt * 0.3) b.f = -b.f;
+      if (b.x < ox - 60 || b.x > ox + vw + 60 || b.y < oy - 60 || b.y > oy + vh + 60) { B.splice(i, 1); continue; }
+      const fr = this.birdSpr[b.fly ? 1 + ((b.t * 16) | 0) % 2 : 0]; if (b.z < 30) { ctx.fillStyle = 'rgba(20,16,30,0.2)'; ctx.fillRect(Math.round(b.x - ox - 2), Math.round(b.y - oy), 5, 1); }
+      ctx.drawImage(b.f > 0 ? fr.n : fr.f, Math.round(b.x - ox - 4), Math.round(b.y - oy - 7 - b.z)); }
   }
   ambient(g, dt, ox, oy, vw, vh) {
     // petals, leaves, fireflies, butterflies

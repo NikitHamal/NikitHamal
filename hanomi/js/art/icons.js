@@ -44,10 +44,10 @@ const P = {
   milk: s => { s.rect(5, 5, 6, 9, (x, y) => y < 8 ? 0xd8e8f0 : (x < 7 ? 0xffffff : 0xe8eef2)); s.rect(6, 2, 4, 3, 0xb8c8d8); s.rect(5, 9, 6, 2, 0x5a8ad8); },
   raw_meat: s => { s.ell(8, 9, 6, 4.5, (u, v) => v < -0.3 ? 0xff8a8a : (u * u + v * v < 0.2 ? 0xf2d8d8 : 0xd84a5a)); s.rect(12, 4, 2, 4, 0xf2ecd8); },
   cooked_meat: s => { s.ell(8, 9, 6, 4.5, (u, v) => v < -0.3 ? 0xc8784a : (u * u + v * v < 0.2 ? 0xe8b080 : 0x8a4a2a)); s.rect(12, 4, 2, 4, 0xf2ecd8); s.line(4, 9, 11, 9, 0x5a2a1a); },
-  raw_fish: s => fish(s, 0x7a9ab8), cooked_fish: s => { fish(s, 0xb8784a); s.line(1, 14, 14, 1, 0x8a5a34); },
-  fish_carp: s => fish(s, 0x9a8a5a), fish_trout: s => fish(s, 0x8aa86a, 0xf08a8a), fish_salmon: s => fish(s, 0xe88a6a), fish_catfish: s => fish(s, 0x6a6a5a),
-  fish_eel: s => { s.stroke(2, 10, 6, 6, 3, 3, 0x4a5a3a); s.stroke(6, 6, 10, 11, 3, 3, 0x5a6a42); s.stroke(10, 11, 14, 5, 3, 2, 0x4a5a3a); s.set(13, 5, 0x1a1414); },
-  fish_golden: s => fish(s, 0xf2c23a, 0xffffff),
+  raw_fish: s => fishHi(s, { c: 0x7a9ab8 }), cooked_fish: s => { s.line(0, 15, 15, 0, 0x6b4428); s.line(1, 15, 15, 1, 0x8a5a34); fishHi(s, { c: 0xb8743a, stripe: 0x6a3a1a }); },
+  fish_carp: s => fishHi(s, { c: 0xa8925a, fat: 1 }), fish_trout: s => fishHi(s, { c: 0x7a9a6a, spots: 0x2a2a2a, stripe: 0xe88a9a }), fish_salmon: s => fishHi(s, { c: 0xd8806a, spots: 0x3a2a3a }), fish_catfish: s => fishHi(s, { c: 0x6a6a5a, fat: 1, whisk: 1 }),
+  fish_eel: s => { const big = new Spr(32, 32); for (let k = 0; k <= 40; k++) { const t = k / 40, x = 3 + t * 26, y = 16 + Math.sin(t * 7) * 5, r = 3.4 - t * 2; big.ell(x, y, r, r, (u, v) => v < -0.3 ? 0x7a8a52 : v > 0.4 ? 0xc8c88a : 0x5a6a3a); } big.rect(3, 13, 2, 2, 0x101018); big.set(3, 13, 0xffffff); s.draw(halve2(big), 0, 0); },
+  fish_golden: s => fishHi(s, { c: 0xf2c23a, patch: 0xe8602a }),
   bread: s => { s.ell(8, 9, 6.5, 4, (u, v) => v < -0.2 ? 0xe8a85a : 0xc8783a); for (let k = 0; k < 3; k++) s.line(5 + k * 3, 7, 6 + k * 3, 9, 0xf2d8a0); },
   onigiri: s => { s.poly([[8, 2], [14, 13], [2, 13]], (x, y) => y > 9 && x > 5 && x < 11 ? 0x1e2a1e : (y < 6 ? 0xffffff : 0xf2f0ea)); },
   stew: s => { s.ell(8, 9, 6.5, 3, 0xc8783a); s.set(6, 8, 0xf07a22); s.set(10, 9, 0xe8dcc0); s.ell(8, 12, 6, 3, (u, v) => v > 0 ? 0x6b4428 : 0x8a5a34); s.rect(2, 9, 12, 1, 0x8a5a34); },
@@ -78,6 +78,29 @@ const P = {
   cobble: s => { s.rect(1, 4, 14, 9, 0x6f7378); for (const [x, y] of [[4, 6], [10, 6], [7, 10], [13, 10], [2, 10]]) s.ell(x, y, 2.4, 1.6, 0xa1a5a8); },
 };
 function ingot(s, c) { const R = r3(c); s.poly([[2, 11], [14, 11], [12, 6], [4, 6]], (x, y) => y < 8 ? R[2] : R[1]); s.rect(2, 11, 12, 2, R[0]); }
+// fish are painted at 2x (shaded body, scales, fins, eye) then mode-filtered down, like the animals
+function halve2(src) { const o = new Spr(src.w >> 1, src.h >> 1), cnt = new Map();
+  for (let y = 0; y < o.h; y++) for (let x = 0; x < o.w; x++) { cnt.clear(); let n = 0; for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) { if (!src.has(x * 2 + i, y * 2 + j)) continue; n++; const c = src.hex(x * 2 + i, y * 2 + j); cnt.set(c, (cnt.get(c) || 0) + (c === 0x101018 || c === 0xffffff ? 3 : 1)); }
+    if (n < 2) { for (const [c] of cnt) if (c === 0x101018) o.set(x, y, c); continue; } let b = 0, bw = -1; for (const [c, k] of cnt) if (k > bw) { bw = k; b = c; } o.set(x, y, b); }
+  return o; }
+function fishHi(s, o) {
+  const F = r3(o.c), B = mix(o.c, 0xfff6e8, 0.55), D = mul(o.c, 0.55), big = new Spr(32, 32), cx = 14, cy = 17, L = o.long ? 13 : 11, Hh = o.long ? 3.2 : o.fat ? 7 : 6;
+  // tail fork + fins
+  big.poly([[cx + L - 2, cy], [31, cy - 7], [29, cy], [31, cy + 7]], (x, y) => (x + y) % 3 ? D : F[1]);
+  big.poly([[cx - 3, cy - Hh + 1], [cx + 4, cy - Hh - 4], [cx + 7, cy - Hh + 2]], D);
+  big.poly([[cx - 2, cy + Hh - 1], [cx + 2, cy + Hh + 3], [cx + 4, cy + Hh - 1]], D);
+  for (let y = 0; y < 32; y++) for (let x = 0; x < 32; x++) { const u = (x + 0.5 - cx) / L, v = (y + 0.5 - cy) / (Hh * (1 - Math.max(0, u) * 0.45)); if (u * u + v * v > 1) continue;
+    let c = v > 0.35 ? B : (0.5 - u * 0.2 - v * 0.6) > 0.75 ? F[2] : v > -0.1 ? F[1] : mix(F[1], D, 0.4);
+    if (o.spots && ((x * 7 + y * 13) % 11 === 0) && v < 0.3) c = o.spots;
+    if (o.stripe && Math.abs(v - 0.1) < 0.14) c = o.stripe;
+    if (o.patch && ((x - cx + 3) ** 2 / 20 + (y - cy + 2) ** 2 / 10 < 1 || (x - cx - 6) ** 2 / 12 + (y - cy) ** 2 / 8 < 1)) c = o.patch;
+    if (!o.long && (x + (y & 1) * 2) % 4 === 0 && v < 0.3 && v > -0.6 && u > -0.6) c = mix(c, 0xffffff, 0.18);
+    big.set(x, y, c); }
+  big.rect(cx - L + 3, cy - 2, 3, 3, 0x101018); big.set(cx - L + 3, cy - 2, 0xffffff); // eye
+  if (o.whisk) { big.line(cx - L, cy + 1, cx - L - 4, cy + 4, D); big.line(cx - L, cy, cx - L - 4, cy - 2, D); }
+  big.line(cx - L + 7, cy - 3, cx - L + 8, cy + 3, mix(D, 0x000000, 0.2)); // gill
+  const h = halve2(big); s.draw(h, 0, 0);
+}
 function fish(s, c, fin2) { const R = r3(c); s.ell(7, 8, 5.5, 3.2, (u, v) => R[v < -0.3 ? 2 : v > 0.4 ? 0 : 1]); s.poly([[11, 8], [15, 4], [15, 12]], R[0]); s.set(4, 7, 0x1a1414); if (fin2) s.line(6, 5, 9, 5, fin2); }
 function seeds(s, c) { s.poly([[3, 4], [13, 4], [13, 14], [3, 14]], (x, y) => y < 6 ? 0xc8a070 : 0xe8d8b0); for (const [x, y] of [[6, 9], [9, 8], [7, 11], [10, 11]]) { s.set(x, y, c); s.set(x + 1, y, mul(c, 0.7)); } s.rect(3, 6, 10, 1, 0x8a5a34); }
 function axe(s, c) { handle(s, 4, 14, 10, 3); const R = r3(c); s.poly([[8, 2], [14, 4], [13, 9], [9, 6]], (x, y) => x + y < 13 ? R[2] : R[1]); }

@@ -22,6 +22,7 @@ export function lookFor(breed) {
   const V = Object.assign({}, B); V.m = R.PATTERNS[V.pattern] || {}; return V;
 }
 
+function lerpPoseCopy(P, cp) { return cp(P); }
 function poseSet(R) {
   const { cp, gait, WALK_PH, RUN_PH, poses: Q } = R;
   const out = {};
@@ -42,6 +43,9 @@ function poseSet(R) {
   for (let i = 0; i < 2; i++) { const P = cp(Q.STAND); headMove(P, 0, -1); P.muz = -1; P.ears = [0.5, -1, 0.5, -1]; P.tl[4] = 0.5; if (i) P.mouth = 'bark'; out.bark.push(P); }
   { const P = cp(Q.LIE); out.lie.push(P); const P2 = cp(Q.LIE); P2.eye = 'half'; out.lie.push(P2); }
   for (let i = 0; i < 2; i++) { const P = cp(Q.SNIFF); P.hd[1] += i; out.sniff.push(P); }
+  // carrying a stick in the mouth (fetch): run cycle with the jaw closed on the stick
+  out.carry = out.run.map(P0 => { const P = lerpPoseCopy(P0, cp); P.mouth = 'closed'; P.stick = 1; return P; });
+  out.carryIdle = [0, 1].map(i => { const P = cp(Q.STAND); P.mouth = 'closed'; P.stick = 1; P.tl[2] += i ? 0.3 : -0.3; return P; });
   return out;
 }
 
@@ -77,6 +81,11 @@ export function bakeDog(breed) {
   for (const k in poses) {
     res.frames[k] = poses[k].map(P => {
       R.drawDog(L, P, V);
+      if (P.stick) { // a twig gripped across the muzzle
+        const mx = Math.round(R.X0 + P.hd[0] + 8), my = Math.round(R.G + P.hd[1] + 5 + (P.muz || 0));
+        for (let x = mx - 3; x <= mx + 13; x++) { const y = my + Math.round((x - mx) * 0.12); for (let t = -1; t <= 1; t++) { const i = (y + t) * R.DW + x; if (x >= 0 && x < R.DW && y + t >= 0 && y + t < R.H) L.b[i] = t < 0 ? 22 : t > 0 ? 18 : 35; } }
+        const lx = mx + 10, ly = my - 1; if (lx < R.DW) { L.b[ly * R.DW + lx] = 20; L.b[(ly - 1) * R.DW + lx + 1] = 21; }
+      }
       const hv = halve(L, R.DW, R.H), s = new Spr(hv.w, hv.h);
       for (let i = 0; i < hv.b.length; i++) if (hv.b[i]) s.d[i] = pal[hv.b[i]];
       // re-outline at the new scale with the breed's own outline colour

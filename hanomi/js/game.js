@@ -398,7 +398,7 @@ export class Game {
     // wildlife
     const wild = near.filter(e => e instanceof Animal && !e.persist).length;
     if (wild < 9) { const [tx, ty] = randTile(15, 26); if (free(tx, ty) && !inVillage(tx, ty)) {
-      const b = w.biomeAt(tx, ty), opts = { meadow: ['rabbit', 'rabbit', 'sheep', 'cow', 'pig', 'deer'], forest: ['deer', 'boar', 'rabbit', 'boar'], sakura: ['rabbit', 'deer', 'sheep'], snow: ['rabbit', 'deer'], marsh: ['boar', 'pig'], rock: ['rabbit'] }[b];
+      const b = w.biomeAt(tx, ty), opts = { meadow: ['rabbit', 'rabbit', 'sheep', 'cow', 'pig', 'deer'], forest: ['deer', 'boar', 'rabbit', 'boar', 'fox'], sakura: ['rabbit', 'deer', 'sheep', 'fox'], snow: ['rabbit', 'deer', 'fox'], marsh: ['boar', 'pig'], rock: ['rabbit'] }[b];
       if (opts) { const k = pick(opts), n = k === 'rabbit' ? 1 : randi(1, 3); for (let i = 0; i < n; i++) this.spawnAnimal(k, tx * TS + 8 + rand(-16, 16), ty * TS + 8 + rand(-16, 16)); } } }
     if (this.diff <= 0) return;
     // wolves in forest/snow at dusk & night

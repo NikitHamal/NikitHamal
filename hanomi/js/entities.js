@@ -108,6 +108,7 @@ export class Human extends Ent {
   drawHeld(ctx, fx, fy) {
     const ic = this.heldIcon(), H = this._hand; if (!ic || !H) return;
     const it = ITEMS[this.held], d = this.dir, hx = fx + H[0], hy = fy + H[1];
+    if (this.held === 'bow' || this.held === 'spear' || this.held === 'torch') return this.drawSpecial(ctx, hx, hy, d);
     const tool = it && (it.k === 'tool' || it.k === 'weapon');
     if (!tool) { // carried things: held up in the hand, bobbing with it
       const sz = 11, bx = Math.round(hx - sz / 2 + (d === 1 ? 2 : d === 3 ? -2 : 0)), by = Math.round(hy - sz + 2);
@@ -124,6 +125,29 @@ export class Human extends Ent {
     if (p > 0.28 && p < 0.6) { ctx.fillStyle = 'rgba(255,248,232,0.55)'; const a1 = T[1] + (T[2] - T[1]) * Math.max(0, ease((p - 0.28) / 0.3) - 0.35);
       for (let k = 0; k <= 8; k++) { const a = a1 + (ang - a1) * k / 8; for (const r of [11, 13]) ctx.fillRect(Math.round(Math.cos(a) * r), Math.round(Math.sin(a) * r), 1, 1); } }
     ctx.rotate(ang + 0.83); ctx.drawImage(ic, -3, -13); ctx.restore();
+    this.grip(ctx, hx, hy);
+  }
+  // bows, spears and torches are drawn as real props rather than rotated icons
+  drawSpecial(ctx, hx, hy, d) {
+    const p = this.actT > 0 ? 1 - this.actT / this.actDur : -1, side = d === 1 || d === 3, sg = d === 3 ? -1 : 1, X = Math.round(hx), Y = Math.round(hy);
+    const px = (x, y, c) => { ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); };
+    if (this.held === 'bow') {
+      const draw = p >= 0 && p < 0.75 ? Math.sin(Math.min(1, p / 0.6) * Math.PI / 2) * 4 : 0;
+      if (side) { const bx = X + sg * 2; for (let k = -7; k <= 7; k++) { const off = Math.round((1 - (k / 7) ** 2) * 3); px(bx + sg * off, Y + k, k % 3 ? '#8a5a34' : '#6b4428'); px(bx + sg * (off + 1), Y + k, '#5a3820'); }
+        const sx = bx - sg * Math.round(draw); for (let k = -6; k <= 6; k++) px(Math.round(bx + (sx - bx) * (1 - Math.abs(k) / 6)), Y + k, 'rgba(240,236,220,0.9)');
+        if (draw > 0.5) { for (let k = 0; k < 10; k++) px(sx + sg * k, Y, k > 7 ? '#c8ccd8' : '#d8b880'); px(sx - sg, Y - 1, '#e8e0d0'); px(sx - sg, Y + 1, '#d84a4a'); } }
+      else { const by = d === 0 ? Y + 1 : Y; for (let k = -6; k <= 6; k++) { const off = Math.round((1 - (k / 6) ** 2) * 2.5); px(X + k, by + off, '#8a5a34'); px(X + k, by + off + 1, '#5a3820'); } for (let k = -5; k <= 5; k++) px(X + k, by - 1 + (draw ? Math.round(draw) : 0), 'rgba(240,236,220,0.8)'); }
+    } else if (this.held === 'spear') {
+      let ang = side ? -1.25 : d === 0 ? -1.75 : -1.4, reach = 0;
+      if (p >= 0) { const th = p < 0.35 ? -p / 0.35 : p < 0.6 ? (p - 0.35) / 0.25 : 1 - (p - 0.6) / 0.4; ang = side ? -0.15 : d === 0 ? 1.45 : -1.6; reach = th * 6; }
+      ctx.save(); ctx.translate(X, Y); if (sg < 0) ctx.scale(-1, 1);
+      const ca = Math.cos(ang), sa = Math.sin(ang), nx = Math.round(-sa), ny = Math.round(ca); for (let k = -7; k <= 22; k++) { const x = Math.round(ca * (k + reach)), y = Math.round(sa * (k + reach)); const tip = k > 17; ctx.fillStyle = k > 20 ? '#ffffff' : tip ? '#d8dce8' : k === 17 ? '#c8423a' : (k & 1 ? '#a8744a' : '#8a5a34'); ctx.fillRect(x, y, 1, 1); ctx.fillStyle = tip ? (k < 21 ? '#8a8e9a' : '#d8dce8') : k === 17 ? '#8a2018' : '#5a3820'; if (k < 21) ctx.fillRect(x + nx, y + ny, 1, 1); if (k === 18 || k === 19) { ctx.fillStyle = '#a8acb8'; ctx.fillRect(x - nx, y - ny, 1, 1); ctx.fillRect(x + 2 * nx, y + 2 * ny, 1, 1); } }
+      ctx.restore();
+    } else { // torch
+      const tx = X + (side ? sg * 1 : 0), ty = Y; for (let k = 0; k < 7; k++) px(tx, ty - k, k > 4 ? '#3a2418' : '#8a5a34');
+      const fl = Math.sin(this.t * 22) > 0 ? 1 : 0, h = 4 + fl; ctx.fillStyle = '#e8602a'; ctx.fillRect(tx - 1, ty - 8 - h + 2, 3, h); ctx.fillStyle = '#ffc23a'; ctx.fillRect(tx - 1 + fl, ty - 8 - h + 3, 2, h - 2); ctx.fillStyle = '#fff2a0'; ctx.fillRect(tx, ty - 9, 1, 2);
+      if (Math.random() < 0.08) this.g.fx.spawn({ x: this.x + (side ? sg : 0), y: this.y, z: 30, vz: 18, vx: rand(-5, 5), life: 0.6, c: '#ffd04a', k: 'dot', top: true, g: 0 });
+    }
     this.grip(ctx, hx, hy);
   }
   grip(ctx, hx, hy) { const L = this.look; if (!L) return; ctx.fillStyle = '#' + L.skin.toString(16).padStart(6, '0'); ctx.fillRect(Math.round(hx - 1), Math.round(hy - 1), 2, 2); ctx.fillStyle = 'rgba(42,26,34,0.85)'; ctx.fillRect(Math.round(hx - 1), Math.round(hy + 1), 2, 1); }
@@ -357,6 +381,7 @@ export class Dog extends Ent {
   pet() { this.state = 'happy'; this.st = 0; this.heartT = 1.4; this.love = Math.min(100, this.love + 2); Audio.play('pet'); Audio.play('bark', { vol: 0.4, pitch: 1.15 }); }
   frameSet() {
     const F = this.sp.frames, s = this.state;
+    if (this.carry) return s === 'run' || s === 'walk' ? F.carry[((this.t * 14) | 0) % 6] : F.carryIdle[((this.t * 3) | 0) % 2];
     if (s === 'run') return F.run[((this.t * 14) | 0) % 6];
     if (s === 'walk') return F.walk[((this.t * 10) | 0) % 8];
     if (s === 'sit') return F.sit[((this.t * 2) | 0) % 4];
@@ -373,7 +398,6 @@ export class Dog extends Ent {
     if (wl) { const cut = wl === 2 ? sp.oy - 12 : sp.oy - 4, yy = y + (wl === 2 ? 9 + Math.round(Math.sin(this.t * 4)) : 0); ctx.drawImage(img, 0, 0, img.width, cut, x, yy, img.width, cut); ctx.fillStyle = 'rgba(232,251,255,0.6)'; ctx.fillRect(Math.round(this.x - ox) - 9, yy + cut, 18, 1); }
     else ctx.drawImage(img, x, y);
     if (this.flash > 0) drawFlash(ctx, img, x, y);
-    if (this.carry) { ctx.fillStyle = '#8a5a34'; ctx.fillRect(Math.round(this.x - ox + this.f * 8) - 4, Math.round(this.y - oy - 13 - this.z), 9, 2); ctx.fillStyle = '#b07c48'; ctx.fillRect(Math.round(this.x - ox + this.f * 8) - 4, Math.round(this.y - oy - 13 - this.z), 9, 1); }
     if (this.state === 'sleep' && Math.random() < 0.01) this.g.fx.spawn({ x: this.x + this.f * 8, y: this.y, z: 16, vz: 8, vx: 4, life: 1.6, c: '#e8e8f8', k: 'z', g: 0 });
   }
   shadow() { return this.waterLevel() ? null : [this.x - this.f * 1, this.y, 8, 2]; }
@@ -388,6 +412,7 @@ const ANI = {
   pig: { hp: 10, sp: 18, drops: [['raw_meat', 2, 3]], food: ['carrot', 'pumpkin'] },
   rabbit: { hp: 3, sp: 46, flee: 2, drops: [['raw_meat', 1, 1], ['leather', 0, 1]], food: ['carrot'] },
   deer: { hp: 10, sp: 52, flee: 2, drops: [['raw_meat', 2, 2], ['leather', 1, 2]], food: ['apple'] },
+  fox: { hp: 6, sp: 58, flee: 2, drops: [['leather', 0, 1], ['bone', 0, 1]], food: ['raw_meat'] },
   boar: { hp: 16, sp: 40, aggro: 1, drops: [['raw_meat', 2, 3], ['leather', 1, 1]], food: ['mushroom'] },
 };
 export class Animal extends Ent {
@@ -420,7 +445,7 @@ export class Animal extends Ent {
   onHurt(src) { if (this.def.aggro && src) this.angry = src; this.panic = 3; this.panicFrom = src; }
   die(src) { const g = this.g; for (const [id, a, b] of this.def.drops) { const n = this.baby > 0 ? 0 : randi(a, b); if (n) g.drop(id, n, this.x, this.y); } }
   draw(ctx, ox, oy) {
-    const A = this.sp, fr = this.state === 'walk' ? A.walk[((this.t * 8) | 0) % 4] : A.idle[this.state === 'graze' && (this.t % 2) > 0.6 ? 1 : 0], img = this.f < 0 ? fr.f : fr.n;
+    const A = this.sp, fr = this.state === 'walk' ? A.walk[((this.t * 10) | 0) % A.walk.length] : A.idle[this.state === 'graze' && (this.t % 2) > 0.6 ? 1 : 0], img = this.f < 0 ? fr.f : fr.n;
     const sc = this.baby > 0 ? 0.65 : 1, w = A.w * sc, h = A.h * sc;
     const x = Math.round(this.x - ox - w / 2), y = Math.round(this.y - oy - h + 1 - this.z);
     if (sc === 1) ctx.drawImage(img, x, y); else ctx.drawImage(img, x, y, Math.round(w), Math.round(h));
