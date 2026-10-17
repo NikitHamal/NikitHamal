@@ -132,7 +132,9 @@ build().then(M => {
   document.querySelectorAll('[data-mascot]').forEach(b => b.addEventListener('click', () => { S.lastInput = performance.now(); const a = b.dataset.mascot; if (a === 'hop') hop(); else setMode(a); }));
 
   function setMode(m) { S.mode = m; S.modeT = 0; if (m === 'wave') S.wave = 0; if (m === 'dance') S.dance = 0; }
-  function hop() { if (S.mode === 'fall' || S.y < -5) return; S.vy = -1500; S.squash = -0.18; setMode('hop'); for (let i = 0; i < 4; i++) spawn('heart', S.x + (Math.random() - 0.5) * 160 * S.k * 4, S.ground - 2700 * S.k); }
+  function hop() { if (S.mode === 'fall' || S.mode === 'crouch' || S.y < -5) return; setMode('crouch'); }
+  function launch() { S.vy = -1100; S.squash = -0.16; setMode('hop'); for (let i = 0; i < 4; i++) spawn('heart', S.x + (Math.random() - 0.5) * 160 * S.k * 4, S.ground - 2700 * S.k); }
+  function dust(n, spread) { for (let i = 0; i < n; i++) S.particles.push({ kind: 'dust', x: S.x + (Math.random() - 0.5) * spread, y: S.ground - 4, vx: (Math.random() - 0.5) * 90, vy: -10 - Math.random() * 25, life: 0, max: 0.55 + Math.random() * 0.3, r: 4 + Math.random() * 5 }); }
   function spawn(kind, x, y) { S.particles.push({ kind, x, y, vx: (Math.random() - 0.5) * 40, vy: -60 - Math.random() * 40, life: 0, max: kind === 'z' ? 2.6 : 1.6, rot: (Math.random() - 0.5) * 40 }); }
 
   // ---------- eyes
@@ -150,7 +152,7 @@ build().then(M => {
   new IntersectionObserver(e => { visible = e[0].isIntersecting; if (visible) { last = performance.now(); requestAnimationFrame(loop); } }, { threshold: 0.05 }).observe(stage);
   function loop(now) {
     if (!visible) return;
-    const dt = Math.min(0.05, (now - last) / 1000); last = now; S.t += dt; S.modeT += dt;
+    const dt = Math.min(0.05, (now - last) / 1000); last = now; S.t += dt; S.modeT += dt; S.dt = dt;
     update(dt, now); draw();
     requestAnimationFrame(loop);
   }
@@ -167,14 +169,16 @@ build().then(M => {
     if (S.mode === 'sit' && S.modeT > 4) setMode('sleep');
     if (S.mode === 'startle' && S.modeT > 0.9) setMode('wave');
     if (S.mode === 'wave' && S.modeT > 2.2) setMode('idle');
-    if (S.mode === 'hop' && S.y >= 0 && S.vy >= 0 && S.modeT > 0.2) setMode('idle');
+    if (S.mode === 'crouch' && S.modeT > 0.16) launch();
+    if (S.mode === 'hop' && S.y >= 0 && S.vy >= 0 && S.modeT > 0.2) setMode('land');
+    if (S.mode === 'land' && S.modeT > 0.35) setMode('idle');
     if (S.mode === 'dance' && S.modeT > 6) setMode('idle');
 
     // walking toward the target
     if (S.mode === 'walk' && S.target != null) {
       const dx = S.target - S.x, sp = 520 * S.k * 4.2;
       if (Math.abs(dx) < 6) { S.target = null; setMode('wave'); }
-      else { S.face = Math.sign(dx); S.x += clamp(dx, -sp * dt, sp * dt); }
+      else { S.face = Math.sign(dx); S.x += clamp(dx, -sp * dt, sp * dt); const ph = Math.floor(S.t * 9 / Math.PI); if (ph !== S.step) { S.step = ph; dust(2, 120 * S.k); } }
     }
     S.x = clamp(S.x, 320 * S.k, S.W - 320 * S.k);
 
@@ -182,7 +186,7 @@ build().then(M => {
     if (S.drag) { S.drag.moved = S.drag.moved || Math.hypot(S.drag.x - S.drag.x0, S.drag.y - S.drag.y0) > 6; if (S.drag.moved) { S.mode = 'held'; S.x = S.drag.x; S.y = Math.min(0, S.drag.y - S.drag.y0); } }
     else if (S.y < 0 || S.vy < 0) {
       S.vy += 4200 * dt * (S.k / 0.17); S.y += S.vy * dt * (S.k / 0.17);
-      if (S.y >= 0) { S.y = 0; S.squash = clamp(S.vy / 9000, 0.06, 0.22); S.vy = 0; if (S.mode === 'fall') setMode('startle'); }
+      if (S.y >= 0) { S.y = 0; S.squash = clamp(S.vy / 9000, 0.08, 0.24); dust(8, 260 * S.k); S.vy = 0; if (S.mode === 'fall') setMode('startle'); }
     }
     S.squash *= Math.pow(0.0008, dt);
 
@@ -200,7 +204,7 @@ build().then(M => {
     S.blinkDur -= dt;
     let em = 'open';
     if (S.mode === 'sleep' || (S.mode === 'yawn' && S.modeT > 0.6 && S.modeT < 2.4) || (S.mode === 'sit' && S.modeT > 2.5)) em = 'closed';
-    else if (S.hover || S.mode === 'hop' || S.mode === 'dance' || S.mode === 'wave' || S.mode === 'held') em = 'happy';
+    else if (S.hover || S.mode === 'hop' || S.mode === 'land' || S.mode === 'dance' || S.mode === 'wave' || S.mode === 'held') em = 'happy';
     else if (S.blinkDur > 0) em = 'closed';
     setEyes(em);
 
@@ -245,6 +249,22 @@ build().then(M => {
     if (m === 'hop') { aL = 70; aR = -70; fL = -20; fR = 20; kL = 30; kR = -30; lL = -10; lR = 10; }
     if (m === 'lookaround') headRot = S.gaze.x * 10;
 
+    if (m === 'crouch') { const u = ease(clamp(mt / 0.16, 0, 1)); bodyDy = u * 160; kL = u * 40; kR = -u * 40; lL = -u * 18; lR = u * 18; aL = 30; aR = -30; headRot -= 3; }
+    if (m === 'land') { const u = 1 - clamp(mt / 0.35, 0, 1); bodyDy = u * 110; kL = u * 30; kR = -u * 30; aL = 35 * u + 9; aR = -35 * u - 9; }
+    if (m === 'idle') { const w = Math.sin(t * 0.55); leanA += w * 1.6; lL += w * 1.5; lR += w * 1.5; headRot -= w * 1.2; }   // slow weight shift
+    // blend toward the target pose (critically damped) so every state change flows instead of snapping
+    const target = { headRot, headDy, leanA, bodyDy, aL, aR, fL, fR, lL, lR, kL, kR };
+    const P = S.pose || (S.pose = { ...target }), V = S.poseV || (S.poseV = {}), fast = m === 'walk' || m === 'dance' || m === 'crouch' || m === 'held' || m === 'wave' || m === 'startle';
+    const w0 = fast ? 26 : 13, dtt = S.dt || 0.016;
+    for (const key in target) {   // spring-damper per channel
+      const v = V[key] || 0, x = P[key], a = w0 * w0 * (target[key] - x) - 2 * w0 * v;
+      V[key] = v + a * dtt; P[key] = x + V[key] * dtt;
+    }
+    ({ headRot, headDy, leanA, bodyDy, aL, aR, fL, fR, lL, lR, kL, kR } = P);
+    // hair follow-through: lags behind head turns and body movement
+    const hv = (S.x - (S.px || S.x)) / Math.max(1e-3, dtt) / (S.k * 4000); S.px = S.x;
+    const hs = S.hairS || (S.hairS = { x: 0, v: 0 }), drive = -(V.headRot || 0) * 0.05 - hv * 6 - (S.vy || 0) * 0.0015;
+    hs.v += (drive - hs.x) * 60 * dtt - hs.v * 7 * dtt; hs.x += hs.v * dtt; hairA += clamp(hs.x, -9, 9);
     // whole figure
     const sq = S.squash, sx = 1 + sq * 0.6, sy = 1 - sq;
     tf(M.root, `translate(${S.x.toFixed(1)} ${(S.ground + S.y).toFixed(1)}) scale(${k}) translate(-800 ${-FOOT_Y})`);
@@ -275,6 +295,7 @@ build().then(M => {
       const a = Math.min(1, q.life * 4) * (1 - q.life / q.max), sz = q.kind === 'z' ? 16 + q.life * 10 : 20;
       if (q.kind === 'z') html += `<text x="${q.x.toFixed(1)}" y="${q.y.toFixed(1)}" font-size="${sz.toFixed(0)}" font-family="JetBrains Mono,monospace" font-weight="600" fill="#5b4a7a" opacity="${a.toFixed(2)}">z</text>`;
       else if (q.kind === 'heart') html += `<path transform="translate(${q.x.toFixed(1)} ${q.y.toFixed(1)}) rotate(${q.rot.toFixed(0)}) scale(${(sz / 20).toFixed(2)})" d="M0 6 C-12 -4 -6 -14 0 -7 C6 -14 12 -4 0 6Z" fill="#e0607e" opacity="${a.toFixed(2)}"/>`;
+      else if (q.kind === 'dust') html += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${(q.r * (1 + q.life * 2)).toFixed(1)}" fill="#cbb9a2" opacity="${(0.5 * (1 - q.life / q.max)).toFixed(2)}"/>`;
       else html += `<text x="${q.x.toFixed(1)}" y="${q.y.toFixed(1)}" font-size="22" fill="#8e4585" opacity="${a.toFixed(2)}">♪</text>`;
     }
     M.fx.innerHTML = html;

@@ -48,8 +48,15 @@
   <div class="row mascot-ctl"><button class="btn" data-mascot="wave">wave</button><button class="btn" data-mascot="hop">hop</button><button class="btn" data-mascot="dance">dance</button><button class="btn" data-mascot="sit">nap</button></div>
 </section>
 
-<section class="block alt how">
-  <p class="kicker">05 · how</p><h2>How it's drawn</h2>
+<section class="block alt pixel-block">
+  <p class="kicker">05 · 8-bit me</p><h2>Pixel me</h2>
+  <p class="note">The same me in pixel art: full body, painted pixel by pixel in code every frame. Click the floor and he walks over. Tap him to make him hop. Leave him alone and he glances around, yawns, sits down and dozes off.</p>
+  <div class="pixel-stage" id="pixelStage"></div>
+  <div class="row mascot-ctl"><button class="btn" data-pixel="wave">wave</button><button class="btn" data-pixel="hop">hop</button><button class="btn" data-pixel="dance">dance</button><button class="btn" data-pixel="sit">nap</button></div>
+</section>
+
+<section class="block how">
+  <p class="kicker">07 · how</p><h2>How it's drawn</h2>
   <ol>
     <li>Code finds the face (478 points) and separates hair, skin and clothes. Tilted heads are levelled, and props like the garland are painted out.</li>
     <li>The photo's light is turned into target pencil values, with skin kept airy, hair dark and features crisp.</li>
@@ -63,5 +70,6 @@
 <div class="lightbox" id="lb" hidden><div class="lb-inner"><div class="art" id="lbArt"></div><div class="lb-bar"><b id="lbTitle"></b><button class="btn" id="lbClose">close</button></div></div></div>
 <script src="js/preview.js"></script>
 <script src="js/mascot.js" defer></script>
+<script src="js/pixelme.js" defer></script>
 </body>
 </html>
