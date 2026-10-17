@@ -16,7 +16,7 @@ h2{font-weight:500;font-size:clamp(28px,4vw,40px);margin:0 0 8px}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 .block{padding:64px clamp(16px,6vw,96px);max-width:1360px;margin:0 auto}
 .alt{background:var(--paper2);max-width:none}.alt>*{max-width:1168px;margin-left:auto;margin-right:auto}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:980px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:980px;margin:0 auto}
 .card{margin:0;background:#fff;padding:8px 8px 0;border-radius:6px;box-shadow:0 14px 30px -22px #5a463466;cursor:zoom-in;transition:transform .25s}
 .card:hover{transform:translateY(-3px)}.card.live{cursor:pointer}
 .card figcaption{display:flex;justify-content:space-between;padding:8px 4px 10px;font:11px 'JetBrains Mono',monospace;color:var(--muted)}.card b{color:var(--ink);font-weight:500}
