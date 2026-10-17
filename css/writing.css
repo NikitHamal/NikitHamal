@@ -1270,3 +1270,15 @@ body[data-decor="poem"] .read-prose-body p {
   line-height: 1.55 !important;
   margin-bottom: 0.55em;
 }
+
+/* ---------- Pixel scenes (js/pixel-scenes.js): integer-scaled so pixels stay square ---------- */
+.read-cover-art.has-pixel-scene { width: auto; display: flex; justify-content: center; }
+.has-pixel-scene pixel-scene { width: 128px; }
+.read-end-scene { display: flex; justify-content: center; margin: 8px auto 28px; opacity: 0.95; }
+.read-end-scene pixel-scene { width: 128px; }
+.writing-scenes { display: flex; justify-content: center; align-items: flex-end; gap: 18px; margin: 4px auto 14px; }
+.writing-scenes pixel-scene { width: 128px; }
+.writing-scenes pixel-scene:nth-child(2) { width: 192px; }
+@media (min-width: 760px) { .has-pixel-scene pixel-scene { width: 192px; } }
+@media (max-width: 520px) { .writing-scenes pixel-scene:not(:nth-child(2)) { display: none; } .writing-scenes pixel-scene:nth-child(2) { width: 128px; } }
+.focus-mode .read-end-scene { display: none; }
