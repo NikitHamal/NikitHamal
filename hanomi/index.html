@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Hanomi — a sakura village survival game</title>
+<meta name="description" content="Hanomi: a cozy 2D pixel-art open-world survival game. Farm, fish, mine, rear animals, raise an army, ally or conquer neighbouring clans, and defend your village from the Blood Moon. By Nikit Hamal.">
+<meta property="og:title" content="Hanomi — a sakura village survival game">
+<meta property="og:description" content="Farm, fish, mine, build, raise an army and defend your village. A handcrafted pixel-art open world in your browser.">
+<meta name="theme-color" content="#1b1420">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%231b1420'/%3E%3Cpath fill='%23f6b8ca' d='M7 2h2v2h2v2h2v2h-2v2H9v2H7v-2H5V8H3V6h2V4h2z'/%3E%3Cpath fill='%23f2c24a' d='M7 6h2v2H7z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/hanomi.css?v=1">
+</head>
+<body>
+<div id="title" class="on">
+  <div id="title-pond"><div id="pond"><canvas id="pond-c"></canvas><canvas id="pond-bar"></canvas></div></div>
+  <div class="title-shade"></div>
+  <div class="title-ui">
+    <h1 class="logo"><span>H</span><span>a</span><span>n</span><span>o</span><span>m</span><span>i</span></h1>
+    <p class="tag">a sakura village survival</p>
+    <nav class="menu">
+      <button class="mbtn" data-go="continue" hidden>Continue</button>
+      <button class="mbtn" data-go="new">New world</button>
+      <button class="mbtn" data-go="load">Load world</button>
+      <button class="mbtn" data-go="settings">Settings</button>
+      <button class="mbtn" data-go="help">How to play</button>
+    </nav>
+    <div class="title-dog"><pixel-dog width="200" scale="2" breed="bernese" start="sleep" sleep-after="18" home="60"></pixel-dog></div>
+  </div>
+  <div class="title-foot"><span>Tap the water to feed the koi</span><a href="../">by Nikit Hamal</a></div>
+  <div id="tmodal"></div>
+</div>
+<canvas id="game"></canvas>
+<div id="hud"></div>
+<div id="bubbles"></div>
+<div id="prompt"></div>
+<div id="fishbar"></div>
+<div id="toasts"></div>
+<div id="banner"></div>
+<div id="hurt"></div>
+<div id="modal"></div>
+<div id="koi"><div class="koi-head"><b>The Koi Pond of Hanomi</b><span>Feed the koi to find serenity</span><button class="koi-close">✕</button></div><div class="koi-frame"></div></div>
+<div id="touch">
+  <div class="t-pad"><div class="t-knob"></div></div>
+  <div class="t-btns"><button data-t="alt" class="tb tb-b">B</button><button data-t="use" class="tb tb-a">A</button><button data-t="roll" class="tb tb-r">⤳</button></div>
+  <div class="t-top"><button data-k="Tab">Bag</button><button data-k="m">Map</button><button data-k="n">Realm</button><button data-k="Escape">❚❚</button></div>
+</div>
+<div id="fade"></div>
+<div id="loading"><b>Hanomi</b><span>painting the world…</span><i></i></div>
+<script src="../js/pixel-dog.js?v=24"></script>
+<script src="../js/pond.js?v=5" defer></script>
+<script type="module" src="js/main.js?v=1"></script>
+</body>
+</html>
