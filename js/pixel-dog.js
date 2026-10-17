@@ -1056,5 +1056,10 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
   }
 }
 PixelDog.BREEDS=BREEDS; PixelDog.PATTERNS=PATTERNS; PixelDog.TAILS=Object.keys(TAILS);
+// Rig access for other renderers (e.g. /hanomi bakes in-game dog sprites from this exact rig).
+PixelDog.rig={G,X0,DW,H:84,mk,
+  drawDog(L,P,V){ const keep=TMP; if(TMP.length!==L.b.length) TMP=new Uint8Array(L.b.length); drawDog(L,P,V); TMP=keep; },
+  outline,buildPal,cp,lerpPose,gait,WALK_PH,RUN_PH,BREEDS,PATTERNS,TAILS,
+  poses:{STAND,SIT,LIE,BOW,ROLL,JUMP,PICK,SLEEP,SLEEP_BELLY,SLEEP_SPLOOT,SNIFF,DIG}};
 customElements.define('pixel-dog',PixelDog);
 })();

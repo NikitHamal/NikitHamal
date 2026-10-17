@@ -1197,6 +1197,14 @@ img.writing-mini-thumb {
   color: var(--text-secondary);
 }
 
+.pond-play {
+  font-size: 0.72rem;
+  color: var(--text-secondary, rgba(160, 160, 160, 0.85));
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+}
+.pond-play:hover { color: #e87a9a; }
+
 .pond-hint {
   margin-left: auto;
   font-size: 0.72rem;
