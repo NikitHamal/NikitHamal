@@ -121,7 +121,7 @@
     <!-- PROFILE / HEADER -->
     <header class="profile-header">
       <div class="avatar-container" id="avatarContainer">
-        <img src="assets/nikit.webp" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" fetchpriority="high" decoding="async" />
+        <img src="assets/nikit-216.webp" width="72" height="72" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" fetchpriority="high" decoding="async" />
       </div>
 
       <div class="profile-name-row">
@@ -242,7 +242,7 @@
 
               <article class="project-card project-card-lami">
                 <div class="project-card-visual" aria-hidden="true">
-                  <span class="project-card-icon"><img src="assets/lami-logo.png" alt="" loading="lazy" decoding="async"></span>
+                  <span class="project-card-icon"><img src="assets/lami-logo-120.webp" alt="" loading="lazy" decoding="async"></span>
                 </div>
                 <div class="project-card-body">
                   <h3 class="project-card-title">Lami Nepal</h3>
@@ -396,13 +396,22 @@
   <dialog id="photoDialog" class="minimal-modal">
     <div class="modal-card modal-photo-card">
       <button class="modal-close-btn" data-close aria-label="Close"><i class="ri-close-line"></i></button>
-      <img src="assets/nikit.jpg" alt="Nikit Hamal" class="modal-full-photo" />
+      <img data-src="assets/nikit.webp" alt="Nikit Hamal" class="modal-full-photo" decoding="async" />
     </div>
   </dialog>
 
   <script src="js/config.js"></script>
   <script src="js/pixel-dog.js?v=23" defer></script>
-  <script src="js/pond.js?v=4" defer></script>
+  <script>
+    // Koi pond lives in the footer: only download/build it (≈30 MB of buffers) when it's about to scroll into view.
+    (function () {
+      var el = document.getElementById('pond'), go = function () { if (go.done) return; go.done = 1; var s = document.createElement('script'); s.src = 'js/pond.js?v=5'; document.body.appendChild(s); };
+      if (!el || !('IntersectionObserver' in window)) return go();
+      // wait for the page to settle (writings render async and push the pond down) before watching
+      var watch = function () { new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { o.disconnect(); go(); } }, { rootMargin: '200px 0px' }).observe(el); };
+      addEventListener('load', function () { setTimeout(watch, 1200); });
+    })();
+  </script>
   <script src="js/card-visuals.js"></script>
   <script defer src="js/app.js"></script>
 </body>

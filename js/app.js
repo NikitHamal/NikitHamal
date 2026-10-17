@@ -176,6 +176,8 @@
 
     const openDlg = (dlg) => {
       if (!dlg) return;
+      // full-size photo is only fetched/decoded when the dialog is opened
+      dlg.querySelectorAll('img[data-src]').forEach((im) => { im.src = im.dataset.src; im.removeAttribute('data-src'); });
       if (typeof dlg.showModal === 'function') dlg.showModal();
       else dlg.setAttribute('open', '');
     };
@@ -288,9 +290,10 @@
 
   function ogThumbFor(post, cls) {
     const slug = (post.slug || '').trim();
-    const src = slug ? `/assets/og/${slug}.png` : '/assets/og-image.png';
+    // 640px webp thumbnails (assets/og/thumb) — the 1200px PNGs stay for social cards only
+    const src = slug ? `/assets/og/thumb/${slug}.webp` : '/assets/og/thumb/og-image.webp';
     const alt = String(post.title || '').replace(/"/g, '&quot;');
-    return `<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" onerror="this.onerror=null;this.src='/assets/og-image.png'" />`;
+    return `<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" decoding="async" width="640" height="336" onerror="this.onerror=null;this.src='/assets/og/thumb/og-image.webp'" />`;
   }
 
   // Canonical link target for a post. Local posts use the pretty
@@ -823,13 +826,21 @@
     enhanceContentImages(body);
     initReaderDock();
 
-    // Reading progress line
-    window.addEventListener('scroll', () => {
+    // Reading progress line. The variable is set on the bar itself (not <html>), once per frame,
+    // so scrolling doesn't restyle the whole document on every scroll event.
+    const topline = $('.topline');
+    let progTick = false, lastProg = -1;
+    const paintProgress = () => {
+      progTick = false;
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollHeight > 0) {
-        const progress = Math.min(1, Math.max(0, window.scrollY / scrollHeight));
-        document.documentElement.style.setProperty('--progress', progress);
-      }
+      if (scrollHeight <= 0) return;
+      const progress = Math.round(Math.min(1, Math.max(0, window.scrollY / scrollHeight)) * 1000) / 1000;
+      if (progress === lastProg) return;
+      lastProg = progress;
+      (topline || document.documentElement).style.setProperty('--progress', progress);
+    };
+    window.addEventListener('scroll', () => {
+      if (!progTick) { progTick = true; requestAnimationFrame(paintProgress); }
     }, { passive: true });
 
     const fullTitle = `${post.title} \u2014 Nikit Hamal`;
@@ -983,8 +994,11 @@
       if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 6) {
         best = total - 1;
       }
+      if (best === current && update.done) return; // nothing changed: leave the DOM alone
+      update.done = true;
+      if (passages[current]) passages[current].classList.remove('is-current');
       current = best;
-      passages.forEach((p, i) => p.classList.toggle('is-current', i === current));
+      passages[current].classList.add('is-current');
 
       if (countEl) {
         const label = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
@@ -1013,7 +1027,12 @@
       if (focus) showToast(`Section ${i + 1} of ${total}`);
     }
 
+    let lastWake = 0;
     function wake() {
+      // scroll fires many times a second; re-arming the timer a few times a second is plenty
+      const now = performance.now();
+      if (now - lastWake < 250 && !dock.classList.contains('quiet')) return;
+      lastWake = now;
       dock.classList.remove('quiet');
       clearTimeout(quietTimer);
       quietTimer = setTimeout(() => {
@@ -1187,7 +1206,8 @@
   function initSiteHeader() {
     const header = $('.site-header');
     if (header) {
-      const onScroll = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+      let stuck = null;
+      const onScroll = () => { const s = window.scrollY > 8; if (s !== stuck) { stuck = s; header.classList.toggle('is-stuck', s); } };
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     }
