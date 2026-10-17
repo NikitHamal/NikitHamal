@@ -65,81 +65,87 @@ function cracks(stage) {
 /* ------------------------- buildings ------------------------- */
 const ROOFS = [
   { tile: [0x2a3446, 0x3a465c, 0x4c5a72, 0x62718a], ridge: 0x1e2534 },        // slate kawara
-  { tile: [0x8a6a2a, 0xa8843a, 0xc49e4a, 0xdcb862], ridge: 0x6a4e1e, thatch: 1 }, // thatch
+  { tile: [0x7a5a26, 0x9a7a36, 0xbc9a4a, 0xd8ba66], ridge: 0x5a4018, thatch: 1 }, // thatch
   { tile: [0x7a2e22, 0x963a2a, 0xb24e36, 0xc8664a], ridge: 0x52201a },        // terracotta
   { tile: [0x2a5a52, 0x347066, 0x40867a, 0x58a092], ridge: 0x1e4038 },        // copper green
 ];
 const WOOD = [0x3e2618, 0x56361f, 0x6e4628, 0x8a5a34];
 const PLASTER = [0xcfc2a6, 0xe2d6bc, 0xf0e8d2];
 function house(w, h, style, opt = {}) {
-  const W = w * 16, Hf = h * 16, eave = 5, rise = opt.hall ? 30 : 20, SW = W + eave * 2, SH = Hf + rise;
+  const W = w * 16, Hf = h * 16, eave = 7, rise = opt.hall ? 34 : 24, SW = W + eave * 2, SH = Hf + rise;
   const s = new Spr(SW, SH), R = ROOFS[style % ROOFS.length], r = mulberry32(w * 31 + h * 7 + style * 3 + (opt.hall ? 99 : 0));
-  const wallH = opt.hall ? 30 : 24, wallTop = SH - wallH, ox = eave;
-  const lights = [];
-  // --- front wall ---
-  for (let y = wallTop; y < SH; y++) for (let x = ox; x < ox + W; x++) {
-    const ly = y - wallTop, lx = x - ox; let c;
-    if (ly >= wallH - 3) c = ly === wallH - 1 ? 0x3a3634 : (hash2(lx >> 2, ly, 5) < 0.5 ? 0x7a7672 : 0x8e8a84);
-    else if (style === 1 && !opt.hall) c = WOOD[(lx % 5 === 0) ? 1 : (lx % 5 === 4 ? 2 : 3)];
-    else { c = PLASTER[ly < 3 ? 0 : (hash2(lx, ly, 6) < 0.08 ? 0 : 1)]; if (ly > wallH - 9) c = WOOD[2 + ((lx % 6 === 0) ? -1 : 0)]; }
+  const wallH = opt.hall ? 42 : 34, wallTop = SH - wallH, ox = eave, lights = [];
+  const Wd = opt.hall ? [0x4a1a16, 0x7a2420, 0xa8302a, 0xc8483a] : [0x3a2416, 0x543420, 0x6e4628, 0x8c5c36];
+  const T = R.tile, thatch = !!R.thatch;
+  // ---------- stone foundation + engawa (veranda) ----------
+  for (let x = ox - 2; x < ox + W + 2; x++) for (let y = SH - 4; y < SH; y++) { const c = ((x >> 2) + (y > SH - 3 ? 1 : 0)) % 3 === 0 ? 0x8a8478 : 0x9e988a; s.set(x, y, y === SH - 1 ? 0x4a4640 : y === SH - 4 ? 0xb8b2a4 : c); }
+  for (let x = ox - 2; x < ox + W + 2; x++) for (let y = SH - 8; y < SH - 4; y++) s.set(x, y, y === SH - 8 ? 0xc89a62 : y === SH - 5 ? Wd[0] : ((x + (y & 1) * 5) % 9 === 0 ? Wd[1] : 0xa47448));
+  // ---------- walls ----------
+  const wy0 = wallTop + 2, wy1 = SH - 8;
+  for (let y = wy0; y < wy1; y++) for (let x = ox; x < ox + W; x++) {
+    const ly = y - wy0, lower = ly > (wy1 - wy0) * 0.58; let c;
+    if (thatch && !opt.hall) c = lower ? Wd[(x % 4 === 0) ? 1 : 2] : ((x % 5 === 0) ? Wd[1] : (ly % 6 === 0 ? Wd[2] : Wd[3]));
+    else c = lower ? ((x % 4 === 0) ? Wd[1] : Wd[2]) : (hash2(x, y, 6) < 0.06 ? 0xe2d6bc : 0xf2ead6);
+    if (!lower && ly === 0) c = 0xd8ccb2;
     s.set(x, y, c);
   }
-  // posts and beams
-  const posts = [0, W - 3]; for (let px = 48; px < W - 20; px += 48) posts.push(px);
-  for (const px of posts) for (let y = wallTop; y < SH - 3; y++) { s.set(ox + px, y, WOOD[0]); s.set(ox + px + 1, y, opt.hall ? 0xa8302a : WOOD[1]); s.set(ox + px + 2, y, opt.hall ? 0x861e1e : WOOD[0]); }
-  for (let x = ox; x < ox + W; x++) { s.set(x, wallTop + 2, WOOD[1]); s.set(x, wallTop + 3, WOOD[0]); }
-  // door
-  const dx = ox + (opt.door != null ? opt.door : (w >> 1)) * 16 + 2, dw = 12, dTop = SH - 3 - (opt.hall ? 22 : 17);
-  for (let y = dTop; y < SH - 3; y++) for (let x = dx; x < dx + dw; x++) { const lx = x - dx; s.set(x, y, lx === 0 || lx === dw - 1 ? WOOD[0] : (lx === 6 ? WOOD[1] : (y - dTop) % 4 === 0 ? WOOD[1] : WOOD[2])); }
-  // noren curtain in clan colour
-  const nc = opt.color != null ? opt.color : 0x2a4a7a, nd = mul(nc, 0.7);
-  for (let y = dTop; y < dTop + 7; y++) for (let x = dx; x < dx + dw; x++) { const lx = x - dx; if (lx % 4 === 3 && y > dTop + 2) continue; s.set(x, y, y === dTop ? nd : nc); }
-  s.set(dx + 5, dTop + 3, 0xf0e8d2); s.set(dx + 6, dTop + 3, 0xf0e8d2); s.set(dx + 5, dTop + 4, 0xf0e8d2);
-  // windows (shoji)
-  const wins = [];
-  for (let k = 0; k < w; k++) { const wx = ox + k * 16 + 3; if (Math.abs(wx - dx) < 16) continue; if (r() < 0.25 && w > 3) continue; wins.push(wx); }
-  for (const wx of wins) {
-    const wy = wallTop + 6, ww = 10, wh = opt.hall ? 10 : 8;
-    for (let y = wy - 1; y <= wy + wh; y++) for (let x = wx - 1; x <= wx + ww; x++) {
-      const ex = x === wx - 1 || x === wx + ww || y === wy - 1 || y === wy + wh;
-      s.set(x, y, ex ? WOOD[0] : ((x - wx) % 3 === 2 || (y - wy) % 3 === 2) ? WOOD[2] : 0xf4ead0);
-    }
-    lights.push({ x: wx, y: wy, w: ww, h: wh });
-  }
-  // --- roof ---
-  const roofBot = wallTop + 3, ridgeY = 4, inset = Math.min(18, W * 0.22);
-  for (let y = 0; y <= roofBot; y++) {
-    const f = y / roofBot; // 0 at ridge … 1 at eave
-    const halfTop = SW / 2 - inset, xl = Math.round(SW / 2 - (halfTop + (SW / 2 - halfTop) * f)), xr = SW - 1 - (xl - 0);
+  // beams
+  for (let x = ox; x < ox + W; x++) { s.set(x, wy0, Wd[1]); s.set(x, wy0 + 1, Wd[0]); const mid = wy0 + Math.round((wy1 - wy0) * 0.58); s.set(x, mid, Wd[3]); s.set(x, mid + 1, Wd[1]); }
+  // pillars standing on the veranda
+  const posts = [ox - 1, ox + W - 2]; for (let px = ox + 32; px < ox + W - 20; px += 32) posts.push(px);
+  for (const px of posts) for (let y = wallTop - 1; y < SH - 5; y++) { s.set(px, y, Wd[3]); s.set(px + 1, y, Wd[2]); s.set(px + 2, y, Wd[0]); }
+  // door (sliding) with noren
+  const dcol = opt.door != null ? opt.door : (w >> 1), dx = ox + dcol * 16 + 1, dw = 14, dTop = wy0 + 3;
+  for (let y = dTop; y < wy1; y++) for (let x = dx; x < dx + dw; x++) { const lx = x - dx, ly = y - dTop; s.set(x, y, lx === 0 || lx === dw - 1 || lx === 7 ? Wd[0] : (ly % 5 === 4 ? Wd[1] : (lx < 7 ? Wd[2] : Wd[3]))); }
+  const nc = opt.color != null ? opt.color : 0x2a4a7a, nd = mul(nc, 0.7), nl = mix(nc, 0xffffff, 0.25);
+  for (let y = dTop; y < dTop + 8; y++) for (let x = dx; x < dx + dw; x++) { const lx = x - dx; if ((lx === 4 || lx === 9) && y > dTop + 2) continue; s.set(x, y, y === dTop ? nd : (lx % 5 === 0 ? nl : nc)); }
+  s.set(dx + 6, dTop + 3, 0xf6eedc); s.set(dx + 7, dTop + 3, 0xf6eedc); s.set(dx + 6, dTop + 4, 0xf6eedc); s.set(dx + 7, dTop + 5, 0xf6eedc);
+  // shoji windows / lattice windows
+  for (let k = 0; k < w; k++) { const wx = ox + k * 16 + 3; if (wx + 11 > dx - 2 && wx < dx + dw + 2) continue; if (r() < 0.2 && w > 3) continue;
+    const wyy = wy0 + 5, ww = 10, wh = opt.hall ? 13 : 10, lattice = !thatch && r() < 0.4;
+    for (let y = wyy - 1; y <= wyy + wh; y++) for (let x = wx - 1; x <= wx + ww; x++) { const ex = x === wx - 1 || x === wx + ww || y === wyy - 1 || y === wyy + wh;
+      s.set(x, y, ex ? Wd[0] : lattice ? ((x - wx) % 2 === 0 ? Wd[2] : 0x2a2018) : ((x - wx) % 3 === 2 || (y - wyy) % 3 === 2) ? Wd[2] : (y - wyy < 2 ? 0xfff6dc : 0xf2e6c8)); }
+    if (!lattice) lights.push({ x: wx, y: wyy, w: ww, h: wh }); else lights.push({ x: wx, y: wyy, w: ww, h: wh, dim: 1 });
+    if (r() < 0.45 && !opt.hall) { const fy = wyy + wh + 1; for (let x = wx - 1; x <= wx + ww; x++) s.set(x, fy, Wd[1]); for (let k2 = 0; k2 < 4; k2++) { const fx = wx + 1 + k2 * 3; s.set(fx, fy - 1, [0xe8504a, 0xf2c24a, 0xf6b8ca, 0xffffff][(k2 + w) % 4]); s.set(fx + 1, fy - 1, 0x4a8a3a); } } }
+  // ---------- roof ----------
+  const roofBot = wallTop + 2, ridgeY = opt.hall ? 7 : 5, inset = Math.min(22, W * 0.24);
+  for (let y = ridgeY; y <= roofBot; y++) {
+    const f = (y - ridgeY) / (roofBot - ridgeY), xl = Math.round(inset * (1 - f) - (f > 0.9 ? (f - 0.9) * 20 : 0)), xr = SW - 1 - xl;
     for (let x = xl; x <= xr; x++) {
-      const lx = x - xl, rx = xr - x, side = Math.min(lx, rx) < 3 + f * 2;
-      let q;
-      if (R.thatch) { q = (hash2(x >> 1, y, 3) < 0.35 ? 1 : 2) + ((x + (y >> 1)) % 5 === 0 ? 1 : 0); if (y % 6 === 5) q = 0; }
-      else { const row = Math.floor((y - ridgeY) / 3); q = ((y - ridgeY) % 3 === 2) ? 0 : ((x + row * 2) % 4 === 0 ? 1 : 2 + ((y - ridgeY) % 3 === 0 ? 1 : 0)); }
-      if (side) q = Math.max(0, q - 1);
-      if (y >= roofBot - 1) q = 0;
-      if (y < ridgeY) q = -1;
-      s.set(x, y, q < 0 ? R.ridge : R.tile[clamp(q, 0, 3)]);
+      const side = Math.min(x - xl, xr - x) < 2 + f * (inset * 0.45), ry = y - ridgeY;
+      let c;
+      if (thatch) { const n = hash2(x >> 1, y, 3); c = T[(ry % 5 === 4) ? 0 : n < 0.25 ? 1 : n > 0.85 ? 3 : 2]; if ((x + ry * 3) % 7 === 0) c = T[1]; }
+      else { const row = Math.floor(ry / 4), yy = ry % 4, col = (x + (row & 1) * 2) % 4;
+        c = yy === 3 ? T[0] : yy === 0 ? T[3] : col === 0 ? T[1] : col === 1 ? T[3] : T[2]; }
+      if (side) c = mul(c, 0.82);
+      if (y >= roofBot - 1) c = thatch ? T[1] : T[0];
+      s.set(x, y, c);
     }
+    if (!thatch && y === roofBot - 2) for (let x = xl; x <= xr; x += 4) { s.set(x + 1, y, T[3]); s.set(x + 2, y, T[3]); } // tile ends
   }
-  // ridge cap with upturned ends
+  if (thatch) for (let x = 0; x < SW; x++) if (hash2(x, 1, 9) < 0.5) s.set(x, roofBot + 1, T[1]); // ragged fringe
+  // irimoya gable with lattice
+  if (!thatch) { const gy1 = ridgeY + Math.round((roofBot - ridgeY) * 0.48), gw = Math.min(W * 0.2, 24);
+    for (let y = ridgeY + 1; y <= gy1; y++) { const f = (y - ridgeY) / (gy1 - ridgeY), hw = gw * f;
+      for (let x = Math.round(SW / 2 - hw); x <= Math.round(SW / 2 + hw); x++) { const edge = Math.abs(x - SW / 2) > hw - 1.5 || y === gy1;
+        s.set(x, y, edge ? Wd[0] : (y > gy1 - 5 && (x % 3 === 0) ? Wd[1] : (y < gy1 - 4 ? 0xf2ead6 : 0xd8ccb2))); } }
+    for (let x = Math.round(SW / 2 - gw - 3); x <= Math.round(SW / 2 + gw + 3); x++) { s.set(x, gy1 + 1, R.ridge); s.set(x, gy1 + 2, T[3]); s.set(x, gy1 + 3, T[0]); } }
+  // ridge with upturned onigawara ends
   const rl = Math.round(inset) - 1, rr = SW - Math.round(inset);
-  for (let x = rl; x <= rr; x++) { s.set(x, 1, R.ridge); s.set(x, 2, mix(R.tile[3], 0xffffff, 0.15)); s.set(x, 3, R.ridge); }
-  s.set(rl - 1, 0, R.ridge); s.set(rl - 2, -0, R.ridge); s.set(rr + 1, 0, R.ridge); s.set(rr + 2, 0, R.ridge);
-  if (!R.thatch) { // irimoya gable: a timber-framed triangle under the ridge
-    const gy1 = Math.round(roofBot * 0.5), gw = Math.min(W * 0.2, 22);
-    for (let y = 4; y <= gy1; y++) { const f = (y - 4) / (gy1 - 4), hw = gw * f; for (let x = Math.round(SW / 2 - hw); x <= Math.round(SW / 2 + hw); x++) {
-      const edge = Math.abs(x - SW / 2) > hw - 1.5 || y === gy1; s.set(x, y, edge ? WOOD[0] : (y === gy1 - 1 ? mul(PLASTER[0], 0.8) : ((x + y) % 4 === 0 && y > gy1 - 6 ? WOOD[1] : PLASTER[1]))); } }
-    for (let x = Math.round(SW / 2 - gw - 2); x <= Math.round(SW / 2 + gw + 2); x++) { s.set(x, gy1 + 1, R.ridge); s.set(x, gy1 + 2, mul(R.tile[0], 0.8)); }
-  }
-  if (opt.hall) { s.rect(SW / 2 - 3, 0, 6, 3, 0xd8a83a); s.set(SW / 2 - 1, 0, 0xfff08a); }
-  // eave shadow on the wall
-  for (let x = ox; x < ox + W; x++) for (let k = 1; k <= 3; k++) { const y = roofBot + k; const c = s.hex(x, y); if (s.has(x, y)) s.set(x, y, mul(c, 0.62 + k * 0.08)); }
-  // lantern by the door
-  const lx = dx + dw + 2, ly = dTop + 1;
-  s.rect(lx, ly - 1, 4, 1, WOOD[0]); s.ell(lx + 2, ly + 3, 2.5, 3.2, (u, v) => v < -0.4 ? 0xff8a6a : 0xd8382e); s.rect(lx + 1, ly + 6, 2, 1, WOOD[0]);
+  for (let x = rl; x <= rr; x++) { s.set(x, ridgeY - 3, R.ridge); s.set(x, ridgeY - 2, mix(T[3], 0xffffff, 0.2)); s.set(x, ridgeY - 1, T[2]); s.set(x, ridgeY, R.ridge); }
+  for (const [x, d] of [[rl, -1], [rr, 1]]) { s.set(x + d, ridgeY - 4, R.ridge); s.set(x + d * 2, ridgeY - 5, R.ridge); s.set(x + d, ridgeY - 3, T[3]); s.set(x + d * 2, ridgeY - 4, T[2]); }
+  if (opt.hall) { s.rect(Math.round(SW / 2) - 3, ridgeY - 6, 6, 3, 0xd8a83a); s.set(Math.round(SW / 2) - 1, ridgeY - 6, 0xfff08a); }
+  // eave shadow + rafter ends
+  for (let x = ox - 2; x < ox + W + 2; x++) for (let k = 1; k <= 3; k++) { const y = roofBot + k; if (s.has(x, y)) s.set(x, y, mul(s.hex(x, y), 0.55 + k * 0.1)); }
+  for (let x = ox; x < ox + W; x += 4) s.set(x, roofBot + 1, 0xd8b088);
+  // red paper lantern by the door
+  const lx = dx + dw + 3, ly = dTop;
+  s.rect(lx + 1, ly - 2, 2, 2, Wd[0]); s.ell(lx + 2, ly + 3, 3, 3.6, (u, v) => (Math.abs(v) > 0.55 ? 0x2a1a14 : v < -0.25 ? 0xff8a6a : (Math.abs(v) % 0.4 < 0.1 ? 0xb82820 : 0xe0382e)));
   lights.push({ x: lx - 1, y: ly, w: 6, h: 7, lantern: 1 });
-  // outline
+  // little extras: potted plant / firewood / barrel by the walls
+  const ex = r() < 0.5 ? ox + 3 : ox + W - 10;
+  if (r() < 0.6 && Math.abs(ex - dx) > 18) { s.ell(ex + 3, SH - 9, 3, 2.4, 0x8a4a2a); s.ell(ex + 3, SH - 13, 3.6, 3.4, (u, v) => v < -0.2 ? 0x7ab85a : 0x3e7a3a); }
+  else if (Math.abs(ex - dx) > 18) for (let k = 0; k < 3; k++) for (let j = 0; j < 3 - k; j++) s.ell(ex + 2 + j * 3 + k * 1.5, SH - 10 - k * 3, 1.6, 1.4, (u, v) => u * u + v * v < 0.3 ? 0xd8b080 : 0x8a5a34);
   s.outline(0x1c1412);
   return { s, ax: eave, ay: SH, lights };
 }
@@ -246,7 +252,51 @@ function tower() { const s = new Spr(32, 60); const P = [0x5a3820, 0x8a5a34, 0xb
 function pot(f) { const s = new Spr(18, 18); s.ell(9, 11, 7, 5, (u) => u < -0.3 ? 0x5a5a62 : 0x3a3a42); s.ell(9, 8, 6, 2, 0xc8783a); s.set(7, 8, 0xe8a85a); s.rect(2, 15, 3, 2, 0x7a7672); s.rect(13, 15, 3, 2, 0x7a7672);
   if (f >= 0) s.ell(9, 16.5, 4, 1.5, f % 2 ? 0xffb02a : 0xe8602a); s.outline(0x141418); return s; }
 
+/* ------------------------- interiors & wayside props ------------------------- */
+const DW = [0x3a2416, 0x543420, 0x6e4628, 0x8c5c36, 0xa8744a];
+function lowTable() { const s = new Spr(22, 14); s.ell(11, 6, 9.5, 4.2, (u, v) => v < -0.3 ? DW[4] : u > 0.5 ? DW[2] : DW[3]); s.rect(3, 8, 16, 2, DW[1]); s.rect(4, 10, 2, 3, DW[0]); s.rect(16, 10, 2, 3, DW[0]);
+  s.ell(9, 4, 2.4, 2, (u, v) => v < -0.2 ? 0x6a8a6a : 0x3a5a4a); s.set(11, 3, 0x2a3a2a); s.set(13, 5, 0xf2ecd8); s.set(14, 5, 0xd8d0c0); s.set(6, 6, 0xf2ecd8); s.outline(0x1a100a); return s; }
+function hearth(f) { const s = new Spr(26, 30);
+  s.rect(7, 0, 2, 16, DW[2]); s.rect(6, 12, 4, 2, 0x3a3a42); // jizai-kagi hook
+  s.rect(1, 14, 24, 14, (x, y) => (x < 3 || x > 22 || y < 16 || y > 25) ? (y === 14 || x === 1 ? DW[4] : DW[2]) : (((x + y) % 5 === 0) ? 0xa8a49c : 0x8e8a82));
+  if (f >= 0) { s.ell(13, 21, 4.5, 2.5, (u, v) => v < -0.2 ? 0xffd04a : 0xe8602a); s.ell(13 + (f % 2 ? 1 : -1), 18, 1.8, 3, f === 1 ? 0xfff2a0 : 0xffb02a); }
+  s.rect(9, 20, 9, 2, 0x5a3a24); s.ell(8, 15, 4.2, 3.4, (u, v) => v < -0.3 ? 0x5a5a66 : 0x2e2e36); s.rect(7, 11, 2, 2, 0x2e2e36);
+  s.outline(0x1a100a); return s; }
+function tansu() { const s = new Spr(18, 26); s.rect(1, 6, 16, 19, (x, y) => (y % 6 === 5 || x === 1 || x === 16) ? DW[0] : x < 6 ? DW[3] : DW[2]);
+  for (let y = 8; y < 24; y += 6) { s.rect(5, y, 2, 1, 0xc8a050); s.rect(11, y, 2, 1, 0xc8a050); }
+  s.ell(9, 3.5, 2.5, 3, (u, v) => v < -0.3 ? 0x8ab8d8 : 0x3a6a9a); s.set(9, 0, 0xf6b8ca); s.set(8, 1, 0xf6b8ca); s.outline(0x1a100a); return s; }
+function bonsai() { const s = new Spr(16, 18); s.rect(3, 13, 10, 4, (x, y) => y === 13 ? 0x5a7aa8 : 0x3a5a88); s.stroke(8, 13, 6, 8, 2, 1, DW[1]); s.stroke(6, 9, 10, 6, 1.5, 1, DW[1]);
+  s.ell(5, 7, 3.4, 2.2, (u, v) => v < -0.2 ? 0x7ab85a : 0x3e7a3a); s.ell(11, 5, 3.2, 2, (u, v) => v < -0.2 ? 0x7ab85a : 0x3e7a3a); s.outline(0x14200e); return s; }
+function andon() { const s = new Spr(12, 22); s.rect(2, 19, 8, 2, DW[1]); s.rect(2, 6, 8, 13, (x, y) => (x === 2 || x === 9 || y === 6 || y === 12 || y === 18) ? DW[1] : (y < 10 ? 0xfff6d0 : 0xffe6a0)); s.rect(5, 2, 2, 4, DW[2]); s.outline(0x1a100a); return { s, light: { x: 3, y: 7, w: 6, h: 11 } }; }
+function cushion(c) { const s = new Spr(14, 10); s.rect(1, 2, 12, 7, (x, y) => y === 2 ? mix(c, 0xffffff, 0.3) : (x + y) % 7 === 0 ? mul(c, 0.8) : c); s.set(7, 5, 0xf2c24a); s.outline(mul(c, 0.35)); return s; }
+function byobu() { const s = new Spr(34, 26); for (let k = 0; k < 4; k++) { const x0 = 1 + k * 8, sk = k % 2 ? 2 : 0;
+  s.poly([[x0, 3 + sk], [x0 + 8, 3 + (2 - sk)], [x0 + 8, 24 - sk], [x0, 24 - (2 - sk)]], (x, y) => y > 18 - sk ? 0x8a6a2a : (y < 7 && ((x * 7 + y) % 9 === 0)) ? 0xffffff : 0xe8c050); }
+  s.line(3, 18, 12, 10, 0x4a6a3a); s.line(12, 10, 20, 16, 0x4a6a3a); s.line(20, 16, 30, 9, 0x4a6a3a); s.ell(24, 7, 2, 2, 0xd8302a); s.set(9, 7, 0x2a2a2a); s.set(10, 6, 0x2a2a2a);
+  s.outline(0x2a1a0a); return s; }
+function kamado(f) { const s = new Spr(24, 20); s.rect(1, 6, 22, 13, (x, y) => y === 6 ? 0xe0c8a8 : (x < 4 ? 0xd0b494 : 0xb89a7a)); for (let x = 1; x < 23; x += 6) for (let y = 9; y < 19; y += 4) s.set(x, y, 0x9a7a5a);
+  for (const cx of [7, 17]) { s.ell(cx, 6, 4, 1.8, 0x2a2224); s.ell(cx, 4, 4, 2.6, (u, v) => v < -0.3 ? 0x5a5a62 : 0x3a3a42); s.rect(cx - 1, 1, 2, 1, 0x2a2a32); }
+  s.rect(5, 12, 5, 5, f >= 0 ? (x, y) => (x + y + f) % 3 ? 0xe8602a : 0xffd04a : 0x1a1414); s.rect(15, 12, 5, 5, f >= 0 ? (x, y) => (x + y + f + 1) % 3 ? 0xe8602a : 0xffd04a : 0x1a1414);
+  s.outline(0x2a1a10); return s; }
+function exitMat() { const s = new Spr(16, 10); s.rect(1, 2, 14, 7, (x, y) => y === 2 ? 0xb8b2a4 : (x + y) % 5 === 0 ? 0x8a8478 : 0x9e988a); s.rect(5, 0, 6, 2, 0x6b4428); s.outline(0x3a3630); return s; }
+function shojiWin() { const s = new Spr(16, 14); s.rect(1, 1, 14, 12, (x, y) => (x === 1 || x === 14 || y === 1 || y === 12) ? DW[1] : ((x - 1) % 4 === 0 || (y - 1) % 4 === 0) ? DW[3] : (y < 5 ? 0xfff8e0 : 0xf2e6c4)); s.outline(0x1a100a); return { s, light: { x: 2, y: 2, w: 12, h: 10 } }; }
+function scroll() { const s = new Spr(10, 20); s.rect(1, 1, 8, 1, DW[1]); s.rect(2, 2, 6, 15, (x, y) => (x === 2 || x === 7) ? 0x6a8a6a : 0xf2ead2); s.line(4, 5, 5, 9, 0x2a2a2a); s.line(5, 9, 4, 13, 0x2a2a2a); s.set(6, 6, 0x2a2a2a); s.ell(6, 14, 1, 1, 0xd8302a); s.rect(1, 17, 8, 1, DW[1]); s.outline(0x1a100a); return s; }
+function shrine() { const s = new Spr(24, 30); const Rd = [0x8a2018, 0xb8302a, 0xd84a3a];
+  s.rect(4, 22, 16, 7, (x, y) => y === 22 ? 0xb8b2a4 : (x + y) % 4 === 0 ? 0x8a8478 : 0x9e988a);
+  s.rect(6, 11, 12, 11, (x, y) => (x === 6 || x === 17) ? DW[1] : y < 14 ? DW[3] : DW[2]); s.rect(9, 14, 6, 7, 0x1e1410); s.ell(12, 18, 2, 2.2, 0xd8d0c0); s.set(11, 17, 0x2a2a2a); s.set(13, 17, 0x2a2a2a); s.rect(10, 20, 4, 1, Rd[1]);
+  s.poly([[1, 12], [23, 12], [18, 4], [6, 4]], (x, y) => y > 10 ? Rd[0] : (x + y) % 3 ? Rd[1] : Rd[2]); s.rect(10, 2, 4, 2, Rd[0]);
+  s.rect(3, 24, 2, 2, 0xffffff); s.rect(19, 24, 2, 2, 0xf2c24a); s.set(4, 23, 0xf6b8ca);
+  s.outline(0x1a100a); return { s, light: { x: 9, y: 14, w: 6, h: 6 } }; }
+function digSpot() { const s = new Spr(14, 9); s.ell(7, 5, 6, 3.4, (u, v) => v < -0.2 ? 0x9a7048 : 0x7a5434); s.line(4, 3, 9, 7, 0x4a2e18); s.line(9, 3, 4, 7, 0x4a2e18); s.set(10, 2, 0xfff6c0); s.outline(0x3a2414); return s; }
+
 export function bakeStructures(nationColors) {
+  put('table', lowTable(), 11, 13, [9, 2]); for (let f = -1; f < 3; f++) put('hearth' + f, hearth(f), 13, 29, [11, 3]);
+  put('tansu', tansu(), 9, 25, [8, 2]); put('bonsai', bonsai(), 8, 17, [5, 2]);
+  { const a = andon(); put('andon', a.s, 6, 21, [4, 2], { lights: [a.light] }); }
+  [0xc8423a, 0x3a6fc8, 0x7a46b8, 0x2f9a6a].forEach((c, i) => put('cushion' + i, cushion(c), 7, 9));
+  put('byobu', byobu(), 17, 25, [14, 2]); for (let f = -1; f < 2; f++) put('kamado' + f, kamado(f), 12, 19, [11, 2]);
+  put('exit', exitMat(), 8, 11); { const w2 = shojiWin(); put('window', w2.s, 8, 16, null, { lights: [w2.light] }); } put('scroll', scroll(), 5, 18);
+  { const sh = shrine(); put('shrine', sh.s, 12, 29, [10, 3], { lights: [sh.light] }); } put('dig', digSpot(), 7, 8);
+
   if (0) for (const id of [B.STONE, B.DARK, B.COAL, B.IRON, B.GOLD, B.GEM, B.WOODWALL, B.STONEWALL])
     for (let m = 0; m < 16; m++) for (let v = 0; v < 2; v++) put(`w${id}_${m}_${v}`, wallSprite(id, m, v), 0, 0);
   for (let k = 1; k <= 3; k++) put('crack' + k, cracks(k), 0, 0);

@@ -9,6 +9,7 @@ import { ICON } from './art/icons.js';
 import { Audio } from './audio.js';
 
 let NID = 1;
+const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
 export const nextId = () => NID++;
 export const setNextId = n => { NID = Math.max(NID, n); };
 const DIRV = [[0, 1], [1, 0], [0, -1], [-1, 0]];
@@ -18,12 +19,12 @@ export class Ent {
   constructor(g, x, y) {
     this.g = g; this.x = x; this.y = y; this.vx = 0; this.vy = 0; this.z = 0; this.vz = 0; this.r = 4; this.hp = this.maxHp = 10;
     this.dead = false; this.dir = 0; this.t = 0; this.flash = 0; this.kbx = 0; this.kby = 0; this.id = nextId(); this.team = 'nature';
-    this.speed = 40; this.solidEnt = true; this.persist = false; this.atkCd = 0; this.target = null; this.path = null; this.stuck = 0; this.inv = 0;
+    this.speed = 40; this.solidEnt = true; this.persist = false; this.atkCd = 0; this.target = null; this.path = null; this.stuck = 0; this.ifr = 0;
   }
   get tx() { return Math.floor(this.x / TS); } get ty() { return Math.floor(this.y / TS); }
   blocked(px, py) {
     const w = this.g.world, hw = this.r, x0 = Math.floor((px - hw) / TS), x1 = Math.floor((px + hw) / TS), y0 = Math.floor((py - 4) / TS), y1 = Math.floor(py / TS);
-    for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) if (w.solid(tx, ty) || (this.noWater && isWater(w.ground(tx, ty)))) return true;
+    for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) if (w.solid(tx, ty, this.swims) || (this.noWater && isWater(w.ground(tx, ty)))) return true;
     return false;
   }
   move(dx, dy) {
@@ -33,13 +34,29 @@ export class Ent {
     return hit;
   }
   inWater() { const w = this.g.world; return isWater(w.ground(this.tx, this.ty)); }
+  waterLevel() { const g = this.g; if (g.inside) return 0; const t = this.tx + this.ty * 7919; if (this._wlT !== t) { this._wlT = t; this._wl = g.world.depth(this.tx, this.ty); } return this._wl; }
+  waterFx(dt) { // ripples, wake and splashes for anything standing in water
+    const wl = this.waterLevel(), g = this.g;
+    if (wl && !this._wasWet) { g.fx.burst(this.x, this.y, 8, ['#e8fbff', '#bfe7f4', '#ffffff'], { z: 2, vz0: 30, vz1: 70, sp1: 30, l1: 0.6 }); Audio.play('splash', { vol: g.vol(this.x, this.y) * 0.5 }); }
+    this._wasWet = !!wl; if (!wl) return;
+    this._rip = (this._rip || 0) - dt;
+    if (this._rip <= 0) { this._rip = this.moving ? 0.22 : 0.9; g.fx.spawn({ x: this.x, y: this.y - (wl === 2 ? 4 : 1), life: this.moving ? 0.6 : 1.1, k: 'ring', s: wl === 2 ? 9 : 6, c: '#e8fbff' });
+      if (this.moving) for (let k = 0; k < (wl === 2 ? 3 : 2); k++) g.fx.spawn({ x: this.x + rand(-5, 5), y: this.y - 2, z: 2, vz: rand(20, 45), vx: rand(-14, 14), g: 160, life: 0.45, c: Math.random() < 0.5 ? '#ffffff' : '#bfe7f4' }); }
+  }
+  // draw a sprite frame with the waterline cutting it: shallow hides the feet, deep shows head & shoulders
+  drawWet(ctx, img, x, y, wl, bob) {
+    const h = img.height, w = img.width, cut = wl === 2 ? 19 : h - 4 - (this.footY ? 0 : 0);
+    if (wl === 1) { ctx.drawImage(img, 0, 0, w, h - 5, x, y, w, h - 5); ctx.fillStyle = 'rgba(232,251,255,0.55)'; ctx.fillRect(x + w / 2 - 6, y + h - 5, 12, 1); return; }
+    const yy = y + (h - cut) - 6 + bob; ctx.drawImage(img, 0, 0, w, cut, x, yy, w, cut);
+    ctx.fillStyle = 'rgba(232,251,255,0.7)'; ctx.fillRect(x + w / 2 - 7, yy + cut, 14, 1); ctx.fillStyle = 'rgba(190,230,240,0.4)'; ctx.fillRect(x + w / 2 - 9, yy + cut + 1, 18, 1);
+  }
   physics(dt) {
     if (this.kbx || this.kby) { this.move(this.kbx * dt, this.kby * dt); const d = Math.pow(0.002, dt); this.kbx *= d; this.kby *= d; if (Math.abs(this.kbx) + Math.abs(this.kby) < 2) this.kbx = this.kby = 0; }
     if (this.z > 0 || this.vz) { this.vz -= 300 * dt; this.z += this.vz * dt; if (this.z <= 0) { this.z = 0; this.vz = 0; } }
-    if (this.flash > 0) this.flash -= dt; if (this.atkCd > 0) this.atkCd -= dt; if (this.inv > 0) this.inv -= dt;
+    if (this.flash > 0) this.flash -= dt; if (this.atkCd > 0) this.atkCd -= dt; if (this.ifr > 0) this.ifr -= dt;
   }
   hurt(dmg, src, kb = 90) {
-    if (this.dead || this.inv > 0) return false;
+    if (this.dead || this.ifr > 0) return false;
     this.hp -= dmg; this.flash = 0.18;
     if (src) { const dx = this.x - src.x, dy = this.y - src.y, d = Math.hypot(dx, dy) || 1; this.kbx = dx / d * kb; this.kby = dy / d * kb; }
     this.g.fx.burst(this.x, this.y - 8, 5, this.bloodCols || ['#e8e0d0', '#c8b8a8'], { sp0: 20, sp1: 60, l0: 0.25, l1: 0.5 });
@@ -53,7 +70,7 @@ export class Ent {
     if (this.path && this.path.length) { const n = this.path[0]; gx = n[0] * TS + 8; gy = n[1] * TS + 12; if (dist2(this.x, this.y, gx, gy) < 25) { this.path.shift(); } }
     const dx = gx - this.x, dy = gy - this.y, d = Math.hypot(dx, dy);
     if (d < stopAt && !(this.path && this.path.length)) { this.moving = false; return true; }
-    const k = (this.inWater() ? 0.55 : 1) * sp * dt / (d || 1);
+    const wl = this.waterLevel(), k = (wl === 2 ? 0.5 : wl ? 0.7 : 1) * sp * dt / (d || 1);
     const ox = this.x, oy = this.y;
     this.move(dx * k, dy * k); this.dir = dirOf(dx, dy); this.moving = true;
     const moved = Math.abs(this.x - ox) + Math.abs(this.y - oy);
@@ -61,7 +78,7 @@ export class Ent {
     else this.stuck = Math.max(0, this.stuck - dt);
     return false;
   }
-  shadow() { return [this.x, this.y, 5, 2]; }
+  shadow() { return this.waterLevel() ? null : [this.x, this.y, 5, 2]; }
   save() { return null; }
 }
 
@@ -69,33 +86,71 @@ export class Ent {
 export class Human extends Ent {
   constructor(g, x, y, look) { super(g, x, y); this.look = look; this.frames = bakeChar(look); this.r = 4; this.act = 0; this.actT = 0; this.held = null; this.bubble = null; this.bubbleT = 0; this.moving = false; this.bloodCols = ['#d8484a', '#a82a3a']; }
   say(text, t = 3) { this.bubble = text; this.bubbleT = t; }
-  physics(dt) { super.physics(dt); if (this.bubbleT > 0) { this.bubbleT -= dt; if (this.bubbleT <= 0) this.bubble = null; } if (this.actT > 0) this.actT -= dt; this.t += dt; }
+  physics(dt) { super.physics(dt); this.waterFx(dt); if (this.bubbleT > 0) { this.bubbleT -= dt; if (this.bubbleT <= 0) this.bubble = null; } if (this.actT > 0) this.actT -= dt; this.t += dt; }
   frame() {
-    const F = this.frames[this.dir];
-    if (this.actT > 0) { const p = 1 - this.actT / this.actDur; return F.act[Math.min(2, (p * 3) | 0)]; }
-    if (this.moving) return F.walk[((this.t * (this.walkFps || 8)) | 0) % 4];
-    return F.idle[((this.t * 1.6) | 0) % 4];
+    const F = this.frames[this.dir]; let set, i;
+    if (this.actT > 0) { const p = 1 - this.actT / this.actDur; set = 'act'; i = Math.min(2, (p * 3) | 0); }
+    else if (this.moving) { set = 'walk'; i = ((this.t * (this.walkFps || 8)) | 0) % 4; }
+    else { set = 'idle'; i = ((this.t * 1.6) | 0) % 4; }
+    this._hand = F[set + 'H'] && F[set + 'H'][i]; return F[set][i];
   }
   draw(ctx, ox, oy) {
-    const fr = this.frame(), x = Math.round(this.x - ox - FX), y = Math.round(this.y - oy - FY - this.z);
-    const heldBehind = this.dir === 2;
-    if (heldBehind) this.drawHeld(ctx, ox, oy);
-    ctx.drawImage(fr, x, y);
+    const fr = this.frame(), x = Math.round(this.x - ox - FX), y = Math.round(this.y - oy - FY - this.z), wl = this.z > 0 ? 0 : this.waterLevel();
+    if (wl === 2) { this.drawWet(ctx, fr, x, y, 2, Math.round(Math.sin(this.t * 4) * 0.8)); return; }
+    const behind = this.dir === 2;
+    if (behind) this.drawHeld(ctx, x, y);
+    if (wl === 1) this.drawWet(ctx, fr, x, y, 1, 0); else ctx.drawImage(fr, x, y);
     if (this.flash > 0) drawFlash(ctx, fr, x, y);
-    if (!heldBehind) this.drawHeld(ctx, ox, oy);
+    if (!behind) this.drawHeld(ctx, x, y);
   }
   heldIcon() { return this.held && ICON[this.held]; }
-  drawHeld(ctx, ox, oy) {
-    const ic = this.heldIcon(); if (!ic) return;
-    const d = this.dir, hand = [[-6, -8], [3, -9], [6, -9], [-3, -9]][d];
-    const hx = Math.round(this.x - ox + hand[0]), hy = Math.round(this.y - oy + hand[1] - this.z);
-    let ang;
-    const base = [Math.PI * 0.5, 0, -Math.PI * 0.5, Math.PI][d];
-    if (this.actT > 0) { const p = 1 - this.actT / this.actDur, e = p < 0.3 ? -p / 0.3 : (p - 0.3) / 0.7; const sgn = d === 3 ? -1 : 1; ang = base + sgn * (-1.4 + clamp(e, -1, 1) * 2.3) * (this.swingK || 1); }
-    else ang = base - (d === 3 ? -0.9 : 0.9);
-    ctx.save(); ctx.translate(hx, hy); ctx.rotate(ang + Math.PI / 4); if (d === 3) ctx.scale(1, -1);
-    ctx.drawImage(ic, -3, -13); ctx.restore();
+  // tools are gripped at the handle in the animated hand and swung through a real arc
+  drawHeld(ctx, fx, fy) {
+    const ic = this.heldIcon(), H = this._hand; if (!ic || !H) return;
+    const it = ITEMS[this.held], d = this.dir, hx = fx + H[0], hy = fy + H[1];
+    if (this.held === 'bow' || this.held === 'spear' || this.held === 'torch') return this.drawSpecial(ctx, hx, hy, d);
+    const tool = it && (it.k === 'tool' || it.k === 'weapon');
+    if (!tool) { // carried things: held up in the hand, bobbing with it
+      const sz = 11, bx = Math.round(hx - sz / 2 + (d === 1 ? 2 : d === 3 ? -2 : 0)), by = Math.round(hy - sz + 2);
+      ctx.drawImage(ic, bx, by, sz, sz); this.grip(ctx, hx, hy); return;
+    }
+    const T = { 1: [-1.05, -2.7, 0.75], 0: [2.45, 4.1, 1.35], 2: [-1.9, -0.7, -3.0] }[d === 3 ? 1 : d];
+    let ang = T[0] + Math.sin(this.t * 9) * (this.moving ? 0.1 : 0.03), p = -1;
+    if (this.actT > 0) { p = 1 - this.actT / this.actDur;
+      ang = p < 0.28 ? T[0] + (T[1] - T[0]) * ease(p / 0.28) : p < 0.58 ? T[1] + (T[2] - T[1]) * ease((p - 0.28) / 0.3) : T[2] + (T[0] - T[2]) * ease((p - 0.58) / 0.42) * 0.6; }
+    if (this.fishing) ang = -0.45;
+    const mir = d === 3 || (d === 2);
+    ctx.save(); ctx.translate(Math.round(hx), Math.round(hy)); if (mir) ctx.scale(-1, 1);
+    // motion trail during the strike
+    if (p > 0.28 && p < 0.6) { ctx.fillStyle = 'rgba(255,248,232,0.55)'; const a1 = T[1] + (T[2] - T[1]) * Math.max(0, ease((p - 0.28) / 0.3) - 0.35);
+      for (let k = 0; k <= 8; k++) { const a = a1 + (ang - a1) * k / 8; for (const r of [11, 13]) ctx.fillRect(Math.round(Math.cos(a) * r), Math.round(Math.sin(a) * r), 1, 1); } }
+    ctx.rotate(ang + 0.83); ctx.drawImage(ic, -3, -13); ctx.restore();
+    this.grip(ctx, hx, hy);
   }
+  // bows, spears and torches are drawn as real props rather than rotated icons
+  drawSpecial(ctx, hx, hy, d) {
+    const p = this.actT > 0 ? 1 - this.actT / this.actDur : -1, side = d === 1 || d === 3, sg = d === 3 ? -1 : 1, X = Math.round(hx), Y = Math.round(hy);
+    const px = (x, y, c) => { ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); };
+    if (this.held === 'bow') {
+      const draw = p >= 0 && p < 0.75 ? Math.sin(Math.min(1, p / 0.6) * Math.PI / 2) * 4 : 0;
+      if (side) { const bx = X + sg * 2; for (let k = -7; k <= 7; k++) { const off = Math.round((1 - (k / 7) ** 2) * 3); px(bx + sg * off, Y + k, k % 3 ? '#8a5a34' : '#6b4428'); px(bx + sg * (off + 1), Y + k, '#5a3820'); }
+        const sx = bx - sg * Math.round(draw); for (let k = -6; k <= 6; k++) px(Math.round(bx + (sx - bx) * (1 - Math.abs(k) / 6)), Y + k, 'rgba(240,236,220,0.9)');
+        if (draw > 0.5) { for (let k = 0; k < 10; k++) px(sx + sg * k, Y, k > 7 ? '#c8ccd8' : '#d8b880'); px(sx - sg, Y - 1, '#e8e0d0'); px(sx - sg, Y + 1, '#d84a4a'); } }
+      else { const by = d === 0 ? Y + 1 : Y; for (let k = -6; k <= 6; k++) { const off = Math.round((1 - (k / 6) ** 2) * 2.5); px(X + k, by + off, '#8a5a34'); px(X + k, by + off + 1, '#5a3820'); } for (let k = -5; k <= 5; k++) px(X + k, by - 1 + (draw ? Math.round(draw) : 0), 'rgba(240,236,220,0.8)'); }
+    } else if (this.held === 'spear') {
+      let ang = side ? -1.25 : d === 0 ? -1.75 : -1.4, reach = 0;
+      if (p >= 0) { const th = p < 0.35 ? -p / 0.35 : p < 0.6 ? (p - 0.35) / 0.25 : 1 - (p - 0.6) / 0.4; ang = side ? -0.15 : d === 0 ? 1.45 : -1.6; reach = th * 6; }
+      ctx.save(); ctx.translate(X, Y); if (sg < 0) ctx.scale(-1, 1);
+      const ca = Math.cos(ang), sa = Math.sin(ang), nx = Math.round(-sa), ny = Math.round(ca); for (let k = -7; k <= 22; k++) { const x = Math.round(ca * (k + reach)), y = Math.round(sa * (k + reach)); const tip = k > 17; ctx.fillStyle = k > 20 ? '#ffffff' : tip ? '#d8dce8' : k === 17 ? '#c8423a' : (k & 1 ? '#a8744a' : '#8a5a34'); ctx.fillRect(x, y, 1, 1); ctx.fillStyle = tip ? (k < 21 ? '#8a8e9a' : '#d8dce8') : k === 17 ? '#8a2018' : '#5a3820'; if (k < 21) ctx.fillRect(x + nx, y + ny, 1, 1); if (k === 18 || k === 19) { ctx.fillStyle = '#a8acb8'; ctx.fillRect(x - nx, y - ny, 1, 1); ctx.fillRect(x + 2 * nx, y + 2 * ny, 1, 1); } }
+      ctx.restore();
+    } else { // torch
+      const tx = X + (side ? sg * 1 : 0), ty = Y; for (let k = 0; k < 7; k++) px(tx, ty - k, k > 4 ? '#3a2418' : '#8a5a34');
+      const fl = Math.sin(this.t * 22) > 0 ? 1 : 0, h = 4 + fl; ctx.fillStyle = '#e8602a'; ctx.fillRect(tx - 1, ty - 8 - h + 2, 3, h); ctx.fillStyle = '#ffc23a'; ctx.fillRect(tx - 1 + fl, ty - 8 - h + 3, 2, h - 2); ctx.fillStyle = '#fff2a0'; ctx.fillRect(tx, ty - 9, 1, 2);
+      if (Math.random() < 0.08) this.g.fx.spawn({ x: this.x + (side ? sg : 0), y: this.y, z: 30, vz: 18, vx: rand(-5, 5), life: 0.6, c: '#ffd04a', k: 'dot', top: true, g: 0 });
+    }
+    this.grip(ctx, hx, hy);
+  }
+  grip(ctx, hx, hy) { const L = this.look; if (!L) return; ctx.fillStyle = '#' + L.skin.toString(16).padStart(6, '0'); ctx.fillRect(Math.round(hx - 1), Math.round(hy - 1), 2, 2); ctx.fillStyle = 'rgba(42,26,34,0.85)'; ctx.fillRect(Math.round(hx - 1), Math.round(hy + 1), 2, 1); }
   swing(dur = 0.32) { this.actT = this.actDur = dur; }
 }
 const flashCache = new WeakMap();
@@ -106,6 +161,12 @@ function drawFlash(ctx, fr, x, y) {
 }
 
 /* ---------- villagers (any village), incl. merchant & chief ---------- */
+const CONVOS = [
+  ['Did you hear the wolves last night?', 'I kept the shutters closed till dawn.'], ['The koi in Hanomi look fat this year.', 'Someone keeps feeding them, ha!'],
+  ['My carrots are finally sprouting.', 'Rain helps more than any watering can.'], ['Is that traveller from Hanomi?', 'They say the dog never leaves their side.'],
+  ['Tea later?', 'Only if you bring the mochi.'], ['The chief looks worried.', 'A red moon is coming, they say.'], ['Iron prices went up again.', 'Blame the zombies in the hills.'],
+  ['Look at the sakura!', 'Petals in my soup again...'], ['Have you been to the shrine?', 'Every morning. It brings good luck.'], ['Nice weather.', 'For now. Clouds in the west.'],
+];
 const CHAT = ['Lovely day for it.', 'The sakura bloom early this year.', 'Mind the forest after dark.', 'My back aches from the fields.', 'Have you seen the koi? So calm.', 'The rice will be good this season.',
   'They say the dead walk under a red moon.', 'Fresh fish is the best breakfast.', 'Ah, a traveller!', 'Watch your step, the soil is wet.', 'I miss my old dog...', 'Iron is found deep in the grey hills.'];
 export class Villager extends Human {
@@ -118,22 +179,54 @@ export class Villager extends Human {
   update(dt) {
     this.physics(dt);
     const g = this.g, night = g.hour >= 20 || g.hour < 6;
-    if (this.inside) { if (!night || this.role !== 'villager') { this.inside = false; } else return; }
+    if (this.inside) { if (!night || this.role !== 'villager') { this.inside = false; if (this.inRoom && this.homeDoor) { this.x = this.homeDoor.x * TS + 8; this.y = (this.homeDoor.y + 1) * TS + 10; } this.inRoom = null; } else { this.moving = false; return; } }
     // flee from nearby undead
     const z = g.nearest(this.x, this.y, 80, e => e.team === 'undead' || (e.hostileTo && e.hostileTo(this)));
     if (z && this.role !== 'chief') { const dx = this.x - z.x, dy = this.y - z.y, d = Math.hypot(dx, dy) || 1; this.move(dx / d * 42 * dt, dy / d * 42 * dt); this.dir = dirOf(-dx, -dy); this.moving = true; if (Math.random() < 0.01) this.say(pick(['Help!', 'Zombies!', 'Aaah!'])); return; }
     if (night && this.role === 'villager' && this.homeDoor) {
-      if (this.seek(this.homeDoor.x * TS + 8, (this.homeDoor.y + 1) * TS + 8, this.speed * 1.3, dt, 6)) { this.inside = true; this.moving = false; }
+      this.held = null; this.task = null; this.chatWith = null;
+      if (this.seek(this.homeDoor.x * TS + 8, (this.homeDoor.y + 1) * TS + 8, this.speed * 1.3, dt, 6)) { this.inside = true; this.moving = false;
+        const rec = g.interiorOf(this.vid, this.homeSi); if (rec) { this.inRoom = rec.key; this.x = (rec.x + 2 + ((this.id * 3) % (rec.w - 4))) * TS + 8; this.y = (rec.y + 3 + (this.id % 2)) * TS + 8; this.dir = 0; } }
       return;
     }
     if (this.role === 'merchant' || this.role === 'chief') { if (dist2(this.x, this.y, this.hx, this.hy) > 400) this.seek(this.hx, this.hy, this.speed, dt); else { this.moving = false; const p = g.player; if (dist2(p.x, p.y, this.x, this.y) < 4000) this.dir = dirOf(p.x - this.x, p.y - this.y); } return; }
-    if (this.goal) { if (this.seek(this.goal.x, this.goal.y, this.speed, dt, 3) || (this.wanderT -= dt) < -6) { this.goal = null; this.wanderT = rand(2, 6); } }
-    else { this.moving = false; if ((this.wanderT -= dt) <= 0) { const a = rand(TAU), r = rand(16, 80); this.goal = { x: this.hx + Math.cos(a) * r, y: this.hy + Math.sin(a) * r }; this.path = null; } }
-    if (!this.bubble && Math.random() < 0.0008 && dist2(g.player.x, g.player.y, this.x, this.y) < 9000) this.say(pick(CHAT), 3.5);
+    // daily routine: work in the morning, gather at midday & dusk, wander in between
+    const h = g.hour, v = this.village || (this.village = g.villageById(this.vid));
+    const phase = h < 11 ? 'work' : h < 14 ? 'social' : h < 18 ? 'work' : 'social';
+    if (this.chatWith) { // a little conversation with a neighbour
+      const o = this.chatWith; if (o.dead || o.inside) { this.chatWith = null; return; } this.moving = false; this.dir = dirOf(o.x - this.x, o.y - this.y);
+      if ((this.chatT -= dt) <= 0) { if (this.chatLines.length) { const [who, line] = this.chatLines.shift(); (who ? o : this).say(line, 2.6); this.chatT = 2.8; } else { this.chatWith = null; o.chatWith = null; this.wanderT = rand(6, 12); } }
+      return;
+    }
+    if (this.goal) {
+      const done = this.seek(this.goal.x, this.goal.y, this.speed, dt, 3) || (this.wanderT -= dt) < -8;
+      if (done) { this.task = this.goal.task; this.goal = null; this.wanderT = rand(3, 7); this.taskT = rand(4, 9); }
+    } else {
+      this.moving = false;
+      if (this.task === 'farm' && (this.taskT -= dt) > 0) { if (this.actT <= 0 && Math.random() < dt * 0.9) { this.swing(0.45); this.held = 'hoe_wood'; if (Math.random() < 0.3) g.fx.burst(this.x + [0, 8, 0, -8][this.dir], this.y + [8, 0, -8, 0][this.dir], 3, ['#6a472f', '#88603f'], {}); } }
+      else if (this.task === 'sweep' && (this.taskT -= dt) > 0) { this.held = 'stick'; if (this.actT <= 0 && Math.random() < dt * 0.7) this.swing(0.5); }
+      else { this.task = null; this.held = null; }
+      if ((this.wanderT -= dt) <= 0 && v) {
+        let gx, gy, task = null;
+        if (phase === 'work') {
+          const F = v._fields || (v._fields = [...v.ov.entries()].filter(([, o]) => o.g === G.TILLED).map(([k]) => k.split(',').map(Number)));
+          if (F.length && Math.random() < 0.6) { const [fx, fy] = pick(F); gx = fx * TS + 8; gy = (fy + 1) * TS + 6; task = 'farm'; }
+          else if (Math.random() < 0.4) { gx = v.x * TS + rand(-50, 50); gy = v.y * TS + rand(-40, 40); task = 'sweep'; }
+        } else { gx = v.x * TS + rand(-56, 56); gy = v.y * TS + rand(-30, 50); }
+        if (gx == null) { const a = rand(TAU), r = rand(16, 80); gx = this.hx + Math.cos(a) * r; gy = this.hy + Math.sin(a) * r; }
+        this.goal = { x: gx, y: gy, task }; this.path = null;
+      }
+      // strike up a conversation
+      if (phase === 'social' && !this.task && Math.random() < dt * 0.25) {
+        const o = g.nearest(this.x, this.y, 28, e => e !== this && e instanceof Villager && e.role === 'villager' && !e.goal && !e.chatWith && !e.inside);
+        if (o) { this.chatWith = o; o.chatWith = this; o.moving = false; o.dir = dirOf(this.x - o.x, this.y - o.y); this.chatLines = pick(CONVOS).map((l, i) => [i % 2, l]); this.chatT = 0.2; }
+      }
+    }
+    if (!this.bubble && !this.chatWith && Math.random() < 0.0008 && dist2(g.player.x, g.player.y, this.x, this.y) < 9000) this.say(pick(CHAT), 3.5);
   }
-  shadow() { return this.inside ? null : [this.x, this.y, 5, 2]; }
-  draw(ctx, ox, oy) { if (!this.inside) super.draw(ctx, ox, oy); }
-  save() { return { k: 'villager', x: this.x, y: this.y, hp: this.hp, role: this.role, vid: this.vid, seed: this.seed, hx: this.hx, hy: this.hy, name: this.name, door: this.homeDoor }; }
+  shadow() { return this.inside && !this.inRoom ? null : [this.x, this.y, 5, 2]; }
+  draw(ctx, ox, oy) { if (!this.inside || this.inRoom) super.draw(ctx, ox, oy); }
+  save() { return { k: 'villager', x: this.x, y: this.y, hp: this.hp, role: this.role, vid: this.vid, seed: this.seed, hx: this.hx, hy: this.hy, name: this.name, door: this.homeDoor, homeSi: this.homeSi }; }
 }
 
 /* ---------- soldiers: nation guards and the player's army ---------- */
@@ -149,6 +242,10 @@ export class Soldier extends Human {
   hostileTo(e) { return this.g.hostile(this, e); }
   update(dt) {
     this.physics(dt); const g = this.g;
+    const night = g.daylight < 0.35; this.light = 0;
+    if (!this.archer) { if (night && !this.target) { this.held = 'torch'; this.light = 4; } else this.held = 'spear'; }
+    if (this.mine && this.hp < this.maxHp * 0.3 && this.target) { // fall back to the player and regroup
+      const p = g.player; if (dist2(this.x, this.y, p.x, p.y) > 30 * 30) { this.seek(p.x, p.y, this.speed * 1.3, dt, 16); if (Math.random() < 0.01) this.say(pick(['Falling back!', 'I need a moment!'])); return; } }
     if (this.temp && g.day >= this.temp) { this.dead = true; g.toast(`${this.name} returns to their clan.`); return; }
     if (this.mine && this.hp < this.maxHp && !this.target) this.hp = Math.min(this.maxHp, this.hp + dt * 0.5);
     // target acquisition
@@ -181,7 +278,11 @@ export class Soldier extends Human {
     if (this.order === 'raid' && this.raidTo) { this.seek(this.raidTo.x, this.raidTo.y, this.speed * 0.8, dt, 30); return; }
     // hold / patrol around post
     if (this.goal) { if (this.seek(this.goal.x, this.goal.y, this.speed * 0.6, dt, 3)) this.goal = null; }
-    else { this.moving = false; if ((this.wanderT -= dt) <= 0) { this.wanderT = rand(3, 8); const r = this.order === 'hold' ? 20 : 70, a = rand(TAU); this.goal = { x: this.post.x + Math.cos(a) * r, y: this.post.y + Math.sin(a) * r }; this.path = null; } }
+    else { this.moving = false; if ((this.wanderT -= dt) <= 0) { this.wanderT = rand(3, 8);
+      const v = !this.mine && this.vid && g.villageById(this.vid);
+      if (v && this.order === 'patrol' && !night) { const arm = pick([[1, 0], [-1, 0], [0, 1], [0, -1]]), d = rand(6, 17) * TS; this.goal = { x: v.x * TS + arm[0] * d + 8, y: v.y * TS + arm[1] * d + 20 }; }
+      else { const r = this.order === 'hold' ? 20 : night ? 30 : 70, a = rand(TAU); this.goal = { x: this.post.x + Math.cos(a) * r, y: this.post.y + Math.sin(a) * r }; }
+      this.path = null; } }
   }
   save() { return { k: 'soldier', x: this.x, y: this.y, hp: this.hp, vid: this.vid, mine: this.mine, archer: this.archer, color: this.color, seed: this.seed, order: this.order, post: this.post, slot: this.slot, name: this.name, temp: this.temp }; }
 }
@@ -207,8 +308,12 @@ export class Zombie extends Human {
       return;
     }
     if (this.raid && this.raidTo) { this.seek(this.raidTo.x, this.raidTo.y, this.speed, dt, 30); return; }
-    if (this.goal) { if (this.seek(this.goal.x, this.goal.y, this.speed * 0.6, dt, 3)) this.goal = null; } else { this.moving = false; if ((this.wanderT -= dt) <= 0) { this.wanderT = rand(2, 5); const a = rand(TAU); this.goal = { x: this.x + Math.cos(a) * 50, y: this.y + Math.sin(a) * 50 }; } }
+    if (this.goal) { if (this.seek(this.goal.x, this.goal.y, this.speed * 0.6, dt, 3)) this.goal = null; } else { this.moving = false; if ((this.wanderT -= dt) <= 0) { this.wanderT = rand(2, 5);
+      // shamble around, but shy away from torchlight
+      let best = null; for (let k = 0; k < 4; k++) { const a = rand(TAU), gx = this.x + Math.cos(a) * 50, gy = this.y + Math.sin(a) * 50; if (!g.lit(Math.floor(gx / 16), Math.floor(gy / 16))) { best = { x: gx, y: gy }; break; } }
+      this.goal = best || { x: this.x + rand(-30, 30), y: this.y + rand(-30, 30) }; } }
   }
+  onHurt(src) { if (!src) return; for (const z of this.g.query(this.x, this.y, 90, e => e.team === 'undead' && !e.target)) z.target = src; }
   bash() { // hit the built thing in our way
     const g = this.g, [dx, dy] = DIRV[this.dir], tx = Math.floor((this.x + dx * 10) / TS), ty = Math.floor((this.y - 2 + dy * 10) / TS);
     g.damageTile(tx, ty, 1, this, true);
@@ -222,11 +327,11 @@ export class Dog extends Ent {
     super(g, x, y); this.breed = o.breed || 'bernese'; this.sp = bakeDog(this.breed); this.name = o.name || 'Kuma'; this.isDog = true;
     this.wild = !!o.wild; this.team = this.wild ? 'wild' : (o.owned ? 'player' : 'nature'); this.owned = !!o.owned; this.persist = !this.wild;
     this.hp = this.maxHp = this.wild ? 14 : 30; this.speed = this.wild ? 62 : 74; this.r = 5; this.state = 'sit'; this.st = 0; this.f = 1; this.love = o.love || 0; this.down = 0; this.dmg = this.wild ? 2 : 4;
-    this.bloodCols = ['#d8d0c0', '#a89888']; this.heartT = 0; this.barkT = rand(4, 12);
+    this.bloodCols = ['#d8d0c0', '#a89888']; this.heartT = 0; this.barkT = rand(4, 12); this.swims = !this.wild;
   }
   hostileTo(e) { return this.g.hostile(this, e); }
   update(dt) {
-    this.physics(dt); this.st += dt; this.t += dt; const g = this.g, p = g.player;
+    this.physics(dt); this.waterFx(dt); this.st += dt; this.t += dt; const g = this.g, p = g.player;
     if (this.down > 0) { this.down -= dt; this.state = 'lie'; if (this.down <= 0) { this.hp = this.maxHp * 0.5; this.say && 0; } return; }
     if (this.heartT > 0) { this.heartT -= dt; if (Math.random() < dt * 4) g.fx.spawn({ x: this.x + rand(-6, 6), y: this.y, z: 22, vz: 14, life: 1, c: '#ff6a8a', k: 'heart', g: 0 }); }
     if (this.wild) return this.updateWild(dt);
@@ -246,8 +351,11 @@ export class Dog extends Ent {
     }
     const d = Math.hypot(p.x - this.x, p.y - this.y);
     if (d > 520) { this.x = p.x - 12; this.y = p.y + 6; }
-    if (this.fetch) { // chase a thrown stick... simple sniff target
-      if (this.seek(this.fetch.x, this.fetch.y, this.speed, dt, 4)) this.fetch = null; this.state = 'run'; this.f = this.vxSign(); return;
+    if (this.fetch) { // play fetch: run to the stick, carry it back, drop it at your feet
+      const st = this.fetch;
+      if (!this.carry) { if (st.dead) { this.fetch = null; return; } if (st.z <= 0 && this.seek(st.x, st.y, this.speed * 1.2, dt, 6)) { st.dead = true; this.carry = true; Audio.play('pet', { vol: 0.4 }); } else if (st.z > 0) { this.seek(st.x, st.y, this.speed * 1.2, dt, 6); } this.state = 'run'; return; }
+      if (this.seek(p.x + 10, p.y + 4, this.speed, dt, 10)) { const d = g.drop('stick', 1, this.x + this.f * 6, this.y); d.vz = 20; d.pickDelay = 0.2; this.fetch = null; this.carry = false; this.pet(); this.love = Math.min(100, this.love + 3); g.stats.fetches = (g.stats.fetches || 0) + 1; }
+      this.state = 'run'; return;
     }
     if (d > 56) { const sp = d > 110 ? this.speed * 1.25 : this.speed * 0.7; this.seek(p.x - 14 * Math.sign(p.x - this.x || 1), p.y + 4, sp, dt, 4); this.state = d > 110 ? 'run' : 'walk'; this.f = p.x > this.x ? 1 : -1; this.st = 0; return; }
     // idle near the player
@@ -273,6 +381,7 @@ export class Dog extends Ent {
   pet() { this.state = 'happy'; this.st = 0; this.heartT = 1.4; this.love = Math.min(100, this.love + 2); Audio.play('pet'); Audio.play('bark', { vol: 0.4, pitch: 1.15 }); }
   frameSet() {
     const F = this.sp.frames, s = this.state;
+    if (this.carry) return s === 'run' || s === 'walk' ? F.carry[((this.t * 14) | 0) % 6] : F.carryIdle[((this.t * 3) | 0) % 2];
     if (s === 'run') return F.run[((this.t * 14) | 0) % 6];
     if (s === 'walk') return F.walk[((this.t * 10) | 0) % 8];
     if (s === 'sit') return F.sit[((this.t * 2) | 0) % 4];
@@ -285,12 +394,13 @@ export class Dog extends Ent {
   }
   draw(ctx, ox, oy) {
     const fr = this.frameSet(), img = this.f < 0 ? fr.f : fr.n, sp = this.sp;
-    const x = Math.round(this.x - ox - (this.f < 0 ? sp.w - sp.ox : sp.ox)), y = Math.round(this.y - oy - sp.oy - this.z);
-    ctx.drawImage(img, x, y);
+    const x = Math.round(this.x - ox - (this.f < 0 ? sp.w - sp.ox : sp.ox)), y = Math.round(this.y - oy - sp.oy - this.z), wl = this.z > 0 ? 0 : this.waterLevel();
+    if (wl) { const cut = wl === 2 ? sp.oy - 12 : sp.oy - 4, yy = y + (wl === 2 ? 9 + Math.round(Math.sin(this.t * 4)) : 0); ctx.drawImage(img, 0, 0, img.width, cut, x, yy, img.width, cut); ctx.fillStyle = 'rgba(232,251,255,0.6)'; ctx.fillRect(Math.round(this.x - ox) - 9, yy + cut, 18, 1); }
+    else ctx.drawImage(img, x, y);
     if (this.flash > 0) drawFlash(ctx, img, x, y);
     if (this.state === 'sleep' && Math.random() < 0.01) this.g.fx.spawn({ x: this.x + this.f * 8, y: this.y, z: 16, vz: 8, vx: 4, life: 1.6, c: '#e8e8f8', k: 'z', g: 0 });
   }
-  shadow() { return [this.x - this.f * 1, this.y, 8, 2]; }
+  shadow() { return this.waterLevel() ? null : [this.x - this.f * 1, this.y, 8, 2]; }
   save() { return this.wild ? null : { k: 'dog', x: this.x, y: this.y, breed: this.breed, name: this.name, owned: this.owned, love: this.love, hp: this.hp }; }
 }
 
@@ -302,6 +412,7 @@ const ANI = {
   pig: { hp: 10, sp: 18, drops: [['raw_meat', 2, 3]], food: ['carrot', 'pumpkin'] },
   rabbit: { hp: 3, sp: 46, flee: 2, drops: [['raw_meat', 1, 1], ['leather', 0, 1]], food: ['carrot'] },
   deer: { hp: 10, sp: 52, flee: 2, drops: [['raw_meat', 2, 2], ['leather', 1, 2]], food: ['apple'] },
+  fox: { hp: 6, sp: 58, flee: 2, drops: [['leather', 0, 1], ['bone', 0, 1]], food: ['raw_meat'] },
   boar: { hp: 16, sp: 40, aggro: 1, drops: [['raw_meat', 2, 3], ['leather', 1, 1]], food: ['mushroom'] },
 };
 export class Animal extends Ent {
@@ -327,12 +438,14 @@ export class Animal extends Ent {
     // follow food
     if (g.holding(this.def.food) && dist2(p.x, p.y, this.x, this.y) < 90 * 90 && dist2(p.x, p.y, this.x, this.y) > 20 * 20) { this.seek(p.x, p.y, this.speed, dt, 18); this.state = 'walk'; this.f = p.x > this.x ? 1 : -1; return; }
     if (this.state === 'walk' && this.goal) { if (this.seek(this.goal.x, this.goal.y, this.speed * 0.5, dt, 2) || this.st < -5) { this.goal = null; this.state = 'idle'; this.st = rand(2, 6); } else this.f = this.goal.x > this.x ? 1 : -1; }
-    else if (this.st <= 0) { if (Math.random() < 0.5) { this.state = 'walk'; this.goal = { x: this.x + rand(-40, 40), y: this.y + rand(-30, 30) }; this.st = 0; } else { this.state = Math.random() < 0.5 ? 'graze' : 'idle'; this.st = rand(2, 6); } if (this.def.sound && Math.random() < 0.15 && dist2(p.x, p.y, this.x, this.y) < 150 * 150) Audio.play(this.def.sound, { pan: g.pan(this.x), vol: g.vol(this.x, this.y) * 0.6 }); }
+    else if (this.st <= 0) { if (Math.random() < 0.5) { this.state = 'walk';
+        const herd = g.query(this.x, this.y, 80, e => e !== this && e.kind === this.kind); let hx = 0, hy = 0; for (const e of herd) { hx += e.x; hy += e.y; }
+        this.goal = herd.length && Math.random() < 0.6 ? { x: hx / herd.length + rand(-20, 20), y: hy / herd.length + rand(-16, 16) } : { x: this.x + rand(-40, 40), y: this.y + rand(-30, 30) }; this.st = 0; } else { this.state = Math.random() < 0.5 ? 'graze' : 'idle'; this.st = rand(2, 6); } if (this.def.sound && Math.random() < 0.15 && dist2(p.x, p.y, this.x, this.y) < 150 * 150) Audio.play(this.def.sound, { pan: g.pan(this.x), vol: g.vol(this.x, this.y) * 0.6 }); }
   }
   onHurt(src) { if (this.def.aggro && src) this.angry = src; this.panic = 3; this.panicFrom = src; }
   die(src) { const g = this.g; for (const [id, a, b] of this.def.drops) { const n = this.baby > 0 ? 0 : randi(a, b); if (n) g.drop(id, n, this.x, this.y); } }
   draw(ctx, ox, oy) {
-    const A = this.sp, fr = this.state === 'walk' ? A.walk[((this.t * 8) | 0) % 4] : A.idle[this.state === 'graze' && (this.t % 2) > 0.6 ? 1 : 0], img = this.f < 0 ? fr.f : fr.n;
+    const A = this.sp, fr = this.state === 'walk' ? A.walk[((this.t * 10) | 0) % A.walk.length] : A.idle[this.state === 'graze' && (this.t % 2) > 0.6 ? 1 : 0], img = this.f < 0 ? fr.f : fr.n;
     const sc = this.baby > 0 ? 0.65 : 1, w = A.w * sc, h = A.h * sc;
     const x = Math.round(this.x - ox - w / 2), y = Math.round(this.y - oy - h + 1 - this.z);
     if (sc === 1) ctx.drawImage(img, x, y); else ctx.drawImage(img, x, y, Math.round(w), Math.round(h));

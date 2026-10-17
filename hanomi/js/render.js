@@ -4,16 +4,17 @@ import { bakeChunk, bakeWalls, makeWaterFx, WH } from './art/terrain.js';
 import { S as NS } from './art/nature.js';
 import { S as SS, houseSprite, bannerSprite, stallSprite } from './art/structures.js';
 import { Spr } from './pix.js';
+import { createKoiPond } from './koipond.js';
+import { Audio } from './audio.js';
 import { clamp, hash2, hash2i, rand, pick, bayer, mulberry32, TAU } from './util.js';
 
 const WALLS = new Set([B.STONE, B.DARK, B.COAL, B.IRON, B.GOLD, B.GEM, B.WOODWALL, B.STONEWALL]);
-const KOI_COLS = [[0xf6f2ea, 0xe0402a], [0xf6f2ea, 0xe0402a, 0x1a1414], [0xf2b23a, 0xffd86a], [0x1a1414, 0xe0402a, 0xf6f2ea], [0xf6f2ea, 0xf6f2ea], [0xe86a2a, 0xffa04a]];
 
 export class Renderer {
   constructor(cv) {
     this.cv = cv; this.ctx = cv.getContext('2d', { alpha: false }); this.lc = document.createElement('canvas'); this.lx = this.lc.getContext('2d');
     this.water = makeWaterFx(); this.wpat = this.water.map(f => this.ctx.createPattern(f, 'repeat'));
-    this.lights = new Map(); this.shadows = new Map(); this.koiSpr = this.bakeKoi(); this.koi = null; this.dl = []; this.zoom = 0; this.t = 0; this.rain = [];
+    this.lights = new Map(); this.shadows = new Map(); this.dl = []; this.zoom = 0; this.t = 0; this.rain = [];
     this.cam = { x: 0, y: 0, scale: 4, dpr: 1, w: 480, h: 270 };
     this.resize();
   }
@@ -41,24 +42,16 @@ export class Renderer {
     const s = new Spr(rx * 2 + 1, ry * 2 + 1); s.ell(rx + 0.5, ry + 0.5, rx + 0.3, ry + 0.3, 0x14101e);
     const c = s.canvas(); this.shadows.set(k, c); return c;
   }
-  bakeKoi() {
-    const out = [];
-    for (let v = 0; v < KOI_COLS.length; v++) { const C = KOI_COLS[v], frames = [];
-      for (let a = 0; a < 16; a++) { const ang = a / 16 * TAU, s = new Spr(14, 14), ca = Math.cos(ang), sa = Math.sin(ang), r = mulberry32(v * 9 + 1);
-        const spots = [[r() * 2 - 1, r() * 0.6 - 0.3], [r() * 2 - 1, r() * 0.6 - 0.3]];
-        for (let y = 0; y < 14; y++) for (let x = 0; x < 14; x++) { const dx = x + 0.5 - 7, dy = y + 0.5 - 7, u = dx * ca + dy * sa, w = -dx * sa + dy * ca;
-          const L = 4.6, body = (u / L) ** 2 + (w / (1.5 + (u > 0 ? 0.4 : 0))) ** 2;
-          if (body <= 1) { let c = C[0]; if (C.length > 1) for (const [su, sw] of spots) if (((u / L - su) ** 2 + (w / 1.6 - sw) ** 2) < 0.22) c = C[1]; if (C[2] && (u / L) > 0.6 && Math.abs(w) < 0.6) c = C[2]; s.set(x, y, c); }
-          else if (u < -L + 0.5 && u > -L - 2.5 && Math.abs(w) < (-L - u) * 0.9 + 0.5) s.set(x, y, C[0], 200); }
-        frames.push(s.canvas()); }
-      out.push(frames); }
-    return out;
-  }
   /* ---------- main ---------- */
   render(g, dt) {
-    this.t += dt; const ctx = this.ctx, cam = this.cam, w = g.world, p = g.player;
+    this.t += dt; this.dtLast = dt; const ctx = this.ctx, cam = this.cam, w = g.world, p = g.player;
     // camera
-    const tx = p.x - cam.w / 2, ty = p.y - 12 - cam.h / 2;
+    let tx = p.x - cam.w / 2, ty = p.y - 12 - cam.h / 2;
+    const room = g.inside;
+    if (room) { const rx = room.x * TS, ry = room.y * TS, rw = room.w * TS, rh = room.h * TS + 12;
+      tx = rw < cam.w ? rx + rw / 2 - cam.w / 2 : Math.max(rx - 8, Math.min(rx + rw + 8 - cam.w, tx));
+      ty = rh < cam.h ? ry + rh / 2 - cam.h / 2 : Math.max(ry - 8, Math.min(ry + rh + 8 - cam.h, ty)); }
+    if (this._room !== room) { this._room = room; this._init = false; }
     if (!this._init) { cam.fx = tx; cam.fy = ty; this._init = true; }
     const k = 1 - Math.pow(0.0008, dt); cam.fx += (tx - cam.fx) * k; cam.fy += (ty - cam.fy) * k;
     let sx = 0, sy = 0; if (g.fx.shakeA > 0 && g.settings.shake) { sx = (Math.random() - 0.5) * g.fx.shakeA * 2; sy = (Math.random() - 0.5) * g.fx.shakeA * 2; }
@@ -80,28 +73,33 @@ export class Renderer {
     for (const c of vis) if (c.wcv) ctx.fillRect(c.cx * CPX - ox + (ox % 64) + 64, c.cy * CPX - oy + (oy % 64) + 64, CPX, CPX);
     ctx.restore();
     for (const c of vis) if (c.cv) ctx.drawImage(c.cv, c.cx * CPX - ox, c.cy * CPX - oy);
+    if (!g.inside) this.fishLife(g, dt, ox, oy, vw, vh);
     // ---- collect drawables ----
     const dl = this.dl; dl.length = 0; const shadows = [];
     const tx0 = Math.floor(ox / TS) - 2, tx1 = Math.floor((ox + vw) / TS) + 2, ty0 = Math.floor(oy / TS) - 1, ty1 = Math.floor((oy + vh) / TS) + 4;
     const lights = []; const night = 1 - g.daylight;
+    const rm = g.inside;
     for (let y = ty0; y <= ty1; y++) for (let x = tx0; x <= tx1; x++) {
+      if (rm && (x < rm.x || y < rm.y || x >= rm.x + rm.w || y >= rm.y + rm.h)) continue;
       const b = w.block(x, y);
+      if (!rm && Math.random() < 0.004 && w.ground(x, y) === G.ONSEN) g.fx.spawn({ x: x * TS + rand(16), y: y * TS + rand(16), z: 2, vz: rand(6, 12), vx: rand(-3, 3), life: rand(1.6, 2.6), c: '#f4fbff', k: 'smoke', s: 4, g: 0 });
       const o = w.obj(x, y);
-      if (o) { dl.push({ k: y * TS + (o === O.LILY ? -100 : 15), t: 2, x, y, o, m: w.meta(x, y) }); const L = OBJ[o].light; if (L && night > 0.05) lights.push([x * TS + 8, y * TS + (o === O.TORCH ? -2 : 4), L, OBJ[o].warm]); }
+      if (o) { dl.push({ k: y * TS + (o === O.LILY || o === O.EXIT || o === O.CUSHION ? -100 : OBJ[o].wall ? 16.5 : 15), t: 2, x, y, o, m: w.meta(x, y) }); const L = OBJ[o].light; if (L && (night > 0.05 || g.inside)) lights.push([x * TS + 8, y * TS + (o === O.TORCH ? -2 : 4), L, OBJ[o].warm]); }
     }
     for (const c of vis) {
       if (c.wallcv === undefined || c.wrv !== c.rv) bakeWalls(w, c);
       if (!c.wallcv) continue;
-      for (let r = 0; r < CS; r++) if (c.wrows[r]) { const wy = (c.cy * CS + r) * TS; if (wy - WH > oy + vh || wy + TS < oy) continue; dl.push({ k: wy + 15.9, t: 1, c, r }); }
+      for (let r = 0; r < CS; r++) if (c.wrows[r]) { const wy = (c.cy * CS + r) * TS; if (wy > oy + vh || wy + TS + WH < oy) continue; dl.push({ k: wy + 15.9, t: 1, c, r }); }
     }
-    // chunks just below the view can still poke their raised tops in
-    for (let cx = c0; cx <= c1; cx++) { const c = w.peek(cx, r1 + 1); if (c && c.wallcv && c.wrows[0] && (r1 + 1) * CPX - WH < oy + vh) { if (c.wrv !== c.rv) bakeWalls(w, c); dl.push({ k: (c.cy * CS) * TS + 15.9, t: 1, c, r: 0 }); } }
+    // the chunk row just above the view can hang its front faces down into it
+    for (let cx = c0; cx <= c1; cx++) { const c = w.peek(cx, r0 - 1); if (c && c.wrows && c.wrows[CS - 1] && r0 * CPX + WH > oy) { if (c.wrv !== c.rv) bakeWalls(w, c); if (c.wallcv) dl.push({ k: (c.cy * CS + CS - 1) * TS + 15.9, t: 1, c, r: CS - 1 }); } }
     for (const v of w.villagesNear((ox + vw / 2) / TS, (oy + vh / 2) / TS, Math.max(vw, vh) / TS)) for (const s of v.structs) {
       const sx0 = s.x * TS, sy1 = (s.y + s.h) * TS; if (sx0 > ox + vw + 16 || sx0 + s.w * TS < ox - 16 || sy1 < oy - 8 || sy1 - 90 > oy + vh) continue;
+      if (s.kind === 'koi') { this.drawKoi(g, s, ox, oy); continue; } // flat water: part of the ground, never over sprites
       dl.push({ k: sy1 - 0.5, t: 3, s, v });
     }
-    for (const e of g.ents) { if (e.dead || e.x < ox - 40 || e.x > ox + vw + 40 || e.y < oy - 20 || e.y > oy + vh + 50) continue; dl.push({ k: e.y, t: 4, e }); const sh = e.shadow && e.shadow(); if (sh) shadows.push(sh); }
-    if (!p.dead) { dl.push({ k: p.y, t: 4, e: p }); shadows.push(p.shadow()); }
+    for (const e of g.ents) { if (e.light && night > 0.05 && !e.dead && !e.inside) lights.push([e.x, e.y - 14, e.light, 1]); if (e.dead || e.x < ox - 40 || e.x > ox + vw + 40 || e.y < oy - 20 || e.y > oy + vh + 50) continue; dl.push({ k: e.y, t: 4, e }); const sh = e.shadow && e.shadow(); if (sh) shadows.push(sh); }
+    if (!p.dead) { dl.push({ k: p.y, t: 4, e: p }); const ps = p.shadow(); if (ps) shadows.push(ps); }
     if (p.item && p.item.id === 'torch' && night > 0.05) lights.push([p.x, p.y - 12, 5, 1]);
     // shadows
     const shA = 0.22 + 0.1 * g.daylight - g.weather.rain * 0.08, shOff = (g.hour - 12) * 0.25;
@@ -114,7 +112,7 @@ export class Renderer {
     const pBox = { x: p.x, y: p.y };
     for (const d of dl) {
       if (d.t === 4) { d.e.draw(ctx, ox, oy); continue; }
-      if (d.t === 1) { const c = d.c; ctx.drawImage(c.wallcv, 0, d.r * TS, CPX, TS + WH, c.cx * CPX - ox, c.cy * CPX + d.r * TS - WH - oy, CPX, TS + WH); continue; }
+      if (d.t === 1) { const c = d.c; ctx.drawImage(c.wallcv, 0, d.r * TS, CPX, TS + WH, c.cx * CPX - ox, c.cy * CPX + d.r * TS - oy, CPX, TS + WH); continue; }
       if (d.t === 3) { this.drawStruct(g, d.s, d.v, ox, oy, pBox, lights, night); continue; }
       const sp = this.objSprite(g, d); if (!sp) continue;
       let dx = d.x * TS + 8 - sp.ax - ox, dy = d.y * TS + 16 - sp.ay - oy;
@@ -124,19 +122,24 @@ export class Renderer {
       if (fade) ctx.globalAlpha = 0.55;
       ctx.drawImage(sp.cv, Math.round(dx), Math.round(dy));
       if (fade) ctx.globalAlpha = 1;
-      if (sp.lights && night > 0.05) for (const L of sp.lights) lights.push([d.x * TS + 8 - sp.ax + L.x + L.w / 2, d.y * TS + 16 - sp.ay + L.y + L.h / 2, 4, 0]);
+      if (sp.lights && (night > 0.05 || g.inside)) for (const L of sp.lights) lights.push([d.x * TS + 8 - sp.ax + L.x + L.w / 2, d.y * TS + 16 - sp.ay + L.y + L.h / 2, 4, 0]);
     }
     // damage cracks
-    for (const [k2, dm] of g.dmg) { const [x, y] = k2.split(',').map(Number); const b = w.block(x, y), o = w.obj(x, y); const hp = b ? 6 : (o && OBJ[o].hp) || 1; const st = clamp(Math.ceil(dm.v / Math.max(1, hp) * 3), 1, 3); if (b) ctx.drawImage(SS['crack' + st].cv, x * TS - ox, y * TS - WH - oy); }
+    for (const [k2, dm] of g.dmg) { const [x, y] = k2.split(',').map(Number); const b = w.block(x, y), o = w.obj(x, y); const hp = b ? 6 : (o && OBJ[o].hp) || 1; const st = clamp(Math.ceil(dm.v / Math.max(1, hp) * 3), 1, 3); if (b) ctx.drawImage(SS['crack' + st].cv, x * TS - ox, y * TS - oy); }
     g.fx.draw(ctx, ox, oy, false);
+    if (room) { // cut the room out of the world
+      const rx = room.x * TS - ox, ry = room.y * TS - oy, rw = room.w * TS, rh = room.h * TS + 12; ctx.fillStyle = '#0c0a10';
+      ctx.fillRect(0, 0, vw, Math.max(0, ry)); ctx.fillRect(0, ry + rh, vw, vh); ctx.fillRect(0, ry, Math.max(0, rx), rh); ctx.fillRect(rx + rw, ry, vw, rh); }
     // target reticle
-    if (g.target && !g.ui.modal && g.showTarget()) this.drawTarget(ctx, g.target.x * TS - ox, (g.target.y * TS - oy) - (w.block(g.target.x, g.target.y) && w.block(g.target.x, g.target.y) !== B.BLDG ? WH : 0));
+    if (g.target && !g.ui.modal && g.showTarget()) this.drawTarget(ctx, g.target.x * TS - ox, (g.target.y * TS - oy) - 0);
+    if (!room) this.birdLife(g, dt, ox, oy, vw, vh);
     // rain
-    this.drawRain(g, ctx, vw, vh, dt);
+    if (!room) this.drawRain(g, ctx, vw, vh, dt);
     // lighting
     this.drawLight(g, ctx, lights, ox, oy, vw, vh);
     g.fx.draw(ctx, ox, oy, true);
-    this.ambient(g, dt, ox, oy, vw, vh);
+    if (!room) this.ambient(g, dt, ox, oy, vw, vh);
+    if (g.flash > 0 && !room) { ctx.fillStyle = `rgba(235,240,255,${Math.min(0.85, g.flash)})`; ctx.fillRect(0, 0, vw, vh); }
   }
   objSprite(g, d) {
     const o = d.o, m = d.m, x = d.x, y = d.y, t = this.t;
@@ -145,6 +148,7 @@ export class Renderer {
       case O.PINE: return NS[(g.world.ground(x, y) === G.SNOW ? 'pinesnow' : 'pine') + (m & 3)];
       case O.SAKURA: return NS['sakura' + (m & 3)];
       case O.BIRCH: return NS['birch' + (m & 3)];
+      case O.BAMBOO: return NS['bamboo' + (hash2i(x, y) % 3)];
       case O.DEADTREE: return NS['dead' + (m & 3)];
       case O.STUMP: return NS.stump;
       case O.BUSH: return NS['bush' + (hash2i(x, y) % 3)];
@@ -169,6 +173,10 @@ export class Renderer {
       case O.BARREL: return SS.barrel; case O.CRATE: return SS.crate; case O.HAY: return SS.hay; case O.TORII: return SS.torii; case O.GRAVE: return SS.satchel; case O.SPIKES: return SS.spikes; case O.TOWER: return SS.tower;
       case O.POT: return SS['pot' + (((t * 5) | 0) % 2)];
       case O.BANNER: { const v = g.world.villagesNear(x, y, 3).find(v => v.banner && v.banner.x === x && v.banner.y === y); const n = v && g.nations.get(v.id); const col = n ? n.color : 0xe87a9a; return bannerSprite(col)[((t * 4 + x) | 0) % 4]; }
+      case O.TABLE: return SS.table; case O.HEARTH: return SS['hearth' + (((t * 6) | 0) % 3)]; case O.SHELF: return SS.tansu; case O.BONSAI: return SS.bonsai; case O.ANDON: return SS.andon;
+      case O.CUSHION: return SS['cushion' + (m & 3)]; case O.SCREEN: return SS.byobu; case O.STOVE: return SS['kamado' + (((t * 5) | 0) % 2)]; case O.EXIT: return SS.exit;
+      case O.WINDOW: return SS.window; case O.SCROLL: return SS.scroll; case O.SHRINE: return SS.shrine;
+      case O.DIG: { if (Math.random() < 0.02) g.fx.spawn({ x: x * TS + 4 + rand(8), y: y * TS + 10, z: rand(2, 6), vz: 6, life: 0.6, c: '#fff6c0', k: 'spark', g: 0 }); return SS.dig; }
       case O.STALL: { const v = g.world.villagesNear(x, y, 3)[0]; const n = v && g.nations.get(v.id); return stallSprite(n ? n.color : 0x3a6fc8); }
     }
     return null;
@@ -194,21 +202,11 @@ export class Renderer {
     if (behind) ctx.globalAlpha = 1;
     if (night > 0.05 && sp.lights) for (const L of sp.lights) { lights.push([x0 + ox + L.x + L.w / 2, y0 + oy + L.y + L.h / 2, L.lantern ? 3 : 3, 1]); (this._win || (this._win = [])).push([x0 + L.x, y0 + L.y, L.w, L.h, L.lantern]); }
   }
-  drawKoi(g, s, ox, oy) {
-    const ctx = this.ctx, base = SS.koipond, x0 = s.x * TS - ox, y0 = s.y * TS - oy - 6;
-    ctx.drawImage(base.cv, x0, y0);
-    if (!this.koi) { this.koi = []; for (let k = 0; k < 7; k++) this.koi.push({ x: 56 + rand(-20, 20), y: 42 + rand(-10, 10), a: rand(TAU), v: k % KOI_COLS.length, sp: rand(6, 12), turn: 0 }); }
-    const dt = 1 / 60;
-    for (const f of this.koi) {
-      f.turn += (Math.random() - 0.5) * 0.4; f.turn *= 0.95; f.a += f.turn * dt * 3;
-      const nx = f.x + Math.cos(f.a) * f.sp * dt, ny = f.y + Math.sin(f.a) * f.sp * dt, u = (nx - 56) / 40, v = (ny - 42) / 24;
-      if (u * u + v * v > 1) f.a += 2.5 * dt * 10; else { f.x = nx; f.y = ny; }
-      const fi = (((f.a % TAU) + TAU) % TAU) / TAU * 16 + 0.5 | 0;
-      ctx.globalAlpha = 0.35; ctx.drawImage(this.koiSpr[f.v][fi % 16], Math.round(x0 + f.x - 7 + 1), Math.round(y0 + f.y - 7 + 2)); ctx.globalAlpha = 1;
-      ctx.drawImage(this.koiSpr[f.v][fi % 16], Math.round(x0 + f.x - 7), Math.round(y0 + f.y - 7));
-    }
-    for (const [lx, ly, v] of [[30, 30, 0], [80, 50, 3], [70, 24, 1]]) ctx.drawImage(NS['lily' + v].cv, x0 + lx, y0 + ly);
-    if (Math.random() < 0.02) g.fx.spawn({ x: s.x * TS + rand(20, 90), y: s.y * TS + rand(15, 60), life: 1, k: 'ring', s: 5, c: '#dff6ff' });
+  drawKoi(g, s, ox, oy) { // the portfolio's own pond simulation, embedded in the world
+    if (!this.pond) { this.pond = createKoiPond(s.w * TS, s.h * TS); this.pondT = 0; }
+    const P = this.pond; this.pondT += this.dtLast || 0;
+    if (this.pondT >= 1 / 30) { P.setRain(g.raining); P.step(Math.min(0.1, this.pondT)); this.pondT = 0; }
+    this.ctx.drawImage(P.canvas, s.x * TS - ox, s.y * TS - oy);
   }
   drawTarget(ctx, x, y) {
     const a = 0.55 + 0.25 * Math.sin(this.t * 6); ctx.globalAlpha = a; ctx.fillStyle = '#fff8e8';
@@ -229,11 +227,11 @@ export class Renderer {
     }
   }
   drawLight(g, ctx, lights, ox, oy, vw, vh) {
-    const d = g.daylight, h = g.hour, rain = g.weather.rain, blood = g.bloodMoon;
+    const d = g.daylight, h = g.hour, rain = g.inside ? 0 : g.weather.rain, blood = g.bloodMoon && !g.inside;
     // dusk / dawn warmth
     const dusk = (h > 16.5 && h < 20.5) ? 1 - Math.abs(h - 18.6) / 2 : (h > 4 && h < 7.5) ? 1 - Math.abs(h - 5.8) / 1.8 : 0;
-    if (dusk > 0.02) { ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = `rgba(255,${190 + (1 - dusk) * 60 | 0},${150 + (1 - dusk) * 100 | 0},1)`; ctx.globalAlpha = dusk * 0.6; ctx.fillRect(0, 0, vw, vh); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
-    const dark = (1 - d) * 0.8 + rain * 0.18;
+    if (dusk > 0.02 && !g.inside) { ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = `rgba(255,${190 + (1 - dusk) * 60 | 0},${150 + (1 - dusk) * 100 | 0},1)`; ctx.globalAlpha = dusk * 0.6; ctx.fillRect(0, 0, vw, vh); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+    const dark = g.inside ? 0.16 + (1 - d) * 0.6 : (1 - d) * 0.8 + rain * 0.18;
     if (dark < 0.02) { this._win = null; return; }
     const L = this.lx; L.globalCompositeOperation = 'source-over'; L.clearRect(0, 0, vw, vh);
     L.fillStyle = blood ? `rgba(40,4,10,${Math.min(0.86, dark)})` : `rgba(8,12,${34 + rain * 10 | 0},${Math.min(0.84, dark)})`; L.fillRect(0, 0, vw, vh);
@@ -249,6 +247,38 @@ export class Renderer {
       if (this._win) { ctx.globalAlpha = Math.min(1, (1 - d) * 1.2); for (const [x, y, w, hh, lan] of this._win) { ctx.fillStyle = lan ? '#ff6a4a' : '#ffd88a'; ctx.globalAlpha = (lan ? 0.6 : 0.85) * Math.min(1, (1 - d) * 1.3); ctx.fillRect(Math.round(x), Math.round(y), w, hh); } ctx.globalAlpha = 1; }
     }
     this._win = null;
+  }
+  // living water: fish shadows glide under the surface and dart away from you
+  fishLife(g, dt, ox, oy, vw, vh) {
+    const F = this.fish || (this.fish = []), w = g.world, p = g.player, ctx = this.ctx;
+    if (F.length < 7 && Math.random() < dt * 2) { const x = ox + Math.random() * vw, y = oy + Math.random() * vh; if (isWater(w.ground(Math.floor(x / TS), Math.floor(y / TS))) && w.ground(Math.floor(x / TS), Math.floor(y / TS)) !== G.ONSEN) F.push({ x, y, a: rand(TAU), sp: rand(6, 12), len: rand(4, 7) | 0, t: 0, turn: 0 }); }
+    for (let i = F.length - 1; i >= 0; i--) { const f = F[i]; f.t += dt;
+      const dx = f.x - p.x, dy = f.y - p.y, d = Math.hypot(dx, dy); let sp = f.sp;
+      if (d < 34) { f.a = Math.atan2(dy, dx) + rand(-0.4, 0.4); sp = 48; } else { f.turn += (Math.random() - 0.5) * dt * 3; f.turn *= 0.97; f.a += f.turn * dt; }
+      const nx = f.x + Math.cos(f.a) * sp * dt, ny = f.y + Math.sin(f.a) * sp * dt;
+      if (!isWater(w.ground(Math.floor((nx + Math.cos(f.a) * 6) / TS), Math.floor((ny + Math.sin(f.a) * 6) / TS)))) f.a += Math.PI * 0.6; else { f.x = nx; f.y = ny; }
+      if (f.x < ox - 40 || f.y < oy - 40 || f.x > ox + vw + 40 || f.y > oy + vh + 40) { F.splice(i, 1); continue; }
+      ctx.fillStyle = 'rgba(10,30,50,0.32)'; const ca = Math.cos(f.a), sa = Math.sin(f.a), wig = Math.sin(f.t * 10) * 0.6;
+      for (let k = 0; k < f.len; k++) { const bx = f.x - ca * k + (-sa) * wig * k / f.len, by = f.y - sa * k + ca * wig * k / f.len; ctx.fillRect(Math.round(bx - ox), Math.round(by - oy), k < f.len - 2 ? 2 : 1, k > 0 && k < f.len - 2 ? 2 : 1); }
+      if (Math.random() < dt * 0.15) g.fx.spawn({ x: f.x, y: f.y, life: 0.8, k: 'ring', s: 4, c: '#e8fbff' });
+    }
+  }
+  // sparrows hop about on grass and flutter off when you come near
+  birdLife(g, dt, ox, oy, vw, vh) {
+    const B = this.birds || (this.birds = []), w = g.world, p = g.player, ctx = this.ctx;
+    if (!this.birdSpr) { const mk = (fl, up) => { const s = new Spr(9, 8); s.ell(4, 4.5, 3, 2.2, (u, v) => v > 0.3 ? 0xe8d8c0 : u > 0.3 ? 0x6a4a32 : 0x8a6440); s.ell(6.5, 3, 1.8, 1.6, 0x7a5236); s.set(8, 3, 0xd8a040); s.set(6, 2, 0x101010); s.set(1, 4, 0x5a3a24); s.set(0, 3, 0x5a3a24);
+        if (fl) { s.ell(4, up ? 1.5 : 6, 2.6, 1.2, 0x5a3a24); } else { s.set(4, 7, 0xb8885a); s.set(5, 7, 0xb8885a); } s.outline(0x2a1a10); return { n: s.canvas(), f: s.flipX().canvas() }; };
+      this.birdSpr = [mk(0), mk(1, 1), mk(1, 0)]; }
+    if (g.daylight > 0.6 && !g.raining && B.length < 6 && Math.random() < dt * 0.6) { const x = ox + Math.random() * vw, y = oy + Math.random() * vh, gr = w.ground(Math.floor(x / TS), Math.floor(y / TS));
+      if ((gr === G.GRASS || gr === G.SAKURA || gr === G.PATH || gr === G.PLAZA) && Math.hypot(x - p.x, y - p.y) > 70 && !w.solid(Math.floor(x / TS), Math.floor(y / TS))) { const n = 1 + (Math.random() * 3 | 0); for (let k = 0; k < n; k++) B.push({ x: x + rand(-14, 14), y: y + rand(-10, 10), z: 0, f: Math.random() < 0.5 ? 1 : -1, t: rand(2), fly: 0, vx: 0, vy: 0 }); } }
+    for (let i = B.length - 1; i >= 0; i--) { const b = B[i]; b.t += dt;
+      if (!b.fly && Math.hypot(b.x - p.x, b.y - p.y) < 40) { b.fly = 1; const a = Math.atan2(b.y - p.y, b.x - p.x); b.vx = Math.cos(a) * 70; b.vy = Math.sin(a) * 40; b.f = b.vx > 0 ? 1 : -1; if (Math.random() < 0.5) Audio.play('chicken', { pitch: 2.4, vol: 0.12 }); }
+      if (b.fly) { b.x += b.vx * dt; b.y += b.vy * dt; b.z += 45 * dt; if (b.z > 90) { B.splice(i, 1); continue; } }
+      else if (Math.random() < dt * 1.5) { b.x += b.f * rand(2, 5); b.z = 2; } else b.z = Math.max(0, b.z - dt * 20);
+      if (!b.fly && Math.random() < dt * 0.3) b.f = -b.f;
+      if (b.x < ox - 60 || b.x > ox + vw + 60 || b.y < oy - 60 || b.y > oy + vh + 60) { B.splice(i, 1); continue; }
+      const fr = this.birdSpr[b.fly ? 1 + ((b.t * 16) | 0) % 2 : 0]; if (b.z < 30) { ctx.fillStyle = 'rgba(20,16,30,0.2)'; ctx.fillRect(Math.round(b.x - ox - 2), Math.round(b.y - oy), 5, 1); }
+      ctx.drawImage(b.f > 0 ? fr.n : fr.f, Math.round(b.x - ox - 4), Math.round(b.y - oy - 7 - b.z)); }
   }
   ambient(g, dt, ox, oy, vw, vh) {
     // petals, leaves, fireflies, butterflies

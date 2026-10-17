@@ -21,11 +21,12 @@ const RAMPS = {
   [G.WOOD]: [0x7d5032, 0x8f5f3b, 0xa06d44, 0xb07c4f],
   [G.COBBLE]: [0x6f7378, 0x7f8388, 0x8f9398, 0xa1a5a8],
   [G.PLAZA]: [0x8a8178, 0x9a9087, 0xa99f95, 0xb8aea3],
+  [G.TATAMI]: [0x8e8c52, 0xa8a462, 0xbeb874, 0xd2cc8a],
 };
 const P = {}; for (const k in RAMPS) P[k] = RAMPS[k].map(h => pk(h));
 const GRASSY = new Uint8Array(32); [G.GRASS, G.FOREST, G.SAKURA, G.MARSH, G.SNOW].forEach(g => GRASSY[g] = 1);
-const WATERY = new Uint8Array(32); WATERY[G.WATER] = WATERY[G.DEEP] = 1;
-const LOW = new Uint8Array(32); [G.PATH, G.DIRT, G.SAND, G.PLAZA, G.COBBLE, G.TILLED, G.WET, G.ROCK, G.WOOD].forEach(g => LOW[g] = 1);
+const WATERY = new Uint8Array(32); WATERY[G.WATER] = WATERY[G.DEEP] = WATERY[G.ONSEN] = 1;
+const LOW = new Uint8Array(32); [G.PATH, G.DIRT, G.SAND, G.PLAZA, G.COBBLE, G.TILLED, G.WET, G.ROCK, G.WOOD, G.TATAMI].forEach(g => LOW[g] = 1);
 
 // ---- tileable textures ----
 function wrapNoise(N, period, seed, oct = 3) {
@@ -64,6 +65,7 @@ const VC = new Int16Array(48 * 48), VE = new Uint8Array(48 * 48);
 
 const FLOWER_COLS = [0xffffff, 0xf7d84a, 0xf28fb0, 0x9cc8f4, 0xe8615a, 0xc89cf0];
 const W1 = [0x7fd3cf, 0x64c1c6, 0x4caabb, 0x3b92ae, 0x2f7aa0, 0x276592, 0x215582].map(h => pk(h));
+const ONS = [0xa8f0e0, 0x7ad8cc, 0x5ac0bc, 0x48a8b0].map(h => pk(h));
 const BANK = [0x5e4a2e, 0x4c3b25, 0x3a2e1f].map(h => pk(h)), FOAM = pk(0xeaf7f2), FOAM2 = pk(0xbfe7e4);
 
 const mat = new Uint8Array(SZ * SZ), dist = new Float32Array(SZ * SZ), LG = new Float32Array(33 * 33);
@@ -117,7 +119,7 @@ export function bakeChunk(world, c) {
       const d = dist[mi], deep = m === G.DEEP ? 1 : 0;
       let v = clamp(d / 34, 0, 1) * 0.75 + deep * 0.25 + (N128[((wy & 127) << 7) | (wx & 127)] - 0.5) * 0.18;
       let k = Math.floor(v * (W1.length - 1) + b * 0.9); k = clamp(k, 0, W1.length - 1);
-      wo[o] = W1[k];
+      wo[o] = m === G.ONSEN ? ONS[Math.min(ONS.length - 1, Math.floor(clamp(d / 10, 0, 1) * 3 + b * 0.8))] : W1[k];
       // north bank: earth face under land
       let bank = -1; for (let k2 = 1; k2 <= 3; k2++) if (!WATERY[mat[mi - SZ * k2]]) { bank = k2 - 1; break; }
       if (bank >= 0) { go[o] = BANK[bank]; continue; }
@@ -141,6 +143,11 @@ export function bakeChunk(world, c) {
       else if (ly === 1 && !soil(up)) v = 3;
       else if (lx === 0 || ly === 0) v = Math.max(0, v - 1);
       col = ramp[v];
+    } else if (m === G.TATAMI) {
+      const tcol = Math.floor(wx / 16), mx = wx & 15, my = (wy + (tcol & 1) * 16) & 31;
+      if (mx === 0 || mx === 15) col = pk(0x3e4a2c);
+      else if (my === 0 || my === 31) col = pk(0x4a3a24);
+      else { const st = (wy & 1) ? 1 : 2; col = ramp[hash2(wx >> 2, wy, 41) < 0.08 ? 3 : st]; if (mx === 1) col = ramp[3]; if (mx === 14) col = ramp[0]; }
     } else if (m === G.WOOD) {
       const ly = wy & 15, row = (wy >> 2), seamX = (hash2i(row, 3, 7) & 15), lx = wx & 15;
       let v = 2 + (FINE[((wy & 63) << 6) | ((wx * 3) & 63)] > 0.6 ? 1 : 0) - (FINE[((row & 63) << 6) | 5] > 0.6 ? 1 : 0);
@@ -198,7 +205,7 @@ export function bakeChunk(world, c) {
       if (GRASSY[up]) col = mulC(col, 0.78); else if (GRASSY[MA(px, py - 2)]) col = mulC(col, 0.9);
       if (m === G.SAND && (WATERY[dn] || WATERY[up] || WATERY[lf] || WATERY[rt] || WATERY[MA(px, py + 2)] || WATERY[MA(px, py + 3)])) col = mulC(col, 0.86);
     }
-    { const ty2 = Math.floor(py / TS), ly2 = py - ty2 * TS; if (ly2 < 4 && wallAbove[(ty2 + 1) * (CS + 2) + Math.floor(px / TS) + 1]) col = mulC(col, ly2 < 2 ? 0.62 : 0.8); }
+    { const ty2 = Math.floor(py / TS), ly2 = py - ty2 * TS; if (ly2 >= 12 && wallAbove[(ty2 + 1) * (CS + 2) + Math.floor(px / TS) + 1]) col = mulC(col, ly2 < 14 ? 0.62 : 0.8); }
     go[o] = col;
   }
   c.cx2d.putImageData(gimg, 0, 0);
@@ -226,16 +233,18 @@ export function makeWaterFx() {
 }
 
 /* ---------------- walls: continuous-texture 3/4 blocks, baked per chunk ---------------- */
-// canvas origin = chunk top-left shifted up by WH so the first row's raised tops fit.
+// canvas origin = chunk top-left; each wall's top face fills its own tile and its front face
+// hangs WH px into the tile below (3/4 view), so nothing ever overlaps the walkable tile above.
 export const WH = 12;
 const WM = {
   1: { top: [0x625e5c, 0x726e6a, 0x807b76, 0x8e8983, 0xa49e96], face: [0x3e3a38, 0x4c4744, 0x5a5552, 0x6a6460], out: 0x26221f },
   9: { top: [0x4a4852, 0x585662, 0x666472, 0x747282, 0x86849a], face: [0x24222a, 0x2e2c34, 0x3a3842, 0x46444e], out: 0x141218 },
   6: { top: [0x6a4228, 0x7a5032, 0x8c5e3a, 0x9e6c44, 0xb07c50], face: [0x3e2614, 0x4a2e1a, 0x5a3820, 0x6b4428], out: 0x22140a, wood: 1 },
+  10: { top: [0x3a2416, 0x4e3220, 0x64422a, 0x7a5434, 0x8e6640], face: [0x5a3a22, 0x6e4a2c, 0xe6dcc6, 0xf4ecda], out: 0x1e120a, inner: 1 },
   7: { top: [0x7a7a80, 0x8a8a90, 0x9a9aa0, 0xaaaab0, 0xbcbcc2], face: [0x46464e, 0x54545c, 0x62626a, 0x72727a], out: 0x1e1e24, brick: 1 },
 };
 const ORE = { 2: [0x1a1818, 0x2e2a2a, 0x4a4644], 3: [0x8a5236, 0xc8845a, 0xf0b88a], 4: [0xa8741a, 0xf2c23a, 0xfff08a], 5: [0x1a7a5a, 0x3ad8a0, 0xc0ffe8] };
-const ISWALL = new Uint8Array(16); [1, 2, 3, 4, 5, 6, 7, 9].forEach(b => ISWALL[b] = 1);
+const ISWALL = new Uint8Array(16); [1, 2, 3, 4, 5, 6, 7, 9, 10].forEach(b => ISWALL[b] = 1);
 const NATB = new Uint8Array(16); [1, 2, 3, 4, 5, 9].forEach(b => NATB[b] = 1);
 const MOSS = [pk(0x4a6a32), pk(0x5a7e3a), pk(0x6e9446)];
 export function bakeWalls(world, c) {
@@ -260,9 +269,10 @@ export function bakeWalls(world, c) {
     const ore = ORE[b];
     // top face: canvas rows j*16 .. j*16+16  (world y wy0-12 .. wy0+4)
     for (let ly = 0; ly < 16; ly++) for (let lx = 0; lx < 16; lx++) {
-      const wx = wx0 + lx, wy = wy0 - WH + ly, cyy = j * 16 + ly, idx = cyy * CPX + i * 16 + lx;
+      const wx = wx0 + lx, wy = wy0 + ly, cyy = j * 16 + ly, idx = cyy * CPX + i * 16 + lx;
       let q;
-      if (mat.wood) { q = ((wy + 1) % 5 === 0) ? 0 : 2 + ((FINE[((wy & 63) << 6) | ((wx * 2) & 63)] > 0.55) ? 1 : 0); if (((wx + ((wy / 5) | 0) * 7) & 15) === 0) q = 1; }
+      if (mat.inner) { q = (N && E && W && !S) ? -9 : ((ly & 3) === 3 ? 1 : (lx & 7) === 0 ? 2 : 3); }
+      else if (mat.wood) { q = ((wy + 1) % 5 === 0) ? 0 : 2 + ((FINE[((wy & 63) << 6) | ((wx * 2) & 63)] > 0.55) ? 1 : 0); if (((wx + ((wy / 5) | 0) * 7) & 15) === 0) q = 1; }
       else if (mat.brick) { const row = Math.floor(wy / 4), off = (row & 1) * 4; q = ((wy & 3) === 3 || ((wx + off) & 7) === 7) ? 0 : ((wy & 3) === 0 ? 4 : 2 + (hash2(Math.floor((wx + off) / 8), row, 5) > 0.6 ? 1 : 0)); }
       else {
         const qx = ((wx % 48) + 48) % 48, qy = ((wy % 48) + 48) % 48, qi = qy * 48 + qx;
@@ -271,7 +281,8 @@ export function bakeWalls(world, c) {
         if (VE[qi]) q = (hash2(wx >> 2, wy >> 2, 4) < 0.5 ? 0 : 1); else { const up = ((((wy - 1) % 48) + 48) % 48) * 48 + qx, lf = qy * 48 + (((wx - 1) % 48 + 48) % 48); if (VE[up] || VE[lf]) q = Math.min(4, q + 1); }
         if (FINE[((wy & 63) << 6) | (wx & 63)] > 0.7 && !VE[qi]) q = Math.max(0, q - 1);
       }
-      let col = mat.top[Math.max(0, Math.min(4, q))];
+      let col = q === -9 ? (ly < 2 ? 0xd8ccb4 : ly > 13 ? 0x6e4a2c : (hash2(wx, wy, 8) < 0.05 ? 0xe6dcc6 : 0xf2eada)) : mat.top[Math.max(0, Math.min(4, q))];
+      if (q === -9) { q = 2; }
       if (!N && ly === 0) col = mat.out; else if (!N && ly === 1) col = mat.top[4];
       if (!W && lx === 0) col = mat.out; else if (!W && lx === 1 && ly > 0) col = mat.top[Math.min(4, q + 1)];
       if (!E && lx === 15) col = mat.out; else if (!E && lx === 14 && ly > 0) col = mat.top[Math.max(0, q - 1)];
@@ -281,9 +292,10 @@ export function bakeWalls(world, c) {
     }
     // front face
     if (!S) for (let ly = 16; ly < 28; ly++) for (let lx = 0; lx < 16; lx++) {
-      const wx = wx0 + lx, wy = wy0 - WH + ly, idx = (j * 16 + ly) * CPX + i * 16 + lx, fy = ly - 16;
+      const wx = wx0 + lx, wy = wy0 + ly, idx = (j * 16 + ly) * CPX + i * 16 + lx, fy = ly - 16;
       let q;
-      if (mat.wood) q = (wx & 3) === 0 ? 0 : (wx & 3) === 1 ? 3 : 2;
+      if (mat.inner) q = fy < 2 ? 1 : fy < 7 ? 3 : (wx & 3) === 0 ? 0 : 1;
+      else if (mat.wood) q = (wx & 3) === 0 ? 0 : (wx & 3) === 1 ? 3 : 2;
       else if (mat.brick) { const off = ((fy >> 2) & 1) * 4; q = ((fy & 3) === 3 || ((wx + off) & 7) === 7) ? 0 : (fy & 3) === 0 ? 3 : 2; }
       else { q = fy < 1 ? 3 : 2 - (fy > 8 ? 1 : 0); const n = FINE[((wy & 63) << 6) | ((wx * 2) & 63)]; if (n > 0.64) q--; if (((wx + (hash2i(wx >> 3, 1, 9) & 3)) % 7) === 0 && fy > 1) q = 0; if (fy === 4 && hash2(wx >> 2, wy, 2) < 0.5) q = Math.max(0, q - 1); }
       let col = mat.face[Math.max(0, Math.min(3, q))];

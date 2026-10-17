@@ -17,13 +17,19 @@ function canopy(s, clumps, ramp, seed, opt = {}) {
     }
   });
   const n = ramp.length;
+  // foliage "bubbles": jittered 4px cells, each lit as a small sphere, so leaves read as clusters
+  const cs = opt.cell || 4, pts = [];
+  for (let gy = -1; gy <= H / cs + 1; gy++) for (let gx = -1; gx <= W / cs + 1; gx++) pts.push([(gx + 0.25 + r() * 0.5) * cs + (gy & 1) * cs * 0.5, (gy + 0.25 + r() * 0.5) * cs]);
+  const gw = Math.ceil(W / cs) + 3;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const i = y * W + x, k = id[i]; if (k < 0) continue;
     const u = U[i], v = V[i];
-    let l = 0.62 - u * 0.32 - v * 0.55 + (clumps[k][4] || 0);
-    l += (hash2(x >> 1, y >> 1, seed + 3) - 0.5) * 0.22;
-    let q = Math.floor(clamp(l, 0, 0.999) * n + (bayer(x, y) - 0.5) * 0.7); q = clamp(q, 0, n - 1);
-    // gap shadow: pixel above-left belongs to a later (front) clump
+    let best = 1e9, bp = null;
+    const gx0 = Math.floor(x / cs), gy0 = Math.floor(y / cs);
+    for (let gy = gy0 - 1; gy <= gy0 + 2; gy++) for (let gx = gx0 - 1; gx <= gx0 + 2; gx++) { const p = pts[(gy + 1) * gw + gx + 1]; if (!p) continue; const d = (p[0] - x - 0.5) ** 2 + (p[1] - y - 0.5) ** 2; if (d < best) { best = d; bp = p; } }
+    const cu = bp ? (x + 0.5 - bp[0]) / cs : 0, cv = bp ? (y + 0.5 - bp[1]) / cs : 0;
+    let l = 0.6 - u * 0.3 - v * 0.55 + (clumps[k][4] || 0) - (cu + cv) * 0.42 + (Math.sqrt(best) / cs > 0.62 ? -0.22 : 0);
+    let q = Math.floor(clamp(l, 0, 0.999) * n + (bayer(x, y) - 0.5) * 0.45); q = clamp(q, 0, n - 1);
     const below = y + 1 < H ? id[i + W] : -1;
     if (below > k && below >= 0) q = 0;
     else if (y + 2 < H && id[i + 2 * W] > k) q = Math.max(0, q - 2);
@@ -33,12 +39,19 @@ function canopy(s, clumps, ramp, seed, opt = {}) {
   }
   void r;
 }
+function trunkShadow(s, ramp, leafTest) { // canopy shade falling on the trunk + bark grooves
+  const src = new Spr(s.w, s.h); src.d.set(s.d); const tr = new Set(ramp);
+  for (let y = 1; y < s.h; y++) for (let x = 0; x < s.w; x++) { const c = src.hex(x, y); if (!src.has(x, y) || !tr.has(c)) continue;
+    let k = 0; for (let d = 1; d <= 4; d++) { if (!src.has(x, y - d)) break; const a = src.hex(x, y - d); if (!tr.has(a) && leafTest(a)) { k = d; break; } }
+    if (k && k <= 3) s.set(x, y, mul(ramp[0], 0.7)); else if (k === 4) s.set(x, y, ramp[0]);
+  }
+}
 function trunk(s, cx, top, bot, w, ramp, roots = true) {
   for (let y = top; y <= bot; y++) {
     const t = (y - top) / Math.max(1, bot - top), ww = w + (roots && t > 0.75 ? Math.round((t - 0.75) * 10) : 0);
     for (let x = -Math.floor(ww / 2); x < Math.ceil(ww / 2); x++) {
       const u = (x + 0.5) / (ww / 2); let q = u < -0.45 ? 2 : u < 0.2 ? 1 : 0;
-      if (hash2(cx + x, y, 77) < 0.12) q = Math.max(0, q - 1);
+      if (hash2(cx + x, y >> 1, 77) < 0.14 || ((x + 7) % 3 === 0 && hash2(x, y >> 2, 78) < 0.5 && q > 0)) q = Math.max(0, q - 1);
       s.set(cx + x, y, ramp[q]);
     }
   }
@@ -56,6 +69,7 @@ function oak(v) {
   cl.unshift([cx, 18, 15, 12]);
   cl.push([cx - 6 + r() * 4, 28, 10, 7, -0.1], [cx + 6 + r() * 4, 29, 9, 6, -0.1]);
   canopy(s, cl, greens, 200 + v, { speck: [0.025, 0xb6d86a, 0x2a4a2a] });
+  trunkShadow(s, T, c => true);
   if (v === 1) for (let k = 0; k < 6; k++) { const x = 10 + r() * 26 | 0, y = 8 + r() * 22 | 0; if (s.has(x, y)) { s.set(x, y, 0xe8433a); s.set(x + 1, y, 0xc0302c); s.set(x, y - 1, 0xff8a6a); } }
   s.outline(c => c === T[0] || c === T[1] || c === T[2] ? 0x2a1a12 : OUT_LEAF);
   return s;
@@ -93,6 +107,7 @@ function sakura(v) {
   for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2 + r() * 0.4; cl.push([cx + Math.cos(a) * 13 + r() * 2, 19 + Math.sin(a) * 7, 8 + r() * 3, 6 + r() * 2]); }
   cl.sort((a, b) => a[1] - b[1]);
   canopy(s, cl, P, 400 + v, { speck: [0.03, 0xffffff, 0x9a3e64] });
+  trunkShadow(s, T, c => true);
   s.outline(c => c === T[0] || c === T[1] || c === T[2] ? 0x24140f : 0x7a2e4e);
   return s;
 }
@@ -113,6 +128,14 @@ function deadtree(v) {
   br(cx, 22, -Math.PI / 2 - 0.5, 12, 3); br(cx, 24, -Math.PI / 2 + 0.6, 11, 3);
   s.outline(0x1e1816);
   return s;
+}
+function bamboo(v) {
+  const s = new Spr(22, 58), r = mulberry32(1600 + v), G = [0x3e7a32, 0x5a9a3e, 0x7ab84a, 0xa0d06a];
+  for (let k = 0; k < 4; k++) { const x0 = 3 + k * 4 + (r() * 2 | 0), top = 2 + (r() * 10 | 0), lean = (r() - 0.5) * 3;
+    for (let y = top; y < 56; y++) { const t = (56 - y) / (56 - top), x = Math.round(x0 + lean * t * t); const node = (y + k * 3) % 9 === 0;
+      s.set(x, y, node ? 0xc8d890 : G[2]); s.set(x + 1, y, node ? 0x8ab060 : G[1]); s.set(x - 1, y, node ? G[0] : G[3]); }
+    for (let j = 0; j < 3; j++) { const ly = top + 4 + j * 9 + (r() * 4 | 0), lx = x0 + (j % 2 ? 2 : -2), dir = j % 2 ? 1 : -1; for (let i = 0; i < 6; i++) { s.set(lx + i * dir, ly + (i >> 1), G[i < 3 ? 2 : 1]); s.set(lx + i * dir, ly + 1 + (i >> 1), G[0]); } } }
+  s.outline(0x173a1a); return s;
 }
 function stump() { const s = new Spr(16, 14); s.ell(8, 9, 6, 4.5, (u, v) => v < -0.1 ? (u * u + v * v < 0.3 ? 0xd8b07a : 0xc09060) : u < -0.3 ? 0x8a5f3f : 0x6b4730); s.rect(2, 9, 12, 3, (x) => x < 6 ? 0x8a5f3f : 0x6b4730); s.set(8, 7, 0xa8784a); s.outline(0x2a1a12); return s; }
 function bush(v, berry, picked) {
@@ -189,6 +212,7 @@ export function bakeNature() {
     put('dead' + v, deadtree(v), 18, 47, [7, 3]);
   }
   put('stump', stump(), 8, 12, [6, 2]);
+  for (let v = 0; v < 3; v++) put('bamboo' + v, bamboo(v), 11, 56, [8, 2]);
   for (let v = 0; v < 3; v++) { put('bush' + v, bush(v), 10, 14, [8, 2]); put('berry' + v, bush(v, true), 10, 14, [8, 2]); put('berryx' + v, bush(v, true, true), 10, 14, [8, 2]); }
   for (let v = 0; v < 8; v++) { put('boulder' + v, boulder(v, v >= 5), 10, 14, [8, 3]); put('flowers' + v, flowers(v), 8, 14); put('pebbles' + v, pebbles(v), 8, 8); put('mush' + v, mushroom(v), 8, 12); put('lily' + v, lily(v), 9, 10); }
   put('grass0', tallgrass(0), 8, 17); put('grass1', tallgrass(1), 8, 17);

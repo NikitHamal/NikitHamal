@@ -60,7 +60,8 @@ export class World {
         if (s.h > 0.655 && v2 > 0.71) b = B.IRON;
         if (s.h > 0.685 && v3 > 0.74) b = B.GOLD;
         if (s.h > 0.7 && H(3) < 0.012) b = B.GEM;
-      } else { const r = H(4); if (r < 0.04) o = O.BOULDER; else if (r < 0.08) o = O.PEBBLE; else if (r < 0.095) o = O.PINE; }
+      } else if (fbm(x / 9, y / 9, this.S[5] + 13, 2) > 0.7 && s.h < 0.62) { g = G.ONSEN; }
+      else { const r = H(4); if (r < 0.04) o = O.BOULDER; else if (r < 0.08) o = O.PEBBLE; else if (r < 0.095) o = O.PINE; }
     }
     else if (s.t < 0.33) { g = G.SNOW; const r = H(5); if (r < 0.09) o = O.PINE; else if (r < 0.105) o = O.BOULDER; else if (r < 0.12) o = O.DEADTREE; else if (r < 0.13) o = O.BERRY; }
     else if (s.e < 0.47 && s.m > 0.58) {
@@ -68,8 +69,9 @@ export class World {
       else { const r = H(7); if (r < 0.1) o = O.REEDS; else if (r < 0.13) o = O.DEADTREE; else if (r < 0.16) o = O.MUSHROOM; else if (r < 0.2) o = O.TALLGRASS; }
     }
     else if (s.m > 0.585) {
-      g = G.FOREST; const r = H(8), k = H(9);
-      if (r < 0.2) o = k < 0.45 ? O.OAK : k < 0.8 ? O.PINE : O.BIRCH;
+      g = G.FOREST; const r = H(8), k = H(9), bam = fbm(x / 30, y / 30, this.S[6] + 5, 2) > 0.66;
+      if (bam && r < 0.26) o = O.BAMBOO;
+      else if (r < 0.2) o = k < 0.45 ? O.OAK : k < 0.8 ? O.PINE : O.BIRCH;
       else if (r < 0.23) o = O.MUSHROOM; else if (r < 0.27) o = O.BUSH; else if (r < 0.285) o = O.BERRY; else if (r < 0.33) o = O.TALLGRASS;
     }
     else if (fbm(x / 46, y / 46, this.S[7], 3) > 0.63) {
@@ -82,6 +84,7 @@ export class World {
       else if (r < 0.05) o = O.BUSH; else if (r < 0.06) o = O.BERRY; else if (r < (dry ? 0.16 : 0.11)) o = O.TALLGRASS;
       else if (r < 0.14) o = O.FLOWERS; else if (r < 0.147) o = O.BOULDER; else if (r < 0.152) o = O.PEBBLE;
     }
+    if (!o && !b && (g === G.GRASS || g === G.FOREST || g === G.SAKURA || g === G.SAND || g === G.SNOW)) { const q = H(31); if (q < 0.0009 && g !== G.SAND) o = O.SHRINE; else if (q < 0.0026) o = O.DIG; }
     if (o && OBJ[o] && OBJ[o].tree) m = hash2i(x, y, 77) & 3;
     if (o === O.FLOWERS || o === O.MUSHROOM || o === O.BOULDER || o === O.PEBBLE) m = hash2i(x, y, 78) & 7;
     return { g, b, o, m };
@@ -151,11 +154,15 @@ export class World {
     const doorPath = s => { const dx = s.x + (s.w >> 1); for (let yy = s.y + s.h; yy <= s.y + s.h + 1; yy++) { path(dx, yy); used.add(dx + ',' + yy); } s.door = { x: dx, y: s.y + s.h - 1 }; };
     if (home) {
       // koi pond east of the plaza, the player's home north-west, farm plot south-west
-      const px0 = cx + 6, py0 = cy - 7;
-      struct('koi', px0, py0, 7, 5); v.koi = { x: px0, y: py0, w: 7, h: 5 };
-      for (let j = 0; j < 5; j++) for (let i = 0; i < 7; i++) set(px0 + i, py0 + j, G.GRASS, B.BLDG, 0, 0);
-      set(px0 - 1, py0 + 5, null, 0, O.LANTERN, 0); set(px0 + 7, py0 + 5, null, 0, O.LANTERN, 0);
-      set(px0 + 8, py0 - 1, null, 0, O.SAKURA, 1); set(px0 - 2, py0 - 2, null, 0, O.SAKURA, 2); set(px0 + 9, py0 + 3, null, 0, O.SAKURA, 0);
+      const KW = 12, KH = 8, px0 = cx + 5, py0 = cy - 11;
+      struct('koi', px0, py0, KW, KH); v.koi = { x: px0, y: py0, w: KW, h: KH };
+      // collision follows the pond's rounded shoreline (same superellipse the pond is carved with)
+      for (let j = 0; j < KH; j++) for (let i = 0; i < KW; i++) {
+        const u = ((i + 0.5) * TS - KW * 8) / (KW * 8 - 4), q = ((j + 0.5) * TS - KH * 8) / (KH * 8 - 4);
+        set(px0 + i, py0 + j, G.SAKURA, Math.pow(Math.abs(u), 2.6) + Math.pow(Math.abs(q), 2.6) < 0.8 ? B.BLDG : 0, 0, 0);
+      }
+      set(px0 - 1, py0 + KH, null, 0, O.LANTERN, 0); set(px0 + KW, py0 + KH - 1, null, 0, O.LANTERN, 0);
+      set(px0 + KW + 1, py0 + 1, null, 0, O.SAKURA, 1); set(px0 - 2, py0 - 1, null, 0, O.SAKURA, 2); set(px0 + KW + 2, py0 + 5, null, 0, O.SAKURA, 0); set(px0 + 3, py0 - 2, null, 0, O.SAKURA, 3);
       const hs = struct('house', cx - 11, cy - 9, 6, 4, { style: 0, home: true }); doorPath(hs); v.homeHouse = hs;
       set(hs.x + hs.w + 1, hs.y + hs.h, null, 0, O.CHEST, 0); set(hs.x - 1, hs.y + hs.h, null, 0, O.BENCH, 0);
       for (let j = 0; j < 4; j++) for (let i = 0; i < 6; i++) set(cx - 11 + i, cy + 5 + j, G.TILLED, 0, (j === 1 || j === 2) && i < 4 ? O.WHEAT : 0, 1);
@@ -282,9 +289,16 @@ export class World {
     if (lx <= 1) xs.push(-1); if (lx >= CS - 2) xs.push(1); if (ly <= 1) ys.push(-1); if (ly >= CS - 2) ys.push(1);
     for (const dx of xs) for (const dy of ys) if (dx || dy) { const n = this.peek(c.cx + dx, c.cy + dy); if (n) { n.dirty = true; if (walls) n.rv++; } }
   }
-  solid(x, y) {
+  // 0 dry, 1 shallow (wade along the shore), 2 deep (swim)
+  depth(x, y) {
+    const g = this.ground(x, y); if (!isWater(g)) return 0; if (g === G.DEEP) return 2;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && !isWater(this.ground(x + dx, y + dy))) return 1;
+    return 2;
+  }
+  solid(x, y, swim) {
     const [c, i] = this._at(x, y); if (c.b[i]) return true;
-    const g = c.g[i]; if (g === G.DEEP) return true;
+    const g = c.g[i];
+    if (!swim && isWater(g) && this.depth(x, y) === 2) return true;
     const o = c.o[i]; if (o && OBJ[o] && OBJ[o].solid) { if (o === O.GATE && c.m[i] & 1) return false; return true; }
     return false;
   }
