@@ -25,7 +25,7 @@ const RAMPS = {
 };
 const P = {}; for (const k in RAMPS) P[k] = RAMPS[k].map(h => pk(h));
 const GRASSY = new Uint8Array(32); [G.GRASS, G.FOREST, G.SAKURA, G.MARSH, G.SNOW].forEach(g => GRASSY[g] = 1);
-const WATERY = new Uint8Array(32); WATERY[G.WATER] = WATERY[G.DEEP] = 1;
+const WATERY = new Uint8Array(32); WATERY[G.WATER] = WATERY[G.DEEP] = WATERY[G.ONSEN] = 1;
 const LOW = new Uint8Array(32); [G.PATH, G.DIRT, G.SAND, G.PLAZA, G.COBBLE, G.TILLED, G.WET, G.ROCK, G.WOOD, G.TATAMI].forEach(g => LOW[g] = 1);
 
 // ---- tileable textures ----
@@ -65,6 +65,7 @@ const VC = new Int16Array(48 * 48), VE = new Uint8Array(48 * 48);
 
 const FLOWER_COLS = [0xffffff, 0xf7d84a, 0xf28fb0, 0x9cc8f4, 0xe8615a, 0xc89cf0];
 const W1 = [0x7fd3cf, 0x64c1c6, 0x4caabb, 0x3b92ae, 0x2f7aa0, 0x276592, 0x215582].map(h => pk(h));
+const ONS = [0xa8f0e0, 0x7ad8cc, 0x5ac0bc, 0x48a8b0].map(h => pk(h));
 const BANK = [0x5e4a2e, 0x4c3b25, 0x3a2e1f].map(h => pk(h)), FOAM = pk(0xeaf7f2), FOAM2 = pk(0xbfe7e4);
 
 const mat = new Uint8Array(SZ * SZ), dist = new Float32Array(SZ * SZ), LG = new Float32Array(33 * 33);
@@ -118,7 +119,7 @@ export function bakeChunk(world, c) {
       const d = dist[mi], deep = m === G.DEEP ? 1 : 0;
       let v = clamp(d / 34, 0, 1) * 0.75 + deep * 0.25 + (N128[((wy & 127) << 7) | (wx & 127)] - 0.5) * 0.18;
       let k = Math.floor(v * (W1.length - 1) + b * 0.9); k = clamp(k, 0, W1.length - 1);
-      wo[o] = W1[k];
+      wo[o] = m === G.ONSEN ? ONS[Math.min(ONS.length - 1, Math.floor(clamp(d / 10, 0, 1) * 3 + b * 0.8))] : W1[k];
       // north bank: earth face under land
       let bank = -1; for (let k2 = 1; k2 <= 3; k2++) if (!WATERY[mat[mi - SZ * k2]]) { bank = k2 - 1; break; }
       if (bank >= 0) { go[o] = BANK[bank]; continue; }

@@ -10,7 +10,7 @@ import { clamp, rand, randi, pick, dist2, TAU } from './util.js';
 export class Player extends Human {
   constructor(g, x, y, look) {
     super(g, x, y, playerLook(look)); this.lookOpts = look; this.isPlayer = true; this.team = 'player'; this.persist = false;
-    this.hp = this.maxHp = 20; this.food = 20; this.speed = 66; this.inv = new Array(32).fill(null); this.sel = 0; this.armor = null; this.coins = 0;
+    this.hp = this.maxHp = 20; this.food = 20; this.speed = 66; this.inv = new Array(32).fill(null); this.swims = true; this.sel = 0; this.armor = null; this.coins = 0;
     this.useCd = 0; this.rollT = 0; this.rollCd = 0; this.idleT = 0; this.fish = null; this.hungerT = 0; this.regenT = 0; this.buff = 0; this.r = 4; this.alive = true; this.walkFps = 9; this.stepT = 0;
   }
   // ---------- inventory ----------
@@ -27,7 +27,7 @@ export class Player extends Human {
   wear(slot = this.sel) { const s = this.inv[slot]; if (!s || !ITEMS[s.id].dur) return; s.d--; if (s.d <= 0) { this.inv[slot] = null; this.g.toast(`${ITEMS[s.id].n} broke!`); Audio.play('break'); } this.g.ui.dirty(); }
   // ---------- main update ----------
   update(dt) {
-    const g = this.g; this.physics(dt); this.held = this.item ? this.item.id : null;
+    const g = this.g; this.physics(dt); this.held = this.item ? this.item.id : null; this.fishing = !!this.fish;
     if (this.dead) return;
     if (this.useCd > 0) this.useCd -= dt; if (this.rollCd > 0) this.rollCd -= dt;
     if (this.buff > 0) this.buff -= dt;
@@ -45,14 +45,14 @@ export class Player extends Human {
     if (this.rollT > 0) { this.rollT -= dt; this.move(this.rollVx * dt, this.rollVy * dt); this.moving = true; if (Math.random() < 0.5) g.fx.spawn({ x: this.x, y: this.y, z: 1, vz: 6, life: 0.4, c: '#d8c8a8', k: 'smoke', s: 2 }); }
     else if (mx || my) {
       const sprint = (Input.down('Shift') || (Input.joy.on && ml > 0.95)) && this.food > 2;
-      let sp = this.speed * (sprint ? 1.45 : 1) * (this.inWater() ? 0.55 : 1) * (this.actT > 0 ? 0.55 : 1);
+      const wl = this.waterLevel(); let sp = this.speed * (sprint && wl < 2 ? 1.45 : 1) * (wl === 2 ? 0.55 : wl ? 0.75 : 1) * (this.actT > 0 ? 0.55 : 1);
       this.move(mx * sp * dt, my * sp * dt); this.moving = true; this.idleT = 0;
       if (!this.facingLock) this.dir = dirOf(mx, my);
-      this.stepT -= dt * (sprint ? 1.5 : 1); if (this.stepT <= 0) { this.stepT = 0.32; if (this.inWater()) { g.fx.burst(this.x, this.y, 3, ['#bfe7e4', '#ffffff'], { z: 1, vz0: 20, vz1: 40, sp1: 20 }); Audio.play('splash', { vol: 0.15 }); } else Audio.play('step', { vol: 0.12 }); }
+      this.stepT -= dt * (sprint ? 1.5 : 1); if (this.stepT <= 0) { this.stepT = 0.32; if (wl) Audio.play('splash', { vol: wl === 2 ? 0.2 : 0.12, pitch: wl === 2 ? 0.8 : 1.2 }); else Audio.play('step', { vol: 0.12 }); }
       if (sprint) this.hungerT += dt * 1.5;
     } else { this.moving = false; this.idleT += dt; }
     // roll
-    if (!busy && (Input.pressed(' ') || Input.tbtnHit.roll) && this.rollCd <= 0 && this.rollT <= 0 && !this.fish) {
+    if (!busy && (Input.pressed(' ') || Input.tbtnHit.roll) && this.rollCd <= 0 && this.rollT <= 0 && !this.fish && this.waterLevel() < 2) {
       const [dx, dy] = (mx || my) ? [mx, my] : DIRV[this.dir]; const l = Math.hypot(dx, dy) || 1; this.rollVx = dx / l * 170; this.rollVy = dy / l * 170; this.rollT = 0.22; this.rollCd = 0.75; this.ifr = 0.3; Audio.play('swing', { vol: 0.5, pitch: 0.7 });
     }
     // aim
@@ -70,7 +70,7 @@ export class Player extends Human {
     const alt = Input.mhit[2] || Input.pressed('e') || Input.tbtnHit.alt || Input.pressed('k');
     if (this.fish) { this.updateFish(dt, usePressed); return; }
     if (alt) { if (this.interact()) return; }
-    if ((useHeld || usePressed) && this.useCd <= 0 && this.rollT <= 0) this.use(usePressed);
+    if ((useHeld || usePressed) && this.useCd <= 0 && this.rollT <= 0) { if (this.waterLevel() === 2) { if (usePressed) g.toastOnce('You can\'t use that while swimming.'); } else this.use(usePressed); }
     this.updateSwing(dt);
   }
   updateVitals(dt) {

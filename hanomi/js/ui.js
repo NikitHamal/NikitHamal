@@ -31,12 +31,14 @@ export class UI {
   buildHud() {
     this.hud.innerHTML = `
       <div class="hud-tl"><div class="hearts"></div><div class="foods"></div><div class="buffs"></div><div class="goal"></div></div>
-      <div class="hud-tr"><div class="clock"><canvas width="22" height="22"></canvas><div class="clock-t"><b class="day">Day 1</b><span class="hr">08:00</span></div></div><div class="coins">${'<img class="ico" src="' + iconUrl('coin') + '">'}<span>0</span></div></div>
+      <div class="hud-tr"><canvas class="minimap" width="72" height="72"></canvas><div class="hud-trc"><div class="clock"><canvas width="22" height="22"></canvas><div class="clock-t"><b class="day">Day 1</b><span class="hr">08:00</span></div></div><div class="coins">${'<img class="ico" src="' + iconUrl('coin') + '">'}<span>0</span></div></div></div>
       <div class="hotbar"></div>
       <div class="army-pill"></div>`;
     this.hb = $('.hotbar', this.hud);
     for (let i = 0; i < 8; i++) { const s = h('div', 'slot', `<i class="k">${i + 1}</i>`); s.dataset.i = i; s.addEventListener('pointerdown', e => { e.stopPropagation(); this.g.player.sel = i; this.g.player.cancelFish(); this.dirty(); Audio.play('click', { vol: 0.4 }); }); this.hb.appendChild(s); }
-    this.clockCv = $('.clock canvas', this.hud);
+    this.clockCv = $('.clock canvas', this.hud); this.mini = $('.minimap', this.hud); this.miniT = 0;
+    this.mini.style.pointerEvents = 'auto'; this.mini.onclick = () => this.open('map');
+    this.g.world.onChange = (x, y) => this.mapCache.delete(Math.floor(x / CS) + ',' + Math.floor(y / CS));
   }
   slotHtml(s) { if (!s) return ''; const it = ITEMS[s.id]; let bar = ''; if (it.dur && s.d < it.dur) bar = `<i class="dur"><i style="width:${Math.max(0, s.d / it.dur * 100)}%;background:${s.d / it.dur < 0.25 ? '#e8504a' : s.d / it.dur < 0.5 ? '#f2c23a' : '#7ad86a'}"></i></i>`; return ico(s.id) + (s.n > 1 ? `<b class="n">${s.n}</b>` : '') + bar; }
   updateHud() {
@@ -75,8 +77,10 @@ export class UI {
     for (const e of [g.player, ...g.ents]) {
       if (!e.bubble || e.dead || e.inside) continue; seen.add(e.id);
       let b = this.bubbles.get(e.id); if (!b) { b = h('div', 'bubble'); this.bubbleLayer.appendChild(b); this.bubbles.set(e.id, b); }
-      if (b._t !== e.bubble) { b.textContent = e.bubble; b._t = e.bubble; b.classList.toggle('bang', e.bubble === '!'); }
-      b.style.transform = `translate(${Math.round((e.x - cam.x) * k)}px,${Math.round((e.y - 34 - cam.y) * k)}px) translate(-50%,-100%)`;
+      if (b._t !== e.bubble) { b._t = e.bubble; b._at = performance.now(); b.classList.toggle('bang', e.bubble === '!'); b.innerHTML = (e.name && e.bubble !== '!' && !e.isPlayer ? `<b></b>` : '') + '<span></span>'; if (b.firstChild.tagName === 'B') b.firstChild.textContent = e.name; b._n = -1; }
+      { const n = Math.min(e.bubble.length, Math.floor((performance.now() - b._at) / 28)); if (n !== b._n) { b._n = n; b.lastChild.textContent = e.bubble.slice(0, n) + (n < e.bubble.length ? '' : ''); } }
+      b.classList.toggle('fade', e.bubbleT < 0.35);
+      b.style.left = Math.round((e.x - cam.x) * k) + 'px'; b.style.top = Math.round((e.y - 34 - cam.y) * k) + 'px';
     }
     for (const [id, b] of this.bubbles) if (!seen.has(id)) { b.remove(); this.bubbles.delete(id); }
     // prompt for interactables
@@ -88,6 +92,22 @@ export class UI {
     const pcx = Math.floor(g.player.x / TS / CS), pcy = Math.floor(g.player.y / TS / CS);
     for (let y = -2; y <= 2; y++) for (let x = -3; x <= 3; x++) this.explored.add((pcx + x) + ',' + (pcy + y));
     if (this.modal === 'map' && this.mapDraw) this.mapDraw();
+    if ((this.miniT -= dt) <= 0) { this.miniT = 0.25; this.drawMini(); }
+  }
+  drawMini() {
+    const g = this.g, c = this.mini.getContext('2d'), N = 72, p = g.player; c.imageSmoothingEnabled = false;
+    this.mini.classList.toggle('off', !!g.inside); if (g.inside) return;
+    const px = p.x / TS, py = p.y / TS, x0 = px - N / 2, y0 = py - N / 2;
+    c.fillStyle = '#1a2a3a'; c.fillRect(0, 0, N, N);
+    let budget = 2;
+    for (let ky = Math.floor(y0 / CS); ky <= Math.floor((y0 + N) / CS); ky++) for (let kx = Math.floor(x0 / CS); kx <= Math.floor((x0 + N) / CS); kx++) {
+      const k = kx + ',' + ky; if (!this.explored.has(k) && !g.world.peek(kx, ky)) continue;
+      const img = this.mapChunk(kx, ky, budget > 0); if (!img) continue; if (img.fresh) { img.fresh = false; budget--; }
+      c.drawImage(img, Math.round(kx * CS - x0), Math.round(ky * CS - y0)); }
+    for (const v of g.world.villagesNear(px, py, N)) { const n = g.nations.get(v.id); if (!n || !n.met) continue; const vx = Math.round(v.x - x0), vy = Math.round(v.y - y0); c.fillStyle = '#fff'; c.fillRect(vx - 2, vy - 2, 5, 5); c.fillStyle = hexCss(n.color); c.fillRect(vx - 1, vy - 1, 3, 3); }
+    for (const e of g.ents) { if (e.dead || e.inside || e.team === 'item' || e.team === 'proj') continue; const ex = Math.round(e.x / TS - x0), ey = Math.round(e.y / TS - y0); if (ex < 0 || ey < 0 || ex >= N || ey >= N) continue;
+      const col = e.team === 'undead' || e.team === 'wild' || g.hostile(e, p) ? '#ff4a4a' : e.isDog && e.owned ? '#ffd04a' : e.team === 'player' ? '#8ad8ff' : e.livestock ? '#f2e2c2' : e.team && e.team.startsWith('v:') ? '#ffffff' : null; if (col) { c.fillStyle = col; c.fillRect(ex, ey, 1, 1); } }
+    const blink = (performance.now() / 400 | 0) % 2; c.fillStyle = '#ff6a8a'; c.fillRect(N / 2 - 1, N / 2 - 1, 3, 3); if (blink) { c.fillStyle = '#fff'; const [dx, dy] = [[0, 1], [1, 0], [0, -1], [-1, 0]][p.dir]; c.fillRect(N / 2 + dx * 2, N / 2 + dy * 2, 1, 1); }
   }
   updatePrompt(k, cam) {
     const g = this.g, p = g.player; let label = null, at = null;

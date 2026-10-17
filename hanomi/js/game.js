@@ -92,18 +92,19 @@ export class Game {
     const N = W * H, gS = new Float32Array(N).fill(1e9), from = new Int32Array(N).fill(-1), closed = new Uint8Array(N), open = [];
     const idx = (x, y) => (y - y0) * W + (x - x0), si = idx(sx, sy), ti = idx(tx, ty);
     const solid = (x, y) => x !== tx || y !== ty ? w.solid(x, y) : false;
-    gS[si] = 0; open.push([Math.abs(tx - sx) + Math.abs(ty - sy), si]);
+    const push = (f, i) => { open.push([f, i]); let k = open.length - 1; while (k > 0) { const p = (k - 1) >> 1; if (open[p][0] <= open[k][0]) break; [open[p], open[k]] = [open[k], open[p]]; k = p; } };
+    const pop = () => { const top = open[0], last = open.pop(); if (open.length) { open[0] = last; let k = 0; for (;;) { const l = 2 * k + 1, r = l + 1; let m = k; if (l < open.length && open[l][0] < open[m][0]) m = l; if (r < open.length && open[r][0] < open[m][0]) m = r; if (m === k) break; [open[m], open[k]] = [open[k], open[m]]; k = m; } } return top; };
+    gS[si] = 0; push(Math.abs(tx - sx) + Math.abs(ty - sy), si);
     let it = 0, best = si, bestH = 1e9;
-    while (open.length && it++ < 900) {
-      let bi = 0; for (let k = 1; k < open.length; k++) if (open[k][0] < open[bi][0]) bi = k;
-      const [, ci] = open.splice(bi, 1)[0]; if (closed[ci]) continue; closed[ci] = 1;
+    while (open.length && it++ < 1400) {
+      const [, ci] = pop(); if (closed[ci]) continue; closed[ci] = 1;
       const cx = ci % W + x0, cy = ((ci / W) | 0) + y0, h = Math.abs(tx - cx) + Math.abs(ty - cy);
       if (h < bestH) { bestH = h; best = ci; }
       if (ci === ti) break;
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
         const nx = cx + dx, ny = cy + dy; if (nx < x0 || ny < y0 || nx >= x0 + W || ny >= y0 + H) continue;
         const ni = idx(nx, ny); if (closed[ni] || solid(nx, ny)) continue;
-        const ng = gS[ci] + (isWater(w.ground(nx, ny)) ? 3 : 1); if (ng < gS[ni]) { gS[ni] = ng; from[ni] = ci; open.push([ng + Math.abs(tx - nx) + Math.abs(ty - ny), ni]); }
+        const ng = gS[ci] + (isWater(w.ground(nx, ny)) ? 3 : 1); if (ng < gS[ni]) { gS[ni] = ng; from[ni] = ci; push(ng + Math.abs(tx - nx) + Math.abs(ty - ny), ni); }
       }
     }
     const path = []; let c = best; while (c !== si && c >= 0) { path.push([c % W + x0, ((c / W) | 0) + y0]); c = from[c]; }
@@ -363,6 +364,9 @@ export class Game {
   tickWeather(dt) {
     const W = this.weather; W.t -= dt; if (W.t <= 0) { W.target = W.target > 0 ? 0 : (Math.random() < 0.45 ? rand(0.5, 1) : 0); W.t = W.target ? rand(90, 220) : rand(240, 600); }
     W.rain += (W.target - W.rain) * Math.min(1, dt * 0.25);
+    // thunderstorms: heavy rain brings lightning
+    if (this.flash > 0) this.flash -= dt * 2.5;
+    if (W.rain > 0.82 && !this.inside && (W.bolt = (W.bolt ?? 6) - dt) <= 0) { W.bolt = rand(7, 22); this.flash = 1; setTimeout(() => Audio.play('drum', { pitch: 0.45, vol: 0.8 }), rand(200, 1400)); }
   }
   get raining() { return this.weather.rain > 0.3; }
   waterBiome(tx, ty) { const b = this.world.biomeAt(tx, ty), s = this.world.sample(tx, ty); if (s.river) return 'river'; if (b === 'deep' || s.e < 0.36) return 'sea'; if (b === 'marsh' || this.world.ground(tx, ty) === G.WATER && this.world.biomeAt(tx + 3, ty) === 'marsh') return 'marsh'; return 'lake'; }
@@ -454,6 +458,7 @@ export class Game {
     this.playTime += dt; this.tickTime(dt); this.tickWeather(dt);
     this.rebuildGrid();
     this.player.update(dt);
+    if (this.world.ground(this.player.tx, this.player.ty) === G.ONSEN) { const p = this.player; this._ons = (this._ons || 0) + dt; if (this._ons > 1.5) { this._ons = 0; if (p.hp < p.maxHp) { p.hp++; this.ui.dirty(); } if (!this._onsMsg) { this._onsMsg = 1; this.ui.toast('The hot spring soothes your aches.', 'good'); } } }
     { const p = this.player, w = this.world, ptx = Math.floor(p.x / TS), pty = Math.floor(p.y / TS);
       if (this.inside) { if (w.obj(ptx, pty) === O.EXIT && p.dir === 0 && !this._fading) this.exitHouse(); }
       else if (p.moving && p.dir === 2 && !this._fading) { const r = this.doorAt(ptx, Math.floor((p.y - 6) / TS)); if (r) this.enterHouse(r[0], r[1]); } }

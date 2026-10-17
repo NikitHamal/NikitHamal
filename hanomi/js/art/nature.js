@@ -129,6 +129,14 @@ function deadtree(v) {
   s.outline(0x1e1816);
   return s;
 }
+function bamboo(v) {
+  const s = new Spr(22, 58), r = mulberry32(1600 + v), G = [0x3e7a32, 0x5a9a3e, 0x7ab84a, 0xa0d06a];
+  for (let k = 0; k < 4; k++) { const x0 = 3 + k * 4 + (r() * 2 | 0), top = 2 + (r() * 10 | 0), lean = (r() - 0.5) * 3;
+    for (let y = top; y < 56; y++) { const t = (56 - y) / (56 - top), x = Math.round(x0 + lean * t * t); const node = (y + k * 3) % 9 === 0;
+      s.set(x, y, node ? 0xc8d890 : G[2]); s.set(x + 1, y, node ? 0x8ab060 : G[1]); s.set(x - 1, y, node ? G[0] : G[3]); }
+    for (let j = 0; j < 3; j++) { const ly = top + 4 + j * 9 + (r() * 4 | 0), lx = x0 + (j % 2 ? 2 : -2), dir = j % 2 ? 1 : -1; for (let i = 0; i < 6; i++) { s.set(lx + i * dir, ly + (i >> 1), G[i < 3 ? 2 : 1]); s.set(lx + i * dir, ly + 1 + (i >> 1), G[0]); } } }
+  s.outline(0x173a1a); return s;
+}
 function stump() { const s = new Spr(16, 14); s.ell(8, 9, 6, 4.5, (u, v) => v < -0.1 ? (u * u + v * v < 0.3 ? 0xd8b07a : 0xc09060) : u < -0.3 ? 0x8a5f3f : 0x6b4730); s.rect(2, 9, 12, 3, (x) => x < 6 ? 0x8a5f3f : 0x6b4730); s.set(8, 7, 0xa8784a); s.outline(0x2a1a12); return s; }
 function bush(v, berry, picked) {
   const s = new Spr(20, 16), r = mulberry32(800 + v);
@@ -204,6 +212,7 @@ export function bakeNature() {
     put('dead' + v, deadtree(v), 18, 47, [7, 3]);
   }
   put('stump', stump(), 8, 12, [6, 2]);
+  for (let v = 0; v < 3; v++) put('bamboo' + v, bamboo(v), 11, 56, [8, 2]);
   for (let v = 0; v < 3; v++) { put('bush' + v, bush(v), 10, 14, [8, 2]); put('berry' + v, bush(v, true), 10, 14, [8, 2]); put('berryx' + v, bush(v, true, true), 10, 14, [8, 2]); }
   for (let v = 0; v < 8; v++) { put('boulder' + v, boulder(v, v >= 5), 10, 14, [8, 3]); put('flowers' + v, flowers(v), 8, 14); put('pebbles' + v, pebbles(v), 8, 8); put('mush' + v, mushroom(v), 8, 12); put('lily' + v, lily(v), 9, 10); }
   put('grass0', tallgrass(0), 8, 17); put('grass1', tallgrass(1), 8, 17);

@@ -80,6 +80,7 @@ export class Renderer {
     for (let y = ty0; y <= ty1; y++) for (let x = tx0; x <= tx1; x++) {
       if (rm && (x < rm.x || y < rm.y || x >= rm.x + rm.w || y >= rm.y + rm.h)) continue;
       const b = w.block(x, y);
+      if (!rm && Math.random() < 0.004 && w.ground(x, y) === G.ONSEN) g.fx.spawn({ x: x * TS + rand(16), y: y * TS + rand(16), z: 2, vz: rand(6, 12), vx: rand(-3, 3), life: rand(1.6, 2.6), c: '#f4fbff', k: 'smoke', s: 4, g: 0 });
       const o = w.obj(x, y);
       if (o) { dl.push({ k: y * TS + (o === O.LILY || o === O.EXIT || o === O.CUSHION ? -100 : OBJ[o].wall ? 16.5 : 15), t: 2, x, y, o, m: w.meta(x, y) }); const L = OBJ[o].light; if (L && (night > 0.05 || g.inside)) lights.push([x * TS + 8, y * TS + (o === O.TORCH ? -2 : 4), L, OBJ[o].warm]); }
     }
@@ -92,10 +93,11 @@ export class Renderer {
     for (let cx = c0; cx <= c1; cx++) { const c = w.peek(cx, r0 - 1); if (c && c.wrows && c.wrows[CS - 1] && r0 * CPX + WH > oy) { if (c.wrv !== c.rv) bakeWalls(w, c); if (c.wallcv) dl.push({ k: (c.cy * CS + CS - 1) * TS + 15.9, t: 1, c, r: CS - 1 }); } }
     for (const v of w.villagesNear((ox + vw / 2) / TS, (oy + vh / 2) / TS, Math.max(vw, vh) / TS)) for (const s of v.structs) {
       const sx0 = s.x * TS, sy1 = (s.y + s.h) * TS; if (sx0 > ox + vw + 16 || sx0 + s.w * TS < ox - 16 || sy1 < oy - 8 || sy1 - 90 > oy + vh) continue;
+      if (s.kind === 'koi') { this.drawKoi(g, s, ox, oy); continue; } // flat water: part of the ground, never over sprites
       dl.push({ k: sy1 - 0.5, t: 3, s, v });
     }
-    for (const e of g.ents) { if (e.dead || e.x < ox - 40 || e.x > ox + vw + 40 || e.y < oy - 20 || e.y > oy + vh + 50) continue; dl.push({ k: e.y, t: 4, e }); const sh = e.shadow && e.shadow(); if (sh) shadows.push(sh); }
-    if (!p.dead) { dl.push({ k: p.y, t: 4, e: p }); shadows.push(p.shadow()); }
+    for (const e of g.ents) { if (e.light && night > 0.05 && !e.dead && !e.inside) lights.push([e.x, e.y - 14, e.light, 1]); if (e.dead || e.x < ox - 40 || e.x > ox + vw + 40 || e.y < oy - 20 || e.y > oy + vh + 50) continue; dl.push({ k: e.y, t: 4, e }); const sh = e.shadow && e.shadow(); if (sh) shadows.push(sh); }
+    if (!p.dead) { dl.push({ k: p.y, t: 4, e: p }); const ps = p.shadow(); if (ps) shadows.push(ps); }
     if (p.item && p.item.id === 'torch' && night > 0.05) lights.push([p.x, p.y - 12, 5, 1]);
     // shadows
     const shA = 0.22 + 0.1 * g.daylight - g.weather.rain * 0.08, shOff = (g.hour - 12) * 0.25;
@@ -134,6 +136,7 @@ export class Renderer {
     this.drawLight(g, ctx, lights, ox, oy, vw, vh);
     g.fx.draw(ctx, ox, oy, true);
     if (!room) this.ambient(g, dt, ox, oy, vw, vh);
+    if (g.flash > 0 && !room) { ctx.fillStyle = `rgba(235,240,255,${Math.min(0.85, g.flash)})`; ctx.fillRect(0, 0, vw, vh); }
   }
   objSprite(g, d) {
     const o = d.o, m = d.m, x = d.x, y = d.y, t = this.t;
@@ -142,6 +145,7 @@ export class Renderer {
       case O.PINE: return NS[(g.world.ground(x, y) === G.SNOW ? 'pinesnow' : 'pine') + (m & 3)];
       case O.SAKURA: return NS['sakura' + (m & 3)];
       case O.BIRCH: return NS['birch' + (m & 3)];
+      case O.BAMBOO: return NS['bamboo' + (hash2i(x, y) % 3)];
       case O.DEADTREE: return NS['dead' + (m & 3)];
       case O.STUMP: return NS.stump;
       case O.BUSH: return NS['bush' + (hash2i(x, y) % 3)];

@@ -13,6 +13,7 @@ function blob(s, cx, cy, rx, ry, c, light = 0.6) { const R = r3(c); s.ell(cx, cy
 
 const P = {
   wood: s => { s.ell(8, 10, 6.5, 3.6, (u, v) => r3(0x8a5a34)[v < 0 ? 2 : 1]); s.rect(2, 6, 12, 4, (x, y) => y === 6 ? 0xb07c48 : 0x8a5a34); s.ell(13, 8, 2.2, 3.4, (u, v) => (u * u + v * v < 0.35) ? 0xc8945a : 0xe8c08a); },
+  bamboo: s => { for (const [x0, c] of [[4, 0x6aa84a], [8, 0x8ac85a], [11, 0x4a8a3a]]) { s.line(x0, 14, x0 + 2, 2, c); s.line(x0 + 1, 14, x0 + 3, 2, mul(c, 0.8)); s.set(x0 + 1, 9, 0xd8e8a0); s.set(x0 + 2, 5, 0xd8e8a0); } s.ell(13, 4, 2, 1, 0x5aa040); },
   stick: s => { s.stroke(3, 13, 13, 3, 2, 1.5, 0x8a5a34); s.set(8, 7, 0x6b4428); s.set(10, 8, 0x5a8a3a); },
   stone: s => blob(s, 8, 9, 6, 4.8, 0x8e8983),
   flint: s => { s.poly([[4, 12], [8, 3], [13, 9], [9, 13]], (x, y) => x + y < 15 ? 0x6a6a7a : 0x3a3a4a); s.line(7, 6, 10, 10, 0x9a9aaa); },

@@ -59,6 +59,8 @@ function drawChar(L, dir, f) {
     if (Ar) { for (let x = x0; x < x0 + w; x += 2) l.set(x, y0 + 4, Ar[0]); l.set(x0 + 4, y0 + 2, L.crest != null ? L.crest : Ar[3]); }
     if (Z) for (let k = 0; k < 5; k++) { const x = x0 + (hash2(k, L.seed, 1) * w | 0), y = y0 + 1 + (hash2(k, L.seed, 2) * 5 | 0); l.set(x, y, Sk[1]); l.set(x + 1, y, Sk[0]); }
     stamp(s, l, mul(L.shirt, 0.38)); }
+  let hand;
+  if (dir === 1) { armSide(11, 18 + bob, f.sa || 0, false); const sw = f.sa || 0; hand = [11 + sw + 1.5 + Math.sign(sw), 24 + bob]; }
   // ---------------- front arms ----------------
   if (dir !== 1) {
     const arm = (x, sw, right) => { const l = layer(), C = sleeve, y0 = 18 + bob;
@@ -67,6 +69,7 @@ function drawChar(L, dir, f) {
       l.rect(x, y0 + 5 + sw, 3, 2, Sk[2]); l.set(x + (right ? 0 : 2), y0 + 6 + sw, Sk[1]); if (dir === 0) l.set(x + 1, y0 + 5 + sw, Sk[3]);
       stamp(s, l, mul(L.shirt, 0.38)); };
     arm(4, f.sa || 0, false); arm(17, f.sb || 0, true);
+    hand = dir === 0 ? [5.5, 23.5 + bob + (f.sa || 0)] : [18.5, 23.5 + bob + (f.sb || 0)];
   }
   // ---------------- head ----------------
   { const l = layer();
@@ -123,7 +126,7 @@ function drawChar(L, dir, f) {
     else if (L.hat === 'band') { for (let x = hx - 7; x <= hx + 7; x++) { l.set(x, hy - 4, hc[3]); l.set(x, hy - 3, hc[2]); } if (dir !== 0) { const kx = dir === 1 ? hx - 7 : hx; l.set(kx, hy - 2, hc[2]); l.set(kx - 1, hy - 1, hc[1]); l.set(kx + 1, hy - 1, hc[1]); } }
     else if (L.hat === 'eboshi') { l.rect(hx - 3, hy - 13, 6, 8, (x, y) => x === hx + 2 ? 0x101014 : y === hy - 13 ? 0x3a3a46 : 0x24242c); }
     stamp(s, l, mul(L.hatColor || 0x404040, 0.35)); }
-  return s;
+  s.hand = hand; return s;
 }
 
 // animation tables
@@ -138,8 +141,9 @@ export function bakeChar(L) {
   L.seed = L.seed || 1;
   const res = { 0: {}, 1: {}, 2: {}, 3: {} };
   for (const dir of [0, 1, 2]) for (const [name, set] of [['idle', IDLE], ['walk', dir === 1 ? WALK_S : WALK_F], ['act', ACT]]) {
-    res[dir][name] = set.map(f => drawChar(L, dir, Object.assign({}, f, L.zombie && name === 'walk' && dir !== 1 ? { sa: 0, sb: 0 } : {})).canvas());
-    if (dir === 1) res[3][name] = res[1][name].map(cv => flip(cv));
+    const sp = set.map(f => drawChar(L, dir, Object.assign({}, f, L.zombie && name === 'walk' && dir !== 1 ? { sa: 0, sb: 0 } : {})));
+    res[dir][name] = sp.map(x => x.canvas()); res[dir][name + 'H'] = sp.map(x => x.hand);
+    if (dir === 1) { res[3][name] = res[1][name].map(cv => flip(cv)); res[3][name + 'H'] = sp.map(x => [FW - x.hand[0], x.hand[1]]); }
   }
   cache.set(k, res); return res;
 }
