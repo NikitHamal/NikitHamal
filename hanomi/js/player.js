@@ -107,6 +107,7 @@ export class Player extends Human {
     // swing (tools, weapons, hands)
     this.swing(it && it.tool === 'spear' ? 0.38 : 0.3); this.useCd = it && it.k === 'weapon' ? 0.36 : 0.32; this.swingHit = false; this.swingK = 1;
     Audio.play('swing', { vol: 0.35 });
+    if (it && it.k === 'weapon') { const [dx, dy] = DIRV[this.dir], px = -dy, py = dx; for (let k = 0; k < 7; k++) { const a = (k / 6 - 0.5) * 2.2, r = 15; this.g.fx.spawn({ x: this.x + (dx * Math.cos(a) + px * Math.sin(a)) * r, y: this.y - 6 + (dy * Math.cos(a) + py * Math.sin(a)) * r * 0.8, z: 4, life: 0.12 + k * 0.015, c: k % 2 ? '#ffffff' : '#ffe8f0', k: 'spark' }); } }
   }
   updateSwing(dt) {
     if (this.actT <= 0 || this.swingHit) return;

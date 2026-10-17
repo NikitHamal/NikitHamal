@@ -126,6 +126,12 @@ function house(w, h, style, opt = {}) {
   const rl = Math.round(inset) - 1, rr = SW - Math.round(inset);
   for (let x = rl; x <= rr; x++) { s.set(x, 1, R.ridge); s.set(x, 2, mix(R.tile[3], 0xffffff, 0.15)); s.set(x, 3, R.ridge); }
   s.set(rl - 1, 0, R.ridge); s.set(rl - 2, -0, R.ridge); s.set(rr + 1, 0, R.ridge); s.set(rr + 2, 0, R.ridge);
+  if (!R.thatch) { // irimoya gable: a timber-framed triangle under the ridge
+    const gy1 = Math.round(roofBot * 0.5), gw = Math.min(W * 0.2, 22);
+    for (let y = 4; y <= gy1; y++) { const f = (y - 4) / (gy1 - 4), hw = gw * f; for (let x = Math.round(SW / 2 - hw); x <= Math.round(SW / 2 + hw); x++) {
+      const edge = Math.abs(x - SW / 2) > hw - 1.5 || y === gy1; s.set(x, y, edge ? WOOD[0] : (y === gy1 - 1 ? mul(PLASTER[0], 0.8) : ((x + y) % 4 === 0 && y > gy1 - 6 ? WOOD[1] : PLASTER[1]))); } }
+    for (let x = Math.round(SW / 2 - gw - 2); x <= Math.round(SW / 2 + gw + 2); x++) { s.set(x, gy1 + 1, R.ridge); s.set(x, gy1 + 2, mul(R.tile[0], 0.8)); }
+  }
   if (opt.hall) { s.rect(SW / 2 - 3, 0, 6, 3, 0xd8a83a); s.set(SW / 2 - 1, 0, 0xfff08a); }
   // eave shadow on the wall
   for (let x = ox; x < ox + W; x++) for (let k = 1; k <= 3; k++) { const y = roofBot + k; const c = s.hex(x, y); if (s.has(x, y)) s.set(x, y, mul(c, 0.62 + k * 0.08)); }
