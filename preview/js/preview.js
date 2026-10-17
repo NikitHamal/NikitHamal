@@ -87,7 +87,7 @@ function Drawing(el, mode = () => 'paint') {
   async function play(id, dur = 3.6, onState, animate = true) {
     const my = ++job, paint = mode() === 'paint', w = Math.round((el.clientWidth || 300) * DPR); cv.width = w; cv.height = Math.round(w * 1.25);
     el.classList.toggle('pencil', !paint); const ov = el.querySelector('svg.eyes'); if (ov) ov.style.opacity = 0;
-    const finName = paint ? (w > 640 ? 'paintlarge_ne' : 'paint_ne') : (w > 640 ? 'large_ne' : 'still_ne');
+    const finName = paint ? (w > 640 ? 'paintlarge_ne' : 'paint_ne') : (w > 640 ? 'large' : 'still');   // pencil keeps its own graphite eyes
     const [S, smudge, fin] = await Promise.all([strokes(id), bitmap(id, 'smudge', w, cv.height), bitmap(id, finName, w, cv.height), mountEyes(el, id)]);
     if (my !== job) { smudge.close(); fin.close(); return; }
     const showEyes = () => { const o = el.querySelector('svg.eyes'); if (o) o.style.opacity = 1; askLook(); };
@@ -141,7 +141,7 @@ async function still(a, id, v, alt) { a.innerHTML = `<img src="${await imgURL(id
 for (const [id, label] of ST) {
   const pf = card($('#paints'), label, 'painted'); onView(pf, () => still(pf.firstChild, id, 'paint_ne', `Painted portrait of Nikit: ${label}`));
   pf.querySelector('figcaption').onclick = () => big(id, label, true);
-  const f = card($('#stills'), label, 'graphite'); f.firstChild.classList.add('pencil'); onView(f, () => still(f.firstChild, id, 'still_ne', `Pencil portrait of Nikit: ${label}`));
+  const f = card($('#stills'), label, 'graphite'); f.firstChild.classList.add('pencil'); onView(f, () => still(f.firstChild, id, 'still', `Pencil portrait of Nikit: ${label}`));
   f.querySelector('figcaption').onclick = () => big(id, label, false);
   const c = card($('#alive'), label, 'tap to redraw'); c.classList.add('live'); const a = c.firstChild; let d = null, off = 0;
   new IntersectionObserver(e => {
@@ -152,7 +152,7 @@ for (const [id, label] of ST) {
 }
 async function big(id, label, paint) {
   $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${paint ? 'painted' : 'graphite'}`;
-  const a = $('#lbArt'); a.className = 'art paper tilt' + (paint ? '' : ' pencil'); await still(a, id, paint ? 'paintlarge_ne' : 'large_ne', '');
+  const a = $('#lbArt'); a.className = 'art paper tilt' + (paint ? '' : ' pencil'); await still(a, id, paint ? 'paintlarge_ne' : 'large', '');
 }
 const closeLb = () => { $('#lb').hidden = true; live.delete($('#lbArt')); $('#lbArt').innerHTML = ''; };
 $('#lb').onclick = e => { if (e.target.id === 'lb' || e.target.id === 'lbClose') closeLb(); };

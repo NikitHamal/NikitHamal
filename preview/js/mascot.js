@@ -178,7 +178,7 @@ build().then(M => {
     if (S.mode === 'walk' && S.target != null) {
       const dx = S.target - S.x, sp = 520 * S.k * 4.2;
       if (Math.abs(dx) < 6) { S.target = null; setMode('wave'); }
-      else { S.face = Math.sign(dx); S.x += clamp(dx, -sp * dt, sp * dt); const ph = Math.floor(S.t * 9 / Math.PI); if (ph !== S.step) { S.step = ph; dust(2, 120 * S.k); } }
+      else { S.face = Math.sign(dx); const mv = clamp(dx, -sp * dt, sp * dt); S.x += mv; S.walkPh = (S.walkPh || 0) + Math.abs(mv) / (S.k * 160) * Math.PI; const ph = Math.floor(S.walkPh / Math.PI); if (ph !== S.step) { S.step = ph; dust(2, 120 * S.k); } }
     }
     S.x = clamp(S.x, 320 * S.k, S.W - 320 * S.k);
 
@@ -221,12 +221,21 @@ build().then(M => {
     let breath = Math.sin(t * 2.2), headRot = S.gaze.x * 7 + Math.sin(t * 1.1) * 1.2, headDy = breath * 6, leanA = 0, bodyDy = 0;
     let aL = 9 + Math.sin(t * 2.2) * 2, aR = -9 - Math.sin(t * 2.2 + 0.4) * 2, fL = 6, fR = -6;
     let lL = 0, lR = 0, kL = 0, kR = 0, hairA = Math.sin(t * 1.7) * 1.4 - S.gaze.x * 2;
+    let liftL = 0, liftR = 0;
     if (m === 'walk') {
-      const ph = t * 9; lL = Math.sin(ph) * 22; lR = -lL; kL = Math.max(0, -Math.sin(ph)) * 30; kR = Math.max(0, Math.sin(ph)) * 30;
-      aL = 9 - Math.sin(ph) * 20; aR = -9 - Math.sin(ph) * 20; fL = 14; fR = -14; bodyDy = -Math.abs(Math.cos(ph)) * 30; leanA = S.face * 3; hairA += -S.face * 5;
+      // front-view walk: feet lift in turn (legs foreshorten), weight dips at each contact,
+      // hips sway over the standing leg, arms counter-swing with a bend on the forward swing
+      const ph = S.walkPh || 0, sL = Math.sin(ph), sR = Math.sin(ph + Math.PI), dir = S.face;
+      liftL = Math.max(0, sL) ** 1.4; liftR = Math.max(0, sR) ** 1.4;
+      lL = dir * 4 + liftL * dir * 6 - 2; lR = dir * 4 + liftR * dir * 6 + 2; kL = -liftL * dir * 14; kR = -liftR * dir * 14;
+      bodyDy = -Math.abs(Math.sin(ph)) * 34 + 18;           // high while passing, low on contact
+      leanA = dir * 3 + (liftL - liftR) * -2.5;             // weight over the standing leg
+      aL = 10 + sR * 9; aR = -10 + sL * 9;                  // arms swing opposite to the legs
+      fL = 8 + Math.max(0, sR) * 38; fR = -8 - Math.max(0, sL) * 38;
+      headRot += (liftR - liftL) * 1.5; hairA += -dir * 4 + (liftR - liftL) * 2;
     }
     if (m === 'wave' || m === 'startle') {
-      const w = ease(clamp(mt / 0.35, 0, 1)); aR = lerp(aR, -140, w); fR = lerp(fR, 25 + Math.sin(mt * 14) * 28, w); headRot += 4;
+      const w = ease(clamp(mt / 0.35, 0, 1)), wv = Math.sin(mt * 11) * (0.7 + 0.3 * Math.sin(mt * 3)); aR = lerp(aR, -138 + wv * 4, w); fR = lerp(fR, 30 + wv * 30, w); headRot += 4 + wv * 1.2; leanA -= w * 2;
       if (m === 'startle') { bodyDy = -Math.sin(clamp(mt / 0.5, 0, 1) * Math.PI) * 120; aL = lerp(aL, 60, w); }
     }
     if (m === 'yawn') {
@@ -253,14 +262,14 @@ build().then(M => {
     if (m === 'land') { const u = 1 - clamp(mt / 0.35, 0, 1); bodyDy = u * 110; kL = u * 30; kR = -u * 30; aL = 35 * u + 9; aR = -35 * u - 9; }
     if (m === 'idle') { const w = Math.sin(t * 0.55); leanA += w * 1.6; lL += w * 1.5; lR += w * 1.5; headRot -= w * 1.2; }   // slow weight shift
     // blend toward the target pose (critically damped) so every state change flows instead of snapping
-    const target = { headRot, headDy, leanA, bodyDy, aL, aR, fL, fR, lL, lR, kL, kR };
+    const target = { headRot, headDy, leanA, bodyDy, aL, aR, fL, fR, lL, lR, kL, kR, liftL, liftR };
     const P = S.pose || (S.pose = { ...target }), V = S.poseV || (S.poseV = {}), fast = m === 'walk' || m === 'dance' || m === 'crouch' || m === 'held' || m === 'wave' || m === 'startle';
     const w0 = fast ? 26 : 13, dtt = S.dt || 0.016;
     for (const key in target) {   // spring-damper per channel
       const v = V[key] || 0, x = P[key], a = w0 * w0 * (target[key] - x) - 2 * w0 * v;
       V[key] = v + a * dtt; P[key] = x + V[key] * dtt;
     }
-    ({ headRot, headDy, leanA, bodyDy, aL, aR, fL, fR, lL, lR, kL, kR } = P);
+    ({ headRot, headDy, leanA, bodyDy, aL, aR, fL, fR, lL, lR, kL, kR, liftL, liftR } = P);
     // hair follow-through: lags behind head turns and body movement
     const hv = (S.x - (S.px || S.x)) / Math.max(1e-3, dtt) / (S.k * 4000); S.px = S.x;
     const hs = S.hairS || (S.hairS = { x: 0, v: 0 }), drive = -(V.headRot || 0) * 0.05 - hv * 6 - (S.vy || 0) * 0.0015;
@@ -272,8 +281,8 @@ build().then(M => {
     rot(M.lean, leanA, 800, 2150);
     tf(M.torso, `translate(800 2190) scale(1 ${(1 + breath * 0.008).toFixed(4)}) translate(-800 -2190)`);
     // limbs
-    const leg = (L, a, kn) => { tf(L.hip, `translate(${L.x} ${L.y})`); tf(L.thigh, `rotate(${a.toFixed(1)})`); tf(L.shin, `rotate(${kn.toFixed(1)} 0 300)`); };
-    leg(M.legL, lL, kL); leg(M.legR, lR, kR);
+    const leg = (L, a, kn, lift) => { tf(L.hip, `translate(${L.x} ${L.y})`); tf(L.thigh, `rotate(${a.toFixed(1)}) scale(1 ${(1 - lift * 0.26).toFixed(3)})`); tf(L.shin, `rotate(${kn.toFixed(1)} 0 300)`); };
+    leg(M.legL, lL, kL, liftL); leg(M.legR, lR, kR, liftR);
     const arm = (A, a, f) => { tf(A.sh, `translate(${A.x} ${A.y + breath * 4}) rotate(${a.toFixed(1)})`); tf(A.fore, `translate(0 330) rotate(${f.toFixed(1)})`); };
     arm(M.armL, aL, fL); arm(M.armR, aR, fR);
     // head + hair

@@ -51,9 +51,9 @@ function paint(P) {
   const cx = 32 + P.dx, by = P.bob;                  // body x, vertical bob (px)
   const hipY = 59 + by, shY = 34 + by, headY = 20 + by + P.headDy, hx = cx + P.headDx;
   // legs (thigh angle a, knee bend k; 0 = straight down)
-  const leg = (side, a, k) => {
-    const hx0 = cx + side * 4, ax = a * Math.PI / 180, kx = (a + k) * Math.PI / 180;
-    const knee = [hx0 + Math.sin(ax) * 15, hipY + Math.cos(ax) * 15], foot = [knee[0] + Math.sin(kx) * 15, knee[1] + Math.cos(kx) * 15];
+  const leg = (side, a, k, lift = 0) => {
+    const hx0 = cx + side * 4, ax = a * Math.PI / 180, kx = (a + k) * Math.PI / 180, th = 15 - lift * 3, sh = 15 - lift * 2;
+    const knee = [hx0 + Math.sin(ax) * th + side * lift, hipY + Math.cos(ax) * th], foot = [knee[0] + Math.sin(kx) * sh, knee[1] + Math.cos(kx) * sh];
     limb(hx0, hipY, knee[0], knee[1], 3.2, 'jean', 'jeanShade'); limb(knee[0], knee[1], foot[0], foot[1], 3, 'jean', 'jeanShade');
     px(knee[0] - 1, knee[1], 'jeanDeep');
     const fx = Math.round(foot[0]), fy = Math.round(foot[1]);
@@ -62,23 +62,23 @@ function paint(P) {
   // back hair (shoulder length, sways)
   const hairBack = () => {
     ell(hx, headY - 1, 13, 13.5, 'hair', 'hairMid', 0.45);
-    for (const side of [-1, 1]) for (let y = 0; y < 22; y++) {
-      const sway = P.sway * (y / 22) ** 1.5, wav = Math.round(Math.sin(y * 0.55 + side) * 1.2);
-      const x0 = hx + side * (9 + y * 0.12) + sway + wav, w = 5 - Math.floor(y / 11);
+    for (const side of [-1, 1]) for (let y = 0; y < 14; y++) {
+      const sway = P.sway * (y / 14) ** 1.5, wav = Math.round(Math.sin(y * 0.6 + side) * 1.1);
+      const x0 = hx + side * (9 + y * 0.1) + sway + wav, w = 4 - Math.floor(y / 8);
       for (let i = 0; i < w; i++) px(x0 + side * i, headY + 3 + y, (i === 1 && y % 5 === 2) ? 'hairHi' : 'hair');
-      if (y > 17) px(x0 + side * w + sway * 0.3, headY + 3 + y - 1, 'hair');   // curled ends
+      if (y > 10) px(x0 + side * w + sway * 0.3, headY + 3 + y - 1, 'hair');   // curled ends
     }
   };
   const arm = (side, a, f, front) => {
     const sx = cx + side * 11, sy = shY + 2, ar = a * Math.PI / 180, fr = (a + f) * Math.PI / 180, sg = side;
     const el = [sx + sg * Math.sin(ar) * 9, sy + Math.cos(ar) * 9], hd = [el[0] + sg * Math.sin(fr) * 9, el[1] + Math.cos(fr) * 9];
     limb(sx, sy, el[0], el[1], 2.4, 'skin', 'skinShade'); limb(el[0], el[1], hd[0], hd[1], 2.2, 'skin', 'skinShade');
-    disc(hd[0], hd[1] + 0.5, 2.4, 'skin'); px(hd[0] + 1, hd[1] + 1, 'skinShade');
+    disc(hd[0], hd[1] + 0.5, 2.3, 'skin'); px(hd[0] + side, hd[1] + 1, 'skinShade'); px(hd[0] - side * 2, hd[1] - 1, 'skin');   // thumb
     // sleeve
     limb(sx, sy - 0.5, sx + sg * Math.sin(ar) * 4.5, sy + Math.cos(ar) * 4.5, 3.4, 'tee', side > 0 ? 'teeShade' : null);
   };
   hairBack();
-  leg(-1, P.lL, P.kL); leg(1, P.lR, P.kR);
+  leg(-1, P.lL, P.kL, P.liftL || 0); leg(1, P.lR, P.kR, P.liftR || 0);
   if (P.armsBehind) { arm(-1, P.aL, P.fL); arm(1, P.aR, P.fR); }
   // torso: tee with soft folds
   for (let y = shY; y <= hipY; y++) {
@@ -150,7 +150,7 @@ function step(dt) {
   if (m === 'dance' && S.mt > 6) set('idle');
   if (m === 'crouch' && S.mt > 0.14) { S.vy = -95; set('air'); }
   if (m === 'land' && S.mt > 0.25) set('idle');
-  if (m === 'walk') { const dx = S.target - S.x; if (Math.abs(dx) < 0.6) { set('wave'); } else { S.face = Math.sign(dx); S.x += clamp(dx, -26 * dt, 26 * dt); if (Math.floor(S.t * 8) % 4 === 0 && Math.random() < 0.3) S.dust.push({ x: S.x - S.face * 3, y: S.H - 5, l: 0 }); } }
+  if (m === 'walk') { const dx = S.target - S.x; if (Math.abs(dx) < 0.6) { set('wave'); } else { S.face = Math.sign(dx); const mv = clamp(dx, -26 * dt, 26 * dt); S.x += mv; S.walkPh = (S.walkPh || 0) + Math.abs(mv) / 9 * Math.PI; if (Math.floor(S.t * 8) % 4 === 0 && Math.random() < 0.3) S.dust.push({ x: S.x - S.face * 3, y: S.H - 5, l: 0 }); } }
   if (S.y < 0 || S.vy < 0) { S.vy += 380 * dt; S.y += S.vy * dt; if (S.y >= 0) { S.y = 0; S.vy = 0; set('land'); for (let i = 0; i < 5; i++) S.dust.push({ x: S.x + (i - 2) * 3, y: S.H - 5, l: 0 }); } }
   S.blink -= dt; if (S.blink < 0) { S.blinkOn = 0.12; S.blink = 2 + Math.random() * 3.5; }
   S.blinkOn -= dt;
@@ -164,8 +164,14 @@ function step(dt) {
 function pose() {
   const m = S.mode, t = S.t, mt = S.mt, P = { dx: 0, bob: 0, headDx: 0, headDy: 0, lL: 0, lR: 0, kL: 0, kR: 0, aL: 8, aR: 8, fL: 6, fR: 6, sway: Math.sin(t * 1.8) * 0.8, eyes: 'open', look: S.look, browUp: 0, mouth: 'line', blush: false, armsBehind: false };
   const breathe = Math.sin(t * 2.4) > 0.6 ? -1 : 0; P.bob = breathe;
-  if (m === 'walk') { const f = Math.floor(t * 9) % 8, ph = f / 8 * Math.PI * 2; P.lL = Math.sin(ph) * 24; P.lR = -P.lL; P.kL = Math.max(0, -Math.sin(ph)) * 30; P.kR = Math.max(0, Math.sin(ph)) * 30; P.aL = 8 - Math.sin(ph) * 22; P.aR = 8 + Math.sin(ph) * 22; P.bob = (f % 4 === 0 || f % 4 === 1) ? 0 : -1; P.sway = -S.face * 2.5; P.headDx = S.face > 0 ? 0 : 0; }
-  if (m === 'wave' || m === 'startle') { P.aR = 155; P.fR = 25 + (Math.floor(mt * 8) % 2) * 26; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; if (m === 'startle') { P.bob = -Math.round(Math.sin(clamp(mt / 0.6, 0, 1) * Math.PI) * 5); P.eyes = 'open'; P.browUp = 1; P.mouth = 'o'; P.aL = 60; } }
+  if (m === 'walk') {
+    const f = Math.floor((S.walkPh || 0) / Math.PI * 4) % 8, ph = f / 8 * Math.PI * 2, d = S.face;
+    const sL = Math.sin(ph), sR = -sL; P.liftL = Math.max(0, sL) * 2.2; P.liftR = Math.max(0, sR) * 2.2;
+    P.lL = d * 3 + (P.liftL ? d * 4 : 0); P.lR = d * 3 + (P.liftR ? d * 4 : 0); P.kL = -P.liftL * d * 8; P.kR = -P.liftR * d * 8;
+    P.aL = 8 + sR * 10; P.aR = 8 + sL * 10; P.fL = 6 + Math.max(0, sR) * 34; P.fR = 6 + Math.max(0, sL) * 34;
+    P.bob = (f % 4 === 1 || f % 4 === 3) ? -1 : 0; P.dx = 0; P.sway = -d * 2 + (f % 4 < 2 ? 0 : 1); P.headDx = (f % 4 === 1) ? d : 0;
+  }
+  if (m === 'wave' || m === 'startle') { P.aR = 150; P.fR = [10, 28, 44, 28][Math.floor(mt * 10) % 4]; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; if (m === 'startle') { P.bob = -Math.round(Math.sin(clamp(mt / 0.6, 0, 1) * Math.PI) * 5); P.eyes = 'open'; P.browUp = 1; P.mouth = 'o'; P.aL = 60; } }
   if (m === 'crouch') { P.bob = 3; P.kL = 40; P.kR = -40; P.lL = -20; P.lR = 20; P.aL = 30; P.aR = 30; }
   if (m === 'air') { P.aL = 150; P.aR = 150; P.fL = -20; P.fR = -20; P.kL = 30; P.kR = -30; P.lL = -12; P.lR = 12; P.eyes = 'happy'; P.mouth = 'smile'; P.sway = 3; }
   if (m === 'land') { P.bob = 2; P.kL = 25; P.kR = -25; P.lL = -12; P.lR = 12; P.aL = 25; P.aR = 25; }

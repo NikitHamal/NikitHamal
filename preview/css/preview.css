@@ -39,7 +39,7 @@ code{background:var(--paper2);padding:2px 6px;border-radius:6px}
 .art .eye{transform-box:view-box;transition:transform .07s ease-in}.art .eye.shut{transform:scaleY(.12)}
 .art .eye.shut>path[fill^="#"],.art .eye.shut>g{opacity:0}
 .art .iris{transition:transform .18s ease-out}
-.art.pencil svg.eyes{filter:grayscale(1) sepia(.12) brightness(.9) contrast(.9);mix-blend-mode:multiply}
+.art.pencil svg.eyes{display:none}
 .art.tilt{transition:transform .25s ease-out;transform-style:preserve-3d;will-change:transform}
 .card .art,.frame .art{cursor:pointer;touch-action:pan-y}
 .card figcaption{cursor:zoom-in}
