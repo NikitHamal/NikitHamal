@@ -9,7 +9,8 @@ h2{font-weight:500;font-size:clamp(28px,4vw,40px);margin:0 0 8px}
 .lede,.note{color:var(--muted);max-width:580px;margin:0 0 26px}
 .hero{display:grid;grid-template-columns:1fr minmax(280px,480px);gap:48px;padding:clamp(20px,5vw,64px) clamp(16px,6vw,96px) 56px;align-items:center;max-width:1280px;margin:0 auto}
 .frame{background:#fff;padding:12px;border-radius:6px;box-shadow:0 30px 60px -28px #5a463455}
-.art{aspect-ratio:4/5;overflow:hidden;background:#fff;position:relative}.art svg,.art img{display:block;width:100%;height:100%}
+.art{aspect-ratio:4/5;overflow:hidden;background:#f6f1e9;position:relative}.art svg,.art img,.art canvas{display:block;width:100%;height:100%}
+.art svg.eyes{position:absolute;inset:0;pointer-events:none;transition:opacity .3s}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .chips button,.btn{font:12px 'JetBrains Mono',monospace;background:none;border:1px solid var(--line);padding:8px 13px;border-radius:99px;cursor:pointer;color:var(--ink)}
 .chips button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}.btn:hover,.chips button:hover{border-color:var(--ink)}
@@ -20,16 +21,8 @@ h2{font-weight:500;font-size:clamp(28px,4vw,40px);margin:0 0 8px}
 .card{margin:0;background:#fff;padding:8px 8px 0;border-radius:6px;box-shadow:0 14px 30px -22px #5a463466;cursor:zoom-in;transition:transform .25s}
 .card:hover{transform:translateY(-3px)}.card.live{cursor:pointer}
 .card figcaption{display:flex;justify-content:space-between;padding:8px 4px 10px;font:11px 'JetBrains Mono',monospace;color:var(--muted)}.card b{color:var(--ink);font-weight:500}
-/* line art: hide every colour layer, keep ink */
-.lineart .fills,.lineart .shades,.lineart .soft,.lineart .bgfill,.lineart rect,.lineart circle[fill="#f6d9a8"]{display:none}
-.lineart .eye>path:first-of-type{fill:#fff}
-/* animated: ink draws in, then colour washes in */
-.drawing .inks path,.drawing .details path{stroke-dasharray:1;stroke-dashoffset:1;animation:ink var(--d,2.2s) cubic-bezier(.5,.1,.3,1) forwards;animation-delay:var(--t,0s)}
-.drawing .fills,.drawing .shades,.drawing .soft,.drawing .bg{opacity:0;animation:wash 1.6s ease forwards;animation-delay:var(--cw,3.2s)}
-.drawing .eye{opacity:0;animation:wash .8s ease forwards;animation-delay:var(--ce,2.4s)}
-@keyframes ink{to{stroke-dashoffset:0}}@keyframes wash{to{opacity:1}}
-.alive .eye{transition:transform .08s ease-in}.alive .eye.shut{transform:scaleY(.08)}
-.alive .iris{transition:transform .2s ease-out}
+.eye{transition:transform .08s ease-in}.eye.shut{transform:scaleY(.08)}
+.iris{transition:transform .2s ease-out}
 .how ol{max-width:660px;padding-left:20px;color:var(--muted)}.how li{margin:6px 0}
 .foot{text-align:center;padding:48px 16px 64px;font:12px 'JetBrains Mono',monospace;color:var(--muted)}
 code{background:var(--paper2);padding:2px 6px;border-radius:6px}
