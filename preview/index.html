@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Preview — painted in code · Nikit Hamal</title>
+<title>Preview: drawn in code · Nikit Hamal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/preview.css">
@@ -14,52 +14,46 @@
 
 <section class="hero">
   <div class="hero-text">
-    <p class="kicker">painted in code</p>
-    <h1>Me, from baby to now, <em>one brushstroke at a time</em>.</h1>
-    <p class="lede">These aren't photos or AI images. A painting algorithm I wrote studied my photos and rebuilt each face as tens of thousands of brushstrokes. Your browser paints every stroke live. Each new age is painted straight over the last, so you watch the face grow up.</p>
-    <div class="chips" id="heroChips"></div>
-    <div class="row"><button class="btn" id="heroAuto">autoplay: on</button><button class="btn" id="heroKind">medium: oil</button><span class="status" id="heroStatus"></span></div>
+    <p class="kicker">drawn in code</p>
+    <h1>Me, from baby to now, <em>drawn line by line</em>.</h1>
+    <p class="lede">Every line here is an SVG path that code wrote. The program measures my face (the shape of the eyes, brows, nose and lips, the jawline, the hairline) and then inks it: contours, strands of hair that follow the way it grows, stubble, flat colour and soft shading, plus Himalayan hills behind. Watch it draw. The eyes follow you.</p>
+    <div class="chips" id="chips"></div>
+    <div class="row"><button class="btn" id="redraw">draw again</button><button class="btn" id="mode">mode: colour</button></div>
   </div>
-  <div class="frame"><canvas id="heroCanvas" width="1040" height="1300"></canvas></div>
+  <div class="frame"><div class="art alive" id="hero"></div></div>
 </section>
 
 <section class="block">
-  <p class="kicker">01 — still</p><h2>Oil portraits</h2>
-  <p class="note">The finished paintings. Click any one to view it large or save it.</p>
-  <div class="grid" id="paintings"></div>
+  <p class="kicker">01 · still</p><h2>Illustrations</h2>
+  <p class="note">The finished drawings. Click one to view it large.</p>
+  <div class="grid" id="colour"></div>
 </section>
 
 <section class="block alt">
-  <p class="kicker">02 — still</p><h2>Graphite studies</h2>
-  <p class="note">The same painter working in monochrome with thin, long strokes, like a pencil and charcoal sketch on warm paper.</p>
-  <div class="grid" id="graphite"></div>
+  <p class="kicker">02 · still</p><h2>Line art</h2>
+  <p class="note">The same drawings with only the ink: outlines, hair strands and stubble.</p>
+  <div class="grid" id="lines"></div>
 </section>
 
 <section class="block">
-  <p class="kicker">03 — animated</p><h2>Time-lapses</h2>
-  <p class="note">Each portrait paints itself and then starts again. Broad strokes come first to block in the shapes, and fine strokes come last for the eyes, lashes and hair.</p>
-  <div class="grid" id="livePaint"></div>
-  <div class="grid gap" id="liveGraphite"></div>
+  <p class="kicker">03 · animated</p><h2>Alive</h2>
+  <p class="note">Each one inks itself, colours in, then blinks and watches your cursor (or finger). Tap one to draw it again.</p>
+  <div class="grid" id="alive"></div>
 </section>
 
 <section class="block alt how">
-  <p class="kicker">04 — how</p><h2>How it's made</h2>
+  <p class="kicker">04 · how</p><h2>How it's drawn</h2>
   <ol>
-    <li>Cut each photo out from its background.</li>
-    <li>Blur the photo at several sizes, from very soft to sharp.</li>
-    <li>Wherever the canvas still differs from the photo, place a stroke. The stroke follows the direction of the hair, skin and fabric, and stops when the colour changes.</li>
-    <li>Go from big brushes to tiny ones, packing all the strokes into a small binary file of numbers.</li>
-    <li>Your browser reads those numbers and paints them onto the canvas.</li>
+    <li>Code finds 478 points on the face (eye corners, lid curves, iris, brows, nostrils, lips, jaw) and splits the picture into hair, skin, clothes and the rest.</li>
+    <li>Each feature is redrawn as smooth Bézier ink lines, with heavier lids, lighter creases and tapered brow hairs.</li>
+    <li>Hair is drawn as hundreds of strands that follow how it flows, spaced so they never clump.</li>
+    <li>The colour is flat, with two-tone cel shading and soft form shadows on the nose, the eye sockets and under the jaw.</li>
+    <li>The backdrop hills are generated too. The result is one SVG made only of paths.</li>
   </ol>
 </section>
+<footer class="foot">drawing program: <code>preview/tools/illustrate.py</code></footer>
 
-<footer class="foot">painter: <code>preview/tools/paint.py</code> · player: <code>preview/js/strokes.js</code></footer>
-
-<div class="lightbox" id="lightbox" hidden>
-  <div class="lb-inner"><canvas id="lbCanvas"></canvas>
-    <div class="lb-bar"><b id="lbTitle"></b><span><button class="btn" id="lbReplay">replay</button><button class="btn" id="lbSave">save png</button><button class="btn" id="lbClose">close</button></span></div></div>
-</div>
-<script src="js/strokes.js"></script>
+<div class="lightbox" id="lb" hidden><div class="lb-inner"><div class="art" id="lbArt"></div><div class="lb-bar"><b id="lbTitle"></b><button class="btn" id="lbClose">close</button></div></div></div>
 <script src="js/preview.js"></script>
 </body>
 </html>

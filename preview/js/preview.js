@@ -1,61 +1,71 @@
 (() => {
 'use strict';
-const STAGES = [
-  { id: 'baby', label: 'Baby' }, { id: 'kid', label: 'Kid' }, { id: 'teen', label: 'Teen' },
-  { id: 'young', label: 'Young' }, { id: 'curls', label: 'Curls' }, { id: 'now', label: 'Now' }];
-const url = (id, kind) => `data/${id}${kind === 'graphite' ? '-graphite' : ''}.bin`;
-const $ = s => document.querySelector(s);
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const visible = (el, fn, th = 0.25) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); fn(); } }, { threshold: th, rootMargin: '200px 0px' }).observe(el);
-
-/* ---- hero: one canvas, each stage painted over the last ---- */
-const hero = $('#heroCanvas'), chips = $('#heroChips'), status = $('#heroStatus'); let cur = 0, run = null, auto = !reduce, timer = 0, kind = 'paint';
-STAGES.forEach((s, i) => { const b = document.createElement('button'); b.textContent = s.label; b.onclick = () => { auto = false; $('#heroAuto').textContent = 'autoplay: off'; go(i); }; chips.appendChild(b); });
-async function go(i) {
-  cur = i; clearTimeout(timer); run && run.stop();
-  [...chips.children].forEach((b, k) => b.classList.toggle('on', k === i));
-  status.textContent = 'painting…';
-  const d = await Strokes.load(url(STAGES[i].id, kind));
-  if (cur !== i) return;
-  if (reduce) { Strokes.draw(hero, d); status.textContent = `${d.total.toLocaleString()} strokes`; return; }
-  run = Strokes.play(hero, d, { duration: 5200, over: true, onDone: () => {
-    status.textContent = `${d.total.toLocaleString()} strokes`;
-    if (auto) timer = setTimeout(() => go((cur + 1) % STAGES.length), 2600);
-  } });
-  STAGES.forEach((s, k) => k > i && k < i + 2 && Strokes.load(url(s.id, kind)));
+const ST = [['baby', 'Baby'], ['kid', 'Kid'], ['teen', 'Teen'], ['young', 'Young'], ['curls', 'Curls'], ['now', 'Now']];
+const $ = s => document.querySelector(s), cache = {};
+// each drawing is stored as a few text parts (art/<id>.<i>.part, listed in art/index.json)
+let manifest;
+const svgText = id => cache[id] || (cache[id] = (manifest = manifest || fetch('art/index.json').then(r => r.json()))
+  .then(m => Promise.all(Array.from({ length: m[id] }, (_, i) => fetch(`art/${id}.${i}.part`).then(r => r.text())))).then(p => p.join('')));
+const svgURL = id => svgText(id).then(t => URL.createObjectURL(new Blob([t], { type: 'image/svg+xml' })));
+let uid = 0;
+// inline an svg, giving its internal ids a unique suffix so many copies can share the page
+async function mount(el, id, cls = '') {
+  const n = ++uid; let t = await svgText(id);
+  t = t.replace(/id="([^"]+)"/g, `id="$1-${n}"`).replace(/url\(#([^)]+)\)/g, `url(#$1-${n})`);
+  el.innerHTML = t; if (cls) el.classList.add(...cls.split(' ')); return el.querySelector('svg');
 }
-$('#heroAuto').onclick = e => { auto = !auto; e.target.textContent = 'autoplay: ' + (auto ? 'on' : 'off'); if (auto) go((cur + 1) % STAGES.length); };
-$('#heroKind').onclick = e => { kind = kind === 'paint' ? 'graphite' : 'paint'; e.target.textContent = kind === 'paint' ? 'medium: oil' : 'medium: graphite'; hero.width = 1; go(cur); };
-visible(hero, () => go(0), 0.1);
+const onView = (el, fn) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); fn(); } }, { rootMargin: '150px 0px' }).observe(el);
 
-/* ---- static galleries ---- */
-function gallery(el, k) {
-  for (const s of STAGES) {
-    const fig = document.createElement('figure'); fig.className = 'card'; const cv = document.createElement('canvas'); cv.width = 520; cv.height = 650;
-    fig.innerHTML = `<figcaption><b>${s.label}</b><span>${k === 'graphite' ? 'graphite' : 'oil'}</span></figcaption>`; fig.prepend(cv); el.appendChild(fig);
-    visible(fig, () => Strokes.load(url(s.id, k)).then(d => { Strokes.draw(cv, d, 1.5); fig.classList.add('ready'); fig.querySelector('span').textContent = `${d.total.toLocaleString()} strokes`; }));
-    fig.onclick = () => openBig(s, k);
+// ---- draw-in animation: ink in reading order (outlines → features → hair), colour after
+function animate(svg, total = 3.2) {
+  const art = svg.parentElement; art.classList.remove('drawing'); void art.offsetWidth;
+  const paths = [...svg.querySelectorAll('.inks path, .details path')], n = paths.length;
+  paths.forEach((p, i) => { p.setAttribute('pathLength', '1'); p.style.setProperty('--t', (i / n * total).toFixed(3) + 's'); p.style.setProperty('--d', (0.5 + Math.random() * 0.6).toFixed(2) + 's'); });
+  art.style.setProperty('--ce', (total * 0.55).toFixed(2) + 's'); art.style.setProperty('--cw', (total + 0.4).toFixed(2) + 's');
+  art.classList.add('drawing');
+}
+// ---- life: blink + gaze
+const living = new Set();
+function live(art) {
+  living.add(art);
+  const blink = () => { if (!art.isConnected) return; const e = art.querySelectorAll('.eye'); e.forEach(x => x.classList.add('shut')); setTimeout(() => e.forEach(x => x.classList.remove('shut')), 120); setTimeout(blink, 2200 + Math.random() * 4000); };
+  setTimeout(blink, 4500 + Math.random() * 2000);
+}
+let px = innerWidth / 2, py = innerHeight / 3;
+function gaze() {
+  for (const art of living) {
+    const r = art.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) continue;
+    const dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height * 0.32), m = Math.hypot(dx, dy) || 1, k = Math.min(1, m / 300), sc = 800 / r.width;
+    const tx = dx / m * 5 * k, ty = dy / m * 3 * k;
+    art.querySelectorAll('.iris').forEach(i => (i.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px)`));
   }
 }
-gallery($('#paintings'), 'paint'); gallery($('#graphite'), 'graphite');
+addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; gaze(); }, { passive: true });
+addEventListener('scroll', gaze, { passive: true });
 
-/* ---- animated: each one paints itself, loops ---- */
-for (const s of STAGES) for (const k of ['paint', 'graphite']) {
-  const fig = document.createElement('figure'); fig.className = 'card live'; const cv = document.createElement('canvas'); cv.width = 520; cv.height = 650;
-  fig.innerHTML = `<figcaption><b>${s.label}</b><span>${k === 'graphite' ? 'graphite' : 'oil'} · time-lapse</span></figcaption>`; fig.prepend(cv);
-  (k === 'paint' ? $('#livePaint') : $('#liveGraphite')).appendChild(fig);
-  let r; const loop = d => { r = Strokes.play(cv, d, { duration: 7000 + Math.random() * 2000, scale: 1.5, onDone: () => setTimeout(() => loop(d), 3500) }); };
-  visible(fig, () => Strokes.load(url(s.id, k)).then(d => (reduce ? Strokes.draw(cv, d, 1.5) : loop(d))));
+// ---- hero
+const hero = $('#hero'); let cur = 'now', lineMode = false;
+async function show(id) {
+  cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id));
+  const svg = await mount(hero, id); hero.classList.toggle('lineart', lineMode); animate(svg); live(hero); gaze();
 }
+ST.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => show(id); $('#chips').appendChild(b); });
+$('#redraw').onclick = () => show(cur);
+$('#mode').onclick = e => { lineMode = !lineMode; e.target.textContent = 'mode: ' + (lineMode ? 'line art' : 'colour'); hero.classList.toggle('lineart', lineMode); };
+onView(hero, () => show('now'));
 
-/* ---- lightbox ---- */
-const lb = $('#lightbox'), lbc = $('#lbCanvas');
-async function openBig(s, k) {
-  lb.hidden = false; $('#lbTitle').textContent = `${s.label} · ${k === 'graphite' ? 'graphite' : 'oil'}`;
-  const d = await Strokes.load(url(s.id, k)); Strokes.draw(lbc, d, 2.5);
-  $('#lbSave').onclick = () => { const a = document.createElement('a'); a.download = `nikit-${s.id}-${k}.png`; a.href = lbc.toDataURL('image/png'); a.click(); };
-  $('#lbReplay').onclick = () => Strokes.play(lbc, d, { duration: 6000, scale: 2.5 });
+// ---- galleries
+function card(grid, id, label, sub, fill) {
+  const f = document.createElement('figure'); f.className = 'card'; f.innerHTML = `<div class="art"></div><figcaption><b>${label}</b><span>${sub}</span></figcaption>`;
+  grid.appendChild(f); onView(f, () => fill(f.firstChild)); return f;
 }
-lb.onclick = e => { if (e.target === lb || e.target.id === 'lbClose') lb.hidden = true; };
-addEventListener('keydown', e => { if (e.key === 'Escape') lb.hidden = true; });
+for (const [id, label] of ST) {
+  card($('#colour'), id, label, 'illustration', async a => (a.innerHTML = `<img src="${await svgURL(id)}" alt="Illustration of Nikit: ${label}">`)).onclick = () => big(id, label, false);
+  card($('#lines'), id, label, 'line art', a => mount(a, id, 'lineart')).onclick = () => big(id, label, true);
+  const c = card($('#alive'), id, label, 'animated', async a => { const s = await mount(a, id, 'alive'); animate(s); live(a); });
+  c.classList.add('live'); c.onclick = () => { const s = c.querySelector('svg'); s && animate(s); };
+}
+async function big(id, label, line) { $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${line ? 'line art' : 'illustration'}`; const a = $('#lbArt'); a.className = 'art' + (line ? ' lineart' : ''); await mount(a, id); }
+$('#lb').onclick = e => { if (e.target.id === 'lb' || e.target.id === 'lbClose') $('#lb').hidden = true; };
+addEventListener('keydown', e => e.key === 'Escape' && ($('#lb').hidden = true));
 })();
