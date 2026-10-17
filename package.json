@@ -1,0 +1,11 @@
+{
+  "name": "nikit-portfolio",
+  "private": true,
+  "scripts": {
+    "test": "node tests/hanomi.cjs",
+    "check": "node --check hanomi/game.js"
+  },
+  "devDependencies": {
+    "playwright": "1.61.1"
+  }
+}

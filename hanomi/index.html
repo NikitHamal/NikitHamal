@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#193e35" />
+    <link rel="icon" type="image/svg+xml" href="../assets/sakura-0.svg" />
+    <title>Hanomi — A little world of your own</title>
+    <meta
+      name="description"
+      content="A living pixel-art world. Build a home, tend a garden, befriend a dog, and find your own way in Hanomi."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas
+      id="world"
+      aria-label="Hanomi pixel art world"
+      tabindex="0"
+    ></canvas>
+    <div class="vignette"></div>
+    <main id="home">
+      <a class="back" href="/">← Nikit's corner</a>
+      <div class="home-content">
+        <div class="eyebrow"><span></span> A LITTLE WORLD OF YOUR OWN</div>
+        <h1>hanomi<span>花の実</span></h1>
+        <p class="intro">
+          Somewhere to get a little lost.<br />Somewhere to put down roots.
+        </p>
+        <div class="home-actions">
+          <button class="primary" id="new">
+            Begin a new story <span>↗</span></button
+          ><button class="secondary" id="continue" hidden>
+            Continue your journey <span>→</span></button
+          ><button class="text-button" id="worlds">
+            Your worlds <span id="save-count">0</span>
+          </button>
+        </div>
+        <div class="home-foot">
+          <i class="leaf"></i> Made for wandering. No rush, no right way.
+        </div>
+      </div>
+      <div class="scene-label">
+        <span>THE HANOMI VALLEY</span>
+        <p>A quiet beginning, endless possibilities.</p>
+      </div>
+      <div class="home-bottom">
+        <span>A pixel world by Nikit</span
+        ><button id="home-help">How to wander ↗</button
+        ><span>Built with little things & a lot of heart</span>
+      </div>
+    </main>
+    <div id="hud" hidden>
+      <div class="top-left">
+        <div class="day-card">
+          <span id="weather">☀</span>
+          <div>
+            <strong id="day">Day 1</strong
+            ><small id="time">Spring · 8:00 am</small>
+          </div>
+        </div>
+        <div class="vitals">
+          <span title="Health">♥ <b id="health">100</b></span
+          ><span title="Nourishment">◈ <b id="food">100</b></span>
+        </div>
+      </div>
+      <div class="top-right">
+        <button id="map-button" title="Map (M)" aria-label="Open map">⌖</button
+        ><button
+          id="journal-button"
+          title="Field journal (J)"
+          aria-label="Open journal"
+        >
+          ☷</button
+        ><button id="pause-button" title="Pause (Escape)" aria-label="Pause">
+          Ⅱ
+        </button>
+      </div>
+      <div id="region">HANOMI VILLAGE</div>
+      <div id="toast" role="status"></div>
+      <div id="prompt"></div>
+      <div class="bottom-bar">
+        <button id="bag-button" aria-label="Open backpack (B)">
+          ▣<small>B</small>
+        </button>
+        <div id="hotbar"></div>
+        <button id="craft-button" aria-label="Open crafting (C)">
+          ⚒<small>C</small>
+        </button>
+      </div>
+      <div class="key-hint">
+        WASD move <span>·</span> E interact <span>·</span> SPACE use
+        <span>·</span> 1–6 tools
+      </div>
+      <div id="touch">
+        <div id="stick"><i></i></div>
+        <button id="touch-e">E</button><button id="touch-use">Use</button>
+      </div>
+    </div>
+    <dialog id="panel">
+      <button class="close" id="close-panel" aria-label="Close dialog">
+        ×
+      </button>
+      <div id="panel-body"></div>
+    </dialog>
+    <div id="pond-overlay" hidden>
+      <button id="close-pond">← Back to the valley</button
+      ><iframe title="Nikit's interactive koi pond" id="pond-frame"></iframe>
+      <div class="pond-note">A moment of stillness. Click to feed the koi.</div>
+    </div>
+    <script src="../js/pixel-dog.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
