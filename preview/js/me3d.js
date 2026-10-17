@@ -89,6 +89,7 @@ function parse(buf) {
 const S = { id: 'now', full: false, yaw: 0, pitch: 0.04, vyaw: 0, drag: null, look: { x: 0, y: 0 }, lookT: { x: 0, y: 0 }, t: 0, vb: null, ib: null, count: 0, itype: 0, frame: { top: 1, bottom: -1 } };
 let job = 0, want = 'now'; const meshes = {};
 async function load(id, full) {
+  if (!gl && !initGL()) return;
   const my = ++job; S.full = full; host.classList.add('loading');
   if (S.id !== id || !S.count) {
     const m = meshes[id] || (meshes[id] = blob(`${id}/figure.me3d`).then(b => b.arrayBuffer()).then(parse));
@@ -97,7 +98,7 @@ async function load(id, full) {
     S.vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, S.vb); gl.bufferData(gl.ARRAY_BUFFER, M.v, gl.STATIC_DRAW);
     S.ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, S.ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, M.idx, gl.STATIC_DRAW);
     S.count = M.idx.length; S.itype = M.isz === 4 ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT; S.M = M; S.id = id;
-    const img = await createImageBitmap(await blob(`${id}/paint.webp`));
+    const img = await createImageBitmap(await blob(`${id}/paintlarge.webp`));
     if (!S.tex) S.tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, S.tex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img); img.close();
     for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
@@ -105,7 +106,7 @@ async function load(id, full) {
     meshes[id] = Promise.resolve(M);
   }
   const M = S.M;
-  S.frame = full ? { top: M.crown + 0.05, bottom: M.ground - 0.05 } : { top: M.crown + 0.08, bottom: M.halfBottom };
+  S.frame = { top: M.crown + 0.06, bottom: M.ground + 0.02 };
   host.classList.remove('loading');
   const st = document.getElementById('me3dStatus'); if (st) st.textContent = `${(S.count / 3).toLocaleString()} triangles`;
 }
@@ -123,7 +124,7 @@ function frame() {
   // camera position for rim light
   const eye = [Math.sin(-S.yaw) * dist, mid, Math.cos(S.yaw) * dist];
   // head: turn toward the pointer around the neck
-  const nk = -0.62, Hm = m4.mul(m4.tr(0, nk, 0), m4.mul(m4.ry(S.look.x * 0.42), m4.mul(m4.rx(-S.look.y * 0.22), m4.tr(0, -nk, 0))));
+  const nk = -0.55, Hm = m4.mul(m4.tr(0, nk, 0), m4.mul(m4.ry(S.look.x * 0.42), m4.mul(m4.rx(-S.look.y * 0.22), m4.tr(0, -nk, 0))));
   gl.useProgram(prog);
   gl.uniformMatrix4fv(loc.P, false, P); gl.uniformMatrix4fv(loc.V, false, V); gl.uniformMatrix4fv(loc.M, false, m4.tr(0, 0, 0)); gl.uniformMatrix4fv(loc.Hm, false, Hm);
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, S.tex);
@@ -157,10 +158,10 @@ const ids = [['baby', 'Baby'], ['kid', 'Kid'], ['teen', 'Teen'], ['young', 'Youn
 const chips = document.getElementById('me3dChips');
 ids.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => { mark(id); want = id; S.count = S.id === id ? S.count : 0; load(id, S.full); }; chips.appendChild(b); });
 const mark = id => [...chips.children].forEach(b => b.classList.toggle('on', b.dataset.id === id));
-const fb = document.getElementById('me3dBody'); fb.onclick = () => { const full = !S.full; fb.textContent = full ? 'view: full body' : 'view: half body'; load(want, full); };
+const fb = document.getElementById('me3dBody'); if (fb) fb.onclick = () => { const full = !S.full; fb.textContent = full ? 'view: full body' : 'view: half body'; load(want, full); };
 new IntersectionObserver(e => {
   vis = e[0].isIntersecting;
-  if (vis && !gl) { if (!initGL()) { host.textContent = 'WebGL is not available in this browser.'; return; } mark('now'); load('now', false); }
+  if (vis && !S.count && !job) { if (!gl && !initGL()) { host.textContent = 'WebGL is not available in this browser.'; return; } mark('now'); load('now', false); }
   if (vis) { last = performance.now(); requestAnimationFrame(tick); }
 }, { rootMargin: '100px 0px' }).observe(host);
 })();
