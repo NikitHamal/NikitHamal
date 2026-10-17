@@ -15,6 +15,7 @@ let manifest; const files = {};
 const getBlob = (f, type) => files[f] || (files[f] = (manifest = manifest || fetch('art/index.json').then(r => r.json()))
   .then(m => Promise.all(Array.from({ length: m[f] }, (_, i) => fetch(`art/${f}.${i}`).then(r => r.arrayBuffer())))).then(p => new Blob(p, { type })));
 const urls = {};
+Living.setLoader(getBlob);
 const imgURL = (id, v) => urls[id + v] || (urls[id + v] = getBlob(`${id}/${v}.webp`, 'image/webp').then(b => URL.createObjectURL(b)));
 const bitmap = async (id, v, w, h) => createImageBitmap(await getBlob(`${id}/${v}.webp`, 'image/webp'), { resizeWidth: w, resizeHeight: h, resizeQuality: 'high' });
 
@@ -125,7 +126,10 @@ function Drawing(el, mode = () => 'paint') {
 const heroEl = $('#hero'); heroEl.classList.add('tilt'); interactive(heroEl);
 let cur = 'now', medium = 'paint';
 const hero = Drawing(heroEl, () => medium);
-function show(id, animate = true) { cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); hero.play(id, 3.8, s => ($('#status').textContent = s), animate); }
+function show(id, animate = true) {
+  cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); Living.detach(heroEl);
+  hero.play(id, 3.8, s => { $('#status').textContent = s; if (/strokes$/.test(s) && medium === 'paint' && cur === id) Living.attach(heroEl, id, 'paintlarge_ne', { fps: 60 }); }, animate);
+}
 ST.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => show(id); $('#chips').appendChild(b); });
 $('#redraw').onclick = () => show(cur);
 $('#mode').onclick = e => { medium = medium === 'paint' ? 'pencil' : 'paint'; e.target.textContent = 'medium: ' + medium; show(cur); };
@@ -137,24 +141,18 @@ function card(grid, label, sub) {
   grid.appendChild(f); return f;
 }
 const onView = (el, fn) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); fn(); } }, { rootMargin: '150px 0px' }).observe(el);
-async function still(a, id, v, alt) { a.innerHTML = `<img src="${await imgURL(id, v)}" alt="${alt}">`; await mountEyes(a, id); a.querySelector('svg.eyes').style.opacity = 1; interactive(a); askLook(); }
+async function still(a, id, v, alt) { a.innerHTML = `<img src="${await imgURL(id, v)}" alt="${alt}">`; if (/paint/.test(v)) { await mountEyes(a, id); a.querySelector('svg.eyes').style.opacity = 1; interactive(a); Living.attach(a, id, v); } askLook(); }
 for (const [id, label] of ST) {
   const pf = card($('#paints'), label, 'painted'); onView(pf, () => still(pf.firstChild, id, 'paint_ne', `Painted portrait of Nikit: ${label}`));
   pf.querySelector('figcaption').onclick = () => big(id, label, true);
   const f = card($('#stills'), label, 'graphite'); f.firstChild.classList.add('pencil'); onView(f, () => still(f.firstChild, id, 'still', `Pencil portrait of Nikit: ${label}`));
   f.querySelector('figcaption').onclick = () => big(id, label, false);
-  const c = card($('#alive'), label, 'tap to redraw'); c.classList.add('live'); const a = c.firstChild; let d = null, off = 0;
-  new IntersectionObserver(e => {
-    if (e[0].isIntersecting) { clearTimeout(off); if (d) return; d = Drawing(a); d.play(id, 3.2); }
-    else if (d) off = setTimeout(() => { d.stop(); d = null; live.delete(a); still(a, id, 'paint_ne', ''); }, 1500);
-  }, { rootMargin: '60px 0px' }).observe(c);
-  c.onclick = () => { if (!d) d = Drawing(a); d.play(id, 3.2); };
 }
 async function big(id, label, paint) {
   $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${paint ? 'painted' : 'graphite'}`;
   const a = $('#lbArt'); a.className = 'art paper tilt' + (paint ? '' : ' pencil'); await still(a, id, paint ? 'paintlarge_ne' : 'large', '');
 }
-const closeLb = () => { $('#lb').hidden = true; live.delete($('#lbArt')); $('#lbArt').innerHTML = ''; };
+const closeLb = () => { $('#lb').hidden = true; live.delete($('#lbArt')); Living.detach($('#lbArt')); $('#lbArt').innerHTML = ''; };
 $('#lb').onclick = e => { if (e.target.id === 'lb' || e.target.id === 'lbClose') closeLb(); };
 addEventListener('keydown', e => e.key === 'Escape' && closeLb());
 })();

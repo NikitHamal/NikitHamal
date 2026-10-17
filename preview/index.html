@@ -25,46 +25,32 @@
 
 <section class="block">
   <p class="kicker">01 · still</p><h2>Painted portraits</h2>
-  <p class="note">Colour in code: skin painted in soft tones taken from each photo's real light, ink for the eyes, brows, lips and hair, glazed over the pencil underdrawing. They're alive: they watch your cursor and blink, and tapping a face makes it wink. Click a name to view it large.</p>
+  <p class="note">Colour in code: skin painted in soft tones taken from each photo's real light, ink for the eyes, brows, lips and hair, glazed over the pencil underdrawing. They're alive. Their hair moves in a soft breeze, and you can brush it with your cursor or finger. They breathe, turn their head and eyes toward you, blink, and wink when you tap. Click a name to view it large.</p>
   <div class="grid" id="paints"></div>
 </section>
 
 <section class="block alt">
   <p class="kicker">02 · still</p><h2>Pencil portraits</h2>
-  <p class="note">The same faces in graphite. Also alive. Click a name to view it large.</p>
+  <p class="note">The same faces in graphite. Click a name to view it large.</p>
   <div class="grid" id="stills"></div>
 </section>
 
-<section class="block">
-  <p class="kicker">03 · animated</p><h2>Time-lapses</h2>
-  <p class="note">Each one draws itself in about four seconds: pencil first, then the paint washes in. Then it comes alive. Tap one to draw it again.</p>
-  <div class="grid" id="alive"></div>
-</section>
-
 <section class="block mascot-block">
-  <p class="kicker">04 · mini me</p><h2>The mascot, all grown up</h2>
+  <p class="kicker">03 · mini me</p><h2>The mascot, all grown up</h2>
   <p class="note">My site mascot, now with a whole body, drawn and animated in code. Click anywhere on the floor and he walks over. Tap him to make him hop, and drag him to pick him up. Leave him alone and he'll look around, stretch, sit down and doze off.</p>
   <div class="mascot-stage" id="mascotStage"></div>
   <div class="row mascot-ctl"><button class="btn" data-mascot="wave">wave</button><button class="btn" data-mascot="hop">hop</button><button class="btn" data-mascot="dance">dance</button><button class="btn" data-mascot="sit">nap</button></div>
 </section>
 
 <section class="block alt pixel-block">
-  <p class="kicker">05 · 8-bit me</p><h2>Pixel me</h2>
+  <p class="kicker">04 · 8-bit me</p><h2>Pixel me</h2>
   <p class="note">The same me in pixel art: full body, painted pixel by pixel in code every frame. Click the floor and he walks over. Tap him to make him hop. Leave him alone and he glances around, yawns, sits down and dozes off.</p>
   <div class="pixel-stage" id="pixelStage"></div>
   <div class="row mascot-ctl"><button class="btn" data-pixel="wave">wave</button><button class="btn" data-pixel="hop">hop</button><button class="btn" data-pixel="dance">dance</button><button class="btn" data-pixel="sit">nap</button></div>
 </section>
 
-<section class="block me3d-block">
-  <p class="kicker">06 · in 3D</p><h2>3D busts</h2>
-  <p class="note">A clay bust for every age, sculpted in code from the photo. The skull carries my real face shape, measured in 3D. The hair follows the photo's exact outline and drapes over the head, with strands carved from the photo's own hair texture. The neck and shoulders come from my real silhouette, and the bust is cut and set on a turned plinth, with the oil painting laid over the front. Drag to turn it. Its head follows your cursor, and it breathes and slowly looks around when you leave it alone.</p>
-  <div class="chips" id="me3dChips"></div>
-  <div class="row"><span class="status" id="me3dStatus"></span></div>
-  <div class="me3d" id="me3d"></div>
-</section>
-
 <section class="block alt how">
-  <p class="kicker">07 · how</p><h2>How it's drawn</h2>
+  <p class="kicker">05 · how</p><h2>How it's drawn</h2>
   <ol>
     <li>Code finds the face (478 points) and separates hair, skin and clothes. Tilted heads are levelled, and props like the garland are painted out.</li>
     <li>The photo's light is turned into target pencil values, with skin kept airy, hair dark and features crisp.</li>
@@ -76,9 +62,9 @@
 <footer class="foot">drawing program: <code>preview/tools/pencil.py</code></footer>
 
 <div class="lightbox" id="lb" hidden><div class="lb-inner"><div class="art" id="lbArt"></div><div class="lb-bar"><b id="lbTitle"></b><button class="btn" id="lbClose">close</button></div></div></div>
+<script src="js/living.js"></script>
 <script src="js/preview.js"></script>
 <script src="js/mascot.js" defer></script>
 <script src="js/pixelme.js" defer></script>
-<script src="js/me3d.js" defer></script>
 </body>
 </html>
