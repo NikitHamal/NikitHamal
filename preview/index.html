@@ -55,7 +55,15 @@
   <div class="row mascot-ctl"><button class="btn" data-pixel="wave">wave</button><button class="btn" data-pixel="hop">hop</button><button class="btn" data-pixel="dance">dance</button><button class="btn" data-pixel="sit">nap</button></div>
 </section>
 
-<section class="block how">
+<section class="block me3d-block">
+  <p class="kicker">06 · in 3D</p><h2>3D me</h2>
+  <p class="note">A small 3D figurine for every age, as a half-body bust or a full body, rendered by a tiny WebGL engine written for this page. The face is the real 3D shape measured from the photo, painted with the portrait. Drag to turn it. It follows your cursor with its head and breathes, and when left alone it slowly looks around.</p>
+  <div class="chips" id="me3dChips"></div>
+  <div class="row"><button class="btn" id="me3dBody">view: half body</button><span class="status" id="me3dStatus"></span></div>
+  <div class="me3d" id="me3d"></div>
+</section>
+
+<section class="block alt how">
   <p class="kicker">07 · how</p><h2>How it's drawn</h2>
   <ol>
     <li>Code finds the face (478 points) and separates hair, skin and clothes. Tilted heads are levelled, and props like the garland are painted out.</li>
@@ -71,5 +79,6 @@
 <script src="js/preview.js"></script>
 <script src="js/mascot.js" defer></script>
 <script src="js/pixelme.js" defer></script>
+<script src="js/me3d.js" defer></script>
 </body>
 </html>
