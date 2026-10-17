@@ -31,3 +31,5 @@ code{background:var(--paper2);padding:2px 6px;border-radius:6px}
 .lb-bar{display:flex;justify-content:space-between;align-items:center;padding-top:10px;font:12px 'JetBrains Mono',monospace}
 @media (max-width:820px){.hero{grid-template-columns:1fr}.frame{max-width:480px;width:100%;justify-self:center}.grid{grid-template-columns:repeat(2,1fr);gap:10px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.drawing *{opacity:1!important;stroke-dashoffset:0!important}}
+.art.paper{background:#f6f3ec}
+.status{font:12px 'JetBrains Mono',monospace;color:var(--muted);margin-left:6px;align-self:center}
