@@ -34,14 +34,14 @@ function strokes(id) {
 function Drawing(el) {
   const cv = document.createElement('canvas'); el.innerHTML = ''; el.appendChild(cv); const ctx = cv.getContext('2d');
   let job = 0;
-  async function play(id, dur = 9, onState) {
+  async function play(id, dur = 9, onState, paint = false) {
     const my = ++job, w = Math.round((el.clientWidth || 300) * DPR); cv.width = w; cv.height = Math.round(w * 1.25);
-    const [S, smudge, fin] = await Promise.all([strokes(id), bitmap(id, 'smudge', w, cv.height), bitmap(id, w > 640 ? 'large' : 'still', w, cv.height)]);
+    const [S, smudge, fin] = await Promise.all([strokes(id), bitmap(id, 'smudge', w, cv.height), bitmap(id, paint ? (w > 640 ? 'paintlarge' : 'paint') : (w > 640 ? 'large' : 'still'), w, cv.height)]);
     if (my !== job) { smudge.close(); fin.close(); return; }
     const k = w / S.W, v = S.v; ctx.lineCap = ctx.lineJoin = 'round';
     if (reduce) { ctx.drawImage(fin, 0, 0); smudge.close(); fin.close(); return; }
     ctx.fillStyle = PAPER; ctx.fillRect(0, 0, w, cv.height);
-    const t0 = performance.now(), fadeIn = 0.9, fadeOut = 0.8; let next = 0, smudged = 0;
+    const t0 = performance.now(), fadeIn = 0.9, fadeOut = paint ? 2.2 : 0.8; let next = 0, smudged = 0;
     const stroke = i => {
       let o = S.off[i]; const p = S.pass[v.getUint8(o)] || [1, 0.1], n = v.getUint8(o + 1); let x = v.getUint16(o + 2, true), y = v.getUint16(o + 4, true); o += 6;
       ctx.globalAlpha = p[1]; ctx.lineWidth = p[0] * k; ctx.beginPath(); ctx.moveTo(x * k, y * k);
@@ -57,7 +57,7 @@ function Drawing(el) {
       const f = Math.min(1, Math.max(0, (t - fadeIn * 0.6) / dur)), upto = Math.floor(S.n * (1 - Math.pow(1 - f, 1.7)));
       while (next < upto) stroke(next++);
       if (f < 1) return requestAnimationFrame(frame);
-      const g = Math.min(1, (t - fadeIn * 0.6 - dur) / fadeOut); ctx.globalAlpha = g * 0.35 + (g >= 1 ? 1 : 0); ctx.drawImage(fin, 0, 0);
+      const g = Math.min(1, (t - fadeIn * 0.6 - dur) / fadeOut); ctx.globalAlpha = paint ? g * 0.09 : g * 0.35 + (g >= 1 ? 1 : 0); ctx.drawImage(fin, 0, 0); // paint washes in gradually
       if (g < 1) return requestAnimationFrame(frame);
       ctx.globalAlpha = 1; ctx.drawImage(fin, 0, 0); smudge.close(); fin.close(); onState && onState(`${S.n.toLocaleString()} strokes`);
     })(t0);
@@ -66,8 +66,9 @@ function Drawing(el) {
 }
 
 // ---- hero
-const hero = Drawing($('#hero')); let cur = 'now';
-function show(id) { cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); hero.play(id, 10, s => ($('#status').textContent = s)); }
+const hero = Drawing($('#hero')); let cur = 'now', paint = true;
+function show(id) { cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); hero.play(id, 10, s => ($('#status').textContent = s), paint); }
+$('#mode').onclick = e => { paint = !paint; e.target.textContent = 'medium: ' + (paint ? 'paint' : 'pencil'); show(cur); };
 ST.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => show(id); $('#chips').appendChild(b); });
 $('#redraw').onclick = () => show(cur);
 new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); show('now'); } }).observe($('#hero'));
@@ -79,18 +80,21 @@ function card(grid, label, sub) {
 }
 const onView = (el, fn) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); fn(); } }, { rootMargin: '150px 0px' }).observe(el);
 for (const [id, label] of ST) {
+  const pf = card($('#paints'), label, 'painted');
+  onView(pf, async () => (pf.firstChild.innerHTML = `<img src="${await imgURL(id, 'paint')}" alt="Painted portrait of Nikit: ${label}">`));
+  pf.onclick = () => big(id, label, true);
   const f = card($('#stills'), label, 'graphite');
   onView(f, async () => (f.firstChild.innerHTML = `<img src="${await imgURL(id, 'still')}" alt="Pencil portrait of Nikit: ${label}">`));
-  f.onclick = () => big(id, label);
+  f.onclick = () => big(id, label, false);
   const c = card($('#alive'), label, 'time-lapse'); c.classList.add('live'); const a = c.firstChild; let d = null, off = 0;
   // a canvas only while the card is on screen; the finished still otherwise
   new IntersectionObserver(async e => {
-    if (e[0].isIntersecting) { clearTimeout(off); if (d) return; d = Drawing(a); d.play(id, 8); }
-    else if (d) off = setTimeout(async () => { d.stop(); d = null; a.innerHTML = `<img src="${await imgURL(id, 'still')}" alt="">`; }, 1500);
+    if (e[0].isIntersecting) { clearTimeout(off); if (d) return; d = Drawing(a); d.play(id, 8, null, true); }
+    else if (d) off = setTimeout(async () => { d.stop(); d = null; a.innerHTML = `<img src="${await imgURL(id, 'paint')}" alt="">`; }, 1500);
   }, { rootMargin: '60px 0px' }).observe(c);
-  c.onclick = () => d && d.play(id, 8);
+  c.onclick = () => d && d.play(id, 8, null, true);
 }
-async function big(id, label) { $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · graphite`; $('#lbArt').innerHTML = `<img src="${await imgURL(id, 'large')}" alt="">`; }
+async function big(id, label, paint) { $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${paint ? 'painted' : 'graphite'}`; $('#lbArt').innerHTML = `<img src="${await imgURL(id, paint ? 'paintlarge' : 'large')}" alt="">`; }
 const closeLb = () => { $('#lb').hidden = true; $('#lbArt').innerHTML = ''; };
 $('#lb').onclick = e => { if (e.target.id === 'lb' || e.target.id === 'lbClose') closeLb(); };
 addEventListener('keydown', e => e.key === 'Escape' && closeLb());
