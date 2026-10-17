@@ -31,17 +31,54 @@ function strokes(id) {
   }));
 }
 
-function Drawing(el) {
+// live eyes: the eye groups from the colour drawing, layered over an eye-less portrait
+const eyeSvg = {};
+const eyesFor = id => eyeSvg[id] || (eyeSvg[id] = getBlob(`${id}/eyes.svg`).then(b => b.text()));
+let uid = 0;
+async function mountEyes(el, id) {
+  let ov = el.querySelector('svg.eyes');
+  if (!ov) { ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ov.setAttribute('class', 'eyes'); ov.setAttribute('viewBox', '0 0 800 1000'); ov.setAttribute('aria-hidden', 'true'); el.appendChild(ov); }
+  const n = ++uid; ov.innerHTML = (await eyesFor(id)).replace(/id="([^"]+)"/g, `id="$1-${n}"`).replace(/url\(#([^)]+)\)/g, `url(#$1-${n})`);
+  live.add(el); return ov;
+}
+
+// ---- interaction: gaze, blink, wink on tap, gentle tilt toward the pointer
+const live = new Set();
+let px = innerWidth / 2, py = innerHeight / 3, pq = false;
+function look() {
+  pq = false;
+  for (const el of live) {
+    if (!el.isConnected) { live.delete(el); continue; }
+    const r = el.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) continue;
+    const dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height * 0.36), m = Math.hypot(dx, dy) || 1, k = Math.min(1, m / (r.width * 1.2));
+    const ix = dx / m * 6 * k, iy = dy / m * 3.5 * k;
+    el.querySelectorAll('.iris').forEach(i => (i.style.transform = `translate(${ix.toFixed(1)}px,${iy.toFixed(1)}px)`));
+    if (el.classList.contains('tilt')) el.style.transform = `perspective(900px) rotateY(${(dx / innerWidth * 3).toFixed(2)}deg) rotateX(${(-dy / innerHeight * 2).toFixed(2)}deg)`;
+  }
+}
+const askLook = () => { if (!pq) { pq = true; requestAnimationFrame(look); } };
+addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; askLook(); }, { passive: true });
+addEventListener('scroll', askLook, { passive: true });
+function blink(el, which = '.eye') { const e = el.querySelectorAll(which); e.forEach(x => x.classList.add('shut')); setTimeout(() => e.forEach(x => x.classList.remove('shut')), which === '.eye' ? 130 : 320); }
+(function blinker() { for (const el of live) { const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < 0.35) { blink(el); if (Math.random() < 0.15) setTimeout(() => blink(el), 260); } } setTimeout(blinker, 1400 + Math.random() * 1600); })();
+function interactive(el) {
+  el.addEventListener('pointerdown', e => { const r = el.getBoundingClientRect(); blink(el, (e.clientX - r.left) < r.width / 2 ? '.eye-l' : '.eye-r'); }); // wink
+}
+
+function Drawing(el, mode = () => 'paint') {
   const cv = document.createElement('canvas'); el.innerHTML = ''; el.appendChild(cv); const ctx = cv.getContext('2d');
   let job = 0;
-  async function play(id, dur = 9, onState, paint = false) {
-    const my = ++job, w = Math.round((el.clientWidth || 300) * DPR); cv.width = w; cv.height = Math.round(w * 1.25);
-    const [S, smudge, fin] = await Promise.all([strokes(id), bitmap(id, 'smudge', w, cv.height), bitmap(id, paint ? (w > 640 ? 'paintlarge' : 'paint') : (w > 640 ? 'large' : 'still'), w, cv.height)]);
+  async function play(id, dur = 3.6, onState, animate = true) {
+    const my = ++job, paint = mode() === 'paint', w = Math.round((el.clientWidth || 300) * DPR); cv.width = w; cv.height = Math.round(w * 1.25);
+    el.classList.toggle('pencil', !paint); const ov = el.querySelector('svg.eyes'); if (ov) ov.style.opacity = 0;
+    const finName = paint ? (w > 640 ? 'paintlarge_ne' : 'paint_ne') : (w > 640 ? 'large_ne' : 'still_ne');
+    const [S, smudge, fin] = await Promise.all([strokes(id), bitmap(id, 'smudge', w, cv.height), bitmap(id, finName, w, cv.height), mountEyes(el, id)]);
     if (my !== job) { smudge.close(); fin.close(); return; }
+    const showEyes = () => { const o = el.querySelector('svg.eyes'); if (o) o.style.opacity = 1; askLook(); };
     const k = w / S.W, v = S.v; ctx.lineCap = ctx.lineJoin = 'round';
-    if (reduce) { ctx.drawImage(fin, 0, 0); smudge.close(); fin.close(); return; }
-    ctx.fillStyle = PAPER; ctx.fillRect(0, 0, w, cv.height);
-    const t0 = performance.now(), fadeIn = 0.9, fadeOut = paint ? 2.2 : 0.8; let next = 0, smudged = 0;
+    if (reduce || !animate) { ctx.drawImage(fin, 0, 0); smudge.close(); fin.close(); showEyes(); onState && onState(`${S.n.toLocaleString()} strokes`); return; }
+    ctx.globalAlpha = 1; ctx.fillStyle = PAPER; ctx.fillRect(0, 0, w, cv.height);
+    const t0 = performance.now(), fadeIn = 0.35, wash = paint ? 1.0 : 0.45; let next = 0, smudged = 0;
     const stroke = i => {
       let o = S.off[i]; const p = S.pass[v.getUint8(o)] || [1, 0.1], n = v.getUint8(o + 1); let x = v.getUint16(o + 2, true), y = v.getUint16(o + 4, true); o += 6;
       ctx.globalAlpha = p[1]; ctx.lineWidth = p[0] * k; ctx.beginPath(); ctx.moveTo(x * k, y * k);
@@ -49,15 +86,18 @@ function Drawing(el) {
       ctx.stroke();
     };
     ctx.strokeStyle = GRAPHITE; onState && onState('drawing…');
+    let washed = 0;
     (function frame(now) {
       if (my !== job) { smudge.close(); fin.close(); return; }
       const t = (now - t0) / 1000;
       if (smudged < 1) { const a = Math.min(1, t / fadeIn); ctx.globalAlpha = a - smudged; ctx.drawImage(smudge, 0, 0); smudged = a; }
-      // ease-out pacing: loose hatching flies by, the fine work slows down
-      const f = Math.min(1, Math.max(0, (t - fadeIn * 0.6) / dur)), upto = Math.floor(S.n * (1 - Math.pow(1 - f, 1.7)));
+      // eased pace: the loose hatching races, the fine strokes land last
+      const f = Math.min(1, Math.max(0, (t - fadeIn * 0.5) / dur)), upto = Math.floor(S.n * (1 - Math.pow(1 - f, 2)));
       while (next < upto) stroke(next++);
       if (f < 1) return requestAnimationFrame(frame);
-      const g = Math.min(1, (t - fadeIn * 0.6 - dur) / fadeOut); ctx.globalAlpha = paint ? g * 0.09 : g * 0.35 + (g >= 1 ? 1 : 0); ctx.drawImage(fin, 0, 0); // paint washes in gradually
+      const g = Math.min(1, (t - fadeIn * 0.5 - dur) / wash);
+      ctx.globalAlpha = (g - washed) / (1 - washed + 1e-6); ctx.drawImage(fin, 0, 0); washed = g;   // exact alpha compositing toward the finished art
+      if (g > 0.6) showEyes();
       if (g < 1) return requestAnimationFrame(frame);
       ctx.globalAlpha = 1; ctx.drawImage(fin, 0, 0); smudge.close(); fin.close(); onState && onState(`${S.n.toLocaleString()} strokes`);
     })(t0);
@@ -66,36 +106,39 @@ function Drawing(el) {
 }
 
 // ---- hero
-const hero = Drawing($('#hero')); let cur = 'now', paint = true;
-function show(id) { cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); hero.play(id, 10, s => ($('#status').textContent = s), paint); }
-$('#mode').onclick = e => { paint = !paint; e.target.textContent = 'medium: ' + (paint ? 'paint' : 'pencil'); show(cur); };
+const heroEl = $('#hero'); heroEl.classList.add('tilt'); interactive(heroEl);
+let cur = 'now', medium = 'paint';
+const hero = Drawing(heroEl, () => medium);
+function show(id, animate = true) { cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); hero.play(id, 3.8, s => ($('#status').textContent = s), animate); }
 ST.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => show(id); $('#chips').appendChild(b); });
 $('#redraw').onclick = () => show(cur);
-new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); show('now'); } }).observe($('#hero'));
+$('#mode').onclick = e => { medium = medium === 'paint' ? 'pencil' : 'paint'; e.target.textContent = 'medium: ' + medium; show(cur); };
+new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); show('now'); } }).observe(heroEl);
 
-// ---- galleries
+// ---- galleries: every card is a live, interactive portrait (static image + live eyes)
 function card(grid, label, sub) {
   const f = document.createElement('figure'); f.className = 'card'; f.innerHTML = `<div class="art paper"></div><figcaption><b>${label}</b><span>${sub}</span></figcaption>`;
   grid.appendChild(f); return f;
 }
 const onView = (el, fn) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); fn(); } }, { rootMargin: '150px 0px' }).observe(el);
+async function still(a, id, v, alt) { a.innerHTML = `<img src="${await imgURL(id, v)}" alt="${alt}">`; await mountEyes(a, id); a.querySelector('svg.eyes').style.opacity = 1; interactive(a); askLook(); }
 for (const [id, label] of ST) {
-  const pf = card($('#paints'), label, 'painted');
-  onView(pf, async () => (pf.firstChild.innerHTML = `<img src="${await imgURL(id, 'paint')}" alt="Painted portrait of Nikit: ${label}">`));
-  pf.onclick = () => big(id, label, true);
-  const f = card($('#stills'), label, 'graphite');
-  onView(f, async () => (f.firstChild.innerHTML = `<img src="${await imgURL(id, 'still')}" alt="Pencil portrait of Nikit: ${label}">`));
-  f.onclick = () => big(id, label, false);
-  const c = card($('#alive'), label, 'time-lapse'); c.classList.add('live'); const a = c.firstChild; let d = null, off = 0;
-  // a canvas only while the card is on screen; the finished still otherwise
-  new IntersectionObserver(async e => {
-    if (e[0].isIntersecting) { clearTimeout(off); if (d) return; d = Drawing(a); d.play(id, 8, null, true); }
-    else if (d) off = setTimeout(async () => { d.stop(); d = null; a.innerHTML = `<img src="${await imgURL(id, 'paint')}" alt="">`; }, 1500);
+  const pf = card($('#paints'), label, 'painted'); onView(pf, () => still(pf.firstChild, id, 'paint_ne', `Painted portrait of Nikit: ${label}`));
+  pf.querySelector('figcaption').onclick = () => big(id, label, true);
+  const f = card($('#stills'), label, 'graphite'); f.firstChild.classList.add('pencil'); onView(f, () => still(f.firstChild, id, 'still_ne', `Pencil portrait of Nikit: ${label}`));
+  f.querySelector('figcaption').onclick = () => big(id, label, false);
+  const c = card($('#alive'), label, 'tap to redraw'); c.classList.add('live'); const a = c.firstChild; let d = null, off = 0;
+  new IntersectionObserver(e => {
+    if (e[0].isIntersecting) { clearTimeout(off); if (d) return; d = Drawing(a); d.play(id, 3.2); }
+    else if (d) off = setTimeout(() => { d.stop(); d = null; live.delete(a); still(a, id, 'paint_ne', ''); }, 1500);
   }, { rootMargin: '60px 0px' }).observe(c);
-  c.onclick = () => d && d.play(id, 8, null, true);
+  c.onclick = () => { if (!d) d = Drawing(a); d.play(id, 3.2); };
 }
-async function big(id, label, paint) { $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${paint ? 'painted' : 'graphite'}`; $('#lbArt').innerHTML = `<img src="${await imgURL(id, paint ? 'paintlarge' : 'large')}" alt="">`; }
-const closeLb = () => { $('#lb').hidden = true; $('#lbArt').innerHTML = ''; };
+async function big(id, label, paint) {
+  $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${paint ? 'painted' : 'graphite'}`;
+  const a = $('#lbArt'); a.className = 'art paper tilt' + (paint ? '' : ' pencil'); await still(a, id, paint ? 'paintlarge_ne' : 'large_ne', '');
+}
+const closeLb = () => { $('#lb').hidden = true; live.delete($('#lbArt')); $('#lbArt').innerHTML = ''; };
 $('#lb').onclick = e => { if (e.target.id === 'lb' || e.target.id === 'lbClose') closeLb(); };
 addEventListener('keydown', e => e.key === 'Escape' && closeLb());
 })();

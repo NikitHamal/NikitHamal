@@ -33,3 +33,14 @@ code{background:var(--paper2);padding:2px 6px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.drawing *{opacity:1!important;stroke-dashoffset:0!important}}
 .art.paper{background:#f6f3ec}
 .status{font:12px 'JetBrains Mono',monospace;color:var(--muted);margin-left:6px;align-self:center}
+
+/* live eyes over the portrait */
+.art svg.eyes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .35s}
+.art .eye{transform-box:view-box;transition:transform .07s ease-in}.art .eye.shut{transform:scaleY(.12)}
+.art .eye.shut>path[fill^="#"],.art .eye.shut>g{opacity:0}
+.art .iris{transition:transform .18s ease-out}
+.art.pencil svg.eyes{filter:grayscale(1) sepia(.12) brightness(.9) contrast(.9);mix-blend-mode:multiply}
+.art.tilt{transition:transform .25s ease-out;transform-style:preserve-3d;will-change:transform}
+.card .art,.frame .art{cursor:pointer;touch-action:pan-y}
+.card figcaption{cursor:zoom-in}
+.art .eye.shut path{vector-effect:non-scaling-stroke;stroke-width:2px}
