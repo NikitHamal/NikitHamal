@@ -1,16 +1,14 @@
 /*!
- * Pixel me — a full-body pixel-art Nikit living in a little scene with the portfolio's own pixel art:
- * the <pixel-dog> rottie (drawn from its rig, js/pixel-dog.js) and a sakura tree.
- * The face is a symmetric 30×32 pixel portrait built from my painting (tools/pixelhead.py), the tree is
- * painted at the same pixel size (tools/pixeltree.py); the body is painted
- * pixel by pixel every frame from a pose rig. He walks, waves, hops, dances, pets the dog, sits under
- * the sakura and naps there with the dog curled up beside him (pixel Zzz); the dog follows him around.
+ * Pixel me — two small animated scenes with a full-body pixel-art Nikit.
+ *   • Me & my dog: the homepage rottie (drawn from the <pixel-dog> rig, js/pixel-dog.js). I pet it,
+ *     and throw a ball that it chases, picks up, brings back and drops at my feet.
+ *   • Under the sakura: I sit against a pixel cherry tree (tools/pixeltree.py) watching petals fall,
+ *     get drowsy, nod off; petals settle on my hair; tap to wake me or shake the tree.
+ * The face is a symmetric 30×32 pixel portrait built from my painting (tools/pixelhead.py) and the
+ * body uses the same skin colours; the body is painted pixel by pixel each frame from a pose.
  */
 (() => {
 'use strict';
-const stage = document.getElementById('pixelStage');
-if (!stage) return;
-const cv = document.createElement('canvas'); stage.appendChild(cv); const out = cv.getContext('2d');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v, lerp = (a, b, t) => a + (b - a) * t;
 
@@ -31,6 +29,7 @@ let HEAD = null, HINFO = null;
 Promise.all([fetch('art/pixelhead.json').then(r => r.json()), new Promise(res => { const im = new Image(); im.onload = () => res(im); im.src = 'art/pixelhead.png'; })]).then(([info, im]) => {
   const c = document.createElement('canvas'); c.width = info.w; c.height = info.h; const x = c.getContext('2d'); x.drawImage(im, 0, 0);
   HEAD = x.getImageData(0, 0, info.w, info.h).data; HINFO = info;
+  RGB.skin = info.skin; RGB.skinShade = info.skinShade; RGB.skinDeep = info.skinShade.map(v => Math.round(v * 0.8));   // body = face skin
 });
 
 // ---- sprite buffer
@@ -133,200 +132,220 @@ function paint(P) {
   outline();
 }
 
-// ---- stage, state, input
-const T = { x: 0 };   // the sakura tree
-const S = { x: 0, target: null, face: 1, mode: 'idle', mt: 0, t: 0, y: 0, vy: 0, last: performance.now(), lastInput: performance.now(), blink: 2, blinkOn: 0, look: 0, ptr: null, zs: [], dust: [], hearts: [], after: null, scale: 4, W: 0, H: 0 };
-function layout() { const r = stage.getBoundingClientRect(); S.scale = r.width < 520 ? 2 : 3; S.W = Math.floor(r.width / S.scale); S.H = Math.floor(r.height / S.scale); cv.width = S.W; cv.height = S.H; cv.style.width = S.W * S.scale + 'px'; cv.style.height = S.H * S.scale + 'px'; if (!S.x) S.x = S.W * 0.36; T.x = Math.round(S.W * 0.74); }
-layout(); addEventListener('resize', layout);
-const set = m => { S.mode = m; S.mt = 0; };
-const loc = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / S.scale, y: (e.clientY - r.top) / S.scale }; };
-const onHim = p => Math.abs(p.x - S.x) < 14 && p.y > S.H - 6 - GY + 4 + S.y && p.y < S.H - 4;
-function wake() { S.lastInput = performance.now(); if (S.mode === 'sleep') set('startle'); else if (S.mode === 'glance' || S.mode === 'yawn') set('idle'); }
-stage.addEventListener('pointermove', e => { S.ptr = loc(e); wake(); });
-stage.addEventListener('pointerleave', () => (S.ptr = null));
-stage.addEventListener('pointerdown', e => {
-  const p = loc(e); wake(); const gy = S.H - 6;
-  if (onHim(p)) hop();
-  else if (D && Math.abs(p.x - D.x) < 16 && p.y > gy - 34) go('pet');
-  else if (Math.abs(p.x - T.x) < 60 && p.y < gy - 60) { pokeTree(); go('tree'); }
-  else { S.after = null; S.target = clamp(p.x, 14, S.W - 14); set('walk'); }
-});
-// walk somewhere, then do something
-function go(what) {
-  S.lastInput = performance.now();
-  if (what === 'pet' && D) { const side = S.x < D.x ? -1 : 1; S.target = clamp(D.x + side * 38, 16, S.W - 16); S.after = 'pet'; D.wait = true; }
-  else if (what === 'tree' || what === 'nap') { S.target = T.x - 2; S.after = what === 'nap' ? 'nap' : 'sit'; }
-  else return set(what);
-  if (Math.abs(S.target - S.x) < 0.8) arrive(); else set('walk');
+// ---------------------------------------------------------------- shared bits
+const ME_TMP = document.createElement('canvas'); ME_TMP.width = SW; ME_TMP.height = SH; const meCtx = ME_TMP.getContext('2d'), meImg = new ImageData(SW, SH);
+function drawMe(ctx, x, gy, P, lift = 0) { paint(P); meImg.data.set(buf); meCtx.putImageData(meImg, 0, 0); ctx.drawImage(ME_TMP, Math.round(x - SW / 2), Math.round(gy + 1 - GY - lift)); }
+function basePose(t) {
+  return { dx: 0, bob: Math.sin(t * 2.4) > 0.6 ? -1 : 0, headDx: 0, headDy: 0, lL: 0, lR: 0, kL: 0, kR: 0, aL: 8, aR: 8, fL: 6, fR: 6,
+    liftL: 0, liftR: 0, sway: Math.sin(t * 1.8) * 0.8, eyes: 'open', look: 0, browUp: 0, mouth: 'line', blush: false, armsBehind: false };
 }
-function arrive() {
-  const a = S.after; S.after = null;
-  if (a === 'pet') { set('pet'); if (D) D.face = S.x < D.x ? -1 : 1; S.face = -D.face; }
-  else if (a === 'sit') set('sit'); else if (a === 'nap') { set('sit'); S.mt = 2.9; } else set('wave');
-}
-document.querySelectorAll('[data-pixel]').forEach(b => b.addEventListener('click', () => { S.lastInput = performance.now(); const a = b.dataset.pixel; a === 'hop' ? hop() : go(a); }));
-function hop() { if (S.mode === 'crouch' || S.y < 0) return; set('crouch'); }
-
-function step(dt) {
-  S.t += dt; S.mt += dt; const idle = (performance.now() - S.lastInput) / 1000, m = S.mode;
-  if (m === 'idle' && idle > 5 && S.mt > 2.5) set('glance');
-  if (m === 'glance' && S.mt > 3) set(idle > 10 ? 'yawn' : 'idle');
-  if (m === 'yawn' && S.mt > 2.4) { if (idle > 13) go('tree'); else set('idle'); }   // sleepy: off to the sakura
-  if (m === 'sit' && S.mt > 6) set('sleep');
-  if (m === 'pet' && S.mt > 4.5) { set('idle'); if (D) D.wait = false; if (D) D.happy = 1.5; }
-  if (m === 'pet' && Math.random() < dt * 2.2) S.hearts.push({ x: (D ? D.x : S.x) + (Math.random() - 0.5) * 8, y: S.H - 6 - 40, l: 0 });
-  if (m === 'startle' && S.mt > 0.6) set('wave');
-  if (m === 'wave' && S.mt > 2) set('idle');
-  if (m === 'dance' && S.mt > 6) set('idle');
-  if (m === 'crouch' && S.mt > 0.14) { S.vy = -95; set('air'); }
-  if (m === 'land' && S.mt > 0.25) set('idle');
-  if (m === 'walk') { const dx = S.target - S.x; if (Math.abs(dx) < 0.6) { arrive(); } else { S.face = Math.sign(dx); const mv = clamp(dx, -26 * dt, 26 * dt); S.x += mv; S.walkPh = (S.walkPh || 0) + Math.abs(mv) / 9 * Math.PI; if (Math.floor(S.t * 8) % 4 === 0 && Math.random() < 0.3) S.dust.push({ x: S.x - S.face * 3, y: S.H - 5, l: 0 }); } }
-  if (S.y < 0 || S.vy < 0) { S.vy += 380 * dt; S.y += S.vy * dt; if (S.y >= 0) { S.y = 0; S.vy = 0; set('land'); for (let i = 0; i < 5; i++) S.dust.push({ x: S.x + (i - 2) * 3, y: S.H - 5, l: 0 }); } }
-  S.blink -= dt; if (S.blink < 0) { S.blinkOn = 0.12; S.blink = 2 + Math.random() * 3.5; }
-  S.blinkOn -= dt;
-  let lk = 0; if (S.ptr) lk = clamp((S.ptr.x - S.x) / 30, -1, 1); if (m === 'glance') lk = Math.sin(S.mt * 2.2) > 0 ? 1 : -1; if (m === 'walk') lk = S.face;
-  S.look = lerp(S.look, lk, 1 - Math.pow(0.001, dt));
-  if (m === 'sleep' && Math.random() < dt * 0.9) S.zs.push({ x: S.x + 10, y: S.H - 8 - 66, l: 0 });
-  S.zs.forEach(z => { z.l += dt; z.y -= 6 * dt; z.x += Math.sin(z.l * 3) * 4 * dt; }); S.zs = S.zs.filter(z => z.l < 2.4);
-  S.dust.forEach(d => { d.l += dt; }); S.dust = S.dust.filter(d => d.l < 0.4);
-  S.hearts.forEach(h => { h.l += dt; h.y -= 9 * dt; h.x += Math.sin(h.l * 4) * 3 * dt; }); S.hearts = S.hearts.filter(h => h.l < 1.6);
-  stepDog(dt); stepTree(dt);
-}
-
-function pose() {
-  const m = S.mode, t = S.t, mt = S.mt, P = { dx: 0, bob: 0, headDx: 0, headDy: 0, lL: 0, lR: 0, kL: 0, kR: 0, aL: 8, aR: 8, fL: 6, fR: 6, sway: Math.sin(t * 1.8) * 0.8, eyes: 'open', look: S.look, browUp: 0, mouth: 'line', blush: false, armsBehind: false };
-  const breathe = Math.sin(t * 2.4) > 0.6 ? -1 : 0; P.bob = breathe;
-  if (m === 'walk') {
-    const f = Math.floor((S.walkPh || 0) / Math.PI * 4) % 8, ph = f / 8 * Math.PI * 2, d = S.face;
-    const sL = Math.sin(ph), sR = -sL; P.liftL = Math.max(0, sL) * 2.2; P.liftR = Math.max(0, sR) * 2.2;
-    P.lL = d * 3 + (P.liftL ? d * 4 : 0); P.lR = d * 3 + (P.liftR ? d * 4 : 0); P.kL = -P.liftL * d * 8; P.kR = -P.liftR * d * 8;
-    P.aL = 8 + sR * 10; P.aR = 8 + sL * 10; P.fL = 6 + Math.max(0, sR) * 34; P.fR = 6 + Math.max(0, sL) * 34;
-    P.bob = (f % 4 === 1 || f % 4 === 3) ? -1 : 0; P.dx = 0; P.sway = -d * 2 + (f % 4 < 2 ? 0 : 1); P.headDx = (f % 4 === 1) ? d : 0;
-  }
-  if (m === 'wave' || m === 'startle') { P.aR = 150; P.fR = [10, 28, 44, 28][Math.floor(mt * 10) % 4]; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; if (m === 'startle') { P.bob = -Math.round(Math.sin(clamp(mt / 0.6, 0, 1) * Math.PI) * 5); P.eyes = 'open'; P.browUp = 1; P.mouth = 'o'; P.aL = 60; } }
-  if (m === 'crouch') { P.bob = 3; P.kL = 40; P.kR = -40; P.lL = -20; P.lR = 20; P.aL = 30; P.aR = 30; }
-  if (m === 'air') { P.aL = 150; P.aR = 150; P.fL = -20; P.fR = -20; P.kL = 30; P.kR = -30; P.lL = -12; P.lR = 12; P.eyes = 'happy'; P.mouth = 'smile'; P.sway = 3; }
-  if (m === 'land') { P.bob = 2; P.kL = 25; P.kR = -25; P.lL = -12; P.lR = 12; P.aL = 25; P.aR = 25; }
-  if (m === 'yawn') { const u = Math.sin(clamp(mt / 2.4, 0, 1) * Math.PI); P.aL = 8 + u * 160; P.aR = 8 + u * 160; P.fL = 0; P.fR = 0; P.eyes = u > 0.4 ? 'closed' : 'open'; P.mouth = u > 0.4 ? 'o' : 'line'; P.bob = -Math.round(u * 2); P.armsBehind = u > 0.5; }
-  if (m === 'sit' || m === 'sleep') { P.bob = 15; P.lL = 84; P.lR = -84; P.kL = -150; P.kR = 150; P.aL = 18; P.aR = 18; P.fL = -40; P.fR = -40; if (m === 'sleep') { P.eyes = 'closed'; P.headDy = 1; P.headDx = 1; P.sway = 1.5; P.bob = 15 + (Math.sin(t * 1.4) > 0.3 ? 0 : 1); } else P.eyes = mt > 1.8 ? 'sleepy' : 'open'; }
-  if (m === 'dance') { const f = Math.floor(t * 6) % 4; P.bob = f % 2 ? -2 : 0; P.dx = f < 2 ? -1 : 1; P.aL = f % 2 ? 150 : 110; P.aR = f % 2 ? 110 : 150; P.fL = -30; P.fR = -30; P.lL = f < 2 ? -10 : 6; P.lR = f < 2 ? -6 : 10; P.kL = f === 1 ? 30 : 0; P.kR = f === 3 ? -30 : 0; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; P.sway = f < 2 ? -3 : 3; }
-  if (m === 'pet') {
-    const st = Math.sin(mt * 5.5), side = D && D.x > S.x ? 1 : -1;
-    P.bob = 15; P.lL = -42; P.kL = 42; P.lR = 42; P.kR = -42; P.liftL = 3; P.liftR = 3;   // squatting down to the dog
-    if (side > 0) { P.aR = 66 + st * 5; P.fR = 30 + st * 14; P.aL = 20; P.fL = -30; } else { P.aL = 66 + st * 5; P.fL = 30 + st * 14; P.aR = 20; P.fR = -30; }   // stroking the head; other hand on the knee
-    P.eyes = mt > 0.6 ? 'happy' : 'open'; P.mouth = 'smile'; P.blush = true; P.look = side; P.headDx = side;
-  }
-  if (m === 'glance') P.browUp = Math.sin(mt * 2.2) > 0.95 ? 1 : 0;
-  if (S.blinkOn > 0 && P.eyes === 'open') P.eyes = 'closed';
-  if (S.ptr && onHim(S.ptr) && (m === 'idle' || m === 'glance')) { P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
-  return P;
-}
-
-// ---- the dog: the portfolio's own <pixel-dog> rottie, drawn from its rig (js/pixel-dog.js)
-let D = null;
-function dogInit() {
-  const C = customElements.get('pixel-dog'); if (!C || !C.rig) return;
-  const R = C.rig, V = Object.assign({}, R.BREEDS.rottie); V.m = R.PATTERNS[V.pattern] || {};
-  const c = document.createElement('canvas'); c.width = R.DW; c.height = R.H;
-  D = { R, V, pal: R.buildPal(V), L: R.mk(R.DW, R.H), tmp: new Uint8Array(R.DW * R.H), c, ctx: c.getContext('2d'), img: new ImageData(R.DW, R.H),
-    x: S.x + 28, face: -1, mode: 'sit', mt: 0, ph: 0, wait: false, happy: 0, blink: 3 };
-  D.u32 = new Uint32Array(D.img.data.buffer);
-}
-customElements.whenDefined('pixel-dog').then(dogInit);
-function stepDog(dt) {
-  if (!D) return; if (D.wait && S.mode !== 'pet' && S.after !== 'pet') D.wait = false; D.mt += dt; D.happy = Math.max(0, D.happy - dt); D.blink -= dt; if (D.blink < -0.15) D.blink = 2 + Math.random() * 4;
-  const m = S.mode, atTree = (m === 'sit' || m === 'sleep') && Math.abs(S.x - (T.x - 2)) < 2;
-  const tx = D.wait ? D.x : atTree ? T.x + 26 : S.x + (D.x >= S.x ? 42 : -42);
-  const dx = tx - D.x;
-  if (Math.abs(dx) > (D.mode === 'walk' ? 1 : 7)) {          // trot after me
-    const mv = clamp(dx, -34 * dt, 34 * dt); D.x += mv; D.face = Math.sign(dx); D.ph += Math.abs(mv) / 6;
-    if (D.mode !== 'walk') { D.mode = 'walk'; D.mt = 0; }
-  } else {
-    const want = atTree ? (m === 'sleep' ? 'sleep' : 'lie') : (D.mt > 9 && m === 'idle' ? 'lie' : 'sit');
-    if (D.mode === 'walk') { D.mode = 'sit'; D.mt = 0; }
-    else if (D.mode !== want && (want !== 'lie' || D.mt > 1.2)) { D.mode = want; D.mt = 0; }
-    if (D.mode !== 'sleep') D.face = S.x > D.x ? 1 : -1;      // keeps an eye on me
-  }
-}
-function dogPose() {
-  const { R } = D, Q = R.poses, t = S.t, joy = S.mode === 'pet' || D.happy > 0;
-  let P;
-  if (D.mode === 'walk') { P = R.cp(Q.STAND); R.gait(P, D.ph, 3.4, 2.6, R.WALK_PH); P.tl[2] += Math.sin(t * 9) * 0.25; }
-  else if (D.mode === 'lie') { P = R.cp(Q.LIE); P.tl[2] += Math.sin(t * 2) * 0.1; }
-  else if (D.mode === 'sleep') P = R.cp(Q.SLEEP);
-  else { P = R.cp(Q.SIT); P.tl[2] += Math.sin(t * (joy ? 13 : 3)) * (joy ? 0.35 : 0.1); }
-  if (joy && D.mode === 'sit') { P.eye = 'happy'; P.blush = 1; P.mouth = 'pant'; P.hd[1] += S.mode === 'pet' ? 1 + (Math.sin(S.mt * 5.5) > 0 ? 1 : 0) : 0; }
-  else if ((S.mode === 'dance' || S.mode === 'air') && D.mode === 'sit') { P.mouth = 'pant'; P.eye = 'happy'; }
-  else if (D.blink < 0 && D.mode !== 'sleep') P.eye = 'blink';
-  return P;
-}
-function drawDog(gy) {
-  if (!D) return; const { R } = D;
-  R.drawDog(D.L, dogPose(), D.V); R.outline(D.L, D.tmp);
-  const b = D.L.b; for (let i = 0; i < b.length; i++) D.u32[i] = b[i] ? D.pal[b[i]] : 0;
-  D.ctx.putImageData(D.img, 0, 0);
-  out.save(); out.translate(Math.round(D.x), gy + 1 - R.G); if (D.face < 0) out.scale(-1, 1); out.drawImage(D.c, -R.X0, 0); out.restore();
-  if (D.mode === 'sleep' && Math.random() < 0.012) S.zs.push({ x: D.x + D.face * 10, y: gy - 22, l: 0.6 });
-}
-
-// ---- the sakura: a pixel tree painted at my pixel size (tools/pixeltree.py), swaying, petals falling
-let TR = null;
-Promise.all([fetch('art/tree/tree.json').then(r => r.json()), ...['trunk', 'back', 'front'].map(n => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.src = `art/tree/${n}.png`; }))])
-  .then(([info, trunk, back, front]) => { TR = { info, trunk, back, front, petals: [], ground: [], shake: 0, sv: 0 }; for (let i = 0; i < 26; i++) TR.ground.push({ x: (Math.random() - 0.5) * 120, c: Math.random() < 0.5 ? 0 : 1 }); });
-const PET_C = ['#f19fb6', '#fbc8d4', '#dc7598'];
-function stepTree(dt) {
-  if (!TR) return; const I = TR.info;
-  TR.sv += (-TR.shake * 60 - TR.sv * 6) * dt; TR.shake += TR.sv * dt;                       // springy shake when poked
-  const wind = Math.sin(S.t * 0.4) * 6 + Math.sin(S.t * 1.3) * 3;
-  if (Math.random() < dt * (1.6 + Math.abs(TR.sv) * 0.5) && TR.petals.length < 40) TR.petals.push({ x: T.x + (Math.random() - 0.5) * 130, y: S.H - 6 - (I.gy - I.crown[1]) + (Math.random() - 0.3) * 50, vx: 0, vy: 6 + Math.random() * 6, ph: Math.random() * 6, c: (Math.random() * 3) | 0, l: 0 });
-  for (const p of TR.petals) { p.l += dt; p.ph += dt * 3; p.x += (wind + Math.sin(p.ph) * 10) * dt; p.y += p.vy * dt; }
-  TR.petals = TR.petals.filter(p => { if (p.y >= S.H - 6) { if (TR.ground.length < 70) TR.ground.push({ x: p.x - T.x, c: p.c % 2 }); return false; } return p.x > -5 && p.x < S.W + 5; });
-}
-function pokeTree() { if (!TR) return; TR.sv += 9 * (Math.random() < 0.5 ? 1 : -1); for (let i = 0; i < 16; i++) TR.petals.push({ x: T.x + (Math.random() - 0.5) * 120, y: S.H - 6 - 110 + Math.random() * 60, vx: 0, vy: 8 + Math.random() * 8, ph: Math.random() * 6, c: (Math.random() * 3) | 0, l: 0 }); }
-function drawTree(gy) {
-  if (!TR) return; const I = TR.info, x0 = Math.round(T.x - I.cx), y0 = gy + 1 - I.gy;
-  out.fillStyle = 'rgba(40,60,30,.22)'; for (let i = -62; i <= 62; i++) { const h = Math.round(2.4 * Math.sqrt(1 - (i / 63) ** 2)); out.fillRect(T.x + i, gy + 1, 1, h); }   // canopy shadow on the grass
-  const sway = k => Math.round(Math.sin(S.t * 0.9 + k) * 0.8 + Math.sin(S.t * 0.37) * 0.5 + TR.shake * (1 + k));
-  out.drawImage(TR.back, x0 + sway(0), y0); out.drawImage(TR.trunk, x0, y0); out.drawImage(TR.front, x0 + sway(0.7), y0 + (Math.abs(TR.shake) > 1 ? 1 : 0));
-}
-function drawPetals(gy) {
-  if (!TR) return;
-  for (const g of TR.ground) { out.fillStyle = PET_C[g.c]; out.fillRect(Math.round(T.x + g.x), gy + 1 + (g.c & 1), 1, 1); }
-  for (const p of TR.petals) { out.fillStyle = PET_C[p.c]; const flip = Math.sin(p.ph) > 0; out.fillRect(Math.round(p.x), Math.round(p.y), flip ? 2 : 1, flip ? 1 : 2); }
-}
-
-// ---- render: ground, tree, dog, me, particles
-const img = new ImageData(SW, SH), tmp = document.createElement('canvas'); tmp.width = SW; tmp.height = SH; const tctx = tmp.getContext('2d');
-const HEART = ['.x.x.', 'xxxxx', 'xxxxx', '.xxx.', '..x..'];
-function render() {
-  out.imageSmoothingEnabled = false; out.clearRect(0, 0, S.W, S.H);
-  const gy = S.H - 6;
-  drawTree(gy);
-  // grass band (hides the floating island's underside and gives everyone a floor)
+const sitPose = (P, t) => { P.bob = 22; P.lL = 84; P.lR = -84; P.kL = -150; P.kR = 150; P.aL = 18; P.aR = 18; P.fL = -40; P.fR = -40; return P; };
+function grass(ctx, W, H, gy) {
   const G = ['#6c9a48', '#58863c', '#4a7634', '#40692e', '#385e2a', '#33552a'];
-  for (let y = gy + 1, i = 0; y < S.H; y++, i++) { out.fillStyle = G[Math.min(i, G.length - 1)]; out.fillRect(0, y, S.W, 1); }
-  out.fillStyle = '#86b25a'; for (let x = (S.W * 7) % 5; x < S.W; x += 5) out.fillRect(x, gy, 1, 1);
-  const lift = clamp(-S.y / 20, 0, 1), sw = Math.round(14 * (1 - lift * 0.5) * (S.mode === 'sit' || S.mode === 'sleep' ? 1.3 : 1));
-  out.fillStyle = 'rgba(30,40,20,.25)'; out.fillRect(Math.round(S.x - sw / 2), gy + 1, sw, 1);
-  drawPetals(gy);
-  drawDog(gy);
-  paint(pose()); img.data.set(buf); tctx.putImageData(img, 0, 0);
-  out.drawImage(tmp, Math.round(S.x - SW / 2), Math.round(gy + 1 - GY + S.y));
-  out.fillStyle = 'rgba(200,185,165,.8)'; for (const d of S.dust) { const r = d.l < 0.2 ? 1 : 2; out.fillRect(Math.round(d.x + (d.l * 10) * (d.x > S.x ? 1 : -1)), Math.round(d.y - d.l * 4), r, r); }
-  out.fillStyle = '#e0607e';
-  for (const h of S.hearts) { out.globalAlpha = Math.min(1, h.l * 4) * (1 - h.l / 1.6); HEART.forEach((row, j) => [...row].forEach((c, i) => c === 'x' && out.fillRect(Math.round(h.x) + i - 2, Math.round(h.y) + j, 1, 1))); }
-  out.globalAlpha = 1; out.fillStyle = '#5b4a7a';
-  for (const z of S.zs) { out.globalAlpha = Math.min(1, z.l * 3) * (1 - z.l / 2.4); const zx = Math.round(z.x), zy = Math.round(z.y), sz = z.l > 1.2 ? 4 : 3;   // pixel "z"
-    out.fillRect(zx, zy, sz, 1); out.fillRect(zx + sz - 2, zy + 1, 1, 1); if (sz > 3) out.fillRect(zx + 1, zy + 2, 1, 1); out.fillRect(zx, zy + sz - 1, sz, 1); }
-  out.globalAlpha = 1;
+  for (let y = gy + 1, i = 0; y < H; y++, i++) { ctx.fillStyle = G[Math.min(i, G.length - 1)]; ctx.fillRect(0, y, W, 1); }
+  ctx.fillStyle = '#86b25a'; for (let x = 2; x < W; x += 5) ctx.fillRect(x, gy, 1, 1);
 }
-let vis = false;
-new IntersectionObserver(e => { vis = e[0].isIntersecting; if (vis) { S.last = performance.now(); requestAnimationFrame(loop); } }, { threshold: 0.05 }).observe(stage);
-let acc = 0;
-function loop(now) {
-  if (!vis) return; const dt = Math.min(0.05, (now - S.last) / 1000); S.last = now; step(dt);
-  acc += dt; if (acc >= 1 / 30 || reduce) { acc = 0; render(); }   // 30 fps is plenty for pixels
-  requestAnimationFrame(loop);
+const HEART = ['.x.x.', 'xxxxx', 'xxxxx', '.xxx.', '..x..'];
+function heart(ctx, x, y) { HEART.forEach((r, j) => [...r].forEach((c, i) => c === 'x' && ctx.fillRect(Math.round(x) + i - 2, Math.round(y) + j, 1, 1))); }
+function zee(ctx, x, y, sz) { x = Math.round(x); y = Math.round(y); ctx.fillRect(x, y, sz, 1); ctx.fillRect(x + sz - 2, y + 1, 1, 1); if (sz > 3) ctx.fillRect(x + 1, y + 2, 1, 1); ctx.fillRect(x, y + sz - 1, sz, 1); }
+const ease = t => t * t * (3 - 2 * t);
+
+// a pixel stage: canvas + crisp scaling + a loop that only runs while visible
+function Stage(el, update) {
+  const cv = document.createElement('canvas'); el.appendChild(cv); const ctx = cv.getContext('2d');
+  const st = { el, cv, ctx, W: 0, H: 0, scale: 3, t: 0 };
+  st.layout = () => { const r = el.getBoundingClientRect(); st.scale = r.width < 520 ? 2 : 3; st.W = Math.floor(r.width / st.scale); st.H = Math.floor(r.height / st.scale); cv.width = st.W; cv.height = st.H; cv.style.width = st.W * st.scale + 'px'; cv.style.height = st.H * st.scale + 'px'; st.onLayout && st.onLayout(); };
+  st.local = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / st.scale, y: (e.clientY - r.top) / st.scale }; };
+  let vis = false, last = 0, acc = 0;
+  const loop = now => { if (!vis) return; const dt = Math.min(0.05, (now - last) / 1000); last = now; st.t += dt; update(dt); acc += dt; if (acc >= 1 / 30 || reduce) { acc = 0; ctx.imageSmoothingEnabled = false; ctx.clearRect(0, 0, st.W, st.H); st.render(); } requestAnimationFrame(loop); };
+  new IntersectionObserver(e => { vis = e[0].isIntersecting; if (vis) { last = performance.now(); requestAnimationFrame(loop); } }, { threshold: 0.05 }).observe(el);
+  addEventListener('resize', st.layout); requestAnimationFrame(st.layout);
+  return st;
 }
-setTimeout(() => S.mode === 'idle' && set('wave'), 800);
+
+// ---------------------------------------------------------------- the dog (rig from js/pixel-dog.js)
+function makeDog() {
+  const C = customElements.get('pixel-dog'); if (!C || !C.rig) return null;
+  const R = C.rig, V = Object.assign({}, R.BREEDS.rottie); V.m = R.PATTERNS[V.pattern] || {};
+  const c = document.createElement('canvas'); c.width = R.DW; c.height = R.H; const img = new ImageData(R.DW, R.H);
+  const d = { R, V, pal: R.buildPal(V), L: R.mk(R.DW, R.H), tmp: new Uint8Array(R.DW * R.H), c, cx: c.getContext('2d'), img, u32: new Uint32Array(img.data.buffer) };
+  d.draw = (ctx, x, gy, face, P) => {
+    R.drawDog(d.L, P, d.V); R.outline(d.L, d.tmp);
+    const b = d.L.b; for (let i = 0; i < b.length; i++) d.u32[i] = b[i] ? d.pal[b[i]] : 0;
+    d.cx.putImageData(d.img, 0, 0);
+    ctx.save(); ctx.translate(Math.round(x), gy + 1 - R.G); if (face < 0) ctx.scale(-1, 1); ctx.drawImage(c, -R.X0, 0); ctx.restore();
+  };
+  return d;
+}
+
+// ---------------------------------------------------------------- scene 1: me & my dog
+(function dogScene() {
+  const el = document.getElementById('dogStage'); if (!el) return;
+  let DOG = null; customElements.whenDefined('pixel-dog').then(() => (DOG = makeDog()));
+  const me = { x: 0, mode: 'idle', mt: 0, blink: 2, look: 1 };
+  const dog = { x: 0, face: -1, mode: 'sit', mt: 0, ph: 0, blink: 3, hasBall: false, tilt: 0 };
+  const ball = { on: false, x: 0, y: 0, vx: 0, vy: 0, held: true, ground: false };
+  const hearts = [], dust = [];
+  let lastAct = 0, nextAuto = 'fetch';
+  const S = Stage(el, update);
+  S.onLayout = () => { me.x = Math.round(S.W * 0.3); if (!dog.x || dog.mode === 'sit') dog.x = me.x + 40; };
+  const gy = () => S.H - 6, home = () => me.x + 40;
+  const setMe = m => { me.mode = m; me.mt = 0; }, setDog = m => { dog.mode = m; dog.mt = 0; };
+  const busy = () => me.mode !== 'idle' || (dog.mode !== 'sit' && dog.mode !== 'happy');
+  function pet() { if (busy()) return; setMe('pet'); setDog('pet'); lastAct = S.t; }
+  function throwBall(tx) { if (busy()) return; ball.tx = Math.max(me.x + 70, Math.min(S.W - 40, tx || S.W * 0.8)); setMe('throw'); lastAct = S.t; }
+  el.addEventListener('pointerdown', e => { const p = S.local(e); if (Math.abs(p.x - dog.x) < 18 && p.y > gy() - 44) pet(); else throwBall(p.x); });
+  document.querySelectorAll('[data-dog]').forEach(b => b.addEventListener('click', () => (b.dataset.dog === 'pet' ? pet() : throwBall())));
+
+  function update(dt) {
+    const t = S.t; me.mt += dt; dog.mt += dt;
+    me.blink -= dt; if (me.blink < -0.12) me.blink = 2 + Math.random() * 3.5;
+    dog.blink -= dt; if (dog.blink < -0.15) dog.blink = 2.5 + Math.random() * 4;
+    // ---- me
+    if (me.mode === 'throw') {
+      if (me.mt > 0.42 && ball.held) {   // release: from the raised hand, up and over in an arc
+        ball.held = false; ball.on = true; ball.ground = false; ball.x = me.x + 12; ball.y = gy() - 82;
+        const T = 0.9; ball.vx = (ball.tx - ball.x) / T; ball.vy = -60; setDog('chase');
+      }
+      if (me.mt > 0.9) setMe('watch');
+    }
+    if (me.mode === 'pet' && me.mt > 3.4) { setMe('idle'); setDog('happy'); }
+    if (me.mode === 'pickup' && me.mt > 0.9) { setMe('idle'); ball.on = false; ball.held = true; }
+    if (me.mode === 'idle' && t - lastAct > 7) { nextAuto === 'fetch' ? throwBall() : pet(); nextAuto = nextAuto === 'fetch' ? 'pet' : 'fetch'; }
+    if (me.mode === 'pet' && Math.random() < dt * 2.4) hearts.push({ x: dog.x - 8 + Math.random() * 8, y: gy() - 48, l: 0 });
+    // ---- ball physics
+    if (ball.on && !ball.held && !dog.hasBall && !ball.ground) {
+      ball.vy += 150 * dt; ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+      if (ball.y >= gy() - 2) { ball.y = gy() - 2; ball.vy *= -0.42; ball.vx *= 0.6; dust.push({ x: ball.x, l: 0 }); if (Math.abs(ball.vy) < 12) { ball.ground = true; ball.vy = 0; } }
+      ball.x = Math.min(S.W - 4, ball.x);
+    }
+    if (ball.ground && !dog.hasBall) ball.x += ball.vx * dt, ball.vx *= Math.pow(0.05, dt);
+    // ---- dog
+    const runTo = (tx, sp) => { const dx = tx - dog.x; if (Math.abs(dx) < 1.5) return true; dog.face = Math.sign(dx); const mv = Math.max(-sp * dt, Math.min(sp * dt, dx)); dog.x += mv; dog.ph += Math.abs(mv) / (sp > 60 ? 9 : 6); return false; };
+    if (dog.mode === 'chase' && dog.mt > 0.15) { const target = ball.x - 13; if (runTo(target, 92) && ball.ground) setDog('pick'); else if (dog.mt > 0.15 && Math.random() < dt * 8) dust.push({ x: dog.x - dog.face * 8, l: 0 }); }
+    if (dog.mode === 'pick' && dog.mt > 0.45) { dog.hasBall = true; ball.on = false; setDog('return'); }
+    if (dog.mode === 'return') { if (runTo(home(), 80)) { dog.face = -1; setDog('present'); } }
+    if (dog.mode === 'present' && dog.mt > 1.1) { dog.hasBall = false; ball.on = true; ball.ground = true; ball.held = false; ball.vx = 0; ball.x = dog.x - 15; ball.y = gy() - 2; setDog('sit'); setMe('pickup'); }
+    if (dog.mode === 'happy' && dog.mt > 1.6) setDog('sit');
+    if (dog.mode === 'sit' && Math.abs(dog.x - home()) > 2) setDog('return');
+    if (me.mode === 'watch' && dog.mode === 'present') setMe('idle');
+    // look
+    const lk = me.mode === 'watch' || dog.mode === 'chase' || dog.mode === 'return' ? Math.sign(dog.x - me.x) : 1;
+    me.look += (lk - me.look) * Math.min(1, dt * 6);
+    for (const h of hearts) { h.l += dt; h.y -= 9 * dt; h.x += Math.sin(h.l * 4) * 3 * dt; } while (hearts.length && hearts[0].l > 1.6) hearts.shift();
+    for (const d of dust) d.l += dt; while (dust.length && dust[0].l > 0.4) dust.shift();
+  }
+  function mePose() {
+    const t = S.t, mt = me.mt, P = basePose(t); P.look = me.look; P.eyes = me.blink < 0 ? 'closed' : 'open';
+    if (me.mode === 'pet') {
+      const st = Math.sin(mt * 5.5);
+      P.bob = 15; P.lL = -42; P.kL = 42; P.lR = 42; P.kR = -42; P.liftL = 3; P.liftR = 3;          // squat, feet planted
+      P.aR = 66 + st * 5; P.fR = 30 + st * 14; P.aL = 20; P.fL = -30;                               // stroke the head
+      P.eyes = mt > 0.5 ? 'happy' : 'open'; P.mouth = 'smile'; P.blush = true; P.headDx = 1;
+    }
+    if (me.mode === 'throw') {   // wind up overhead, then throw forward and follow through
+      const u = mt / 0.42;
+      if (u < 1) { P.aR = 30 + ease(u) * 140; P.fR = 10 + ease(u) * 30; P.bob = Math.round(ease(u) * 2); P.lL = -6; P.lR = 6; }
+      else { const v = Math.min(1, (mt - 0.42) / 0.25); P.aR = 170 - ease(v) * 120; P.fR = 40 - v * 50; P.bob = -1; P.lR = 10; P.kR = -10; }
+      P.aL = 20; P.mouth = 'smile'; P.look = 1;
+    }
+    if (me.mode === 'watch') { P.mouth = 'smile'; if (Math.floor(mt * 3) % 4 === 0) P.browUp = 1; }
+    if (me.mode === 'pickup') { const u = Math.sin(Math.min(1, mt / 0.9) * Math.PI); P.bob = Math.round(u * 15); P.lL = -42 * u; P.kL = 42 * u; P.lR = 42 * u; P.kR = -42 * u; P.liftL = P.liftR = 3 * u; P.aR = 8 + u * 30; P.fR = 6 - u * 10; P.mouth = 'smile'; }
+    if (me.mode === 'idle' && dog.mode === 'happy') { P.mouth = 'smile'; P.eyes = 'happy'; }
+    return P;
+  }
+  function dogPose() {
+    const R = DOG.R, Q = R.poses, t = S.t, mt = dog.mt; let P;
+    switch (dog.mode) {
+      case 'chase': case 'return':
+        P = R.cp(Q.STAND); R.gait(P, dog.ph, 6, 4, R.RUN_PH); P.b[4] = Math.sin(dog.ph + 0.6) * 0.08; P.ears = [-2.5, 2, -2, 2]; P.tl[4] = 0.6; P.mouth = dog.hasBall ? 'ball' : 'pant';
+        if (dog.mode === 'chase' && mt < 0.15) { P = R.cp(Q.STAND); P.ears = [0.5, -1.5, 0.5, -1.5]; } break;
+      case 'pick': P = R.cp(Q.SNIFF); if (mt > 0.3) P.mouth = 'ball'; break;
+      case 'present': P = R.cp(Q.SIT); P.mouth = 'ball'; P.tl[2] += Math.sin(t * 13) * 0.35; P.eye = 'happy'; break;
+      case 'pet': P = R.cp(Q.SIT); P.eye = 'happy'; P.blush = 1; P.mouth = 'pant'; P.hd[1] += Math.sin(dog.mt * 5.5) > 0 ? 1 : 0; P.tl[2] += Math.sin(t * 13) * 0.35; break;
+      case 'happy': P = R.cp(Q.BOW); P.mouth = 'pant'; P.eye = 'happy'; P.tl[2] += Math.sin(t * 15) * 0.4; break;
+      default: P = R.cp(Q.SIT); P.tl[2] += Math.sin(t * 3) * 0.1; if (dog.blink < 0) P.eye = 'blink'; if (me.mode === 'throw') { P.ears = [0.5, -1.5, 0.5, -1.5]; P.hd[1] -= 1; }
+    }
+    return P;
+  }
+  S.render = () => {
+    const c = S.ctx, g = gy(); grass(c, S.W, S.H, g);
+    c.fillStyle = 'rgba(30,40,20,.25)'; c.fillRect(me.x - 7, g + 1, 14, 1); c.fillRect(Math.round(dog.x) - 12, g + 1, 22, 1);
+    if (DOG) DOG.draw(c, dog.x, g, dog.face, dogPose());
+    drawMe(c, me.x, g, mePose());
+    if (ball.on) { const bx = Math.round(ball.x), by = Math.round(ball.y); c.fillStyle = '#4e5a1c'; c.fillRect(bx - 2, by - 1, 4, 3); c.fillRect(bx - 1, by - 2, 2, 5); c.fillStyle = '#d4e24a'; c.fillRect(bx - 1, by - 1, 2, 3); c.fillRect(bx - 1, by - 1, 2, 2); c.fillStyle = '#f2f7b0'; c.fillRect(bx - 1, by - 1, 1, 1); }
+    c.fillStyle = 'rgba(200,185,165,.85)'; for (const d of dust) c.fillRect(Math.round(d.x + d.l * 12 * (Math.random() < 0.5 ? 1 : -1)), Math.round(g - d.l * 5), d.l < 0.2 ? 1 : 2, d.l < 0.2 ? 1 : 2);
+    c.fillStyle = '#e0607e'; for (const h of hearts) { c.globalAlpha = Math.min(1, h.l * 4) * (1 - h.l / 1.6); heart(c, h.x, h.y); } c.globalAlpha = 1;
+  };
+})();
+
+// ---------------------------------------------------------------- scene 2: under the sakura
+(function treeScene() {
+  const el = document.getElementById('treeStage'); if (!el) return;
+  let TR = null;
+  Promise.all([fetch('art/tree/tree.json').then(r => r.json()), ...['trunk', 'back', 'front'].map(n => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.src = `art/tree/${n}.png`; }))])
+    .then(([info, trunk, back, front]) => (TR = { info, trunk, back, front }));
+  const me = { mode: 'sit', mt: 0, blink: 2, look: 0, nod: 0 };
+  const petals = [], ground = [], onHair = [], zs = [];
+  let shake = 0, sv = 0, lastPoke = -9, tx = 0;
+  const PC = ['#f19fb6', '#fbc8d4', '#dc7598'];
+  const S = Stage(el, update);
+  S.onLayout = () => { tx = Math.round(S.W * 0.56); };
+  const gy = () => S.H - 6, meX = () => tx - 22, headY = () => gy() + 1 - GY + 22 + 20;   // sitting head centre
+  const set = m => { me.mode = m; me.mt = 0; };
+  function spawn(n, spread) { for (let i = 0; i < n; i++) petals.push({ x: tx + (Math.random() - 0.5) * 130, y: gy() - 150 + Math.random() * spread, vy: 7 + Math.random() * 7, ph: Math.random() * 6, c: (Math.random() * 3) | 0 }); }
+  function poke() { sv += 9 * (Math.random() < 0.5 ? 1 : -1); spawn(22, 60); lastPoke = S.t; onHair.length = 0; if (me.mode === 'sleep' || me.mode === 'drowsy') set('wake'); else set('lookup'); }
+  function nap() { if (me.mode === 'sleep') return; set('drowsy'); me.mt = 3.5; }
+  el.addEventListener('pointerdown', e => { const p = S.local(e); if (me.mode === 'sleep' || me.mode === 'drowsy') { set('wake'); return; } if (Math.abs(p.x - tx) < 70 && p.y < gy() - 70) poke(); else set('wave'); });
+  document.querySelectorAll('[data-tree]').forEach(b => b.addEventListener('click', () => (b.dataset.tree === 'shake' ? poke() : nap())));
+
+  function update(dt) {
+    const t = S.t; me.mt += dt; me.blink -= dt; if (me.blink < -0.12) me.blink = 2 + Math.random() * 3.5;
+    sv += (-shake * 60 - sv * 6) * dt; shake += sv * dt;
+    const wind = Math.sin(t * 0.4) * 6 + Math.sin(t * 1.3) * 3;
+    if (Math.random() < dt * 1.5 && petals.length < 40) spawn(1, 50);
+    for (const p of petals) { p.ph += dt * 3; p.x += (wind + Math.sin(p.ph) * 10) * dt; p.y += p.vy * dt; }
+    for (let i = petals.length - 1; i >= 0; i--) {
+      const p = petals[i], hx = meX(), hy = headY() - 14;
+      if (Math.abs(p.x - hx) < 9 && Math.abs(p.y - hy) < 2 && onHair.length < 4 && Math.random() < 0.5) { onHair.push({ dx: Math.round(p.x - hx), dy: Math.round(p.y - hy), c: p.c }); petals.splice(i, 1); continue; }
+      if (p.y >= gy()) { if (ground.length < 80) ground.push({ x: p.x, c: p.c % 2 }); petals.splice(i, 1); }
+      else if (p.x < -4 || p.x > S.W + 4) petals.splice(i, 1);
+    }
+    // the afternoon: sit and watch → drowsy → asleep
+    if (me.mode === 'sit' && me.mt > 8) set('drowsy');
+    if (me.mode === 'drowsy' && me.mt > 6) set('sleep');
+    if ((me.mode === 'wake' || me.mode === 'lookup') && me.mt > 2.2) set('sit');
+    if (me.mode === 'wave' && me.mt > 1.6) set('sit');
+    if (me.mode === 'sleep' && Math.random() < dt * 0.8) zs.push({ x: meX() + 12, y: headY() - 18, l: 0 });
+    for (const z of zs) { z.l += dt; z.y -= 6 * dt; z.x += Math.sin(z.l * 3) * 4 * dt; } while (zs.length && zs[0].l > 2.4) zs.shift();
+    // eyes follow a petal while awake
+    let lk = 0; if (me.mode === 'sit' && petals.length) { const p = petals.reduce((a, b) => (Math.abs(b.y - headY()) < Math.abs(a.y - headY()) ? b : a)); lk = Math.max(-1, Math.min(1, (p.x - meX()) / 30)); }
+    me.look += (lk - me.look) * Math.min(1, dt * 3);
+  }
+  function mePose() {
+    const t = S.t, mt = me.mt, P = sitPose(basePose(t), t); P.look = me.look; P.eyes = me.blink < 0 ? 'closed' : 'open';
+    if (me.mode === 'drowsy') { P.eyes = me.blink < 0.6 ? 'closed' : 'sleepy'; const nod = (mt % 2.2) < 0.5; P.headDy = nod ? 1 : 0; me.blink = Math.min(me.blink, 1.2); }
+    if (me.mode === 'sleep') { P.eyes = 'closed'; P.headDy = 1; P.headDx = 1; P.bob = 22 + (Math.sin(t * 1.4) > 0.3 ? 0 : 1); P.sway = 1.5; }
+    if (me.mode === 'wake') { if (mt < 0.5) { P.eyes = 'open'; P.browUp = 1; P.mouth = 'o'; P.bob = 20; } else { P.mouth = 'smile'; P.eyes = mt < 1.4 ? 'happy' : P.eyes; } }
+    if (me.mode === 'lookup') { P.browUp = 1; P.mouth = mt < 0.8 ? 'o' : 'smile'; P.look = 0; P.eyes = mt > 0.8 && mt < 1.6 ? 'happy' : 'open'; }
+    if (me.mode === 'wave') { P.aR = 150; P.fR = [10, 28, 44, 28][Math.floor(mt * 10) % 4]; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
+    if (me.mode === 'sit') P.mouth = 'line';
+    return P;
+  }
+  S.render = () => {
+    const c = S.ctx, g = gy();
+    if (TR) {
+      const I = TR.info, x0 = Math.round(tx - I.cx), y0 = g + 1 - I.gy, sway = k => Math.round(Math.sin(S.t * 0.9 + k) * 0.8 + Math.sin(S.t * 0.37) * 0.5 + shake * (1 + k));
+      c.drawImage(TR.back, x0 + sway(0), y0); c.drawImage(TR.trunk, x0, y0);
+      grass(c, S.W, S.H, g);
+      c.fillStyle = 'rgba(40,60,30,.22)'; for (let i = -62; i <= 62; i++) c.fillRect(tx + i, g + 1, 1, Math.round(2.4 * Math.sqrt(1 - (i / 63) ** 2)));
+      for (const p of ground) { c.fillStyle = PC[p.c]; c.fillRect(Math.round(p.x), g + 1 + (p.c & 1), 1, 1); }
+      drawMe(c, meX(), g, mePose());
+      for (const h of onHair) { c.fillStyle = PC[h.c]; c.fillRect(meX() + h.dx, headY() - 14 + h.dy + (me.mode === 'sleep' ? 1 : 0), 2, 1); }
+      c.drawImage(TR.front, x0 + sway(0.7), y0 + (Math.abs(shake) > 1 ? 1 : 0));
+    } else { grass(c, S.W, S.H, g); drawMe(c, meX(), g, mePose()); }
+    for (const p of petals) { c.fillStyle = PC[p.c]; const f = Math.sin(p.ph) > 0; c.fillRect(Math.round(p.x), Math.round(p.y), f ? 2 : 1, f ? 1 : 2); }
+    c.fillStyle = '#5b4a7a'; for (const z of zs) { c.globalAlpha = Math.min(1, z.l * 3) * (1 - z.l / 2.4); zee(c, z.x, z.y, z.l > 1.2 ? 4 : 3); } c.globalAlpha = 1;
+  };
+})();
 })();

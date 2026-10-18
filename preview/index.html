@@ -43,14 +43,21 @@
 </section>
 
 <section class="block alt pixel-block">
-  <p class="kicker">04 · 8-bit me</p><h2>Pixel me</h2>
-  <p class="note">Me in pixel art, with a face made from my painting, living in a small scene with the rest of this site's pixel art: my dog from the homepage, under a sakura tree. Click the floor and I walk over. Click the dog and I pet it, or click the tree and I sit under it. Leave me alone and I get sleepy, wander over to the sakura and nap, and the dog curls up beside me. Tap me to make me hop.</p>
-  <div class="pixel-stage" id="pixelStage"></div>
-  <div class="row mascot-ctl"><button class="btn" data-pixel="pet">pet the dog</button><button class="btn" data-pixel="tree">sit under the sakura</button><button class="btn" data-pixel="nap">nap</button><button class="btn" data-pixel="wave">wave</button><button class="btn" data-pixel="hop">hop</button><button class="btn" data-pixel="dance">dance</button></div>
+  <p class="kicker">04 · 8-bit me</p><h2>Me &amp; my dog</h2>
+  <p class="note">Pixel me with the rottie from my homepage. Tap the dog to pet it. Tap anywhere else to throw the ball: it chases, picks it up, brings it back and drops it at my feet. Leave us alone and we keep playing.</p>
+  <div class="pixel-stage dog-stage" id="dogStage"></div>
+  <div class="row mascot-ctl"><button class="btn" data-dog="pet">pet the dog</button><button class="btn" data-dog="ball">throw the ball</button></div>
+</section>
+
+<section class="block pixel-block">
+  <p class="kicker">05 · 8-bit me</p><h2>Under the sakura</h2>
+  <p class="note">A quiet afternoon against a cherry tree. My eyes follow the falling petals until I get drowsy and nod off, and petals settle in my hair. Tap the tree to shake it, or tap me to wake me up.</p>
+  <div class="pixel-stage tree-stage" id="treeStage"></div>
+  <div class="row mascot-ctl"><button class="btn" data-tree="shake">shake the tree</button><button class="btn" data-tree="nap">nap</button></div>
 </section>
 
 <section class="block alt how">
-  <p class="kicker">05 · how</p><h2>How it's drawn</h2>
+  <p class="kicker">06 · how</p><h2>How it's drawn</h2>
   <ol>
     <li>Code finds the face (478 points) and separates hair, skin and clothes. Tilted heads are levelled, and props like the garland are painted out.</li>
     <li>The photo's light is turned into target pencil values, with skin kept airy, hair dark and features crisp.</li>
