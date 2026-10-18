@@ -1,7 +1,8 @@
 /*!
  * Pixel me — a full-body pixel-art Nikit living in a little scene with the portfolio's own pixel art:
- * the <pixel-dog> rottie (drawn from its rig, js/pixel-dog.js) and the sakura tree from js/pixel-scenes.js.
- * The face is a 30×32 pixel portrait made from my painting (tools/pixelhead.py); the body is painted
+ * the <pixel-dog> rottie (drawn from its rig, js/pixel-dog.js) and a sakura tree.
+ * The face is a symmetric 30×32 pixel portrait built from my painting (tools/pixelhead.py), the tree is
+ * painted at the same pixel size (tools/pixeltree.py); the body is painted
  * pixel by pixel every frame from a pose rig. He walks, waves, hops, dances, pets the dog, sits under
  * the sakura and naps there with the dog curled up beside him (pixel Zzz); the dog follows him around.
  */
@@ -42,9 +43,10 @@ function rect(x, y, w, h, c) { for (let j = 0; j < h; j++) for (let i = 0; i < w
 function disc(cx, cy, r, c) { for (let y = Math.floor(cy - r); y <= cy + r; y++) for (let x = Math.floor(cx - r); x <= cx + r; x++) if ((x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r) px(x, y, c); }
 function ell(cx, cy, rx, ry, c, shade, sc) { for (let y = Math.floor(cy - ry); y <= cy + ry; y++) for (let x = Math.floor(cx - rx); x <= cx + rx; x++) { const u = (x + 0.5 - cx) / rx, v = (y + 0.5 - cy) / ry; if (u * u + v * v <= 1) px(x, y, shade && u > sc ? shade : c); } }
 // thick limb from (x0,y0) to (x1,y1), with a shaded right edge
-function limb(x0, y0, x1, y1, r, c, shade) {
-  const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) * 2));
-  for (let i = 0; i <= n; i++) { const t = i / n, x = lerp(x0, x1, t), y = lerp(y0, y1, t); disc(x, y, r, c); if (shade) disc(x + r * 0.55, y, r * 0.45, shade); }
+function limb(x0, y0, x1, y1, r, c, shade) {   // constant-width limb with a crisp square brush, shaded right edge
+  const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) * 2)), w = Math.round(r * 2 - 0.6), h = w >> 1;
+  for (let i = 0; i <= n; i++) { const t = i / n, x = Math.round(lerp(x0, x1, t)), y = Math.round(lerp(y0, y1, t)); rect(x - h, y - h, w, w, c); }
+  if (shade) for (let i = 0; i <= n; i++) { const t = i / n, x = Math.round(lerp(x0, x1, t)), y = Math.round(lerp(y0, y1, t)); rect(x - h + w - 1, y - h + 1, 1, w - 2, shade); }
 }
 function outline() {
   const src = ids.slice();
@@ -146,14 +148,14 @@ stage.addEventListener('pointerdown', e => {
   const p = loc(e); wake(); const gy = S.H - 6;
   if (onHim(p)) hop();
   else if (D && Math.abs(p.x - D.x) < 16 && p.y > gy - 34) go('pet');
-  else if (Math.abs(p.x - T.x) < 40 && p.y < gy - 30) { pokeTree(); go('tree'); }
+  else if (Math.abs(p.x - T.x) < 60 && p.y < gy - 60) { pokeTree(); go('tree'); }
   else { S.after = null; S.target = clamp(p.x, 14, S.W - 14); set('walk'); }
 });
 // walk somewhere, then do something
 function go(what) {
   S.lastInput = performance.now();
-  if (what === 'pet' && D) { const side = S.x < D.x ? -1 : 1; S.target = clamp(D.x + side * 35, 14, S.W - 14); S.after = 'pet'; D.wait = true; }
-  else if (what === 'tree' || what === 'nap') { S.target = T.x - 20; S.after = what === 'nap' ? 'nap' : 'sit'; }
+  if (what === 'pet' && D) { const side = S.x < D.x ? -1 : 1; S.target = clamp(D.x + side * 38, 16, S.W - 16); S.after = 'pet'; D.wait = true; }
+  else if (what === 'tree' || what === 'nap') { S.target = T.x - 2; S.after = what === 'nap' ? 'nap' : 'sit'; }
   else return set(what);
   if (Math.abs(S.target - S.x) < 0.8) arrive(); else set('walk');
 }
@@ -210,8 +212,8 @@ function pose() {
   if (m === 'dance') { const f = Math.floor(t * 6) % 4; P.bob = f % 2 ? -2 : 0; P.dx = f < 2 ? -1 : 1; P.aL = f % 2 ? 150 : 110; P.aR = f % 2 ? 110 : 150; P.fL = -30; P.fR = -30; P.lL = f < 2 ? -10 : 6; P.lR = f < 2 ? -6 : 10; P.kL = f === 1 ? 30 : 0; P.kR = f === 3 ? -30 : 0; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; P.sway = f < 2 ? -3 : 3; }
   if (m === 'pet') {
     const st = Math.sin(mt * 5.5), side = D && D.x > S.x ? 1 : -1;
-    P.bob = 10; if (side > 0) { P.lL = -8; P.kL = 95; P.lR = 55; P.kR = -105; } else { P.lR = 8; P.kR = -95; P.lL = -55; P.kL = 105; }   // kneeling on one knee
-    if (side > 0) { P.aR = 72 + st * 8; P.fR = -40 + st * 10; P.aL = 14; } else { P.aL = 72 + st * 8; P.fL = -40 + st * 10; P.aR = 14; }
+    P.bob = 15; P.lL = -42; P.kL = 42; P.lR = 42; P.kR = -42; P.liftL = 3; P.liftR = 3;   // squatting down to the dog
+    if (side > 0) { P.aR = 66 + st * 5; P.fR = 30 + st * 14; P.aL = 20; P.fL = -30; } else { P.aL = 66 + st * 5; P.fL = 30 + st * 14; P.aR = 20; P.fR = -30; }   // stroking the head; other hand on the knee
     P.eyes = mt > 0.6 ? 'happy' : 'open'; P.mouth = 'smile'; P.blush = true; P.look = side; P.headDx = side;
   }
   if (m === 'glance') P.browUp = Math.sin(mt * 2.2) > 0.95 ? 1 : 0;
@@ -232,9 +234,9 @@ function dogInit() {
 }
 customElements.whenDefined('pixel-dog').then(dogInit);
 function stepDog(dt) {
-  if (!D) return; D.mt += dt; D.happy = Math.max(0, D.happy - dt); D.blink -= dt; if (D.blink < -0.15) D.blink = 2 + Math.random() * 4;
-  const m = S.mode, atTree = (m === 'sit' || m === 'sleep') && Math.abs(S.x - (T.x - 20)) < 2;
-  const tx = D.wait ? D.x : atTree ? T.x + 4 : S.x + (D.x >= S.x ? 26 : -26);
+  if (!D) return; if (D.wait && S.mode !== 'pet' && S.after !== 'pet') D.wait = false; D.mt += dt; D.happy = Math.max(0, D.happy - dt); D.blink -= dt; if (D.blink < -0.15) D.blink = 2 + Math.random() * 4;
+  const m = S.mode, atTree = (m === 'sit' || m === 'sleep') && Math.abs(S.x - (T.x - 2)) < 2;
+  const tx = D.wait ? D.x : atTree ? T.x + 26 : S.x + (D.x >= S.x ? 42 : -42);
   const dx = tx - D.x;
   if (Math.abs(dx) > (D.mode === 'walk' ? 1 : 7)) {          // trot after me
     const mv = clamp(dx, -34 * dt, 34 * dt); D.x += mv; D.face = Math.sign(dx); D.ph += Math.abs(mv) / 6;
@@ -267,21 +269,30 @@ function drawDog(gy) {
   if (D.mode === 'sleep' && Math.random() < 0.012) S.zs.push({ x: D.x + D.face * 10, y: gy - 22, l: 0.6 });
 }
 
-// ---- the sakura: the blossom tree scene from js/pixel-scenes.js, its petals still falling
+// ---- the sakura: a pixel tree painted at my pixel size (tools/pixeltree.py), swaying, petals falling
 let TR = null;
-function treeInit() {
-  const PS = window.PixelScene; if (!PS || !PS.SCENES) return; const Sc = PS.SCENES.sakura;
-  const c = document.createElement('canvas'); c.width = Sc.w; c.height = Sc.h;
-  TR = { Sc, B: Sc.bake(7341), st: {}, c, ctx: c.getContext('2d'), t: 0 }; Sc.init(TR.st, TR.B);
-  const dummy = { fillRect() {}, drawImage() {}, beginPath() {}, ellipse() {}, stroke() {} };
-  for (let i = 0; i < 90; i++) Sc.frame(dummy, TR.st, 1 / 30, i / 30, TR.B);   // petals already falling
+Promise.all([fetch('art/tree/tree.json').then(r => r.json()), ...['trunk', 'back', 'front'].map(n => new Promise(res => { const im = new Image(); im.onload = () => res(im); im.src = `art/tree/${n}.png`; }))])
+  .then(([info, trunk, back, front]) => { TR = { info, trunk, back, front, petals: [], ground: [], shake: 0, sv: 0 }; for (let i = 0; i < 26; i++) TR.ground.push({ x: (Math.random() - 0.5) * 120, c: Math.random() < 0.5 ? 0 : 1 }); });
+const PET_C = ['#f19fb6', '#fbc8d4', '#dc7598'];
+function stepTree(dt) {
+  if (!TR) return; const I = TR.info;
+  TR.sv += (-TR.shake * 60 - TR.sv * 6) * dt; TR.shake += TR.sv * dt;                       // springy shake when poked
+  const wind = Math.sin(S.t * 0.4) * 6 + Math.sin(S.t * 1.3) * 3;
+  if (Math.random() < dt * (1.6 + Math.abs(TR.sv) * 0.5) && TR.petals.length < 40) TR.petals.push({ x: T.x + (Math.random() - 0.5) * 130, y: S.H - 6 - (I.gy - I.crown[1]) + (Math.random() - 0.3) * 50, vx: 0, vy: 6 + Math.random() * 6, ph: Math.random() * 6, c: (Math.random() * 3) | 0, l: 0 });
+  for (const p of TR.petals) { p.l += dt; p.ph += dt * 3; p.x += (wind + Math.sin(p.ph) * 10) * dt; p.y += p.vy * dt; }
+  TR.petals = TR.petals.filter(p => { if (p.y >= S.H - 6) { if (TR.ground.length < 70) TR.ground.push({ x: p.x - T.x, c: p.c % 2 }); return false; } return p.x > -5 && p.x < S.W + 5; });
 }
-customElements.whenDefined('pixel-scene').then(treeInit);
-function stepTree(dt) { if (TR) { TR.t += dt; TR.dt = (TR.dt || 0) + dt; } }
-function pokeTree() { if (TR && TR.Sc.poke) TR.Sc.poke(TR.st, 32, 20, TR.B); }
+function pokeTree() { if (!TR) return; TR.sv += 9 * (Math.random() < 0.5 ? 1 : -1); for (let i = 0; i < 16; i++) TR.petals.push({ x: T.x + (Math.random() - 0.5) * 120, y: S.H - 6 - 110 + Math.random() * 60, vx: 0, vy: 8 + Math.random() * 8, ph: Math.random() * 6, c: (Math.random() * 3) | 0, l: 0 }); }
 function drawTree(gy) {
-  if (!TR) return; TR.ctx.clearRect(0, 0, TR.Sc.w, TR.Sc.h); TR.Sc.frame(TR.ctx, TR.st, TR.dt || 0, TR.t, TR.B); TR.dt = 0;
-  out.drawImage(TR.c, T.x - 64, gy - 2 * 56, 128, 128);
+  if (!TR) return; const I = TR.info, x0 = Math.round(T.x - I.cx), y0 = gy + 1 - I.gy;
+  out.fillStyle = 'rgba(40,60,30,.22)'; for (let i = -62; i <= 62; i++) { const h = Math.round(2.4 * Math.sqrt(1 - (i / 63) ** 2)); out.fillRect(T.x + i, gy + 1, 1, h); }   // canopy shadow on the grass
+  const sway = k => Math.round(Math.sin(S.t * 0.9 + k) * 0.8 + Math.sin(S.t * 0.37) * 0.5 + TR.shake * (1 + k));
+  out.drawImage(TR.back, x0 + sway(0), y0); out.drawImage(TR.trunk, x0, y0); out.drawImage(TR.front, x0 + sway(0.7), y0 + (Math.abs(TR.shake) > 1 ? 1 : 0));
+}
+function drawPetals(gy) {
+  if (!TR) return;
+  for (const g of TR.ground) { out.fillStyle = PET_C[g.c]; out.fillRect(Math.round(T.x + g.x), gy + 1 + (g.c & 1), 1, 1); }
+  for (const p of TR.petals) { out.fillStyle = PET_C[p.c]; const flip = Math.sin(p.ph) > 0; out.fillRect(Math.round(p.x), Math.round(p.y), flip ? 2 : 1, flip ? 1 : 2); }
 }
 
 // ---- render: ground, tree, dog, me, particles
@@ -297,6 +308,7 @@ function render() {
   out.fillStyle = '#86b25a'; for (let x = (S.W * 7) % 5; x < S.W; x += 5) out.fillRect(x, gy, 1, 1);
   const lift = clamp(-S.y / 20, 0, 1), sw = Math.round(14 * (1 - lift * 0.5) * (S.mode === 'sit' || S.mode === 'sleep' ? 1.3 : 1));
   out.fillStyle = 'rgba(30,40,20,.25)'; out.fillRect(Math.round(S.x - sw / 2), gy + 1, sw, 1);
+  drawPetals(gy);
   drawDog(gy);
   paint(pose()); img.data.set(buf); tctx.putImageData(img, 0, 0);
   out.drawImage(tmp, Math.round(S.x - SW / 2), Math.round(gy + 1 - GY + S.y));

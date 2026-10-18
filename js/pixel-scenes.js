@@ -612,7 +612,7 @@ class PixelScene extends HTMLElement {
   draw(dt = 0) { this.ctx.clearRect(0, 0, this.S.w, this.S.h); this.step(dt); }
 }
 customElements.define('pixel-scene', PixelScene);
-window.PixelScene = { scenes: LIST, pick: pickScene, SCENES };   // SCENES: lets other pages reuse a scene's art (e.g. /preview)
+window.PixelScene = { scenes: LIST, pick: pickScene };
 
 /* ---------------- page wiring (writing list + reading pages) ---------------- */
 function mount() {
