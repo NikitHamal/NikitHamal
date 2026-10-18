@@ -1,0 +1,1 @@
+{ "name": "showreel-tools", "private": true, "dependencies": { "playwright": "^1.64.1" } }

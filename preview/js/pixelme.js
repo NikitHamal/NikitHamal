@@ -555,8 +555,8 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
       x.fillStyle = '#3a6a3a'; x.fillRect(S.W - 30, 22, 6, 8); x.fillStyle = '#5a9a4a'; x.fillRect(S.W - 32, 18, 4, 5); x.fillRect(S.W - 26, 17, 4, 6); }), 0, 0);
     // me, seated behind the desk, lit by the screen
     const P = basePose(t); P.eyes = blink < 0 ? 'closed' : 'open'; P.look = 0;
-    if (mode === 'type') { const a = Math.floor(t * 9) % 2, b2 = Math.floor(t * 4.5) % 3; reach(P, dx - 4, g + 4, -1, dx - 2 - 19 + b2, g - 33 - (a ? 1 : 0)); reach(P, dx - 4, g + 4, 1, dx - 2 + 17 - b2, g - 33 - (a ? 0 : 1)); }   // fingers on the keys, tapping
-    if (mode === 'sip') { reach(P, dx - 4, g + 4, -1, dx - 6, g - 58 + Math.round(Math.sin(Math.min(1, mt / 2.2) * Math.PI) * -2)); reach(P, dx - 4, g + 4, 1, dx + 15, g - 33); P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
+    if (mode === 'type') { const a = Math.floor(t * 9) % 2, b2 = Math.floor(t * 4.5) % 3; reach(P, dx - 4, g + 4, -1, dx - 2 - 10 + b2, g - 35 - (a ? 1 : 0)); reach(P, dx - 4, g + 4, 1, dx - 2 + 9 - b2, g - 35 - (a ? 0 : 1)); }   // fingers on the keys, tapping
+    if (mode === 'sip') { reach(P, dx - 4, g + 4, -1, dx - 6, g - 58 + Math.round(Math.sin(Math.min(1, mt / 2.2) * Math.PI) * -2)); reach(P, dx - 4, g + 4, 1, dx + 7, g - 35); P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
     if (mode === 'stretch') { const u = Math.sin(Math.min(1, mt / 2.4) * Math.PI); P.aL = P.aR = 30 + u * 140; P.fL = P.fR = -40 + u * 30; P.mouth = u > 0.5 ? 'o' : 'line'; P.eyes = u > 0.5 ? 'closed' : P.eyes; }
     if (mode === 'yay') { P.aL = P.aR = 155; P.fL = P.fR = Math.sin(mt * 18) * 20; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
     ring(c, dx, g - 52, 40, 26, win > 0 ? '#8ee08a' : '#7ab8ff', 4, 0.1);
@@ -566,14 +566,18 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     // desk with drawers, monitor turned toward us, keyboard, mug, lamp, a sleeping cat
     c.fillStyle = '#6b4a32'; c.fillRect(dx - 64, g - 30, 128, 4); c.fillStyle = '#86603e'; c.fillRect(dx - 64, g - 30, 128, 1);
     c.fillStyle = '#4e3524'; c.fillRect(dx - 62, g - 26, 124, S.H - g + 26); c.fillStyle = '#5a3e2a'; c.fillRect(dx - 58, g - 22, 54, 10); c.fillRect(dx + 4, g - 22, 54, 10); c.fillStyle = '#c9a46a'; c.fillRect(dx - 33, g - 18, 4, 1); c.fillRect(dx + 29, g - 18, 4, 1);
-    const mx = dx - 2, my = g - 49;   // monitor in front of me, turned toward me: we see its back
-    ring(c, mx, my - 8, 34, 22, win > 0 ? '#1a4a20' : '#10304a', 5, 0.55, true);           // its screen lights my face
+    // seen from the front: me, then the keyboard by my hands, then the monitor (its back to us) nearest the viewer.
+    // The screen sits on a tall neck so the keyboard shows through the gap under it; a real keyboard is a bit narrower than the screen.
+    const mx = dx - 2, my = g - 55, kw = 26, ky = g - 34;
+    c.fillStyle = '#1c1a24'; c.fillRect(mx - kw / 2, ky + 2, kw, 1);                                   // keyboard shadow on the desk
+    c.fillStyle = '#9a9aa8'; c.fillRect(mx - kw / 2, ky, kw, 2); c.fillStyle = '#c8c8d2'; c.fillRect(mx - kw / 2, ky, kw, 1);
+    c.fillStyle = '#7a7a88'; for (let i = 0; i < 8; i++) c.fillRect(mx - kw / 2 + 1 + i * 3, ky + 1, 2, 1);
+    if (mode === 'type') { const k = Math.floor(t * 9) % 8; c.fillStyle = '#7ab8ff'; c.fillRect(mx - kw / 2 + 1 + k * 3, ky + 1, 2, 1); }   // the key being pressed
+    ring(c, mx, my - 6, 34, 22, win > 0 ? '#1a4a20' : '#10304a', 5, 0.55, true);           // its screen lights my face
     c.fillStyle = '#2a2836'; c.fillRect(mx - 15, my, 30, 19); c.fillStyle = '#3a3848'; c.fillRect(mx - 15, my, 30, 1); c.fillRect(mx - 15, my, 1, 19);
     c.fillStyle = win > 0 ? '#8ee08a' : '#7ab8ff'; c.fillRect(mx - 16, my + 1, 1, 17); c.fillRect(mx + 15, my + 1, 1, 17); c.fillRect(mx - 14, my - 1, 28, 1);   // screen glow around the edges
-    c.fillStyle = '#4a4858'; c.fillRect(mx - 3, my + 7, 6, 4); c.fillStyle = '#1c1a26'; c.fillRect(mx - 2, my + 19, 4, 2);
-    c.fillStyle = '#b8b8c4'; c.fillRect(mx - 24, g - 32, 48, 3); c.fillStyle = '#d8d8e0'; c.fillRect(mx - 24, g - 32, 48, 1);   // keyboard, wider than the screen
-    c.fillStyle = '#9a9aa8'; for (let i = 0; i < 12; i++) c.fillRect(mx - 23 + i * 4, g - 31, 3, 1);
-    if (mode === 'type') { const k = Math.floor(t * 9) % 12; c.fillStyle = '#7ab8ff'; c.fillRect(mx - 23 + k * 4, g - 31, 3, 1); }   // the key being pressed   // logo, stand
+    c.fillStyle = '#4a4858'; c.fillRect(mx - 3, my + 7, 6, 4);                                      // VESA plate
+    c.fillStyle = '#23212e'; c.fillRect(mx, my + 19, 2, g - 31 - (my + 19)); c.fillRect(mx - 5, g - 31, 12, 1);   // neck in front of the keyboard, foot on the desk
     // what's on screen, shown as a small window on the wall behind me
     const px = Math.round(S.W * 0.58), py = 14; c.fillStyle = 'rgba(14,18,34,0.92)'; c.fillRect(px, py, 50, 36); c.fillStyle = '#3a3256'; c.fillRect(px, py, 50, 4);
     code.slice(0, 7).forEach((l, i) => { c.fillStyle = win > 0 && i === 6 ? '#8ee08a' : l.c; c.fillRect(px + 3 + l.ind, py + 7 + i * 4, Math.min(42 - l.ind, l.w * 2), 1); });
