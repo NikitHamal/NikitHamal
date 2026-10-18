@@ -1,7 +1,9 @@
 // "Drawn in code" — a 15 s showreel for Nikit Hamal. 1920x1080 @ 60 fps, 120 BPM (beat = 30 f, bar = 120 f).
 // Everything is a function of the frame number; frames are rendered in order (the pencil replay accumulates).
+// ?v=portrait renders the hand-laid-out 1080x1920 cut (vertical film strip, tall wall, height-filling scenes).
 'use strict';
-const W = 1920, H = 1080, FPS = 60, BEAT = 30, BAR = 120, TOTAL = 900;
+const PORT = new URLSearchParams(location.search).get('v') === 'portrait';
+const W = PORT ? 1080 : 1920, H = PORT ? 1920 : 1080, FPS = 60, BEAT = 30, BAR = 120, TOTAL = 900;
 const C = { paper: '#f3eee6', ink: '#211a16', accent: '#b4553c', mute: '#76685c', paper2: '#e9e1d3' };   // brand-supplied
 const AGES = ['baby', 'kid', 'teen', 'young', 'curls', 'now'];
 const SCENES = ['fireStage', 'rainStage', 'deskStage', 'fishStage', 'starStage', 'snowStage'];
@@ -44,7 +46,7 @@ async function load() {
 const clipAt = (s, f, fps = 30) => { const L = A.clips[s]; return L[Math.floor(Math.max(0, f) / (FPS / fps)) % L.length]; };
 
 // ---- canvas
-const cv = document.getElementById('c'), x = cv.getContext('2d');
+const cv = document.getElementById('c'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
 const acc = document.createElement('canvas'); acc.width = W; acc.height = H; const ax = acc.getContext('2d');
 
 function pencilTo(count) {   // replay pencil strokes (graphite) up to count, accumulating
@@ -74,12 +76,12 @@ function pixelImg(c, im, cx, cy, s) { c.imageSmoothingEnabled = false; c.drawIma
 // ================================================================ the frame
 function draw(c, f) {
   c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = C.paper; c.fillRect(0, 0, W, H);
-  const PH = 820, PW = 656, px0 = (W - PW) / 2, py0 = 40;
+  const PH = PORT ? 1180 : 820, PW = PH * 0.8, px0 = (W - PW) / 2, py0 = PORT ? 200 : 40, CY = PORT ? 1640 : 1000, CARD = PORT ? 700 : 420;
   // ------------------------------------------------ act 1–2: line → pencil → colour
   if (f < T.shrink[1]) {
     const cnt = Math.floor(A.pcl.n * Math.pow(prog(f, ...T.pencil), 1.25)); if (cnt > A.penDone) pencilTo(cnt);
     const push = lmix(1, 1.06, E.cam(prog(f, T.push[0], T.push[1] + 60)));
-    const sh = E.inOut(prog(f, ...T.shrink)), sc = push * lmix(1, 420 / 820, sh), tx = mix(0, 5 * 384 - 5 * 384, sh);   // shrinking into its card slot
+    const sh = E.inOut(prog(f, ...T.shrink)), sc = push * lmix(1, CARD / PH, sh), tx = 0;   // shrinking into its card slot
     c.save(); c.translate(W / 2 + tx, mix(py0 + PH / 2, H / 2, sh)); c.scale(sc, sc); c.translate(-PW / 2, -PH / 2);
     const fade = prog(f, T.pencil[0] - 2, T.pencil[0] + 10); c.globalAlpha = fade; c.drawImage(A.pen, 0, 0, PW, PH); c.globalAlpha = 1;
     // colour wipe along a diagonal; the device line is its edge
@@ -91,10 +93,10 @@ function draw(c, f) {
     // the device: one ink line arrives, already moving, and curls into the drawing
     const li = prog(f, ...T.lineIn), lo = prog(f, T.lineIn[0] + 18, T.pencil[0] + 30);
     if (li > 0 && lo < 1) { const head = E.out(li), tail = E.smooth(lo); c.save(); c.strokeStyle = C.ink; c.lineWidth = 6; c.lineCap = 'round'; c.beginPath();
-      const pt = u => { const a = u; return [mix(-120, 960, a) + Math.sin(a * 3.1) * 220 * (1 - a), mix(860, 250, a * a) + Math.sin(a * 6) * 40 * (1 - a)]; };
+      const pt = u => { const a = u; return [mix(-120, W / 2, a) + Math.sin(a * 3.1) * W * 0.115 * (1 - a), mix(H * 0.8, H * 0.23, a * a) + Math.sin(a * 6) * 40 * (1 - a)]; };
       for (let k = 0; k <= 60; k++) { const u = tail + (head - tail) * k / 60, [X, Y] = pt(u); k ? c.lineTo(X, Y) : c.moveTo(X, Y); } c.stroke(); c.restore(); }
-    words(c, 'one line', f, T.copy1, T.wipe[0] - 22, W / 2, 1000, 72);
-    if (f >= T.copy2 - 1) words(c, 'becomes me.', f, T.copy2, T.shrink[0] - 4, W / 2, 1000, 72);
+    words(c, 'one line', f, T.copy1, T.wipe[0] - 22, W / 2, CY, 72);
+    if (f >= T.copy2 - 1) words(c, 'becomes me.', f, T.copy2, T.shrink[0] - 4, W / 2, CY, 72);
   }
   // ------------------------------------------------ act 3: every age, on a film strip
   if (f >= T.shrink[0] && f < T.grow[1]) {
@@ -102,17 +104,18 @@ function draw(c, f) {
     // camera index: 5 (now) → back to 0 → steps 0..5 on 8ths → grows on 5
     let ci = 5;   // 'now' lands in its card; match cut on the card frame to 'baby'; then one age per 8th note
     if (f >= T.step0) { ci = 0; for (let k = 1; k < 6; k++) { const s0 = T.step0 + k * T.stepN; if (f >= s0) ci = (k - 1) + E.rest(prog(f, s0, s0 + 14)); } }
-    const cs = lmix(1, 820 / 420, grow), cw = 336 * cs, ch = 420 * cs, gap = 48 * cs;
+    const cs = lmix(1, PH / CARD, grow), cw = CARD * 0.8 * cs, ch = CARD * cs, gap = 48 * cs;
     if (f >= T.shrink[1] - 1) for (let k = 0; k < 6; k++) {
-      const cx = W / 2 + (k - ci) * (cw + gap); if (cx < -cw || cx > W + cw) continue;
+      const cx = PORT ? W / 2 : W / 2 + (k - ci) * (cw + gap), cy0 = PORT ? mix(H / 2, py0 + PH / 2, grow) + (k - ci) * (ch + gap) : mix(H / 2, py0 + PH / 2, grow);
+      if (cx < -cw || cx > W + cw || cy0 < -ch || cy0 > H + ch) continue;
       const act = 1 - clamp(Math.abs(k - ci)), lift = act * 0.06;
-      c.save(); c.translate(cx, mix(H / 2, py0 + PH / 2, grow)); c.scale(1 + lift, 1 + lift); c.drawImage(A['paint_' + AGES[k]], -cw / 2, -ch / 2, cw, ch);
+      c.save(); c.translate(cx, cy0); c.scale(1 + lift, 1 + lift); c.drawImage(A['paint_' + AGES[k]], -cw / 2, -ch / 2, cw, ch);
       c.fillStyle = `rgba(243,238,230,${(0.55 * (1 - act)).toFixed(3)})`; c.fillRect(-cw / 2, -ch / 2, cw, ch);
       c.strokeStyle = act > 0.5 ? C.accent : C.ink; c.lineWidth = act > 0.5 ? 4 : 2; c.strokeRect(-cw / 2, -ch / 2, cw, ch); c.restore();
     }
     // the device as the strip's rail
-    if (f >= T.shrink[1] - 1 && grow < 1) { c.fillStyle = C.ink; c.globalAlpha = 1 - grow; c.fillRect(0, H / 2 + ch / 2 + 28, W, 4); c.globalAlpha = 1; }
-    if (f >= T.copy3 - 1) words(c, 'every age', f, T.copy3, T.grow[0] - 6, W / 2, 1000, 72);
+    if (f >= T.shrink[1] - 1 && grow < 1) { c.fillStyle = C.ink; c.globalAlpha = 1 - grow; if (PORT) c.fillRect(W / 2 + cw / 2 + 40, 0, 4, H); else c.fillRect(0, H / 2 + ch / 2 + 28, W, 4); c.globalAlpha = 1; }
+    if (f >= T.copy3 - 1) { if (PORT) plate(c, W / 2, CY - 24, 420, 110); words(c, 'every age', f, T.copy3, T.grow[0] - 6, W / 2, CY, 72); }
   }
   // ------------------------------------------------ act 4: pixels
   if (f >= T.grow[1] && f < T.whip0) {
@@ -123,11 +126,11 @@ function draw(c, f) {
       c.strokeStyle = C.accent; c.lineWidth = 4; c.strokeRect(px0, py0, PW, PH);
     } else {
       // the same me, now in pixels: start on my face, pull back to the sakura
-      const z = E.cam(prog(f, ...T.zoom)), clip = clipAt('treeStage', f - T.cut), sTo = 6, sFrom = 22;
+      const z = E.cam(prog(f, ...T.zoom)), clip = clipAt('treeStage', f - T.cut), sTo = PORT ? H / 213 : 6, sFrom = PORT ? 30 : 22;
       const s = lmix(sFrom, sTo, z), fx_ = mix(193, 375 / 2, z), fy_ = mix(158, 213 / 2 + 6, z);
       c.imageSmoothingEnabled = false; c.drawImage(clip, Math.round(W / 2 - fx_ * s), Math.round(H / 2 - fy_ * s), Math.round(375 * s), Math.round(213 * s)); c.imageSmoothingEnabled = true;
     }
-    if (f < T.cut + 4) words(c, 'in pixels', f, T.copy4, T.cut - 14, W / 2, 1000, 72);
+    if (f < T.cut + 4) words(c, 'in pixels', f, T.copy4, T.cut - 14, W / 2, CY, 72);
   }
   // ------------------------------------------------ act 5: whip through the scenes
   if (f >= T.whip0 && f < T.pull[0]) {
@@ -136,7 +139,7 @@ function draw(c, f) {
     if (f >= T.whip0 + 6 * T.whipLen) u = 5;
     const list = ['treeStage', ...SCENES], at = u + 1;
     for (let i = Math.floor(at); i <= Math.ceil(at); i++) {
-      const s = list[i]; if (!s) continue; const off = (i - at) * W, clip = clipAt(s, f - T.whip0 + i * 7), sc = s === 'treeStage' ? 6 : 9;
+      const s = list[i]; if (!s) continue; const off = (i - at) * W, clip = clipAt(s, f - T.whip0 + i * 7), sc = PORT ? Math.ceil(H / clip.height) : s === 'treeStage' ? 6 : 9;
       c.save(); c.beginPath(); c.rect(off, 0, W, H); c.clip(); c.imageSmoothingEnabled = false;
       c.drawImage(clip, Math.round(off + W / 2 - clip.width * sc / 2), Math.round(H / 2 - clip.height * sc / 2), clip.width * sc, clip.height * sc); c.restore();
       if (i > at - 1 && i !== Math.floor(at)) { c.fillStyle = C.ink; c.fillRect(Math.round(off) - 4, 0, 8, H); }   // the device rides the seam
@@ -144,7 +147,7 @@ function draw(c, f) {
   }
   // ------------------------------------------------ act 6: the wall
   if (f >= T.pull[0] && f < T.wipeOut[1]) {
-    const cols = 4, rows = 3, cw = 420, ch = 236, g = 28, gw = cols * cw + (cols - 1) * g, gh = rows * ch + (rows - 1) * g;
+    const cols = PORT ? 3 : 4, rows = PORT ? 4 : 3, cw = PORT ? 318 : 420, ch = PORT ? 400 : 236, g = PORT ? 24 : 28, gw = cols * cw + (cols - 1) * g, gh = rows * ch + (rows - 1) * g;
     const drift = (f - T.pull[0]) * 0.5, creep = lmix(1, 1.035, prog(f, T.pull[0], T.wipeOut[1]));
     const cells = ['paint_now', 'pencil', 'treeStage', 'fireStage', 'paint_kid', 'mascot', 'rainStage', 'paint_young', 'deskStage', 'paint_baby', 'fishStage', 'snowStage'];
     c.save(); c.translate(W / 2, H / 2); c.scale(creep, creep); c.translate(-gw / 2 - drift * 0.6, -gh / 2 - drift * 0.25);
@@ -152,7 +155,7 @@ function draw(c, f) {
       const r = Math.floor(i / cols), q = i % cols, X = q * (cw + g), Y = r * (ch + g), last = i === cells.length - 1;
       let a = 1, sc = 1;
       if (!last) { const d = T.cells0 + ((i * 5) % 12) * 4; a = E.out(prog(f, d, d + 20)); sc = mix(0.92, 1, a); }
-      else { const p = E.inOut(prog(f, ...T.pull)); if (p < 1) { c.restore(); c.save(); const fs = lmix(W / cw, 1, p) * creep;   // the snow scene shrinks into its cell
+      else { const p = E.inOut(prog(f, ...T.pull)); if (p < 1) { c.restore(); c.save(); const fs = lmix(Math.max(W / cw, H / ch), 1, p) * creep;   // the snow scene shrinks into its cell
         const tx = mix(W / 2, W / 2 + (X + cw / 2 - gw / 2 - drift * 0.6) * creep, p), ty = mix(H / 2, H / 2 + (Y + ch / 2 - gh / 2 - drift * 0.25) * creep, p);
         c.translate(tx, ty); c.scale(fs, fs); cellDraw(c, id, f, -cw / 2, -ch / 2, cw, ch); c.restore(); c.save(); c.translate(W / 2, H / 2); c.scale(creep, creep); c.translate(-gw / 2 - drift * 0.6, -gh / 2 - drift * 0.25); return; } }
       if (a <= 0) return; c.save(); c.globalAlpha = a; c.translate(X + cw / 2, Y + ch / 2); c.scale(sc, sc); cellDraw(c, id, f, -cw / 2, -ch / 2, cw, ch); c.restore();
@@ -161,16 +164,16 @@ function draw(c, f) {
     if (f >= T.copy5a - 1) { const out = T.wipeOut[0] - 2;
       c.save(); c.font = '700 80px Jakarta'; const w1 = c.measureText('all drawn').width, sp = c.measureText(' ').width, w2 = c.measureText('in code.').width; c.restore();
       const k = f >= T.copy5b ? E.out(prog(f, T.copy5b, T.copy5b + 26)) : 0, L = W / 2 - (w1 + sp + w2) / 2;
-      plate(c, W / 2, 974, mix(w1 + 120, w1 + sp + w2 + 120, k), 116);
-      const ax = mix(W / 2, L + w1 / 2, k); words(c, 'all drawn', f, T.copy5a, out, ax, 1004, 80); words(c, 'in code.', f, T.copy5b, out, ax + w1 / 2 + sp + w2 / 2, 1004, 80); }
+      const PY = PORT ? 1786 : 974; plate(c, W / 2, PY, mix(w1 + 120, w1 + sp + w2 + 120, k), 116);
+      const ax = mix(W / 2, L + w1 / 2, k); words(c, 'all drawn', f, T.copy5a, out, ax, PY + 30, 80); words(c, 'in code.', f, T.copy5b, out, ax + w1 / 2 + sp + w2 / 2, PY + 30, 80); }
     // the line sweeps across and clears the wall to paper
     const wo = E.inOut(prog(f, ...T.wipeOut));
-    if (wo > 0) { const xw = wo * (W + 200) - 100; c.fillStyle = C.paper; c.fillRect(0, 0, xw, H); c.fillStyle = C.ink; c.fillRect(Math.round(xw) - 4, 0, 8, H); }
+    if (wo > 0) { const xw = wo * (W + 200) - 100; c.fillStyle = C.paper; c.fillRect(0, 0, xw, H); c.fillStyle = C.ink; c.fillRect(Math.round(xw) - 4, 0, 8, H); }   // (both cuts sweep left to right)
   }
   // ------------------------------------------------ act 7: lockup
   if (f >= T.wipeOut[1] - 1) {
     const ub = E.out(prog(f, ...T.under)), creep = lmix(1, 1.03, prog(f, T.name[1], TOTAL));
-    c.save(); c.translate(W / 2, 560); c.scale(creep, creep);
+    c.save(); c.translate(W / 2, PORT ? H / 2 + 20 : 560); c.scale(creep, creep); if (PORT) c.scale(0.78, 0.78);
     // the line, now the underline the name stands on
     const half = 430; c.fillStyle = C.ink; c.fillRect(Math.round(-half), 26, Math.round(half * 2 * ub), 7);
     const nm = E.out(prog(f, ...T.name)); c.save(); c.beginPath(); c.rect(-1000, -200, 2000, 226); c.clip();
