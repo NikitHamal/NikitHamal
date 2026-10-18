@@ -35,6 +35,9 @@ const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 const hex = c => '#' + (c >>> 0).toString(16).padStart(6, '0');
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + .5) / 16);
 const bay = (x, y) => BAYER[(y & 3) * 4 + (x & 3)];
+// 8x8 ordered dither for long, smooth gradients (sky bands, mountain mist)
+const B8 = (() => { const m = [0]; let n = 1; let a = [[0]]; while (n < 8) { const b = []; for (let y = 0; y < n * 2; y++) { b.push([]); for (let x = 0; x < n * 2; x++) b[y].push(4 * a[y % n][x % n] + [[0, 2], [3, 1]][y / n | 0][x / n | 0]); } a = b; n *= 2; } return a.flat().map(v => (v + .5) / 64); })();
+const bay8 = (x, y) => B8[(y & 7) * 8 + (x & 7)];
 const cv = (w, h) => { const c = D.createElement('canvas'); c.width = Math.max(1, w | 0); c.height = Math.max(1, h | 0); return c; };
 const isDark = () => R.getAttribute('data-theme') === 'dark';
 
@@ -69,7 +72,7 @@ function makeBand(cols, w, h) {
   for (let y = 0; y < h; y++) {
     const t = y / h, ct = clamp(t / 0.7, 0, 1) * (cols.length - 1), i = Math.min(cols.length - 2, Math.floor(ct)), f = ct - i;
     const a = t < 0.42 ? 1 : 1 - (t - 0.42) / 0.58;
-    for (let x = 0; x < w; x++) { if (bay(x + 1, y + 2) >= a * a) continue; d[y * w + x] = bay(x, y) < f ? px[i + 1] : px[i]; }
+    for (let x = 0; x < w; x++) { if (bay8(x + 3, y + 5) >= a * a) continue; d[y * w + x] = bay8(x, y) < f ? px[i + 1] : px[i]; }
   }
   g.putImageData(im, 0, 0); return c;
 }
@@ -207,6 +210,7 @@ let bands = {}, clouds = [], stars = [], drops = [], flakes = [], petals = [], s
 let sunSpr = {}, moonSpr = null, moonP = realMoonPhase(), sunR = 11, moonR = 10;
 let night = isDark() ? 1 : 0, nFrom = night, nTo = night, nT0 = 0;
 let flash = 0, flare = 0, ptr = { x: -999, y: -999, vx: 0, vy: 0, lx: 0, ly: 0, t: 0 }, lastScroll = scrollY, t = 0;
+let rainbow = null, rainbowSpr = null, wasWet = WX[weather].rain > 0;
 let nextBird = 6, nextBolt = 3, nextShoot = 5, nextBalloon = 25;
 
 const LAYERS = [
@@ -226,7 +230,7 @@ function measure() {
     const bh = Math.round(H * 1.35);
     for (const k in BANDS) bands[k] = makeBand(BANDS[k], W, bh);
     sunR = W < 200 ? 8 : 11; moonR = W < 200 ? 7 : 10;
-    sunSpr = { noon: sunSprite(sunR, SUN_NOON), set: sunSprite(sunR, SUN_SET) }; moonSpr = moonSprite(moonR, moonP);
+    sunSpr = { noon: sunSprite(sunR, SUN_NOON), set: sunSprite(sunR, SUN_SET) }; moonSpr = moonSprite(moonR, moonP); rainbowSpr = null;
   }
   if (changed || Math.abs(docH - sky.docH) > 400) { sky.docH = docH; populate(); }
 }
@@ -253,6 +257,19 @@ function populate() {
 function sunPos() {
   const { W } = sky, base = W < 200 ? 50 : 40;
   return { x: Math.round(W - Math.max(W < 200 ? 22 : 44, W * .12)), y: base - scrollY / S * .38 };
+}
+
+function makeRainbow(W, H) {
+  const c = cv(W, H), g = c.getContext('2d'), cx = W * .26, cy = H * 1.05, r0 = Math.max(W * .27, H * .58);
+  const cols = ['#e8505f', '#f29544', '#f6d04d', '#6cc66a', '#4f9be6', '#8a6fdc'];
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const d = Math.hypot(x + .5 - cx, y + .5 - cy), band = Math.floor((r0 - d) / 2);
+    if (band < 0 || band >= cols.length) continue;
+    const fadeH = clamp((cy - y) / (H * .55), 0, 1);           // melts into the horizon
+    if (bay8(x, y) >= fadeH) continue;
+    g.fillStyle = cols[band]; g.fillRect(x, y, 1, 1);
+  }
+  return c;
 }
 
 /* ---------- spawning ---------- */
@@ -337,6 +354,12 @@ function frame(dt) {
     if (y - moonR < H + 10) { g.globalAlpha = 1 - st * .55; g.drawImage(moonSpr, x - mw, y - mw); g.globalAlpha = 1; }
   }
   flare = Math.max(0, flare - dt * .9);
+  // a rainbow arcs over the sky when the rain stops in the daytime
+  if (rainbow) {
+    rainbow.age += dt; const k = rainbow.age / rainbow.life;
+    if (k >= 1 || n > .6) rainbow = null;
+    else { if (!rainbowSpr) rainbowSpr = makeRainbow(W, H); g.globalAlpha = Math.min(1, k * 5, (1 - k) * 3) * (1 - n) * .4; g.drawImage(rainbowSpr, 0, Math.round(-scroll * .3 + H * .1)); g.globalAlpha = 1; }
+  }
 
   /* ====== fx layer: clouds & weather (faded under the text column) ====== */
   fg.clearRect(0, 0, W, H);
@@ -373,14 +396,19 @@ function frame(dt) {
     if (c.rain > 0) { c.rain -= dt; if (!reduce && rnd() < dt * 40 * (sw / 40)) spawnDrop(x + ra(3, sw - 3), y + sh - 2, L.d + .2, true); }
   }
   fg.globalAlpha = 1;
+  // at dusk and dawn the clouds catch the low sun
+  if (dusk > .02) { fg.globalCompositeOperation = 'source-atop'; fg.globalAlpha = dusk * .5; fg.fillStyle = '#ff8f6b'; fg.fillRect(0, 0, W, H); fg.globalAlpha = 1; fg.globalCompositeOperation = 'source-over'; }
 
   // birds (day)
   if (!reduce && (nextBird -= dt) < 0) { nextBird = ra(14, 30); if (n < .3 && P.birds > .5 && !calm) { const dir = rnd() < .5 ? 1 : -1; flock(dir > 0 ? -10 : W + 10, ra(H * .12, H * .5), dir); } }
   fg.fillStyle = n > .5 ? '#9aa6c8' : '#454b5a';
   for (let i = birds.length - 1; i >= 0; i--) {
-    const b = birds[i]; b.x += (b.vx + wind * .3) * dt; b.y += Math.sin(t * 2 + b.wob) * .08 - dScroll * b.d;
-    if (b.x < -30 || b.x > W + 30) { birds.splice(i, 1); continue; }
-    const fr = BIRD[Math.floor(t * 8 + b.ph) % 3], bx = Math.round(b.x) - 2, byy = Math.round(b.y), flip = b.vx < 0;
+    const b = birds[i];
+    if (!b.scared && Math.abs(b.x - ptr.x) < 16 && Math.abs(b.y - ptr.y) < 12) { b.scared = 1; b.vy = ra(-55, -35); b.vx *= 1.7; b.ph += 10; }
+    b.vy = (b.vy || 0) * Math.exp(-dt * 1.5);
+    b.x += (b.vx + wind * .3) * dt; b.y += Math.sin(t * 2 + b.wob) * .08 + b.vy * dt - dScroll * b.d;
+    if (b.x < -30 || b.x > W + 30 || b.y < -20) { birds.splice(i, 1); continue; }
+    const fr = BIRD[Math.floor(t * (b.scared ? 16 : 8) + b.ph) % 3], bx = Math.round(b.x) - 2, byy = Math.round(b.y), flip = b.vx < 0;
     fg.globalAlpha = .85; for (const [px2, py2] of fr) fg.fillRect(bx + (flip ? 4 - px2 : px2), byy + py2, 1, 1);
   }
   fg.globalAlpha = 1;
@@ -522,6 +550,19 @@ function onSkyClick(e) {
   else flock(x, y, x < sky.W / 2 ? 1 : -1);
 }
 const st = () => P.storm;
+function skyHot(e, x, y) {
+  if (!e.target || !e.target.closest || e.target.closest(NOT_SKY)) return false;
+  const sp = sunPos(); if (Math.hypot(x - sp.x, y - sp.y) < (night < .5 ? sunR : moonR) + 5) return true;
+  for (let i = clouds.length - 1; i >= 0; i--) { const c = clouds[i]; if (c.vis < .4 || c.L.d < .2) continue; const lx = Math.floor(x - c.sx), ly = Math.floor(y - c.sy); if (lx >= 0 && ly >= 0 && lx < c.spr.w && ly < c.spr.h && c.spr.mask[ly * c.spr.w + lx]) return true; }
+  return false;
+}
+let barColor = '';
+function tintBar() {
+  const m = D.querySelector('meta[name="theme-color"]'); if (!m) return;
+  const top = scrollY < innerHeight * .5, dark = isDark();
+  const want = top ? (dark ? '#0a0f2a' : '#a9d0f0') : getComputedStyle(D.body).backgroundColor;
+  if (want !== barColor) { barColor = want; m.setAttribute('content', want); }
+}
 
 /* ---------- boot the sky ---------- */
 function bootSky() {
@@ -536,12 +577,15 @@ function bootSky() {
     if (e.pointerType === 'touch') return; const now = performance.now(), x = e.clientX / S, y = e.clientY / S, dt = Math.max(8, now - ptr.t) / 1000;
     if (now - ptr.t < 120) { ptr.vx = lerp(ptr.vx, clamp((x - ptr.x) / dt, -260, 260), .5); ptr.vy = lerp(ptr.vy, clamp((y - ptr.y) / dt, -260, 260), .5); }
     ptr.x = x; ptr.y = y; ptr.t = now;
+    R.classList.toggle('sky-hot', skyHot(e, x, y));
   }, { passive: true });
   D.addEventListener('click', onSkyClick);
+  addEventListener('scroll', tintBar, { passive: true }); new MutationObserver(() => setTimeout(tintBar, 60)).observe(R, { attributes: true, attributeFilter: ['data-theme'] }); tintBar();
+  if (reduce) c.classList.add('on');
   let last = performance.now();
   const loop = now => {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
-    if (!D.hidden) frame(reduce ? 0 : dt);
+    if (!D.hidden) { frame(reduce ? 0 : dt); if (!c.classList.contains('on')) c.classList.add('on'); }
     requestAnimationFrame(loop);
   };
   if (reduce) { frame(0); addEventListener('scroll', () => requestAnimationFrame(() => frame(0)), { passive: true }); new MutationObserver(() => frame(0)).observe(R, { attributes: true, attributeFilter: ['data-theme'] }); }
@@ -580,6 +624,14 @@ function themeSVG() {
     <g class="ti-star ti-s1">${svgRects(star(13, 3), pal)}</g><g class="ti-star ti-s2">${svgRects(star(3, 2), pal)}</g>
     <g class="ti-ground">${svgRects(ground, { g: 'currentColor' })}</g></svg>`;
 }
+let tipEl = null, tipT = 0;
+function tip(btn, text) {
+  if (!tipEl) { tipEl = D.createElement('span'); tipEl.className = 'wx-tip'; tipEl.setAttribute('role', 'status'); D.body.appendChild(tipEl); }
+  const r = btn.getBoundingClientRect(); tipEl.textContent = text;
+  tipEl.style.left = `${r.left + r.width / 2}px`; tipEl.style.top = `${r.bottom + 10}px`;
+  tipEl.classList.remove('show'); void tipEl.offsetWidth; tipEl.classList.add('show');
+  clearTimeout(tipT); tipT = setTimeout(() => tipEl.classList.remove('show'), 1300);
+}
 function bootControls() {
   D.querySelectorAll('.theme-toggle .theme-icon').forEach(s => { s.textContent = ''; s.innerHTML = themeSVG(); s.classList.add('is-pixel'); });
   const tog = D.querySelector('.theme-toggle'); if (!tog || D.querySelector('.weather-toggle')) return;
@@ -595,7 +647,8 @@ function bootControls() {
   b.addEventListener('click', () => {
     weather = ORDER[(ORDER.indexOf(weather) + 1) % ORDER.length];
     try { localStorage.setItem('sky-weather', weather); } catch (e) {}
-    set(weather, true);
+    set(weather, true); tip(b, WX[weather].label);
+    const wet = WX[weather].rain > 0; if (wasWet && !wet && !WX[weather].snow && !isDark() && !reduce) setTimeout(() => { rainbow = { age: 0, life: 16 }; }, 1800); wasWet = wet;
     if (weather === 'storm' && sky.c) { const vis = clouds.filter(c => c.vis > .3 && c.sy > 0 && c.sy < sky.H * .5); const c = vis.length ? pick(vis) : null; setTimeout(() => bolt(c ? c.sx + c.spr.w / 2 : sky.W * .7, c ? c.sy + c.spr.h : 0, sky.W * ra(.3, .8), sky.H * .8), 500); }
   });
   tog.parentNode.insertBefore(b, tog);
@@ -649,7 +702,7 @@ class PixelHorizon extends HTMLElement {
     const L = (h, fill) => { const c = cv(W, H), g = c.getContext('2d'); fill(g, h); return c; };
     const fade = (g, top) => { // the lower part melts into mist
       const im = g.getImageData(0, 0, W, H), d = new Uint32Array(im.data.buffer);
-      for (let y = 0; y < H; y++) { const a = clamp(1 - (y - top) / (H - top), 0, 1); for (let x = 0; x < W; x++) if (bay(x, y) >= a * a) d[y * W + x] = 0; }
+      for (let y = 0; y < H; y++) { const a = clamp(1 - (y - top) / (H - top), 0, 1); for (let x = 0; x < W; x++) if (bay8(x, y) >= a * a) d[y * W + x] = 0; }
       g.putImageData(im, 0, 0); };
     this.far = L(far, (g, h) => {
       for (let x = 0; x < W; x++) { const top = Math.round(H - h[x]), lit = h[x + 1] < h[x]; const snowLine = H - h[x] + Math.min(h[x] - H * .3, 7 + h[x] * .1);

@@ -73,7 +73,14 @@
     el.addEventListener('click', e => { if (el._dragged) return; const r = el.getBoundingClientRect(); shut(el, e.clientX - r.left < r.width / 2 ? 'l' : 'r'); });   // wink the eye on the side you tap
     return el;
   }
-  function setDots() { dlg.querySelectorAll('.painted-dot').forEach((d, k) => d.setAttribute('aria-current', k === at ? 'true' : 'false')); }
+  // two stacked layers cross-fade the blurred painting behind the stage
+  let ambK = 0;
+  function ambient(i) {
+    let a = dlg.querySelector('.painted-ambient');
+    if (!a) { a = document.createElement('div'); a.className = 'painted-ambient'; a.setAttribute('aria-hidden', 'true'); a.innerHTML = '<span></span><span></span>'; dlg.prepend(a); }
+    const L = a.children; ambK ^= 1; L[ambK].style.backgroundImage = `url(assets/painted/${IDS[i]}.webp)`; L[ambK].classList.add('on'); L[ambK ^ 1].classList.remove('on');
+  }
+  function setDots() { ambient(at); dlg.querySelectorAll('.painted-dot').forEach((d, k) => d.setAttribute('aria-current', k === at ? 'true' : 'false')); }
 
   // slide to painting i; dir = +1 (next, comes in from the right) / -1; from = current drag offset in px
   async function show(i, dir, from) {
