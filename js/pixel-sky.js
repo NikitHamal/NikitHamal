@@ -210,6 +210,7 @@ let bands = {}, clouds = [], stars = [], drops = [], flakes = [], petals = [], s
 let sunSpr = {}, moonSpr = null, moonP = realMoonPhase(), sunR = 11, moonR = 10;
 let night = isDark() ? 1 : 0, nFrom = night, nTo = night, nT0 = 0;
 let flash = 0, flare = 0, ptr = { x: -999, y: -999, vx: 0, vy: 0, lx: 0, ly: 0, t: 0 }, lastScroll = scrollY, t = 0;
+let aur = 0, beamA = 0, beamSpr = null, kite = 0, lanterns = [], nextLantern = 4;
 let rainbow = null, rainbowSpr = null, wasWet = WX[weather].rain > 0;
 let nextBird = 6, nextBolt = 3, nextShoot = 5, nextBalloon = 25;
 
@@ -230,7 +231,7 @@ function measure() {
     const bh = Math.round(H * 1.35);
     for (const k in BANDS) bands[k] = makeBand(BANDS[k], W, bh);
     sunR = W < 200 ? 8 : 11; moonR = W < 200 ? 7 : 10;
-    sunSpr = { noon: sunSprite(sunR, SUN_NOON), set: sunSprite(sunR, SUN_SET) }; moonSpr = moonSprite(moonR, moonP); rainbowSpr = null;
+    sunSpr = { noon: sunSprite(sunR, SUN_NOON), set: sunSprite(sunR, SUN_SET) }; moonSpr = moonSprite(moonR, moonP); rainbowSpr = null; beamSpr = null;
   }
   if (changed || Math.abs(docH - sky.docH) > 400) { sky.docH = docH; populate(); }
 }
@@ -258,6 +259,23 @@ function sunPos() {
   const { W } = sky, base = W < 200 ? 50 : 40;
   return { x: Math.round(W - Math.max(W < 200 ? 22 : 44, W * .12)), y: base - scrollY / S * .38 };
 }
+
+function makeBeams(W, H, sx) {
+  // a few long dithered shafts fanning down and to the left of the sun
+  const c = cv(W, Math.round(H * 1.3)), g = c.getContext('2d'), L = H * 1.3;
+  const rays = [[116, 4.5], [131, 2.8], [144, 6], [159, 3.6], [171, 2.4]].map(([a, w]) => [a * Math.PI / 180, w * Math.PI / 180]);
+  g.fillStyle = '#fff1c4';
+  for (let y = 0; y < c.height; y++) for (let x = 0; x < W; x++) {
+    const dx = x + .5 - sx, dy = y + .5, d = Math.hypot(dx, dy); if (d < 14) continue;
+    const a = Math.atan2(dy, dx); let v = 0;
+    for (const [ra2, w] of rays) { const e = Math.abs(a - ra2); if (e < w) v = Math.max(v, 1 - e / w); }
+    if (!v) continue; const fade = Math.pow(v, 1.6) * (1 - d / L) * .42;
+    if (bay8(x, y) < fade) g.fillRect(x, y, 1, 1);
+  }
+  g.globalAlpha = 1; return c;
+}
+const KITE = art(['...a...', '..aba..', '.aabaa.', 'cccbccc', '.aabaa.', '..aba..', '...a...'], { a: '#e0473c', b: '#f2c24b', c: '#7a3b2a' });
+const LANTERN = art(['.ddd.', 'dmmmd', 'mllhm', 'mlllm', '.mmm.', '..e..'], { d: '#a8382a', m: '#f08a3c', l: '#ffc76a', h: '#fff1c0', e: '#ffdf8a' });
 
 function makeRainbow(W, H) {
   const c = cv(W, H), g = c.getContext('2d'), cx = W * .26, cy = H * 1.05, r0 = Math.max(W * .27, H * .58);
@@ -322,6 +340,23 @@ function frame(dt) {
     layer(bands.dusk, dusk * .95);
     g.globalAlpha = 1;
   }
+  /* --- aurora: slow curtains on clear nights --- */
+  aur += ((n > .8 ? (weather === 'clear' ? 1 : weather === 'fair' ? .35 : 0) : 0) * (calm ? .6 : 1) - aur) * f * .6;
+  if (aur > .02) {
+    const ay = Math.round(H * .06 - scroll * .22);
+    if (ay > -70) {
+      for (let x = 0; x < W; x++) {
+        const top = ay + Math.sin(x * .035 + t * .35) * 5 + Math.sin(x * .013 - t * .22 + 2) * 9;
+        const len = 20 + Math.sin(x * .05 + t * .6) * 6 + Math.sin(x * .021 + 1) * 5;
+        const k = (.5 + .5 * Math.sin(x * .07 - t * .9 + Math.sin(x * .02 + t * .1) * 2)) * aur * clamp(Math.sin(Math.PI * x / W) * 2.2, 0, 1);
+        if (k < .03) continue;
+        g.globalAlpha = k * .55; g.fillStyle = '#7cf5b4'; g.fillRect(x, Math.round(top + len * .74), 1, Math.max(1, Math.round(len * .14)));
+        g.globalAlpha = k * .26; g.fillStyle = '#46d59a'; g.fillRect(x, Math.round(top + len * .32), 1, Math.round(len * .42));
+        g.globalAlpha = k * .14; g.fillStyle = '#9b7cf2'; g.fillRect(x, Math.round(top), 1, Math.round(len * .32));
+      }
+      g.globalAlpha = 1;
+    }
+  }
   /* --- shooting stars --- */
   for (let i = shoots.length - 1; i >= 0; i--) {
     const s = shoots[i]; s.age += dt; s.x += s.vx * dt; s.y += s.vy * dt - dScroll * .3; if (s.age > s.life) { shoots.splice(i, 1); continue; }
@@ -334,6 +369,11 @@ function frame(dt) {
   if (n < .999) {
     const drop = ease(n) * (H * .8 + 40), x = Math.round(sp.x + n * 10), y = Math.round(sp.y + drop), fl = flare;
     const sa = (1 - st * .7) * (calm ? .85 : 1);
+    beamA += (((weather === 'clear' ? 1 : weather === 'fair' ? .7 : weather === 'wind' ? .4 : 0) * (1 - n * 3) * (calm ? .6 : 1)) - beamA) * f * .6;
+    if (beamA > .02 && y < H) {
+      if (!beamSpr) beamSpr = makeBeams(W, H, x);
+      g.globalAlpha = Math.max(0, beamA) * (reduce ? .7 : .6 + .4 * Math.sin(t * .35)); g.drawImage(beamSpr, 0, y); g.globalAlpha = 1;
+    }
     if (y - sunR < H + 10) {
       g.globalAlpha = sa; const sw = sunSpr.noon.width / 2;
       g.drawImage(sunSpr.noon, x - sw, y - sw);
@@ -415,6 +455,30 @@ function frame(dt) {
   // hot-air balloon (day, rare)
   if (!reduce && !calm && (nextBalloon -= dt) < 0 && !balloon) { nextBalloon = ra(50, 90); if (n < .3 && P.rain < .2 && P.snow < .2) balloon = { x: -14, y: ra(H * .15, H * .45), ph: rnd() * 6 }; }
   if (balloon) { balloon.x += (4 + wind * .25) * dt; balloon.y -= dScroll * .3; if (balloon.x > W + 14) balloon = null; else { fg.globalAlpha = .9 * (1 - n); fg.drawImage(BALLOON, Math.round(balloon.x), Math.round(balloon.y + Math.sin(t * .8 + balloon.ph) * 2)); fg.globalAlpha = 1; } }
+
+  // a kite rides the wind on windy days (Dashain skies)
+  kite += ((weather === 'wind' && n < .5 ? 1 : 0) - kite) * f * .5;
+  if (kite > .02) {
+    const kx = Math.round(W * (W < 200 ? .72 : .8) + Math.sin(t * .7) * 7 + Math.sin(t * 1.9) * 2 + (1 - kite) * 40), ky = Math.round(H * .3 + Math.sin(t * 1.1) * 5 - scroll * .25 + (1 - kite) * 30);
+    fg.globalAlpha = kite * .8; fg.fillStyle = n > .4 ? '#8d97b8' : '#8a8f99';
+    const ax = W * .5, ay = H + 8;                       // the string sags down to someone off-screen
+    let px2 = kx + 3, py2 = ky + 6;
+    for (let i = 1; i <= 24; i++) { const u = i / 24, qx = lerp(kx + 3, ax, u), qy = lerp(ky + 6, ay, u) + Math.sin(Math.PI * u) * 14; line(fg, px2, py2, qx, qy); px2 = qx; py2 = qy; if (qy > H) break; }
+    fg.globalAlpha = kite;
+    fg.fillStyle = '#e0473c';
+    for (let i = 0; i < 9; i++) { const tx = kx + 4 + i * 2.2, ty = ky + 6 + i * 1.4 + Math.sin(t * 6 - i * .8) * 1.6; fg.fillRect(Math.round(tx), Math.round(ty), 1, 1); if (i % 3 === 2) { fg.fillStyle = '#f2c24b'; fg.fillRect(Math.round(tx) - 1, Math.round(ty), 3, 1); fg.fillStyle = '#e0473c'; } }
+    fg.drawImage(KITE, kx, ky); fg.globalAlpha = 1;
+  }
+  // sky lanterns drift up on calm nights
+  if (!reduce && (nextLantern -= dt) < 0) { nextLantern = ra(3, 8); if (n > .85 && P.rain < .2 && P.snow < .2 && lanterns.length < (calm ? 3 : 7)) lanterns.push({ x: ra(W * .05, W * .95), y: H + 8, vy: ra(4, 8), ph: rnd() * 7 }); }
+  for (let i = lanterns.length - 1; i >= 0; i--) {
+    const l = lanterns[i]; l.y -= l.vy * dt + dScroll * .45; l.x += (Math.sin(t * .6 + l.ph) * 3 + wind * .35) * dt;
+    if (l.y < -12 || n < .5) { lanterns.splice(i, 1); continue; }
+    const x = Math.round(l.x), y = Math.round(l.y), fl = .75 + .25 * Math.sin(t * 9 + l.ph * 3) * Math.sin(t * 3.7 + l.ph);
+    fg.globalAlpha = .18 * fl; fg.fillStyle = '#ffb35c'; fg.fillRect(x - 2, y - 1, 9, 8); fg.fillRect(x - 1, y - 2, 7, 10);
+    fg.globalAlpha = .9 * fl + .1; fg.drawImage(LANTERN, x, y);
+  }
+  fg.globalAlpha = 1;
 
   // rain
   if (!reduce) {
@@ -546,7 +610,7 @@ function onSkyClick(e) {
   if (P.rain > .5) bolt(x + ra(-12, 12), 0, x, y);
   else if (P.snow > .5) { for (let i = 0; i < 24; i++) flakes.push({ x: x + ra(-10, 10), y: y + ra(-6, 6), vy: ra(4, 12), ph: rnd() * 7, s: rnd() < .4 ? 2 : 1, d: ra(.3, .7) }); }
   else if (P.wind > 12) { for (let i = 0; i < 18; i++) petals.push({ x: x + ra(-6, 6), y: y + ra(-6, 6), vy: ra(-6, 6), vx: ra(10, 30), ph: rnd() * 7, fr: ri(0, 3), c: ['#f6aec0', '#e47b98'], d: .6 }); }
-  else if (n > .5) { shootingStar(x, y); burst(x, y, ['#ffffff', '#d6e4ff'], 8, 30); }
+  else if (n > .5) { if (y > sky.H * .45) { lanterns.push({ x: x - 2, y: y - 3, vy: ra(6, 9), ph: rnd() * 7 }); burst(x, y, ['#ffc76a', '#ffdf8a'], 8, 25); } else { shootingStar(x, y); burst(x, y, ['#ffffff', '#d6e4ff'], 8, 30); } }
   else flock(x, y, x < sky.W / 2 ? 1 : -1);
 }
 const st = () => P.storm;
@@ -693,7 +757,7 @@ class PixelHorizon extends HTMLElement {
     if (this._on) return; this._on = true; this.setAttribute('aria-hidden', 'true');
     this.c = D.createElement('canvas'); this.appendChild(this.c); this.g = this.c.getContext('2d');
     this.ro = new ResizeObserver(() => this.build()); this.ro.observe(this);
-    this.mo = new MutationObserver(() => this.build()); this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
+    this.mo = new MutationObserver(() => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); }); this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
     this.vis = false; this.io = new IntersectionObserver(es => { this.vis = es[0].isIntersecting; }, { rootMargin: '100px' }); this.io.observe(this);
     const loop = () => { if (this.vis && !D.hidden) this.draw(); this.raf = requestAnimationFrame(loop); }; this.raf = requestAnimationFrame(loop);
   }
@@ -734,6 +798,13 @@ class PixelHorizon extends HTMLElement {
     this.sx = stupaX - 6; this.sy = sTop - stupa.length + 2;
     this.anchorL = [Math.round(stupaX - W * .16), Math.round(H - near[Math.max(0, Math.round(stupaX - W * .16))])];
     this.anchorR = [Math.min(W - 1, Math.round(stupaX + W * .14)), Math.round(H - near[Math.min(W, Math.round(stupaX + W * .14))])];
+    // two soft mist bands that drift through the valleys (tiles seamlessly: built twice as wide)
+    const mist = (yc, th, col, seedOff) => { const c = cv(W * 2, H), g = c.getContext('2d'); g.fillStyle = col;
+      for (let y = 0; y < H; y++) for (let x = 0; x < W * 2; x++) { const u = x / (W * 2) * Math.PI * 2;
+        const ctr = yc + Math.sin(u * 3 + seedOff) * 2.5 + Math.sin(u * 7 + seedOff * 2) * 1.2, thick = th * (.6 + .4 * Math.sin(u * 5 + seedOff * 3));
+        const a = 1 - Math.abs(y - ctr) / thick; if (a > 0 && bay8(x, y) < a * .55) g.fillRect(x, y, 1, 1); }
+      return c; };
+    this.mistA = mist(H * .56, 4, dark ? '#36406a' : '#ffffff', 1.3); this.mistB = mist(H * .78, 3.5, dark ? '#2a3354' : '#f4f7fb', 4.1);
     this.lights = []; if (dark) for (let i = 0; i < Math.round(W / 25); i++) { const x = ri(0, W - 1); this.lights.push([x, Math.round(H - near[x]) + ri(1, 4), rnd() * 6]); }
     this.draw();
   }
@@ -741,7 +812,13 @@ class PixelHorizon extends HTMLElement {
     if (!this.W) return; const { g, W, H } = this, r = this.getBoundingClientRect(), p = clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1);
     const off = k => reduce ? 0 : Math.round((1 - p) * k), now = performance.now() / 1000;
     g.clearRect(0, 0, W, H);
-    g.drawImage(this.far, 0, off(16)); g.drawImage(this.mid, 0, off(9));
+    const drift = (img, sp, y) => { if (!img) return; const x = Math.round(reduce ? 0 : -((now * sp) % (W * 2))); g.drawImage(img, x, y); if (x < -W) g.drawImage(img, x + W * 2, y); };
+    g.drawImage(this.far, 0, off(16));
+    // eagles soaring slow circles over the peaks (daytime)
+    if (!this.dark && !reduce) { g.fillStyle = '#4a5160'; for (let k = 0; k < 2; k++) { const a = now * .22 + k * 2.6, ex = Math.round(W * (.3 + k * .32) + Math.cos(a) * 14), ey = Math.round(H * .22 + Math.sin(a) * 4 + off(16)); const fr = BIRD[Math.sin(now * 1.3 + k) > .85 ? 0 : 1]; g.globalAlpha = .75; for (const [bx, by] of fr) g.fillRect(ex + (Math.cos(a) > 0 ? 4 - bx : bx), ey + by, 1, 1); } g.globalAlpha = 1; }
+    g.globalAlpha = this.dark ? .5 : .75; drift(this.mistA, 2.2, off(12)); g.globalAlpha = 1;
+    g.drawImage(this.mid, 0, off(9));
+    g.globalAlpha = this.dark ? .45 : .7; drift(this.mistB, 3.6, off(6)); g.globalAlpha = 1;
     const o = off(3); g.drawImage(this.near, 0, o);
     g.drawImage(this.stupa, this.sx, this.sy + o);
     // prayer flags from the spire to the hills, fluttering
@@ -756,6 +833,7 @@ class PixelHorizon extends HTMLElement {
     }
     for (const [x, y, ph] of this.lights) { const a = .6 + .4 * Math.sin(now * 2 + ph * 3); g.globalAlpha = a; g.fillStyle = '#ffd36b'; g.fillRect(x, y + o, 1, 1); }
     g.globalAlpha = 1;
+    if (this.prev) { const k = (performance.now() - this.prevT) / 1400; if (k >= 1) this.prev = null; else { g.globalAlpha = 1 - ease(k); g.drawImage(this.prev, 0, 0); g.globalAlpha = 1; } }
   }
 }
 if (!customElements.get('pixel-horizon')) customElements.define('pixel-horizon', PixelHorizon);
