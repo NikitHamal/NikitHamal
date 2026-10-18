@@ -8,7 +8,7 @@
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const INFO = {
-    'consicalabs.com': { kind: 'consica', title: 'Consica Labs', tag: 'Head of Operations', desc: 'The studio behind NEBians and AstroWeb, where I lead operations.', logo: 'assets/consica-logo.png' },
+    'consicalabs.com': { kind: 'consica', title: 'Consica Labs', tag: 'Head of Ops', desc: 'The studio behind NEBians and AstroWeb, where I lead operations.', logo: 'assets/consica-logo.png' },
     'nebians.consica.com.np': { kind: 'neb', title: 'NEBians', tag: 'Android · Django', desc: 'Material 3 Android app and Django backend for Nepali NEB students: study tools, AI chat arena, forums, result checker.', logo: 'assets/neb-logo.svg' },
     'play.google.com': { kind: 'lami', title: 'Lami Nepal', tag: 'Flutter · Firebase', desc: 'Matrimonial and spiritual services app with real-time chat, push notifications and full Nepali localization.', logo: 'assets/lami-logo-120.webp' },
     'astroweb.consicalabs.com': { kind: 'astro', title: 'AstroWeb', tag: 'SvelteKit · TypeScript', desc: 'Free Vedic astrology web app with accurate Kundali, Dasha calculations and astrological insights.', logo: 'assets/astroweb-logo.png' }
@@ -16,15 +16,15 @@
   const infoFor = a => { try { const u = new URL(a.href); return INFO[u.hostname.replace(/^www\./, '')] || null; } catch (e) { return null; } };
 
   const card = D.createElement('div'); card.className = 'lp-card'; card.setAttribute('role', 'tooltip'); card.id = 'lp-card';
-  card.innerHTML = '<div class="lp-banner"><canvas></canvas><span class="lp-logo"><img alt=""></span></div><div class="lp-body"><div class="lp-head"><strong class="lp-title"></strong><span class="lp-tag"></span></div><p class="lp-desc"></p><span class="lp-url"></span></div><span class="lp-caret"></span>';
+  card.innerHTML = '<div class="lp-banner"><canvas></canvas></div><div class="lp-body"><div class="lp-head"><img class="lp-logo" alt="" width="16" height="16"><strong class="lp-title"></strong><span class="lp-tag"></span></div><p class="lp-desc"></p><span class="lp-url"></span></div><span class="lp-caret"></span>';
   D.body.appendChild(card);
   const $ = s => card.querySelector(s);
   let cur = null, scene = null, openT = 0, closeT = 0, over = false;
 
   function place(a) {
-    const r = a.getBoundingClientRect(), cw = card.offsetWidth, ch = card.offsetHeight, m = 12;
-    const above = r.top - ch - 14 > 8, x = Math.min(innerWidth - cw - m, Math.max(m, r.left + r.width / 2 - cw / 2));
-    const y = above ? r.top - ch - 12 : r.bottom + 12;
+    const r = a.getBoundingClientRect(), cw = card.offsetWidth, ch = card.offsetHeight, m = 14;
+    const above = r.top - ch - 18 > 8, x = Math.min(innerWidth - cw - m, Math.max(m, r.left + r.width / 2 - cw / 2));
+    const y = above ? r.top - ch - 16 : r.bottom + 16;
     card.style.left = x + 'px'; card.style.top = y + 'px';
     card.classList.toggle('below', !above);
     const cx = Math.max(16, Math.min(cw - 16, r.left + r.width / 2 - x));
@@ -36,8 +36,8 @@
     if (cur === a && card.classList.contains('on')) return;
     cur = a;
     $('.lp-title').textContent = info.title; $('.lp-tag').textContent = info.tag; $('.lp-desc').textContent = info.desc;
-    $('.lp-url').textContent = new URL(a.href).hostname.replace(/^www\./, '') + ' ↗'; $('.lp-logo img').src = info.logo;
-    if (scene) scene.stop(); scene = window.PixelCards ? window.PixelCards.mount(info.kind, $('canvas'), 288, 96) : null;
+    $('.lp-url').textContent = new URL(a.href).hostname.replace(/^www\./, '') + ' ↗'; $('.lp-logo').src = info.logo;
+    if (scene) scene.stop(); scene = window.PixelCards ? window.PixelCards.mount(info.kind, $('canvas'), 210, 54) : null;
     a.setAttribute('aria-describedby', 'lp-card');
     card.classList.remove('on'); void card.offsetWidth; place(a); card.classList.add('on');
     D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'tap' }));
