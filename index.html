@@ -121,7 +121,7 @@
     <!-- PROFILE / HEADER -->
     <header class="profile-header">
       <div class="avatar-container" id="avatarContainer">
-        <img src="assets/nikit-216.webp" width="72" height="72" alt="Nikit Hamal" class="profile-avatar" id="avatarImg" fetchpriority="high" decoding="async" />
+        <div class="profile-avatar painted-avatar" id="avatarPainted" data-painted="now" data-eager data-alt="Nikit Hamal, painted" role="img" aria-label="Nikit Hamal, painted portrait"></div>
       </div>
 
       <div class="profile-name-row">
@@ -167,6 +167,21 @@
       </div>
 
       <!-- 2. SKILLS & EXPERIENCE -->
+      <div class="accordion-item" data-accordion="portraits">
+        <button class="accordion-header" aria-expanded="false">
+          <span class="header-left">
+            <span class="accordion-prefix">&gt;</span>
+            <span class="accordion-title">PORTRAITS</span>
+          </span>
+          <span class="accordion-icon"><i class="ri-add-line"></i></span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-inner">
+            <div class="painted-grid" id="paintedGrid"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="accordion-item" data-accordion="skills">
         <button class="accordion-header" aria-expanded="false">
           <span class="header-left">
@@ -392,15 +407,17 @@
     </div>
   </section>
 
-  <!-- Photo Modal -->
-  <dialog id="photoDialog" class="minimal-modal">
-    <div class="modal-card modal-photo-card">
-      <button class="modal-close-btn" data-close aria-label="Close"><i class="ri-close-line"></i></button>
-      <img data-src="assets/nikit.webp" alt="Nikit Hamal" class="modal-full-photo" decoding="async" />
-    </div>
+  <!-- Painted portraits, fullscreen -->
+  <dialog id="paintedDialog" class="painted-dialog" aria-label="Painted portraits">
+    <button class="painted-close" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="painted-nav painted-prev" aria-label="Previous painting"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="painted-stage"></div>
+    <button class="painted-nav painted-next" aria-label="Next painting"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="painted-dots"></div>
   </dialog>
 
   <script src="js/config.js"></script>
+  <script src="js/painted.js" defer></script>
   <script src="js/pixel-dog.js?v=23" defer></script>
   <script>
     // Koi pond lives in the footer: only download/build it (≈30 MB of buffers) when it's about to scroll into view.

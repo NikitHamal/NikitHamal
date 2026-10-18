@@ -170,29 +170,13 @@
   // ============================================
 
   function initModals() {
-    const avatarContainer = $('#avatarContainer');
-    const avatarImg = $('#avatarImg');
-    const photoDialog = $('#photoDialog');
-
-    const openDlg = (dlg) => {
-      if (!dlg) return;
-      // full-size photo is only fetched/decoded when the dialog is opened
-      dlg.querySelectorAll('img[data-src]').forEach((im) => { im.src = im.dataset.src; im.removeAttribute('data-src'); });
-      if (typeof dlg.showModal === 'function') dlg.showModal();
-      else dlg.setAttribute('open', '');
-    };
+    // (the avatar opens the painted-portraits viewer: js/painted.js)
 
     const closeDlg = (dlg) => {
       if (!dlg) return;
       if (typeof dlg.close === 'function') dlg.close();
       else dlg.removeAttribute('open');
     };
-
-    if (avatarContainer && photoDialog) {
-      avatarContainer.addEventListener('click', () => openDlg(photoDialog));
-    } else if (avatarImg && photoDialog) {
-      avatarImg.addEventListener('click', () => openDlg(photoDialog));
-    }
 
     $$('.minimal-modal, .modal').forEach((dlg) => {
       const closeBtn = dlg.querySelector('[data-close]');
