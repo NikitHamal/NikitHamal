@@ -1,0 +1,12 @@
+@font-face{font-family:Mono;src:url(fonts/JetBrainsMono.ttf);font-weight:100 800}
+@font-face{font-family:Serif;src:url(fonts/Newsreader.ttf);font-weight:200 800}
+@font-face{font-family:SerifI;src:url(fonts/Newsreader-Italic.ttf);font-weight:200 800;font-style:italic}
+@font-face{font-family:Sans;src:url(fonts/PlusJakartaSans.ttf);font-weight:200 800}
+@font-face{font-family:Poppins;src:url(fonts/Poppins-Regular.ttf);font-weight:400}
+@font-face{font-family:Poppins;src:url(fonts/Poppins-Medium.ttf);font-weight:500}
+@font-face{font-family:Poppins;src:url(fonts/Poppins-SemiBold.ttf);font-weight:600}
+@font-face{font-family:Poppins;src:url(fonts/Poppins-Bold.ttf);font-weight:700}
+@font-face{font-family:Poppins;src:url(fonts/Poppins-ExtraBold.ttf);font-weight:800}
+@font-face{font-family:Cinzel;src:url(fonts/CinzelDecorative-Regular.ttf);font-weight:400}
+@font-face{font-family:Cinzel;src:url(fonts/CinzelDecorative-Bold.ttf);font-weight:700}
+@font-face{font-family:MIcons;src:url(fonts/MaterialIconsRound.otf);font-weight:400}
