@@ -1,3 +1,7 @@
 UI sounds: "Interface Sounds" by Kenney (www.kenney.nl), CC0 1.0 (public domain).
 https://kenney.nl/assets/interface-sounds  https://creativecommons.org/publicdomain/zero/1.0/
 Packed into ui.wav (32 kHz mono); offsets live in js/sound.js.
+Ambience (all CC0 1.0 / public domain, from OpenGameArt.org), trimmed, made seamless and re-encoded:
+  rain.m4a    <- "AMB Rain Loop 1"      https://opengameart.org/content/amb-rain-loop-1
+  thunder.m4a <- "Rain - Long Thunder"  https://opengameart.org/content/rain-long-thunder
+  wind.m4a    <- "Wind Whoosh Loop"     https://opengameart.org/content/wind-whoosh-loop

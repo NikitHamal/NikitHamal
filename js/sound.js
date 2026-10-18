@@ -16,6 +16,8 @@
   const coarse = matchMedia('(pointer: coarse)').matches;
   let on = false; try { on = localStorage.getItem(KEY) === 'on'; } catch (e) {}
   let ac = null, master, sfx, amb, music, sendS, sendM, pink, brown, rainG, windG, windF, sprite = null, started = false, duck = 1, voices = 0;
+  // real ambience (CC0 recordings, see assets/sfx/LICENSE.txt), fetched only when that weather first needs them
+  let rainLP, rainRecG, windRecG, windSrc = null, rec = {}, recLoading = {};
   const MAX_VOICES = coarse ? 18 : 28;
   const rnd = Math.random, pick = a => a[Math.floor(rnd() * a.length)], clamp = (v, a, b) => v < a ? a : v > b ? b : v;
   const mf = m => 440 * Math.pow(2, (m - 69) / 12);
@@ -39,8 +41,11 @@
     const verb = ac.createConvolver(); verb.buffer = impulse(coarse ? 1.6 : 2.1, 2.6); verb.connect(gain(.42, master));
     sendS = gain(.18, verb); sendM = gain(.5, verb);      // shared sends: one per bus
     pink = noiseBuf(true); brown = noiseBuf(false);
+    // synthesized beds play until the real recordings arrive (and stay as a quiet texture under them)
     rainG = gain(0, amb); loop(pink, [bq('highpass', 500), bq('lowpass', 3600)], rainG);
     windG = gain(0, amb); windF = bq('bandpass', 420, .9); loop(pink, [windF], windG);
+    rainLP = bq('lowpass', 9000); rainRecG = gain(0, amb); rainLP.connect(rainRecG);
+    windRecG = gain(0, amb);
     loadSprite();
     return true;
   }
@@ -55,6 +60,16 @@
     return b;
   }
   function loop(buf, chain, to) { const s = ac.createBufferSource(); s.buffer = buf; s.loop = true; let n = s; for (const f of chain) { n.connect(f); n = f; } n.connect(to); s.start(0, rnd() * 2); }
+  function decode(buf) { return new Promise((ok, no) => { const p = ac.decodeAudioData(buf, ok, no); if (p && p.then) p.then(ok, no); }); }
+  function need(name) {
+    if (rec[name] || recLoading[name]) return rec[name] || null; recLoading[name] = true;
+    fetch(`/assets/sfx/${name}.m4a?v=1`).then(r => r.arrayBuffer()).then(decode).then(buf => { rec[name] = buf; onRec(name, buf); }).catch(() => { recLoading[name] = false; });
+    return null;
+  }
+  function onRec(name, buf) {
+    if (name === 'rain') { const s = ac.createBufferSource(); s.buffer = buf; s.loop = true; s.connect(rainLP); s.start(0, Math.random() * buf.duration); }
+    if (name === 'wind') { const s = ac.createBufferSource(); s.buffer = buf; s.loop = true; s.connect(windRecG); s.start(0, Math.random() * buf.duration); windSrc = s; }
+  }
   function loadSprite() {
     fetch(SPRITE_URL).then(r => r.arrayBuffer()).then(b => new Promise((ok, no) => { const p = ac.decodeAudioData(b, ok, no); if (p && p.then) p.then(ok, no); })).then(buf => { sprite = buf; }).catch(() => {});
   }
@@ -96,7 +111,14 @@
     weather() { sample('toggle', .35, .85); noise({ a: .12, d: .5, v: .08, f: 450, f2: 2400, q: .8, send: sendS }); },
     sparkle() { sample('glass', .4) || [0, 1, 2].forEach(i => bell(pick(DAY) + 24, i * .06, .02, .5)); },
     drop() { sample('drop', .45, 1.1) || tone({ f: mf(88), glide: mf(98), d: .09, v: .04 }); },
-    thunder() { const dist = rnd(), t = .2 + dist * 1.3; noise({ buf: brown, t, a: .06, d: 2.4 + dist, v: .5 * (1 - dist * .5), type: 'lowpass', f: 200 + (1 - dist) * 160, q: .4, to: amb, send: sendS }); if (dist < .35) noise({ t: t - .12, a: .002, d: .2, v: .16, type: 'highpass', f: 1400, to: amb }); },
+    thunder() {
+      const dist = rnd(), buf = rec.thunder || need('thunder');
+      if (buf) {   // the real roll: near = the crack from the top, far = later in the roll, slower and darker
+        const s = ac.createBufferSource(), lp = bq('lowpass', 900 + (1 - dist) * 5000), g = gain(.95 - dist * .45, amb);
+        s.buffer = buf; s.playbackRate.value = (.82 + rnd() * .2) * (1 - dist * .1); s.connect(lp); lp.connect(g); g.connect(sendS); track(s);
+        s.start(ac.currentTime + .15 + dist * 1.2, dist < .4 ? 0 : 1.5 + rnd() * 3); return;
+      }
+      const t = .2 + dist * 1.3; noise({ buf: brown, t, a: .06, d: 2.4 + dist, v: .5 * (1 - dist * .5), type: 'lowpass', f: 200 + (1 - dist) * 160, q: .4, to: amb, send: sendS }); if (dist < .35) noise({ t: t - .12, a: .002, d: .2, v: .16, type: 'highpass', f: 1400, to: amb }); },
     star() { tone({ f: mf(93), glide: mf(81), d: .8, v: .022, send: sendM, partial: 2.76, essential: true }); },
     lantern() { sample('pluck', .35, .8) ; bell(69, .05, .03, 1.5); bell(76, .2, .024, 1.5); },
     whoosh() { noise({ a: .25, d: .75, v: .1, f: 260, f2: 2000, q: 1.1, send: sendS }); sample('open', .25, .9, .3); }
@@ -138,8 +160,16 @@
   function ambTick() {
     if (!started) return; const now = ac.currentTime, dt = clamp(now - lastAmb, 0, 1); lastAmb = now;
     const P = (window.PixelSky && window.PixelSky.params) || { rain: 0, wind: 3, snow: 0, storm: 0 }, night = window.PixelSky ? window.PixelSky.night > .5 : isDark();
-    rainG.gain.setTargetAtTime(clamp(P.rain, 0, 2) * .15, now, .8);
-    const w = clamp((P.wind - 3) / 18, 0, 1); windG.gain.setTargetAtTime(.01 + w * .13 + P.snow * .03, now, 1.2);
+    const rainAmt = clamp(P.rain, 0, 2), w = clamp((P.wind - 3) / 18, 0, 1);
+    if (rainAmt > .05) need('rain'); if (w > .2 || P.snow > .2) need('wind'); if (P.storm > .6) need('thunder');
+    // recorded rain carries the sound; the synth bed fades back to a whisper once it has loaded
+    rainRecG.gain.setTargetAtTime(rainAmt * .55, now, .9); rainLP.frequency.setTargetAtTime(9000 - P.storm * 4500, now, 1);
+    rainG.gain.setTargetAtTime(rainAmt * (rec.rain ? .03 : .2), now, .8);
+    // wind: the recording swells and speeds up with the gusts; snow gets a soft, slow hush of it
+    const gust = .65 + .35 * Math.sin(now * .37) * Math.sin(now * .11 + 1);
+    windRecG.gain.setTargetAtTime((w * .7 * gust + P.snow * .18 + P.storm * .12) * (rec.wind ? 1 : 0), now, 1.1);
+    if (windSrc) windSrc.playbackRate.setTargetAtTime(.75 + w * .45 * gust - P.snow * .1, now, 1.5);
+    windG.gain.setTargetAtTime(.01 + (w * gust * .14 + P.snow * .03) * (rec.wind ? .35 : 1), now, 1.2);
     windF.frequency.setTargetAtTime(320 + Math.sin(now * .23) * 120 + w * 420, now, .9);
     amb.gain.setTargetAtTime(.9 * duck, now, .6); music.gain.setTargetAtTime(.7 * duck, now, 1.2);
     const calm = P.rain < .2 && P.snow < .2 && P.wind < 12;
@@ -184,8 +214,12 @@
     b.addEventListener('click', () => set(!on, b));
     D.querySelectorAll('.sound-toggle').forEach(x => { x.setAttribute('aria-pressed', String(on)); x.classList.toggle('is-on', on); x.title = on ? 'Sound: on' : 'Sound: off'; });
     // remembered "on": audio may only start inside a user gesture (iOS wants touchend / click, not pointerdown)
-    if (on) { const evs = ['pointerup', 'touchend', 'click', 'keydown'], first = e => { if (e.target.closest && e.target.closest('.sound-toggle')) return; start(); evs.forEach(n => D.removeEventListener(n, first, true)); };
-      evs.forEach(n => D.addEventListener(n, first, true)); }
+    // keep trying on every gesture until the context is really running: iOS ignores some gesture types
+    const evs = ['pointerup', 'touchend', 'click', 'keydown'], unlock = e => {
+      if (!on || (e.target.closest && e.target.closest('.sound-toggle'))) return;
+      start(); if (ac && ac.state === 'running') evs.forEach(n => D.removeEventListener(n, unlock, true));
+    };
+    evs.forEach(n => D.addEventListener(n, unlock, true));
     D.addEventListener('click', e => {
       if (!on || !started || !e.target.closest) return;
       const acc = e.target.closest('.accordion-header');

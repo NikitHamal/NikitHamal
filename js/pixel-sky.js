@@ -206,7 +206,7 @@ try { const w = localStorage.getItem('sky-weather'); if (WX[w]) weather = w; } c
 const P = Object.assign({}, WX[weather]); P.bolts = WX[weather].bolts || 0;
 
 const sky = { c: null, g: null, fx: null, fg: null, W: 0, H: 0, docH: 0 };
-let bands = {}, clouds = [], stars = [], drops = [], flakes = [], petals = [], streaks = [], sparks = [], birds = [], bolts = [], shoots = [], flies = [], balloon = null;
+let ripples = [], bands = {}, clouds = [], stars = [], drops = [], flakes = [], petals = [], streaks = [], sparks = [], birds = [], bolts = [], shoots = [], flies = [], balloon = null;
 let sunSpr = {}, moonSpr = null, moonP = realMoonPhase(), sunR = 11, moonR = 10;
 let night = isDark() ? 1 : 0, nFrom = night, nTo = night, nT0 = 0;
 let flash = 0, flare = 0, ptr = { x: -999, y: -999, vx: 0, vy: 0, lx: 0, ly: 0, t: 0 }, lastScroll = scrollY, t = 0;
@@ -302,7 +302,7 @@ function makeRainbow(W, H) {
 function spawnDrop(x, y, d, fromCloud) {
   drops.push({ x, y, d, vy: ra(170, 230) * (.6 + d * .6), len: d > .45 ? ri(6, 9) : ri(3, 5), stop: fromCloud ? y + ra(30, 110) : ra(sky.H * .35, sky.H + 4) });
 }
-function splash(x, y, col) { for (let i = 0; i < 3; i++) sparks.push({ x, y, vx: ra(-25, 25), vy: ra(-45, -15), g: 160, life: ra(.15, .3), age: 0, c: col, s: 1 }); }
+function splash(x, y, col) { for (let i = 0; i < 2; i++) sparks.push({ x, y, vx: ra(-25, 25), vy: ra(-45, -15), g: 160, life: ra(.15, .3), age: 0, c: col, s: 1 }); ripples.push({ x, y, age: 0, life: ra(.35, .55), c: col }); }
 function burst(x, y, cols, n = 14, sp = 60) {
   for (let i = 0; i < n; i++) { const a = rnd() * Math.PI * 2, v = ra(sp * .3, sp); sparks.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: 30, life: ra(.4, .9), age: 0, c: pick(cols), s: rnd() < .3 ? 2 : 1 }); }
 }
@@ -334,7 +334,8 @@ function frame(dt) {
   const tw = WX[weather], f = 1 - Math.exp(-dt / 1.4);
   for (const k of ['cover', 'wind', 'rain', 'snow', 'storm', 'petals', 'streaks', 'birds']) P[k] += (tw[k] - P[k]) * f;
   P.bolts = tw.bolts || 0;
-  const st = P.storm, wind = P.wind, scroll = scrollY / S, dScroll = (scrollY - lastScroll) / S; lastScroll = scrollY;
+  const gust = .65 + .35 * Math.sin(t * .37) * Math.sin(t * .11 + 1), windy = clamp((P.wind - 6) / 14, 0, 1);
+  const st = P.storm, wind = P.wind * (1 - windy * .45 + windy * .9 * gust), scroll = scrollY / S, dScroll = (scrollY - lastScroll) / S; lastScroll = scrollY;
   // pointer velocity (art px / s), decays when still
   ptr.vx *= Math.exp(-dt * 6); ptr.vy *= Math.exp(-dt * 6);
 
@@ -442,6 +443,9 @@ function frame(dt) {
     const draw = (spr, w) => { if (w > .01) { fg.globalAlpha = a * w; fg.drawImage(spr, x, y); } };
     const dark = c.rain > 0 ? Math.min(1, c.rain) * .8 : 0;
     draw(c.spr.day, wDay * (1 - dark)); draw(c.spr.storm, wDayS + wDay * dark); draw(c.spr.night, wN * (1 - dark)); draw(c.spr.stormN, wNS + wN * dark);
+    const glow = Math.max(flash * st * (L.d > .25 ? 1.1 : .6), c.sheet > 0 ? (Math.sin(c.sheet * 40) > -.2 ? c.sheet : 0) : 0);
+    if (glow > .03) { fg.globalAlpha = a * Math.min(.85, glow); fg.drawImage(c.spr.day, x, y); }
+    if (c.sheet > 0) c.sheet -= dt;
     if (c.rain > 0) { c.rain -= dt; if (!reduce && rnd() < dt * 40 * (sw / 40)) spawnDrop(x + ra(3, sw - 3), y + sh - 2, L.d + .2, true); }
   }
   fg.globalAlpha = 1;
@@ -503,18 +507,29 @@ function frame(dt) {
     for (let j = 0; j < d.len; j++) fg.fillRect(Math.round(d.x - kx * j), Math.round(d.y - j), 1, 1);
   }
   fg.globalAlpha = 1;
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    const r = ripples[i]; r.age += dt; r.y -= dScroll * .6; const k = r.age / r.life; if (k >= 1) { ripples.splice(i, 1); continue; }
+    const w = 1 + Math.round(k * 4), x = Math.round(r.x), y = Math.round(r.y); fg.globalAlpha = (1 - k) * .55; fg.fillStyle = r.c;
+    fg.fillRect(x - w, y, 1, 1); fg.fillRect(x + w, y, 1, 1); if (k > .3) { fg.fillRect(x - w + 1, y + 1, w * 2 - 1, 1); }
+  }
+  fg.globalAlpha = 1;
   // snow
-  if (!reduce) for (let k = P.snow * W * .5 * dt + rnd(); k > 1; k--) flakes.push({ x: ra(-10, W + 10), y: -3, vy: ra(7, 16), ph: rnd() * 7, s: rnd() < .25 ? 2 : 1, d: ra(.2, .7) });
-  const sc = n > .5 ? '#f2f6ff' : '#b9cde4';
+  if (!reduce) for (let k = P.snow * W * (calm ? .05 : .085) * dt + rnd(); k > 1; k--) { const d = rnd(); flakes.push({ x: ra(-10, W + 10), y: -4, vy: ra(9, 16), ph: rnd() * 7, s: d > .92 ? 3 : d > .6 ? 2 : 1, d: .2 + d * .6, sw: rnd() < .15 ? ra(4, 9) : 0, rot: rnd() * 4 }); }
+  const sc = n > .5 ? '#f2f6ff' : '#a9c1dc', sc2 = n > .5 ? '#c6d4f2' : '#d9e6f3';
   for (let i = flakes.length - 1; i >= 0; i--) {
-    const s = flakes[i]; s.y += s.vy * dt * (.6 + s.d) - dScroll * s.d; s.x += (Math.sin(t * 1.3 + s.ph) * 4 + wind * .6) * dt + ptr.near(s.x, s.y) * dt * 1.5;
-    if (s.y > H + 3 || s.y < -10) { flakes.splice(i, 1); continue; }
-    fg.globalAlpha = .55 + s.d * .5; fg.fillStyle = sc; const x = Math.round(s.x), y = Math.round(s.y);
-    if (s.s === 2) { fg.fillRect(x - 1, y, 3, 1); fg.fillRect(x, y - 1, 1, 3); } else fg.fillRect(x, y, 1, 1);
+    const s = flakes[i]; s.y += s.vy * dt * (.55 + s.d) - dScroll * s.d;
+    s.x += (Math.sin(t * 1.3 + s.ph) * 4 + wind * (.4 + s.d * .5)) * dt + ptr.near(s.x, s.y) * dt * 1.5;
+    if (s.y > H + 4 || s.y < -10) { flakes.splice(i, 1); continue; }
+    let x = s.x, y = s.y; if (s.sw) { x += Math.cos(t * 2 + s.ph) * s.sw * .5; y += Math.sin(t * 2 + s.ph) * s.sw * .25; }
+    x = Math.round(x); y = Math.round(y); fg.globalAlpha = .5 + s.d * .55; fg.fillStyle = sc;
+    if (s.s === 3) {   // a tiny six-point crystal that tumbles between its two poses
+      if ((Math.floor(t * 2 + s.rot) & 1) === 0) { fg.fillRect(x - 2, y, 5, 1); fg.fillRect(x, y - 2, 1, 5); fg.fillStyle = sc2; fg.fillRect(x - 1, y - 1, 1, 1); fg.fillRect(x + 1, y + 1, 1, 1); fg.fillRect(x + 1, y - 1, 1, 1); fg.fillRect(x - 1, y + 1, 1, 1); }
+      else { fg.fillRect(x - 1, y - 1, 1, 1); fg.fillRect(x + 1, y + 1, 1, 1); fg.fillRect(x + 1, y - 1, 1, 1); fg.fillRect(x - 1, y + 1, 1, 1); fg.fillRect(x - 2, y - 2, 1, 1); fg.fillRect(x + 2, y + 2, 1, 1); fg.fillRect(x + 2, y - 2, 1, 1); fg.fillRect(x - 2, y + 2, 1, 1); fg.fillStyle = sc2; fg.fillRect(x, y, 1, 1); }
+    } else if (s.s === 2) { fg.fillRect(x - 1, y, 3, 1); fg.fillRect(x, y - 1, 1, 3); } else fg.fillRect(x, y, 1, 1);
   }
   fg.globalAlpha = 1;
   // petals & leaves
-  if (!reduce) for (let k = P.petals * W * .02 * dt + rnd(); k > 1; k--) petals.push({ x: wind > 8 ? -6 : ra(0, W), y: wind > 8 ? ra(-10, H * .8) : -4, vy: ra(5, 11), vx: ra(-2, 4), ph: rnd() * 7, fr: ri(0, 3), c: rnd() < .8 ? ['#f6aec0', '#e47b98'] : ['#9cc58a', '#6f9e5e'], d: ra(.3, .8) });
+  if (!reduce) for (let k = P.petals * W * .02 * dt + rnd(); k > 1; k--) petals.push({ x: wind > 8 ? -6 : ra(0, W), y: wind > 8 ? ra(-10, H * .8) : -4, vy: ra(5, 11), vx: ra(-2, 4), ph: rnd() * 7, fr: ri(0, 3), c: windy > .3 ? pick([['#f6aec0', '#e47b98'], ['#9cc58a', '#6f9e5e'], ['#e9b44c', '#c47f2a'], ['#d9734a', '#a8492f']]) : rnd() < .8 ? ['#f6aec0', '#e47b98'] : ['#9cc58a', '#6f9e5e'], d: ra(.3, .8) });
   for (let i = petals.length - 1; i >= 0; i--) {
     const p = petals[i]; p.y += (p.vy + Math.sin(t * 2 + p.ph) * 3) * dt - dScroll * p.d; p.x += (p.vx + wind * (.8 + p.d * .6) + Math.cos(t * 1.7 + p.ph) * 4) * dt + ptr.near(p.x, p.y) * dt * 2;
     if (p.y > H + 4 || p.x > W + 8 || p.x < -10 || p.y < -14) { petals.splice(i, 1); continue; }
@@ -523,7 +538,7 @@ function frame(dt) {
     if (fr === 0) fg.fillRect(x + 1, y, 1, 1); else if (fr === 1) fg.fillRect(x + 1, y + 1, 1, 1); else if (fr === 2) fg.fillRect(x, y + 1, 1, 1); else { fg.fillStyle = p.c[0]; fg.fillRect(x - 1, y + 1, 1, 1); }
   }
   // wind streaks with curls
-  if (!reduce) for (let k = P.streaks * dt * 1.6 + rnd() * .02; k > 1 || (rnd() < P.streaks * dt * 1.4); k--) { streaks.push({ x: ra(-20, W * .8), y: ra(4, H - 4), len: ri(14, 34), age: 0, life: ra(1, 1.8), curl: rnd() < .45, ph: rnd() * 6 }); if (k <= 1) break; }
+  if (!reduce) for (let k = P.streaks * gust * dt * 2 + rnd() * .02; k > 1 || (rnd() < P.streaks * dt * 1.4); k--) { streaks.push({ x: ra(-20, W * .8), y: ra(4, H - 4), len: ri(14, 34), age: 0, life: ra(1, 1.8), curl: rnd() < .45, ph: rnd() * 6 }); if (k <= 1) break; }
   fg.fillStyle = n > .5 ? '#6c7ca3' : '#a7b8cb';
   for (let i = streaks.length - 1; i >= 0; i--) {
     const s = streaks[i]; s.age += dt; s.x += (wind * 2.2 + 10) * dt; s.y -= dScroll * .4; const p = s.age / s.life; if (p >= 1) { streaks.splice(i, 1); continue; }
@@ -577,6 +592,8 @@ function frame(dt) {
   fg.globalCompositeOperation = 'source-over';
   g.drawImage(sky.fx, 0, 0);
 
+  // sheet lightning: a single cloud flickers from inside now and then
+  if (!reduce && P.bolts && rnd() < dt * .28) { const vis = clouds.filter(c => c.vis > .6 && c.sy > -10 && c.sy < H * .6); if (vis.length) { pick(vis).sheet = ra(.25, .5); D.dispatchEvent(new CustomEvent('sky:sfx', { detail: rnd() < .3 ? 'thunder' : '' })); } }
   // lightning flash lights the whole sky
   if (flash > .01) { g.fillStyle = n > .5 ? `rgba(200,215,255,${flash * .35})` : `rgba(255,255,255,${flash * .55})`; g.fillRect(0, 0, W, H); flash *= Math.exp(-dt * 9); }
 
@@ -742,7 +759,7 @@ function bootControls() {
   b.addEventListener('click', () => {
     weather = ORDER[(ORDER.indexOf(weather) + 1) % ORDER.length];
     try { localStorage.setItem('sky-weather', weather); } catch (e) {}
-    set(weather, true); tip(b, WX[weather].label); D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'weather' }));
+    set(weather, true); tip(b, WX[weather].label); D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'weather' })); D.dispatchEvent(new CustomEvent('sky:weather', { detail: weather }));
     const wet = WX[weather].rain > 0; if (wasWet && !wet && !WX[weather].snow && !isDark() && !reduce) setTimeout(() => { rainbow = { age: 0, life: 16 }; }, 1800); wasWet = wet;
     if (weather === 'storm' && sky.c) { const vis = clouds.filter(c => c.vis > .3 && c.sy > 0 && c.sy < sky.H * .5); const c = vis.length ? pick(vis) : null; setTimeout(() => bolt(c ? c.sx + c.spr.w / 2 : sky.W * .7, c ? c.sy + c.spr.h : 0, sky.W * ra(.3, .8), sky.H * .8), 500); }
   });
@@ -778,10 +795,12 @@ class PixelHorizon extends HTMLElement {
     this.ro = new ResizeObserver(() => this.build()); this.ro.observe(this);
     this.mo = new MutationObserver(() => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); });
     this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
+    this._wx = () => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); };
+    D.addEventListener('sky:weather', this._wx);
     this.vis = false; this.io = new IntersectionObserver(es => { this.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '100px' }); this.io.observe(this);
     let lastT = 0; const loop = now => { this.raf = requestAnimationFrame(loop); if (this.vis && !D.hidden && now - lastT > 30) { lastT = now; this.draw(); } }; this.raf = requestAnimationFrame(loop);   // 30 fps: mist, flags and ripples are slow
   }
-  disconnectedCallback() { this._on = false; cancelAnimationFrame(this.raf); this.ro.disconnect(); this.mo.disconnect(); this.io.disconnect(); }
+  disconnectedCallback() { this._on = false; cancelAnimationFrame(this.raf); this.ro.disconnect(); this.mo.disconnect(); this.io.disconnect(); D.removeEventListener('sky:weather', this._wx); }
   build() {
     const W = Math.ceil(this.clientWidth / S), H = Math.ceil(this.clientHeight / S); if (!W || !H) return;
     // the mountains take the top ~60%, a still lake (Phewa-style) mirrors them below
@@ -790,6 +809,14 @@ class PixelHorizon extends HTMLElement {
     const dark = isDark(), C = dark
       ? { far: '#27304e', farS: '#1f2743', snow: '#8796bf', snowS: '#5f6d96', mid: '#1c2438', midS: '#171e30', tree: '#121827', near: '#131928', nearS: '#0f1420', water: '#111830', water2: '#0c1226', shore: '#2a3352', glint: '#e9e4c8' }
       : { far: '#c3d1e5', farS: '#aebfd8', snow: '#ffffff', snowS: '#dce6f2', mid: '#a7bdad', midS: '#94ab9a', tree: '#7d9884', near: '#8ca393', nearS: '#7b9282', water: '#b7cde0', water2: '#a3bfd6', shore: '#e9f1f7', glint: '#ffffff' };
+    // dress for the weather: snow settles on the hills and roofs, rain and storms grey everything out
+    const wx = window.PixelSky ? window.PixelSky.weather : 'fair';
+    const mixHex = (a, b, k) => { const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), ch = sh => Math.round(((A >> sh) & 255) * (1 - k) + ((B >> sh) & 255) * k); return '#' + ((ch(16) << 16) | (ch(8) << 8) | ch(0)).toString(16).padStart(6, '0'); };
+    if (wx === 'snow') { const w = dark ? '#7f8db5' : '#f4f8fc', w2 = dark ? '#66739a' : '#dfe8f2';
+      Object.assign(C, { mid: w, midS: w2, near: mixHex(C.near, w, .75), nearS: mixHex(C.nearS, w2, .75), tree: dark ? '#2e3a58' : '#5f7f6c', far: mixHex(C.far, w, .5), farS: mixHex(C.farS, w2, .5), water: mixHex(C.water, w, .35), water2: mixHex(C.water2, w2, .35) }); }
+    else if (wx === 'rain' || wx === 'storm') { const g = dark ? '#1a1f2e' : '#9aa3ae', k = wx === 'storm' ? .5 : .32;
+      for (const key of ['far', 'farS', 'snow', 'snowS', 'mid', 'midS', 'tree', 'near', 'nearS', 'water', 'water2']) C[key] = mixHex(C[key], g, k); }
+    this.snowy = wx === 'snow';
     this.C = C; this.dark = dark; seed = 0x9e3779b;
     const ridge = (amp, base, rough, peaks) => { const h = new Float32Array(W + 1); const pk = []; for (let i = 0; i < peaks; i++) pk.push([ra(0, W), ra(.55, 1) * amp, ra(Math.max(12, W * .05), Math.max(22, W * .14))]);
       for (let x = 0; x <= W; x++) { let v = 0; for (const [px, a, wd] of pk) v = Math.max(v, a * (1 - Math.abs(x - px) / wd)); h[x] = base + v + Math.sin(x * .21) * rough + Math.sin(x * .057 + 2) * rough * 1.6; } return h; };
@@ -850,7 +877,7 @@ class PixelHorizon extends HTMLElement {
     // shore houses: a white wall, a red tin roof, one window (warm at night)
     for (const [x, y, k] of this.houses) {
       s.fillStyle = this.dark ? '#3a4260' : '#f4efe6'; s.fillRect(x, y - 3, 5, 3);
-      s.fillStyle = this.dark ? '#5a2f36' : ['#c4483b', '#3d6fb0', '#d08a2e'][k]; s.fillRect(x - 1, y - 4, 7, 1); s.fillRect(x, y - 5, 5, 1);
+      s.fillStyle = this.snowy ? (this.dark ? '#9aa6c8' : '#ffffff') : this.dark ? '#5a2f36' : ['#c4483b', '#3d6fb0', '#d08a2e'][k]; s.fillRect(x - 1, y - 4, 7, 1); s.fillRect(x, y - 5, 5, 1);
       s.fillStyle = this.dark ? (Math.sin(now * .7 + x) > -.6 ? '#ffd36b' : '#5a4a30') : '#7a8796'; s.fillRect(x + 1 + (k & 1) * 2, y - 2, 1, 1);
     }
     s.drawImage(this.stupa, this.sx, this.sy);
