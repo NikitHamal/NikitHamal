@@ -15,7 +15,6 @@ let manifest; const files = {};
 const getBlob = (f, type) => files[f] || (files[f] = (manifest = manifest || fetch('art/index.json').then(r => r.json()))
   .then(m => Promise.all(Array.from({ length: m[f] }, (_, i) => fetch(`art/${f}.${i}`).then(r => r.arrayBuffer())))).then(p => new Blob(p, { type })));
 const urls = {};
-Living.setLoader(getBlob);
 const imgURL = (id, v) => urls[id + v] || (urls[id + v] = getBlob(`${id}/${v}.webp`, 'image/webp').then(b => URL.createObjectURL(b)));
 const bitmap = async (id, v, w, h) => createImageBitmap(await getBlob(`${id}/${v}.webp`, 'image/webp'), { resizeWidth: w, resizeHeight: h, resizeQuality: 'high' });
 
@@ -127,8 +126,8 @@ const heroEl = $('#hero'); heroEl.classList.add('tilt'); interactive(heroEl);
 let cur = 'now', medium = 'paint';
 const hero = Drawing(heroEl, () => medium);
 function show(id, animate = true) {
-  cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id)); Living.detach(heroEl);
-  hero.play(id, 3.8, s => { $('#status').textContent = s; if (/strokes$/.test(s) && medium === 'paint' && cur === id) Living.attach(heroEl, id, 'paintlarge_ne', { fps: 60 }); }, animate);
+  cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id));
+  hero.play(id, 3.8, s => ($('#status').textContent = s), animate);
 }
 ST.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => show(id); $('#chips').appendChild(b); });
 $('#redraw').onclick = () => show(cur);
@@ -141,7 +140,7 @@ function card(grid, label, sub) {
   grid.appendChild(f); return f;
 }
 const onView = (el, fn) => new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); fn(); } }, { rootMargin: '150px 0px' }).observe(el);
-async function still(a, id, v, alt) { a.innerHTML = `<img src="${await imgURL(id, v)}" alt="${alt}">`; if (/paint/.test(v)) { await mountEyes(a, id); a.querySelector('svg.eyes').style.opacity = 1; interactive(a); Living.attach(a, id, v); } askLook(); }
+async function still(a, id, v, alt) { a.innerHTML = `<img src="${await imgURL(id, v)}" alt="${alt}">`; if (/paint/.test(v)) { await mountEyes(a, id); a.querySelector('svg.eyes').style.opacity = 1; interactive(a); } askLook(); }
 for (const [id, label] of ST) {
   const pf = card($('#paints'), label, 'painted'); onView(pf, () => still(pf.firstChild, id, 'paint_ne', `Painted portrait of Nikit: ${label}`));
   pf.querySelector('figcaption').onclick = () => big(id, label, true);
@@ -152,7 +151,7 @@ async function big(id, label, paint) {
   $('#lb').hidden = false; $('#lbTitle').textContent = `${label} · ${paint ? 'painted' : 'graphite'}`;
   const a = $('#lbArt'); a.className = 'art paper tilt' + (paint ? '' : ' pencil'); await still(a, id, paint ? 'paintlarge_ne' : 'large', '');
 }
-const closeLb = () => { $('#lb').hidden = true; live.delete($('#lbArt')); Living.detach($('#lbArt')); $('#lbArt').innerHTML = ''; };
+const closeLb = () => { $('#lb').hidden = true; live.delete($('#lbArt')); $('#lbArt').innerHTML = ''; };
 $('#lb').onclick = e => { if (e.target.id === 'lb' || e.target.id === 'lbClose') closeLb(); };
 addEventListener('keydown', e => e.key === 'Escape' && closeLb());
 })();
