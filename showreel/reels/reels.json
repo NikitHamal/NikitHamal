@@ -1274,7 +1274,7 @@
       "size": 60,
       "f": "serif",
       "c": "ink2",
-      "y": -1.9,
+      "y": -2.8,
       "at": 6,
       "step": 7
      },
@@ -1283,13 +1283,13 @@
       "size": 76,
       "f": "serif",
       "c": "ink",
-      "y": -0.8,
+      "y": -1.7,
       "at": 80,
       "step": 8
      }
     ],
     "word": "yourself.",
-    "wy": 0.8,
+    "wy": 1.25,
     "zat": 150
    }
   ],
@@ -1666,13 +1666,13 @@
       "size": 80,
       "f": "serif",
       "c": "ink",
-      "y": -1.0,
+      "y": -1.9,
       "at": 8,
       "step": 10
      }
     ],
     "word": "a random happening.",
-    "wy": 0.7,
+    "wy": 1.15,
     "zat": 70
    }
   ],
@@ -2283,13 +2283,13 @@
       "size": 96,
       "f": "serif",
       "c": "ink",
-      "y": -1.0,
+      "y": -1.9,
       "at": 8,
       "step": 14
      }
     ],
     "word": "always the same.",
-    "wy": 0.7,
+    "wy": 1.15,
     "zat": 60
    }
   ],
@@ -2489,7 +2489,7 @@
       "size": 92,
       "f": "serif",
       "c": "ink",
-      "y": -1.6,
+      "y": -2.5,
       "at": 8,
       "step": 14
      },
@@ -2498,13 +2498,13 @@
       "size": 72,
       "f": "serifI",
       "c": "ink2",
-      "y": 1.9,
+      "y": 3.0,
       "at": 170,
       "step": 9
      }
     ],
     "word": "glow,",
-    "wy": 0.0,
+    "wy": 0.45,
     "zat": 50
    }
   ],
@@ -2764,13 +2764,13 @@
       "size": 96,
       "f": "serif",
       "c": "paper",
-      "y": -1.1,
+      "y": -2.0,
       "at": 6,
       "step": 12
      }
     ],
     "word": "the whole Nikit?",
-    "wy": 0.6,
+    "wy": 1.05,
     "zat": 56
    },
    {
@@ -2871,6 +2871,2288 @@
    }
   ],
   "scene": "tea",
+  "sceneAmb": "air"
+ },
+ "unity-is-a-lie": {
+  "title": "Unity is a lie",
+  "cat": "An essay",
+  "date": "October 2, 2025",
+  "key": 50,
+  "ghost": "UNITY",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Unity is",
+      "size": 150,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 18
+     },
+     {
+      "t": "a pretense.",
+      "size": 116,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 60,
+      "step": 16
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Leave aside nations,",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "step": 5,
+      "at": 6
+     },
+     {
+      "t": "religions, communities;",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 5,
+      "at": 37
+     },
+     {
+      "t": "there is not even unity",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "step": 5,
+      "at": 63
+     },
+     {
+      "t": "within one's own family.",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.6,
+      "step": 5,
+      "at": 104
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "Why is there no unity?",
+      "size": 66,
+      "f": "serif",
+      "c": "ink2",
+      "y": -2.7,
+      "at": 6,
+      "step": 8
+     },
+     {
+      "t": "Because each",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.6,
+      "at": 60,
+      "step": 12
+     }
+    ],
+    "word": "mind is different.",
+    "wy": 1.15,
+    "zat": 100
+   },
+   {
+    "from": 648,
+    "to": 900,
+    "mode": "light",
+    "kind": "type",
+    "lines": [
+     {
+      "t": "you must succeed,",
+      "size": 59,
+      "f": "mono",
+      "c": "ink",
+      "y": -1.79,
+      "at": 6,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "you must move ahead,",
+      "size": 59,
+      "f": "mono",
+      "c": "ink",
+      "y": -0.62,
+      "at": 50,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "you must earn name, fame, wealth,",
+      "size": 59,
+      "f": "mono",
+      "c": "ink",
+      "y": 0.62,
+      "at": 100,
+      "rate": 1,
+      "step": 12
+     },
+     {
+      "t": "you must be respectable.",
+      "size": 59,
+      "f": "mono",
+      "c": "pink",
+      "y": 1.79,
+      "at": 152,
+      "rate": 2,
+      "step": 12
+     }
+    ]
+   },
+   {
+    "from": 900,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "Many thoughts may meet,",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 10,
+      "at": 6
+     },
+     {
+      "t": "but never",
+      "size": 86,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 10,
+      "at": 62
+     },
+     {
+      "t": "two whole minds.",
+      "size": 91,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 10,
+      "at": 98
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Either you are completely free",
+      "size": 80,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.15,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "from self-interest,",
+      "size": 80,
+      "f": "serif",
+      "c": "paper",
+      "y": 0,
+      "step": 12,
+      "at": 82
+     },
+     {
+      "t": "or you are entirely selfish.",
+      "size": 92,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.2,
+      "at": 120,
+      "step": 12
+     }
+    ]
+   }
+  ],
+  "scene": "maple",
+  "sceneAmb": "air"
+ },
+ "in-relationship-there-is-no-love": {
+  "title": "In relationship, there is no love",
+  "cat": "An essay",
+  "date": "February 27, 2025",
+  "key": 49,
+  "ghost": "LOVE",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "In relationship,",
+      "size": 140,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 16
+     },
+     {
+      "t": "there is no love.",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 64,
+      "step": 14
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "We use one another",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "step": 7,
+      "at": 6
+     },
+     {
+      "t": "for pleasure.",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 7,
+      "at": 50
+     },
+     {
+      "t": "And with pleasure",
+      "size": 84,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "step": 7,
+      "at": 80
+     },
+     {
+      "t": "comes displeasure.",
+      "size": 92,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.6,
+      "step": 7,
+      "at": 117
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "light",
+    "kind": "center",
+    "lines": [
+     {
+      "t": "The void never gets filled.",
+      "size": 92,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.9,
+      "at": 40,
+      "step": 10
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Do not look out.",
+      "size": 116,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 6,
+      "step": 14
+     },
+     {
+      "t": "Look inward.",
+      "size": 124,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 80,
+      "step": 18
+     }
+    ]
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "Where there is",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "no open heart,",
+      "size": 86,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 58
+     },
+     {
+      "t": "how can love be?",
+      "size": 91,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 110
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "It is just the mind,",
+      "size": 76,
+      "f": "serif",
+      "c": "ink2",
+      "y": -2.7,
+      "at": 6,
+      "step": 9
+     },
+     {
+      "t": "playing the game of",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "at": 56,
+      "step": 10
+     }
+    ],
+    "word": "profit and loss.",
+    "wy": 1.15,
+    "zat": 110
+   }
+  ],
+  "scene": "tea",
+  "sceneAmb": "air"
+ },
+ "love-is-acceptance": {
+  "title": "Love is acceptance",
+  "cat": "An essay",
+  "date": "February 27, 2025",
+  "key": 53,
+  "ghost": "ACCEPT",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Love is",
+      "size": 150,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 18
+     },
+     {
+      "t": "acceptance.",
+      "size": 124,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 56,
+      "step": 16
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "I say I love my wife,",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 7,
+      "at": 6
+     },
+     {
+      "t": "but I get angry,",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 7,
+      "at": 64
+     },
+     {
+      "t": "jealous, hurt, frustrated.",
+      "size": 88,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 7,
+      "at": 108
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "Like expecting a banana tree",
+      "size": 70,
+      "f": "serif",
+      "c": "ink2",
+      "y": -2.7,
+      "at": 6,
+      "step": 8
+     },
+     {
+      "t": "to produce",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.6,
+      "at": 70,
+      "step": 12
+     }
+    ],
+    "word": "mangoes.",
+    "wy": 1.15,
+    "zat": 104
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Where there is acceptance,",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 9,
+      "at": 6
+     },
+     {
+      "t": "there is no desire",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 9,
+      "at": 58
+     },
+     {
+      "t": "to change.",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 15,
+      "at": 110
+     }
+    ]
+   },
+   {
+    "from": 864,
+    "to": 1080,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "No one has lived",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 8,
+      "at": 6
+     },
+     {
+      "t": "this life before.",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 8,
+      "at": 54
+     },
+     {
+      "t": "We are all newcomers.",
+      "size": 86,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 8,
+      "at": 94
+     }
+    ]
+   },
+   {
+    "from": 1080,
+    "to": 1404,
+    "mode": "light",
+    "kind": "brackets",
+    "lines": [
+     {
+      "t": "You cannot judge anyone.",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.5,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "You have not lived their",
+      "size": 66,
+      "f": "serif",
+      "c": "ink2",
+      "y": -0.5,
+      "step": 12,
+      "at": 70
+     }
+    ],
+    "word": "life.",
+    "lock": 140
+   }
+  ],
+  "scene": "cat",
+  "sceneAmb": "air"
+ },
+ "wisdom-cannot-be-taught": {
+  "title": "Wisdom cannot be taught",
+  "cat": "An essay",
+  "date": "February 26, 2025",
+  "key": 55,
+  "ghost": "WISDOM",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Wisdom",
+      "size": 160,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 6,
+      "step": 14
+     },
+     {
+      "t": "cannot be taught.",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 50,
+      "step": 14
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "How can anyone show light",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 10,
+      "at": 6
+     },
+     {
+      "t": "to someone whose eyes are closed?",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.65,
+      "step": 10,
+      "at": 72
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Open your eyes,",
+      "size": 124,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 6,
+      "step": 14
+     },
+     {
+      "t": "and things are visible already.",
+      "size": 88,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 70,
+      "step": 9
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 900,
+    "mode": "light",
+    "kind": "type",
+    "lines": [
+     {
+      "t": "knowledge can be transferred.",
+      "size": 68,
+      "f": "mono",
+      "c": "ink",
+      "y": -0.78,
+      "at": 10,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "wisdom must come on its own.",
+      "size": 68,
+      "f": "mono",
+      "c": "pink",
+      "y": 0.78,
+      "at": 110,
+      "rate": 2,
+      "step": 12
+     }
+    ]
+   },
+   {
+    "from": 900,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "We are all",
+      "size": 86,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "guests of life.",
+      "size": 91,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 58
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "You are no teacher, no guru.",
+      "size": 72,
+      "f": "serif",
+      "c": "ink2",
+      "y": -2.7,
+      "at": 6,
+      "step": 9
+     },
+     {
+      "t": "You are also",
+      "size": 92,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "at": 66,
+      "step": 12
+     }
+    ],
+    "word": "a guest.",
+    "wy": 1.15,
+    "zat": 110
+   }
+  ],
+  "scene": "incense",
+  "sceneAmb": "air"
+ },
+ "the-non-dual-relationship": {
+  "title": "The Non-Dual Relationship",
+  "cat": "An essay",
+  "date": "December 21, 2024",
+  "key": 51,
+  "ghost": "ECHO",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Pain and pleasure are natural.",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 4,
+      "step": 9
+     },
+     {
+      "t": "Suffering is conditioning.",
+      "size": 100,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.65,
+      "at": 80,
+      "step": 12
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "You have eyes",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "step": 5,
+      "at": 6
+     },
+     {
+      "t": "but never saw anyone.",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 5,
+      "at": 37
+     },
+     {
+      "t": "You have ears",
+      "size": 84,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "step": 5,
+      "at": 73
+     },
+     {
+      "t": "but never heard anyone.",
+      "size": 84,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.6,
+      "step": 5,
+      "at": 104
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "What you hear is your own",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.9,
+      "at": 6,
+      "step": 11
+     }
+    ],
+    "word": "echo.",
+    "wy": 1.15,
+    "zat": 80
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Walls of conditioning,",
+      "size": 92,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 10,
+      "at": 6
+     },
+     {
+      "t": "broken by the hammer",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 10,
+      "at": 52
+     },
+     {
+      "t": "of awareness.",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 16,
+      "at": 108
+     }
+    ]
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "There are two Nikits:",
+      "size": 81,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "the body,",
+      "size": 86,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 70
+     },
+     {
+      "t": "and the mind.",
+      "size": 91,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 110
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "The best relationship",
+      "size": 100,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "at": 8,
+      "step": 12
+     },
+     {
+      "t": "is the non-dual relationship.",
+      "size": 92,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 90,
+      "step": 11
+     }
+    ]
+   }
+  ],
+  "scene": "lotus",
+  "sceneAmb": "water"
+ },
+ "a-love-that-never-hurts": {
+  "title": "A Love that never hurts",
+  "cat": "An essay",
+  "date": "December 14, 2024",
+  "key": 56,
+  "ghost": "HURT",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "A love",
+      "size": 160,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 6,
+      "step": 14
+     },
+     {
+      "t": "that never hurts.",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 50,
+      "step": 14
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "The love of the ego",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 8,
+      "at": 6
+     },
+     {
+      "t": "is a trade,",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 8,
+      "at": 62
+     },
+     {
+      "t": "an exchange of conditions.",
+      "size": 88,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 8,
+      "at": 102
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Give me pleasure,",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "step": 5,
+      "at": 6
+     },
+     {
+      "t": "and we go smoothly.",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 5,
+      "at": 37
+     },
+     {
+      "t": "Give me displeasure,",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "step": 5,
+      "at": 73
+     },
+     {
+      "t": "and I don't feel love.",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.6,
+      "step": 5,
+      "at": 104
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "No one can ever hurt you",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.9,
+      "at": 6,
+      "step": 10
+     }
+    ],
+    "word": "psychologically.",
+    "wy": 1.15,
+    "zat": 80
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "Curse a newborn baby;",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "he isn't hurt.",
+      "size": 86,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 70
+     },
+     {
+      "t": "He might even laugh.",
+      "size": 91,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 122
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Meanings are invented by the mind.",
+      "size": 76,
+      "f": "serif",
+      "c": "ink2",
+      "y": -1.2,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "It is me myself,",
+      "size": 96,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 12,
+      "at": 94
+     },
+     {
+      "t": "self-hurting.",
+      "size": 120,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.25,
+      "at": 130,
+      "step": 16
+     }
+    ]
+   }
+  ],
+  "scene": "tea",
+  "sceneAmb": "air"
+ },
+ "we-came-out-of-this-world": {
+  "title": "We came out of this world",
+  "cat": "An essay",
+  "date": "December 14, 2024",
+  "key": 50,
+  "ghost": "WORLD",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "We came out of this world,",
+      "size": 116,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 12
+     },
+     {
+      "t": "not into it.",
+      "size": 116,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.65,
+      "at": 90,
+      "step": 16
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "This world is not designed for us;",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 8,
+      "at": 6
+     },
+     {
+      "t": "we are designed for this world.",
+      "size": 84,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.65,
+      "step": 8,
+      "at": 78
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "Not a party hall to be planned.",
+      "size": 66,
+      "f": "serif",
+      "c": "ink2",
+      "y": -2.7,
+      "at": 6,
+      "step": 8
+     },
+     {
+      "t": "This world is",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.6,
+      "at": 66,
+      "step": 12
+     }
+    ],
+    "word": "a random happening.",
+    "wy": 1.15,
+    "zat": 104
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Dinosaurs and mammoths,",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.6,
+      "step": 5,
+      "at": 6
+     },
+     {
+      "t": "as the world was.",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 5,
+      "at": 37
+     },
+     {
+      "t": "Bacteria that digest plastic,",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "step": 5,
+      "at": 73
+     },
+     {
+      "t": "as the world is.",
+      "size": 88,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.6,
+      "step": 5,
+      "at": 109
+     }
+    ]
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "We are not outsiders.",
+      "size": 81,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "We are the world itself.",
+      "size": 86,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 70
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "We are,",
+      "size": 140,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "at": 10,
+      "step": 18
+     },
+     {
+      "t": "as the world is.",
+      "size": 116,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 70,
+      "step": 16
+     }
+    ]
+   }
+  ],
+  "scene": "maple",
+  "sceneAmb": "air"
+ },
+ "how-to-be-happy": {
+  "title": "How to be happy?",
+  "cat": "An essay",
+  "date": "December 5, 2024",
+  "key": 55,
+  "ghost": "NOW",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "How to be",
+      "size": 150,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 18
+     },
+     {
+      "t": "happy?",
+      "size": 140,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 60,
+      "step": 18
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Happiness is the mind",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 9,
+      "at": 6
+     },
+     {
+      "t": "in harmony",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 9,
+      "at": 58
+     },
+     {
+      "t": "with what actually is.",
+      "size": 92,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 9,
+      "at": 92
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "The mind cannot accept the present,",
+      "size": 72,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 5,
+      "at": 6
+     },
+     {
+      "t": "doesn't let go of the past,",
+      "size": 76,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 5,
+      "at": 52
+     },
+     {
+      "t": "and seeks a hopeful future.",
+      "size": 80,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 5,
+      "at": 98
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "Truth is nothing but",
+      "size": 92,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.9,
+      "at": 6,
+      "step": 12
+     }
+    ],
+    "word": "this very moment.",
+    "wy": 1.15,
+    "zat": 70
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "We are in the present,",
+      "size": 81,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "but we are not present.",
+      "size": 86,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 82
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "type",
+    "lines": [
+     {
+      "t": "letting go + acceptance",
+      "size": 73,
+      "f": "mono",
+      "c": "ink",
+      "y": -0.78,
+      "at": 10,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "= neverminding.",
+      "size": 87,
+      "f": "mono",
+      "c": "pink",
+      "y": 0.84,
+      "at": 100,
+      "rate": 3,
+      "step": 12
+     }
+    ]
+   }
+  ],
+  "scene": "sakura",
+  "sceneAmb": "air"
+ },
+ "how-to-be-happy-2": {
+  "title": "How to be happy (2)",
+  "cat": "An essay",
+  "date": "January 1, 2026",
+  "key": 52,
+  "ghost": "FEAR",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Have you ever been",
+      "size": 116,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 12
+     },
+     {
+      "t": "complete?",
+      "size": 140,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.65,
+      "at": 74,
+      "step": 18
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Pleasure fills our emptiness.",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 8,
+      "at": 6
+     },
+     {
+      "t": "Happiness is being complete,",
+      "size": 84,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0,
+      "step": 8,
+      "at": 54
+     },
+     {
+      "t": "no longer seeking.",
+      "size": 92,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 8,
+      "at": 102
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 720,
+    "mode": "light",
+    "kind": "type",
+    "lines": [
+     {
+      "t": "fear of trusting,",
+      "size": 61,
+      "f": "mono",
+      "c": "ink",
+      "y": -1.79,
+      "at": 6,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "fear of opening up,",
+      "size": 61,
+      "f": "mono",
+      "c": "ink",
+      "y": -0.62,
+      "at": 52,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "fear of being rejected,",
+      "size": 61,
+      "f": "mono",
+      "c": "ink",
+      "y": 0.62,
+      "at": 104,
+      "rate": 2,
+      "step": 12
+     },
+     {
+      "t": "fear of not being enough.",
+      "size": 61,
+      "f": "mono",
+      "c": "pink",
+      "y": 1.79,
+      "at": 160,
+      "rate": 2,
+      "step": 12
+     }
+    ]
+   },
+   {
+    "from": 720,
+    "to": 936,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Ask yourself:",
+      "size": 110,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 6,
+      "step": 14
+     },
+     {
+      "t": "what is driving you?",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 60,
+      "step": 14
+     }
+    ]
+   },
+   {
+    "from": 936,
+    "to": 1152,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "Is that mood",
+      "size": 91,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "really yours?",
+      "size": 104,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 58
+     }
+    ]
+   },
+   {
+    "from": 1152,
+    "to": 1404,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "Is this maturity,",
+      "size": 100,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.9,
+      "at": 6,
+      "step": 14
+     }
+    ],
+    "word": "or fear?",
+    "wy": 1.15,
+    "zat": 70
+   }
+  ],
+  "scene": "lantern",
+  "sceneAmb": "air"
+ },
+ "everything-is-thought": {
+  "title": "Everything is thought",
+  "cat": "An essay",
+  "date": "November 30, 2024",
+  "key": 51,
+  "ghost": "MIND",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Everything",
+      "size": 160,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 6,
+      "step": 14
+     },
+     {
+      "t": "is thought.",
+      "size": 124,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 50,
+      "step": 16
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "The seer, the listener,",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 7,
+      "at": 6
+     },
+     {
+      "t": "the feeler, the knower:",
+      "size": 88,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 7,
+      "at": 50
+     },
+     {
+      "t": "it is the mind alone.",
+      "size": 96,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 7,
+      "at": 94
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "What does the air see?",
+      "size": 100,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 6,
+      "step": 12
+     },
+     {
+      "t": "What does the grass feel?",
+      "size": 100,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 80,
+      "step": 12
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 900,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "In dreamless sleep,",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "eight hours pass",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 58
+     },
+     {
+      "t": "like a single moment.",
+      "size": 86,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 110
+     }
+    ]
+   },
+   {
+    "from": 900,
+    "to": 1116,
+    "mode": "light",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "You are not the mind; you are",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.9,
+      "at": 6,
+      "step": 9
+     }
+    ],
+    "word": "whole.",
+    "wy": 1.15,
+    "zat": 80
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "And this whole",
+      "size": 116,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 8,
+      "step": 16
+     },
+     {
+      "t": "is what we call god.",
+      "size": 104,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 80,
+      "step": 14
+     }
+    ]
+   }
+  ],
+  "scene": "bonsai",
+  "sceneAmb": "air"
+ },
+ "i-and-you-cannot-love": {
+  "title": "“I” and “You” cannot Love",
+  "cat": "An essay",
+  "date": "November 23, 2024",
+  "key": 49,
+  "ghost": "PAST",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "“I” and “you”",
+      "size": 150,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 16
+     },
+     {
+      "t": "cannot love.",
+      "size": 124,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.6,
+      "at": 60,
+      "step": 16
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Just like an old radio",
+      "size": 92,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "cannot play YouTube videos.",
+      "size": 88,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.65,
+      "step": 12,
+      "at": 82
+     }
+    ]
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "A bundle of memories.",
+      "size": 96,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "at": 6,
+      "step": 12
+     },
+     {
+      "t": "You are the past.",
+      "size": 116,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 70,
+      "step": 16
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "light",
+    "kind": "wind",
+    "lines": [
+     {
+      "t": "Hands can never grasp",
+      "size": 96,
+      "f": "serif",
+      "c": "ink",
+      "y": -0.6,
+      "at": 6,
+      "step": 10
+     },
+     {
+      "t": "the flowing water.",
+      "size": 96,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 54,
+      "step": 12
+     }
+    ],
+    "blow": 124
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "Comparing what is",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "with what should be:",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 58
+     },
+     {
+      "t": "this is bondage.",
+      "size": 91,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 122
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "light",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "When you see me, you see",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.9,
+      "at": 6,
+      "step": 9
+     }
+    ],
+    "word": "your own thoughts.",
+    "wy": 1.15,
+    "zat": 80
+   }
+  ],
+  "scene": "sakura",
+  "sceneAmb": "air"
+ },
+ "you-have-never-trusted-anyone-or-anything-your-entire-life": {
+  "title": "You have never trusted anyone or anything your entire life",
+  "cat": "An essay",
+  "date": "November 22, 2024",
+  "key": 53,
+  "ghost": "TRUST",
+  "beats": [
+   {
+    "from": 0,
+    "to": 216,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "You have never trusted",
+      "size": 110,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.55,
+      "at": 4,
+      "step": 12
+     },
+     {
+      "t": "anyone.",
+      "size": 150,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 80,
+      "step": 18
+     }
+    ]
+   },
+   {
+    "from": 216,
+    "to": 432,
+    "mode": "light",
+    "kind": "brackets",
+    "lines": [
+     {
+      "t": "What you call trust",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.5,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "is only",
+      "size": 66,
+      "f": "serif",
+      "c": "ink2",
+      "y": -0.5,
+      "step": 12,
+      "at": 70
+     }
+    ],
+    "word": "security.",
+    "lock": 120
+   },
+   {
+    "from": 432,
+    "to": 648,
+    "mode": "dark",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "Trust, in its truest sense,",
+      "size": 96,
+      "f": "serif",
+      "c": "paper",
+      "y": -0.6,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "cannot be broken.",
+      "size": 110,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.7,
+      "at": 80,
+      "step": 14
+     }
+    ]
+   },
+   {
+    "from": 648,
+    "to": 864,
+    "mode": "light",
+    "kind": "impact",
+    "lines": [
+     {
+      "t": "You trusted only the good side,",
+      "size": 80,
+      "f": "serif",
+      "c": "ink",
+      "y": -1.15,
+      "step": 7,
+      "at": 6
+     },
+     {
+      "t": "the pleasant side,",
+      "size": 84,
+      "f": "serif",
+      "c": "ink",
+      "y": 0,
+      "step": 7,
+      "at": 64
+     },
+     {
+      "t": "an idea of the person.",
+      "size": 92,
+      "f": "serifI",
+      "c": "pink",
+      "y": 1.15,
+      "step": 7,
+      "at": 101
+     }
+    ]
+   },
+   {
+    "from": 864,
+    "to": 1116,
+    "mode": "light",
+    "kind": "scene",
+    "lines": [
+     {
+      "t": "A human being is all:",
+      "size": 78,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 6
+     },
+     {
+      "t": "good and bad,",
+      "size": 83,
+      "f": "serif",
+      "c": "ink",
+      "y": 0.0,
+      "step": 12,
+      "at": 82
+     },
+     {
+      "t": "pleasant and unpleasant.",
+      "size": 81,
+      "f": "serifI",
+      "c": "pink",
+      "y": 0.0,
+      "step": 12,
+      "at": 134
+     }
+    ]
+   },
+   {
+    "from": 1116,
+    "to": 1404,
+    "mode": "dark",
+    "kind": "zoom",
+    "lines": [
+     {
+      "t": "Only free people can",
+      "size": 100,
+      "f": "serif",
+      "c": "paper",
+      "y": -1.9,
+      "at": 6,
+      "step": 12
+     }
+    ],
+    "word": "trust.",
+    "wy": 1.15,
+    "zat": 80
+   }
+  ],
+  "scene": "bamboo",
   "sceneAmb": "air"
  }
 }
