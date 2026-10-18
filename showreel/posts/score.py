@@ -6,10 +6,10 @@ import os, numpy as np, soundfile as sf, pyloudnorm as pyln
 from scipy.signal import butter, sosfilt, fftconvolve
 import sys
 SLUG = sys.argv[1] if len(sys.argv) > 1 else 'the-lie-of-being-yourself'
-SR = 48000; FPS = 60; TOTAL = 810; N = int(SR * TOTAL / FPS)
+SR = 48000; FPS = 60; TOTAL = 1440; N = int(SR * TOTAL / FPS)   # title 0-150, kinetic 150-720, excerpts 720-1140, end card 1140-1440
 rng = np.random.default_rng(23)
 DRY = np.zeros((N, 2)); WET = np.zeros((N, 2))
-fr = lambda f: f / FPS
+OFF = 0; fr = lambda f: (f + OFF) / FPS   # OFF shifts the kinetic scene's cues (written in scene-local frames)
 note = lambda n: 440 * 2 ** ((n - 69) / 12)
 def bp(x, lo, hi, o=2): return sosfilt(butter(o, [lo, hi], 'bandpass', fs=SR, output='sos'), x)
 def lp(x, f, o=2): return sosfilt(butter(o, f, 'lowpass', fs=SR, output='sos'), x)
@@ -84,8 +84,11 @@ R = KEYS.get(SLUG, 50)
 CH = [(R, R + 7, R + 11, R + 14), (R - 3, R + 4, R + 7, R + 12), (R - 7, R, R + 4, R + 9), (R - 5, R + 2, R + 5, R + 11)]
 n_all = int(fr(TOTAL) * SR); tt = np.arange(n_all) / SR
 add(pad([note(R - 12), note(R - 5), note(R)], fr(TOTAL)) * np.minimum(1, tt / 1.5) * np.minimum(1, (fr(TOTAL) - tt) / 1.2), 0, 0.22, 0, 0.2)
-for b in range(0, 4): add(piano([note(n) for n in CH[b]], 3.4, 0.7, 0.55), fr(b * 150 + 4), 0.22, 0, 0.45); add(pad([note(n) for n in CH[b][1:]], 2.8, 0.3), fr(b * 150 + 4), 0.1, 0, 0.5)
+for b in range(0, 10): add(piano([note(n) for n in CH[b % 4]], 3.4, 0.7, 0.55), fr(b * 150 + 4), 0.22, 0, 0.45); add(pad([note(n) for n in CH[b % 4][1:]], 2.8, 0.3), fr(b * 150 + 4), 0.1, 0, 0.5)
 S = SLUG
+# the title card: the cover art draws, a bell, a pluck per word of the title
+add(brush(1.6, 0.7), fr(0), 0.12, 0, 0.3); add(bell([note(R)], 4.0, 1.2), fr(16), 0.22, 0, 0.5); words(14, 4, 5, R + 7, 0.1)
+OFF = 150
 if S == 'the-lie-of-being-yourself':
     typing(6, 12, 2); typing(46, 14, 2); typing(86, 24, 2)
     for f in (168, 192, 216): add(brush(0.3, 1.4), fr(f), 0.26, 0, 0.25)
@@ -125,9 +128,15 @@ elif S == 'you':
 elif S == 'perfect':
     add(brush(1.0, 0.8), fr(0), 0.15, 0, 0.3)
     for i, f in enumerate((30, 160, 290, 420)): words(f, 4, 5, R + 2 * i); add(bell([note(R + 24 + 2 * i)], 1.6, 0.7), fr(f + 4), 0.1, 0, 0.6); words(f + 18, 6, 5, R + 2 * i + 4, 0.09)
+OFF = 0
+# the excerpts: a soft chord as each passage begins, low plucks as it is read, a glass tone on the highlighted phrase
+NEX = {'god-and-the-ocean': 1}.get(S, 2); seg = (1140 - 720) / NEX
+for i in range(NEX):
+    f0 = 720 + i * seg; add(piano([note(n) for n in CH[(i + 1) % 4]], 3.6, 0.6, 0.45), fr(f0 + 4), 0.2, 0, 0.5)
+    words(f0 + 14, 10, 9, R - 5 + 2 * i, 0.05); add(glass(note(R + 26 + 2 * i), 2.4), fr(f0 + 80), 0.07, 0, 0.7)
 # the end card: one bell and a chord for the title, nibs for the address
-add(bell([note(R - 12), note(R)], 5.0, 1.6), fr(600), 0.4, 0, 0.55); add(piano([note(n) for n in (R - 12, R, R + 7, R + 12, R + 16)], 4.0, 0.8, 0.5), fr(600), 0.26, 0, 0.55)
-for k in range(28): add(nib(), fr(660 + k * 0.9), 0.06, 0.1, 0.1)
+add(bell([note(R - 12), note(R)], 5.0, 1.6), fr(1140), 0.4, 0, 0.55); add(piano([note(n) for n in (R - 12, R, R + 7, R + 12, R + 16)], 4.0, 0.8, 0.5), fr(1140), 0.26, 0, 0.55)
+for k in range(28): add(nib(), fr(1200 + k * 0.9), 0.06, 0.1, 0.1)
 
 # ---- reverb (stereo convolution with decaying noise) and master
 L = int(3.2 * SR); t = np.arange(L) / SR; ir = np.stack([lp(rng.standard_normal(L), 6000) * np.exp(-t * 2.2), lp(rng.standard_normal(L), 6000) * np.exp(-t * 2.2)], 1); ir[: int(0.012 * SR)] = 0; ir /= np.sqrt((ir ** 2).sum(0))
