@@ -127,11 +127,9 @@ let cur = 'now', medium = 'paint';
 const hero = Drawing(heroEl, () => medium);
 function show(id, animate = true) {
   cur = id; [...$('#chips').children].forEach(b => b.classList.toggle('on', b.dataset.id === id));
-  hero.play(id, 3.8, s => ($('#status').textContent = s), animate);
+  hero.play(id, 3.8, null, false);   // painted portrait, straight away (no time-lapse)
 }
 ST.forEach(([id, label]) => { const b = document.createElement('button'); b.textContent = label; b.dataset.id = id; b.onclick = () => show(id); $('#chips').appendChild(b); });
-$('#redraw').onclick = () => show(cur);
-$('#mode').onclick = e => { medium = medium === 'paint' ? 'pencil' : 'paint'; e.target.textContent = 'medium: ' + medium; show(cur); };
 new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); show('now'); } }).observe(heroEl);
 
 // ---- galleries: every card is a live, interactive portrait (static image + live eyes)

@@ -287,7 +287,7 @@ build().then(M => {
     arm(M.armL, aL, fL); arm(M.armR, aR, fR);
     // head + hair
     const headT = `translate(0 ${headDy.toFixed(1)}) rotate(${headRot.toFixed(2)} 800 1330)`;
-    tf(M.head, headT); tf(M.hairSway, `${headT} rotate(${hairA.toFixed(2)} 800 420)`);
+    tf(M.head, headT); tf(M.hairSway, `${headT} translate(800 560) skewX(${(Math.max(-4, Math.min(4, hairA)) * 0.9).toFixed(2)}) translate(-800 -560)`);   // hair bends from the scalp line, never leaves the head
     // eyes look around (eye frame ≈ upright in head space)
     const ex = S.gaze.x * 34, ey = S.gaze.y * 22 + (m === 'sleep' ? 8 : 0);
     for (const e of M.eyes) if (e.track) tf(e.track, `translate(${ex.toFixed(1)} ${ey.toFixed(1)})`);

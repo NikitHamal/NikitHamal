@@ -151,6 +151,16 @@ function handPos(P, x, gy, side) {   // screen position of a hand (side -1 = lef
   const ex = sx + side * Math.sin(a) * 10.5, ey = sy + Math.cos(a) * 10.5, hx = ex + side * Math.sin(a + f) * 10, hy = ey + Math.cos(a + f) * 10;
   return [Math.round(x - SW / 2) + Math.round(hx) + 1, Math.round(gy + 1 - GY) + Math.round(hy) + 1];
 }
+// two-bone IK: set an arm's angles so its hand lands on a screen point (same maths as paint/handPos)
+function reach(P, x, gy, side, tx, ty) {
+  const L1 = 10.5, L2 = 10, cx = 32 + (P.dx || 0), shY = 34 + (P.bob || 0);
+  const sx = Math.round(x - SW / 2) + cx + side * 12 + 1, sy = Math.round(gy + 1 - GY) + shY + 2 + 1;
+  let ox = (tx - sx) * side, oy = ty - sy, d = Math.hypot(ox, oy); const k = Math.min(1, (L1 + L2 - 0.05) / Math.max(d, 1e-3)); ox *= k; oy *= k; d = Math.min(d, L1 + L2 - 0.05);
+  const th = Math.atan2(ox, oy), al = Math.acos(Math.max(-1, Math.min(1, (L1 * L1 + d * d - L2 * L2) / (2 * L1 * d)))), be = Math.acos(Math.max(-1, Math.min(1, (L1 * L1 + L2 * L2 - d * d) / (2 * L1 * L2))));
+  const a = (th + al) * 180 / Math.PI, f = -(Math.PI - be) * 180 / Math.PI;
+  if (side < 0) { P.aL = a; P.fL = f; } else { P.aR = a; P.fR = f; }
+  return P;
+}
 function basePose(t) {
   return { dx: 0, bob: Math.sin(t * 2.4) > 0.6 ? -1 : 0, headDx: 0, headDy: 0, lL: 0, lR: 0, kL: 0, kR: 0, aL: 8, aR: 8, fL: 6, fR: 6,
     liftL: 0, liftR: 0, sway: Math.sin(t * 1.8) * 0.8, eyes: 'open', look: 0, browUp: 0, mouth: 'line', blush: false, armsBehind: false };
@@ -247,7 +257,7 @@ function makeDog() {
     // ---- me
     if (me.mode === 'throw') {
       if (me.mt > 0.42 && ball.held) {   // release: from the raised hand, up and over in an arc
-        ball.held = false; ball.on = true; ball.ground = false; ball.x = me.x + 12; ball.y = gy() - 82;
+        ball.held = false; ball.on = true; ball.ground = false; { const [hx, hy] = handPos(mePose(), me.x, gy(), 1); ball.x = hx; ball.y = hy - 2; }
         const T = 0.9; ball.vx = (ball.tx - ball.x) / T; ball.vy = -60; setDog('chase');
       }
       if (me.mt > 0.9) setMe('watch');
@@ -283,7 +293,7 @@ function makeDog() {
     if (me.mode === 'pet') {
       const st = Math.sin(mt * 5.5);
       P.bob = 15; P.lL = -42; P.kL = 42; P.lR = 42; P.kR = -42; P.liftL = 3; P.liftR = 3;          // squat, feet planted
-      P.aR = 66 + st * 5; P.fR = 30 + st * 14; P.aL = 20; P.fL = -30;                               // stroke the head
+      reach(P, me.x, gy(), 1, dog.x - 12 + Math.round(st * 3), gy() - 40 + (st > 0.3 ? 1 : 0)); P.aL = 24; P.fL = -40;   // stroke along the dog's head; other hand on the knee
       P.eyes = mt > 0.5 ? 'happy' : 'open'; P.mouth = 'smile'; P.blush = true; P.headDx = 1;
     }
     if (me.mode === 'throw') {   // wind up overhead, then throw forward and follow through
@@ -293,7 +303,7 @@ function makeDog() {
       P.aL = 20; P.mouth = 'smile'; P.look = 1;
     }
     if (me.mode === 'watch') { P.mouth = 'smile'; if (Math.floor(mt * 3) % 4 === 0) P.browUp = 1; }
-    if (me.mode === 'pickup') { const u = Math.sin(Math.min(1, mt / 0.9) * Math.PI); P.bob = Math.round(u * 15); P.lL = -42 * u; P.kL = 42 * u; P.lR = 42 * u; P.kR = -42 * u; P.liftL = P.liftR = 3 * u; P.aR = 8 + u * 30; P.fR = 6 - u * 10; P.mouth = 'smile'; }
+    if (me.mode === 'pickup') { const u = Math.sin(Math.min(1, mt / 0.9) * Math.PI); P.bob = Math.round(u * 15); P.lL = -42 * u; P.kL = 42 * u; P.lR = 42 * u; P.kR = -42 * u; P.liftL = P.liftR = 3 * u; if (u > 0.2) reach(P, me.x, gy(), 1, ball.x, gy() - 2 - (mt > 0.45 ? (mt - 0.45) * 30 : 0)); P.mouth = 'smile'; }
     if (me.mode === 'idle' && dog.mode === 'happy') { P.mouth = 'smile'; P.eyes = 'happy'; }
     return P;
   }
@@ -320,6 +330,8 @@ function makeDog() {
     c.fillStyle = 'rgba(20,35,15,.3)'; c.fillRect(me.x - 8, g + 1, 16, 1); c.fillRect(me.x - 5, g + 2, 10, 1); c.fillRect(Math.round(dog.x) - 14, g + 1, 24, 1);
     if (DOG) DOG.draw(c, dog.x, g, dog.face, dogPose());
     drawMe(c, me.x, g, mePose());
+    if (me.mode === 'pickup' && me.mt > 0.45) { const [hx, hy] = handPos(mePose(), me.x, g, 1); ball.x = hx; ball.y = hy - 1; }
+    if (me.mode === 'throw' && ball.held) { const [hx, hy] = handPos(mePose(), me.x, g, 1); c.fillStyle = '#4e5a1c'; c.fillRect(hx - 2, hy - 3, 4, 4); c.fillStyle = '#d4e24a'; c.fillRect(hx - 1, hy - 2, 2, 2); }
     if (ball.on) { const bx = Math.round(ball.x), by = Math.round(ball.y); c.fillStyle = '#4e5a1c'; c.fillRect(bx - 2, by - 1, 4, 3); c.fillRect(bx - 1, by - 2, 2, 5); c.fillStyle = '#d4e24a'; c.fillRect(bx - 1, by - 1, 2, 3); c.fillRect(bx - 1, by - 1, 2, 2); c.fillStyle = '#f2f7b0'; c.fillRect(bx - 1, by - 1, 1, 1); }
     c.fillStyle = 'rgba(200,185,165,.85)'; for (const d of dust) c.fillRect(Math.round(d.x + d.l * 12 * (Math.random() < 0.5 ? 1 : -1)), Math.round(g - d.l * 5), d.l < 0.2 ? 1 : 2, d.l < 0.2 ? 1 : 2);
     c.fillStyle = '#e0607e'; for (const h of hearts) { c.globalAlpha = Math.min(1, h.l * 4) * (1 - h.l / 1.6); heart(c, h.x, h.y); } c.globalAlpha = 1;
@@ -364,6 +376,8 @@ function makeDog() {
     if (me.mode === 'drowsy' && me.mt > 6) set('sleep');
     if ((me.mode === 'wake' || me.mode === 'lookup') && me.mt > 2.2) set('sit');
     if (me.mode === 'wave' && me.mt > 1.6) set('sit');
+    if (me.mode === 'sit' && me.mt > 3 && !me.catchP && Math.random() < dt * 0.25) { const p = petals.find(q => Math.abs(q.x - (meX() + 16)) < 14 && q.y < headY() - 4 && q.y > headY() - 40); if (p) { me.catchP = p; me.catchT = 0; } }
+    if (me.catchP) { me.catchT += dt; if (me.catchT > 2.6) me.catchP = null; else if (me.catchT > 0.55 && petals.includes(me.catchP)) { petals.splice(petals.indexOf(me.catchP), 1); me.held = me.catchP.c; } }   // the hand reaches it: caught
     if (me.mode === 'sleep' && Math.random() < dt * 0.8) zs.push({ x: meX() + 12, y: headY() - 18, l: 0 });
     for (const z of zs) { z.l += dt; z.y -= 6 * dt; z.x += Math.sin(z.l * 3) * 4 * dt; } while (zs.length && zs[0].l > 2.4) zs.shift();
     // eyes follow a petal while awake
@@ -378,6 +392,11 @@ function makeDog() {
     if (me.mode === 'lookup') { P.browUp = 1; P.mouth = mt < 0.8 ? 'o' : 'smile'; P.look = 0; P.eyes = mt > 0.8 && mt < 1.6 ? 'happy' : 'open'; }
     if (me.mode === 'wave') { P.aR = 150; P.fR = [10, 28, 44, 28][Math.floor(mt * 10) % 4]; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
     if (me.mode === 'sit') P.mouth = 'line';
+    if (me.mode === 'sit' && me.catchP) {   // reach for a falling petal, then look at it in my palm
+      const p = me.catchP, u = Math.min(1, me.catchT / 0.5), down = Math.max(0, (me.catchT - 1.3) / 0.9);
+      const tx2 = petals.includes(p) ? p.x : meX() + 16, ty2 = petals.includes(p) ? Math.max(p.y, headY() - 10) : headY() + 8 + down * 14;
+      reach(P, meX(), gy(), 1, meX() + 12 + (tx2 - meX() - 12) * u, headY() + 22 + (ty2 - headY() - 22) * u); P.look = 1; P.browUp = petals.includes(p) ? 1 : 0; if (!petals.includes(p)) { P.mouth = 'smile'; P.eyes = 'happy'; }
+    }
     return P;
   }
   S.render = () => {
@@ -391,7 +410,8 @@ function makeDog() {
       c.fillStyle = 'rgba(40,60,30,.22)'; for (let i = -70; i <= 70; i++) c.fillRect(tx + i, g + 1, 1, Math.round(2.6 * Math.sqrt(1 - (i / 71) ** 2)));
       for (const [dx, dy, k] of I.carpet) { c.fillStyle = `rgb(${I.petals[(k - 5) % 4]})`; c.fillRect(tx + dx, g + 1 + Math.max(0, dy), 1, 1); }
       for (const p of ground) { c.fillStyle = PC[p.c]; c.fillRect(Math.round(p.x), g + 1 + (p.c & 1), 1, 1); }
-      drawMe(c, meX(), g, mePose());
+      const MP = mePose(); drawMe(c, meX(), g, MP);
+      if (me.catchP && !petals.includes(me.catchP)) { const [hx, hy] = handPos(MP, meX(), g, 1); c.fillStyle = PC[me.held || 0]; c.fillRect(hx - 1, hy - 3, 2, 1); }
       for (const h of onHair) { c.fillStyle = PC[h.c]; c.fillRect(meX() + h.dx, headY() - 14 + h.dy + (me.mode === 'sleep' ? 1 : 0), 2, 1); }
       bendDraw(c, TR.front, x0, y0, I.crownBot + 6, bend);
     } else { grass(c, S.W, S.H, g, S.t); drawMe(c, meX(), g, mePose()); }
@@ -450,10 +470,10 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     c.fillStyle = '#fff4c2'; c.fillRect(fx - 2, g - 6, 4, 3); c.fillStyle = '#ffd45a'; c.fillRect(fx - 4, g - 4, 8, 2);
     for (const e of embers) { c.fillStyle = e.l < 1 ? '#ffd45a' : '#ff7a2e'; c.globalAlpha = 1 - e.l / 2.2; c.fillRect(Math.round(e.x), Math.round(e.y), 1, 1); } c.globalAlpha = 1;
     // me, toasting a marshmallow, warm firelight on one side
-    const P = sitPose(basePose(t), t); P.aR = 74; P.fR = -18; P.aL = 26; P.fL = -22; P.look = 1; P.eyes = blink < 0 ? 'closed' : 'open'; P.mouth = toast > 0.7 && toast < 1 ? 'smile' : !mall ? 'o' : 'line';
+    const P = sitPose(basePose(t), t); reach(P, meX(), g, 1, meX() + 22, g - 34 + Math.round(Math.sin(t * 2) * 1)); P.aL = 26; P.fL = -22; P.look = 1; P.eyes = blink < 0 ? 'closed' : 'open'; P.mouth = toast > 0.7 && toast < 1 ? 'smile' : !mall ? 'o' : 'line';
     drawMeT(c, meX(), g, P, `rgba(255,140,60,${(0.1 + 0.08 * flick).toFixed(3)})`);
-    const [hx, hy] = handPos(P, meX(), g, 1); c.fillStyle = '#7a5236'; for (let i = 0; i <= 22; i++) c.fillRect(Math.round(hx + i), Math.round(hy + i * 0.55), 1, 1);
-    if (mall) { const tc = toast < 0.5 ? '#fbf6ea' : toast < 0.85 ? '#e8b46a' : toast < 1.05 ? '#a8642e' : '#3a2418'; c.fillStyle = '#2a1d18'; c.fillRect(hx + 21, hy + 10, 5, 5); c.fillStyle = tc; c.fillRect(hx + 22, hy + 11, 3, 3); }
+    const [hx, hy] = handPos(P, meX(), g, 1), ex = fx - 3, ey = g - 19 + Math.round(Math.sin(t * 2) * 1); c.fillStyle = '#7a5236'; const n_ = Math.max(Math.abs(ex - hx), Math.abs(ey - hy)); for (let i = 0; i <= n_; i++) c.fillRect(Math.round(hx + (ex - hx) * i / n_), Math.round(hy + (ey - hy) * i / n_), 1, 1);
+    if (mall) { const tc = toast < 0.5 ? '#fbf6ea' : toast < 0.85 ? '#e8b46a' : toast < 1.05 ? '#a8642e' : '#3a2418'; c.fillStyle = '#2a1d18'; c.fillRect(ex - 2, ey - 2, 5, 5); c.fillStyle = tc; c.fillRect(ex - 1, ey - 1, 3, 3); c.fillStyle = 'rgba(255,255,255,.6)'; c.fillRect(ex - 1, ey - 1, 1, 1); }
   };
 })();
 
@@ -535,13 +555,14 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
       x.fillStyle = '#3a6a3a'; x.fillRect(S.W - 30, 22, 6, 8); x.fillStyle = '#5a9a4a'; x.fillRect(S.W - 32, 18, 4, 5); x.fillRect(S.W - 26, 17, 4, 6); }), 0, 0);
     // me, seated behind the desk, lit by the screen
     const P = basePose(t); P.eyes = blink < 0 ? 'closed' : 'open'; P.look = 0;
-    if (mode === 'type') { const a = Math.floor(t * 9) % 2; P.aL = 40; P.fL = -20 + (a ? 8 : 0); P.aR = 40; P.fR = -20 + (a ? 0 : 8); }   // hands on the keyboard either side of the screen
-    if (mode === 'sip') { P.aL = 50; P.fL = -120; P.aR = 34; P.fR = -60; P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
+    if (mode === 'type') { const a = Math.floor(t * 9) % 2, b2 = Math.floor(t * 4.5) % 3; reach(P, dx - 4, g + 4, -1, dx - 2 - 19 + b2, g - 33 - (a ? 1 : 0)); reach(P, dx - 4, g + 4, 1, dx - 2 + 17 - b2, g - 33 - (a ? 0 : 1)); }   // fingers on the keys, tapping
+    if (mode === 'sip') { reach(P, dx - 4, g + 4, -1, dx - 6, g - 58 + Math.round(Math.sin(Math.min(1, mt / 2.2) * Math.PI) * -2)); reach(P, dx - 4, g + 4, 1, dx + 15, g - 33); P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
     if (mode === 'stretch') { const u = Math.sin(Math.min(1, mt / 2.4) * Math.PI); P.aL = P.aR = 30 + u * 140; P.fL = P.fR = -40 + u * 30; P.mouth = u > 0.5 ? 'o' : 'line'; P.eyes = u > 0.5 ? 'closed' : P.eyes; }
     if (mode === 'yay') { P.aL = P.aR = 155; P.fL = P.fR = Math.sin(mt * 18) * 20; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
     ring(c, dx, g - 52, 40, 26, win > 0 ? '#8ee08a' : '#7ab8ff', 4, 0.1);
     c.fillStyle = '#3a2c46'; c.fillRect(dx - 16, g - 52, 32, 26); c.fillStyle = '#463656'; c.fillRect(dx - 16, g - 52, 32, 2);   // chair back
     drawMeT(c, dx - 4, g + 4, P, `rgba(${win > 0 ? '120,255,160' : '110,170,255'},0.12)`);
+    if (mode === 'sip') { const [hx, hy] = handPos(P, dx - 4, g + 4, -1); c.fillStyle = '#e8e2d4'; c.fillRect(hx - 4, hy - 6, 7, 7); c.fillStyle = '#c9c2b2'; c.fillRect(hx + 3, hy - 4, 2, 3); }
     // desk with drawers, monitor turned toward us, keyboard, mug, lamp, a sleeping cat
     c.fillStyle = '#6b4a32'; c.fillRect(dx - 64, g - 30, 128, 4); c.fillStyle = '#86603e'; c.fillRect(dx - 64, g - 30, 128, 1);
     c.fillStyle = '#4e3524'; c.fillRect(dx - 62, g - 26, 124, S.H - g + 26); c.fillStyle = '#5a3e2a'; c.fillRect(dx - 58, g - 22, 54, 10); c.fillRect(dx + 4, g - 22, 54, 10); c.fillStyle = '#c9a46a'; c.fillRect(dx - 33, g - 18, 4, 1); c.fillRect(dx + 29, g - 18, 4, 1);
@@ -549,12 +570,15 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     ring(c, mx, my - 8, 34, 22, win > 0 ? '#1a4a20' : '#10304a', 5, 0.55, true);           // its screen lights my face
     c.fillStyle = '#2a2836'; c.fillRect(mx - 15, my, 30, 19); c.fillStyle = '#3a3848'; c.fillRect(mx - 15, my, 30, 1); c.fillRect(mx - 15, my, 1, 19);
     c.fillStyle = win > 0 ? '#8ee08a' : '#7ab8ff'; c.fillRect(mx - 16, my + 1, 1, 17); c.fillRect(mx + 15, my + 1, 1, 17); c.fillRect(mx - 14, my - 1, 28, 1);   // screen glow around the edges
-    c.fillStyle = '#4a4858'; c.fillRect(mx - 3, my + 7, 6, 4); c.fillStyle = '#1c1a26'; c.fillRect(mx - 2, my + 19, 4, 2);   // logo, stand
+    c.fillStyle = '#4a4858'; c.fillRect(mx - 3, my + 7, 6, 4); c.fillStyle = '#1c1a26'; c.fillRect(mx - 2, my + 19, 4, 2);
+    c.fillStyle = '#b8b8c4'; c.fillRect(mx - 24, g - 32, 48, 3); c.fillStyle = '#d8d8e0'; c.fillRect(mx - 24, g - 32, 48, 1);   // keyboard, wider than the screen
+    c.fillStyle = '#9a9aa8'; for (let i = 0; i < 12; i++) c.fillRect(mx - 23 + i * 4, g - 31, 3, 1);
+    if (mode === 'type') { const k = Math.floor(t * 9) % 12; c.fillStyle = '#7ab8ff'; c.fillRect(mx - 23 + k * 4, g - 31, 3, 1); }   // the key being pressed   // logo, stand
     // what's on screen, shown as a small window on the wall behind me
     const px = Math.round(S.W * 0.58), py = 14; c.fillStyle = 'rgba(14,18,34,0.92)'; c.fillRect(px, py, 50, 36); c.fillStyle = '#3a3256'; c.fillRect(px, py, 50, 4);
     code.slice(0, 7).forEach((l, i) => { c.fillStyle = win > 0 && i === 6 ? '#8ee08a' : l.c; c.fillRect(px + 3 + l.ind, py + 7 + i * 4, Math.min(42 - l.ind, l.w * 2), 1); });
     if (Math.floor(t * 2) % 2) { c.fillStyle = '#e8e8f0'; c.fillRect(px + 3, py + 34, 2, 1); }
-    c.fillStyle = '#e8e2d4'; c.fillRect(dx - 34, g - 38, 8, 8); c.fillStyle = '#c9c2b2'; c.fillRect(dx - 27, g - 36, 2, 4); c.fillStyle = '#4a2c1c'; c.fillRect(dx - 33, g - 37, 6, 1);   // mug
+    if (mode !== 'sip') { c.fillStyle = '#e8e2d4'; c.fillRect(dx - 34, g - 38, 8, 8); c.fillStyle = '#c9c2b2'; c.fillRect(dx - 27, g - 36, 2, 4); c.fillStyle = '#4a2c1c'; c.fillRect(dx - 33, g - 37, 6, 1); }   // mug (in my hand while sipping)
     c.fillStyle = '#2a2836'; c.fillRect(dx - 58, g - 31, 8, 1); c.fillRect(dx - 55, g - 52, 2, 21); c.fillRect(dx - 55, g - 53, 12, 2); c.fillStyle = '#e0a83a'; c.fillRect(dx - 46, g - 54, 8, 4);   // desk lamp
     ring(c, dx - 42, g - 34, 26, 8, '#5a3a10', 4, 0.6, true);
     const cb = Math.sin(t * 1.3) > 0 ? 0 : 1; c.fillStyle = '#2a2430'; c.fillRect(dx - 62, g - 37 + cb, 14, 7 - cb); c.fillRect(dx - 64, g - 35, 3, 5); c.fillStyle = '#3a3242'; c.fillRect(dx - 61, g - 36 + cb, 10, 2);   // cat, breathing
