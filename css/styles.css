@@ -2182,21 +2182,12 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .lp-card, .lp-card.on { transition: opacity .15s ease; transform: none; filter: none; } }
 
 /* ==========================================================================
-   FOOTER DIORAMA (js/pixel-footer.js): the footer stands on the soil of the scene
+   FOOTER LANDSCAPE (js/pixel-footer.js): a quiet strip of hills, trees and meadow above the footer
    ========================================================================== */
-pixel-footer { display: block; position: relative; width: 100vw; margin: 56px 0 0 calc(50% - 50vw); overflow: hidden; pointer-events: auto; min-height: 280px;
-  /* until the scene draws, a soil band keeps the footer text readable */
-  background: linear-gradient(to bottom, transparent calc(100% - 120px), #6a4a30 calc(100% - 120px), #463120); }
-[data-theme="dark"] pixel-footer { background: linear-gradient(to bottom, transparent calc(100% - 120px), #30231b calc(100% - 120px), #1d1511); }
+pixel-footer { display: block; position: relative; width: 100vw; height: 222px; margin: 52px 0 0 calc(50% - 50vw); overflow: hidden; }
 pixel-footer canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
-.site-footer { position: relative; z-index: 2; padding: 22px 0 18px; color: #f1e4cf; margin-top: -110px; }
-.site-footer .footer-links a { color: #f1e4cf; opacity: .92; }
-.site-footer .footer-links a:hover { color: #ffffff; opacity: 1; }
-.site-footer .ft-bottom { color: rgba(241, 228, 207, .7); border-top-color: rgba(241, 228, 207, .18); }
-.site-footer .ft-up { color: #f1e4cf; }
-.site-footer .ft-up:hover { color: #fff; }
-.minimal-wrapper { padding-bottom: 0; }
-@media (max-width: 600px) { pixel-footer { margin-top: 36px; } }
+.site-footer { position: relative; z-index: 2; margin-top: 6px; padding: 10px 0 28px; }
+@media (max-width: 600px) { pixel-footer { height: 174px; margin-top: 36px; } }
 /* while the pond script loads, the window shows grass instead of a black hole */
 .pond-frame {
   background-color: #2f5a2c;
@@ -2205,3 +2196,10 @@ pixel-footer canvas { display: block; image-rendering: pixelated; image-renderin
     repeating-linear-gradient(0deg, rgba(0,0,0,.06) 0 3px, transparent 3px 6px),
     repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 3px, transparent 3px 6px);
 }
+
+/* pond header: one tidy line (no wrapping), hint truncates and disappears on narrow screens */
+.pond-head { align-items: center; flex-wrap: nowrap; white-space: nowrap; gap: 12px; min-width: 0; }
+.pond-head > * { flex: none; }
+.pond-head .pond-dive { margin-left: 2px; display: inline-flex; align-items: center; gap: 5px; }
+.pond-head .pond-hint { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+@media (max-width: 520px) { .pond-head { gap: 9px; } .pond-head .pond-play { font-size: .68rem; } }
