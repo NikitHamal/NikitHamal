@@ -220,17 +220,25 @@ const LAYERS = [
   { d: .52, w: [46, 84], a: 1,   sp: 1,   dens: .6 }
 ];
 
+// The canvas is sized to the *large* viewport (100lvh: phone toolbars hidden) and its css box is set to exactly
+// W*S x H*S px, so one art pixel is always a true square. (Stretching it over 100vh squashed the sun and moon.)
+let lvhProbe = null;
+function viewH() {
+  if (!lvhProbe) { lvhProbe = D.createElement('div'); lvhProbe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:100vh;height:100lvh;visibility:hidden;pointer-events:none'; D.body.appendChild(lvhProbe); }
+  return Math.max(innerHeight, lvhProbe.getBoundingClientRect().height || 0);
+}
+function fitCss(c, W, H) { c.style.width = W * S + 'px'; c.style.height = H * S + 'px'; }
 function measure() {
-  const W = Math.ceil(innerWidth / S), H = Math.ceil(innerHeight / S);
+  const W = Math.ceil(innerWidth / S), H = Math.ceil(viewH() / S);
   const docH = Math.max(R.scrollHeight, innerHeight * 2);
   const changed = W !== sky.W || H !== sky.H;
   sky.W = W; sky.H = H;
   if (changed) {
-    sky.c.width = W; sky.c.height = H; sky.fx.width = W; sky.fx.height = H;
+    sky.c.width = W; sky.c.height = H; sky.fx.width = W; sky.fx.height = H; fitCss(sky.c, W, H);
     sky.g.imageSmoothingEnabled = false; sky.fg.imageSmoothingEnabled = false;
     const bh = Math.round(H * 1.35);
     for (const k in BANDS) bands[k] = makeBand(BANDS[k], W, bh);
-    sunR = W < 200 ? 8 : 11; moonR = W < 200 ? 7 : 10;
+    sunR = W < 200 ? 10 : 11; moonR = W < 200 ? 9 : 10;
     sunSpr = { noon: sunSprite(sunR, SUN_NOON), set: sunSprite(sunR, SUN_SET) }; moonSpr = moonSprite(moonR, moonP); rainbowSpr = null; beamSpr = null;
   }
   if (changed || Math.abs(docH - sky.docH) > 400) { sky.docH = docH; populate(); }
@@ -649,10 +657,18 @@ function bootSky() {
   addEventListener('scroll', tintBar, { passive: true }); new MutationObserver(() => setTimeout(tintBar, 60)).observe(R, { attributes: true, attributeFilter: ['data-theme'] }); tintBar();
   if (reduce) c.classList.add('on');
   let last = performance.now();
+  // frame pacing: 30 fps on phones (plenty for pixel art, half the GPU work), 60 on desktops unless frames get
+  // expensive; no frames at all while the koi pond or the portrait viewer covers the sky
+  const coarse = matchMedia('(pointer: coarse)').matches; let minMs = coarse ? 32 : 0, cost = 0, covered = false;
+  const pond = D.getElementById('pond');
+  if (pond && 'IntersectionObserver' in window) new IntersectionObserver(es => { const e = es[es.length - 1]; covered = e.intersectionRect.height >= innerHeight * .92; }, { threshold: [0, .25, .5, .75, .9, 1] }).observe(pond);
   const loop = now => {
-    const dt = Math.min(.05, (now - last) / 1000); last = now;
-    if (!D.hidden) { frame(reduce ? 0 : dt); if (!c.classList.contains('on')) c.classList.add('on'); }
     requestAnimationFrame(loop);
+    if (D.hidden || covered || now - last < minMs - 2 || D.querySelector('dialog[open]')) return;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const t0 = performance.now(); frame(dt); cost = cost * .92 + (performance.now() - t0) * .08;
+    if (!coarse) minMs = cost > 7 ? 32 : cost < 3.5 ? 0 : minMs;
+    if (!c.classList.contains('on')) c.classList.add('on');
   };
   if (reduce) { frame(0); addEventListener('scroll', () => requestAnimationFrame(() => frame(0)), { passive: true }); new MutationObserver(() => frame(0)).observe(R, { attributes: true, attributeFilter: ['data-theme'] }); }
   else requestAnimationFrame(loop);
@@ -763,14 +779,14 @@ class PixelHorizon extends HTMLElement {
     this.mo = new MutationObserver(() => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); });
     this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
     this.vis = false; this.io = new IntersectionObserver(es => { this.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '100px' }); this.io.observe(this);
-    const loop = () => { if (this.vis && !D.hidden) this.draw(); this.raf = requestAnimationFrame(loop); }; this.raf = requestAnimationFrame(loop);
+    let lastT = 0; const loop = now => { this.raf = requestAnimationFrame(loop); if (this.vis && !D.hidden && now - lastT > 30) { lastT = now; this.draw(); } }; this.raf = requestAnimationFrame(loop);   // 30 fps: mist, flags and ripples are slow
   }
   disconnectedCallback() { this._on = false; cancelAnimationFrame(this.raf); this.ro.disconnect(); this.mo.disconnect(); this.io.disconnect(); }
   build() {
     const W = Math.ceil(this.clientWidth / S), H = Math.ceil(this.clientHeight / S); if (!W || !H) return;
     // the mountains take the top ~60%, a still lake (Phewa-style) mirrors them below
     const M = Math.round(H * .6), L = H - M;
-    this.W = W; this.H = H; this.M = M; this.L = L; this.c.width = W; this.c.height = H; this.g.imageSmoothingEnabled = false;
+    this.W = W; this.H = H; this.M = M; this.L = L; this.c.width = W; this.c.height = H; fitCss(this.c, W, H); this.g.imageSmoothingEnabled = false;
     const dark = isDark(), C = dark
       ? { far: '#27304e', farS: '#1f2743', snow: '#8796bf', snowS: '#5f6d96', mid: '#1c2438', midS: '#171e30', tree: '#121827', near: '#131928', nearS: '#0f1420', water: '#111830', water2: '#0c1226', shore: '#2a3352', glint: '#e9e4c8' }
       : { far: '#c3d1e5', farS: '#aebfd8', snow: '#ffffff', snowS: '#dce6f2', mid: '#a7bdad', midS: '#94ab9a', tree: '#7d9884', near: '#8ca393', nearS: '#7b9282', water: '#b7cde0', water2: '#a3bfd6', shore: '#e9f1f7', glint: '#ffffff' };
@@ -887,7 +903,7 @@ function bootSparkles() {
   if (reduce) return;
   const c = D.createElement('canvas'); c.className = 'pixel-fx'; c.setAttribute('aria-hidden', 'true'); D.body.appendChild(c);
   const g = c.getContext('2d'); let parts = [], raf = 0, last = 0;
-  const size = () => { c.width = Math.ceil(innerWidth / S); c.height = Math.ceil(innerHeight / S); g.imageSmoothingEnabled = false; }; size(); addEventListener('resize', size, { passive: true });
+  const size = () => { c.width = Math.ceil(innerWidth / S); c.height = Math.ceil(viewH() / S); fitCss(c, c.width, c.height); g.imageSmoothingEnabled = false; }; size(); addEventListener('resize', size, { passive: true });
   const COLS = ['#ffc23d', '#f6aec0', '#8ec5ff', '#a7e3a1', '#ffffff'];
   const run = now => {
     const dt = Math.min(.05, (now - last) / 1000 || .016); last = now; g.clearRect(0, 0, c.width, c.height);

@@ -11,6 +11,8 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const EASE = 'cubic-bezier(.22,1,.36,1)';
   const svgText = {}, live = new Set(); let uid = 0;
+  // only paintings that are actually on screen get measured and animated each frame
+  const onScreen = new WeakSet(), io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? onScreen.add(e.target) : onScreen.delete(e.target))) : null;
   const eyesFor = id => svgText[id] || (svgText[id] = fetch(`assets/painted/${id}-eyes.svg`).then(r => r.text()));
 
   async function mount(el) {
@@ -26,7 +28,7 @@
     // even if the box is ever not exactly 4:5 (the old 'meet' default shrank them on narrow phones)
     ov.setAttribute('preserveAspectRatio', 'xMidYMid slice');
     const n = ++uid; ov.innerHTML = (await eyesFor(id)).replace(/id="([^"]+)"/g, `id="$1-${n}"`).replace(/url\(#([^)]+)\)/g, `url(#$1-${n})`);
-    el.appendChild(ov); el._seed = Math.random() * 100; el._g = { x: 0, y: 0 }; live.add(el);
+    el.appendChild(ov); el._seed = Math.random() * 100; el._g = { x: 0, y: 0 }; live.add(el); if (io) io.observe(el); else onScreen.add(el);
     return img.decode ? img.decode().catch(() => {}) : null;
   }
   // blink (both eyes) or wink (one side)
@@ -45,7 +47,8 @@
   function tick(now) {
     const dt = Math.min(0.1, (now - last) / 1000); last = now; const idle = (now - lastMove) / 1000;
     for (const el of live) {
-      if (!el.isConnected) { live.delete(el); continue; }
+      if (!el.isConnected) { live.delete(el); if (io) io.unobserve(el); continue; }
+      if (!onScreen.has(el)) continue;
       const r = el.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) continue;
       const cx = r.left + r.width / 2, cy = r.top + r.height * 0.37, dx = px - cx, dy = py - cy, m = Math.hypot(dx, dy) || 1;
       const full = el.classList.contains('painted-full'), reach = full ? Infinity : Math.max(170, Math.max(r.width, r.height) * 1.9);
@@ -62,7 +65,7 @@
   }
   requestAnimationFrame(tick);
   (function blinker() {
-    for (const el of live) { const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < 0.4) { shut(el); if (Math.random() < 0.15) setTimeout(() => shut(el), 260); } }
+    for (const el of live) { if (!onScreen.has(el)) continue; const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < 0.4) { shut(el); if (Math.random() < 0.15) setTimeout(() => shut(el), 260); } }
     setTimeout(blinker, 1400 + Math.random() * 1800);
   })();
 

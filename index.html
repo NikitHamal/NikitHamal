@@ -51,7 +51,7 @@
   <link href="/css/remixicon.css?v=1" rel="stylesheet">
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/styles.css?v=10" />
+  <link rel="stylesheet" href="css/styles.css?v=11" />
 
   <!-- Theme Init (prevent flash) -->
   <script>
@@ -418,12 +418,12 @@
   </dialog>
 
   <script src="js/config.js"></script>
-  <script src="js/painted.js?v=4" defer></script>
+  <script src="js/painted.js?v=5" defer></script>
   <script src="js/pixel-dog.js?v=23" defer></script>
   <script>
     // Koi pond lives in the footer: only download/build it (≈30 MB of buffers) when it's about to scroll into view.
     (function () {
-      var el = document.getElementById('pond'), go = function () { if (go.done) return; go.done = 1; var s = document.createElement('script'); s.src = 'js/pond.js?v=6'; document.body.appendChild(s); };
+      var el = document.getElementById('pond'), go = function () { if (go.done) return; go.done = 1; var s = document.createElement('script'); s.src = 'js/pond.js?v=7'; document.body.appendChild(s); };
       if (!el || !('IntersectionObserver' in window)) return go();
       // wait for the page to settle (writings render async and push the pond down) before watching
       var watch = function () { new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { o.disconnect(); go(); } }, { rootMargin: '200px 0px' }).observe(el); };
@@ -431,8 +431,8 @@
     })();
   </script>
   <script defer src="js/card-visuals.js"></script>
-  <script defer src="js/pixel-sky.js?v=5"></script>
-  <script defer src="js/sound.js?v=1"></script>
+  <script defer src="js/pixel-sky.js?v=6"></script>
+  <script defer src="js/sound.js?v=2"></script>
   <script defer src="js/motion.js?v=3"></script>
   <script defer src="js/app.js?v=2"></script>
 </body>
