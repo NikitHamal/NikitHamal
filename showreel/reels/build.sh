@@ -12,7 +12,7 @@ for P in $POSTS; do
   for V in portrait landscape; do
     Q2="&v=$V"; NAME="$P"; [ $V = portrait ] && NAME="${P}_vertical"
     rm -rf "$FR"; for r in "0 540" "540 1080" "1080 1620"; do node tools/render.js $r "$FR" "http://localhost:8765/showreel/reels/film.html?post=$P$Q2" & done; wait
-    ffmpeg -y -loglevel error -framerate 60 -i "$FR/%04d.jpg" -i "out/$P.wav" -map 0:v -map 1:a -c:v libx264 -preset slower -crf 18 -pix_fmt yuv420p \
+    ffmpeg -y -loglevel error -framerate 60 -i "$FR/%04d.jpg" -i "out/$P.wav" -map 0:v -map 1:a -c:v libx264 -preset slower -crf 21 -pix_fmt yuv420p \
       -x264-params "colorprim=bt709:transfer=bt709:colormatrix=bt709" -color_primaries bt709 -color_trc bt709 -colorspace bt709 -c:a aac -b:a 256k -ar 48000 -movflags +faststart -shortest "out/$NAME.mp4"
   done
   rm -f "out/${P}_raw.wav" "out/$P.wav"; rm -rf "$FR"
