@@ -1168,7 +1168,7 @@ img.writing-mini-thumb {
    ============================================ */
 
 .pond-section {
-  margin-top: 72px;
+  margin-top: 24px;
 }
 
 .pond-head {
@@ -1254,8 +1254,7 @@ img.writing-mini-thumb {
      small screens. Sim + toolbar follow the frame height automatically. */
   .pond-frame { height: 82vh; height: 82svh; }
   /* Mobile footer keeps GitHub / Writing / Email only. */
-  .footer-links a[href*="twitter.com"],
-  .footer-links a[href*="linkedin.com"] { display: none; }
+  /* (all footer links stay visible: the v2 footer wraps them cleanly) */
 }
 
 @media (pointer: coarse) {
@@ -1851,11 +1850,11 @@ html.has-sky .decor { display: none !important; }
 
 /* ---------- <pixel-horizon>: Himalaya above the footer, full bleed ---------- */
 pixel-horizon {
-  display: block; position: relative; width: 100vw; height: 190px; margin: 40px 0 -18px calc(50% - 50vw);
+  display: block; position: relative; width: 100vw; height: 270px; margin: 44px 0 -6px calc(50% - 50vw);
   pointer-events: none;
 }
 pixel-horizon canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
-@media (max-width: 600px) { pixel-horizon { height: 140px; margin-top: 28px; } }
+@media (max-width: 600px) { pixel-horizon { height: 200px; margin-top: 28px; } }
 
 /* ==========================================================================
    MOTION SYSTEM (js/motion.js): choreographed entrance, scroll reveals,
@@ -1992,7 +1991,7 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
   .project-card-icon { transform: scale(.82); }
   .minimal-footer { margin-top: 28px; padding-top: 12px; }
   .pond-section { margin-top: 36px; }
-  pixel-horizon { margin-top: 20px; margin-bottom: -10px; }
+  pixel-horizon { margin-top: 20px; margin-bottom: -4px; }
 }
 @media (max-width: 360px) {
   .site-header { padding-left: 12px; gap: 6px; }
@@ -2000,4 +1999,71 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
   .site-brand svg { width: 28px; height: 15px; }
   .site-nav-link { font-size: .82rem; }
   .site-divider { display: none; }
+}
+
+/* ---------- sound toggle (js/sound.js) ---------- */
+.sound-toggle {
+  position: relative; width: 30px; height: 30px; border: 0; border-radius: var(--radius-pill); background: none; padding: 0;
+  display: grid; place-items: center; cursor: pointer; color: var(--text-muted);
+  transition: background-color var(--dur-1) ease, color .3s ease, transform .45s var(--spring);
+}
+.sound-toggle svg { width: 17px; height: 14px; display: block; overflow: visible; }
+.sound-toggle:hover { background-color: var(--bg-hover); color: var(--text-primary); }
+.sound-toggle:active { transform: scale(.86); }
+.sound-toggle:focus-visible { outline: 1px solid var(--text-muted); outline-offset: 2px; }
+.sound-toggle .sp-w1, .sound-toggle .sp-w2 { opacity: 0; }
+.sound-toggle .sp-x { fill: #e8505f; }
+.sound-toggle.is-on { color: var(--text-primary); }
+.sound-toggle.is-on .sp-x { opacity: 0; }
+.sound-toggle.is-on .sp-w1 { opacity: 1; fill: #8ec5ff; animation: spWave 1.6s steps(2) infinite; }
+.sound-toggle.is-on .sp-w2 { opacity: 1; fill: #8ec5ff; animation: spWave 1.6s steps(2) .4s infinite; }
+@keyframes spWave { 50% { opacity: .35; } }
+.top-bar .sound-toggle { width: 32px; height: 32px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); margin-right: 6px; margin-left: auto; }
+.top-bar .sound-toggle + .weather-toggle { margin-left: 0; }
+
+/* ==========================================================================
+   FOOTER v2: monogram + live Kathmandu clock, a note, links, balloon to top
+   ========================================================================== */
+.site-footer { margin-top: 6px; padding-top: 0; display: grid; gap: 14px; position: relative; }
+.ft-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ft-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text-primary); text-decoration: none; font: 500 1.08rem/1 var(--font-serif); letter-spacing: -.01em; }
+.ft-brand svg { width: 30px; height: 16px; display: block; transition: transform .5s var(--spring); }
+.ft-brand:hover svg { transform: translateY(-2px) rotate(-4deg); }
+.ft-clock {
+  display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px 5px 9px; border: 1px solid var(--border-line); border-radius: 999px;
+  font: 500 .72rem/1 var(--font-mono); color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg) 72%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.ft-ico { display: block; width: 12px; height: 12px; }
+.ft-ico svg { width: 100%; height: 100%; display: block; animation: ftSpin 24s steps(16) infinite; }
+.ft-ico[data-day="false"] svg { animation: none; }
+@keyframes ftSpin { to { transform: rotate(360deg); } }
+.ft-time { color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ft-note { margin: 0; color: var(--text-secondary); font: 400 .84rem/1.5 var(--font-sans); }
+.site-footer .footer-links { gap: 8px 18px; }
+.ft-bottom {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; margin-top: 2px;
+  border-top: 1px dashed var(--border-line); font: 400 .72rem/1 var(--font-mono); color: var(--text-muted);
+}
+.ft-up { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 6px 2px; color: var(--text-secondary); font: inherit; cursor: pointer; transition: color .2s ease; }
+.ft-up:hover { color: var(--text-primary); }
+.ft-balloon { display: block; width: 13px; height: 16px; }
+.ft-balloon svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.ft-up:hover .ft-balloon { animation: ftBob 1.4s var(--ease-in-out) infinite; }
+.ft-up.lift .ft-balloon { animation: ftLift 1.5s var(--ease-in-out) forwards; }
+@keyframes ftBob { 50% { transform: translateY(-3px) rotate(3deg); } }
+@keyframes ftLift { 0% { transform: none; } 15% { transform: translateY(3px); } 100% { transform: translate(-6px, -140px) rotate(-8deg); opacity: 0; } }
+@media (max-width: 600px) {
+  .site-footer { gap: 12px; }
+  .ft-brand { font-size: 1rem; }
+  .site-footer .footer-links { gap: 6px 14px; font-size: .78rem; }
+}
+@media (max-width: 360px) { .ft-where { display: none; } }
+@media (prefers-reduced-motion: reduce) { .ft-ico svg, .ft-up .ft-balloon, .sound-toggle .sp-w1, .sound-toggle .sp-w2 { animation: none !important; } }
+/* short landscape screens (phones on their side): the painting takes almost the full height, controls sit at the sides */
+@media (max-height: 520px) and (orientation: landscape) {
+  .painted-stage { width: min(80vw, calc((100vh - 52px) * 0.8)); width: min(80vw, calc((100dvh - 52px) * 0.8)); margin-bottom: 14px; }
+  .painted-nav { top: 50%; bottom: auto; transform: translateY(-50%); }
+  .painted-dots { bottom: 8px; }
+  .painted-close { top: 10px; right: 10px; }
 }
