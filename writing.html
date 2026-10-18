@@ -57,12 +57,12 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=7" />
   <link rel="stylesheet" href="css/writing.css" />
 
   <!-- Theme Init (prevent flash) -->
   <script>
-    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0e0e10':'#faf9f6')})();
+    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0e0e10':'#faf9f6')})();
   </script>
 </head>
 
@@ -90,7 +90,7 @@
         <span class="site-divider" aria-hidden="true"></span>
         <span class="site-controls">
           <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
-            <span class="theme-icon">*</span>
+            <span class="theme-icon" aria-hidden="true"></span>
           </button>
         </span>
       </nav>
@@ -141,6 +141,8 @@
   <script src="js/motion-forms.js"></script>
   <script src="js/card-visuals.js"></script>
   <script defer src="js/pixel-scenes.js"></script>
+  <script defer src="js/pixel-sky.js?v=1"></script>
+  <script defer src="js/motion.js?v=1"></script>
   <script defer src="js/app.js"></script>
 </body>
 

@@ -111,29 +111,43 @@
         };
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (document.startViewTransition && !reduceMotion) {
+          // Pixel-stepped reveal: the new theme grows out of the toggle as a blocky,
+          // stair-stepped circle, frame by frame like a hand-made 2D animation.
           const rect = btn.getBoundingClientRect();
           const x = rect.left + rect.width / 2;
           const y = rect.top + rect.height / 2;
           const endRadius = Math.hypot(
             Math.max(x, window.innerWidth - x),
             Math.max(y, window.innerHeight - y)
-          );
+          ) + 48;
+          const B = window.innerWidth < 600 ? 18 : 24;
+          const pixelCircle = (r) => {
+            if (r < 1) return `polygon(${x}px ${y}px, ${x}px ${y}px, ${x}px ${y}px)`;
+            const rows = Math.ceil(r / B), right = [], left = [];
+            for (let i = -rows; i < rows; i++) {
+              const m = Math.abs((i + 0.5) * B);
+              const w = Math.round(Math.sqrt(Math.max(0, r * r - m * m)) / B) * B;
+              const y0 = y + i * B, y1 = y0 + B;
+              right.push(`${x + w}px ${y0}px`, `${x + w}px ${y1}px`);
+              left.unshift(`${x - w}px ${y1}px`, `${x - w}px ${y0}px`);
+            }
+            return `polygon(${right.concat(left).join(',')})`;
+          };
+          const FRAMES = 22;
+          const easeInOut = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+          const keyframes = [];
+          for (let k = 0; k <= FRAMES; k++) {
+            keyframes.push({ clipPath: pixelCircle(endRadius * easeInOut(k / FRAMES)), easing: 'steps(1, end)' });
+          }
+          document.documentElement.classList.add('vt-theme');
           const transition = document.startViewTransition(swap);
           transition.ready.then(() => {
-            document.documentElement.animate(
-              {
-                clipPath: [
-                  `circle(0px at ${x}px ${y}px)`,
-                  `circle(${endRadius}px at ${x}px ${y}px)`
-                ]
-              },
-              {
-                duration: 550,
-                easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-                pseudoElement: '::view-transition-new(root)'
-              }
-            );
+            document.documentElement.animate(keyframes, {
+              duration: 900,
+              pseudoElement: '::view-transition-new(root)'
+            });
           }).catch(() => {});
+          transition.finished.finally(() => document.documentElement.classList.remove('vt-theme'));
         } else {
           swap();
         }
