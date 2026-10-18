@@ -1,9 +1,9 @@
-"""Code-made soundtrack for the 28 s "Nikit Hamal" reel (120 BPM, A minor). Every sound sits on a picture cue from film.js (frames @ 60 fps):
+"""Code-made soundtrack for the 29 s "Nikit Hamal" reel (120 BPM, A minor). Every sound sits on a picture cue from film.js (frames @ 60 fps):
 keys for every typed character, UI pops for the apps, a marimba per stack icon, checks for the ops list, felt piano in the essay
 breakdown, impacts on the montage cuts, then the music stops for the name and the pup snores out. Master: -14 LUFS, TP <= -1.5."""
 import os, numpy as np, soundfile as sf, pyloudnorm as pyln
 from scipy.signal import butter, sosfilt
-SR = 48000; FPS = 60; TOTAL = 1680; DUR = TOTAL / FPS; N = int(SR * DUR)
+SR = 48000; FPS = 60; TOTAL = 1740; DUR = TOTAL / FPS; N = int(SR * DUR)
 rng = np.random.default_rng(11)
 L = np.zeros(N); R = np.zeros(N)
 fr = lambda f: f / FPS
@@ -78,8 +78,8 @@ def snore(dur=0.9): n = int(dur * SR); t = np.arange(n) / SR; return lp(rng.stan
 # ---- timeline, mirrored from film.js T
 T = dict(pop=54, expand=150, name=168, sub=190, wink1=222, build=240, neb=262, nebTap=332, nebDetail=338, swipe=400, lami=404, hop=(420, 432, 444), lamiTap=462, matches=466,
          morph=512, astro=546, astroTap=594, chartPg=598, chart=(612, 648), planets=640, stack=660, iconsAt=672, stackCopy=712, ops=780, ticks=(822, 837, 852, 867), bar=(822, 890),
-         write=900, be=928, strike=(972, 990), which=996, scroll=(1050, 1112), neither=(1116, 1146, 1176), pond=1200, feed=1262, mont=1320, lock=1440, lname=1452, ltype=1480,
-         lurl=1560, wake=1584, wink2=1608)
+         write=900, be=928, strike=(972, 990), which=996, scroll=(1040, 1096), neither=(1102, 1154, 1206), pond=1260, feed=1322, mont=1380, lock=1500, lname=1512, ltype=1540,
+         lurl=1620, wake=1644, wink2=1668)
 BEAT = 30; GROOVE = (T['build'], T['write']); DROP = (T['mont'], T['lock'] - 4)
 CH = [(57, 60, 64), (53, 57, 60), (48, 52, 55), (55, 59, 62)]   # Am F C G, one per bar
 chord = lambda f: CH[int(max(0, f - T['build']) // 120) % 4]
@@ -151,7 +151,7 @@ for f in range(T['scroll'][0], T['scroll'][1] + 1):
     if prev is not None and pos != prev: add(tick(2200 + 40 * pos), fr(f), 0.07)
     prev = pos
 add(bell([note(69), note(76)], 1.6), fr(T['scroll'][1]), 0.16)
-for i, f in enumerate(T['neither']): add(piano([note([64, 62, 60][i] + 12)], 1.4, 1.0), fr(f), 0.22); add(piano([note([69, 67, 64][i] + 12)], 1.4, 0.8), fr(f + 10), 0.18)
+for i, f in enumerate(T['neither']): add(piano([note([64, 62, 60][i] + 12)], 1.8, 1.0), fr(f), 0.22); add(piano([note([69, 67, 64][i] + 12)], 1.8, 0.8), fr(f + 16), 0.18); add(bell([note([81, 79, 76][i])], 1.2), fr(f + 22), 0.05)
 # pond: water bed, a wind chime, the food landing; a riser into the drop
 nW = int(fr(T['mont'] - T['pond'] + 30) * SR); water = lp(rng.standard_normal(nW), 900) * 0.5 + bp(rng.standard_normal(nW), 2500, 6000) * 0.08 * (0.6 + 0.4 * np.sin(np.arange(nW) / SR * 2.1))
 add(water * np.minimum(1, np.arange(nW) / SR / 0.4) * np.minimum(1, (nW - np.arange(nW)) / SR / 0.4), fr(T['pond']), 0.22)
@@ -171,7 +171,7 @@ typing('Head of Operations at Consica Labs.', T['ltype'], 1.1, 0.1)
 typing('Android & full-stack engineer from Nepal.', T['ltype'] + 40, 1.1, 0.1)
 typing('Writing about the self.', T['ltype'] + 86, 1.1, 0.1)
 add(pop(880), fr(T['lurl']), 0.18)
-for f in (1480, 1530): add(snore(), fr(f), 0.07, 0.4)
+for f in (1540, 1590): add(snore(), fr(f), 0.07, 0.4)
 add(pop(1500), fr(T['wake']), 0.12, 0.4); add(pop(1700), fr(T['wake'] + 5), 0.1, 0.4)
 add(bell([note(88)], 0.8), fr(T['wink2']) + 0.03, 0.16, -0.2)
 

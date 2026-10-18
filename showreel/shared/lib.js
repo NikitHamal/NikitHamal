@@ -80,7 +80,6 @@ const LIB = (() => {
       }
       if (open < 0.3) { c.restore(); const [x0, y0, x1, y1] = e.box, my = (y0 + y1) / 2 + 2, k = 1 - open / 0.3;
         c.save(); c.globalAlpha *= k; c.strokeStyle = '#1d1714'; c.lineCap = 'round'; c.lineWidth = 4.5; c.beginPath(); c.moveTo(x0 + 2, my - 2); c.quadraticCurveTo((x0 + x1) / 2, my + (y1 - y0) * 0.55, x1 - 2, my - 3); c.stroke();
-        c.lineWidth = 1.6; for (let i = 1; i < 5; i++) { const t = i / 5, lx = mix(x0, x1, t), ly = my - 1 + Math.sin(t * Math.PI) * (y1 - y0) * 0.5; c.beginPath(); c.moveTo(lx, ly); c.lineTo(lx + (t - 0.5) * 5, ly + 4.5); c.stroke(); }
         c.restore(); continue; }
       const ga = c.globalAlpha; for (const s of e.strokes) { c.globalAlpha = ga * s.a; c.strokeStyle = s.stroke; c.lineCap = 'round'; c.lineWidth = s.w / Math.max(sy, 0.45); c.stroke(s.p); } c.globalAlpha = ga;
       c.restore();
@@ -102,34 +101,42 @@ const LIB = (() => {
   }
 
   // ---- the site's pixel dog (<pixel-dog> rig from js/pixel-dog.js, breed "rottie" as on the homepage)
-  const ZS = ['XXXX', '..X.', '.X..', 'XXXX'];
+  const ZS = ['XXXX', '..X.', '.X..', 'XXXX'], ZB = ['XXXXX', '...X.', '..X..', '.X...', 'XXXXX'];
   function dogKit(breed = 'rottie') {
     const R = customElements.get('pixel-dog').rig, V = Object.assign({}, R.BREEDS[breed]); V.m = R.PATTERNS[V.pattern] || {};
     const pal = R.buildPal(V), L = R.mk(R.DW, R.H), T = new Uint8Array(R.DW * R.H), cv = document.createElement('canvas'); cv.width = R.DW; cv.height = R.H;
     const x = cv.getContext('2d'), im = x.createImageData(R.DW, R.H), px = new Uint32Array(im.data.buffer);
     // pose at time t (seconds): 'sleep' | 'sit' | 'stand' | 'lie' | 'walk' | 'run'; o: {wag, eye, mouth, ph}
     function pose(kind, t, o = {}) {
-      const base = { sleep: 'SLEEP', sit: 'SIT', stand: 'STAND', lie: 'LIE', walk: 'STAND', run: 'STAND', sploot: 'SLEEP_SPLOOT', belly: 'SLEEP_BELLY', bow: 'BOW', jump: 'JUMP' }[kind];
+      const base = { sleep: 'SLEEP_SPLOOT', sit: 'SIT', stand: 'STAND', lie: 'LIE', walk: 'STAND', run: 'STAND', bow: 'BOW', jump: 'JUMP' }[kind];
       const P = R.cp(R.poses[base]);
-      const br = Math.sin(t * (kind === 'sleep' ? 1.6 : 2.2)); P.b[3] += br * (kind === 'sleep' ? 0.3 : 0.25); P.ch[1] += br * 0.25;
+      if (kind === 'sleep') {   // the site's sleep (js/pixel-dog.js 'sleep'): the sploot — melty breathing, swaying tail, blep in and out, dream twitches
+        const br = Math.sin(t * 1.5); P.b[3] += br * 0.45; P.b[2] += br * 0.35; P.tl[2] += Math.sin(t * 2.2) * 0.15; P.mouth = Math.sin(t * 0.8) > -0.55 ? 'blep' : 'closed';
+        const dr = (t % 12) - 7; if (dr > 0 && dr < 2) { P.legs[0][4] += Math.sin(t * 14) * 1.3; P.legs[2][4] += Math.sin(t * 14 + 1.5) * 1.3; P.tl[2] += Math.sin(t * 12) * 0.3; }
+      } else { const br = Math.sin(t * 2.2); P.b[3] += br * 0.25; P.ch[1] += br * 0.25; }
       if (kind === 'walk') { R.gait(P, t * 7, 3.4, 2.6, R.WALK_PH); if (Math.sin(t * 14) > 0.3) { for (const k of ['b', 'th', 'ne', 'ch', 'hd', 'tl']) P[k][1] -= 1; } P.tl[2] += Math.sin(t * 8) * 0.2; }
       if (kind === 'run') { R.gait(P, t * 13, 6, 4, R.RUN_PH); P.b[4] = Math.sin(t * 13 + 0.6) * 0.08; P.ears = [-2.5, 2, -2, 2]; P.mouth = 'pant'; P.tl[4] = 0.6; P.tl[2] += Math.sin(t * 26) * 0.15; }
       if (o.wag) P.tl[2] += Math.sin(t * (o.wagF || 17)) * o.wag;
       if (o.eye) P.eye = o.eye; if (o.mouth) P.mouth = o.mouth; if (o.headDy) { P.hd[1] += o.headDy; P.ne[1] += o.headDy * 0.4; }
       return P;
     }
+    const head = P => [P.hd[0], P.hd[1]];
     function sprite(P) { L.b.fill(0); R.drawDog(L, P, V); R.outline(L, T); for (let i = 0; i < L.b.length; i++) px[i] = pal[L.b[i]]; x.putImageData(im, 0, 0); return cv; }
     // draw with the paws on (gx, gy); `scale` px per dog pixel; face 1 = right, -1 = left
     function draw(c, gx, gy, scale, kind, t, o = {}) {
-      const s = sprite(pose(kind, t, o)); c.save(); c.imageSmoothingEnabled = false;
-      c.fillStyle = 'rgba(43,36,32,0.16)'; c.beginPath(); c.ellipse(gx, gy + scale * 0.5, scale * (kind === 'sleep' ? 13 : 16), scale * 1.4, 0, 0, 7); c.fill();
+      const P = pose(kind, t, o), s = sprite(P), f = o.face || 1; c.save(); c.imageSmoothingEnabled = false;
+      c.fillStyle = 'rgba(43,36,32,0.16)'; c.beginPath(); c.ellipse(gx - f * 2 * scale, gy + scale * 0.5, scale * 17, scale * 1.3, 0, 0, 7); c.fill();
+      if (kind === 'sleep') { const r = Math.min(3.2, 0.6 + t * 0.12); if (r > 0.6) { c.fillStyle = 'rgba(207,234,255,0.92)'; c.beginPath(); c.ellipse(gx + f * (P.hd[0] + 8.5) * scale, gy + 0.6 * scale, r * scale, 0.7 * scale, 0, 0, 7); c.fill(); } }   // drool puddle
       c.translate(Math.round(gx), Math.round(gy)); c.scale((o.face || 1) * scale, scale); c.drawImage(s, -R.X0, -R.G); c.restore();
     }
-    // the sleeping "z"s (the same 4x4 glyph the site uses), rising from the head
-    function zzz(c, hx, hy, scale, t, col = '#9a7a63', a = 1) {
-      for (let k = 0; k < 3; k++) { const u = ((t * 0.55 + k / 3) % 1), g = scale * (0.8 + u * 0.5);
-        c.save(); c.globalAlpha *= a * Math.sin(u * Math.PI); c.fillStyle = col; const ox = hx + u * scale * 7 + Math.sin(u * 6 + k) * scale, oy = hy - u * scale * 16;
-        ZS.forEach((r, j) => { for (let i = 0; i < 4; i++) if (r[i] === 'X') c.fillRect(Math.round(ox + i * g), Math.round(oy + j * g), Math.ceil(g), Math.ceil(g)); }); c.restore(); }
+    // the sleeping "z"s exactly as the site spawns them: every 1.6 s from the head, drifting up, small glyph then big, blinking out
+    function zzz(c, gx, gy, scale, t, col = '#9a7a63', a = 1, face = 1) {
+      const P = pose('sleep', t), hx = gx + face * (P.hd[0] + 4) * scale, hy = gy + (P.hd[1] - 9) * scale;
+      for (let k = Math.floor((t - 2.8) / 1.6); k <= Math.floor(t / 1.6); k++) {
+        const life = t - k * 1.6; if (life < 0 || life > 2.8) continue; if (life > 2.8 * 0.72 && Math.floor(life * 18) % 2 === 0) continue;
+        const g = life < 1.1 ? ZS : ZB, ph = hash(k) * 6, x = hx + face * 3.5 * life * scale + Math.sin(life * 2.5 + ph) * 1.5 * scale, y = hy - 5 * life * scale;
+        c.save(); c.globalAlpha *= a; c.fillStyle = col; g.forEach((r, j) => { for (let i = 0; i < r.length; i++) if (r[i] === 'X') c.fillRect(Math.round(x + i * scale), Math.round(y + j * scale), Math.ceil(scale), Math.ceil(scale)); }); c.restore();
+      }
     }
     return { draw, zzz, R };
   }
@@ -176,9 +183,11 @@ const LIB = (() => {
     host.remove(); return forms;
   }
   // draw form `F` centred at cx,cy at `size` px; p = 0..1 draw-on progress (staggered per element); spin for orbit groups
-  function form(c, F, cx, cy, size, p = 1, col = '#18181b', spin = 0, wk = 1) {
+  // only: 'guide' (the faint construction lines) | 'main' (the drawing itself) | undefined (both)
+  function form(c, F, cx, cy, size, p = 1, col = '#18181b', spin = 0, wk = 1, only) {
     const s = size / 452; c.save(); c.translate(cx, cy); c.scale(s, s); c.lineCap = 'round'; c.lineJoin = 'round';
     F.forEach((L, i) => {
+      if (only && (only === 'guide') !== (L.a < 0.5)) return;
       const u = clamp(p * (F.length * 0.5 + 1) - i * 0.5); if (u <= 0) return; const ga = c.globalAlpha;
       c.save(); if (/orbit/.test(L.cls)) c.rotate(spin * (/slow/.test(L.cls) ? 0.5 : 1));
       const k = Math.max(1, Math.round(L.n * u)); c.beginPath(); c.moveTo(L.pts[0], L.pts[1]); for (let j = 1; j <= k; j++) c.lineTo(L.pts[j * 2], L.pts[j * 2 + 1]);

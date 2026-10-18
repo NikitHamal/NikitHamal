@@ -29,7 +29,6 @@ function buildPal(V){
   set(27,V.eyes); set(12,V.collar); set(13,mix(V.collar,'000000',0.35));
   const n=toN(f), lum=(((n>>16)&255)*0.3+((n>>8)&255)*0.59+(n&255)*0.11)/255;
   set(32,lum<0.38?mix(f,'ffffff',0.55):V.outline);   // eyelid/face lines stay readable on dark coats
-  set(33,'cfeaff',0.92); set(34,'ffffff');           // snot bubble + glint
   set(35,'8a6a50'); set(36,'8fa36a');                // dirt, scent specks
   return P;
 }
@@ -283,11 +282,6 @@ const ROLL=mkPose({b:[-1,-9,10,5.5,0],th:[-10,-10,4.5],ne:[11,-9],ch:[9,-12],hd:
 const JUMP=Object.assign(cp(STAND),{tl:[-17,-24,0,0,0.6],
   legs:[[-15,-19,-18,-13,-24,-9],[2,-16,6,-10,9,-9],[-11,-19,-14,-13,-20,-9],[7,-16,11,-10,14,-9]]});
 const PICK=Object.assign(cp(STAND),{ne:[13,-17],hd:[19,-8],ears:[1,0,0,0]});
-const SLEEP=mkPose({b:[-3,-9,7.5,6.8,0],th:[-8,-6.5,5.5],ne:[7,-10],ch:[7,-6],hd:[13,-8.5],tl:[-12,-10,0,0,0,1],
-  legs:[[-10,-6,-5,-3,-1,-1],[1,-5,6,-3,11,-2],[-8,-6,-2,-3,2,-1],[3,-4,8,-2,13,-1]],
-  eye:'closed',ears:[-1,1.5,-1,1.5]});                                   // curled "loaf"
-const SLEEP_BELLY=Object.assign(cp(ROLL),{hd:[17,-8],eye:'closed',mouth:'pant',ears:[-3,4,-3,4],
-  legs:[[-14,-13,-16,-19,-15,-23],[2,-13,5,-19,8,-18],[-10,-13,-7,-20,-6,-24],[6,-13,9,-19,12,-18]]}); // belly-up, limp paws
 const SLEEP_SPLOOT=mkPose({b:[-3,-5.5,10.5,4.6,0],th:[-11,-4,4.5],ne:[12,-6],ch:[8,-4],hd:[18,-6],tl:[-15,-8,0,0,1],
   legs:[[-11,-4,-16,-3,-22,-2,0,0],[3,-3,7,-2,10,-2],[-12,-3,-17,-1.5,-24,-1,0,0],[5,-3,8,-1,12,-1]],
   eye:'closed',mouth:'blep',ears:[0.5,1,0,1]});   // belly flat, back legs straight out, chin on the floor
@@ -351,7 +345,7 @@ canvas:focus-visible{outline:none}</style>
     this.sleepAfter=(sa>0)?sa:((hr>=22||hr<6)?16:38);
     this.d={x:this.home,z:0,vz:0,vx:0,f:1,st:'sit',t:0,data:{},sq:0,sqv:0};
     const st=this.getAttribute('start'), s0=st==='sleep'?'sleep':st==='lie'?'lie':'sit';
-    this.pose=cp(s0==='sleep'?SLEEP:s0==='lie'?LIE:SIT);
+    this.pose=cp(s0==='sleep'?SLEEP_SPLOOT:s0==='lie'?LIE:SIT);
     this.go(s0,{dur:rand(3,6)});
     this.bind();
     this.visible=true;
@@ -538,8 +532,8 @@ canvas:focus-visible{outline:none}</style>
       sleep:()=>this.go('sleep'), roll:()=>this.go('roll',{dur:4.5}), jump:()=>this.go('jump'), spin:()=>this.go('spin'),
       zoomies:()=>this.go('zoomies'), fetch:()=>this.throwBall(clamp(this.d.x+this.d.f*60,6,W-6),8),
       pet:()=>{ this.lastRub=this.time; this.go('pet'); }, dizzy:()=>this.go('dizzy'), scratch:()=>this.go('scratch'),
-      stretch:()=>this.go('stretch'), shake:()=>this.go('shake'), chase:()=>this.go('chase'), sniff:()=>this.go('sniff',{tx:this.randX()}), nap:()=>this.go('sleep',{kind:'belly'}),
-sploot:()=>this.go('sleep',{kind:'sploot'}),
+      stretch:()=>this.go('stretch'), shake:()=>this.go('shake'), chase:()=>this.go('chase'), sniff:()=>this.go('sniff',{tx:this.randX()}), nap:()=>this.go('sleep'),
+sploot:()=>this.go('sleep'),
     };
     if(m[n]){ m[n](); if(n!=='sleep') this.act(); }
   }
@@ -669,8 +663,8 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
       case 'drag': this.dv.x=0; this.dv.z=0; this.spawn('drop',hx-d.f*6,above(hy,6),{vx:-d.f*10,vy:-14,g:1,max:0.9}); break;
       case 'fetch': data.ph=data.ph||'see'; if(data.ph==='see') this.bang('bang',0.7); break;
       case 'look': this.bang('q',1.3); break;
-      case 'sleep': data.zt=0.6; data.dream=rand(6,14); data.pop=rand(8,14); data.drool=0;
-        data.kind=data.kind||'sploot'; break;
+      case 'sleep': data.zt=0.6; data.dream=rand(6,14); data.drool=0;
+        break;
       case 'sniff': data.ph='trail'; data.dur=rand(2.5,4.5); if(data.tx==null) data.tx=this.randX(); break;
       case 'roll': if(data.dur==null) data.dur=4.5; break;
       case 'zoomies': data.n=3+(Math.random()*3|0); data.tx=this.farX(); break;
@@ -716,38 +710,20 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
       case 'lie':
         P=cp(LIE); this.breathe(P,1.6,0.3); this.wag(P,0.06,2); this.look(P,dt);
         if(t>D.dur){ if(this.sleepy()) this.go('yawn',{base:'lie',then:'sleep'}); else this.next(); } break;
-      case 'sleep': {
-        const kind=D.kind, belly=kind==='belly', sploot=kind==='sploot', br=Math.sin(now*1.5);
-        P=cp(belly?SLEEP_BELLY:sploot?SLEEP_SPLOOT:SLEEP); P.b[3]+=br*0.45; P.tau=0.15; P.noTw=1;
-        if(belly) P.legs.forEach((l,i)=>{ l[4]+=Math.sin(now*1.5+i)*0.4; });
-        if(sploot){                                   // melty breathing, swaying tail, blep in & out
-          P.b[2]+=br*0.35; P.tl[2]+=Math.sin(now*2.2)*0.15;
-          P.mouth=Math.sin(now*0.8)>-0.55?'blep':'closed';
-          D.drool=Math.min(3.2,D.drool+dt*0.12);
-        }
-        if((D.zt-=dt)<=0){ D.zt=belly?1.1:1.6; const [hx,hy]=this.headW();
-          this.spawn('z',hx+d.f*(belly?2:4),above(hy,belly?7:9),{vx:d.f*3.5,vy:-5,max:2.8,ph:rand(0,6)}); }
-        // dreams
+      case 'sleep': {                                  // the sploot: belly flat, back legs out, melty breathing, blep, drool
+        const br=Math.sin(now*1.5);
+        P=cp(SLEEP_SPLOOT); P.b[3]+=br*0.45; P.tau=0.15; P.noTw=1;
+        P.b[2]+=br*0.35; P.tl[2]+=Math.sin(now*2.2)*0.15;
+        P.mouth=Math.sin(now*0.8)>-0.55?'blep':'closed';
+        D.drool=Math.min(3.2,D.drool+dt*0.12);
+        if((D.zt-=dt)<=0){ D.zt=1.6; const [hx,hy]=this.headW();
+          this.spawn('z',hx+d.f*4,above(hy,9),{vx:d.f*3.5,vy:-5,max:2.8,ph:rand(0,6)}); }
+        // dreams: running paws and a twitching tail
         if((D.dream-=dt)<=0){
           if(D.dream<-2){ D.dream=rand(8,16); D.talked=0; }
-          else {
-            if(belly) P.legs.forEach((l,i)=>{ l[4]+=Math.sin(now*14+i*1.6)*1.3; });
-            else if(sploot){ P.legs[0][4]+=Math.sin(now*14)*1.3; P.legs[2][4]+=Math.sin(now*14+1.5)*1.3; P.tl[2]+=Math.sin(now*12)*0.3; }
-            else { P.legs[1][4]+=Math.sin(now*15)*1.4; P.legs[3][4]+=Math.sin(now*15+2)*1.4; P.tl[2]+=Math.sin(now*10)*0.12; }
-            P.tau=0.03;
-          }
+          else { P.legs[0][4]+=Math.sin(now*14)*1.3; P.legs[2][4]+=Math.sin(now*14+1.5)*1.3; P.tl[2]+=Math.sin(now*12)*0.3; P.tau=0.03; }
         }
-        // snot bubble (curled only)
-        if(kind==='curl'){
-          const [nx,ny]=this.noseW(); D.pop-=dt;
-          let r=0.6+Math.max(0,br)*2.2; if(D.pop<1.6) r+=(1.6-D.pop)*1.4;
-          if(D.pop<=0){ this.spawn('spark',nx+d.f*3,ny,{max:0.35}); this.spawn('spark',nx+d.f*6,ny-3,{max:0.3});
-            D.pop=rand(10,18); D.startle=1.1; r=0; this.bang('q',1); }
-          this.snot={x:nx+d.f*(r+0.4),y:ny+0.5,r};
-        } else this.snot=null;
-        // drool puddle (sploot only)
-        if(sploot){ const [nx]=this.noseW(); this.drool={x:nx-d.f*2,r:D.drool}; } else this.drool=null;
-        if(D.startle>0){ D.startle-=dt; P.eye='half'; P.ears=[0.5,-0.5,0,0]; this.headMove(P,0,-1); }
+        { const [nx]=this.noseW(); this.drool={x:nx-d.f*2,r:D.drool}; }
         const p=this.ptr, [hx,hy]=this.headW();
         if(p.ok&&now-p.t<1.5&&Math.hypot(p.x-hx,p.y-hy)<30) P.eye='half';
         break;
@@ -1029,8 +1005,6 @@ sploot:()=>this.go('sleep',{kind:'sploot'}),
     }
     if(d.st==='dizzy'){ const [hx,hy]=this.headW();
       for(let i=0;i<3;i++){ const a=this.time*5+i*2.094; spr(F,PLUS,Math.round(hx+Math.cos(a)*9)-1,Math.round(above(hy,11)+Math.sin(a)*2)-1); } }
-    if(d.st==='sleep'&&this.snot&&this.snot.r>0.7){ const s=this.snot;
-      disc(F,s.x,s.y,s.r,(u,v)=>(u<-0.15&&v<-0.15&&u>-0.85&&v>-0.85)?34:33); }
     outline(F,this.TF);
     const sb=S.b, fb=F.b; for(let i=0;i<fb.length;i++) if(fb[i]) sb[i]=fb[i];
     for(const p of this.parts){
@@ -1060,6 +1034,6 @@ PixelDog.BREEDS=BREEDS; PixelDog.PATTERNS=PATTERNS; PixelDog.TAILS=Object.keys(T
 PixelDog.rig={G,X0,DW,H:84,mk,
   drawDog(L,P,V){ const keep=TMP; if(TMP.length!==L.b.length) TMP=new Uint8Array(L.b.length); drawDog(L,P,V); TMP=keep; },
   outline,buildPal,cp,lerpPose,gait,WALK_PH,RUN_PH,BREEDS,PATTERNS,TAILS,
-  poses:{STAND,SIT,LIE,BOW,ROLL,JUMP,PICK,SLEEP,SLEEP_BELLY,SLEEP_SPLOOT,SNIFF,DIG}};
+  poses:{STAND,SIT,LIE,BOW,ROLL,JUMP,PICK,SLEEP_SPLOOT,SNIFF,DIG}};
 customElements.define('pixel-dog',PixelDog);
 })();

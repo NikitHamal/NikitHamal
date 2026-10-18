@@ -1,4 +1,4 @@
-// "Nikit Hamal": a 28 s reel of the person behind nikit.is-a.dev. 60 fps, 120 BPM (beat = 30 f, bar = 120 f).
+// "Nikit Hamal": a 29 s reel of the person behind nikit.is-a.dev. 60 fps, 120 BPM (beat = 30 f, bar = 120 f).
 // Landscape 1920x1080 by default; ?v=portrait renders the hand-laid-out 1080x1920 cut.
 // Built from the main site only: the painted portrait with live eyes, the real apps (NEBians, Lami Nepal, AstroWeb,
 // redrawn from their actual screens), the stack, operations at Consica Labs, the essays, the koi pond and the pixel pup.
@@ -6,7 +6,7 @@
 'use strict';
 const { E, clamp, prog, mix, hash, img, font, typed, rise, portrait, cover, form } = LIB;
 const PORT = new URLSearchParams(location.search).get('v') === 'portrait';
-const W = PORT ? 1080 : 1920, H = PORT ? 1920 : 1080, CX = W / 2, TOTAL = 1680;
+const W = PORT ? 1080 : 1920, H = PORT ? 1920 : 1080, CX = W / 2, TOTAL = 1740;
 const C = { bg: '#faf9f6', warm: '#f4ede2', ink: '#18181b', ink2: '#52525b', mute: '#8e8e93', line: '#e4e2dc', pink: '#d9779a',
   neb: '#1d4ed8', nebInk: '#0b1633', lami: '#b71c1c', lamiGold: '#d39e14', astro: '#1b1d33' };
 // ---- timeline (frames). score.py mirrors these numbers.
@@ -17,10 +17,10 @@ const T = {
   morph: [512, 546], astro: 546, astroTap: 594, chartPg: [598, 614], chart: [612, 648], planets: 640,
   stack: 660, burst: [660, 700], iconsAt: 672, stackCopy: 712,
   ops: 780, opsIn: [780, 810], ticks: [822, 837, 852, 867], bar: [822, 890],
-  write: 900, warm: [900, 932], be: 928, strike: [972, 990], which: 996, scroll: [1050, 1112], neither: [1116, 1146, 1176],
-  pond: 1200, iris: [1200, 1236], feed: 1262,
-  mont: 1320, montN: 8, montLen: 15,
-  lock: 1440, lockIn: [1440, 1476], lname: 1452, ltype: 1480, lurl: 1560, wake: 1584, wink2: 1608, end: 1680,
+  write: 900, warm: [900, 932], be: 928, strike: [972, 990], which: 996, scroll: [1040, 1096], neither: [1102, 1154, 1206],
+  pond: 1260, iris: [1260, 1296], feed: 1322,
+  mont: 1380, montN: 8, montLen: 15,
+  lock: 1500, lockIn: [1500, 1536], lname: 1512, ltype: 1540, lurl: 1620, wake: 1644, wink2: 1668, end: 1740,
 };
 // ---- layout per orientation (hand-placed)
 const LY = PORT ? {
@@ -50,8 +50,8 @@ const A = {};
 async function load() {
   await LIB.fonts();
   const track = LIB.eyeTrack({
-    keys: [[0, 0.75, 0.15], [40, 0.9, 0.1], [84, 0.6, 0.05], [140, 0.2, 0], [176, -0.1, 0.05], [200, 0, 0], [1440, 0, 0], [1480, PORT ? 0 : 0.85, PORT ? 0.6 : 0.2], [1556, PORT ? 0 : 0.6, PORT ? 0.8 : 0.35], [1590, 0.5, 0.5], [1604, 0, 0]],
-    blinks: [T.blink1, 330, 520, 750, 965, 1160, 1290, 1520], winks: [[T.wink1, 'l'], [T.mont + 7 * T.montLen + 3, 'r'], [T.wink2, 'l']],
+    keys: [[0, 0.75, 0.15], [40, 0.9, 0.1], [84, 0.6, 0.05], [140, 0.2, 0], [176, -0.1, 0.05], [200, 0, 0], [1500, 0, 0], [1540, PORT ? 0 : 0.85, PORT ? 0.6 : 0.2], [1616, PORT ? 0 : 0.6, PORT ? 0.8 : 0.35], [1650, 0.5, 0.5], [1664, 0, 0]],
+    blinks: [T.blink1, 330, 520, 750, 965, 1240, 1350, 1580], winks: [[T.wink1, 'l'], [T.mont + 7 * T.montLen + 3, 'r'], [T.wink2, 'l']],
     over: f => f < 140 ? { lx: PORT ? 0 : mix(0.55, 0.95, Math.min(15, Math.floor(f / 4)) / 15), ly: PORT ? mix(0.4, 0.7, Math.min(15, Math.floor(f / 4)) / 15) : 0.1 } : null });
   A.me = await LIB.loadPortrait('../shared/art', 'now', track);
   A.icons = await Promise.all(ICONS.map(n => img(`assets/icons/${n}.svg`)));
@@ -348,14 +348,17 @@ function actWrite(c, f) {
     const nY = mix(my, PORT ? my - 420 : 300, E.inOut(prog(f, T.neither[0] - 10, T.neither[0] + 14)));
     for (let k = Math.floor(pos) - 8; k <= Math.floor(pos) + 8; k++) {
       const t = TITLES[((k % TITLES.length) + TITLES.length) % TITLES.length], y = nY + (k - pos) * lh, d = Math.abs(k - pos), on = k === land && p > 0.98;
-      const fa = clamp(1 - d / (PORT ? 6 : 4)) * fade * (1 - ex) * (k === land ? 1 : 1 - E.smooth(prog(f, T.neither[0] - 26, T.neither[0] - 4)));
+      const fa = clamp(1 - d / (PORT ? 6 : 4)) * fade * (1 - ex) * (k === land ? 1 : 1 - E.smooth(prog(f, T.scroll[1] - 6, T.neither[0] - 4)));
       if (fa <= 0) continue; font(c, 'serif', k === land ? LY.titles * 1.33 : LY.titles); c.textAlign = 'center'; c.fillStyle = on || d < 0.5 ? C.ink : C.ink2; c.globalAlpha = fa; c.fillText(t, CX, y + 30);
     }
     c.globalAlpha = 1; c.textAlign = 'left';
-    const L = [['God is neither in,', 'nor out.'], ['neither above,', 'nor below.'], ['neither time,', 'nor the timeless.']];
-    L.forEach(([a, b], i) => { const f0 = T.neither[i], f1 = i < 2 ? T.neither[i + 1] - 4 : T.pond - 16;
-      if (LY.neitherSplit) { rise(c, a, f, f0, f1, CX, my - 10, 84, 'serif', C.ink, 'center'); rise(c, b, f, f0 + 10, f1, CX, my + 100, 84, 'serifI', C.pink, 'center'); }
-      else { rise(c, a, f, f0, f1, CX - 60, my + 60, 84, 'serif', C.ink, 'right'); rise(c, b, f, f0 + 10, f1, CX - 30, my + 60, 84, 'serifI', C.pink, 'left'); } });
+    // "Where is God?" speaks: each couplet arrives word by word out of a soft blur, holds, and clears before the next
+    const L = [['God is neither in,', 'nor out.'], ['God is neither above,', 'nor below.'], ['God is neither time,', 'nor the timeless.']];
+    L.forEach(([a, b], i) => { const f0 = T.neither[i], f1 = (i < 2 ? T.neither[i + 1] : T.pond) - 16;
+      if (f < f0 || f > f1 + 18) return;
+      if (LY.neitherSplit) { LIB.wordsIn(c, a, f, f0, 5, CX, my - 10, 80, 'serif', C.ink, 'center', f1); LIB.wordsIn(c, b, f, f0 + 16, 5, CX, my + 100, 80, 'serifI', C.pink, 'center', f1); }
+      else { LIB.wordsIn(c, a, f, f0, 5, CX - 40, my + 60, 84, 'serif', C.ink, 'right', f1); LIB.wordsIn(c, b, f, f0 + 16, 5, CX - 10, my + 60, 84, 'serifI', C.pink, 'left', f1); }
+      const u = E.inOut(prog(f, f0 + 20, f0 + 44)) * (1 - E.exit(prog(f, f1, f1 + 14))); if (u > 0) { c.save(); c.strokeStyle = C.pink; c.globalAlpha = 0.6 * u; c.lineWidth = 2; const ly = PORT ? my + 140 : my + 100, hw = (PORT ? 220 : 300) * u; c.beginPath(); c.moveTo(CX - hw, ly); c.lineTo(CX + hw, ly); c.stroke(); c.restore(); } });
   }
 }
 
@@ -385,8 +388,8 @@ function actLock(c, f) {
   // the pup: asleep beside the name (as on the homepage), wakes, sits up and wags at the end
   const du = E.out(prog(f, T.lname + 18, T.lname + 40));
   if (du > 0) { const sc = PORT ? 6 : 5.2, [gx, gy] = L.dog || [nx + nw + 40 + 30 * sc, ny + 6], t = (f - T.lock) / 60, awake = f >= T.wake;
-    c.save(); c.globalAlpha = du; A.dog.draw(c, gx, gy, sc, awake ? 'sit' : 'sleep', t, awake ? { wag: 0.35, mouth: f > T.wake + 30 ? 'pant' : undefined } : {});
-    if (!awake) A.dog.zzz(c, gx + 12 * sc, gy - 13 * sc, sc * 1.2, t); c.restore(); }
+    c.save(); c.globalAlpha = du; const startled = f < T.wake + 16; A.dog.draw(c, gx, gy, sc, !awake ? 'sleep' : startled ? 'stand' : 'sit', t, !awake ? {} : startled ? { eye: 'wide' } : { wag: 0.35, mouth: f > T.wake + 30 ? 'pant' : undefined });
+    if (!awake) A.dog.zzz(c, gx, gy, sc, t); c.restore(); }
   const [lx, ly, ls, lg] = L.lines, al = L.align;
   typed(c, 'Head of Operations at Consica Labs.', f, T.ltype, lx, ly, ls, { col: C.ink2, rate: 1.1, caretUntil: T.ltype + 44, align: al });
   typed(c, 'Android & full-stack engineer from Nepal.', f, T.ltype + 40, lx, ly + lg, ls, { col: C.ink2, rate: 1.1, caretUntil: T.ltype + 90, align: al });
