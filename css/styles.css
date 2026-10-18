@@ -1722,9 +1722,10 @@ body[data-decor="reflection"] .decor[data-decor="reflection"] {
 .painted-eyes .lid.shut { opacity: 1; }
 .painted-eyes .iris { transition: transform .18s ease-out; }
 
-/* avatar: head and shoulders of the painting, in the same 72px circle */
-.profile-avatar.painted-avatar { position: relative; overflow: hidden; background: #efe7da; }
-.painted-avatar > img, .painted-avatar > .painted-eyes { position: absolute; width: 106%; height: 132.5%; left: -3%; top: -3%; }
+/* avatar: the whole painting, uncropped */
+.profile-avatar.painted-avatar { position: relative; width: 112px; height: 140px; border-radius: 14px; overflow: hidden; background: #efe7da; box-shadow: 0 6px 20px rgba(0,0,0,.10); }
+.avatar-container:hover .profile-avatar.painted-avatar { transform: translateY(-2px); }
+@media (max-width: 540px) { .profile-avatar.painted-avatar { width: 96px; height: 120px; } }
 
 /* gallery: just the paintings, no labels */
 .painted-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 4px; }
