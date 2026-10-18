@@ -17,7 +17,10 @@
     const id = el.dataset.painted; el.classList.add('painted'); el.textContent = '';
     const img = new Image(); img.alt = el.dataset.alt || 'Nikit Hamal, painted'; img.decoding = 'async'; img.draggable = false;
     if (el.dataset.eager == null) img.loading = 'lazy';
-    img.src = `assets/painted/${id}.webp`; el.appendChild(img);   // 800x1000 everywhere, so the painting is as sharp as the vector eyes
+    // 560x700 for the avatar and gallery (sharp at 3x), the full 800x1000 only in the fullscreen viewer
+    const full = el.classList.contains('painted-full');
+    img.src = `assets/painted/${id}${full ? '' : '-sm'}.webp`; if (!full) { img.srcset = `assets/painted/${id}-sm.webp 560w, assets/painted/${id}.webp 800w`; img.sizes = el.id === 'avatarPainted' ? '112px' : '(max-width: 540px) 46vw, 200px'; }
+    el.appendChild(img);
     const ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ov.setAttribute('viewBox', '0 0 800 1000'); ov.setAttribute('class', 'painted-eyes'); ov.setAttribute('aria-hidden', 'true');
     // 'slice' scales the eyes exactly like object-fit: cover scales the painting, so they stay glued to the face
     // even if the box is ever not exactly 4:5 (the old 'meet' default shrank them on narrow phones)

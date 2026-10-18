@@ -53,10 +53,12 @@
   function header() {
     const h = D.querySelector('.site-header'); if (!h || reduce) return;
     let lastY = scrollY, acc = 0, ticking = false;
+    const progress = () => { const max = R.scrollHeight - innerHeight; h.style.setProperty('--progress', max > 0 ? Math.min(1, scrollY / max).toFixed(4) : 0); };
+    progress(); addEventListener('resize', progress, { passive: true });
     addEventListener('scroll', () => {
       if (ticking) return; ticking = true;
       requestAnimationFrame(() => {
-        const y = scrollY, d = y - lastY; lastY = y; ticking = false;
+        const y = scrollY, d = y - lastY; lastY = y; ticking = false; progress();
         acc = (d > 0) === (acc > 0) ? acc + d : d;
         if (y < 140 || acc < -24) h.classList.remove('is-hidden');
         else if (acc > 48 && !h.contains(D.activeElement)) h.classList.add('is-hidden');

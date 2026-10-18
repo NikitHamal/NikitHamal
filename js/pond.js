@@ -1723,9 +1723,13 @@ Object.assign(Snd,{
 build();
 let last=performance.now(),idleOn=false,pondVis=true,slowTick=0,audioQuiet=false;
 const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if('IntersectionObserver' in window){new IntersectionObserver(es=>{pondVis=es[0].isIntersecting;},{threshold:0.02}).observe(holder);}
+// Use the LATEST entry: a fast scroll (or content loading above) can deliver "left" and "entered" in one batch,
+// and reading es[0] left the pond paused and black on phones. A cheap rect re-check while paused is a safety net.
+if('IntersectionObserver' in window){new IntersectionObserver(es=>{pondVis=es[es.length-1].isIntersecting;},{threshold:0.02}).observe(holder);}
+let visChk=0;const recheckVis=()=>{const r=holder.getBoundingClientRect();pondVis=r.bottom>0&&r.top<innerHeight;};
 function loop(now){
   let dt=(now-last)/16.667;last=now;if(dt>3)dt=3;if(dt<0.1)dt=0.1;
+  if(!pondVis&&!document.hidden&&++visChk%20===0)recheckVis();
   if(!pondVis||document.hidden){ if(!audioQuiet){ audioQuiet=true; Snd.quiet(true); } requestAnimationFrame(loop);return;}
   if(audioQuiet){ audioQuiet=false; Snd.quiet(false); }
   slowTick++;

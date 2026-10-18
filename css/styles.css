@@ -3,7 +3,7 @@
   Ultra-clean, modern, minimalist typography layout
 */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+/* fonts are linked from each page's <head> (no @import: it blocked rendering behind a second request) */
 
 :root {
   --font-serif: 'Newsreader', Georgia, serif;
@@ -1950,3 +1950,54 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
 .painted-ambient span.on { opacity: .42; }
 .painted-stage, .painted-nav, .painted-close, .painted-dots { z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .painted-ambient span { transition: none; } }
+
+/* ==========================================================================
+   TOP BAR v2: monogram left, nav + controls right, scroll progress underneath
+   ========================================================================== */
+.site-header {
+  justify-content: space-between; gap: 12px; padding: 7px 8px 7px 16px; min-height: 50px; border-radius: 16px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+}
+.site-header.is-stuck { border-color: var(--border-line); background: color-mix(in srgb, var(--bg) 88%, transparent); }
+.site-brand { display: inline-flex; align-items: center; color: var(--text-primary); padding: 6px 4px; margin-left: -4px; border-radius: 8px; -webkit-tap-highlight-color: transparent; }
+.site-brand svg { width: 34px; height: 18px; display: block; overflow: visible; }
+.site-brand g, .site-brand .sb-dot { transition: transform .5s var(--spring); transform-box: view-box; }
+.site-brand:hover .sb-n { transform: translateY(-1px); }
+.site-brand:hover .sb-h { transform: translateY(-1px); transition-delay: .06s; }
+.site-brand:hover .sb-dot { transform: translateY(-2px); transition-delay: .12s; }
+.site-brand:focus-visible { outline: 1px solid var(--text-muted); outline-offset: 2px; }
+.site-header .site-nav { gap: 14px; }
+.site-controls { gap: 2px; }
+.site-progress {
+  position: absolute; left: 16px; right: 16px; bottom: -1px; height: 2px; border-radius: 2px; pointer-events: none;
+  background: linear-gradient(90deg, #8ec5ff, #f6aec0 55%, #ffc23d);
+  transform: scaleX(var(--progress, 0)); transform-origin: left; opacity: 0; transition: opacity .4s ease;
+}
+.site-header.is-stuck .site-progress { opacity: .9; }
+.site-nav-btn, .theme-toggle, .weather-toggle, .accordion-header, .contact-row, .skill-orb { -webkit-tap-highlight-color: transparent; }
+
+/* ==========================================================================
+   SMALL SCREENS: tighter rhythm, compact cards, comfortable touch targets
+   ========================================================================== */
+@media (max-width: 600px) {
+  .minimal-wrapper { padding: 12px 16px 48px; }
+  .site-header { top: 8px; margin-bottom: 18px; padding: 5px 6px 5px 14px; min-height: 46px; }
+  .site-header .site-nav { gap: 12px; }
+  .site-nav-link { font-size: .86rem; }
+  .site-divider { height: 18px; }
+  .profile-header { margin-bottom: 28px; }
+  .accordion-header { min-height: 52px; }
+  .project-card-visual { aspect-ratio: 3 / 1; }
+  .project-card-icon { transform: scale(.82); }
+  .minimal-footer { margin-top: 28px; padding-top: 12px; }
+  .pond-section { margin-top: 36px; }
+  pixel-horizon { margin-top: 20px; margin-bottom: -10px; }
+}
+@media (max-width: 360px) {
+  .site-header { padding-left: 12px; gap: 6px; }
+  .site-header .site-nav { gap: 9px; }
+  .site-brand svg { width: 28px; height: 15px; }
+  .site-nav-link { font-size: .82rem; }
+  .site-divider { display: none; }
+}
