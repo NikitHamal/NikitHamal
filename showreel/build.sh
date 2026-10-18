@@ -16,6 +16,12 @@ ffmpeg -y -loglevel error -framerate 60 -i frames/%04d.jpg -i out/soundtrack.wav
   -c:v libx264 -preset slow -crf 15 -pix_fmt yuv420p -x264-params "colorprim=bt709:transfer=bt709:colormatrix=bt709" \
   -color_primaries bt709 -color_trc bt709 -colorspace bt709 -c:a aac -b:a 256k -ar 48000 -movflags +faststart -shortest out/showreel.mp4
 ffmpeg -y -loglevel error -ss 7.0 -i out/showreel.mp4 -frames:v 1 out/poster.jpg
+# the vertical cut (1080x1920): same film with ?v=portrait; three workers (each replays the pencil strokes first)
+rm -rf frames_v; for r in "0 300" "300 600" "600 900"; do node tools/render.js $r 1 frames_v "http://localhost:8799/film.html?v=portrait" & done; wait
+ffmpeg -y -loglevel error -framerate 60 -i frames_v/%04d.jpg -i out/soundtrack.wav -map 0:v -map 1:a \
+  -c:v libx264 -preset slower -crf 17 -pix_fmt yuv420p -x264-params "colorprim=bt709:transfer=bt709:colormatrix=bt709" \
+  -color_primaries bt709 -color_trc bt709 -colorspace bt709 -c:a aac -b:a 256k -ar 48000 -movflags +faststart -shortest out/showreel_vertical.mp4
+rm -rf frames_v
 # contact sheet for review
 rm -rf frames_sheet && mkdir frames_sheet && for f in 0 40 90 130 175 220 260 290 315 345 380 430 460 480 500 525 565 605 636 646 656 700 740 800 860; do cp frames/$(printf %04d $f).jpg frames_sheet/; done
 python3 sheet.py frames_sheet out/contact_sheet.png && rm -rf frames_sheet

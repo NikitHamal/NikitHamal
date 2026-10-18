@@ -7,7 +7,7 @@ Spec: 1920×1080, 60 fps, 900 frames, 120 BPM (beat = 30 f, bar = 120 f), BT.709
 The craft rules come from the [cinetic](https://github.com/Leonxlnx/cinetic) skill. That repo only ships its SKILL.md, so the tooling here is custom.
 See `BRIEF.md` for the spec, brand and banned list, and `TREATMENT.md` for the beat sheet.
 
-**Final output:** `out/showreel.mp4`. Also in `out/`: the mastered `soundtrack.wav`, `poster.jpg`, and `contact_sheet.png` (25 key frames).
+**Final output:** `out/showreel.mp4`, plus the vertical cut `out/showreel_vertical.mp4` (1080×1920, rendered from the same film with `?v=portrait`: a vertical film strip of ages, height-filling scenes, and a 3×4 wall of tall cells). Also in `out/`: the mastered `soundtrack.wav`, `poster.jpg`, and `contact_sheet.png` (25 key frames).
 
 ## Layout
 | path | what |
