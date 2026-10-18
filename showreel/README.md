@@ -1,6 +1,6 @@
 # "Drawn in code": Nikit Hamal showreel (15 s)
 
-> More films: **`portfolio-reel/`** (29 s; the person behind the portfolio: apps, stack, operations, essays, pond) and **`then-i-write/`** (32 s; the writer's reel). Both come in landscape and vertical cuts, built on the shared engine in `shared/`.
+> More films: **`portfolio-reel/`** (29 s; the person behind the portfolio: apps, stack, operations, essays, pond) **`then-i-write/`** (32 s; the writer's reel, illustrated) and **`i-write/`** (56 s; the typographic film, his words only). Both come in landscape and vertical cuts, built on the shared engine in `shared/`.
 
 A 15-second motion-graphics showreel built entirely in code: a canvas frame function rendered headless, plus a synthesised score and sound effects.
 Spec: 1920×1080, 60 fps, 900 frames, 120 BPM (beat = 30 f, bar = 120 f), BT.709 colour tags, AAC 48 kHz, loudness −14 LUFS, true peak ≤ −1.5 dBTP.
