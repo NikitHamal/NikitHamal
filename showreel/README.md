@@ -16,9 +16,9 @@ See `BRIEF.md` for the spec, brand and banned list, and `TREATMENT.md` for the b
 | `score.py` | the soundtrack: numpy/scipy synth voices placed on picture cues, normalised to −14 LUFS. Writes `out/soundtrack_raw.wav`. |
 | `build.sh` | the full pipeline. It serves the files, renders 900 frames, scores, masters, muxes, makes a poster and contact sheet, and runs the spec checks. |
 | `tools/render.js` | Playwright frame renderer: `node tools/render.js from to step outdir url`. Renders in order, because the pencil replay accumulates. |
-| `tools/grabclips.js` | re-records the live `/preview` pixel scenes into `clips/<stageId>/000-071.png`, and the mascot into `clips/mascot/` (48 PNGs). |
+| `tools/grabclips.js` | re-records the live `_preview/` pixel scenes into `clips/<stageId>/000-071.png`, and the mascot into `clips/mascot/` (48 PNGs). |
 | `sheet.py` | contact sheet: `python3 sheet.py <dir of jpgs> out.png` |
-| `assets/` | `paint_<age>.png`: the six painted portraits, rasterised from `preview/art/<age>`. `now.pcl`: pencil stroke data, replayed as the drawing. `now_tone.png`, `now_smudge.png`: pencil shading layers. `pixelhead.png`: the pixel me. `jakarta.ttf`: Plus Jakarta Sans (OFL). |
+| `assets/` | `paint_<age>.png`: the six painted portraits, rasterised from `_preview/art/<age>`. `now.pcl`: pencil stroke data, replayed as the drawing. `now_tone.png`, `now_smudge.png`: pencil shading layers. `pixelhead.png`: the pixel me. `jakarta.ttf`: Plus Jakarta Sans (OFL). |
 | `clips/` | the real footage of each pixel scene and the mascot. |
 
 ## Rebuild
@@ -26,7 +26,7 @@ See `BRIEF.md` for the spec, brand and banned list, and `TREATMENT.md` for the b
 cd showreel/tools && npm i && npx playwright install chromium && cd ..
 pip install numpy scipy soundfile pyloudnorm pillow     # and ffmpeg on PATH
 ./build.sh            # uses the committed clips
-./build.sh --clips    # re-record clips from /preview first (do this after changing any pixel scene or the mascot)
+./build.sh --clips    # re-record clips from _preview/ first (do this after changing any pixel scene or the mascot)
 ```
 `build.sh` serves `showreel/` on :8799 and the repo root on :8765. It writes the frames to `frames/`, which git ignores.
 

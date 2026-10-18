@@ -1,9 +1,9 @@
-// Record each /preview pixel scene's canvas as a 72-frame PNG sequence (the real footage the film cuts to),
+// Record each _preview pixel scene's canvas as a 72-frame PNG sequence (the real footage the film cuts to),
 // plus 48 element screenshots of the SVG mascot.  Serve the repo root first (see README), then:
-//   node tools/grabclips.js [only=deskStage,fireStage,...] [url=http://localhost:8765/preview/]
+//   node tools/grabclips.js [only=deskStage,fireStage,...] [url=http://localhost:8765/_preview/]
 const { chromium } = require('playwright'); const fs = require('fs'); const path = require('path');
 const OUT = path.join(__dirname, '..', 'clips');
-(async () => { const only = process.argv[2] ? process.argv[2].split(',') : null, url = process.argv[3] || 'http://localhost:8765/preview/';
+(async () => { const only = process.argv[2] ? process.argv[2].split(',') : null, url = process.argv[3] || 'http://localhost:8765/_preview/';
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   await p.goto(url); await p.waitForTimeout(1500);
   const plan = { treeStage: [], fireStage: [], rainStage: [], deskStage: [], fishStage: ['[data-fish=reel]', 3500], starStage: ['[data-star=wish]', 600], snowStage: ['[data-snow=throw]', 200], dogStage: ['[data-dog=pet]', 300] };

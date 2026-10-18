@@ -42,7 +42,7 @@ const LIB = (() => {
     return tot;
   }
 
-  // ---- the painted portrait + live eyes (preview/art/<id>/eyes.svg, parsed into canvas paths)
+  // ---- the painted portrait + live eyes (_preview/art/<id>/eyes.svg, parsed into canvas paths)
   function parseEyes(txt) {
     const doc = new DOMParser().parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${txt}</svg>`, 'image/svg+xml');
     return [...doc.querySelectorAll('g.eye')].map(g => {
