@@ -56,6 +56,6 @@ code{background:var(--paper2);padding:2px 6px;border-radius:6px}
 .art .eye.shut{transition:transform .07s ease-in}
 .frame .art{animation:breathe 5.5s ease-in-out infinite}
 @keyframes breathe{50%{scale:1.006}}
-.pixel-stage{position:relative;height:clamp(300px,36vw,420px);border-radius:18px;overflow:hidden;cursor:pointer;touch-action:none;user-select:none;background:linear-gradient(#f7f1e8,#efe5d6);border:1px solid #e3d7c4}
+.pixel-stage{position:relative;height:clamp(340px,40vw,480px);border-radius:18px;overflow:hidden;cursor:pointer;touch-action:none;user-select:none;background:linear-gradient(#fbf3ea 0%,#f6e6e2 55%,#efe3d4 100%);border:1px solid #e3d7c4}
 .pixel-stage canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
   background:radial-gradient(90% 80% at 50% 35%,#fdfaf5 0%,#efe6d9 70%,#e4d7c5 100%)}
