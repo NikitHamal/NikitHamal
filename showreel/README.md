@@ -1,5 +1,7 @@
 # "Drawn in code": Nikit Hamal showreel (15 s)
 
+> There is also a second film: **`portfolio-reel/`** (25 s), built from the main portfolio (apps, stack, operations, essays) rather than /preview. See its README.
+
 A 15-second motion-graphics showreel built entirely in code: a canvas frame function rendered headless, plus a synthesised score and sound effects.
 Spec: 1920×1080, 60 fps, 900 frames, 120 BPM (beat = 30 f, bar = 120 f), BT.709 colour tags, AAC 48 kHz, loudness −14 LUFS, true peak ≤ −1.5 dBTP.
 The craft rules come from the [cinetic](https://github.com/Leonxlnx/cinetic) skill. That repo only ships its SKILL.md, so the tooling here is custom.
