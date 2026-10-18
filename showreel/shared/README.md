@@ -10,7 +10,7 @@
   - the essays' line-art motion forms: `loadForms`, `form`, which draws them on stroke by stroke;
   - sub-frame motion blur: `blurFrame`.
 - **`fonts.css` + `fonts/`**: JetBrains Mono, Newsreader (regular and italic) and Plus Jakarta Sans for the site; Poppins, Cinzel Decorative and Material Icons Round for the app UIs. All are OFL or Apache.
-- **`art/`**: the painted portraits with their eyes painted out, plus their live-eye SVGs (from `preview/art/<id>`).
+- **`art/`**: the painted portraits with their eyes painted out, plus their live-eye SVGs (from `_preview/art/<id>`).
 - **`pond/`**: the homepage koi pond (`js/pond.js`) recorded at day, golden hour, night and rain.
   - `land_*` files are 640×360 (shown at 3× nearest-neighbour).
   - `port_*` files are 540×960.
