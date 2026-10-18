@@ -1,0 +1,33 @@
+/* Remix Icon v3.5.0 (Apache-2.0, remixicon.com), subset to the icons this site uses.
+   Rebuild after adding an icon: python3 tools/remixicon-subset.py */
+@font-face{font-family:"remixicon";src:url("../assets/fonts/remixicon-subset.woff2") format("woff2");font-display:block}
+[class^="ri-"],[class*=" ri-"]{font-family:"remixicon"!important;font-style:normal;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.ri-add-line:before{content:"\ea13"}
+.ri-apps-2-line:before{content:"\ea42"}
+.ri-arrow-left-line:before{content:"\ea60"}
+.ri-arrow-left-s-line:before{content:"\ea64"}
+.ri-arrow-right-line:before{content:"\ea6c"}
+.ri-arrow-right-s-line:before{content:"\ea6e"}
+.ri-arrow-right-up-line:before{content:"\ea70"}
+.ri-check-line:before{content:"\eb7b"}
+.ri-checkbox-circle-fill:before{content:"\eb80"}
+.ri-download-cloud-line:before{content:"\ec58"}
+.ri-download-line:before{content:"\ec5a"}
+.ri-github-line:before{content:"\edcb"}
+.ri-global-line:before{content:"\edcf"}
+.ri-grid-fill:before{content:"\edde"}
+.ri-layout-masonry-line:before{content:"\ee97"}
+.ri-linkedin-line:before{content:"\eeb6"}
+.ri-loader-4-line:before{content:"\eec6"}
+.ri-mail-line:before{content:"\eef6"}
+.ri-moon-line:before{content:"\ef75"}
+.ri-quill-pen-line:before{content:"\f04a"}
+.ri-refresh-line:before{content:"\f064"}
+.ri-search-line:before{content:"\f0d1"}
+.ri-send-plane-line:before{content:"\f0da"}
+.ri-slideshow-3-line:before{content:"\f154"}
+.ri-sun-line:before{content:"\f1bf"}
+.ri-swap-line:before{content:"\f1cb"}
+.ri-twitter-x-line:before{content:"\f3e7"}
+.ri-whatsapp-line:before{content:"\f2bc"}
+.ri-spin{animation:ri-spin 1s linear infinite}@keyframes ri-spin{to{transform:rotate(360deg)}}

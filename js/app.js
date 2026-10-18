@@ -246,7 +246,7 @@
 
   async function fetchJSON(url) {
     try {
-      const res = await fetch(url, { cache: 'no-store' });
+      const res = await fetch(url, { cache: 'no-cache' });   // revalidate, but let the browser reuse what it has
       if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
       return await res.json();
     } catch (e) {
@@ -259,6 +259,9 @@
     const { apiKey, blogId } = window.BLOGGER_CONFIG || {};
     if (!apiKey || !blogId || apiKey === 'YOUR_API_KEY_HERE') {
       if (!pageToken) {
+        // one small file with everything the lists need (tools/posts-summary.py); full posts only as a fallback
+        const sum = await fetchJSON('/posts/summary.json');
+        if (sum && Array.isArray(sum.posts) && sum.posts.length) return sum.posts.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
         const idx = await fetchJSON('/posts/index.json');
         if (!idx || !Array.isArray(idx.posts)) return [];
         const posts = await Promise.all(idx.posts.map(slug => fetchJSON(`/posts/${slug}.json`)));
@@ -305,7 +308,7 @@
     const cardVisual = ogThumbFor(post, 'writing-mini-thumb');
     const link = postLink(post);
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const readingTime = estimateReadingTime(post.contentHtml).mins;
+    const readingTime = post.mins || estimateReadingTime(post.contentHtml).mins;
 
     return `
       <a href="${link}" class="writing-mini-item">
@@ -322,7 +325,7 @@
 
   function renderWritingCard(post) {
     const cardVisual = ogThumbFor(post, 'writing-card__thumb');
-    const readingTime = estimateReadingTime(post.contentHtml).mins;
+    const readingTime = post.mins || estimateReadingTime(post.contentHtml).mins;
     const excerpt = post.excerpt || (htmlToText(post.contentHtml).substring(0, 140) + '...');
     const date = new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const link = postLink(post);
@@ -769,7 +772,7 @@
 
     if (!post) {
       const allPosts = await loadAllPosts();
-      post = allPosts[0];
+      post = allPosts[0] && !allPosts[0].contentHtml ? (await fetchJSON(`/posts/${allPosts[0].slug}.json`)) || allPosts[0] : allPosts[0];
     }
 
     if (!post) {

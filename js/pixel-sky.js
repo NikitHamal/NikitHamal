@@ -632,7 +632,19 @@ function tip(btn, text) {
   tipEl.classList.remove('show'); void tipEl.offsetWidth; tipEl.classList.add('show');
   clearTimeout(tipT); tipT = setTimeout(() => tipEl.classList.remove('show'), 1300);
 }
+const MONO = ['X...X.X...X', 'XX..X.X...X', 'X.X.X.XXXXX', 'X..XX.X...X', 'X...X.X...X'];
+function bootBrand() {
+  const h = D.querySelector('.site-header'); if (!h || h.querySelector('.site-brand')) return;
+  const a = D.createElement('a'); a.className = 'site-brand'; a.href = '/'; a.setAttribute('aria-label', 'Nikit Hamal, home');
+  // each letter is its own group so they can hop one after the other
+  const letter = (x0, x1) => MONO.map(r => r.slice(x0, x1));
+  a.innerHTML = `<svg viewBox="-1 -1 13 7" aria-hidden="true" shape-rendering="crispEdges"><g class="sb-n">${svgRects(letter(0, 5), { X: 'currentColor' })}</g><g class="sb-h">${svgRects(letter(6, 11), { X: 'currentColor' }, 6)}</g><rect class="sb-dot" x="11.5" y="4" width="1" height="1" fill="#e8505f"/></svg>`;
+  if (location.pathname === '/' || location.pathname.endsWith('/index.html')) a.addEventListener('click', e => { e.preventDefault(); scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+  h.prepend(a);
+  const bar = D.createElement('span'); bar.className = 'site-progress'; bar.setAttribute('aria-hidden', 'true'); h.appendChild(bar);
+}
 function bootControls() {
+  bootBrand();
   D.querySelectorAll('.theme-toggle .theme-icon').forEach(s => { s.textContent = ''; s.innerHTML = themeSVG(); s.classList.add('is-pixel'); });
   const tog = D.querySelector('.theme-toggle'); if (!tog || D.querySelector('.weather-toggle')) return;
   const b = D.createElement('button'); b.type = 'button'; b.className = 'weather-toggle';
@@ -694,9 +706,9 @@ class PixelHorizon extends HTMLElement {
       : { far: '#c3d1e5', farS: '#aebfd8', snow: '#ffffff', snowS: '#dce6f2', mid: '#a7bdad', midS: '#94ab9a', tree: '#7d9884', near: '#8ca393', nearS: '#7b9282' };
     this.C = C; this.dark = dark; seed = 0x9e3779b;
     // ridge profiles
-    const ridge = (amp, base, rough, peaks) => { const h = new Float32Array(W + 1); const pk = []; for (let i = 0; i < peaks; i++) pk.push([ra(0, W), ra(.55, 1) * amp, ra(W * .05, W * .14)]);
+    const ridge = (amp, base, rough, peaks) => { const h = new Float32Array(W + 1); const pk = []; for (let i = 0; i < peaks; i++) pk.push([ra(0, W), ra(.55, 1) * amp, ra(Math.max(12, W * .05), Math.max(22, W * .14))]);   // peaks keep a sane base width on phones
       for (let x = 0; x <= W; x++) { let v = 0; for (const [px, a, wd] of pk) v = Math.max(v, a * (1 - Math.abs(x - px) / wd)); h[x] = base + v + Math.sin(x * .21) * rough + Math.sin(x * .057 + 2) * rough * 1.6; } return h; };
-    const far = ridge(H * .62, H * .22, 1.2, Math.max(4, Math.round(W / 45)));
+    const far = ridge(H * .62, H * .22, 1.2, Math.max(3, Math.round(W / 45)));
     const mid = ridge(H * .18, H * .3, 1.5, Math.max(3, Math.round(W / 60)));
     const near = ridge(H * .08, H * .14, 1, Math.max(3, Math.round(W / 50)));
     const L = (h, fill) => { const c = cv(W, H), g = c.getContext('2d'); fill(g, h); return c; };
