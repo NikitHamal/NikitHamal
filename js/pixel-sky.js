@@ -24,7 +24,7 @@ if (window.PixelSky) return;
 const D = document, R = D.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const me = D.currentScript, calm = !!(me && me.dataset.mode === 'calm');
-const S = 3;   // one art pixel = 3 css px
+const S = innerWidth >= 1800 ? 4 : 3;   // one art pixel = 3 css px (4 on very large screens, so the art keeps its scale)
 
 /* ---------------- tiny helpers ---------------- */
 let seed = 0x2f6b9d1;
@@ -306,6 +306,7 @@ function bolt(x0, y0, x1, y1) {
   const segs = []; let x = x0, y = y0;
   while (y < y1) { const nx = x + ra(-2.5, 2.5) + (x1 - x) * .08, ny = y + ra(2, 4); segs.push([x, y, nx, ny, 1]); if (rnd() < .14) { let bx = nx, by = ny; const dir = rnd() < .5 ? -1 : 1; for (let j = 0; j < ri(2, 5); j++) { const ex = bx + dir * ra(1, 3), ey = by + ra(2, 3); segs.push([bx, by, ex, ey, 0]); bx = ex; by = ey; } } x = nx; y = ny; }
   bolts.push({ segs, age: 0, life: .45 }); flash = Math.max(flash, .55);
+  D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'thunder' }));
 }
 function shootingStar(x, y) { const dir = x > sky.W / 2 ? -1 : 1; shoots.push({ x, y, vx: dir * ra(110, 160), vy: ra(40, 70), age: 0, life: ra(.7, 1.1) }); }
 
@@ -596,6 +597,7 @@ function onSkyClick(e) {
   // sun / moon
   const sp = sunPos();
   if (Math.hypot(x - sp.x, y - sp.y) < (n < .5 ? sunR : moonR) + 5) {
+    D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'sparkle' }));
     if (n < .5) { flare = 1; burst(sp.x, sp.y, ['#ffe27a', '#ffc23d', '#fff6c4', '#ff9a4a'], 22, 80); }
     else { moonP = (moonP + .125) % 1; moonSpr = moonSprite(moonR, moonP); burst(sp.x, sp.y, ['#ffffff', '#d6e4ff', '#fffbea'], 14, 50); }
     return;
@@ -604,13 +606,13 @@ function onSkyClick(e) {
   for (let i = clouds.length - 1; i >= 0; i--) {
     const c = clouds[i]; if (c.vis < .4 || c.L.d < .2) continue;
     const lx = Math.floor(x - c.sx), ly = Math.floor(y - c.sy);
-    if (lx >= 0 && ly >= 0 && lx < c.spr.w && ly < c.spr.h && c.spr.mask[ly * c.spr.w + lx]) { c.rain = 4.5; c.vx += ra(-6, 6); if (st() > .6) bolt(c.sx + c.spr.w / 2, c.sy + c.spr.h - 2, x + ra(-10, 10), Math.min(sky.H - 4, y + ra(40, 90))); return; }
+    if (lx >= 0 && ly >= 0 && lx < c.spr.w && ly < c.spr.h && c.spr.mask[ly * c.spr.w + lx]) { D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'drop' })); c.rain = 4.5; c.vx += ra(-6, 6); if (st() > .6) bolt(c.sx + c.spr.w / 2, c.sy + c.spr.h - 2, x + ra(-10, 10), Math.min(sky.H - 4, y + ra(40, 90))); return; }
   }
   // open sky
   if (P.rain > .5) bolt(x + ra(-12, 12), 0, x, y);
   else if (P.snow > .5) { for (let i = 0; i < 24; i++) flakes.push({ x: x + ra(-10, 10), y: y + ra(-6, 6), vy: ra(4, 12), ph: rnd() * 7, s: rnd() < .4 ? 2 : 1, d: ra(.3, .7) }); }
   else if (P.wind > 12) { for (let i = 0; i < 18; i++) petals.push({ x: x + ra(-6, 6), y: y + ra(-6, 6), vy: ra(-6, 6), vx: ra(10, 30), ph: rnd() * 7, fr: ri(0, 3), c: ['#f6aec0', '#e47b98'], d: .6 }); }
-  else if (n > .5) { if (y > sky.H * .45) { lanterns.push({ x: x - 2, y: y - 3, vy: ra(6, 9), ph: rnd() * 7 }); burst(x, y, ['#ffc76a', '#ffdf8a'], 8, 25); } else { shootingStar(x, y); burst(x, y, ['#ffffff', '#d6e4ff'], 8, 30); } }
+  else if (n > .5) { if (y > sky.H * .45) { D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'lantern' })); lanterns.push({ x: x - 2, y: y - 3, vy: ra(6, 9), ph: rnd() * 7 }); burst(x, y, ['#ffc76a', '#ffdf8a'], 8, 25); } else { D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'star' })); shootingStar(x, y); burst(x, y, ['#ffffff', '#d6e4ff'], 8, 30); } }
   else flock(x, y, x < sky.W / 2 ? 1 : -1);
 }
 const st = () => P.storm;
@@ -711,6 +713,7 @@ function bootControls() {
   bootBrand();
   D.querySelectorAll('.theme-toggle .theme-icon').forEach(s => { s.textContent = ''; s.innerHTML = themeSVG(); s.classList.add('is-pixel'); });
   const tog = D.querySelector('.theme-toggle'); if (!tog || D.querySelector('.weather-toggle')) return;
+  window.PixelSky_tip = tip;
   const b = D.createElement('button'); b.type = 'button'; b.className = 'weather-toggle';
   const set = (k, anim) => {
     b.setAttribute('aria-label', `Weather: ${WX[k].label}. Click to change. Tip: click a cloud to make it rain.`); b.title = `Weather: ${WX[k].label} — click to change (tip: click a cloud, the sun or the moon)`;
@@ -723,7 +726,7 @@ function bootControls() {
   b.addEventListener('click', () => {
     weather = ORDER[(ORDER.indexOf(weather) + 1) % ORDER.length];
     try { localStorage.setItem('sky-weather', weather); } catch (e) {}
-    set(weather, true); tip(b, WX[weather].label);
+    set(weather, true); tip(b, WX[weather].label); D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'weather' }));
     const wet = WX[weather].rain > 0; if (wasWet && !wet && !WX[weather].snow && !isDark() && !reduce) setTimeout(() => { rainbow = { age: 0, life: 16 }; }, 1800); wasWet = wet;
     if (weather === 'storm' && sky.c) { const vis = clouds.filter(c => c.vis > .3 && c.sy > 0 && c.sy < sky.H * .5); const c = vis.length ? pick(vis) : null; setTimeout(() => bolt(c ? c.sx + c.spr.w / 2 : sky.W * .7, c ? c.sy + c.spr.h : 0, sky.W * ra(.3, .8), sky.H * .8), 500); }
   });
@@ -757,82 +760,121 @@ class PixelHorizon extends HTMLElement {
     if (this._on) return; this._on = true; this.setAttribute('aria-hidden', 'true');
     this.c = D.createElement('canvas'); this.appendChild(this.c); this.g = this.c.getContext('2d');
     this.ro = new ResizeObserver(() => this.build()); this.ro.observe(this);
-    this.mo = new MutationObserver(() => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); }); this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
-    this.vis = false; this.io = new IntersectionObserver(es => { this.vis = es[0].isIntersecting; }, { rootMargin: '100px' }); this.io.observe(this);
+    this.mo = new MutationObserver(() => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); });
+    this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
+    this.vis = false; this.io = new IntersectionObserver(es => { this.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '100px' }); this.io.observe(this);
     const loop = () => { if (this.vis && !D.hidden) this.draw(); this.raf = requestAnimationFrame(loop); }; this.raf = requestAnimationFrame(loop);
   }
   disconnectedCallback() { this._on = false; cancelAnimationFrame(this.raf); this.ro.disconnect(); this.mo.disconnect(); this.io.disconnect(); }
   build() {
     const W = Math.ceil(this.clientWidth / S), H = Math.ceil(this.clientHeight / S); if (!W || !H) return;
-    this.W = W; this.H = H; this.c.width = W; this.c.height = H; this.g.imageSmoothingEnabled = false;
+    // the mountains take the top ~60%, a still lake (Phewa-style) mirrors them below
+    const M = Math.round(H * .6), L = H - M;
+    this.W = W; this.H = H; this.M = M; this.L = L; this.c.width = W; this.c.height = H; this.g.imageSmoothingEnabled = false;
     const dark = isDark(), C = dark
-      ? { far: '#27304e', farS: '#1f2743', snow: '#8796bf', snowS: '#5f6d96', mid: '#1c2438', midS: '#171e30', tree: '#121827', near: '#131928', nearS: '#0f1420' }
-      : { far: '#c3d1e5', farS: '#aebfd8', snow: '#ffffff', snowS: '#dce6f2', mid: '#a7bdad', midS: '#94ab9a', tree: '#7d9884', near: '#8ca393', nearS: '#7b9282' };
+      ? { far: '#27304e', farS: '#1f2743', snow: '#8796bf', snowS: '#5f6d96', mid: '#1c2438', midS: '#171e30', tree: '#121827', near: '#131928', nearS: '#0f1420', water: '#111830', water2: '#0c1226', shore: '#2a3352', glint: '#e9e4c8' }
+      : { far: '#c3d1e5', farS: '#aebfd8', snow: '#ffffff', snowS: '#dce6f2', mid: '#a7bdad', midS: '#94ab9a', tree: '#7d9884', near: '#8ca393', nearS: '#7b9282', water: '#b7cde0', water2: '#a3bfd6', shore: '#e9f1f7', glint: '#ffffff' };
     this.C = C; this.dark = dark; seed = 0x9e3779b;
-    // ridge profiles
-    const ridge = (amp, base, rough, peaks) => { const h = new Float32Array(W + 1); const pk = []; for (let i = 0; i < peaks; i++) pk.push([ra(0, W), ra(.55, 1) * amp, ra(Math.max(12, W * .05), Math.max(22, W * .14))]);   // peaks keep a sane base width on phones
+    const ridge = (amp, base, rough, peaks) => { const h = new Float32Array(W + 1); const pk = []; for (let i = 0; i < peaks; i++) pk.push([ra(0, W), ra(.55, 1) * amp, ra(Math.max(12, W * .05), Math.max(22, W * .14))]);
       for (let x = 0; x <= W; x++) { let v = 0; for (const [px, a, wd] of pk) v = Math.max(v, a * (1 - Math.abs(x - px) / wd)); h[x] = base + v + Math.sin(x * .21) * rough + Math.sin(x * .057 + 2) * rough * 1.6; } return h; };
-    const far = ridge(H * .62, H * .22, 1.2, Math.max(3, Math.round(W / 45)));
-    const mid = ridge(H * .18, H * .3, 1.5, Math.max(3, Math.round(W / 60)));
-    const near = ridge(H * .08, H * .14, 1, Math.max(3, Math.round(W / 50)));
-    const L = (h, fill) => { const c = cv(W, H), g = c.getContext('2d'); fill(g, h); return c; };
-    const fade = (g, top) => { // the lower part melts into mist
-      const im = g.getImageData(0, 0, W, H), d = new Uint32Array(im.data.buffer);
-      for (let y = 0; y < H; y++) { const a = clamp(1 - (y - top) / (H - top), 0, 1); for (let x = 0; x < W; x++) if (bay8(x, y) >= a * a) d[y * W + x] = 0; }
+    const far = ridge(M * .66, M * .24, 1.2, Math.max(3, Math.round(W / 45)));
+    const mid = ridge(M * .18, M * .3, 1.5, Math.max(3, Math.round(W / 60)));
+    const near = ridge(M * .1, M * .12, 1, Math.max(3, Math.round(W / 50)));
+    const layer = fill => { const c = cv(W, M), g = c.getContext('2d'); fill(g); return c; };
+    const fade = (g, top) => { const im = g.getImageData(0, 0, W, M), d = new Uint32Array(im.data.buffer);
+      for (let y = 0; y < M; y++) { const a = clamp(1 - (y - top) / (M - top), 0, 1); for (let x = 0; x < W; x++) if (bay8(x, y) >= a * a) d[y * W + x] = 0; }
       g.putImageData(im, 0, 0); };
-    this.far = L(far, (g, h) => {
-      for (let x = 0; x < W; x++) { const top = Math.round(H - h[x]), lit = h[x + 1] < h[x]; const snowLine = H - h[x] + Math.min(h[x] - H * .3, 7 + h[x] * .1);
-        for (let y = top; y < H; y++) { const sn = h[x] > H * .45 && y < snowLine + (bay(x, y) - .5) * 3; g.fillStyle = sn ? (lit ? C.snow : C.snowS) : (lit ? C.far : C.farS); g.fillRect(x, y, 1, 1); } }
-      fade(g, H * .45); });
-    this.mid = L(mid, (g, h) => {
-      for (let x = 0; x < W; x++) { const top = Math.round(H - h[x]); g.fillStyle = h[x + 1] < h[x] ? C.mid : C.midS; g.fillRect(x, top, 1, H - top);
+    this.far = layer(g => {
+      for (let x = 0; x < W; x++) { const hx = far[x], top = Math.round(M - hx), lit = far[x + 1] < hx, snowLine = M - hx + Math.min(hx - M * .3, 7 + hx * .1);
+        for (let y = top; y < M; y++) { const sn = hx > M * .45 && y < snowLine + (bay(x, y) - .5) * 3; g.fillStyle = sn ? (lit ? C.snow : C.snowS) : (lit ? C.far : C.farS); g.fillRect(x, y, 1, 1); } }
+      fade(g, M * .5); });
+    this.mid = layer(g => {
+      for (let x = 0; x < W; x++) { const top = Math.round(M - mid[x]); g.fillStyle = mid[x + 1] < mid[x] ? C.mid : C.midS; g.fillRect(x, top, 1, M - top);
         if (bay(x * 7, x) < .12) { g.fillStyle = C.tree; const th = ri(3, 6); for (let k = 0; k < th; k++) { const hw = Math.floor(k / 2); g.fillRect(x - hw, top - th + k, hw * 2 + 1, 1); } } }
-      fade(g, H * .7); });
-    const stupaX = Math.round(W * (W < 200 ? .7 : .78)), sTop = Math.round(H - near[stupaX]);
-    this.near = L(near, (g, h) => {
-      for (let x = 0; x < W; x++) { const top = Math.round(H - h[x]); g.fillStyle = h[x + 1] < h[x] ? C.near : C.nearS; g.fillRect(x, top, 1, H - top); }
-      fade(g, H * .86); });
-    // stupa (Boudhanath eyes) and lights
+      fade(g, M * .78); });
+    // the near shore stays solid down to the waterline
+    this.near = layer(g => { for (let x = 0; x < W; x++) { const top = Math.round(M - near[x]); g.fillStyle = near[x + 1] < near[x] ? C.near : C.nearS; g.fillRect(x, top, 1, M - top); } });
     const stupa = ['......y......', '.....yyy.....', '......y......', '.....yyy.....', '.....yyy.....', '....yyyyy....', '.....ooo.....', '....wwwww....', '....wkwkw....', '...wwwwwww...', '..wwwwwwwww..', '.wwwwwwwwwww.', 'wwwwwwwwwwwww'];
     this.stupa = art(stupa, dark ? { y: '#c79a3b', o: '#8a6a2a', w: '#b7bfd6', k: '#2a3150' } : { y: '#f2c14e', o: '#c28a2a', w: '#ffffff', k: '#2b3a55' });
+    const stupaX = Math.round(W * (W < 200 ? .7 : .78)), sTop = Math.round(M - near[stupaX]);
     this.sx = stupaX - 6; this.sy = sTop - stupa.length + 2;
-    this.anchorL = [Math.round(stupaX - W * .16), Math.round(H - near[Math.max(0, Math.round(stupaX - W * .16))])];
-    this.anchorR = [Math.min(W - 1, Math.round(stupaX + W * .14)), Math.round(H - near[Math.min(W, Math.round(stupaX + W * .14))])];
-    // two soft mist bands that drift through the valleys (tiles seamlessly: built twice as wide)
-    const mist = (yc, th, col, seedOff) => { const c = cv(W * 2, H), g = c.getContext('2d'); g.fillStyle = col;
-      for (let y = 0; y < H; y++) for (let x = 0; x < W * 2; x++) { const u = x / (W * 2) * Math.PI * 2;
-        const ctr = yc + Math.sin(u * 3 + seedOff) * 2.5 + Math.sin(u * 7 + seedOff * 2) * 1.2, thick = th * (.6 + .4 * Math.sin(u * 5 + seedOff * 3));
+    const at = x => { x = clamp(Math.round(x), 0, W); return [x, Math.round(M - near[x])]; };
+    this.anchorL = at(stupaX - W * .16); this.anchorR = at(stupaX + W * .14);
+    // little houses along the shore, windows lit at night
+    this.houses = []; for (let i = 0; i < Math.max(3, Math.round(W / 70)); i++) { const x = ri(4, W - 10); if (Math.abs(x - stupaX) < 18) continue; this.houses.push([x, Math.round(M - near[x + 2]) + 1, ri(0, 2)]); }
+    this.lights = []; if (dark) for (let i = 0; i < Math.round(W / 25); i++) { const x = ri(0, W - 1); this.lights.push([x, Math.round(M - near[x]) + ri(1, 3), rnd() * 6]); }
+    const mist = (yc, th, col, so) => { const c = cv(W * 2, M), g = c.getContext('2d'); g.fillStyle = col;
+      for (let y = 0; y < M; y++) for (let x = 0; x < W * 2; x++) { const u = x / (W * 2) * Math.PI * 2, ctr = yc + Math.sin(u * 3 + so) * 2.5 + Math.sin(u * 7 + so * 2) * 1.2, thick = th * (.6 + .4 * Math.sin(u * 5 + so * 3));
         const a = 1 - Math.abs(y - ctr) / thick; if (a > 0 && bay8(x, y) < a * .55) g.fillRect(x, y, 1, 1); }
       return c; };
-    this.mistA = mist(H * .56, 4, dark ? '#36406a' : '#ffffff', 1.3); this.mistB = mist(H * .78, 3.5, dark ? '#2a3354' : '#f4f7fb', 4.1);
-    this.lights = []; if (dark) for (let i = 0; i < Math.round(W / 25); i++) { const x = ri(0, W - 1); this.lights.push([x, Math.round(H - near[x]) + ri(1, 4), rnd() * 6]); }
+    this.mistA = mist(M * .58, 4, dark ? '#36406a' : '#ffffff', 1.3); this.mistB = mist(M * .8, 3, dark ? '#2a3354' : '#f4f7fb', 4.1);
+    // water: a dithered gradient that melts away at the bottom so the footer text sits on the page colour
+    this.scene = cv(W, M);
+    this.water = cv(W, L); { const g = this.water.getContext('2d');
+      for (let y = 0; y < L; y++) { const k = y / L, vis = 1 - clamp((k - .45) / .55, 0, 1);
+        for (let x = 0; x < W; x++) { if (bay8(x, y) >= vis) continue; g.fillStyle = bay8(x + 3, y + 1) < k * 1.4 ? C.water2 : C.water; g.fillRect(x, y, 1, 1); } } }
+    this.mask = cv(W, L); { const g = this.mask.getContext('2d'); g.fillStyle = '#000';
+      for (let y = 0; y < L; y++) { const vis = 1 - clamp((y / L - .45) / .55, 0, 1); for (let x = 0; x < W; x++) if (bay8(x, y) >= vis) g.fillRect(x, y, 1, 1); } }
+    this.lake = cv(W, L);
+    this.boat = { x: W * .3, dir: 1 };
     this.draw();
   }
   draw() {
-    if (!this.W) return; const { g, W, H } = this, r = this.getBoundingClientRect(), p = clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1);
+    if (!this.W) return; const { g, W, H, M, L, C } = this, r = this.getBoundingClientRect(), p = clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1);
     const off = k => reduce ? 0 : Math.round((1 - p) * k), now = performance.now() / 1000;
-    g.clearRect(0, 0, W, H);
-    const drift = (img, sp, y) => { if (!img) return; const x = Math.round(reduce ? 0 : -((now * sp) % (W * 2))); g.drawImage(img, x, y); if (x < -W) g.drawImage(img, x + W * 2, y); };
-    g.drawImage(this.far, 0, off(16));
-    // eagles soaring slow circles over the peaks (daytime)
-    if (!this.dark && !reduce) { g.fillStyle = '#4a5160'; for (let k = 0; k < 2; k++) { const a = now * .22 + k * 2.6, ex = Math.round(W * (.3 + k * .32) + Math.cos(a) * 14), ey = Math.round(H * .22 + Math.sin(a) * 4 + off(16)); const fr = BIRD[Math.sin(now * 1.3 + k) > .85 ? 0 : 1]; g.globalAlpha = .75; for (const [bx, by] of fr) g.fillRect(ex + (Math.cos(a) > 0 ? 4 - bx : bx), ey + by, 1, 1); } g.globalAlpha = 1; }
-    g.globalAlpha = this.dark ? .5 : .75; drift(this.mistA, 2.2, off(12)); g.globalAlpha = 1;
-    g.drawImage(this.mid, 0, off(9));
-    g.globalAlpha = this.dark ? .45 : .7; drift(this.mistB, 3.6, off(6)); g.globalAlpha = 1;
-    const o = off(3); g.drawImage(this.near, 0, o);
-    g.drawImage(this.stupa, this.sx, this.sy + o);
-    // prayer flags from the spire to the hills, fluttering
-    const flags = ['#3d7be0', '#ffffff', '#e0473c', '#3fae5a', '#f2c24b'], top = [this.sx + 6, this.sy + o];
+    // ---- compose the mountain scene
+    const s = this.scene.getContext('2d'); s.clearRect(0, 0, W, M);
+    const drift = (img, sp, y) => { const x = Math.round(reduce ? 0 : -((now * sp) % (W * 2))); s.drawImage(img, x, y); if (x < -W) s.drawImage(img, x + W * 2, y); };
+    s.drawImage(this.far, 0, off(14));
+    if (!this.dark && !reduce) { s.fillStyle = '#4a5160'; for (let k = 0; k < 2; k++) { const a = now * .22 + k * 2.6, ex = Math.round(W * (.3 + k * .32) + Math.cos(a) * 14), ey = Math.round(M * .2 + Math.sin(a) * 4 + off(14)); const fr = BIRD[Math.sin(now * 1.3 + k) > .85 ? 0 : 1]; s.globalAlpha = .75; for (const [bx, by] of fr) s.fillRect(ex + (Math.cos(a) > 0 ? 4 - bx : bx), ey + by, 1, 1); } s.globalAlpha = 1; }
+    s.globalAlpha = this.dark ? .5 : .75; drift(this.mistA, 2.2, off(10)); s.globalAlpha = 1;
+    s.drawImage(this.mid, 0, off(7));
+    s.globalAlpha = this.dark ? .45 : .7; drift(this.mistB, 3.6, off(4)); s.globalAlpha = 1;
+    s.drawImage(this.near, 0, 0);
+    // shore houses: a white wall, a red tin roof, one window (warm at night)
+    for (const [x, y, k] of this.houses) {
+      s.fillStyle = this.dark ? '#3a4260' : '#f4efe6'; s.fillRect(x, y - 3, 5, 3);
+      s.fillStyle = this.dark ? '#5a2f36' : ['#c4483b', '#3d6fb0', '#d08a2e'][k]; s.fillRect(x - 1, y - 4, 7, 1); s.fillRect(x, y - 5, 5, 1);
+      s.fillStyle = this.dark ? (Math.sin(now * .7 + x) > -.6 ? '#ffd36b' : '#5a4a30') : '#7a8796'; s.fillRect(x + 1 + (k & 1) * 2, y - 2, 1, 1);
+    }
+    s.drawImage(this.stupa, this.sx, this.sy);
+    const flags = ['#3d7be0', '#ffffff', '#e0473c', '#3fae5a', '#f2c24b'], top = [this.sx + 6, this.sy];
     for (const an of [this.anchorL, this.anchorR]) {
-      const ax = an[0], ay = an[1] + o - 1, n = Math.max(6, Math.round(Math.abs(ax - top[0]) / 3));
+      const ax = an[0], ay = an[1] - 1, n = Math.max(6, Math.round(Math.abs(ax - top[0]) / 3));
       for (let i = 0; i <= n; i++) {
-        const u = i / n, x = Math.round(lerp(top[0], ax, u)), sag = Math.sin(Math.PI * u) * 5, y = Math.round(lerp(top[1], ay, u) + sag);
-        g.fillStyle = this.dark ? '#4a5270' : '#8a8f99'; g.fillRect(x, y, 1, 1);
-        if (i % 2 === 1 && i < n) { const fl = reduce ? 0 : Math.round(Math.sin(now * 6 + i * .9) * .7); g.fillStyle = flags[(i >> 1) % 5]; g.globalAlpha = this.dark ? .65 : 1; g.fillRect(x, y + 1, 2, 2 + (fl > 0 ? 1 : 0)); g.fillRect(x + (fl < 0 ? 1 : 0), y + 3 + (fl > 0 ? 1 : 0), 1, 1); g.globalAlpha = 1; }
+        const u = i / n, x = Math.round(lerp(top[0], ax, u)), y = Math.round(lerp(top[1], ay, u) + Math.sin(Math.PI * u) * 5);
+        s.fillStyle = this.dark ? '#4a5270' : '#8a8f99'; s.fillRect(x, y, 1, 1);
+        if (i % 2 === 1 && i < n) { const fl = reduce ? 0 : Math.round(Math.sin(now * 6 + i * .9) * .7); s.fillStyle = flags[(i >> 1) % 5]; s.globalAlpha = this.dark ? .65 : 1; s.fillRect(x, y + 1, 2, 2 + (fl > 0 ? 1 : 0)); s.fillRect(x + (fl < 0 ? 1 : 0), y + 3 + (fl > 0 ? 1 : 0), 1, 1); s.globalAlpha = 1; }
       }
     }
-    for (const [x, y, ph] of this.lights) { const a = .6 + .4 * Math.sin(now * 2 + ph * 3); g.globalAlpha = a; g.fillStyle = '#ffd36b'; g.fillRect(x, y + o, 1, 1); }
-    g.globalAlpha = 1;
+    for (const [x, y, ph] of this.lights) { s.globalAlpha = .6 + .4 * Math.sin(now * 2 + ph * 3); s.fillStyle = '#ffd36b'; s.fillRect(x, y, 1, 1); }
+    s.globalAlpha = 1;
+    // ---- the lake: water, then the scene mirrored row by row with a gentle ripple
+    const lk = this.lake.getContext('2d'); lk.globalCompositeOperation = 'source-over'; lk.clearRect(0, 0, W, L); lk.drawImage(this.water, 0, 0);
+    lk.globalAlpha = this.dark ? .55 : .42;
+    for (let y = 0; y < L; y++) {
+      const sy = M - 1 - Math.round(y * 1.15); if (sy < 0) break;
+      const dx = reduce ? 0 : Math.round(Math.sin(now * 1.4 + y * .55) * Math.min(2, .4 + y * .06));
+      lk.drawImage(this.scene, 0, sy, W, 1, dx, y, W, 1);
+    }
+    lk.globalAlpha = 1;
+    // the boat (a painted doonga) drifting, and its reflection
+    const b = this.boat; if (!reduce) { b.x += b.dir * .05; if (b.x > W * .62) b.dir = -1; if (b.x < W * .12) b.dir = 1; }
+    const bx = Math.round(b.x), by = 3 + Math.round(Math.sin(now * 1.6)), hull = this.dark ? ['#3b4566', '#2a3150'] : ['#d9483b', '#2f6db3'];
+    const boat = (y0, flip, a) => { lk.globalAlpha = a; const row = (dy, x0, w, c) => { lk.fillStyle = c; lk.fillRect(bx + x0, flip ? y0 - dy : y0 + dy, w, 1); };
+      row(0, 2, 2, this.dark ? '#c9c2a8' : '#f2c14e'); row(1, 2, 2, this.dark ? '#6a7090' : '#3a3f4a');   // rower
+      row(2, 0, 9, hull[0]); row(3, 1, 7, hull[1]); };
+    boat(by - 3, false, 1); boat(by + 2 + 3, true, .35);
+    lk.globalAlpha = 1;
+    // shimmering glints on a light path under the sun / moon (it hangs to the right in the sky)
+    lk.fillStyle = C.glint;
+    for (let k = 0; k < 14; k++) { const gy = (k * 7 + 3) % Math.max(1, Math.floor(L * .6)), gx = Math.round(W * .82 + Math.sin(k * 12.9) * (3 + gy * .5) + Math.sin(now * .8 + k) * 2), a = Math.sin(now * 2.2 + k * 1.7); if (a > .35) { lk.globalAlpha = (a - .35) * 1.4; lk.fillRect(gx, gy, a > .8 ? 2 : 1, 1); } }
+    lk.globalAlpha = 1;
+    // shoreline highlight, then cut the bottom away with the dither mask
+    lk.fillStyle = C.shore; lk.globalAlpha = .7; lk.fillRect(0, 0, W, 1); lk.globalAlpha = 1;
+    lk.globalCompositeOperation = 'destination-out'; lk.drawImage(this.mask, 0, 0); lk.globalCompositeOperation = 'source-over';
+    // ---- put it together
+    g.clearRect(0, 0, W, H); g.drawImage(this.scene, 0, 0); g.drawImage(this.lake, 0, M);
     if (this.prev) { const k = (performance.now() - this.prevT) / 1400; if (k >= 1) this.prev = null; else { g.globalAlpha = 1 - ease(k); g.drawImage(this.prev, 0, 0); g.globalAlpha = 1; } }
   }
 }
@@ -863,13 +905,41 @@ function bootSparkles() {
 }
 
 /* ================================================================== */
+/*  FOOTER: monogram, a live Kathmandu clock, a balloon back to top    */
+/* ================================================================== */
+const BALLOON_ROWS = ['...aaaaa...', '..abbabbaa.', '.aabbabbaaa', '.aabbabbaaa', 'aaabbabbaaa', '.aabbabbaa.', '..aabbbaa..', '...aabaa...', '....aaa....', '....c.c....', '....c.c....', '....ddd....', '....ddd....'];
+function bootFooter() {
+  const f = D.querySelector('.minimal-footer'); if (!f || f.dataset.v2) return; f.dataset.v2 = '1'; f.classList.add('site-footer');
+  const mono = (x0, x1, ox) => svgRects(MONO.map(r => r.slice(x0, x1)), { X: 'currentColor' }, ox);
+  const top = D.createElement('div'); top.className = 'ft-top';
+  top.innerHTML = `<a class="ft-brand" href="/" aria-label="Nikit Hamal, home"><svg viewBox="-1 -1 13 7" aria-hidden="true" shape-rendering="crispEdges">${mono(0, 5, 0)}${mono(6, 11, 6)}<rect x="11.5" y="4" width="1" height="1" fill="#e8505f"/></svg><span>Nikit Hamal</span></a>
+    <span class="ft-clock" title="My local time"><span class="ft-ico" aria-hidden="true"></span><time class="ft-time"></time><span class="ft-where">in Kathmandu</span></span>`;
+  const note = D.createElement('p'); note.className = 'ft-note'; note.textContent = 'Made with pixels and patience in Nepal.';
+  const bottom = D.createElement('div'); bottom.className = 'ft-bottom';
+  bottom.innerHTML = `<span>&copy; ${new Date().getFullYear()} Nikit Hamal</span><button type="button" class="ft-up"><span class="ft-balloon" aria-hidden="true"><svg viewBox="0 0 11 13" shape-rendering="crispEdges">${svgRects(BALLOON_ROWS, { a: '#e3606d', b: '#f7d36a', c: '#8a7a68', d: '#9a6a44' })}</svg></span><span>Back to top</span></button>`;
+  f.prepend(top, note); f.appendChild(bottom);
+  // the clock: my time, with a little sun or moon for whether it is day there
+  const sun = svgRects(grid(8, (x, y) => { const d = Math.hypot(x + .5 - 4, y + .5 - 4); return d < 2.2 ? 'y' : (d > 3 && d < 3.9 && (x === 3 || x === 4 || y === 3 || y === 4)) ? 'o' : ''; }), { y: '#ffc23d', o: '#f2931f' });
+  const moon = svgRects(grid(8, (x, y) => { const a = Math.hypot(x + .5 - 4, y + .5 - 4), b2 = Math.hypot(x + .5 - 5.6, y + .5 - 2.8); return a < 3.3 && b2 > 2.6 ? 'm' : ''; }), { m: '#e9dfb4' });
+  const ico = top.querySelector('.ft-ico'), tm = top.querySelector('.ft-time');
+  const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kathmandu', hour: 'numeric', minute: '2-digit' });
+  const hourFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kathmandu', hour: 'numeric', hour12: false });
+  const tick = () => { const d = new Date(), h = +hourFmt.format(d) % 24, day = h >= 6 && h < 18; tm.textContent = fmt.format(d).toLowerCase(); tm.dateTime = d.toISOString();
+    if (ico.dataset.day !== String(day)) { ico.dataset.day = day; ico.innerHTML = `<svg viewBox="0 0 8 8" shape-rendering="crispEdges">${day ? sun : moon}</svg>`; ico.title = day ? 'Daytime in Kathmandu' : 'Night in Kathmandu'; } };
+  tick(); setInterval(tick, 20000);
+  // back to top: the balloon lifts off and the page follows it up
+  const up = bottom.querySelector('.ft-up');
+  up.addEventListener('click', () => { up.classList.remove('lift'); void up.offsetWidth; up.classList.add('lift'); D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'whoosh' })); scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); setTimeout(() => up.classList.remove('lift'), 1600); });
+}
+
+/* ================================================================== */
 function boot() {
   bootControls(); bootIcons();
   // a horizon above the footer on every page
   const foot = D.querySelector('.minimal-footer');
   if (foot && !D.querySelector('pixel-horizon')) { const h = D.createElement('pixel-horizon'); foot.parentNode.insertBefore(h, foot); }
-  bootSky(); bootSparkles();
+  bootFooter(); bootSky(); bootSparkles();
 }
-window.PixelSky = { setWeather(k) { if (WX[k]) weather = k; }, get weather() { return weather; }, bolt: () => bolt(sky.W / 2, 0, sky.W / 2, sky.H * .8) };
+window.PixelSky = { setWeather(k) { if (WX[k]) weather = k; }, get weather() { return weather; }, params: P, get night() { return night; }, bolt: () => bolt(sky.W / 2, 0, sky.W / 2, sky.H * .8) };
 if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', boot); else boot();
 })();
