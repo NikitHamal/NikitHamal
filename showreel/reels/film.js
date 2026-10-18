@@ -200,7 +200,12 @@ const KIND = {
 function endCard(c, f) {
   const u = E.out(prog(f, END, END + 30)); bg(c, f, null); ghost(c, f, false);
   const h = PORT ? 470 : 330, cy = PORT ? CY - 330 : CY - 215; pixWin(c, f, CX, cy + (1 - u) * 20, h, u, prog(f, END + 2, END + 26), false);
-  const ty = cy + h / 2 + (PORT ? 150 : 120), s = fit(c, R.title, 'serif', PORT ? 92 : 100, W * 0.86); LIB.wordsIn(c, R.title, f, END + 16, 5, CX, ty, s, 'serif', C.ink, 'center');
+  const want = PORT ? 92 : 100, s1 = fit(c, R.title, 'serif', want, W * 0.86); let ty = cy + h / 2 + (PORT ? 150 : 120), s = s1;
+  if (s1 < want * 0.72) {   // a long title wraps onto two balanced lines instead of shrinking
+    const ws = R.title.split(' '); let best = 1, bd = 1e9; font(c, 'serif', want); for (let k = 1; k < ws.length; k++) { const d = Math.abs(c.measureText(ws.slice(0, k).join(' ')).width - c.measureText(ws.slice(k).join(' ')).width); if (d < bd) { bd = d; best = k; } }
+    const a1 = ws.slice(0, best).join(' '), a2 = ws.slice(best).join(' '); s = Math.min(fit(c, a1, 'serif', want, W * 0.86), fit(c, a2, 'serif', want, W * 0.86));
+    LIB.wordsIn(c, a1, f, END + 16, 5, CX, ty, s, 'serif', C.ink, 'center'); ty += s * 1.12; LIB.wordsIn(c, a2, f, END + 16 + best * 5, 5, CX, ty, s, 'serif', C.ink, 'center');
+  } else LIB.wordsIn(c, R.title, f, END + 16, 5, CX, ty, s, 'serif', C.ink, 'center');
   const v = E.out(prog(f, END + 46, END + 72)); c.save(); c.globalAlpha = v; font(c, 'serifI', PORT ? 50 : 44); c.textAlign = 'center'; c.fillStyle = C.ink2; c.fillText(R.cat + ' by Nikit Hamal', CX, ty + (PORT ? 90 : 76));
   font(c, 'mono', PORT ? 22 : 18, 500); c.letterSpacing = '5px'; c.fillStyle = C.mute; c.fillText(R.date.toUpperCase(), CX, ty + (PORT ? 150 : 124)); c.restore();
   const url = 'nikit.is-a.dev/writings/' + SLUG, w = E.out(prog(f, END + 70, END + 96)); c.save(); c.globalAlpha = w; font(c, 'mono', fit(c, url, 'mono', PORT ? 28 : 26, W * 0.9), 500); c.textAlign = 'center'; c.fillStyle = C.ink; c.fillText(url, CX, ty + (PORT ? 240 : 200));

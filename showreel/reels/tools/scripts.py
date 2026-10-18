@@ -36,6 +36,10 @@ def reel(title, cat, date, key, ghost, beats, scene=None):
         b = dict(b); b['lines'] = [dict(L) for L in b['lines']]
         if b['kind'] == 'scene':     # lines beside the pixel window read larger
             for L in b['lines']: L['size'] = round(L['size'] * 1.3)
+        if b['kind'] == 'zoom':      # room for the big word: lines up, word down
+            for L in b['lines']:
+                L['y'] = round(L['y'] - 0.9, 2) if L['y'] < 1 else round(L['y'] + 1.1, 2)
+            b['wy'] = b.get('wy', 0) + 0.45
         if b['kind'] == 'type':
             for L in b['lines']: L['size'] = round(L['size'] * 1.18); L['y'] = round(L['y'] * 1.12, 2)
         b = timed(b); d = b.pop('dur'); b['from'], b['to'] = f, f + d; f += d
@@ -119,6 +123,106 @@ S['we-never-met'] = reel('We never met', 'An essay', 'November 22, 2024', 54, 'M
     blk(216, 'light', 'impact', [ln('Between the actual you', 80, y=-1.6), ln('and the actual me', 80, y=-0.6), ln('sits a translator:', 80, 'serifI', 'ink2', 0.6), ln('the mind.', 100, 'serifI', 'pink', 1.6)]),
     blk(252, 'light', 'scene', [ln('I met my idea of you.', 62), ln('You met your idea of me.', 62, 'serifI', 'pink')]),
     blk(288, 'dark', 'impact', [ln('Only when there is no mediator', 80, 'serif', 'paper', -0.6), ln('can we really meet.', 110, 'serifI', 'pink', 0.7, 110, 14)]),
+])
+
+# ---------------------------------------------------------------- essays (batch 2)
+S['unity-is-a-lie'] = reel('Unity is a lie', 'An essay', 'October 2, 2025', 50, 'UNITY', [
+    blk(216, 'dark', 'impact', [ln('Unity is', 150, 'serif', 'paper', -0.55, 4, 18), ln('a pretense.', 116, 'serifI', 'pink', 0.6, 60, 16)]),
+    blk(216, 'light', 'impact', [ln('Leave aside nations,', 80, y=-1.6), ln('religions, communities;', 80, y=-0.6), ln('there is not even unity', 80, 'serifI', 'pink', 0.6), ln("within one's own family.", 80, 'serifI', 'pink', 1.6)]),
+    blk(216, 'dark', 'zoom', [ln('Why is there no unity?', 66, 'serif', 'ink2', -1.8, 6, 8), ln('Because each', 92, 'serif', 'paper', -0.7, 60, 12)], word='mind is different.', wy=0.7, zat=100),
+    blk(252, 'light', 'type', [ln('you must succeed,', 50, 'mono', 'ink', -1.6, 6, rate=2), ln('you must move ahead,', 50, 'mono', 'ink', -0.55, 50, rate=2), ln('you must earn name, fame, wealth,', 50, 'mono', 'ink', 0.55, 100, rate=1), ln('you must be respectable.', 50, 'mono', 'pink', 1.6, 152, rate=2)]),
+    blk(216, 'light', 'scene', [ln('Many thoughts may meet,', 60), ln('but never', 66), ln('two whole minds.', 70, 'serifI', 'pink')]),
+    blk(288, 'dark', 'impact', [ln('Either you are completely free', 80, 'serif', 'paper', -1.15), ln('from self-interest,', 80, 'serif', 'paper', 0), ln('or you are entirely selfish.', 92, 'serifI', 'pink', 1.2, 120, 12)]),
+])
+S['in-relationship-there-is-no-love'] = reel('In relationship, there is no love', 'An essay', 'February 27, 2025', 49, 'LOVE', [
+    blk(216, 'dark', 'impact', [ln('In relationship,', 140, 'serif', 'paper', -0.55, 4, 16), ln('there is no love.', 110, 'serifI', 'pink', 0.6, 64, 14)]),
+    blk(216, 'light', 'impact', [ln('We use one another', 84, y=-1.6), ln('for pleasure.', 84, y=-0.6), ln('And with pleasure', 84, 'serifI', 'pink', 0.6), ln('comes displeasure.', 92, 'serifI', 'pink', 1.6)]),
+    blk(216, 'light', 'center', [ln('The void never gets filled.', 92, 'serif', 'ink', 0.9, 40, 10)]),
+    blk(216, 'dark', 'impact', [ln('Do not look out.', 116, 'serif', 'paper', -0.6, 6, 14), ln('Look inward.', 124, 'serifI', 'pink', 0.7, 80, 18)]),
+    blk(252, 'light', 'scene', [ln('Where there is', 60), ln('no open heart,', 66), ln('how can love be?', 70, 'serifI', 'pink')]),
+    blk(288, 'light', 'zoom', [ln('It is just the mind,', 76, 'serif', 'ink2', -1.8, 6, 9), ln('playing the game of', 84, 'serif', 'ink', -0.7, 56, 10)], word='profit and loss.', wy=0.7, zat=110),
+])
+S['love-is-acceptance'] = reel('Love is acceptance', 'An essay', 'February 27, 2025', 53, 'ACCEPT', [
+    blk(216, 'dark', 'impact', [ln('Love is', 150, 'serif', 'paper', -0.55, 4, 18), ln('acceptance.', 124, 'serifI', 'pink', 0.6, 56, 16)]),
+    blk(216, 'light', 'impact', [ln('I say I love my wife,', 88, y=-1.15), ln('but I get angry,', 88, y=0), ln('jealous, hurt, frustrated.', 88, 'serifI', 'pink', 1.15)]),
+    blk(216, 'dark', 'zoom', [ln('Like expecting a banana tree', 70, 'serif', 'ink2', -1.8, 6, 8), ln('to produce', 92, 'serif', 'paper', -0.7, 70, 12)], word='mangoes.', wy=0.7, zat=104),
+    blk(216, 'light', 'impact', [ln('Where there is acceptance,', 88, y=-1.15), ln('there is no desire', 88, y=0), ln('to change.', 110, 'serifI', 'pink', 1.15)]),
+    blk(216, 'light', 'scene', [ln('No one has lived', 60), ln('this life before.', 60), ln('We are all newcomers.', 66, 'serifI', 'pink')]),
+    blk(324, 'light', 'brackets', [ln('You cannot judge anyone.', 84, y=-1.5), ln('You have not lived their', 66, 'serif', 'ink2', -0.5)], word='life.', lock=140),
+])
+S['wisdom-cannot-be-taught'] = reel('Wisdom cannot be taught', 'An essay', 'February 26, 2025', 55, 'WISDOM', [
+    blk(216, 'dark', 'impact', [ln('Wisdom', 160, 'serif', 'paper', -0.55, 6, 14), ln('cannot be taught.', 110, 'serifI', 'pink', 0.6, 50, 14)]),
+    blk(216, 'light', 'impact', [ln('How can anyone show light', 84, y=-0.6), ln('to someone whose eyes are closed?', 80, 'serifI', 'pink', 0.65)]),
+    blk(216, 'dark', 'impact', [ln('Open your eyes,', 124, 'serif', 'paper', -0.6, 6, 14), ln('and things are visible already.', 88, 'serifI', 'pink', 0.7, 70, 9)]),
+    blk(252, 'light', 'type', [ln('knowledge can be transferred.', 58, 'mono', 'ink', -0.7, 10, rate=2), ln('wisdom must come on its own.', 58, 'mono', 'pink', 0.7, 110, rate=2)]),
+    blk(216, 'light', 'scene', [ln('We are all', 66), ln('guests of life.', 70, 'serifI', 'pink')]),
+    blk(288, 'light', 'zoom', [ln('You are no teacher, no guru.', 72, 'serif', 'ink2', -1.8, 6, 9), ln('You are also', 92, 'serif', 'ink', -0.7, 66, 12)], word='a guest.', wy=0.7, zat=110),
+])
+S['the-non-dual-relationship'] = reel('The Non-Dual Relationship', 'An essay', 'December 21, 2024', 51, 'ECHO', [
+    blk(216, 'dark', 'impact', [ln('Pain and pleasure are natural.', 92, 'serif', 'paper', -0.6, 4, 9), ln('Suffering is conditioning.', 100, 'serifI', 'pink', 0.65, 80, 12)]),
+    blk(216, 'light', 'impact', [ln('You have eyes', 84, y=-1.6), ln('but never saw anyone.', 84, y=-0.6), ln('You have ears', 84, 'serifI', 'pink', 0.6), ln('but never heard anyone.', 84, 'serifI', 'pink', 1.6)]),
+    blk(216, 'dark', 'zoom', [ln('What you hear is your own', 92, 'serif', 'paper', -1.0, 6, 11)], word='echo.', wy=0.7, zat=80),
+    blk(216, 'light', 'impact', [ln('Walls of conditioning,', 92, y=-1.15), ln('broken by the hammer', 88, y=0), ln('of awareness.', 110, 'serifI', 'pink', 1.15)]),
+    blk(252, 'light', 'scene', [ln('There are two Nikits:', 62), ln('the body,', 66), ln('and the mind.', 70, 'serifI', 'pink')]),
+    blk(288, 'light', 'impact', [ln('The best relationship', 100, y=-0.6, at=8, step=12), ln('is the non-dual relationship.', 92, 'serifI', 'pink', 0.7, 90, 11)]),
+])
+S['a-love-that-never-hurts'] = reel('A Love that never hurts', 'An essay', 'December 14, 2024', 56, 'HURT', [
+    blk(216, 'dark', 'impact', [ln('A love', 160, 'serif', 'paper', -0.55, 6, 14), ln('that never hurts.', 110, 'serifI', 'pink', 0.6, 50, 14)]),
+    blk(216, 'light', 'impact', [ln('The love of the ego', 88, y=-1.15), ln('is a trade,', 88, y=0), ln('an exchange of conditions.', 88, 'serifI', 'pink', 1.15)]),
+    blk(216, 'light', 'impact', [ln('Give me pleasure,', 80, y=-1.6), ln('and we go smoothly.', 80, y=-0.6), ln('Give me displeasure,', 80, 'serifI', 'pink', 0.6), ln("and I don't feel love.", 80, 'serifI', 'pink', 1.6)]),
+    blk(216, 'dark', 'zoom', [ln('No one can ever hurt you', 92, 'serif', 'paper', -1.0, 6, 10)], word='psychologically.', wy=0.7, zat=80),
+    blk(252, 'light', 'scene', [ln('Curse a newborn baby;', 60), ln("he isn't hurt.", 66), ln('He might even laugh.', 70, 'serifI', 'pink')]),
+    blk(288, 'light', 'impact', [ln('Meanings are invented by the mind.', 76, 'serif', 'ink2', -1.2), ln('It is me myself,', 96, y=0), ln('self-hurting.', 120, 'serifI', 'pink', 1.25, 130, 16)]),
+])
+
+# ---------------------------------------------------------------- essays (batch 3)
+S['we-came-out-of-this-world'] = reel('We came out of this world', 'An essay', 'December 14, 2024', 50, 'WORLD', [
+    blk(216, 'dark', 'impact', [ln('We came out of this world,', 116, 'serif', 'paper', -0.55, 4, 12), ln('not into it.', 116, 'serifI', 'pink', 0.65, 90, 16)]),
+    blk(216, 'light', 'impact', [ln('This world is not designed for us;', 80, y=-0.6), ln('we are designed for this world.', 84, 'serifI', 'pink', 0.65)]),
+    blk(216, 'dark', 'zoom', [ln('Not a party hall to be planned.', 66, 'serif', 'ink2', -1.8, 6, 8), ln('This world is', 92, 'serif', 'paper', -0.7, 66, 12)], word='a random happening.', wy=0.7, zat=104),
+    blk(216, 'light', 'impact', [ln('Dinosaurs and mammoths,', 80, y=-1.6), ln('as the world was.', 80, y=-0.6), ln('Bacteria that digest plastic,', 80, 'serifI', 'pink', 0.6), ln('as the world is.', 88, 'serifI', 'pink', 1.6)]),
+    blk(252, 'light', 'scene', [ln('We are not outsiders.', 62), ln('We are the world itself.', 66, 'serifI', 'pink')]),
+    blk(288, 'light', 'impact', [ln('We are,', 140, y=-0.6, at=10, step=18), ln('as the world is.', 116, 'serifI', 'pink', 0.7, 70, 16)]),
+])
+S['how-to-be-happy'] = reel('How to be happy?', 'An essay', 'December 5, 2024', 55, 'NOW', [
+    blk(216, 'dark', 'impact', [ln('How to be', 150, 'serif', 'paper', -0.55, 4, 18), ln('happy?', 140, 'serifI', 'pink', 0.6, 60, 18)]),
+    blk(216, 'light', 'impact', [ln('Happiness is the mind', 88, y=-1.15), ln('in harmony', 88, y=0), ln('with what actually is.', 92, 'serifI', 'pink', 1.15)]),
+    blk(216, 'light', 'impact', [ln('The mind cannot accept the present,', 72, y=-1.15), ln("doesn't let go of the past,", 76, y=0), ln('and seeks a hopeful future.', 80, 'serifI', 'pink', 1.15)]),
+    blk(216, 'dark', 'zoom', [ln('Truth is nothing but', 92, 'serif', 'paper', -1.0, 6, 12)], word='this very moment.', wy=0.7, zat=70),
+    blk(252, 'light', 'scene', [ln('We are in the present,', 62), ln('but we are not present.', 66, 'serifI', 'pink')]),
+    blk(288, 'light', 'type', [ln('letting go + acceptance', 62, 'mono', 'ink', -0.7, 10, rate=2), ln('= neverminding.', 74, 'mono', 'pink', 0.75, 100, rate=3)]),
+])
+S['how-to-be-happy-2'] = reel('How to be happy (2)', 'An essay', 'January 1, 2026', 52, 'FEAR', [
+    blk(216, 'dark', 'impact', [ln('Have you ever been', 116, 'serif', 'paper', -0.55, 4, 12), ln('complete?', 140, 'serifI', 'pink', 0.65, 74, 18)]),
+    blk(216, 'light', 'impact', [ln('Pleasure fills our emptiness.', 80, y=-1.15), ln('Happiness is being complete,', 84, 'serifI', 'pink', 0), ln('no longer seeking.', 92, 'serifI', 'pink', 1.15)]),
+    blk(288, 'light', 'type', [ln('fear of trusting,', 52, 'mono', 'ink', -1.6, 6, rate=2), ln('fear of opening up,', 52, 'mono', 'ink', -0.55, 52, rate=2), ln('fear of being rejected,', 52, 'mono', 'ink', 0.55, 104, rate=2), ln('fear of not being enough.', 52, 'mono', 'pink', 1.6, 160, rate=2)]),
+    blk(216, 'dark', 'impact', [ln('Ask yourself:', 110, 'serif', 'paper', -0.6, 6, 14), ln('what is driving you?', 110, 'serifI', 'pink', 0.7, 60, 14)]),
+    blk(216, 'light', 'scene', [ln('Is that mood', 70), ln('really yours?', 80, 'serifI', 'pink')]),
+    blk(252, 'dark', 'zoom', [ln('Is this maturity,', 100, 'serif', 'paper', -1.0, 6, 14)], word='or fear?', wy=0.7, zat=70),
+])
+S['everything-is-thought'] = reel('Everything is thought', 'An essay', 'November 30, 2024', 51, 'MIND', [
+    blk(216, 'dark', 'impact', [ln('Everything', 160, 'serif', 'paper', -0.55, 6, 14), ln('is thought.', 124, 'serifI', 'pink', 0.6, 50, 16)]),
+    blk(216, 'light', 'impact', [ln('The seer, the listener,', 88, y=-1.15), ln('the feeler, the knower:', 88, y=0), ln('it is the mind alone.', 96, 'serifI', 'pink', 1.15)]),
+    blk(216, 'dark', 'impact', [ln('What does the air see?', 100, 'serif', 'paper', -0.6, 6, 12), ln('What does the grass feel?', 100, 'serifI', 'pink', 0.7, 80, 12)]),
+    blk(252, 'light', 'scene', [ln('In dreamless sleep,', 60), ln('eight hours pass', 60), ln('like a single moment.', 66, 'serifI', 'pink')]),
+    blk(216, 'light', 'zoom', [ln('You are not the mind; you are', 84, 'serif', 'ink', -1.0, 6, 9)], word='whole.', wy=0.7, zat=80),
+    blk(288, 'dark', 'impact', [ln('And this whole', 116, 'serif', 'paper', -0.6, 8, 16), ln('is what we call god.', 104, 'serifI', 'pink', 0.7, 80, 14)]),
+])
+S['i-and-you-cannot-love'] = reel('“I” and “You” cannot Love', 'An essay', 'November 23, 2024', 49, 'PAST', [
+    blk(216, 'dark', 'impact', [ln('“I” and “you”', 150, 'serif', 'paper', -0.55, 4, 16), ln('cannot love.', 124, 'serifI', 'pink', 0.6, 60, 16)]),
+    blk(216, 'light', 'impact', [ln('Just like an old radio', 92, y=-0.6), ln('cannot play YouTube videos.', 88, 'serifI', 'pink', 0.65)]),
+    blk(216, 'dark', 'impact', [ln('A bundle of memories.', 96, 'serif', 'paper', -0.6, 6, 12), ln('You are the past.', 116, 'serifI', 'pink', 0.7, 70, 16)]),
+    blk(216, 'light', 'wind', [ln('Hands can never grasp', 96, y=-0.6, at=6, step=10), ln('the flowing water.', 96, 'serifI', 'pink', 0.7, 54, 12)], blow=124),
+    blk(252, 'light', 'scene', [ln('Comparing what is', 60), ln('with what should be:', 60), ln('this is bondage.', 70, 'serifI', 'pink')]),
+    blk(288, 'light', 'zoom', [ln('When you see me, you see', 84, 'serif', 'ink', -1.0, 6, 9)], word='your own thoughts.', wy=0.7, zat=80),
+])
+S['you-have-never-trusted-anyone-or-anything-your-entire-life'] = reel('You have never trusted anyone or anything your entire life', 'An essay', 'November 22, 2024', 53, 'TRUST', [
+    blk(216, 'dark', 'impact', [ln('You have never trusted', 110, 'serif', 'paper', -0.55, 4, 12), ln('anyone.', 150, 'serifI', 'pink', 0.7, 80, 18)]),
+    blk(216, 'light', 'brackets', [ln('What you call trust', 84, y=-1.5), ln('is only', 66, 'serif', 'ink2', -0.5)], word='security.', lock=120),
+    blk(216, 'dark', 'impact', [ln('Trust, in its truest sense,', 96, 'serif', 'paper', -0.6), ln('cannot be broken.', 110, 'serifI', 'pink', 0.7, 80, 14)]),
+    blk(216, 'light', 'impact', [ln('You trusted only the good side,', 80, y=-1.15), ln('the pleasant side,', 84, y=0), ln('an idea of the person.', 92, 'serifI', 'pink', 1.15)]),
+    blk(252, 'light', 'scene', [ln('A human being is all:', 60), ln('good and bad,', 64), ln('pleasant and unpleasant.', 62, 'serifI', 'pink')]),
+    blk(288, 'dark', 'zoom', [ln('Only free people can', 100, 'serif', 'paper', -1.0, 6, 12)], word='trust.', wy=0.7, zat=80),
 ])
 
 # the same scene the post's writing page shows (port of pickScene in js/pixel-scenes.js)
