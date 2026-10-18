@@ -146,6 +146,11 @@ function paint(P) {
 // ---------------------------------------------------------------- shared bits
 const ME_TMP = document.createElement('canvas'); ME_TMP.width = SW; ME_TMP.height = SH; const meCtx = ME_TMP.getContext('2d'), meImg = new ImageData(SW, SH);
 function drawMe(ctx, x, gy, P, lift = 0) { paint(P); meImg.data.set(buf); meCtx.putImageData(meImg, 0, 0); ctx.drawImage(ME_TMP, Math.round(x - SW / 2), Math.round(gy + 1 - GY - lift)); }
+function handPos(P, x, gy, side) {   // screen position of a hand (side -1 = left, 1 = right) for a pose drawn with drawMe/drawMeT at (x, gy)
+  const cx = 32 + (P.dx || 0), shY = 34 + (P.bob || 0), sx = cx + side * 12, sy = shY + 2, a = (side < 0 ? P.aL : P.aR) * Math.PI / 180, f = (side < 0 ? P.fL : P.fR) * Math.PI / 180;
+  const ex = sx + side * Math.sin(a) * 10.5, ey = sy + Math.cos(a) * 10.5, hx = ex + side * Math.sin(a + f) * 10, hy = ey + Math.cos(a + f) * 10;
+  return [Math.round(x - SW / 2) + Math.round(hx) + 1, Math.round(gy + 1 - GY) + Math.round(hy) + 1];
+}
 function basePose(t) {
   return { dx: 0, bob: Math.sin(t * 2.4) > 0.6 ? -1 : 0, headDx: 0, headDy: 0, lL: 0, lR: 0, kL: 0, kR: 0, aL: 8, aR: 8, fL: 6, fR: 6,
     liftL: 0, liftR: 0, sway: Math.sin(t * 1.8) * 0.8, eyes: 'open', look: 0, browUp: 0, mouth: 'line', blush: false, armsBehind: false };
@@ -447,8 +452,8 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     // me, toasting a marshmallow, warm firelight on one side
     const P = sitPose(basePose(t), t); P.aR = 74; P.fR = -18; P.aL = 26; P.fL = -22; P.look = 1; P.eyes = blink < 0 ? 'closed' : 'open'; P.mouth = toast > 0.7 && toast < 1 ? 'smile' : !mall ? 'o' : 'line';
     drawMeT(c, meX(), g, P, `rgba(255,140,60,${(0.1 + 0.08 * flick).toFixed(3)})`);
-    const hx = meX() + 26, hy = g - 46; c.strokeStyle = '#7a5236'; c.fillStyle = '#7a5236'; for (let i = 0; i <= 22; i++) c.fillRect(Math.round(hx + i), Math.round(hy + i * 0.7), 1, 1);
-    if (mall) { const tc = toast < 0.5 ? '#fbf6ea' : toast < 0.85 ? '#e8b46a' : toast < 1.05 ? '#a8642e' : '#3a2418'; c.fillStyle = '#2a1d18'; c.fillRect(hx + 21, hy + 13, 5, 5); c.fillStyle = tc; c.fillRect(hx + 22, hy + 14, 3, 3); }
+    const [hx, hy] = handPos(P, meX(), g, 1); c.fillStyle = '#7a5236'; for (let i = 0; i <= 22; i++) c.fillRect(Math.round(hx + i), Math.round(hy + i * 0.55), 1, 1);
+    if (mall) { const tc = toast < 0.5 ? '#fbf6ea' : toast < 0.85 ? '#e8b46a' : toast < 1.05 ? '#a8642e' : '#3a2418'; c.fillStyle = '#2a1d18'; c.fillRect(hx + 21, hy + 10, 5, 5); c.fillStyle = tc; c.fillRect(hx + 22, hy + 11, 3, 3); }
   };
 })();
 
@@ -490,7 +495,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     // me with the umbrella
     const P = basePose(t); P.aR = 40; P.fR = -110; P.look = startle > 0 ? 0 : -0.4; P.eyes = blink < 0 ? 'closed' : 'open'; if (startle > 0) { P.browUp = 1; P.mouth = 'o'; P.eyes = 'open'; }
     drawMeT(c, meX(), g, P, 'rgba(40,60,120,0.22)');
-    const ux = meX() + 8, uy = g - 95; c.fillStyle = '#2a1d18'; c.fillRect(ux, uy, 1, 50);
+    const [ux, hyU] = handPos(P, meX(), g, 1), uy = g - 95; c.fillStyle = '#2a1d18'; c.fillRect(ux, uy, 1, hyU - uy + 4); c.fillRect(ux - 1, hyU + 3, 3, 1);
     for (let y = 0; y < 10; y++) { const w = Math.round(28 * Math.sqrt(1 - ((10 - y) / 10.5) ** 2)); c.fillStyle = y < 2 ? '#e05656' : y > 7 ? '#8e2630' : '#c43a42'; c.fillRect(ux - w, uy - 10 + y, w * 2 + 1, 1); }
     c.fillStyle = '#6e1e26'; for (let i = -3; i <= 3; i++) c.fillRect(ux + i * 8, uy - 1, 1, 2); c.fillStyle = '#2a1d18'; c.fillRect(ux, uy - 12, 1, 2);
     // rain, splashes, ripples
@@ -526,11 +531,11 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
       x.fillStyle = '#f2ecd2'; x.beginPath(); x.arc(wx + 52, 30, 5, 0, 7); x.fill(); for (let i = 0; i < 9; i++) { x.fillStyle = '#1b2244'; const h = 8 + (i * 7) % 16; x.fillRect(wx + i * 8, 17 + wh - h, 7, h); }
       x.fillStyle = '#3a3256'; x.fillRect(wx + ww / 2 - 1, 17, 2, wh); x.fillRect(wx, 17 + wh / 2, ww, 2);
       x.fillStyle = '#4a3a2c'; x.fillRect(S.W - 60, 30, 40, 3); x.fillStyle = '#7a5236'; for (let i = 0; i < 5; i++) x.fillRect(S.W - 58 + i * 7, 20 + (i % 2) * 2, 5, 10 - (i % 2) * 2);   // shelf + books
-      x.fillStyle = '#1a1530'; x.fillRect(Math.round(S.W * 0.55), 18, 30, 40); x.fillStyle = '#e05656'; x.fillRect(Math.round(S.W * 0.55) + 2, 20, 26, 36); x.fillStyle = '#f2c66a'; x.beginPath(); x.arc(Math.round(S.W * 0.55) + 15, 34, 7, 0, 7); x.fill(); x.fillStyle = '#2a1530'; x.fillRect(Math.round(S.W * 0.55) + 4, 44, 22, 2); x.fillRect(Math.round(S.W * 0.55) + 4, 48, 14, 2);
+      x.fillStyle = '#1a1530'; x.fillRect(Math.round(S.W * 0.4), 18, 30, 40); x.fillStyle = '#e05656'; x.fillRect(Math.round(S.W * 0.4) + 2, 20, 26, 36); x.fillStyle = '#f2c66a'; x.beginPath(); x.arc(Math.round(S.W * 0.4) + 15, 34, 7, 0, 7); x.fill(); x.fillStyle = '#2a1530'; x.fillRect(Math.round(S.W * 0.4) + 4, 44, 22, 2); x.fillRect(Math.round(S.W * 0.4) + 4, 48, 14, 2);
       x.fillStyle = '#3a6a3a'; x.fillRect(S.W - 30, 22, 6, 8); x.fillStyle = '#5a9a4a'; x.fillRect(S.W - 32, 18, 4, 5); x.fillRect(S.W - 26, 17, 4, 6); }), 0, 0);
     // me, seated behind the desk, lit by the screen
-    const P = basePose(t); P.eyes = blink < 0 ? 'closed' : 'open'; P.look = 1;
-    if (mode === 'type') { const a = Math.floor(t * 9) % 2; P.aL = 34; P.fL = -60 + (a ? 6 : 0); P.aR = 34; P.fR = -60 + (a ? 0 : 6); }
+    const P = basePose(t); P.eyes = blink < 0 ? 'closed' : 'open'; P.look = 0;
+    if (mode === 'type') { const a = Math.floor(t * 9) % 2; P.aL = 40; P.fL = -20 + (a ? 8 : 0); P.aR = 40; P.fR = -20 + (a ? 0 : 8); }   // hands on the keyboard either side of the screen
     if (mode === 'sip') { P.aL = 50; P.fL = -120; P.aR = 34; P.fR = -60; P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
     if (mode === 'stretch') { const u = Math.sin(Math.min(1, mt / 2.4) * Math.PI); P.aL = P.aR = 30 + u * 140; P.fL = P.fR = -40 + u * 30; P.mouth = u > 0.5 ? 'o' : 'line'; P.eyes = u > 0.5 ? 'closed' : P.eyes; }
     if (mode === 'yay') { P.aL = P.aR = 155; P.fL = P.fR = Math.sin(mt * 18) * 20; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
@@ -540,13 +545,15 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     // desk with drawers, monitor turned toward us, keyboard, mug, lamp, a sleeping cat
     c.fillStyle = '#6b4a32'; c.fillRect(dx - 64, g - 30, 128, 4); c.fillStyle = '#86603e'; c.fillRect(dx - 64, g - 30, 128, 1);
     c.fillStyle = '#4e3524'; c.fillRect(dx - 62, g - 26, 124, S.H - g + 26); c.fillStyle = '#5a3e2a'; c.fillRect(dx - 58, g - 22, 54, 10); c.fillRect(dx + 4, g - 22, 54, 10); c.fillStyle = '#c9a46a'; c.fillRect(dx - 33, g - 18, 4, 1); c.fillRect(dx + 29, g - 18, 4, 1);
-    const mx = dx + 30, my = g - 62;   // monitor
-    c.fillStyle = '#1c1a26'; c.fillRect(mx - 1, my - 1, 46, 32); c.fillStyle = '#0e1222'; c.fillRect(mx + 1, my + 1, 42, 26);
-    code.slice(0, 7).forEach((l, i) => { c.fillStyle = win > 0 && i === 6 ? '#8ee08a' : l.c; c.fillRect(mx + 3 + l.ind, my + 3 + i * 3, Math.min(36 - l.ind, l.w * 2), 1); });
-    if (Math.floor(t * 2) % 2) { c.fillStyle = '#e8e8f0'; c.fillRect(mx + 3, my + 24, 2, 1); }
-    c.fillStyle = '#2a2836'; c.fillRect(mx + 19, my + 31, 6, 5); c.fillRect(mx + 13, my + 35, 18, 2);
-    ring(c, mx + 22, my + 14, 40, 28, win > 0 ? '#1a4a20' : '#10304a', 5, 0.5, true);
-    c.fillStyle = '#d8d8e0'; c.fillRect(dx - 18, g - 33, 36, 3); c.fillStyle = '#a8a8b4'; for (let i = 0; i < 8; i++) c.fillRect(dx - 16 + i * 4, g - 32, 3, 1);   // keyboard
+    const mx = dx - 2, my = g - 49;   // monitor in front of me, turned toward me: we see its back
+    ring(c, mx, my - 8, 34, 22, win > 0 ? '#1a4a20' : '#10304a', 5, 0.55, true);           // its screen lights my face
+    c.fillStyle = '#2a2836'; c.fillRect(mx - 15, my, 30, 19); c.fillStyle = '#3a3848'; c.fillRect(mx - 15, my, 30, 1); c.fillRect(mx - 15, my, 1, 19);
+    c.fillStyle = win > 0 ? '#8ee08a' : '#7ab8ff'; c.fillRect(mx - 16, my + 1, 1, 17); c.fillRect(mx + 15, my + 1, 1, 17); c.fillRect(mx - 14, my - 1, 28, 1);   // screen glow around the edges
+    c.fillStyle = '#4a4858'; c.fillRect(mx - 3, my + 7, 6, 4); c.fillStyle = '#1c1a26'; c.fillRect(mx - 2, my + 19, 4, 2);   // logo, stand
+    // what's on screen, shown as a small window on the wall behind me
+    const px = Math.round(S.W * 0.58), py = 14; c.fillStyle = 'rgba(14,18,34,0.92)'; c.fillRect(px, py, 50, 36); c.fillStyle = '#3a3256'; c.fillRect(px, py, 50, 4);
+    code.slice(0, 7).forEach((l, i) => { c.fillStyle = win > 0 && i === 6 ? '#8ee08a' : l.c; c.fillRect(px + 3 + l.ind, py + 7 + i * 4, Math.min(42 - l.ind, l.w * 2), 1); });
+    if (Math.floor(t * 2) % 2) { c.fillStyle = '#e8e8f0'; c.fillRect(px + 3, py + 34, 2, 1); }
     c.fillStyle = '#e8e2d4'; c.fillRect(dx - 34, g - 38, 8, 8); c.fillStyle = '#c9c2b2'; c.fillRect(dx - 27, g - 36, 2, 4); c.fillStyle = '#4a2c1c'; c.fillRect(dx - 33, g - 37, 6, 1);   // mug
     c.fillStyle = '#2a2836'; c.fillRect(dx - 58, g - 31, 8, 1); c.fillRect(dx - 55, g - 52, 2, 21); c.fillRect(dx - 55, g - 53, 12, 2); c.fillStyle = '#e0a83a'; c.fillRect(dx - 46, g - 54, 8, 4);   // desk lamp
     ring(c, dx - 42, g - 34, 26, 8, '#5a3a10', 4, 0.6, true);
@@ -600,8 +607,8 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     if (mode === 'reel') { P.mouth = 'smile'; P.aR = 120 + Math.sin(mt * 20) * 10; P.fR = 20; } else { P.aR = 70; P.fR = -10; }
     if (mode === 'release') { P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
     drawMeT(c, meX(), dy, P, 'rgba(255,170,120,0.08)');
-    const hx = meX() + 22, hy = dy - (mode === 'reel' ? 62 : 46), tipX = hx + 40, tipY = hy - (mode === 'reel' ? 26 : 22);
-    c.fillStyle = '#3a2a1e'; for (let i = 0; i <= 40; i++) { const u = i / 40, bendy = mode === 'reel' ? Math.sin(u * Math.PI) * 6 : 0; c.fillRect(Math.round(hx + (tipX - hx) * u), Math.round(hy + (tipY - hy) * u + bendy * u), 1, 1); }
+    const [hx, hy] = handPos(P, meX(), dy, 1), tipX = hx + 42, tipY = hy - (mode === 'reel' ? 34 : 26);
+    c.fillStyle = '#2a1d18'; c.fillRect(hx - 1, hy - 1, 3, 3); c.fillStyle = '#3a2a1e'; for (let i = 0; i <= 40; i++) { const u = i / 40, bendy = mode === 'reel' ? Math.sin(u * Math.PI) * 6 : 0; c.fillRect(Math.round(hx + (tipX - hx) * u), Math.round(hy + (tipY - hy) * u + bendy * u), 1, 1); }
     if (mode !== 'reel' && mode !== 'release') { c.fillStyle = 'rgba(255,255,255,0.6)'; const bx = bobX(); for (let i = 0; i <= 30; i++) { const u = i / 30; c.fillRect(Math.round(tipX + (bx - tipX) * u), Math.round(tipY + (w + bob - 2 - tipY) * u + Math.sin(u * Math.PI) * 6), 1, 1); }
       c.fillStyle = '#e05656'; c.fillRect(bx - 1, w + bob - 3, 3, 2); c.fillStyle = '#fff'; c.fillRect(bx - 1, w + bob - 1, 3, 1); }
     for (const r of ripples) { const rr = Math.round(2 + r.l * 9); c.globalAlpha = 0.6 * (1 - r.l / 1.4); c.fillStyle = '#fff2e6'; c.fillRect(bobX() - rr, w + 1, 2, 1); c.fillRect(bobX() + rr - 1, w + 1, 2, 1); } c.globalAlpha = 1;
