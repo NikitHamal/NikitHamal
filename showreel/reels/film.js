@@ -7,20 +7,21 @@ const Q = new URLSearchParams(location.search), PORT = Q.get('v') === 'portrait'
 const W = PORT ? 1080 : 1920, H = PORT ? 1920 : 1080, CX = W / 2, CY = H / 2, TOTAL = 1620, END = 1404, BEAT = 36, LH = PORT ? 150 : 96;
 const C = { paper: '#f4ede2', ink: '#1d1a17', ink2: '#5b544c', mute: '#8a8178', pink: '#c9607f', pinkD: '#e98aa6', blush: '#ffd2df', night: '#14110e', line: 'rgba(29,26,23,0.18)' };
 let R, A = {};
+{ let sd = 99991; Math.random = () => (sd = (sd * 16807) % 2147483647) / 2147483647; }   // the pixel scenes use Math.random: make every render identical
 const col = (name, dark) => ({ paper: C.paper, ink: dark ? C.paper : C.ink, ink2: dark ? 'rgba(244,237,226,0.7)' : C.ink2, pink: dark ? C.pinkD : C.pink, blush: C.blush }[name] || C.ink);
 function fit(c, text, kind, size, maxW = W * 0.88) { font(c, kind, size); const w = c.measureText(text).width; return w > maxW ? size * maxW / w : size; }
 const blockAt = f => R.beats.find(b => f >= b.from && f < b.to);
 
 // ---- word landing: each word drops in from a slight scale with a blur, on the grid
 function land(c, L, f, b, dark, opt = {}) {
-  const want = L.size * (PORT ? 1.12 : 1), color = opt.col || col(L.c, dark), out = E.exit(prog(f, b.to - 16, b.to)), f0 = b.from + L.at;
-  font(c, L.f, want); const natural = c.measureText(L.t).width, maxW = W * 0.86, ws = L.t.split(' ');
+  const want = L.size * (PORT ? 1.12 : 1), color = opt.col || col(L.c, dark), out = E.exit(prog(f, b.to - 16, b.to)), f0 = b.from + L.at, cxL = opt.cx ?? CX;
+  font(c, L.f, want); const natural = c.measureText(L.t).width, maxW = opt.maxW ?? W * 0.86, ws = L.t.split(' ');
   // on the narrow frame a long line wraps onto two lines (split nearest the middle) instead of shrinking
   let rows = [ws];
-  if (PORT && !L.nowrap && natural > maxW && ws.length > 2) { let best = 1, bd = 1e9; for (let k = 1; k < ws.length; k++) { font(c, L.f, want); const d = Math.abs(c.measureText(ws.slice(0, k).join(' ')).width - c.measureText(ws.slice(k).join(' ')).width); if (d < bd) { bd = d; best = k; } } rows = [ws.slice(0, best), ws.slice(best)]; }
+  if ((PORT || opt.maxW) && !L.nowrap && natural > maxW && ws.length > 2) { let best = 1, bd = 1e9; for (let k = 1; k < ws.length; k++) { font(c, L.f, want); const d = Math.abs(c.measureText(ws.slice(0, k).join(' ')).width - c.measureText(ws.slice(k).join(' ')).width); if (d < bd) { bd = d; best = k; } } rows = [ws.slice(0, best), ws.slice(best)]; }
   let size = want; for (const r of rows) size = Math.min(size, fit(c, r.join(' '), L.f, want, maxW));
   const yc = (opt.y ?? (L.py != null ? L.py : CY + L.y * LH)), lh2 = size * 1.12, xs = []; let idx = 0, yLast = 0;
-  rows.forEach((r, ri) => { const y = yc + (ri - (rows.length - 1) / 2) * lh2 + size * 0.32; yLast = y; font(c, L.f, size); const sp = c.measureText(' ').width, wd = r.map(w => c.measureText(w).width), tot = wd.reduce((p, q) => p + q, 0) + sp * (r.length - 1); let x = CX - tot / 2;
+  rows.forEach((r, ri) => { const y = yc + (ri - (rows.length - 1) / 2) * lh2 + size * 0.32; yLast = y; font(c, L.f, size); const sp = c.measureText(' ').width, wd = r.map(w => c.measureText(w).width), tot = wd.reduce((p, q) => p + q, 0) + sp * (r.length - 1); let x = cxL - tot / 2;
     r.forEach((w, i) => { const t0 = f0 + idx * L.step, u = E.out(prog(f, t0, t0 + 14)); xs.push([x, x + wd[i], y]); idx++;
       if (u > 0) { c.save(); c.globalAlpha *= u * (1 - out) * (opt.a ?? 1); if (u < 1 || out > 0) c.filter = `blur(${((1 - u) * 9 + out * 8).toFixed(1)}px)`; const s = mix(1.16, 1, u);
         c.translate(x + wd[i] / 2, y + (1 - u) * 14 - out * 12); c.scale(s, s); font(c, L.f, size); c.fillStyle = color; c.textAlign = 'center'; c.fillText(w, 0, 0); c.restore(); }
@@ -33,6 +34,7 @@ function measure(c, L) { const want = L.size * (PORT ? 1.12 : 1), maxW = W * (PO
   return { rows: 2, size: Math.min(fit(c, ws.slice(0, best).join(' '), L.f, want, maxW), fit(c, ws.slice(best).join(' '), L.f, want, maxW)) }; }
 function layoutPortrait(c) {
   for (const b of R.beats) {
+    if (b.kind === 'zoom' && PORT) b.wpy = CY + (b.wy ?? 0) * LH * 1.4;
     if (b.kind === 'dis') b.lines[1].nowrap = true; if (b.kind === 'breaks') b.lines[1].nowrap = true; if (b.kind === 'wind') b.lines.forEach(L => L.nowrap = true);
     const groups = { top: [], mid: [], bot: [] }; b.lines.forEach(L => groups[L.y <= -2 ? 'top' : L.y >= 2 ? 'bot' : 'mid'].push(L));
     for (const g of Object.values(groups)) { if (!g.length) continue; const ms = g.map(L => measure(c, L)), hs = ms.map(m => m.rows * m.size * 1.12), gaps = ms.map(m => m.size * 0.42);
@@ -51,7 +53,7 @@ function bg(c, f, b) {
   c.fillStyle = dark ? C.night : C.paper; c.fillRect(0, 0, W, H);
   const g = c.createRadialGradient(CX + Math.sin(f / 90) * W * 0.12, CY * 0.9, Math.min(W, H) * 0.1, CX, CY, Math.hypot(W, H) * 0.62);
   if (dark) { g.addColorStop(0, 'rgba(90,70,55,0.35)'); g.addColorStop(1, 'rgba(0,0,0,0.35)'); } else { g.addColorStop(0, 'rgba(255,252,246,0.55)'); g.addColorStop(1, 'rgba(150,120,90,0.16)'); }
-  c.fillStyle = g; c.fillRect(0, 0, W, H); return dark;
+  c.fillStyle = g; c.fillRect(0, 0, W, H); motes(c, f, dark); return dark;
 }
 // ---- story-style progress bars at the top: one segment per block, plus the end
 function bars(c, f, dark) {
@@ -69,9 +71,55 @@ function card(c, P, f, cx, cy, h, a = 1) { if (a <= 0) return; const w = h * 0.8
   c.save(); c.shadowColor = 'rgba(60,40,20,0.2)'; c.shadowBlur = h * 0.08; c.shadowOffsetY = h * 0.03; c.fillStyle = '#efe7da'; c.beginPath(); c.roundRect(-w / 2, -h / 2, w, h, h * 0.04); c.fill(); c.restore();
   LIB.portrait(c, P, f, 0, 0, h, 0, [w, h], 500); c.restore(); }
 
+// ---- the post's own pixel scene (the same <pixel-scene> its writing page shows), stepped frame by frame
+const SC = {}, DUMMY = { fillRect() {}, drawImage() {}, beginPath() {}, ellipse() {}, stroke() {}, fill() {}, arc() {}, moveTo() {}, lineTo() {}, save() {}, restore() {}, clearRect() {} };
+function sceneInit() {
+  const P = window.PixelScene, name = R.scene || P.pick(SLUG), S = P.SCENES[name] || P.SCENES.sakura;
+  Object.assign(SC, { name, S, B: S.bake(P.hstr(SLUG + name)), st: {}, f: -1 }); S.init(SC.st, SC.B);
+  SC.cv = document.createElement('canvas'); SC.cv.width = S.w; SC.cv.height = S.h; SC.g = SC.cv.getContext('2d'); SC.g.imageSmoothingEnabled = false;
+  for (let i = 0; i < 90; i++) S.frame(DUMMY, SC.st, 1 / 30, 10 + i / 30, SC.B);
+}
+function sceneAt(f) {
+  f = Math.floor(f); if (f === SC.f) return SC.cv; if (SC.f < 0 || f < SC.f) SC.f = f - 1;
+  while (SC.f < f) { SC.f++; const last = SC.f === f; if (last) SC.g.clearRect(0, 0, SC.S.w, SC.S.h); SC.S.frame(last ? SC.g : DUMMY, SC.st, 1 / 60, 13 + SC.f / 60, SC.B); }
+  return SC.cv;
+}
+// the scene in a notched pixel frame with a hard shadow; `boot` 0..1 opens it with a stepped, blocky circle
+function pixWin(c, f, cx, cy, h, a, boot, dark) {
+  if (a <= 0) return; const sc = sceneAt(f), S = SC.S, k = Math.max(1, Math.floor(h / S.h)), w = S.w * k, hh = S.h * k, x = Math.round(cx - w / 2), y = Math.round(cy - hh / 2), p = Math.max(6, k);
+  c.save(); c.globalAlpha *= a;
+  c.fillStyle = dark ? 'rgba(0,0,0,0.45)' : 'rgba(29,26,23,0.16)'; c.fillRect(x + p, y + p * 2, w + p, hh); c.fillRect(x + p * 2, y + p, w, hh + p);
+  c.fillStyle = dark ? C.paper : C.ink; c.fillRect(x - p, y, w + p * 2, hh); c.fillRect(x, y - p, w, hh + p * 2);
+  c.fillStyle = dark ? '#221d19' : '#efe7da'; c.fillRect(x, y, w, hh);
+  if (boot < 1) { const B = k * 4, r = Math.round(boot * 12) / 12 * Math.hypot(w, hh) / 2, ox = x + w / 2, oy = y + hh / 2; c.beginPath(); for (let yy = y; yy < y + hh; yy += B) for (let xx = x; xx < x + w; xx += B) if (Math.hypot(xx + B / 2 - ox, yy + B / 2 - oy) < r) c.rect(xx, yy, B, B); c.clip(); }
+  c.imageSmoothingEnabled = false; c.drawImage(sc, x, y, w, hh); c.restore();
+}
+// slow pixel motes drifting up through the light
+function motes(c, f, dark) {
+  c.save(); c.fillStyle = dark ? '#f4ede2' : '#1d1a17';
+  for (let i = 0; i < 46; i++) { const sp = 0.25 + hash(i + 3) * 0.5, x = hash(i) * W + Math.sin(f / 160 + i) * 24, y = ((hash(i + 9) * (H + 80) - f * sp) % (H + 80) + H + 80) % (H + 80) - 40, s = hash(i + 5) < 0.3 ? 6 : 4;
+    c.globalAlpha = (dark ? 0.1 : 0.07) * (0.5 + 0.5 * Math.sin(f / 50 + i * 2)); c.fillRect(Math.round(x / 2) * 2, Math.round(y / 2) * 2, s, s); }
+  c.restore();
+}
+
 // ---- the special kinds (lines are always landed by `land`; these add the motion)
 const KIND = {
   impact(c, f, b, dark) { b.lines.forEach(L => land(c, L, f, b, dark)); },
+  scene(c, f, b, dark) {   // the post's pixel world boots up in its frame, the words land beside it (below it, vertically)
+    const lf = f - b.from, out = E.exit(prog(f, b.to - 16, b.to)), a = E.out(prog(lf, 0, 14)) * (1 - out), h = PORT ? 700 : 600, cx = PORT ? CX : W * 0.3, cy = PORT ? CY - 300 : CY;
+    pixWin(c, f, cx, cy + (1 - a) * 24 - out * 16, h, a, prog(lf, 2, 30), dark);
+    const n = b.lines.length;
+    b.lines.forEach((L, i) => { const sz = L.size * (PORT ? 1.0 : 0.95), y = PORT ? cy + h / 2 + 150 + i * sz * 1.35 : CY + (i - (n - 1) / 2) * sz * 1.4;
+      land(c, { ...L, size: sz / (PORT ? 1.12 : 1) * (PORT ? 1 : 1) }, f, b, dark, PORT ? { y } : { y, cx: W * 0.69, maxW: W * 0.5 }); }); },
+  zoom(c, f, b, dark) {    // one word arrives huge, through the lens, and settles; then the rest lands around it
+    const lf = f - b.from - (b.zat || 0), out = E.exit(prog(f, b.to - 16, b.to)), u = E.out(prog(lf, 0, 46)), sz = fit(c, b.word, 'serifI', PORT ? 230 : 280, W * 0.84), s = mix(4.2, 1, u), y = (b.wpy ?? CY + (b.wy ?? 0) * LH) + sz * 0.3;
+    b.lines.forEach(L => land(c, L, f, b, dark)); if (lf < 0) return;
+    c.save(); c.globalAlpha *= Math.min(1, lf / 8) * (1 - out); if (u < 0.98) c.filter = `blur(${((1 - u) * 14).toFixed(1)}px)`; c.translate(CX, y - sz * 0.3); c.scale(s, s); font(c, 'serifI', sz); c.textAlign = 'center'; c.fillStyle = col(b.wc || 'pink', dark); c.fillText(b.word, 0, sz * 0.3); c.restore(); },
+  type(c, f, b, dark) {    // a line typed in mono, with a block caret, like a note to self
+    const out = E.exit(prog(f, b.to - 16, b.to)); c.save(); c.globalAlpha *= 1 - out;
+    b.lines.forEach((L, i) => { const next = b.lines[i + 1], sz = fit(c, L.t, 'mono', L.size * (PORT ? 1.05 : 1), W * 0.86), y = (L.py ?? CY + L.y * LH) + sz * 0.32;
+      LIB.typed(c, L.t, f, b.from + L.at, CX, y, sz, { kind: 'mono', weight: 500, col: col(L.c, dark), rate: L.rate || 2, align: 'center', caretUntil: next ? b.from + next.at : b.to, caretCol: col('pink', dark) }); });
+    c.restore(); },
   strike(c, f, b, dark) { b.lines.forEach((L, i) => { const r = land(c, L, f, b, dark), s = E.out(prog(f, b.from + b.strikes[i], b.from + b.strikes[i] + 16));
     if (s > 0) { const rowsY = [...new Set(r.xs.map(q => q[2]))]; rowsY.forEach(ry => { const seg = r.xs.filter(q => q[2] === ry), x0 = seg[0][0], x1 = seg[seg.length - 1][1], yy = ry - r.size * 0.3; c.save(); c.globalAlpha *= 1 - E.exit(prog(f, b.to - 16, b.to)); c.strokeStyle = col('pink', dark); c.lineWidth = r.size * 0.06; c.lineCap = 'round'; c.beginPath(); c.moveTo(x0 - 14, yy + 4); c.lineTo(x0 - 14 + (x1 - x0 + 28) * s, yy - 6 * s); c.stroke(); c.restore(); }); } }); },
   dis(c, f, b, dark) {   // "Now their approval guides you." -> "Now their disapproval guides you."
@@ -151,7 +199,7 @@ const KIND = {
 // ---- the end: only now the title, the name and the address
 function endCard(c, f) {
   const u = E.out(prog(f, END, END + 30)); bg(c, f, null); ghost(c, f, false);
-  const h = PORT ? 420 : 300, cy = PORT ? CY - 300 : CY - 220; card(c, A.now, f, CX, cy + (1 - u) * 20, h, u);
+  const h = PORT ? 470 : 330, cy = PORT ? CY - 330 : CY - 215; pixWin(c, f, CX, cy + (1 - u) * 20, h, u, prog(f, END + 2, END + 26), false);
   const ty = cy + h / 2 + (PORT ? 150 : 120), s = fit(c, R.title, 'serif', PORT ? 92 : 100, W * 0.86); LIB.wordsIn(c, R.title, f, END + 16, 5, CX, ty, s, 'serif', C.ink, 'center');
   const v = E.out(prog(f, END + 46, END + 72)); c.save(); c.globalAlpha = v; font(c, 'serifI', PORT ? 50 : 44); c.textAlign = 'center'; c.fillStyle = C.ink2; c.fillText(R.cat + ' by Nikit Hamal', CX, ty + (PORT ? 90 : 76));
   font(c, 'mono', PORT ? 22 : 18, 500); c.letterSpacing = '5px'; c.fillStyle = C.mute; c.fillText(R.date.toUpperCase(), CX, ty + (PORT ? 150 : 124)); c.restore();
@@ -170,11 +218,14 @@ function draw(c, f) {
   KIND[b.kind](c, f, b, dark || b.mode === 'pond');
   c.restore();
   // a soft light sweeps through on each cut
-  const lk = prog(f, b.from, b.from + 18); if (lk < 1 && b.from > 0) { c.save(); c.globalAlpha = (1 - lk) * 0.22; const g = c.createLinearGradient(mix(-W, W, lk), 0, mix(0, W * 2, lk), 0); g.addColorStop(0, 'rgba(255,240,220,0)'); g.addColorStop(0.5, 'rgba(255,240,220,1)'); g.addColorStop(1, 'rgba(255,240,220,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H); c.restore(); }
+  const pi = R.beats.indexOf(b), pb = pi > 0 ? R.beats[pi - 1] : null, flip = pb && (pb.mode === 'dark') !== (b.mode === 'dark') && b.mode !== 'pond' && pb.mode !== 'pond';
+  if (flip && f - b.from < 14) { const p = E.inOut(prog(f, b.from, b.from + 14)), cs = PORT ? 36 : 40; c.save(); c.fillStyle = pb.mode === 'dark' ? C.night : C.paper;
+    for (let yy = 0; yy < H; yy += cs) for (let xx = 0; xx < W; xx += cs) if (hash(xx * 0.071 + yy * 0.133) > p) c.fillRect(xx, yy, cs, cs); c.restore(); }
+  const lk = prog(f, b.from, b.from + 18); if (!flip && lk < 1 && b.from > 0) { c.save(); c.globalAlpha = (1 - lk) * 0.22; const g = c.createLinearGradient(mix(-W, W, lk), 0, mix(0, W * 2, lk), 0); g.addColorStop(0, 'rgba(255,240,220,0)'); g.addColorStop(0.5, 'rgba(255,240,220,1)'); g.addColorStop(1, 'rgba(255,240,220,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H); c.restore(); }
   bars(c, f, dark || b.mode === 'pond'); grain(c, f);
 }
 async function load() {
-  await LIB.fonts(); R = (await (await fetch('reels.json')).json())[SLUG]; layoutPortrait(document.getElementById('c').getContext('2d'));
+  await LIB.fonts(); R = (await (await fetch('reels.json')).json())[SLUG]; layoutPortrait(document.getElementById('c').getContext('2d')); sceneInit();
   A.dog = LIB.dogKit('rottie'); A.now = await LIB.loadPortrait('../shared/art', 'now', LIB.eyeTrack({ keys: [[0, 0, 0], [END, 0, 0], [END + 60, 0, 0.1], [TOTAL, 0, 0]], blinks: [END + 120], winks: [[END + 170, 'l']] }));
   const wk = R.beats.find(b => b.kind === 'wake'); if (wk) { const base = A.now.track; A.now = { ...A.now, track: f => { const s = base(f); if (f < wk.from + wk.open) { s.L = 0; s.R = 0; } else if (f < wk.from + wk.open + 8) { const o = (f - wk.from - wk.open) / 8; s.L = s.R = o; } return s; } }; }
   A.ocean = points('ocean', 'serifI', PORT ? 240 : 280, 5);
