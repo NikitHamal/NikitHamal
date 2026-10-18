@@ -168,14 +168,20 @@ function sSelfish(c, f) {
   cap(c, '— UNITY IS A LIE', f, T.between + 30, y + (PORT ? 420 : 250));
   c.restore();
 }
-// ---- 7. UNITY flies apart
+// ---- 7. UNITY parts: five letters, evenly spaced on one baseline, each walled off from the others — then only the line remains
 function sUnity(c, f) {
-  if (f < T.un || f > T.unOut + 16) return; const S = (PORT ? 210 : 240), y = CY + 40, ex = E.exit(prog(f, T.unOut, T.unOut + 16)), dr = E.inOut(prog(f, ...T.drift));
-  c.save(); c.globalAlpha = 1 - ex; c.letterSpacing = `${S * 0.08}px`;
-  letters(c, 'UNITY', CX, y, S, 'serif', C.ink, (i) => { const u = E.out(prog(f, T.un + i * 4, T.un + i * 4 + 26)), d = i - 2;
-    return { a: u * (1 - dr * 0.75), dy: (1 - u) * 40 + dr * Math.abs(d) * 24 * (d % 2 ? -1 : 1), dx: dr * d * (PORT ? 70 : 150), r: dr * d * 0.12, blur: dr * Math.abs(d) * 2.5 }; });
-  c.letterSpacing = '0px';
-  lineIn(c, 'is nothing but a pretense.', f, T.pretense, 5, y + (PORT ? 150 : 140), 64, 'serifI', C.pink);
+  if (f < T.un || f > T.unOut + 16) return; const S = PORT ? 200 : 230, y = CY + S * 0.3 - 40, ex = E.exit(prog(f, T.unOut, T.unOut + 16)), dr = E.inOut(prog(f, ...T.drift)), ghost = E.inOut(prog(f, T.drift[1] - 10, T.drift[1] + 30));
+  const spread = PORT ? 190 : 300;
+  c.save(); c.globalAlpha = 1 - ex;
+  font(c, 'serif', S); const ws = [...'UNITY'].map(ch => c.measureText(ch).width), tw = ws.reduce((p, q) => p + q, 0); let lx = CX - tw / 2; const x0 = [];
+  ws.forEach(w => { x0.push(lx + w / 2); lx += w; });
+  [...'UNITY'].forEach((ch, i) => { const u = E.out(prog(f, T.un + i * 4, T.un + i * 4 + 26)), x = mix(x0[i], CX + (i - 2) * spread, dr);
+    c.save(); c.globalAlpha *= u * mix(1, 0.2, ghost); font(c, 'serif', S); c.textAlign = 'center'; c.fillStyle = C.ink; c.fillText(ch, x, y + (1 - u) * 40); c.restore(); });
+  // the walls between them
+  for (let k = 0; k < 4; k++) { const d = E.out(prog(f, T.drift[0] + 20 + Math.abs(k - 1.5) * 6, T.drift[0] + 50 + Math.abs(k - 1.5) * 6)); if (d <= 0) continue; const x = CX + (k - 1.5) * spread, hh = S * 0.62 * d;
+    c.save(); c.strokeStyle = C.line; c.globalAlpha *= mix(1, 0.6, ghost); c.lineWidth = 1.5; c.beginPath(); c.moveTo(x, y - S * 0.36 - hh); c.lineTo(x, y - S * 0.36 + hh); c.stroke(); c.restore(); }
+  lineIn(c, 'is nothing but a pretense.', f, T.pretense + 30, 6, y + S * 0.62 + (PORT ? 70 : 60), 72, 'serifI', C.pink);
+  cap(c, '— UNITY IS A LIE', f, T.pretense + 60, y + S * 0.62 + (PORT ? 170 : 150));
   c.restore();
 }
 // ---- 8. everything is thought: the word rings outward, then even that goes; nothing
