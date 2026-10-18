@@ -515,13 +515,16 @@ function frame(dt) {
   fg.globalAlpha = 1;
   // snow
   if (!reduce) for (let k = P.snow * W * (calm ? .05 : .085) * dt + rnd(); k > 1; k--) { const d = rnd(); flakes.push({ x: ra(-10, W + 10), y: -4, vy: ra(9, 16), ph: rnd() * 7, s: d > .92 ? 3 : d > .6 ? 2 : 1, d: .2 + d * .6, sw: rnd() < .15 ? ra(4, 9) : 0, rot: rnd() * 4 }); }
-  const sc = n > .5 ? '#f2f6ff' : '#a9c1dc', sc2 = n > .5 ? '#c6d4f2' : '#d9e6f3';
+  // daylight: white flakes with a soft slate shadow pixel so they read against a pale sky
+  const sc = n > .5 ? '#f2f6ff' : '#ffffff', sc2 = n > .5 ? '#c6d4f2' : '#e4eef8', shade = n > .5 ? null : '#6f86a6';
   for (let i = flakes.length - 1; i >= 0; i--) {
     const s = flakes[i]; s.y += s.vy * dt * (.55 + s.d) - dScroll * s.d;
     s.x += (Math.sin(t * 1.3 + s.ph) * 4 + wind * (.4 + s.d * .5)) * dt + ptr.near(s.x, s.y) * dt * 1.5;
     if (s.y > H + 4 || s.y < -10) { flakes.splice(i, 1); continue; }
     let x = s.x, y = s.y; if (s.sw) { x += Math.cos(t * 2 + s.ph) * s.sw * .5; y += Math.sin(t * 2 + s.ph) * s.sw * .25; }
-    x = Math.round(x); y = Math.round(y); fg.globalAlpha = .5 + s.d * .55; fg.fillStyle = sc;
+    x = Math.round(x); y = Math.round(y);
+    if (shade) { fg.globalAlpha = .28 + s.d * .3; fg.fillStyle = shade; if (s.s === 3) { fg.fillRect(x - 1, y + 1, 5, 1); fg.fillRect(x + 1, y - 1, 1, 5); } else if (s.s === 2) { fg.fillRect(x, y + 1, 3, 1); fg.fillRect(x + 1, y, 1, 3); } else fg.fillRect(x + 1, y + 1, 1, 1); }
+    fg.globalAlpha = .55 + s.d * .45; fg.fillStyle = sc;
     if (s.s === 3) {   // a tiny six-point crystal that tumbles between its two poses
       if ((Math.floor(t * 2 + s.rot) & 1) === 0) { fg.fillRect(x - 2, y, 5, 1); fg.fillRect(x, y - 2, 1, 5); fg.fillStyle = sc2; fg.fillRect(x - 1, y - 1, 1, 1); fg.fillRect(x + 1, y + 1, 1, 1); fg.fillRect(x + 1, y - 1, 1, 1); fg.fillRect(x - 1, y + 1, 1, 1); }
       else { fg.fillRect(x - 1, y - 1, 1, 1); fg.fillRect(x + 1, y + 1, 1, 1); fg.fillRect(x + 1, y - 1, 1, 1); fg.fillRect(x - 1, y + 1, 1, 1); fg.fillRect(x - 2, y - 2, 1, 1); fg.fillRect(x + 2, y + 2, 1, 1); fg.fillRect(x + 2, y - 2, 1, 1); fg.fillRect(x - 2, y + 2, 1, 1); fg.fillStyle = sc2; fg.fillRect(x, y, 1, 1); }
@@ -612,7 +615,7 @@ function onTheme() {
 }
 
 /* ---------- clicks on open sky ---------- */
-const NOT_SKY = 'a,button,input,textarea,select,label,summary,dialog,img,svg,video,iframe,p,h1,h2,h3,h4,h5,li,blockquote,figure,pre,code,article,table,.accordion-header,.accordion-inner,.project-card,.site-header,.top-bar,pixel-dog,pixel-scene,pixel-horizon,.pond-section,.reader-dock,.settings,[contenteditable],[role="button"],[role="dialog"]';
+const NOT_SKY = 'a,button,input,textarea,select,label,summary,dialog,img,svg,video,iframe,p,h1,h2,h3,h4,h5,li,blockquote,figure,pre,code,article,table,.accordion-header,.accordion-inner,.project-card,.site-header,.top-bar,pixel-dog,pixel-scene,pixel-horizon,pixel-footer,.pond-section,.reader-dock,.settings,[contenteditable],[role="button"],[role="dialog"]';
 function onSkyClick(e) {
   if (e.button > 0 || e.defaultPrevented || !sky.c) return;
   if (e.target.closest && e.target.closest(NOT_SKY)) return;
@@ -785,143 +788,7 @@ function bootIcons() {
   });
 }
 
-/* ================================================================== */
-/*  <pixel-horizon>: Himalaya, a stupa and prayer flags in the mist   */
-/* ================================================================== */
-class PixelHorizon extends HTMLElement {
-  connectedCallback() {
-    if (this._on) return; this._on = true; this.setAttribute('aria-hidden', 'true');
-    this.c = D.createElement('canvas'); this.appendChild(this.c); this.g = this.c.getContext('2d');
-    this.ro = new ResizeObserver(() => this.build()); this.ro.observe(this);
-    this.mo = new MutationObserver(() => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); });
-    this.mo.observe(R, { attributes: true, attributeFilter: ['data-theme'] });
-    this._wx = () => { if (this.W && !reduce) { const p = cv(this.W, this.H); p.getContext('2d').drawImage(this.c, 0, 0); this.prev = p; this.prevT = performance.now(); } this.build(); };
-    D.addEventListener('sky:weather', this._wx);
-    this.vis = false; this.io = new IntersectionObserver(es => { this.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '100px' }); this.io.observe(this);
-    let lastT = 0; const loop = now => { this.raf = requestAnimationFrame(loop); if (this.vis && !D.hidden && now - lastT > 30) { lastT = now; this.draw(); } }; this.raf = requestAnimationFrame(loop);   // 30 fps: mist, flags and ripples are slow
-  }
-  disconnectedCallback() { this._on = false; cancelAnimationFrame(this.raf); this.ro.disconnect(); this.mo.disconnect(); this.io.disconnect(); D.removeEventListener('sky:weather', this._wx); }
-  build() {
-    const W = Math.ceil(this.clientWidth / S), H = Math.ceil(this.clientHeight / S); if (!W || !H) return;
-    // the mountains take the top ~60%, a still lake (Phewa-style) mirrors them below
-    const M = Math.round(H * .6), L = H - M;
-    this.W = W; this.H = H; this.M = M; this.L = L; this.c.width = W; this.c.height = H; fitCss(this.c, W, H); this.g.imageSmoothingEnabled = false;
-    const dark = isDark(), C = dark
-      ? { far: '#27304e', farS: '#1f2743', snow: '#8796bf', snowS: '#5f6d96', mid: '#1c2438', midS: '#171e30', tree: '#121827', near: '#131928', nearS: '#0f1420', water: '#111830', water2: '#0c1226', shore: '#2a3352', glint: '#e9e4c8' }
-      : { far: '#c3d1e5', farS: '#aebfd8', snow: '#ffffff', snowS: '#dce6f2', mid: '#a7bdad', midS: '#94ab9a', tree: '#7d9884', near: '#8ca393', nearS: '#7b9282', water: '#b7cde0', water2: '#a3bfd6', shore: '#e9f1f7', glint: '#ffffff' };
-    // dress for the weather: snow settles on the hills and roofs, rain and storms grey everything out
-    const wx = window.PixelSky ? window.PixelSky.weather : 'fair';
-    const mixHex = (a, b, k) => { const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16), ch = sh => Math.round(((A >> sh) & 255) * (1 - k) + ((B >> sh) & 255) * k); return '#' + ((ch(16) << 16) | (ch(8) << 8) | ch(0)).toString(16).padStart(6, '0'); };
-    if (wx === 'snow') { const w = dark ? '#7f8db5' : '#f4f8fc', w2 = dark ? '#66739a' : '#dfe8f2';
-      Object.assign(C, { mid: w, midS: w2, near: mixHex(C.near, w, .75), nearS: mixHex(C.nearS, w2, .75), tree: dark ? '#2e3a58' : '#5f7f6c', far: mixHex(C.far, w, .5), farS: mixHex(C.farS, w2, .5), water: mixHex(C.water, w, .35), water2: mixHex(C.water2, w2, .35) }); }
-    else if (wx === 'rain' || wx === 'storm') { const g = dark ? '#1a1f2e' : '#9aa3ae', k = wx === 'storm' ? .5 : .32;
-      for (const key of ['far', 'farS', 'snow', 'snowS', 'mid', 'midS', 'tree', 'near', 'nearS', 'water', 'water2']) C[key] = mixHex(C[key], g, k); }
-    this.snowy = wx === 'snow';
-    this.C = C; this.dark = dark; seed = 0x9e3779b;
-    const ridge = (amp, base, rough, peaks) => { const h = new Float32Array(W + 1); const pk = []; for (let i = 0; i < peaks; i++) pk.push([ra(0, W), ra(.55, 1) * amp, ra(Math.max(12, W * .05), Math.max(22, W * .14))]);
-      for (let x = 0; x <= W; x++) { let v = 0; for (const [px, a, wd] of pk) v = Math.max(v, a * (1 - Math.abs(x - px) / wd)); h[x] = base + v + Math.sin(x * .21) * rough + Math.sin(x * .057 + 2) * rough * 1.6; } return h; };
-    const far = ridge(M * .66, M * .24, 1.2, Math.max(3, Math.round(W / 45)));
-    const mid = ridge(M * .18, M * .3, 1.5, Math.max(3, Math.round(W / 60)));
-    const near = ridge(M * .1, M * .12, 1, Math.max(3, Math.round(W / 50)));
-    const layer = fill => { const c = cv(W, M), g = c.getContext('2d'); fill(g); return c; };
-    const fade = (g, top) => { const im = g.getImageData(0, 0, W, M), d = new Uint32Array(im.data.buffer);
-      for (let y = 0; y < M; y++) { const a = clamp(1 - (y - top) / (M - top), 0, 1); for (let x = 0; x < W; x++) if (bay8(x, y) >= a * a) d[y * W + x] = 0; }
-      g.putImageData(im, 0, 0); };
-    this.far = layer(g => {
-      for (let x = 0; x < W; x++) { const hx = far[x], top = Math.round(M - hx), lit = far[x + 1] < hx, snowLine = M - hx + Math.min(hx - M * .3, 7 + hx * .1);
-        for (let y = top; y < M; y++) { const sn = hx > M * .45 && y < snowLine + (bay(x, y) - .5) * 3; g.fillStyle = sn ? (lit ? C.snow : C.snowS) : (lit ? C.far : C.farS); g.fillRect(x, y, 1, 1); } }
-      fade(g, M * .5); });
-    this.mid = layer(g => {
-      for (let x = 0; x < W; x++) { const top = Math.round(M - mid[x]); g.fillStyle = mid[x + 1] < mid[x] ? C.mid : C.midS; g.fillRect(x, top, 1, M - top);
-        if (bay(x * 7, x) < .12) { g.fillStyle = C.tree; const th = ri(3, 6); for (let k = 0; k < th; k++) { const hw = Math.floor(k / 2); g.fillRect(x - hw, top - th + k, hw * 2 + 1, 1); } } }
-      fade(g, M * .78); });
-    // the near shore stays solid down to the waterline
-    this.near = layer(g => { for (let x = 0; x < W; x++) { const top = Math.round(M - near[x]); g.fillStyle = near[x + 1] < near[x] ? C.near : C.nearS; g.fillRect(x, top, 1, M - top); } });
-    const stupa = ['......y......', '.....yyy.....', '......y......', '.....yyy.....', '.....yyy.....', '....yyyyy....', '.....ooo.....', '....wwwww....', '....wkwkw....', '...wwwwwww...', '..wwwwwwwww..', '.wwwwwwwwwww.', 'wwwwwwwwwwwww'];
-    this.stupa = art(stupa, dark ? { y: '#c79a3b', o: '#8a6a2a', w: '#b7bfd6', k: '#2a3150' } : { y: '#f2c14e', o: '#c28a2a', w: '#ffffff', k: '#2b3a55' });
-    const stupaX = Math.round(W * (W < 200 ? .7 : .78)), sTop = Math.round(M - near[stupaX]);
-    this.sx = stupaX - 6; this.sy = sTop - stupa.length + 2;
-    const at = x => { x = clamp(Math.round(x), 0, W); return [x, Math.round(M - near[x])]; };
-    this.anchorL = at(stupaX - W * .16); this.anchorR = at(stupaX + W * .14);
-    // little houses along the shore, windows lit at night
-    this.houses = []; for (let i = 0; i < Math.max(3, Math.round(W / 70)); i++) { const x = ri(4, W - 10); if (Math.abs(x - stupaX) < 18) continue; this.houses.push([x, Math.round(M - near[x + 2]) + 1, ri(0, 2)]); }
-    this.lights = []; if (dark) for (let i = 0; i < Math.round(W / 25); i++) { const x = ri(0, W - 1); this.lights.push([x, Math.round(M - near[x]) + ri(1, 3), rnd() * 6]); }
-    const mist = (yc, th, col, so) => { const c = cv(W * 2, M), g = c.getContext('2d'); g.fillStyle = col;
-      for (let y = 0; y < M; y++) for (let x = 0; x < W * 2; x++) { const u = x / (W * 2) * Math.PI * 2, ctr = yc + Math.sin(u * 3 + so) * 2.5 + Math.sin(u * 7 + so * 2) * 1.2, thick = th * (.6 + .4 * Math.sin(u * 5 + so * 3));
-        const a = 1 - Math.abs(y - ctr) / thick; if (a > 0 && bay8(x, y) < a * .55) g.fillRect(x, y, 1, 1); }
-      return c; };
-    this.mistA = mist(M * .58, 4, dark ? '#36406a' : '#ffffff', 1.3); this.mistB = mist(M * .8, 3, dark ? '#2a3354' : '#f4f7fb', 4.1);
-    // water: a dithered gradient that melts away at the bottom so the footer text sits on the page colour
-    this.scene = cv(W, M);
-    this.water = cv(W, L); { const g = this.water.getContext('2d');
-      for (let y = 0; y < L; y++) { const k = y / L, vis = 1 - clamp((k - .45) / .55, 0, 1);
-        for (let x = 0; x < W; x++) { if (bay8(x, y) >= vis) continue; g.fillStyle = bay8(x + 3, y + 1) < k * 1.4 ? C.water2 : C.water; g.fillRect(x, y, 1, 1); } } }
-    this.mask = cv(W, L); { const g = this.mask.getContext('2d'); g.fillStyle = '#000';
-      for (let y = 0; y < L; y++) { const vis = 1 - clamp((y / L - .45) / .55, 0, 1); for (let x = 0; x < W; x++) if (bay8(x, y) >= vis) g.fillRect(x, y, 1, 1); } }
-    this.lake = cv(W, L);
-    this.boat = { x: W * .3, dir: 1 };
-    this.draw();
-  }
-  draw() {
-    if (!this.W) return; const { g, W, H, M, L, C } = this, r = this.getBoundingClientRect(), p = clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1);
-    const off = k => reduce ? 0 : Math.round((1 - p) * k), now = performance.now() / 1000;
-    // ---- compose the mountain scene
-    const s = this.scene.getContext('2d'); s.clearRect(0, 0, W, M);
-    const drift = (img, sp, y) => { const x = Math.round(reduce ? 0 : -((now * sp) % (W * 2))); s.drawImage(img, x, y); if (x < -W) s.drawImage(img, x + W * 2, y); };
-    s.drawImage(this.far, 0, off(14));
-    if (!this.dark && !reduce) { s.fillStyle = '#4a5160'; for (let k = 0; k < 2; k++) { const a = now * .22 + k * 2.6, ex = Math.round(W * (.3 + k * .32) + Math.cos(a) * 14), ey = Math.round(M * .2 + Math.sin(a) * 4 + off(14)); const fr = BIRD[Math.sin(now * 1.3 + k) > .85 ? 0 : 1]; s.globalAlpha = .75; for (const [bx, by] of fr) s.fillRect(ex + (Math.cos(a) > 0 ? 4 - bx : bx), ey + by, 1, 1); } s.globalAlpha = 1; }
-    s.globalAlpha = this.dark ? .5 : .75; drift(this.mistA, 2.2, off(10)); s.globalAlpha = 1;
-    s.drawImage(this.mid, 0, off(7));
-    s.globalAlpha = this.dark ? .45 : .7; drift(this.mistB, 3.6, off(4)); s.globalAlpha = 1;
-    s.drawImage(this.near, 0, 0);
-    // shore houses: a white wall, a red tin roof, one window (warm at night)
-    for (const [x, y, k] of this.houses) {
-      s.fillStyle = this.dark ? '#3a4260' : '#f4efe6'; s.fillRect(x, y - 3, 5, 3);
-      s.fillStyle = this.snowy ? (this.dark ? '#9aa6c8' : '#ffffff') : this.dark ? '#5a2f36' : ['#c4483b', '#3d6fb0', '#d08a2e'][k]; s.fillRect(x - 1, y - 4, 7, 1); s.fillRect(x, y - 5, 5, 1);
-      s.fillStyle = this.dark ? (Math.sin(now * .7 + x) > -.6 ? '#ffd36b' : '#5a4a30') : '#7a8796'; s.fillRect(x + 1 + (k & 1) * 2, y - 2, 1, 1);
-    }
-    s.drawImage(this.stupa, this.sx, this.sy);
-    const flags = ['#3d7be0', '#ffffff', '#e0473c', '#3fae5a', '#f2c24b'], top = [this.sx + 6, this.sy];
-    for (const an of [this.anchorL, this.anchorR]) {
-      const ax = an[0], ay = an[1] - 1, n = Math.max(6, Math.round(Math.abs(ax - top[0]) / 3));
-      for (let i = 0; i <= n; i++) {
-        const u = i / n, x = Math.round(lerp(top[0], ax, u)), y = Math.round(lerp(top[1], ay, u) + Math.sin(Math.PI * u) * 5);
-        s.fillStyle = this.dark ? '#4a5270' : '#8a8f99'; s.fillRect(x, y, 1, 1);
-        if (i % 2 === 1 && i < n) { const fl = reduce ? 0 : Math.round(Math.sin(now * 6 + i * .9) * .7); s.fillStyle = flags[(i >> 1) % 5]; s.globalAlpha = this.dark ? .65 : 1; s.fillRect(x, y + 1, 2, 2 + (fl > 0 ? 1 : 0)); s.fillRect(x + (fl < 0 ? 1 : 0), y + 3 + (fl > 0 ? 1 : 0), 1, 1); s.globalAlpha = 1; }
-      }
-    }
-    for (const [x, y, ph] of this.lights) { s.globalAlpha = .6 + .4 * Math.sin(now * 2 + ph * 3); s.fillStyle = '#ffd36b'; s.fillRect(x, y, 1, 1); }
-    s.globalAlpha = 1;
-    // ---- the lake: water, then the scene mirrored row by row with a gentle ripple
-    const lk = this.lake.getContext('2d'); lk.globalCompositeOperation = 'source-over'; lk.clearRect(0, 0, W, L); lk.drawImage(this.water, 0, 0);
-    lk.globalAlpha = this.dark ? .55 : .42;
-    for (let y = 0; y < L; y++) {
-      const sy = M - 1 - Math.round(y * 1.15); if (sy < 0) break;
-      const dx = reduce ? 0 : Math.round(Math.sin(now * 1.4 + y * .55) * Math.min(2, .4 + y * .06));
-      lk.drawImage(this.scene, 0, sy, W, 1, dx, y, W, 1);
-    }
-    lk.globalAlpha = 1;
-    // the boat (a painted doonga) drifting, and its reflection
-    const b = this.boat; if (!reduce) { b.x += b.dir * .05; if (b.x > W * .62) b.dir = -1; if (b.x < W * .12) b.dir = 1; }
-    const bx = Math.round(b.x), by = 3 + Math.round(Math.sin(now * 1.6)), hull = this.dark ? ['#3b4566', '#2a3150'] : ['#d9483b', '#2f6db3'];
-    const boat = (y0, flip, a) => { lk.globalAlpha = a; const row = (dy, x0, w, c) => { lk.fillStyle = c; lk.fillRect(bx + x0, flip ? y0 - dy : y0 + dy, w, 1); };
-      row(0, 2, 2, this.dark ? '#c9c2a8' : '#f2c14e'); row(1, 2, 2, this.dark ? '#6a7090' : '#3a3f4a');   // rower
-      row(2, 0, 9, hull[0]); row(3, 1, 7, hull[1]); };
-    boat(by - 3, false, 1); boat(by + 2 + 3, true, .35);
-    lk.globalAlpha = 1;
-    // shimmering glints on a light path under the sun / moon (it hangs to the right in the sky)
-    lk.fillStyle = C.glint;
-    for (let k = 0; k < 14; k++) { const gy = (k * 7 + 3) % Math.max(1, Math.floor(L * .6)), gx = Math.round(W * .82 + Math.sin(k * 12.9) * (3 + gy * .5) + Math.sin(now * .8 + k) * 2), a = Math.sin(now * 2.2 + k * 1.7); if (a > .35) { lk.globalAlpha = (a - .35) * 1.4; lk.fillRect(gx, gy, a > .8 ? 2 : 1, 1); } }
-    lk.globalAlpha = 1;
-    // shoreline highlight, then cut the bottom away with the dither mask
-    lk.fillStyle = C.shore; lk.globalAlpha = .7; lk.fillRect(0, 0, W, 1); lk.globalAlpha = 1;
-    lk.globalCompositeOperation = 'destination-out'; lk.drawImage(this.mask, 0, 0); lk.globalCompositeOperation = 'source-over';
-    // ---- put it together
-    g.clearRect(0, 0, W, H); g.drawImage(this.scene, 0, 0); g.drawImage(this.lake, 0, M);
-    if (this.prev) { const k = (performance.now() - this.prevT) / 1400; if (k >= 1) this.prev = null; else { g.globalAlpha = 1 - ease(k); g.drawImage(this.prev, 0, 0); g.globalAlpha = 1; } }
-  }
-}
-if (!customElements.get('pixel-horizon')) customElements.define('pixel-horizon', PixelHorizon);
+
 
 /* ================================================================== */
 /*  pixel sparkles on presses                                         */
@@ -964,9 +831,9 @@ function bootFooter() {
 /* ================================================================== */
 function boot() {
   bootControls(); bootIcons();
-  // a horizon above the footer on every page
+  // the footer diorama on every page
   const foot = D.querySelector('.minimal-footer');
-  if (foot && !D.querySelector('pixel-horizon')) { const h = D.createElement('pixel-horizon'); foot.parentNode.insertBefore(h, foot); }
+  if (foot && !D.querySelector('pixel-footer')) { const h = D.createElement('pixel-footer'); foot.parentNode.insertBefore(h, foot); }   // js/pixel-footer.js
   bootFooter(); bootSky(); bootSparkles();
 }
 window.PixelSky = { setWeather(k) { if (WX[k]) weather = k; }, get weather() { return weather; }, params: P, get night() { return night; }, bolt: () => bolt(sky.W / 2, 0, sky.W / 2, sky.H * .8) };
