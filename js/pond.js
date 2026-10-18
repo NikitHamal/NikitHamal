@@ -1722,6 +1722,7 @@ Object.assign(Snd,{
 
 /* ================= loop ================= */
 build();
+try{update(1);render();}catch(e){}   // paint a first frame right away: an alpha:false canvas is solid black until drawn
 let last=performance.now(),idleOn=false,pondVis=true,slowTick=0,audioQuiet=false;
 // Adaptive quality: the pond is a per-pixel software renderer, so slower phones get 30 fps first and, if that is
 // still too heavy, one step chunkier pixels. Fast machines never notice. (QBUMP is declared up top for build().)

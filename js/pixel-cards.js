@@ -26,6 +26,26 @@
   const GLYPHS = [['xxxx', '.x.x', '.x.x', '.x.x'], ['...xx', '..x..', 'x.x..', '.x...'], ['xxx', 'x..', '.x.', 'x..', 'xxx'], ['.x.', 'xxx', '.x.'], ['x.x', '.x.', 'x.x'], ['xx', '.x', 'x.', 'xx']];
 
   const SCENES = {
+    consica: {
+      paint(g, W, H, dk) {
+        grad(g, W, H, dk ? '#0e1a24' : '#cfe8ea', dk ? '#21384a' : '#9fcfd4');
+        ridge(g, W, H, 8, 2, .05, 2, dk ? '#1a2c3a' : '#86b9bf');
+        // a row of buildings with a lit studio in the middle
+        this.wins = []; let x = 2;
+        while (x < W - 2) { const w = 6 + (Math.random() * 8 | 0), h = 10 + (Math.random() * (H * .55) | 0), mid = Math.abs(x + w / 2 - W / 2) < 10;
+          g.fillStyle = dk ? (mid ? '#2f4a5e' : '#1f3242') : (mid ? '#2f6f78' : '#4f8e96'); g.fillRect(x, H - h, w, h);
+          g.fillStyle = dk ? '#3d5c72' : '#6fb0b8'; g.fillRect(x, H - h, w, 1);
+          for (let yy = H - h + 3; yy < H - 3; yy += 3) for (let xx = x + 1; xx < x + w - 1; xx += 2) this.wins.push([xx, yy, Math.random()]);
+          x += w + 1 + (Math.random() * 3 | 0); }
+      },
+      init(st) { st.t = 0; },
+      tick(g, st, W, H, t, dt, hot, dk) {
+        for (const [x, y, r] of SCENES.consica.wins || []) { const on = Math.sin(t * .4 + r * 30) > (hot ? -.4 : .1); g.fillStyle = on ? (dk ? '#ffd98a' : '#e9fbff') : (dk ? '#18283a' : '#3f7e86'); g.fillRect(x, y, 1, 1); }
+        // a few pixels drifting up, like code shipping
+        for (let i = 0; i < 6; i++) { const y = H - ((t * 8 + i * 13) % (H + 4)), x = (i * 37 + 11) % W; g.globalAlpha = .6; g.fillStyle = dk ? '#7fe0d0' : '#ffffff'; g.fillRect(x, Math.round(y), 1, 1); }
+        g.globalAlpha = 1;
+      }
+    },
     lami: {
       paint(g, W, H, dk) {
         grad(g, W, H, dk ? '#2e1c33' : '#f3b7a8', dk ? '#6a3448' : '#fde6d6');
@@ -143,5 +163,17 @@
     new MutationObserver(() => cards.forEach(build)).observe(R, { attributes: true, attributeFilter: ['data-theme'] });
     if (!reduce) requestAnimationFrame(loop);
   }
+  // public: an animated mini scene for any canvas (js/link-previews.js)
+  window.PixelCards = {
+    mount(kind, canvas, wpx, hpx) {
+      if (!SCENES[kind]) return null;
+      const W = Math.ceil(wpx / S), H = Math.ceil(hpx / S), o = { kind, c: canvas, g: canvas.getContext('2d'), st: {}, hot: true, on: true, last: 0, W, H };
+      canvas.width = W; canvas.height = H; canvas.style.width = W * S + 'px'; canvas.style.height = H * S + 'px'; o.g.imageSmoothingEnabled = false;
+      o.bg = cv(W, H); SCENES[kind].paint(o.bg.getContext('2d'), W, H, isDark()); SCENES[kind].init(o.st, W, H); draw(o, performance.now(), 0);
+      let raf = 0, last = performance.now(); const run = now => { raf = requestAnimationFrame(run); if (now - last < 40) return; const dt = Math.min(.1, (now - last) / 1000); last = now; draw(o, now, reduce ? 0 : dt); };
+      if (!reduce) raf = requestAnimationFrame(run);
+      return { stop() { cancelAnimationFrame(raf); } };
+    }
+  };
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', boot); else boot();
 })();

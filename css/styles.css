@@ -2129,11 +2129,79 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
 .painted-card { border-radius: 10px; }
 @media (max-width: 540px) { .painted-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } }
 
-/* ---------- koi pond: an inset rounded window that opens to full screen as it snaps in ---------- */
-.pond-frame { clip-path: inset(7% 5% 7% 5% round 28px); transition: clip-path 1s var(--ease-out-expo); }
-.pond-frame > canvas#pond-c { transform: scale(1.06); transform-origin: 50% 50%; transition: transform 1.2s var(--ease-out-expo); }
-.pond-section.is-open .pond-frame { clip-path: inset(0 0 0 0 round 0); }
-.pond-section.is-open .pond-frame > canvas#pond-c { transform: none; }
-.pond-head { transition: opacity .6s ease, transform .8s var(--ease-out-expo); }
-.pond-section.is-open .pond-head { opacity: 0; transform: translateY(-8px); }
-@media (prefers-reduced-motion: reduce) { .pond-frame { clip-path: none; transition: none; } .pond-frame > canvas#pond-c { transform: none; transition: none; } }
+/* ---------- koi pond: the window shape follows the scroll (--pk: 1 closed .. 0 open, set by js/motion.js) ---------- */
+.pond-section { --pk: 1; --pp: 0; }
+.pond-frame { clip-path: inset(calc(var(--pk) * 8%) calc(var(--pk) * 6%) calc(var(--pk) * 8%) calc(var(--pk) * 6%) round calc(var(--pk) * 30px)); }
+.pond-frame > canvas#pond-c { transform: scale(calc(1 + var(--pk) * .07)); transform-origin: 50% 50%; }
+.pond-head { opacity: calc(1 - var(--pp) * 1.6); transform: translateY(calc(var(--pp) * -10px)); }
+.pond-dive {
+  margin-left: 6px; padding: 3px 9px; border: 1px solid var(--border-strong); border-radius: 999px; background: none; cursor: pointer;
+  font: 600 .66rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary);
+  transition: background-color .2s ease, color .2s ease, transform .4s var(--spring);
+}
+.pond-dive span { display: inline-block; animation: pondNudge 1.6s var(--ease-in-out) infinite; }
+.pond-dive:hover { background: var(--text-primary); color: var(--bg); transform: translateY(1px); }
+@keyframes pondNudge { 50% { transform: translateY(2px); } }
+.pond-up {
+  position: absolute; top: 14px; left: 50%; z-index: 3; transform: translate(-50%, -14px); opacity: 0; pointer-events: none;
+  padding: 7px 13px 6px; border: 0; border-radius: 999px; cursor: pointer; color: #f4ead8; background: rgba(12, 16, 12, .55);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font: 600 .68rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25); transition: opacity .45s ease, transform .6s var(--spring), background-color .2s ease;
+}
+.pond-section.is-open .pond-up { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; transition-delay: .25s; }
+.pond-up:hover { background: rgba(12, 16, 12, .75); }
+@media (prefers-reduced-motion: reduce) { .pond-frame { clip-path: none; } .pond-frame > canvas#pond-c { transform: none; } .pond-dive span { animation: none; } }
+
+/* ==========================================================================
+   LINK PREVIEWS (js/link-previews.js)
+   ========================================================================== */
+.lp-card {
+  position: fixed; z-index: 80; width: 288px; border-radius: 14px; overflow: visible; pointer-events: none; cursor: pointer;
+  background: var(--bg-elevated); border: 1px solid var(--border-line);
+  box-shadow: 0 24px 48px -18px rgba(10, 10, 30, .35), 0 2px 6px rgba(10,10,30,.06);
+  opacity: 0; transform: translateY(8px) scale(.94) rotate(0deg); filter: blur(3px);
+  transition: opacity .18s ease, transform .3s var(--ease-out-expo), filter .25s ease;
+}
+.lp-card.on { opacity: 1; pointer-events: auto; filter: none; transform: translateX(var(--shift, 0px)) rotate(var(--lean, 0deg)); transition: opacity .25s ease, transform .55s var(--spring), filter .3s ease; }
+.lp-card.below { transform: translateY(-8px) scale(.94); }
+.lp-card.below.on { transform: translateX(var(--shift, 0px)) rotate(var(--lean, 0deg)); }
+.lp-banner { position: relative; height: 96px; border-radius: 13px 13px 0 0; overflow: hidden; background: var(--bg-hover); }
+.lp-banner canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+.lp-logo { position: absolute; left: 14px; bottom: -16px; width: 38px; height: 38px; border-radius: 10px; background: #fff; display: grid; place-items: center; box-shadow: 0 0 0 3px var(--bg-elevated), 4px 4px 0 0 rgba(20,16,40,.18); }
+.lp-banner { overflow: visible; }
+.lp-banner canvas { border-radius: 13px 13px 0 0; }
+.lp-logo img { width: 24px; height: 24px; object-fit: contain; }
+.lp-body { padding: 22px 16px 14px; font-family: 'Poppins', var(--font-sans); }
+.lp-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.lp-title { font-size: .95rem; font-weight: 600; color: var(--text-primary); }
+.lp-tag { font: 500 .62rem/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+.lp-desc { margin: 6px 0 10px; font-size: .78rem; line-height: 1.55; color: var(--text-secondary); }
+.lp-url { font: 500 .68rem/1 var(--font-mono); color: var(--text-primary); border-bottom: 1px dashed var(--border-strong); padding-bottom: 2px; }
+.lp-caret { position: absolute; left: var(--cx, 50%); bottom: -6px; width: 12px; height: 12px; margin-left: -6px; background: var(--bg-elevated); border-right: 1px solid var(--border-line); border-bottom: 1px solid var(--border-line); transform: rotate(45deg); }
+.lp-card.below .lp-caret { bottom: auto; top: -6px; transform: rotate(225deg); }
+@media (prefers-reduced-motion: reduce) { .lp-card, .lp-card.on { transition: opacity .15s ease; transform: none; filter: none; } }
+
+/* ==========================================================================
+   FOOTER DIORAMA (js/pixel-footer.js): the footer stands on the soil of the scene
+   ========================================================================== */
+pixel-footer { display: block; position: relative; width: 100vw; margin: 56px 0 0 calc(50% - 50vw); overflow: hidden; pointer-events: auto; min-height: 280px;
+  /* until the scene draws, a soil band keeps the footer text readable */
+  background: linear-gradient(to bottom, transparent calc(100% - 120px), #6a4a30 calc(100% - 120px), #463120); }
+[data-theme="dark"] pixel-footer { background: linear-gradient(to bottom, transparent calc(100% - 120px), #30231b calc(100% - 120px), #1d1511); }
+pixel-footer canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+.site-footer { position: relative; z-index: 2; padding: 22px 0 18px; color: #f1e4cf; margin-top: -110px; }
+.site-footer .footer-links a { color: #f1e4cf; opacity: .92; }
+.site-footer .footer-links a:hover { color: #ffffff; opacity: 1; }
+.site-footer .ft-bottom { color: rgba(241, 228, 207, .7); border-top-color: rgba(241, 228, 207, .18); }
+.site-footer .ft-up { color: #f1e4cf; }
+.site-footer .ft-up:hover { color: #fff; }
+.minimal-wrapper { padding-bottom: 0; }
+@media (max-width: 600px) { pixel-footer { margin-top: 36px; } }
+/* while the pond script loads, the window shows grass instead of a black hole */
+.pond-frame {
+  background-color: #2f5a2c;
+  background-image:
+    radial-gradient(circle at 30% 40%, rgba(60, 110, 140, .55) 0 18%, transparent 19%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,.06) 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 3px, transparent 3px 6px);
+}

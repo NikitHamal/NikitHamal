@@ -17,7 +17,7 @@
     const groups = [
       '.top-bar', '.avatar-container', '.profile-name', '.profile-name-row pixel-dog', '.profile-bio',
       '.accordion-item', '.read-article-header', '.read-cover-art', '.read-prose-body', '.writing-header', '.page-header',
-      '.writing-controls', '.writing-list > *', '.writing-grid > *', 'pixel-horizon', '.minimal-footer', '.pond-head', '.pond-frame'
+      '.writing-controls', '.writing-list > *', '.writing-grid > *', 'pixel-footer', '.minimal-footer', '.pond-head', '.pond-frame'
     ];
     const els = [];
     groups.forEach(sel => D.querySelectorAll(sel).forEach(el => { if (!els.includes(el) && !el.closest('.rv')) els.push(el); }));
@@ -89,39 +89,48 @@
   }
 
   /* ---------- koi pond: opens full screen or not at all ----------
-     When scrolling settles with the pond only partly on screen, glide it fully open (if you were heading down)
-     or fully closed (heading up). While closed it sits as an inset, rounded window; it expands to the full
-     screen as it snaps in and shrinks back as it leaves. */
+     The pond's window shape is tied to its scroll position: closed, it is an inset rounded window; as it rises it
+     widens until it fills the screen exactly when it reaches the top. When scrolling settles halfway, it glides fully
+     open (heading down) or fully closed (heading up). "dive in" / "back up" buttons and Esc do the same. */
   function pondSnap() {
     const frame = D.getElementById('pond'), sec = frame && frame.closest('.pond-section'); if (!frame || !sec) return;
-    let lastY = scrollY, dir = 0, timer = 0, anim = 0, touching = false;
-    const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const glide = (to, open) => {
-      cancelAnimationFrame(anim); sec.classList.toggle('is-open', open);
-      const from = scrollY, dist = to - from; if (Math.abs(dist) < 2) return;
+    let lastY = scrollY, dir = 0, timer = 0, anim = 0, touching = false, gliding = false, wasOpen = false, ticking = false;
+    const ease = t => t < .5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2;     // easeInOutQuint
+    const openTop = () => scrollY + frame.getBoundingClientRect().top, closedTop = () => openTop() - innerHeight;
+    const shape = () => {                                     // window shape follows the scroll position
+      ticking = false; const r = frame.getBoundingClientRect(), vh = innerHeight;
+      const p = Math.max(0, Math.min(1, 1 - r.top / vh)), k = Math.pow(1 - p, 1.4);
+      sec.style.setProperty('--pk', k.toFixed(4)); sec.style.setProperty('--pp', p.toFixed(4));
+      const open = Math.abs(r.top) < 2; sec.classList.toggle('is-open', open);
+      if (open !== wasOpen) { wasOpen = open; D.dispatchEvent(new CustomEvent('sky:sfx', { detail: open ? 'open' : 'close' })); }
+    };
+    const glide = to => {
+      cancelAnimationFrame(anim); const from = scrollY, dist = to - from; if (Math.abs(dist) < 2) return;
       if (reduce) { scrollTo({ top: to, behavior: 'instant' }); return; }
-      const dur = Math.min(900, 420 + Math.abs(dist) * .6), t0 = performance.now();
-      const step = now => { const k = Math.min(1, (now - t0) / dur); scrollTo({ top: from + dist * ease(k), behavior: 'instant' }); if (k < 1) anim = requestAnimationFrame(step); else lastY = scrollY; };
+      gliding = true; const dur = Math.min(1000, 520 + Math.abs(dist) * .55), t0 = performance.now();
+      const step = now => { const k = Math.min(1, (now - t0) / dur); scrollTo({ top: from + dist * ease(k), behavior: 'instant' }); if (k < 1) anim = requestAnimationFrame(step); else { gliding = false; lastY = scrollY; } };
       anim = requestAnimationFrame(step);
     };
     const settle = () => {
-      if (touching) return;
+      if (touching || gliding) return;
       const r = frame.getBoundingClientRect(), vh = innerHeight, vis = Math.min(vh, r.bottom) - Math.max(0, r.top);
-      if (vis <= 1) { sec.classList.remove('is-open'); return; }                 // fully closed
-      if (r.top >= -1 && r.top <= 1) { sec.classList.add('is-open'); return; }   // fully open
-      if (r.top < 0) return;                                                    // (frame taller than the screen: leave it)
-      const frac = vis / vh, open = dir >= 0 ? frac > .1 : frac > .9;           // a nudge down opens, a nudge up closes
-      glide(open ? scrollY + r.top : scrollY + r.top - vh, open);
+      if (vis <= 1 || Math.abs(r.top) < 2 || r.top < 0) return;
+      const frac = vis / vh, open = dir >= 0 ? frac > .1 : frac > .9;
+      glide(open ? openTop() : closedTop());
     };
     addEventListener('scroll', () => {
-      const y = scrollY; if (y !== lastY) dir = y > lastY ? 1 : -1; lastY = y;
-      // heading up out of an open pond: start closing the window right away
-      if (dir < 0 && sec.classList.contains('is-open') && frame.getBoundingClientRect().top > 2) sec.classList.remove('is-open');
-      clearTimeout(timer); timer = setTimeout(settle, 160);
+      const y = scrollY; if (!gliding && y !== lastY) dir = y > lastY ? 1 : -1; lastY = y;
+      if (!ticking) { ticking = true; requestAnimationFrame(shape); }
+      if (!gliding) { clearTimeout(timer); timer = setTimeout(settle, 150); }
     }, { passive: true });
-    addEventListener('touchstart', () => { touching = true; cancelAnimationFrame(anim); }, { passive: true });
-    addEventListener('touchend', () => { touching = false; clearTimeout(timer); timer = setTimeout(settle, 220); }, { passive: true });
-    addEventListener('wheel', () => cancelAnimationFrame(anim), { passive: true });
+    addEventListener('resize', shape, { passive: true }); shape();
+    addEventListener('touchstart', () => { touching = true; if (gliding) { cancelAnimationFrame(anim); gliding = false; } }, { passive: true });
+    addEventListener('touchend', () => { touching = false; clearTimeout(timer); timer = setTimeout(settle, 200); }, { passive: true });
+    addEventListener('wheel', () => { if (gliding) { cancelAnimationFrame(anim); gliding = false; } }, { passive: true });
+    const dive = sec.querySelector('.pond-dive'), up = sec.querySelector('.pond-up');
+    if (dive) dive.addEventListener('click', () => { dir = 1; glide(openTop()); });
+    if (up) up.addEventListener('click', () => { dir = -1; glide(closedTop()); });
+    D.addEventListener('keydown', e => { if (e.key === 'Escape' && sec.classList.contains('is-open') && !D.querySelector('dialog[open]')) { dir = -1; glide(closedTop()); } });
   }
 
   function boot() { indices(); reveals(); header(); tilt(); pondSnap(); setTimeout(magnetic, 50); }
