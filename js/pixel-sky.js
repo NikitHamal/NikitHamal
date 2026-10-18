@@ -948,28 +948,14 @@ function bootSparkles() {
 }
 
 /* ================================================================== */
-/*  FOOTER: monogram, a live Kathmandu clock, a balloon back to top    */
+/*  FOOTER: links, copyright and a balloon that floats you back to top  */
 /* ================================================================== */
 const BALLOON_ROWS = ['...aaaaa...', '..abbabbaa.', '.aabbabbaaa', '.aabbabbaaa', 'aaabbabbaaa', '.aabbabbaa.', '..aabbbaa..', '...aabaa...', '....aaa....', '....c.c....', '....c.c....', '....ddd....', '....ddd....'];
 function bootFooter() {
   const f = D.querySelector('.minimal-footer'); if (!f || f.dataset.v2) return; f.dataset.v2 = '1'; f.classList.add('site-footer');
-  const mono = (x0, x1, ox) => svgRects(MONO.map(r => r.slice(x0, x1)), { X: 'currentColor' }, ox);
-  const top = D.createElement('div'); top.className = 'ft-top';
-  top.innerHTML = `<a class="ft-brand" href="/" aria-label="Nikit Hamal, home"><svg viewBox="-1 -1 13 7" aria-hidden="true" shape-rendering="crispEdges">${mono(0, 5, 0)}${mono(6, 11, 6)}<rect x="11.5" y="4" width="1" height="1" fill="#e8505f"/></svg><span>Nikit Hamal</span></a>
-    <span class="ft-clock" title="My local time"><span class="ft-ico" aria-hidden="true"></span><time class="ft-time"></time><span class="ft-where">in Kathmandu</span></span>`;
-  const note = D.createElement('p'); note.className = 'ft-note'; note.textContent = 'Made with pixels and patience in Nepal.';
   const bottom = D.createElement('div'); bottom.className = 'ft-bottom';
   bottom.innerHTML = `<span>&copy; ${new Date().getFullYear()} Nikit Hamal</span><button type="button" class="ft-up"><span class="ft-balloon" aria-hidden="true"><svg viewBox="0 0 11 13" shape-rendering="crispEdges">${svgRects(BALLOON_ROWS, { a: '#e3606d', b: '#f7d36a', c: '#8a7a68', d: '#9a6a44' })}</svg></span><span>Back to top</span></button>`;
-  f.prepend(top, note); f.appendChild(bottom);
-  // the clock: my time, with a little sun or moon for whether it is day there
-  const sun = svgRects(grid(8, (x, y) => { const d = Math.hypot(x + .5 - 4, y + .5 - 4); return d < 2.2 ? 'y' : (d > 3 && d < 3.9 && (x === 3 || x === 4 || y === 3 || y === 4)) ? 'o' : ''; }), { y: '#ffc23d', o: '#f2931f' });
-  const moon = svgRects(grid(8, (x, y) => { const a = Math.hypot(x + .5 - 4, y + .5 - 4), b2 = Math.hypot(x + .5 - 5.6, y + .5 - 2.8); return a < 3.3 && b2 > 2.6 ? 'm' : ''; }), { m: '#e9dfb4' });
-  const ico = top.querySelector('.ft-ico'), tm = top.querySelector('.ft-time');
-  const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kathmandu', hour: 'numeric', minute: '2-digit' });
-  const hourFmt = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kathmandu', hour: 'numeric', hour12: false });
-  const tick = () => { const d = new Date(), h = +hourFmt.format(d) % 24, day = h >= 6 && h < 18; tm.textContent = fmt.format(d).toLowerCase(); tm.dateTime = d.toISOString();
-    if (ico.dataset.day !== String(day)) { ico.dataset.day = day; ico.innerHTML = `<svg viewBox="0 0 8 8" shape-rendering="crispEdges">${day ? sun : moon}</svg>`; ico.title = day ? 'Daytime in Kathmandu' : 'Night in Kathmandu'; } };
-  tick(); setInterval(tick, 20000);
+  f.appendChild(bottom);
   // back to top: the balloon lifts off and the page follows it up
   const up = bottom.querySelector('.ft-up');
   up.addEventListener('click', () => { up.classList.remove('lift'); void up.offsetWidth; up.classList.add('lift'); D.dispatchEvent(new CustomEvent('sky:sfx', { detail: 'whoosh' })); scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); setTimeout(() => up.classList.remove('lift'), 1600); });

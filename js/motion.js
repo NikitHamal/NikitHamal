@@ -88,6 +88,42 @@
     });
   }
 
-  function boot() { indices(); reveals(); header(); tilt(); setTimeout(magnetic, 50); }
+  /* ---------- koi pond: opens full screen or not at all ----------
+     When scrolling settles with the pond only partly on screen, glide it fully open (if you were heading down)
+     or fully closed (heading up). While closed it sits as an inset, rounded window; it expands to the full
+     screen as it snaps in and shrinks back as it leaves. */
+  function pondSnap() {
+    const frame = D.getElementById('pond'), sec = frame && frame.closest('.pond-section'); if (!frame || !sec) return;
+    let lastY = scrollY, dir = 0, timer = 0, anim = 0, touching = false;
+    const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const glide = (to, open) => {
+      cancelAnimationFrame(anim); sec.classList.toggle('is-open', open);
+      const from = scrollY, dist = to - from; if (Math.abs(dist) < 2) return;
+      if (reduce) { scrollTo({ top: to, behavior: 'instant' }); return; }
+      const dur = Math.min(900, 420 + Math.abs(dist) * .6), t0 = performance.now();
+      const step = now => { const k = Math.min(1, (now - t0) / dur); scrollTo({ top: from + dist * ease(k), behavior: 'instant' }); if (k < 1) anim = requestAnimationFrame(step); else lastY = scrollY; };
+      anim = requestAnimationFrame(step);
+    };
+    const settle = () => {
+      if (touching) return;
+      const r = frame.getBoundingClientRect(), vh = innerHeight, vis = Math.min(vh, r.bottom) - Math.max(0, r.top);
+      if (vis <= 1) { sec.classList.remove('is-open'); return; }                 // fully closed
+      if (r.top >= -1 && r.top <= 1) { sec.classList.add('is-open'); return; }   // fully open
+      if (r.top < 0) return;                                                    // (frame taller than the screen: leave it)
+      const frac = vis / vh, open = dir >= 0 ? frac > .1 : frac > .9;           // a nudge down opens, a nudge up closes
+      glide(open ? scrollY + r.top : scrollY + r.top - vh, open);
+    };
+    addEventListener('scroll', () => {
+      const y = scrollY; if (y !== lastY) dir = y > lastY ? 1 : -1; lastY = y;
+      // heading up out of an open pond: start closing the window right away
+      if (dir < 0 && sec.classList.contains('is-open') && frame.getBoundingClientRect().top > 2) sec.classList.remove('is-open');
+      clearTimeout(timer); timer = setTimeout(settle, 160);
+    }, { passive: true });
+    addEventListener('touchstart', () => { touching = true; cancelAnimationFrame(anim); }, { passive: true });
+    addEventListener('touchend', () => { touching = false; clearTimeout(timer); timer = setTimeout(settle, 220); }, { passive: true });
+    addEventListener('wheel', () => cancelAnimationFrame(anim), { passive: true });
+  }
+
+  function boot() { indices(); reveals(); header(); tilt(); pondSnap(); setTimeout(magnetic, 50); }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', boot); else boot();
 })();

@@ -21,7 +21,7 @@
     if (el.dataset.eager == null) img.loading = 'lazy';
     // 560x700 for the avatar and gallery (sharp at 3x), the full 800x1000 only in the fullscreen viewer
     const full = el.classList.contains('painted-full');
-    img.src = `assets/painted/${id}${full ? '' : '-sm'}.webp`; if (!full) { img.srcset = `assets/painted/${id}-sm.webp 560w, assets/painted/${id}.webp 800w`; img.sizes = el.id === 'avatarPainted' ? '112px' : '(max-width: 540px) 46vw, 200px'; }
+    img.src = `assets/painted/${id}${full ? '' : '-sm'}.webp`; if (!full) { img.srcset = `assets/painted/${id}-sm.webp 560w, assets/painted/${id}.webp 800w`; img.sizes = el.id === 'avatarPainted' ? '112px' : '(max-width: 540px) 31vw, 110px'; }
     el.appendChild(img);
     const ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ov.setAttribute('viewBox', '0 0 800 1000'); ov.setAttribute('class', 'painted-eyes'); ov.setAttribute('aria-hidden', 'true');
     // 'slice' scales the eyes exactly like object-fit: cover scales the painting, so they stay glued to the face
@@ -48,13 +48,14 @@
     const dt = Math.min(0.1, (now - last) / 1000); last = now; const idle = (now - lastMove) / 1000;
     for (const el of live) {
       if (!el.isConnected) { live.delete(el); if (io) io.unobserve(el); continue; }
-      if (!onScreen.has(el)) continue;
-      const r = el.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) continue;
+      // only the zoomed-in painting in the viewer follows the pointer; the avatar and the gallery keep a calm,
+      // straight gaze and just blink (and wink now and then)
+      if (!el.classList.contains('painted-full') || !onScreen.has(el)) continue;
+      const r = el.getBoundingClientRect(); if (!r.width) continue;
       const cx = r.left + r.width / 2, cy = r.top + r.height * 0.37, dx = px - cx, dy = py - cy, m = Math.hypot(dx, dy) || 1;
-      const full = el.classList.contains('painted-full'), reach = full ? Infinity : Math.max(170, Math.max(r.width, r.height) * 1.9);
-      const near = idle < 3 && m < reach && !reduce;
+      const near = idle < 3 && !reduce;
       let tx, ty;
-      if (near) { const k = Math.min(1, m / (r.width * (full ? 0.9 : 1.4))); tx = dx / m * k; ty = dy / m * k; }
+      if (near) { const k = Math.min(1, m / (r.width * 0.9)); tx = dx / m * k; ty = dy / m * k; }
       else if (!reduce) { const s = el._seed, t = now / 1000; tx = Math.sin(t * 0.37 + s) * 0.7 + Math.sin(t * 0.91 + s * 2) * 0.3; ty = Math.sin(t * 0.29 + s * 3) * 0.35; if (Math.sin(t * 0.21 + s) > 0.93) tx = Math.sign(tx) * 0.95; }
       else { tx = 0; ty = 0; }
       const g = el._g, f = 1 - Math.pow(near ? 0.0004 : 0.08, dt); g.x += (tx - g.x) * f; g.y += (ty - g.y) * f;
@@ -65,7 +66,10 @@
   }
   requestAnimationFrame(tick);
   (function blinker() {
-    for (const el of live) { if (!onScreen.has(el)) continue; const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < 0.4) { shut(el); if (Math.random() < 0.15) setTimeout(() => shut(el), 260); } }
+    for (const el of live) { if (!onScreen.has(el)) continue; const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && Math.random() < 0.4) {
+      const full = el.classList.contains('painted-full');
+      if (!full && Math.random() < 0.07) shut(el, Math.random() < 0.5 ? 'l' : 'r', 360);   // an occasional wink
+      else { shut(el); if (Math.random() < 0.15) setTimeout(() => shut(el), 260); } } }
     setTimeout(blinker, 1400 + Math.random() * 1800);
   })();
 

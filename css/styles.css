@@ -1252,7 +1252,7 @@ img.writing-mini-thumb {
   .pond-hint { display: none; }
   /* Phones: a shorter finale band — 100svh is a long dark scroll-trap on
      small screens. Sim + toolbar follow the frame height automatically. */
-  .pond-frame { height: 82vh; height: 82svh; }
+  /* (phones get the full-height pond too: it snaps open / closed, so it is never a scroll trap) */
   /* Mobile footer keeps GitHub / Writing / Email only. */
   /* (all footer links stay visible: the v2 footer wraps them cleanly) */
 }
@@ -2087,12 +2087,8 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
 :root { --font-display: 'Instrument Serif', var(--font-serif); --font-pixel: 'Silkscreen', var(--font-mono); }
 .profile-name { font-family: var(--font-display); font-weight: 400; font-size: 3rem; letter-spacing: -0.01em; line-height: 1.05; }
 .profile-name .ch:nth-child(n+7) { font-style: italic; }
-.skill-readout { font-family: var(--font-display); font-weight: 400; font-size: 1.4rem; }
 .ft-brand { font-family: var(--font-display); font-weight: 400; font-size: 1.3rem; }
-.accordion-header .accordion-title { font-family: var(--font-pixel); font-weight: 400; font-size: .86rem; letter-spacing: .08em; }
-.accordion-item.open .accordion-title { font-weight: 700; }
-.pond-title { font-family: var(--font-pixel); letter-spacing: .1em; }
-@media (max-width: 600px) { .profile-name { font-size: 2.55rem; } .accordion-header .accordion-title { font-size: .8rem; } }
+@media (max-width: 600px) { .profile-name { font-size: 2.55rem; } }
 
 /* ==========================================================================
    PROJECT CARDS v2: a pixel scene per project (js/pixel-cards.js), pixel-framed app badge
@@ -2109,15 +2105,35 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
   box-shadow: 0 0 0 3px rgba(255,255,255,.95), 5px 5px 0 0 rgba(20, 16, 40, .22);
 }
 .project-card:hover .project-card-icon { transform: translateY(-3px) rotate(-4deg) scale(1.05); box-shadow: 0 0 0 3px #fff, 7px 8px 0 0 rgba(20, 16, 40, .2); }
-.project-card-title { font-family: var(--font-display); font-weight: 400; font-size: 1.45rem; letter-spacing: 0; line-height: 1.1; }
+.project-card-title { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
 .project-card-body { gap: 8px; }
 .project-card-link { position: relative; }
 .project-card-link i { display: inline-block; transition: transform .5s var(--spring); }
 .project-card:hover .project-card-link i { transform: translateX(4px); }
 [data-theme="dark"] .project-card-icon { box-shadow: 0 0 0 3px rgba(255,255,255,.12), 5px 5px 0 0 rgba(0,0,0,.45); }
-@media (max-width: 600px) { .project-card-icon { width: 46px; height: 46px; } .project-card-title { font-size: 1.3rem; } }
+@media (max-width: 600px) { .project-card-icon { width: 46px; height: 46px; } }
 /* three project cards on a two-column grid: the last one spans the row with a wider banner */
 @media (min-width: 601px) {
   .project-cards > .project-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .project-cards > .project-card:last-child:nth-child(odd) .project-card-visual { aspect-ratio: 16 / 5; }
 }
+
+/* ---------- section contents in Poppins (homepage); the section labels keep their mono face ---------- */
+.accordion-inner { --font-sans: 'Poppins', 'Plus Jakarta Sans', system-ui, sans-serif; font-family: var(--font-sans); font-size: .86rem; line-height: 1.7; letter-spacing: .002em; }
+.accordion-inner .skill-readout { font-family: var(--font-sans); font-weight: 600; font-size: 1.02rem; letter-spacing: -0.01em; }
+.accordion-inner .project-card-desc, .accordion-inner .contact-meta span, .accordion-inner .writing-mini-meta { font-weight: 400; }
+.accordion-inner .contact-meta strong, .accordion-inner .writing-mini-title { font-family: var(--font-sans); font-weight: 500; }
+
+/* ---------- portraits: a compact single row on desktop, three across on phones ---------- */
+.painted-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.painted-card { border-radius: 10px; }
+@media (max-width: 540px) { .painted-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } }
+
+/* ---------- koi pond: an inset rounded window that opens to full screen as it snaps in ---------- */
+.pond-frame { clip-path: inset(7% 5% 7% 5% round 28px); transition: clip-path 1s var(--ease-out-expo); }
+.pond-frame > canvas#pond-c { transform: scale(1.06); transform-origin: 50% 50%; transition: transform 1.2s var(--ease-out-expo); }
+.pond-section.is-open .pond-frame { clip-path: inset(0 0 0 0 round 0); }
+.pond-section.is-open .pond-frame > canvas#pond-c { transform: none; }
+.pond-head { transition: opacity .6s ease, transform .8s var(--ease-out-expo); }
+.pond-section.is-open .pond-head { opacity: 0; transform: translateY(-8px); }
+@media (prefers-reduced-motion: reduce) { .pond-frame { clip-path: none; transition: none; } .pond-frame > canvas#pond-c { transform: none; transition: none; } }
