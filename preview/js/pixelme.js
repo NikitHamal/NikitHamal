@@ -120,9 +120,9 @@ function paint(P) {
   };
   const arm = (side, a, f, front) => {
     const sx = cx + side * 12, sy = shY + 2, ar = a * Math.PI / 180, fr = (a + f) * Math.PI / 180, sg = side;
-    const el = [sx + sg * Math.sin(ar) * 9, sy + Math.cos(ar) * 9], hd = [el[0] + sg * Math.sin(fr) * 9, el[1] + Math.cos(fr) * 9];
+    const el = [sx + sg * Math.sin(ar) * 10.5, sy + Math.cos(ar) * 10.5], hd = [el[0] + sg * Math.sin(fr) * 10, el[1] + Math.cos(fr) * 10];
     limb(sx, sy, el[0], el[1], 2.4, 'skin', 'skinShade'); limb(el[0], el[1], hd[0], hd[1], 2.2, 'skin', 'skinShade');
-    disc(hd[0], hd[1] + 0.5, 2.3, 'skin'); px(hd[0] + side, hd[1] + 1, 'skinShade'); px(hd[0] - side * 2, hd[1] - 1, 'skin');   // thumb
+    const hx_ = Math.round(hd[0]), hy_ = Math.round(hd[1]); rect(hx_ - 1, hy_ - 1, 4, 4, 'skin'); rect(hx_ - 1, hy_ + 2, 4, 1, 'skinShade'); px(hx_ + (side > 0 ? 3 : -1), hy_, 'skinShade'); px(hx_ - side * 2 + (side > 0 ? 0 : 1), hy_ - 1, 'skin');   // hand + thumb
     // sleeve
     limb(sx, sy - 0.5, sx + sg * Math.sin(ar) * 4.5, sy + Math.cos(ar) * 4.5, 3.4, 'tee', side > 0 ? 'teeShade' : null);
   };
@@ -171,10 +171,10 @@ function zee(ctx, x, y, sz) { x = Math.round(x); y = Math.round(y); ctx.fillRect
 const ease = t => t * t * (3 - 2 * t);
 
 // a pixel stage: canvas + crisp scaling + a loop that only runs while visible
-function Stage(el, update) {
+function Stage(el, update, opt = {}) {
   const cv = document.createElement('canvas'); el.appendChild(cv); const ctx = cv.getContext('2d');
   const st = { el, cv, ctx, W: 0, H: 0, scale: 3, t: 0 };
-  st.layout = () => { const r = el.getBoundingClientRect(); st.scale = r.width < 520 ? 2 : 3; st.W = Math.floor(r.width / st.scale); st.H = Math.floor(r.height / st.scale); cv.width = st.W; cv.height = st.H; cv.style.width = st.W * st.scale + 'px'; cv.style.height = st.H * st.scale + 'px'; st.onLayout && st.onLayout(); };
+  st.layout = () => { const r = el.getBoundingClientRect(); st.scale = r.width < 520 ? 2 : r.width >= 900 ? (opt.scale || 3) : 3; st.W = Math.floor(r.width / st.scale); st.H = Math.floor(r.height / st.scale); cv.width = st.W; cv.height = st.H; cv.style.width = st.W * st.scale + 'px'; cv.style.height = st.H * st.scale + 'px'; st.onLayout && st.onLayout(); };
   st.local = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / st.scale, y: (e.clientY - r.top) / st.scale }; };
   let vis = false, last = 0, acc = 0;
   const loop = now => { if (!vis) return; const dt = Math.min(0.05, (now - last) / 1000); last = now; st.t += dt; update(dt); acc += dt; if (acc >= 1 / 30 || reduce) { acc = 0; ctx.imageSmoothingEnabled = false; ctx.clearRect(0, 0, st.W, st.H); st.render(); } requestAnimationFrame(loop); };
@@ -225,7 +225,7 @@ function makeDog() {
   const ball = { on: false, x: 0, y: 0, vx: 0, vy: 0, held: true, ground: false };
   const hearts = [], dust = [];
   let lastAct = 0, nextAuto = 'fetch';
-  const S = Stage(el, update);
+  const S = Stage(el, update, { scale: 4 });
   S.onLayout = () => { me.x = Math.round(S.W * 0.3); if (!dog.x || dog.mode === "sit") dog.x = me.x + 46; };
   const gy = () => S.H - 6, home = () => me.x + 46;
   const setMe = m => { me.mode = m; me.mt = 0; }, setDog = m => { dog.mode = m; dog.mt = 0; };
@@ -397,17 +397,18 @@ function makeDog() {
 
 // ================================================================ more scenes
 const rnd = Math.random, clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-function ring(ctx, cx, cy, rx, ry, col, steps = 5, a0 = 0.22) {   // stepped radial glow (pixel-style light pool)
+function ring(ctx, cx, cy, rx, ry, col, steps = 5, a0 = 0.22, add = false) {   // stepped radial glow (pixel-style light pool)
+  if (add) ctx.globalCompositeOperation = 'lighter';
   for (let i = steps; i >= 1; i--) { const f = i / steps; ctx.globalAlpha = a0 * (1 - f) + 0.02; ctx.fillStyle = col;
     for (let y = -Math.ceil(ry * f); y <= ry * f; y++) { const w = Math.round(rx * f * Math.sqrt(Math.max(0, 1 - (y / (ry * f)) ** 2))); ctx.fillRect(Math.round(cx - w), Math.round(cy + y), w * 2 + 1, 1); } }
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
 }
 function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const w = Math.round((y / h) * h * 0.32 * (1 + ((y % 6) < 2 ? 0.25 : 0))); ctx.fillStyle = col; ctx.fillRect(x - w, base - h + y, w * 2 + 1, 1); if (snow && (y % 6) === 0 && y > 2) { ctx.fillStyle = snow; ctx.fillRect(x - w, base - h + y, w * 2 + 1, 1); } } ctx.fillStyle = col; ctx.fillRect(x - 1, base, 3, 3); }
 
 // ---------------------------------------------------------------- campfire under the stars
 (function campfire() {
   const el = document.getElementById('fireStage'); if (!el) return;
-  const S = Stage(el, update); let fx = 0, flare = 0, toast = 0, mall = 1, blink = 2;
+  const S = Stage(el, update, { scale: 4 }); let fx = 0, flare = 0, toast = 0, mall = 1, blink = 2;
   const flames = [], embers = [], smoke = [];
   S.onLayout = () => { fx = Math.round(S.W * 0.56); };
   const gy = () => S.H - 6, meX = () => fx - 34;
@@ -416,7 +417,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
   function update(dt) {
     flare *= Math.pow(0.3, dt); blink -= dt; if (blink < -0.12) blink = 2 + rnd() * 3;
     if (mall) { toast += dt * (0.05 + flare * 0.4); if (toast > 1.2) { mall = 0; setTimeout(() => { toast = 0; mall = 1; }, 2600); } }
-    const n = 3 + Math.round(flare * 6); for (let i = 0; i < n; i++) flames.push({ x: fx + (rnd() - 0.5) * (10 + flare * 6), y: gy() - 4, vy: -(18 + rnd() * 22) * (1 + flare), l: 0, max: 0.35 + rnd() * 0.35 });
+    const n = 6 + Math.round(flare * 8); for (let i = 0; i < n; i++) flames.push({ x: fx + (rnd() - 0.5) * (14 + flare * 6), y: gy() - 4, vy: -(18 + rnd() * 22) * (1 + flare), l: 0, max: 0.45 + rnd() * 0.4 });
     for (const f of flames) { f.l += dt; f.y += f.vy * dt; f.x += Math.sin(f.l * 20 + f.y) * 6 * dt + (fx - f.x) * dt * 2.5; }
     for (let i = flames.length - 1; i >= 0; i--) if (flames[i].l > flames[i].max) flames.splice(i, 1);
     if (rnd() < dt * 4) embers.push({ x: fx + (rnd() - 0.5) * 6, y: gy() - 10, vx: (rnd() - 0.5) * 8, vy: -16 - rnd() * 14, l: 0 });
@@ -431,14 +432,16 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     stars(c, S.W, S.H, t, g - 40, 0.9);
     // ground lit by the fire
     for (let y = g + 1; y < S.H; y++) { c.fillStyle = ['#1e2a1c', '#1a2418', '#162014'][Math.min(2, y - g - 1)] || '#141c12'; c.fillRect(0, y, S.W, 1); }
-    ring(c, fx, g, 70 * flick, 9, '#ff9a3c', 6, 0.35);
-    ring(c, fx, g - 14, 46 * flick, 34 * flick, '#ffb15a', 5, 0.12);
+    c.globalCompositeOperation = 'lighter';   // firelight: many faint warm discs = a smooth falloff
+    for (let i = 10; i >= 1; i--) { const f = i / 10; c.globalAlpha = 0.045; c.fillStyle = '#ff7a20'; c.beginPath(); c.ellipse(fx, g - 10, 64 * f * flick, 46 * f * flick, 0, 0, 7); c.fill(); }
+    for (let i = 6; i >= 1; i--) { const f = i / 6; c.globalAlpha = 0.07; c.fillStyle = '#ffb050'; c.fillRect(Math.round(fx - 74 * f * flick), g + 1, Math.round(148 * f * flick), 2); }
+    c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
     // logs and stones
-    c.fillStyle = '#4a2c1c'; c.fillRect(fx - 10, g - 2, 20, 3); c.fillStyle = '#6b4128'; c.fillRect(fx - 9, g - 3, 8, 2); c.fillRect(fx + 2, g - 1, 9, 2);
+    c.fillStyle = '#3a2216'; c.fillRect(fx - 13, g - 3, 26, 4); c.fillStyle = '#6b4128'; c.fillRect(fx - 12, g - 4, 11, 3); c.fillRect(fx + 2, g - 2, 12, 3); c.fillStyle = '#c86a2a'; c.fillRect(fx - 3, g - 2, 6, 1);
     for (let i = -3; i <= 3; i++) { c.fillStyle = i % 2 ? '#5a5a62' : '#74747e'; c.fillRect(fx + i * 5 - 2, g - 1, 4, 3); }
     // smoke, flames, embers
-    for (const s of smoke) { c.globalAlpha = 0.18 * (1 - s.l / 4); c.fillStyle = '#9aa0b8'; c.fillRect(Math.round(s.x - s.r), Math.round(s.y - s.r / 2), Math.round(s.r * 2), Math.round(s.r)); } c.globalAlpha = 1;
-    for (const f of flames) { const k = f.l / f.max; c.fillStyle = FL[Math.min(4, Math.floor(k * 5))]; const sz = k < 0.5 ? 2 : 1; c.fillRect(Math.round(f.x), Math.round(f.y), sz, sz); }
+    for (const s of smoke) { c.globalAlpha = 0.1 * (1 - s.l / 4); c.fillStyle = '#8a90a8'; c.fillRect(Math.round(s.x - s.r / 2), Math.round(s.y), Math.round(s.r), 1); c.fillRect(Math.round(s.x - s.r / 3), Math.round(s.y) - 1, Math.round(s.r * 0.66), 1); } c.globalAlpha = 1;
+    for (const f of flames) { const k = f.l / f.max; c.fillStyle = FL[Math.min(4, Math.floor(k * 5))]; const sz = k < 0.35 ? 3 : k < 0.65 ? 2 : 1; c.fillRect(Math.round(f.x), Math.round(f.y), sz, sz); }
     c.fillStyle = '#fff4c2'; c.fillRect(fx - 2, g - 6, 4, 3); c.fillStyle = '#ffd45a'; c.fillRect(fx - 4, g - 4, 8, 2);
     for (const e of embers) { c.fillStyle = e.l < 1 ? '#ffd45a' : '#ff7a2e'; c.globalAlpha = 1 - e.l / 2.2; c.fillRect(Math.round(e.x), Math.round(e.y), 1, 1); } c.globalAlpha = 1;
     // me, toasting a marshmallow, warm firelight on one side
@@ -452,7 +455,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
 // ---------------------------------------------------------------- rainy night under the street lamp
 (function rain() {
   const el = document.getElementById('rainStage'); if (!el) return;
-  const S = Stage(el, update); let lx = 0, flash = 0, startle = 0, blink = 2;
+  const S = Stage(el, update, { scale: 4 }); let lx = 0, flash = 0, startle = 0, blink = 2;
   const drops = [], splashes = [], rings = [];
   const WIN = []; for (let i = 0; i < 160; i++) WIN.push({ on: rnd() < 0.55, t: rnd() * 20 });
   S.onLayout = () => { lx = Math.round(S.W * 0.6); };
@@ -464,7 +467,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     for (let i = 0; i < 5; i++) drops.push({ x: rnd() * (S.W + 40) - 20, y: -4, v: 110 + rnd() * 40 });
     for (const d of drops) { d.y += d.v * dt; d.x -= d.v * 0.18 * dt; }
     for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i], ux = meX() + 12, inU = Math.abs(d.x - ux) < 27 && d.y > gy() - 112 && d.y < gy() - 106;
-      if (inU || d.y > gy()) { splashes.push({ x: d.x, y: inU ? gy() - 106 : gy() + 1, l: 0 }); if (!inU && rnd() < 0.3) rings.push({ x: d.x, y: gy() + 3 + (rnd() * 4 | 0), l: 0 }); drops.splice(i, 1); } }
+      if (inU || d.y > gy()) { splashes.push({ x: d.x, y: inU ? gy() - 106 + Math.round(Math.abs(d.x - ux) / 6) : gy() + 1, l: 0 }); if (!inU && rnd() < 0.3) rings.push({ x: d.x, y: gy() + 3 + (rnd() * 4 | 0), l: 0 }); drops.splice(i, 1); } }
     for (const s of splashes) s.l += dt; while (splashes.length && splashes[0].l > 0.2) splashes.shift();
     for (const r of rings) r.l += dt; while (rings.length && rings[0].l > 0.8) rings.shift();
     for (const w of WIN) { w.t -= dt; if (w.t < 0) { w.on = !w.on; w.t = 5 + rnd() * 25; } }
@@ -487,7 +490,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     // me with the umbrella
     const P = basePose(t); P.aR = 40; P.fR = -110; P.look = startle > 0 ? 0 : -0.4; P.eyes = blink < 0 ? 'closed' : 'open'; if (startle > 0) { P.browUp = 1; P.mouth = 'o'; P.eyes = 'open'; }
     drawMeT(c, meX(), g, P, 'rgba(40,60,120,0.22)');
-    const ux = meX() + 8, uy = g - 104; c.fillStyle = '#2a1d18'; c.fillRect(ux, uy, 1, 60);
+    const ux = meX() + 8, uy = g - 95; c.fillStyle = '#2a1d18'; c.fillRect(ux, uy, 1, 50);
     for (let y = 0; y < 10; y++) { const w = Math.round(28 * Math.sqrt(1 - ((10 - y) / 10.5) ** 2)); c.fillStyle = y < 2 ? '#e05656' : y > 7 ? '#8e2630' : '#c43a42'; c.fillRect(ux - w, uy - 10 + y, w * 2 + 1, 1); }
     c.fillStyle = '#6e1e26'; for (let i = -3; i <= 3; i++) c.fillRect(ux + i * 8, uy - 1, 1, 2); c.fillStyle = '#2a1d18'; c.fillRect(ux, uy - 12, 1, 2);
     // rain, splashes, ripples
@@ -501,7 +504,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
 // ---------------------------------------------------------------- late-night coding
 (function desk() {
   const el = document.getElementById('deskStage'); if (!el) return;
-  const S = Stage(el, update); let dx = 0, mode = 'type', mt = 0, blink = 2, win = 0, nextSip = 6;
+  const S = Stage(el, update, { scale: 4 }); let dx = 0, mode = 'type', mt = 0, blink = 2, win = 0, nextSip = 6;
   const steam = [], confetti = [], code = [];
   for (let i = 0; i < 14; i++) code.push({ w: 3 + (rnd() * 14 | 0), ind: (rnd() * 3 | 0) * 3, c: ['#7ad3ff', '#f2c66a', '#c38aff', '#8ee08a', '#e8e8f0'][i % 5] });
   S.onLayout = () => { dx = Math.round(S.W * 0.5); };
@@ -513,7 +516,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     if (mode === 'type' && nextSip < 0) { mode = rnd() < 0.5 ? 'sip' : 'stretch'; mt = 0; nextSip = 7 + rnd() * 6; }
     if ((mode === 'sip' && mt > 2.2) || (mode === 'stretch' && mt > 2.4) || (mode === 'yay' && mt > 2.2)) { mode = 'type'; mt = 0; }
     if (mode === 'type' && rnd() < dt * 3) { code.push(code.shift()); }
-    if (rnd() < dt * 3) steam.push({ x: dx + 30, y: gy() - 38, l: 0 }); for (const s of steam) { s.l += dt; s.y -= 7 * dt; s.x += Math.sin(s.l * 4) * 3 * dt; } while (steam.length && steam[0].l > 1.8) steam.shift();
+    if (rnd() < dt * 3) steam.push({ x: dx + 34, y: gy() - 38, l: 0 }); for (const s of steam) { s.l += dt; s.y -= 7 * dt; s.x += Math.sin(s.l * 4) * 3 * dt; } while (steam.length && steam[0].l > 1.8) steam.shift();
     for (const p of confetti) { p.l += dt; p.vy += 90 * dt; p.x += p.vx * dt; p.y += p.vy * dt; } while (confetti.length && confetti[0].l > 2.5) confetti.shift();
   }
   S.render = () => {
@@ -523,27 +526,33 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
       x.fillStyle = '#f2ecd2'; x.beginPath(); x.arc(wx + 52, 30, 5, 0, 7); x.fill(); for (let i = 0; i < 9; i++) { x.fillStyle = '#1b2244'; const h = 8 + (i * 7) % 16; x.fillRect(wx + i * 8, 17 + wh - h, 7, h); }
       x.fillStyle = '#3a3256'; x.fillRect(wx + ww / 2 - 1, 17, 2, wh); x.fillRect(wx, 17 + wh / 2, ww, 2);
       x.fillStyle = '#4a3a2c'; x.fillRect(S.W - 60, 30, 40, 3); x.fillStyle = '#7a5236'; for (let i = 0; i < 5; i++) x.fillRect(S.W - 58 + i * 7, 20 + (i % 2) * 2, 5, 10 - (i % 2) * 2);   // shelf + books
+      x.fillStyle = '#1a1530'; x.fillRect(Math.round(S.W * 0.55), 18, 30, 40); x.fillStyle = '#e05656'; x.fillRect(Math.round(S.W * 0.55) + 2, 20, 26, 36); x.fillStyle = '#f2c66a'; x.beginPath(); x.arc(Math.round(S.W * 0.55) + 15, 34, 7, 0, 7); x.fill(); x.fillStyle = '#2a1530'; x.fillRect(Math.round(S.W * 0.55) + 4, 44, 22, 2); x.fillRect(Math.round(S.W * 0.55) + 4, 48, 14, 2);
       x.fillStyle = '#3a6a3a'; x.fillRect(S.W - 30, 22, 6, 8); x.fillStyle = '#5a9a4a'; x.fillRect(S.W - 32, 18, 4, 5); x.fillRect(S.W - 26, 17, 4, 6); }), 0, 0);
     // me, seated behind the desk, lit by the screen
-    const P = basePose(t); P.eyes = blink < 0 ? 'closed' : 'open'; P.look = 0;
+    const P = basePose(t); P.eyes = blink < 0 ? 'closed' : 'open'; P.look = 1;
     if (mode === 'type') { const a = Math.floor(t * 9) % 2; P.aL = 34; P.fL = -60 + (a ? 6 : 0); P.aR = 34; P.fR = -60 + (a ? 0 : 6); }
-    if (mode === 'sip') { P.aR = 50; P.fR = -120; P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
+    if (mode === 'sip') { P.aL = 50; P.fL = -120; P.aR = 34; P.fR = -60; P.aL = 34; P.fL = -60; P.eyes = mt > 0.6 && mt < 1.6 ? 'closed' : P.eyes; }
     if (mode === 'stretch') { const u = Math.sin(Math.min(1, mt / 2.4) * Math.PI); P.aL = P.aR = 30 + u * 140; P.fL = P.fR = -40 + u * 30; P.mouth = u > 0.5 ? 'o' : 'line'; P.eyes = u > 0.5 ? 'closed' : P.eyes; }
     if (mode === 'yay') { P.aL = P.aR = 155; P.fL = P.fR = Math.sin(mt * 18) * 20; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
     ring(c, dx, g - 52, 40, 26, win > 0 ? '#8ee08a' : '#7ab8ff', 4, 0.1);
     c.fillStyle = '#3a2c46'; c.fillRect(dx - 16, g - 52, 32, 26); c.fillStyle = '#463656'; c.fillRect(dx - 16, g - 52, 32, 2);   // chair back
-    drawMeT(c, dx, g + 4, P, `rgba(${win > 0 ? '120,255,160' : '110,170,255'},0.16)`);
-    // desk, laptop (back to us, glowing), mug
-    c.fillStyle = '#6b4a32'; c.fillRect(dx - 56, g - 30, 112, 4); c.fillStyle = '#4e3524'; c.fillRect(dx - 54, g - 26, 108, S.H - g + 26); c.fillStyle = '#5a3e2a'; c.fillRect(dx - 50, g - 22, 46, 10); c.fillRect(dx + 4, g - 22, 46, 10); c.fillStyle = '#c9a46a'; c.fillRect(dx - 28, g - 18, 4, 1); c.fillRect(dx + 26, g - 18, 4, 1);   // desk with drawers
-    c.fillStyle = '#c8ccd6'; c.fillRect(dx - 18, g - 49, 36, 19); c.fillStyle = '#a8adb8'; c.fillRect(dx - 18, g - 49, 36, 1); c.fillRect(dx + 17, g - 49, 1, 19);
-    c.fillStyle = win > 0 ? '#8ee08a' : '#7ad3ff'; c.fillRect(dx - 3, g - 41, 2, 4); c.fillRect(dx + 1, g - 41, 2, 4); c.fillRect(dx - 1, g - 42, 2, 1); // logo glow
-    c.fillStyle = '#9aa0ac'; c.fillRect(dx - 24, g - 31, 48, 2);
-    c.fillStyle = '#e8e2d4'; c.fillRect(dx + 26, g - 38, 8, 8); c.fillStyle = '#c9c2b2'; c.fillRect(dx + 33, g - 36, 2, 4); c.fillStyle = '#4a2c1c'; c.fillRect(dx + 27, g - 37, 6, 1);
-    c.fillStyle = 'rgba(230,230,240,0.45)'; for (const s of steam) { c.globalAlpha = 0.5 * (1 - s.l / 1.8); c.fillRect(Math.round(s.x), Math.round(s.y), 1, 2); } c.globalAlpha = 1;
-    // a floating code panel to show what's on screen
-    const px = dx + 46, py = 18; c.fillStyle = 'rgba(16,18,36,0.85)'; c.fillRect(px, py, 60, 50); c.fillStyle = '#3a3256'; c.fillRect(px, py, 60, 5); c.fillStyle = '#e05656'; c.fillRect(px + 2, py + 2, 1, 1); c.fillStyle = '#f2c66a'; c.fillRect(px + 4, py + 2, 1, 1); c.fillStyle = '#8ee08a'; c.fillRect(px + 6, py + 2, 1, 1);
-    code.slice(0, 10).forEach((l, i) => { c.fillStyle = l.c; c.fillRect(px + 3 + l.ind, py + 8 + i * 4, l.w * 2, 2); });
-    if (Math.floor(t * 2) % 2) { c.fillStyle = '#e8e8f0'; c.fillRect(px + 3, py + 48, 2, 1); }
+    drawMeT(c, dx - 4, g + 4, P, `rgba(${win > 0 ? '120,255,160' : '110,170,255'},0.12)`);
+    // desk with drawers, monitor turned toward us, keyboard, mug, lamp, a sleeping cat
+    c.fillStyle = '#6b4a32'; c.fillRect(dx - 64, g - 30, 128, 4); c.fillStyle = '#86603e'; c.fillRect(dx - 64, g - 30, 128, 1);
+    c.fillStyle = '#4e3524'; c.fillRect(dx - 62, g - 26, 124, S.H - g + 26); c.fillStyle = '#5a3e2a'; c.fillRect(dx - 58, g - 22, 54, 10); c.fillRect(dx + 4, g - 22, 54, 10); c.fillStyle = '#c9a46a'; c.fillRect(dx - 33, g - 18, 4, 1); c.fillRect(dx + 29, g - 18, 4, 1);
+    const mx = dx + 30, my = g - 62;   // monitor
+    c.fillStyle = '#1c1a26'; c.fillRect(mx - 1, my - 1, 46, 32); c.fillStyle = '#0e1222'; c.fillRect(mx + 1, my + 1, 42, 26);
+    code.slice(0, 7).forEach((l, i) => { c.fillStyle = win > 0 && i === 6 ? '#8ee08a' : l.c; c.fillRect(mx + 3 + l.ind, my + 3 + i * 3, Math.min(36 - l.ind, l.w * 2), 1); });
+    if (Math.floor(t * 2) % 2) { c.fillStyle = '#e8e8f0'; c.fillRect(mx + 3, my + 24, 2, 1); }
+    c.fillStyle = '#2a2836'; c.fillRect(mx + 19, my + 31, 6, 5); c.fillRect(mx + 13, my + 35, 18, 2);
+    ring(c, mx + 22, my + 14, 40, 28, win > 0 ? '#1a4a20' : '#10304a', 5, 0.5, true);
+    c.fillStyle = '#d8d8e0'; c.fillRect(dx - 18, g - 33, 36, 3); c.fillStyle = '#a8a8b4'; for (let i = 0; i < 8; i++) c.fillRect(dx - 16 + i * 4, g - 32, 3, 1);   // keyboard
+    c.fillStyle = '#e8e2d4'; c.fillRect(dx - 34, g - 38, 8, 8); c.fillStyle = '#c9c2b2'; c.fillRect(dx - 27, g - 36, 2, 4); c.fillStyle = '#4a2c1c'; c.fillRect(dx - 33, g - 37, 6, 1);   // mug
+    c.fillStyle = '#2a2836'; c.fillRect(dx - 58, g - 31, 8, 1); c.fillRect(dx - 55, g - 52, 2, 21); c.fillRect(dx - 55, g - 53, 12, 2); c.fillStyle = '#e0a83a'; c.fillRect(dx - 46, g - 54, 8, 4);   // desk lamp
+    ring(c, dx - 42, g - 34, 26, 8, '#5a3a10', 4, 0.6, true);
+    const cb = Math.sin(t * 1.3) > 0 ? 0 : 1; c.fillStyle = '#2a2430'; c.fillRect(dx - 62, g - 37 + cb, 14, 7 - cb); c.fillRect(dx - 64, g - 35, 3, 5); c.fillStyle = '#3a3242'; c.fillRect(dx - 61, g - 36 + cb, 10, 2);   // cat, breathing
+    c.fillStyle = '#2a2430'; c.fillRect(dx - 66, g - 35, 2, 2); c.fillRect(dx - 65, g - 37, 1, 2); c.fillRect(dx - 62, g - 37, 1, 1); const tf = Math.floor(t * 1.5) % 4 === 0 ? 1 : 0; c.fillRect(dx - 48, g - 32 - tf, 5, 2);
+    c.fillStyle = 'rgba(230,230,240,0.45)'; for (const s2 of steam) { c.globalAlpha = 0.5 * (1 - s2.l / 1.8); c.fillRect(Math.round(s2.x - 64), Math.round(s2.y), 1, 2); } c.globalAlpha = 1;
     for (const p of confetti) { c.fillStyle = p.c; c.fillRect(Math.round(p.x), Math.round(p.y), 2, 1); }
   };
 })();
@@ -551,7 +560,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
 // ---------------------------------------------------------------- fishing at a Himalayan lake
 (function fishing() {
   const el = document.getElementById('fishStage'); if (!el) return;
-  const S = Stage(el, update); let mode = 'wait', mt = 0, blink = 2, bob = 0, nextBite = 5 + rnd() * 5, fish = null, catches = 0;
+  const S = Stage(el, update, { scale: 4 }); let mode = 'wait', mt = 0, blink = 2, bob = 0, nextBite = 5 + rnd() * 5, fish = null, catches = 0;
   const ripples = [], drops = [];
   const gy = () => S.H - 6, wy = () => Math.round(S.H * 0.62), dockEnd = () => Math.round(S.W * 0.42), meX = () => dockEnd() - 18, bobX = () => Math.round(S.W * 0.7);
   const reel = () => { if (mode === 'bite' || mode === 'wait') { mode = 'reel'; mt = 0; fish = { x: bobX(), y: wy(), l: 0 }; } };
@@ -576,9 +585,11 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
       const peaks = [[0.08, 40], [0.22, 62], [0.36, 50], [0.5, 74], [0.63, 58], [0.78, 68], [0.92, 46]];
       const ridge = X => { let h = 18; for (const [px, ph] of peaks) { const d = Math.abs(X / S.W - px) * S.W; h = Math.max(h, ph - d * (0.9 + 0.25 * Math.sin(X * 0.3 + ph))); } return Math.round(h + Math.sin(X * 0.7) * 1.5); };
       for (let X = 0; X < S.W; X++) { const h = ridge(X), lit = ridge(X - 1) < h; for (let y = w - h; y < w; y++) { const dep = y - (w - h), snowLine = h > 40 ? 6 + (h - 40) * 0.5 + (X % 4 === 0 ? 2 : 0) : 0; x.fillStyle = dep < snowLine ? (lit ? '#fbf6f8' : '#d6cde4') : (lit ? '#7a6c9c' : '#5e5486'); x.fillRect(X, y, 1, 1); } }
-      hills(x, S.W, w, 14, '#3e4a6e', 3, 0.05);
+      const sx0 = Math.round(S.W * 0.62); for (let r = 14; r > 0; r -= 3) { x.globalAlpha = 0.18; x.fillStyle = '#ffe6a8'; x.beginPath(); x.arc(sx0, w - 6, r + 6, 0, 7); x.fill(); } x.globalAlpha = 1; x.fillStyle = '#ffd88a'; x.beginPath(); x.arc(sx0, w - 6, 9, 0, 7); x.fill(); x.fillStyle = '#fff2c8'; x.beginPath(); x.arc(sx0 - 2, w - 8, 5, 0, 7); x.fill();
+      hills(x, S.W, w, 14, '#3e4a6e', 3, 0.05); for (let i = 0; i < 40; i++) { const px_ = (i * 37) % S.W, h = 6 + (i % 4) * 2; x.fillStyle = '#2e3858'; for (let k = 0; k < h; k++) x.fillRect(px_ - Math.floor(k / 3), w - 4 - h + k, 1 + Math.floor(k / 3) * 2, 1); }
       // water + reflections
       for (let y = w; y < S.H; y++) { const f = (y - w) / (S.H - w); x.fillStyle = f < 0.3 ? '#8a7aa8' : f < 0.6 ? '#6a6496' : '#4e4c7e'; x.fillRect(0, y, S.W, 1); } }), 0, 0);
+    for (let y = w + 1; y < S.H; y++) { const half = Math.round(3 + (y - w) * 0.35), j = Math.round(Math.sin(t * 3 + y * 1.7) * 2); c.globalAlpha = 0.5 - (y - w) / (S.H - w) * 0.3; c.fillStyle = (y + Math.floor(t * 6)) % 3 ? '#ffd88a' : '#fff2c8'; c.fillRect(Math.round(S.W * 0.62) - half + j, y, (y % 2) ? half * 2 : half, 1); } c.globalAlpha = 1;   // sun glitter
     for (let i = 0; i < 26; i++) { const y = w + 2 + (i * 7) % (S.H - w - 4), x0 = ((i * 53 + t * 8 * (i % 3 + 1)) % (S.W + 30)) - 15; c.fillStyle = i % 3 ? 'rgba(250,210,190,0.35)' : 'rgba(255,240,220,0.5)'; c.fillRect(Math.round(x0), y, 6 + (i % 5) * 2, 1); }
     // dock
     const de = dockEnd(), dy = w - 2; c.fillStyle = '#6b4a32'; c.fillRect(0, dy, de, 5); c.fillStyle = '#86603e'; for (let x = 0; x < de; x += 7) c.fillRect(x, dy, 6, 1); c.fillStyle = '#4a3222'; c.fillRect(0, dy + 4, de, 1);
@@ -603,7 +614,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
 // ---------------------------------------------------------------- stargazing on a hill
 (function stargaze() {
   const el = document.getElementById('starStage'); if (!el) return;
-  const S = Stage(el, update); let blink = 2, smile = 0, next = 3;
+  const S = Stage(el, update, { scale: 4 }); let blink = 2, smile = 0, next = 3;
   const shooting = [], flies = []; for (let i = 0; i < 14; i++) flies.push({ x: rnd(), y: rnd(), ph: rnd() * 6 });
   const gy = () => S.H - 6;
   const shoot = (x) => shooting.push({ x: x ?? S.W * (0.2 + rnd() * 0.6), y: 6 + rnd() * 20, l: 0, vx: 90 + rnd() * 40, vy: 40 + rnd() * 20 });
@@ -624,9 +635,11 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     for (const s of shooting) { for (let k = 0; k < 14; k++) { c.globalAlpha = (1 - k / 14) * (1 - s.l / 1.1); c.fillStyle = k < 2 ? '#ffffff' : '#bcd0ff'; c.fillRect(Math.round(s.x - k * 2), Math.round(s.y - k), 1, 1); } } c.globalAlpha = 1;
     // the hill and me lying on it, looking up
     for (let X = 0; X < S.W; X++) { const h = Math.round(22 + 10 * Math.sin(X * 0.012 + 0.5)); for (let y = g - h; y < S.H; y++) { c.fillStyle = y === g - h ? '#3a5a3a' : y < g - h + 3 ? '#26402a' : '#1a2e1e'; c.fillRect(X, y, 1, 1); } }
-    const mx = Math.round(S.W * 0.42), my = g - Math.round(22 + 10 * Math.sin(mx * 0.012 + 0.5)) + 1;
-    const P = basePose(t); P.bob = 0; P.aL = 12; P.fL = 4; P.aR = 30; P.fR = -40; P.look = 0; P.eyes = blink < 0 ? 'closed' : smile > 0 ? 'happy' : 'open'; P.mouth = smile > 0 ? 'smile' : 'line'; P.lR = 12; P.kR = -30;
-    drawMeLying(c, mx, my - 1, P, 'rgba(40,60,140,0.35)');
+    const mx = Math.round(S.W * 0.4), hillY = X => g - Math.round(22 + 10 * Math.sin(X * 0.012 + 0.5)), my = hillY(mx);
+    for (let i = -26; i <= 26; i++) { const yy = hillY(mx + i); for (let k = 0; k < 3; k++) { c.fillStyle = (((i + 30) >> 2) + k) % 2 ? '#a83a4a' : '#d8cfc0'; c.fillRect(mx + i, yy - 1 + k, 1, 1); } }   // checked picnic blanket
+    const P = sitPose(basePose(t), t); P.aL = 34; P.fL = -16; P.aR = 34; P.fR = -16; P.armsBehind = true; P.headDy = -1; P.browUp = 1;   // leaning back on my hands, face to the sky
+    P.look = shooting.length ? Math.max(-1, Math.min(1, (shooting[shooting.length - 1].x - mx) / 40)) : 0; P.eyes = blink < 0 ? 'closed' : smile > 0 ? 'happy' : 'open'; P.mouth = smile > 0 ? 'smile' : 'line';
+    drawMeT(c, mx, my, P, 'rgba(40,60,140,0.3)');
     for (const f of flies) { const a = 0.5 + 0.5 * Math.sin(f.ph * 3); if (a < 0.3) continue; c.globalAlpha = a; c.fillStyle = '#e8ff8a'; const x = Math.round(f.x * S.W), y = Math.round(g - 8 - f.y * 30); c.fillRect(x, y, 1, 1); c.globalAlpha = a * 0.3; c.fillRect(x - 1, y, 3, 1); c.fillRect(x, y - 1, 1, 3); } c.globalAlpha = 1;
   };
 })();
@@ -634,7 +647,7 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
 // ---------------------------------------------------------------- snowy evening with a snowman
 (function snow() {
   const el = document.getElementById('snowStage'); if (!el) return;
-  const S = Stage(el, update); let blink = 2, mode = 'idle', mt = 0, hat = 0, hatV = 0, hatY = 0;
+  const S = Stage(el, update, { scale: 4 }); let blink = 2, mode = 'idle', mt = 0, hat = 0, hatV = 0, hatY = 0;
   const flakes = [], breath = [], ball = { on: false };
   for (let i = 0; i < 140; i++) flakes.push({ x: rnd(), y: rnd(), z: rnd(), ph: rnd() * 6 });
   const gy = () => S.H - 10, meX = () => Math.round(S.W * 0.36), snX = () => Math.round(S.W * 0.62);
@@ -671,6 +684,8 @@ function pine(ctx, x, base, h, col, snow) { for (let y = 0; y < h; y++) { const 
     if (mode === 'laugh') { P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; P.bob = Math.floor(mt * 8) % 2 ? -1 : 0; }
     drawMeT(c, meX(), g, P, 'rgba(120,140,200,0.12)');
     c.fillStyle = '#c43a42'; c.fillRect(meX() - 6, g + 1 - GY + 33 + P.bob, 13, 3); c.fillRect(meX() + 3, g + 1 - GY + 35 + P.bob, 3, 8); c.fillStyle = '#e05656'; c.fillRect(meX() - 6, g + 1 - GY + 33 + P.bob, 13, 1);
+    const hx = meX(), ht = g + 1 - GY + P.bob + 4; c.fillStyle = '#8e2630'; c.fillRect(hx - 13, ht + 2, 26, 7); c.fillRect(hx - 10, ht, 20, 3); c.fillStyle = '#a82e38'; for (let i = -12; i < 13; i += 3) c.fillRect(hx + i, ht + 2, 1, 5); c.fillStyle = '#c43a42'; c.fillRect(hx - 13, ht + 7, 26, 3); for (let i = -12; i < 13; i += 2) { c.fillStyle = '#e05656'; c.fillRect(hx + i, ht + 8, 1, 1); } c.fillStyle = '#f4f0f6'; c.fillRect(hx - 2, ht - 3, 4, 4); c.fillStyle = '#d8d2e6'; c.fillRect(hx + 1, ht - 1, 1, 2);   // knit beanie with a pom-pom
+    c.fillStyle = '#cfd6ea'; for (let i = 0; i < 6; i++) { const fx = hx - 20 - i * 9; c.fillRect(fx, g + 2 + (i % 2), 3, 1); }   // footprints
     if (ball.on) { c.fillStyle = '#ffffff'; c.fillRect(Math.round(ball.x) - 1, Math.round(ball.y) - 1, 3, 3); }
     c.fillStyle = 'rgba(255,255,255,0.6)'; for (const b of breath) { c.globalAlpha = 0.5 * (1 - b.l / 1.2); c.fillRect(Math.round(b.x), Math.round(b.y), 2 + Math.round(b.l * 2), 1); } c.globalAlpha = 1;
     for (const f of flakes) { if (f.z <= 0.5) continue; c.fillStyle = '#ffffff'; const x = Math.round(f.x * S.W), y = Math.round(f.y * S.H); c.fillRect(x, y, f.z > 0.85 ? 2 : 1, f.z > 0.85 ? 2 : 1); }
