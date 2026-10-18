@@ -26,7 +26,7 @@ const T = {
 const LY = PORT ? {
   head: [64, 150], hello: { av: [540, 700], tx: 540, ty: 1010, pc: [540, 700], pbox: [900, 1080], ph: 1180, name: [540, 1430], sub: [540, 1520], nameSize: 140, align: 'center' },
   phone: { cx: 540, cy: 920, s: 1.52 }, label: [540, 1730, 'center'], browser: [960, 1400, 540, 900], astroLabel: [540, 1720, 'center'],
-  grid: { cols: 4, gx: 220, gy: 220, cy: 860, sz: 150 }, stackCopy: [540, 1380, 34],
+  grid: { cols: 4, gx: 236, gy: 236, cy: 860, sz: 120 }, stackCopy: [540, 1450, 34],
   card: [920, 1000], be: 150, which: 58, whichSplit: true, titles: 60, neitherSplit: true,
   lock: { av: [540, 540, 300], name: [540, 870, 132], dog: [540, 1180], lines: [540, 1290, 32, 58], url: [540, 1560], align: 'center' },
   mont: [[160, 1.3, 540, 1000], [T.neb + 80, 1.35, 540, 760], [T.matches[1] + 30, 1.35, 540, 820], [T.chart[1] + 6, 1.3, 540, 900], [T.iconsAt + 60, 1.5, 540, 860], [T.strike[1] + 30, 1.3, 540, 900], [T.feed + 20, 1.35, 540, 900], null],
