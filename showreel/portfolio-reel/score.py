@@ -1,9 +1,9 @@
-"""Code-made soundtrack for the 25 s "Nikit Hamal" reel (120 BPM, A minor). Every sound sits on a picture cue from film.js (frames @ 60 fps):
+"""Code-made soundtrack for the 28 s "Nikit Hamal" reel (120 BPM, A minor). Every sound sits on a picture cue from film.js (frames @ 60 fps):
 keys for every typed character, UI pops for the apps, a marimba per stack icon, checks for the ops list, felt piano in the essay
 breakdown, impacts on the montage cuts, then the music stops for the name and the pup snores out. Master: -14 LUFS, TP <= -1.5."""
 import os, numpy as np, soundfile as sf, pyloudnorm as pyln
 from scipy.signal import butter, sosfilt
-SR = 48000; FPS = 60; TOTAL = 1500; DUR = TOTAL / FPS; N = int(SR * DUR)
+SR = 48000; FPS = 60; TOTAL = 1680; DUR = TOTAL / FPS; N = int(SR * DUR)
 rng = np.random.default_rng(11)
 L = np.zeros(N); R = np.zeros(N)
 fr = lambda f: f / FPS
@@ -76,20 +76,23 @@ def crash(): n = int(1.2 * SR); return hp(rng.standard_normal(n), 5000) * env(n,
 def snore(dur=0.9): n = int(dur * SR); t = np.arange(n) / SR; return lp(rng.standard_normal(n), 500) * np.sin(np.pi * t / dur) ** 2 * (0.6 + 0.4 * np.sin(2 * np.pi * 28 * t))
 
 # ---- timeline, mirrored from film.js T
-T = dict(type0=0, pop=54, expand=150, name=168, sub=190, wink1=222, build=240, phoneIn=248, neb=262, swipe=360, bub=(384, 402, 420, 438), morph=452, chart=(490, 560),
-         planets=556, stack=600, iconsAt=612, stackCopy=652, ops=720, ticks=(762, 777, 792, 807), bar=(762, 830), write=840, be=868, strike=(912, 930), which=936,
-         scroll=(990, 1052), neither=(1056, 1086, 1116), mont=1140, lock=1260, lname=1272, ltype=1300, lurl=1380, wink2=1428)
+T = dict(pop=54, expand=150, name=168, sub=190, wink1=222, build=240, neb=262, nebTap=332, nebDetail=338, swipe=400, lami=404, hop=(420, 432, 444), lamiTap=462, matches=466,
+         morph=512, astro=546, astroTap=594, chartPg=598, chart=(612, 648), planets=640, stack=660, iconsAt=672, stackCopy=712, ops=780, ticks=(822, 837, 852, 867), bar=(822, 890),
+         write=900, be=928, strike=(972, 990), which=996, scroll=(1050, 1112), neither=(1116, 1146, 1176), pond=1200, feed=1262, mont=1320, lock=1440, lname=1452, ltype=1480,
+         lurl=1560, wake=1584, wink2=1608)
 BEAT = 30; GROOVE = (T['build'], T['write']); DROP = (T['mont'], T['lock'] - 4)
 CH = [(57, 60, 64), (53, 57, 60), (48, 52, 55), (55, 59, 62)]   # Am F C G, one per bar
 chord = lambda f: CH[int(max(0, f - T['build']) // 120) % 4]
 def typing(text, f0, rate, gain=0.13, heavy=False):
     for k, ch in enumerate(text):
         if ch != ' ': add(key(heavy), fr(f0 + k * rate) + rng.uniform(-0.004, 0.004), gain * (1.4 if heavy else 1), rng.uniform(-0.3, 0.3))
-# intro: a held pad and a soft sub, then a riser into the groove
+def tap(f, pan=0.0): add(pop(1400), fr(f), 0.12, pan); add(key(), fr(f), 0.12, pan)
+def swish(f, d=0.3, g=0.25, pan=0.0): add(whoosh(d), fr(f) - d * 0.5, g, pan)
+# intro
 add(pad((note(45), note(52), note(57)), fr(T['build'])) * 0.7, 0, 0.3)
-typing("> hi, i'm nikit", T['type0'], 4, 0.2)
+typing("> hi, i'm nikit", 0, 4, 0.2)
 add(pop(660), fr(T['pop']), 0.3); add(marimba(note(69)), fr(T['pop']) + 0.02, 0.2)
-add(whoosh(0.5), fr(175) - 0.27, 0.3)
+swish(175, 0.5, 0.3)
 add(piano([note(57), note(64), note(69)], 2.0, 0.6), fr(T['name']), 0.35)
 typing('android · full-stack · writing', T['sub'], 1.6, 0.1)
 add(bell([note(88)], 0.6), fr(T['wink1']) + 0.03, 0.14, 0.3)
@@ -102,35 +105,41 @@ def groove(a, b, full=True):
     for f in range(a, b, BEAT // 2): add(hat((f // 15) % 4 == 3), fr(f), 0.15, 0.35 if (f // 15) % 2 else -0.25)
     for f in range(a, b, BEAT // 2): root = chord(f)[0] - 24 + (12 if (f // 15) % 4 == 2 else 0); add(bass(note(root)), fr(f), 0.5)
     for f in range(a, b, 120): add(pad([note(n - 12) for n in chord(f)], min(2.0, fr(b - f))), fr(f), 0.2)
-    for f in range(a, b, BEAT // 2):   # plucky arp
+    for f in range(a, b, BEAT // 2):
         if full and (f // 15) % 2 == 0: ch = chord(f); add(pluck(note(ch[(f // 30) % 3] + 12), 0.25, 0.7), fr(f), 0.09, 0.4 if (f // 30) % 2 else -0.4)
 groove(*GROOVE)
 add(impact(), fr(T['build']), 0.45); add(crash(), fr(T['build']), 0.15)
 typing('SIDE PROJECTS & WORK', T['build'] + 10, 1.5, 0.08)
-add(whoosh(0.45), fr(256) - 0.25, 0.3)
-for i in range(4): add(pop(700 + i * 120), fr(T['neb'] + 14 + i * 8), 0.16, -0.2 + i * 0.13)
+swish(256, 0.45, 0.3)
+for i in range(4): add(pop(700 + i * 120), fr(T['neb'] + 16 + i * 7), 0.14, -0.2 + i * 0.13)
 typing('NEBians', T['neb'], 2, 0.1)
-add(whoosh(0.3), fr(T['swipe']) - 0.05, 0.25, 0.3)
-for i, f in enumerate(T['bub']): add(pop(1050 if i % 2 else 760), fr(f), 0.25, 0.25 if i % 2 else -0.25)
-add(whoosh(0.6), fr(470) - 0.33, 0.32)
-for i in range(10): add(marimba(note([69, 72, 76, 79, 81][i % 5] + (12 if i >= 5 else 0))), fr(T['chart'][0] + i * 6.3), 0.07, -0.4 + i * 0.08)
-for i in range(9): add(bell([note(93 + [0, 3, 7, 10, 12][i % 5])], 0.4), fr(T['planets'] - 40 + i * 4), 0.04)
+tap(T['nebTap'], 0.2); swish(T['nebDetail'] + 8, 0.3, 0.2, 0.3)
+swish(T['swipe'] + 8, 0.35, 0.25, 0.3); typing('Lami Nepal', T['swipe'] + 8, 2, 0.1)
+for i, f in enumerate(T['hop']): add(marimba(note([72, 74, 76][i])), fr(f), 0.12, -0.3 + i * 0.2)
+tap(T['lamiTap'], -0.1); swish(T['matches'] + 8, 0.3, 0.2, 0.3)
+for i in range(3): add(pop(900 + i * 140), fr(T['matches'] + 6 + i * 8), 0.13)
+swish(530, 0.6, 0.32)
+for i in range(10): add(pop(800 + i * 60), fr(T['astro'] + 8 + i * 3), 0.06, -0.4 + i * 0.08)
+typing('AstroWeb', T['morph'] + 16, 2, 0.1)
+tap(T['astroTap'], -0.2); swish(T['chartPg'] + 8, 0.3, 0.2)
+for i in range(10): add(marimba(note([69, 72, 76, 79, 81][i % 5] + (12 if i >= 5 else 0))), fr(T['chart'][0] + i * 3.6), 0.07, -0.4 + i * 0.08)
+for i in range(10): add(bell([note(93 + [0, 3, 7, 10, 12][i % 5])], 0.4), fr(T['planets'] + i * 2), 0.035)
 # stack
-add(impact(), fr(T['stack']), 0.4); add(whoosh(0.4), fr(T['stack']) - 0.1, 0.3)
+add(impact(), fr(T['stack']), 0.4); swish(T['stack'] + 6, 0.4, 0.3)
 typing('SKILLS & EXPERIENCE', T['stack'] + 8, 1.5, 0.08)
 for i in range(14): add(marimba(note([57, 60, 62, 64, 67][i % 5] + 12 * (i // 5))), fr(T['iconsAt'] + i * 3 + 8), 0.13, -0.5 + i * 0.075)
 typing('kotlin · compose · django · svelte · firebase', T['stackCopy'], 1.2, 0.08)
 # ops
-add(whoosh(0.45), fr(T['ops']) - 0.15, 0.3)
+swish(T['ops'], 0.45, 0.3)
 typing('OPERATIONS', T['ops'] + 8, 1.5, 0.08)
 for i, f in enumerate(T['ticks']): add(pop(1200 + i * 150), fr(f), 0.18); add(key(True), fr(f), 0.2)
 n = int(fr(T['bar'][1] - T['bar'][0]) * SR); t = np.arange(n) / SR; add(np.sin(2 * np.pi * np.cumsum(300 + 500 * (t / t[-1]) ** 0.5) / SR) * 0.15 * np.minimum(1, t / 0.05), fr(T['bar'][0]), 0.25)
 add(bell([note(81), note(88)], 1.0), fr(T['bar'][1]), 0.12)
-# breakdown: the essays (no drums), felt piano, typewriter, the strike, titles flicking past
-add(whoosh(0.6), fr(T['write']) - 0.2, 0.25)
-for i, f in enumerate(range(T['write'], T['mont'], 60)):
+# breakdown: the essays (no drums)
+swish(T['write'] + 10, 0.6, 0.25)
+for i, f in enumerate(range(T['write'], T['pond'], 60)):
     ch = CH[(i // 2) % 4]; add(piano([note(n) for n in ch] + [note(ch[0] - 12)], 2.2, 0.8), fr(f), 0.3)
-add(pad([note(45), note(57), note(64)], fr(T['mont'] - T['write'])), fr(T['write']), 0.16)
+add(pad([note(45), note(57), note(64)], fr(T['pond'] - T['write'])), fr(T['write']), 0.16)
 typing('ESSAYS & WRITING', T['write'] + 14, 1.5, 0.07)
 typing('Be yourself.', T['be'], 3, 0.18, True)
 add(scratch(fr(T['strike'][1] - T['strike'][0]) + 0.05), fr(T['strike'][0]), 0.5)
@@ -143,12 +152,18 @@ for f in range(T['scroll'][0], T['scroll'][1] + 1):
     prev = pos
 add(bell([note(69), note(76)], 1.6), fr(T['scroll'][1]), 0.16)
 for i, f in enumerate(T['neither']): add(piano([note([64, 62, 60][i] + 12)], 1.4, 1.0), fr(f), 0.22); add(piano([note([69, 67, 64][i] + 12)], 1.4, 0.8), fr(f + 10), 0.18)
-add(riser(1.2), fr(T['mont']) - 1.2, 0.4)
+# pond: water bed, a wind chime, the food landing; a riser into the drop
+nW = int(fr(T['mont'] - T['pond'] + 30) * SR); water = lp(rng.standard_normal(nW), 900) * 0.5 + bp(rng.standard_normal(nW), 2500, 6000) * 0.08 * (0.6 + 0.4 * np.sin(np.arange(nW) / SR * 2.1))
+add(water * np.minimum(1, np.arange(nW) / SR / 0.4) * np.minimum(1, (nW - np.arange(nW)) / SR / 0.4), fr(T['pond']), 0.22)
+swish(T['pond'] + 18, 0.6, 0.25); typing('POND', T['pond'] + 12, 1.5, 0.07)
+for i, nt in enumerate([93, 97, 100, 105]): add(bell([note(nt)], 1.2), fr(T['pond'] + 30 + i * 9), 0.05, -0.4 + i * 0.25)
+for i in range(3): add(pop(500 - i * 60), fr(T['feed'] + i * 6), 0.1)
+add(riser(1.0), fr(T['mont']) - 1.0, 0.4)
 # drop: montage, an impact on every cut
 groove(*DROP)
 for k in range(8): add(impact() if k % 2 == 0 else crash(), fr(T['mont'] + k * 15), 0.35 if k % 2 == 0 else 0.12); add(whoosh(0.2), fr(T['mont'] + k * 15) - 0.1, 0.15, -0.5 + k * 0.14)
-add(bell([note(88)], 0.6), fr(1247) + 0.03, 0.14, -0.3)
-# lockup: the music has stopped; one clean hit on the name, then keys, the pup snores, a last wink
+add(bell([note(88)], 0.6), fr(T['mont'] + 7 * 15 + 3) + 0.03, 0.14, -0.3)
+# lockup: the music stops; one clean hit on the name, keys, the pup snoring, then it wakes; a last wink
 nh = int(1.8 * SR); th = np.arange(nh) / SR
 add(np.sin(2 * np.pi * 55 * th) * np.exp(-th * 4.5) * 0.9 + bell([note(57), note(64), note(69), note(72)], 1.8)[:nh] * 0.5, fr(T['lname']), 0.6)
 add(pad([note(45), note(52), note(57), note(64)], fr(TOTAL - T['lname'])), fr(T['lname']), 0.12)
@@ -156,8 +171,9 @@ typing('Head of Operations at Consica Labs.', T['ltype'], 1.1, 0.1)
 typing('Android & full-stack engineer from Nepal.', T['ltype'] + 40, 1.1, 0.1)
 typing('Writing about the self.', T['ltype'] + 86, 1.1, 0.1)
 add(pop(880), fr(T['lurl']), 0.18)
-for f in (1300, 1350): add(snore(), fr(f), 0.07, 0.4)
-add(bell([note(88)], 0.8), fr(T['wink2']) + 0.03, 0.16, -0.2); add(pop(1400), fr(T['wink2'] - 20), 0.1, 0.4)
+for f in (1480, 1530): add(snore(), fr(f), 0.07, 0.4)
+add(pop(1500), fr(T['wake']), 0.12, 0.4); add(pop(1700), fr(T['wake'] + 5), 0.1, 0.4)
+add(bell([note(88)], 0.8), fr(T['wink2']) + 0.03, 0.16, -0.2)
 
 # ---- master
 mix_ = np.stack([L, R], 1); mix_ = np.tanh(mix_ * 1.1) / 1.1
