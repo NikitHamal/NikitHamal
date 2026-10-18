@@ -1767,7 +1767,7 @@ body[data-decor="reflection"] .decor[data-decor="reflection"] {
    PIXEL SKY (js/pixel-sky.js): page-space parallax sky, weather, sun & moon
    ========================================================================== */
 .pixel-sky, .pixel-fx {
-  position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+  position: fixed; left: 0; top: 0; width: 100vw; height: 100lvh;   /* js sets the exact square-pixel size */
   pointer-events: none; image-rendering: pixelated; image-rendering: crisp-edges;
 }
 .pixel-sky { z-index: 0; opacity: 0; transition: opacity 1.6s var(--ease-out-quart); }
@@ -1853,6 +1853,7 @@ pixel-horizon {
   display: block; position: relative; width: 100vw; height: 270px; margin: 44px 0 -6px calc(50% - 50vw);
   pointer-events: none;
 }
+pixel-horizon { overflow: hidden; }
 pixel-horizon canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
 @media (max-width: 600px) { pixel-horizon { height: 200px; margin-top: 28px; } }
 
@@ -2066,4 +2067,15 @@ html.vt-theme::view-transition-new(root) { z-index: 1; }
   .painted-nav { top: 50%; bottom: auto; transform: translateY(-50%); }
   .painted-dots { bottom: 8px; }
   .painted-close { top: 10px; right: 10px; }
+}
+
+/* ---------- performance on phones and tablets ---------- */
+@media (pointer: coarse), (max-width: 700px) {
+  /* a frosted header over an animated sky re-blurs every frame: use a near-solid bar instead */
+  .site-header, .site-header.is-stuck { -webkit-backdrop-filter: none; backdrop-filter: none; background: color-mix(in srgb, var(--bg) 94%, transparent); }
+  .ft-clock { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--bg); }
+  /* reveals: no blur filter (expensive to animate on mobile GPUs), just fade + rise */
+  html.motion .rv { filter: none; }
+  html.motion .rv.in { transition: opacity .8s var(--ease-out-expo), transform 1s var(--ease-out-expo); transition-delay: calc(var(--rv-i, 0) * 60ms); }
+  @keyframes accIn { from { opacity: 0; transform: translateY(10px); } }
 }

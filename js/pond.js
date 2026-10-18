@@ -3,6 +3,7 @@
 (()=>{
 const cv=document.getElementById('pond-c'),ctx=cv.getContext('2d',{alpha:false});
 const holder=document.getElementById('pond');
+let QBUMP=0;
 const pondW=()=>Math.max(320,holder.clientWidth||innerWidth);
 const pondH=()=>Math.max(360,holder.clientHeight||innerHeight);
 const bar=document.getElementById('pond-bar'),bctx=bar.getContext('2d');
@@ -1260,7 +1261,7 @@ const CLOUDK=[0.16,0.3,0.22,0.08,0],SUNK=[0.5,0,0.9,0.35,0];
 
 function build(){
   const IW=pondW(),IH=pondH();
-  SCALE=IW<760?2:clamp(Math.round(IW/640),2,6);
+  SCALE=Math.min(6,(IW<760?2:clamp(Math.round(IW/640),2,6))+QBUMP);
   W=Math.ceil(IW/SCALE);H=Math.ceil(IH/SCALE);N=W*H;S=Math.min(W,H);
   cv.width=W;cv.height=H;cv.style.width=W*SCALE+'px';cv.style.height=H*SCALE+'px';
   img=ctx.createImageData(W,H);out=new Uint32Array(img.data.buffer);
@@ -1722,19 +1723,29 @@ Object.assign(Snd,{
 /* ================= loop ================= */
 build();
 let last=performance.now(),idleOn=false,pondVis=true,slowTick=0,audioQuiet=false;
+// Adaptive quality: the pond is a per-pixel software renderer, so slower phones get 30 fps first and, if that is
+// still too heavy, one step chunkier pixels. Fast machines never notice. (QBUMP is declared up top for build().)
+let pCost=0,pSkip=false,pFrames=0,pOdd=false;
 const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Use the LATEST entry: a fast scroll (or content loading above) can deliver "left" and "entered" in one batch,
 // and reading es[0] left the pond paused and black on phones. A cheap rect re-check while paused is a safety net.
 if('IntersectionObserver' in window){new IntersectionObserver(es=>{pondVis=es[es.length-1].isIntersecting;},{threshold:0.02}).observe(holder);}
 let visChk=0;const recheckVis=()=>{const r=holder.getBoundingClientRect();pondVis=r.bottom>0&&r.top<innerHeight;};
 function loop(now){
+  if(pSkip&&pondVis&&!document.hidden){pOdd=!pOdd;if(pOdd){requestAnimationFrame(loop);return;}}   // 30 fps: skip without advancing `last`, so dt covers both frames
   let dt=(now-last)/16.667;last=now;if(dt>3)dt=3;if(dt<0.1)dt=0.1;
   if(!pondVis&&!document.hidden&&++visChk%20===0)recheckVis();
   if(!pondVis||document.hidden){ if(!audioQuiet){ audioQuiet=true; Snd.quiet(true); } requestAnimationFrame(loop);return;}
   if(audioQuiet){ audioQuiet=false; Snd.quiet(false); }
   slowTick++;
   if(reducedMotion&&slowTick%3!==0){requestAnimationFrame(loop);return;}
+  const t0=performance.now();
   update(dt*(reducedMotion?3:1));render();
+  const c=performance.now()-t0;pCost=pCost*0.9+c*0.1;
+  if(++pFrames>45){
+    if(!pSkip&&pCost>11){pSkip=true;pFrames=0;}
+    else if(pSkip&&pCost>22&&QBUMP<2){QBUMP++;pFrames=0;pCost=0;build();}
+  }
   const idle=now-lastMove>6000&&barHover<0;if(idle!==idleOn){idleOn=idle;bar.classList.toggle('idle',idle);}
   if(keyFxT>0){keyFxT-=dt;if(keyFxT<=0){keyFx=-1;drawBar();}}
   requestAnimationFrame(loop);
