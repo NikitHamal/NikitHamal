@@ -1712,3 +1712,43 @@ body[data-decor="reflection"] .decor[data-decor="reflection"] {
     font-size: 0.85rem;
   }
 }
+/* ===== Painted portraits (js/painted.js): live eyes over the eye-less painting ===== */
+.painted { position: relative; }
+.painted > img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+.painted-eyes { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.painted-eyes .eye { transform-box: view-box; transition: transform .07s ease-in, opacity .07s; }
+.painted-eyes .eye.shut { transform: scaleY(.12); opacity: 0; }
+.painted-eyes .lid { opacity: 0; transition: opacity .06s; }
+.painted-eyes .lid.shut { opacity: 1; }
+.painted-eyes .iris { transition: transform .18s ease-out; }
+
+/* avatar: head and shoulders of the painting, in the same 72px circle */
+.profile-avatar.painted-avatar { position: relative; overflow: hidden; background: #efe7da; }
+.painted-avatar > img, .painted-avatar > .painted-eyes { position: absolute; width: 106%; height: 132.5%; left: -3%; top: -3%; }
+
+/* gallery: just the paintings, no labels */
+.painted-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 4px; }
+.painted-card { padding: 0; border: 1px solid var(--border-color, rgba(0,0,0,.08)); border-radius: 14px; overflow: hidden; background: #efe7da; cursor: zoom-in; aspect-ratio: 4 / 5; transition: transform .25s ease, box-shadow .25s ease; }
+.painted-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.12); }
+.painted-card:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.painted-card > .painted { width: 100%; height: 100%; }
+@media (max-width: 540px) { .painted-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+
+/* fullscreen viewer */
+.painted-dialog { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(14, 12, 10, .97); color: #f4ede2; display: none; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.painted-dialog[open] { display: flex; align-items: center; justify-content: center; }
+.painted-dialog::backdrop { background: rgba(14, 12, 10, .6); }
+.painted-stage { height: min(86dvh, 125vw); aspect-ratio: 4 / 5; max-width: 92vw; }
+.painted-full { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.5); cursor: pointer; animation: paintedIn .35s ease; }
+@keyframes paintedIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+.painted-nav, .painted-close { position: absolute; border: 0; width: 44px; height: 44px; border-radius: 50%; background: rgba(244,237,226,.12); color: #f4ede2; display: grid; place-items: center; cursor: pointer; transition: background .2s; padding: 0; }
+.painted-nav svg, .painted-close svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.painted-nav:hover, .painted-close:hover { background: rgba(244,237,226,.24); }
+.painted-prev { left: max(16px, 3vw); top: 50%; transform: translateY(-50%); }
+.painted-next { right: max(16px, 3vw); top: 50%; transform: translateY(-50%); }
+.painted-close { top: 18px; right: 18px; }
+.painted-dots { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+.painted-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(244,237,226,.3); cursor: pointer; }
+.painted-dot[aria-current="true"] { background: #f4ede2; }
+@media (max-width: 540px) { .painted-nav { top: auto; bottom: 14px; transform: none; } .painted-dots { bottom: 32px; } }
+@media (prefers-reduced-motion: reduce) { .painted-full { animation: none; } .painted-card { transition: none; } }
