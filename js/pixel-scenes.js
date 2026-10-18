@@ -612,7 +612,7 @@ class PixelScene extends HTMLElement {
   draw(dt = 0) { this.ctx.clearRect(0, 0, this.S.w, this.S.h); this.step(dt); }
 }
 customElements.define('pixel-scene', PixelScene);
-window.PixelScene = { scenes: LIST, pick: pickScene };
+window.PixelScene = { scenes: LIST, pick: pickScene, SCENES, hstr };   // SCENES / hstr: used by the post reels (showreel/reels) to step scenes frame by frame
 
 /* ---------------- page wiring (writing list + reading pages) ---------------- */
 function mount() {

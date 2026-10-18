@@ -155,6 +155,16 @@ for bi, b in enumerate(R['beats']):
             elif a == 'tears': add(drop(note(K + 33)), fr(f0 + 16), 0.12, 0, 0.6); [add(koto(note(K + 24 + q * 3), 0.8, 0.8), fr(f0 + 66 + q * 5), 0.1, -0.3 + q * 0.2) for q in range(4)]
             elif a == 'humility': add(saw([note(K - 12), note(K - 5), note(K)], 2.0), fr(f0 + 60), 0.22, 0, 0.4)
             elif a == 'worship': add(bell([note(K - 12)], 1.0, 0.4), fr(f0 + 10), 0.1, 0, 0.5)
+    if k == 'scene':     # the pixel window boots: a soft chime, then the scene's own air
+        add(chime(K + 24, 5, 0.4), fr(s + 4), 0.12, 0.2, 0.6); add(bell([note(K + 19)], 2.4, 0.9), fr(s + 28), 0.1, -0.2, 0.6)
+        amb = water(fr(e - s)) if R.get('sceneAmb') == 'water' else air(fr(e - s), True) * 0.5
+        amb = amb * np.minimum(1, np.arange(len(amb)) / SR / 0.5) * np.minimum(1, (len(amb) - np.arange(len(amb))) / SR / 0.5); add(amb, fr(s), 0.08, 0, 0.3)
+    if k == 'zoom':      # the word comes through the lens: air rising into it, a bell when it settles
+        z = s + b.get('zat', 0); add(air(0.7, True), fr(z) - 0.1, 0.22, 0, 0.3); add(bell([note(K + 24), note(K + 31)], 3.0, 1.0), fr(z + 40), 0.2, 0, 0.6); add(thump(), fr(z + 40), 0.25, 0, 0.1)
+    if k == 'type':      # one soft key per character
+        for L in b['lines']:
+            for j in range(len(L['t'])):
+                if L['t'][j] != ' ': add(tick(3200 + (j % 5) * 140), fr(s + L['at'] + j * L.get('rate', 2)), 0.035, rng.uniform(-0.3, 0.3), 0.05)
 # the end: one bell and the chord resolving under the title, nibs for the address
 add(riser(0.8), fr(END) - 0.8, 0.18, 0, 0.3); add(bell([note(K - 12), note(K)], 5.0, 1.6), fr(END), 0.42, 0, 0.55); add(piano([note(n) for n in (K - 12, K, K + 7, K + 12, K + 16)], 5.0, 0.8, 0.5), fr(END), 0.28, 0, 0.55)
 for j in range(len(R['title'].split(' '))): add(koto(note(K + [7, 9, 12, 14, 16, 19][j % 6] + 12), 1.6, 0.5), fr(END + 16 + j * 5), 0.1, 0, 0.5)
