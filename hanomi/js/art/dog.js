@@ -38,7 +38,7 @@ function poseSet(R) {
   }
   for (let i = 0; i < 4; i++) { const P = cp(Q.STAND); wag(P, Math.sin(i / 4 * Math.PI * 2) * 0.3); if (i === 2) P.eye = 'blink'; out.idle.push(P); }
   for (let i = 0; i < 4; i++) { const P = cp(Q.SIT); wag(P, Math.sin(i / 4 * Math.PI * 2) * 0.12); if (i >= 2) P.mouth = 'pant'; out.sit.push(P); }
-  for (let i = 0; i < 2; i++) { const P = cp(Q.SLEEP); P.b[3] += i ? 0.3 : -0.2; out.sleep.push(P); }
+  for (let i = 0; i < 2; i++) { const P = cp(Q.SLEEP_SPLOOT); P.b[3] += i ? 0.3 : -0.2; P.mouth = i ? 'blep' : 'closed'; out.sleep.push(P); }
   for (let i = 0; i < 4; i++) { const P = cp(Q.SIT); P.eye = 'happy'; P.blush = 1; P.ears = [-2.5, 2.5, -2, 2.5]; headMove(P, 0, -1); P.muz = -1; P.mouth = 'pant'; wag(P, Math.sin(i / 4 * Math.PI * 2) * 0.35); out.happy.push(P); }
   for (let i = 0; i < 2; i++) { const P = cp(Q.STAND); headMove(P, 0, -1); P.muz = -1; P.ears = [0.5, -1, 0.5, -1]; P.tl[4] = 0.5; if (i) P.mouth = 'bark'; out.bark.push(P); }
   { const P = cp(Q.LIE); out.lie.push(P); const P2 = cp(Q.LIE); P2.eye = 'half'; out.lie.push(P2); }
