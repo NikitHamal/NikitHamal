@@ -1,5 +1,5 @@
 /* Painted portraits with live eyes, for the homepage: the avatar, the portraits gallery and the fullscreen viewer.
- * Each [data-painted="<id>"] gets the eye-less painting (assets/painted/<id>.webp, or -lg.webp in the viewer) and the eyes
+ * Each [data-painted="<id>"] gets the eye-less painting (assets/painted/<id>.webp, 800x1000) and the eyes
  * as an inline SVG on top (assets/painted/<id>-eyes.svg): the irises follow the pointer (or drift on their own when idle /
  * on touch), the eyes blink now and then, and a tap on a face in the viewer winks the eye on that side. */
 (() => {
@@ -13,7 +13,7 @@
     const id = el.dataset.painted; el.classList.add('painted'); el.textContent = '';
     const img = new Image(); img.alt = el.dataset.alt || 'Nikit Hamal, painted'; img.decoding = 'async'; img.draggable = false;
     if (el.dataset.eager == null) img.loading = 'lazy';
-    img.src = `assets/painted/${id}${large ? '-lg' : ''}.webp`; el.appendChild(img);
+    img.src = `assets/painted/${id}.webp`; el.appendChild(img);   // 800x1000 everywhere, so the painting is as sharp as the vector eyes
     const ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ov.setAttribute('viewBox', '0 0 800 1000'); ov.setAttribute('class', 'painted-eyes'); ov.setAttribute('aria-hidden', 'true');
     const n = ++uid; ov.innerHTML = (await eyesFor(id)).replace(/id="([^"]+)"/g, `id="$1-${n}"`).replace(/url\(#([^)]+)\)/g, `url(#$1-${n})`);
     el.appendChild(ov); el._seed = Math.random() * 100; el._g = { x: 0, y: 0 }; live.add(el);
@@ -55,7 +55,7 @@
   async function show(i) {
     at = (i + IDS.length) % IDS.length; const stage = dlg.querySelector('.painted-stage');
     const el = document.createElement('div'); el.dataset.painted = IDS[at]; el.dataset.eager = ''; el.className = 'painted-full';
-    el.addEventListener('click', e => { const r = el.getBoundingClientRect(); shut(el, e.clientX - r.left < r.width / 2 ? 'r' : 'l'); });   // the viewer's left is his right eye
+    el.addEventListener('click', e => { const r = el.getBoundingClientRect(); shut(el, e.clientX - r.left < r.width / 2 ? 'l' : 'r'); });   // wink the eye on the side you tap (as on the preview page)
     stage.replaceChildren(el); await mount(el, true);
     dlg.querySelectorAll('.painted-dot').forEach((d, k) => d.setAttribute('aria-current', k === at ? 'true' : 'false'));
   }
