@@ -33,7 +33,7 @@ Promise.all([fetch('art/pixelhead.json').then(r => r.json()), new Promise(res =>
 });
 
 // ---- sprite buffer
-const SW = 64, SH = 100, GY = 96;      // sprite size, feet line
+const SW = 64, SH = 100, GY = 92;      // sprite size, sole row (drawn on the ground)
 const buf = new Uint8ClampedArray(SW * SH * 4); let ids = new Uint8Array(SW * SH);
 function clear() { buf.fill(0); ids.fill(0); }
 function px(x, y, c) { x |= 0; y |= 0; if (x < 0 || y < 0 || x >= SW || y >= SH) return; const i = (y * SW + x) * 4, r = RGB[c]; buf[i] = r[0]; buf[i + 1] = r[1]; buf[i + 2] = r[2]; buf[i + 3] = 255; ids[y * SW + x] = 1; }
@@ -66,12 +66,11 @@ function head(P, hx, headY) {
   for (const [ex, ey] of I.eyes) {
     const X = ox + ex, Y = oy + ey;
     const skinUnder = at(ex, Math.min(I.h - 1, ey + 2));
-    if (P.eyes === 'closed' || P.eyes === 'sleepy') {   // lid down
-      for (let i = -1; i <= 1; i++) { pxc(X + i, Y, ...skinUnder); pxc(X + i, Y + (P.eyes === 'sleepy' ? 0 : 1), 34, 24, 20); }
-      if (P.eyes === 'sleepy') { pxc(X, Y + 1, 40, 22, 14); }
-    } else if (P.eyes === 'happy') {                     // ^ ^
-      for (let i = -1; i <= 1; i++) pxc(X + i, Y, ...skinUnder);
-      pxc(X - 1, Y + 1, 34, 24, 20); pxc(X, Y, 34, 24, 20); pxc(X + 1, Y + 1, 34, 24, 20); pxc(X - 1, Y - 1 + 1, ...skinUnder);
+    if (P.eyes === 'closed' || P.eyes === 'sleepy' || P.eyes === 'happy') {
+      for (let i = -1; i <= 1; i++) { pxc(X + i, Y - 1, ...skinUnder); pxc(X + i, Y, ...skinUnder); }    // erase lid + eye
+      if (P.eyes === 'closed') { pxc(X - 1, Y, 34, 24, 20); pxc(X, Y, 34, 24, 20); pxc(X + 1, Y, 34, 24, 20); }          // one closed line
+      else if (P.eyes === 'sleepy') { for (let i = -1; i <= 1; i++) pxc(X + i, Y - 1, 34, 24, 20); pxc(X - 1, Y, 236, 226, 214); pxc(X, Y, 40, 22, 14); pxc(X + 1, Y, 236, 226, 214); }   // heavy lid, half-open
+      else { pxc(X - 1, Y, 34, 24, 20); pxc(X, Y - 1, 34, 24, 20); pxc(X + 1, Y, 34, 24, 20); }   // ^ smiling eyes
     } else {                                             // look left/right: move the iris pixel
       const l = clamp(Math.round(P.look), -1, 1); if (l) { pxc(X, Y, 236, 226, 214); pxc(X + l, Y, 40, 22, 14); }
     }
@@ -81,6 +80,17 @@ function head(P, hx, headY) {
   if (P.mouth === 'o') { pxc(MX, MY, 70, 30, 28); pxc(MX + 1, MY, 70, 30, 28); pxc(MX, MY + 1, 90, 40, 36); pxc(MX + 1, MY + 1, 90, 40, 36); }
   else if (P.mouth === 'smile') { pxc(MX - 3, MY - 1, 150, 82, 70); pxc(MX + 3, MY - 1, 150, 82, 70); }
   if (P.blush) { pxc(ox + I.eyes[0][0] - 1, oy + I.eyes[0][1] + 3, 214, 120, 104); pxc(ox + I.eyes[1][0] + 1, oy + I.eyes[1][1] + 3, 214, 120, 104); }
+}
+
+// cross-legged: thighs out to the knees, shins crossed in front, shoes tucked under the opposite knee
+function crossLegs(cx, hipY) {
+  limb(cx + 3, hipY + 1, cx + 15, hipY + 6, 3.2, 'jean', 'jeanShade');               // right thigh (behind)
+  limb(cx + 15, hipY + 7, cx - 4, hipY + 9, 3, 'jean', 'jeanShade');                 // right shin crossing left
+  limb(cx - 3, hipY + 1, cx - 15, hipY + 6, 3.2, 'jean', 'jeanShade');               // left thigh
+  limb(cx - 15, hipY + 7, cx + 4, hipY + 9, 3, 'jean', 'jeanShade');                 // left shin in front
+  for (let i = 0; i <= 19; i++) px(cx - 15 + i, hipY + 6 + Math.round(i * 2 / 19), 'jeanDeep');   // fold where the shins cross
+  for (const [x, f] of [[cx - 11, -1], [cx + 7, 1]]) { rect(x, hipY + 8, 5, 3, 'shoe'); rect(x + (f > 0 ? 3 : 0), hipY + 9, 2, 1, 'shoeShade'); rect(x, hipY + 10, 5, 1, 'sole'); }   // both shoes peek out
+  px(cx - 15, hipY + 5, 'jeanDeep'); px(cx + 15, hipY + 5, 'jeanDeep');               // knees
 }
 
 // ---- the character, drawn from a pose
@@ -115,7 +125,7 @@ function paint(P) {
     // sleeve
     limb(sx, sy - 0.5, sx + sg * Math.sin(ar) * 4.5, sy + Math.cos(ar) * 4.5, 3.4, 'tee', side > 0 ? 'teeShade' : null);
   };
-  leg(-1, P.lL, P.kL, P.liftL || 0); leg(1, P.lR, P.kR, P.liftR || 0);
+  if (P.cross) crossLegs(cx, hipY); else { leg(-1, P.lL, P.kL, P.liftL || 0); leg(1, P.lR, P.kR, P.liftR || 0); }
   if (P.armsBehind) { arm(-1, P.aL, P.fL); arm(1, P.aR, P.fR); }
   // torso: tee with soft folds
   for (let y = shY; y <= hipY; y++) {
@@ -139,11 +149,20 @@ function basePose(t) {
   return { dx: 0, bob: Math.sin(t * 2.4) > 0.6 ? -1 : 0, headDx: 0, headDy: 0, lL: 0, lR: 0, kL: 0, kR: 0, aL: 8, aR: 8, fL: 6, fR: 6,
     liftL: 0, liftR: 0, sway: Math.sin(t * 1.8) * 0.8, eyes: 'open', look: 0, browUp: 0, mouth: 'line', blush: false, armsBehind: false };
 }
-const sitPose = (P, t) => { P.bob = 22; P.lL = 84; P.lR = -84; P.kL = -150; P.kR = 150; P.aL = 18; P.aR = 18; P.fL = -40; P.fR = -40; return P; };
-function grass(ctx, W, H, gy) {
-  const G = ['#6c9a48', '#58863c', '#4a7634', '#40692e', '#385e2a', '#33552a'];
+const sitPose = (P, t) => { P.bob = 22; P.cross = true; P.aL = 26; P.aR = 26; P.fL = -22; P.fR = -22; return P; };   // hands resting on the thighs
+const BLADES = []; for (let i = 0; i < 900; i++) { const r = Math.sin(i * 12.9898) * 43758.5453; const f = r - Math.floor(r), g = (Math.sin(i * 78.233) * 9631.4) % 1; BLADES.push({ x: i * 0.83 + f * 0.6, h: 1 + Math.floor(Math.abs(g) * 4), c: Math.floor(f * 4), ph: f * 6 }); }
+function grass(ctx, W, H, gy, t = 0) {
+  const G = ['#6c9a48', '#5a8a3e', '#4c7a35', '#426c30', '#3a612c', '#33552a'];
   for (let y = gy + 1, i = 0; y < H; y++, i++) { ctx.fillStyle = G[Math.min(i, G.length - 1)]; ctx.fillRect(0, y, W, 1); }
-  ctx.fillStyle = '#86b25a'; for (let x = 2; x < W; x += 5) ctx.fillRect(x, gy, 1, 1);
+  // texture in the turf
+  ctx.fillStyle = '#7aa850'; for (let x = 1; x < W; x += 7) ctx.fillRect(x, gy + 2 + (x % 3), 1, 1);
+  ctx.fillStyle = '#3e6630'; for (let x = 4; x < W; x += 9) ctx.fillRect(x, gy + 3 + (x % 2), 2, 1);
+  // blades along the top, leaning in the breeze
+  const BC = ['#86b85a', '#6ea24a', '#5a8f40', '#9cc868'];
+  for (const b of BLADES) { if (b.x > W) break; const lean = b.h >= 3 ? Math.round(Math.sin(t * 1.6 + b.x * 0.15 + b.ph) * 0.8) : 0; ctx.fillStyle = BC[b.c];
+    for (let k = 0; k < b.h; k++) ctx.fillRect(Math.round(b.x) + (k === b.h - 1 ? lean : 0), gy - k, 1, 1); }
+  // a few little flowers
+  for (let x = 13; x < W; x += 41) { ctx.fillStyle = '#6ea24a'; ctx.fillRect(x, gy - 1, 1, 2); ctx.fillStyle = x % 2 ? '#fff6d8' : '#f6d25a'; ctx.fillRect(x - 1, gy - 2, 3, 1); ctx.fillRect(x, gy - 3, 1, 3); ctx.fillStyle = '#e6a63a'; ctx.fillRect(x, gy - 2, 1, 1); }
 }
 const HEART = ['.x.x.', 'xxxxx', 'xxxxx', '.xxx.', '..x..'];
 function heart(ctx, x, y) { HEART.forEach((r, j) => [...r].forEach((c, i) => c === 'x' && ctx.fillRect(Math.round(x) + i - 2, Math.round(y) + j, 1, 1))); }
@@ -188,8 +207,8 @@ function makeDog() {
   const hearts = [], dust = [];
   let lastAct = 0, nextAuto = 'fetch';
   const S = Stage(el, update);
-  S.onLayout = () => { me.x = Math.round(S.W * 0.3); if (!dog.x || dog.mode === 'sit') dog.x = me.x + 40; };
-  const gy = () => S.H - 6, home = () => me.x + 40;
+  S.onLayout = () => { me.x = Math.round(S.W * 0.3); if (!dog.x || dog.mode === "sit") dog.x = me.x + 46; };
+  const gy = () => S.H - 6, home = () => me.x + 46;
   const setMe = m => { me.mode = m; me.mt = 0; }, setDog = m => { dog.mode = m; dog.mt = 0; };
   const busy = () => me.mode !== 'idle' || (dog.mode !== 'sit' && dog.mode !== 'happy');
   function pet() { if (busy()) return; setMe('pet'); setDog('pet'); lastAct = S.t; }
@@ -269,8 +288,8 @@ function makeDog() {
     return P;
   }
   S.render = () => {
-    const c = S.ctx, g = gy(); grass(c, S.W, S.H, g);
-    c.fillStyle = 'rgba(30,40,20,.25)'; c.fillRect(me.x - 7, g + 1, 14, 1); c.fillRect(Math.round(dog.x) - 12, g + 1, 22, 1);
+    const c = S.ctx, g = gy(); grass(c, S.W, S.H, g, S.t);
+    c.fillStyle = 'rgba(20,35,15,.3)'; c.fillRect(me.x - 8, g + 1, 16, 1); c.fillRect(me.x - 5, g + 2, 10, 1); c.fillRect(Math.round(dog.x) - 14, g + 1, 24, 1);
     if (DOG) DOG.draw(c, dog.x, g, dog.face, dogPose());
     drawMe(c, me.x, g, mePose());
     if (ball.on) { const bx = Math.round(ball.x), by = Math.round(ball.y); c.fillStyle = '#4e5a1c'; c.fillRect(bx - 2, by - 1, 4, 3); c.fillRect(bx - 1, by - 2, 2, 5); c.fillStyle = '#d4e24a'; c.fillRect(bx - 1, by - 1, 2, 3); c.fillRect(bx - 1, by - 1, 2, 2); c.fillStyle = '#f2f7b0'; c.fillRect(bx - 1, by - 1, 1, 1); }
@@ -325,8 +344,8 @@ function makeDog() {
   function mePose() {
     const t = S.t, mt = me.mt, P = sitPose(basePose(t), t); P.look = me.look; P.eyes = me.blink < 0 ? 'closed' : 'open';
     if (me.mode === 'drowsy') { P.eyes = me.blink < 0.6 ? 'closed' : 'sleepy'; const nod = (mt % 2.2) < 0.5; P.headDy = nod ? 1 : 0; me.blink = Math.min(me.blink, 1.2); }
-    if (me.mode === 'sleep') { P.eyes = 'closed'; P.headDy = 1; P.headDx = 1; P.bob = 22 + (Math.sin(t * 1.4) > 0.3 ? 0 : 1); P.sway = 1.5; }
-    if (me.mode === 'wake') { if (mt < 0.5) { P.eyes = 'open'; P.browUp = 1; P.mouth = 'o'; P.bob = 20; } else { P.mouth = 'smile'; P.eyes = mt < 1.4 ? 'happy' : P.eyes; } }
+    if (me.mode === 'sleep') { P.eyes = 'closed'; P.headDy = 1; P.headDx = 1; P.bob = 22 + (Math.sin(t * 1.4) > 0.3 ? 0 : 1); P.sway = 1.5; P.aL = 22; P.aR = 22; P.fL = -12; P.fR = -12; }
+    if (me.mode === 'wake') { if (mt < 0.5) { P.eyes = 'open'; P.browUp = 1; P.mouth = 'o'; P.bob = 21; } else { P.mouth = 'smile'; P.eyes = mt < 1.4 ? 'happy' : P.eyes; } }
     if (me.mode === 'lookup') { P.browUp = 1; P.mouth = mt < 0.8 ? 'o' : 'smile'; P.look = 0; P.eyes = mt > 0.8 && mt < 1.6 ? 'happy' : 'open'; }
     if (me.mode === 'wave') { P.aR = 150; P.fR = [10, 28, 44, 28][Math.floor(mt * 10) % 4]; P.eyes = 'happy'; P.mouth = 'smile'; P.blush = true; }
     if (me.mode === 'sit') P.mouth = 'line';
@@ -337,13 +356,13 @@ function makeDog() {
     if (TR) {
       const I = TR.info, x0 = Math.round(tx - I.cx), y0 = g + 1 - I.gy, sway = k => Math.round(Math.sin(S.t * 0.9 + k) * 0.8 + Math.sin(S.t * 0.37) * 0.5 + shake * (1 + k));
       c.drawImage(TR.back, x0 + sway(0), y0); c.drawImage(TR.trunk, x0, y0);
-      grass(c, S.W, S.H, g);
+      grass(c, S.W, S.H, g, S.t);
       c.fillStyle = 'rgba(40,60,30,.22)'; for (let i = -62; i <= 62; i++) c.fillRect(tx + i, g + 1, 1, Math.round(2.4 * Math.sqrt(1 - (i / 63) ** 2)));
       for (const p of ground) { c.fillStyle = PC[p.c]; c.fillRect(Math.round(p.x), g + 1 + (p.c & 1), 1, 1); }
       drawMe(c, meX(), g, mePose());
       for (const h of onHair) { c.fillStyle = PC[h.c]; c.fillRect(meX() + h.dx, headY() - 14 + h.dy + (me.mode === 'sleep' ? 1 : 0), 2, 1); }
       c.drawImage(TR.front, x0 + sway(0.7), y0 + (Math.abs(shake) > 1 ? 1 : 0));
-    } else { grass(c, S.W, S.H, g); drawMe(c, meX(), g, mePose()); }
+    } else { grass(c, S.W, S.H, g, S.t); drawMe(c, meX(), g, mePose()); }
     for (const p of petals) { c.fillStyle = PC[p.c]; const f = Math.sin(p.ph) > 0; c.fillRect(Math.round(p.x), Math.round(p.y), f ? 2 : 1, f ? 1 : 2); }
     c.fillStyle = '#5b4a7a'; for (const z of zs) { c.globalAlpha = Math.min(1, z.l * 3) * (1 - z.l / 2.4); zee(c, z.x, z.y, z.l > 1.2 ? 4 : 3); } c.globalAlpha = 1;
   };
