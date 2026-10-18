@@ -151,37 +151,38 @@ function sIY(c, f) {
   cap(c, '— “I” AND “YOU” CANNOT LOVE', f, T.love + 40, y + (PORT ? 150 : 140));
   c.restore();
 }
-// ---- 6. selfish, or not: the sentence parts down the middle; nothing is in between
+// ---- 6. selfish, or not: the sentence is cut exactly on the axis; the halves part symmetrically and a line is drawn between them
 function sSelfish(c, f) {
-  if (f < T.sf || f > T.sfOut + 16) return; const S = 84 * K, ex = E.exit(prog(f, T.sfOut, T.sfOut + 16)), part = E.inOut(prog(f, ...T.part)), y = CY;
+  if (f < T.sf || f > T.sfOut + 16) return; const ex = E.exit(prog(f, T.sfOut, T.sfOut + 16)), part = E.inOut(prog(f, ...T.part)), wall = E.inOut(prog(f, T.part[0] + 18, T.part[1] + 14));
+  const a = 'Either a person is selfish,', b = 'or they are not.', y = CY;
   c.save(); c.globalAlpha = 1 - ex;
-  const a = 'Either a person is selfish,', b = 'or they are not.';
-  if (PORT) {   // stacked: the halves part upward and downward
-    lineIn(c, a, f, T.sf, 5, y - 70 - part * 120, 84); lineIn(c, b, f, T.sf + 30, 5, y + 40 + part * 120, 84, 'serifI', C.ink2);
+  if (!PORT) {
+    const S = 80; font(c, 'serif', S); const wa = c.measureText(a).width, sp = c.measureText(' ').width; font(c, 'serifI', S); const wb = c.measureText(b).width;
+    const xs = CX - (wa + sp + wb) / 2 + wa + sp / 2, G = 170;   // where the sentence naturally breaks -> the axis
+    const ra = mix(xs - sp / 2, CX - G / 2, part), lb = mix(xs + sp / 2, CX + G / 2, part);
+    LIB.wordsIn(c, a, f, T.sf, 5, ra, y, S, 'serif', C.ink, 'right'); LIB.wordsIn(c, b, f, T.sf + 26, 5, lb, y, S, 'serifI', C.ink2, 'left');
+    if (wall > 0) { const mid = y - S * 0.32, hh = S * 1.1 * wall; c.save(); c.strokeStyle = C.pink; c.lineWidth = 2; c.beginPath(); c.moveTo(CX, mid - hh); c.lineTo(CX, mid + hh); c.stroke();
+      c.fillStyle = C.pink; [mid - hh, mid + hh].forEach(yy => { c.beginPath(); c.arc(CX, yy, 3.5 * wall, 0, 7); c.fill(); }); c.restore(); }
+    lineIn(c, 'There is nothing in between.', f, T.between + 10, 5, y + 190, 54, 'serifI', C.pink);
+    cap(c, '— UNITY IS A LIE', f, T.between + 30, y + 270);
   } else {
-    font(c, 'serif', S); const wa = c.measureText(a + ' ').width; font(c, 'serifI', S); const wb = c.measureText(b).width, x0 = CX - (wa + wb) / 2, sh = part * 140;
-    LIB.wordsIn(c, a, f, T.sf, 5, x0 - sh, y, S, 'serif', C.ink, 'left'); LIB.wordsIn(c, b, f, T.sf + 30, 5, x0 + wa + sh, y, S, 'serifI', C.ink2, 'left');
+    const S = 76, g = mix(54, 150, part); line2(a, y - g + S * 0.3 - 10, 'serif', C.ink, T.sf); line2(b, y + g + S * 0.3 - 10, 'serifI', C.ink2, T.sf + 26);
+    if (wall > 0) { const hw = 230 * wall; c.save(); c.strokeStyle = C.pink; c.lineWidth = 2; c.beginPath(); c.moveTo(CX - hw, y - 10); c.lineTo(CX + hw, y - 10); c.stroke();
+      c.fillStyle = C.pink; [CX - hw, CX + hw].forEach(xx => { c.beginPath(); c.arc(xx, y - 10, 3.5 * wall, 0, 7); c.fill(); }); c.restore(); }
+    lineIn(c, 'There is nothing in between.', f, T.between + 10, 5, y + 360, 56, 'serifI', C.pink);
+    cap(c, '— UNITY IS A LIE', f, T.between + 30, y + 450);
+    function line2(t, yy, kind, col, f0) { LIB.wordsIn(c, t, f, f0, 5, CX, yy, fit(c, t, kind, S), kind, col, 'center'); }
   }
-  if (f >= T.between) { const u = E.out(prog(f, T.between, T.between + 30)); c.save(); c.globalAlpha *= u; c.strokeStyle = C.pink; c.lineWidth = 2; const L = (PORT ? 70 : 90) * u;
-    if (PORT) { c.beginPath(); c.moveTo(CX - L, y - 15); c.lineTo(CX + L, y - 15); c.stroke(); } else { c.beginPath(); c.moveTo(CX, y - 60 - L * 0.4); c.lineTo(CX, y + 20 + L * 0.4); c.stroke(); } c.restore();
-    lineIn(c, 'There is nothing in between.', f, T.between + 10, 5, y + (PORT ? 330 : 170), 52, 'serifI', C.pink); }
-  cap(c, '— UNITY IS A LIE', f, T.between + 30, y + (PORT ? 420 : 250));
   c.restore();
 }
-// ---- 7. UNITY parts: five letters, evenly spaced on one baseline, each walled off from the others — then only the line remains
+// ---- 7. UNITY flies apart
 function sUnity(c, f) {
-  if (f < T.un || f > T.unOut + 16) return; const S = PORT ? 200 : 230, y = CY + S * 0.3 - 40, ex = E.exit(prog(f, T.unOut, T.unOut + 16)), dr = E.inOut(prog(f, ...T.drift)), ghost = E.inOut(prog(f, T.drift[1] - 10, T.drift[1] + 30));
-  const spread = PORT ? 190 : 300;
-  c.save(); c.globalAlpha = 1 - ex;
-  font(c, 'serif', S); const ws = [...'UNITY'].map(ch => c.measureText(ch).width), tw = ws.reduce((p, q) => p + q, 0); let lx = CX - tw / 2; const x0 = [];
-  ws.forEach(w => { x0.push(lx + w / 2); lx += w; });
-  [...'UNITY'].forEach((ch, i) => { const u = E.out(prog(f, T.un + i * 4, T.un + i * 4 + 26)), x = mix(x0[i], CX + (i - 2) * spread, dr);
-    c.save(); c.globalAlpha *= u * mix(1, 0.2, ghost); font(c, 'serif', S); c.textAlign = 'center'; c.fillStyle = C.ink; c.fillText(ch, x, y + (1 - u) * 40); c.restore(); });
-  // the walls between them
-  for (let k = 0; k < 4; k++) { const d = E.out(prog(f, T.drift[0] + 20 + Math.abs(k - 1.5) * 6, T.drift[0] + 50 + Math.abs(k - 1.5) * 6)); if (d <= 0) continue; const x = CX + (k - 1.5) * spread, hh = S * 0.62 * d;
-    c.save(); c.strokeStyle = C.line; c.globalAlpha *= mix(1, 0.6, ghost); c.lineWidth = 1.5; c.beginPath(); c.moveTo(x, y - S * 0.36 - hh); c.lineTo(x, y - S * 0.36 + hh); c.stroke(); c.restore(); }
-  lineIn(c, 'is nothing but a pretense.', f, T.pretense + 30, 6, y + S * 0.62 + (PORT ? 70 : 60), 72, 'serifI', C.pink);
-  cap(c, '— UNITY IS A LIE', f, T.pretense + 60, y + S * 0.62 + (PORT ? 170 : 150));
+  if (f < T.un || f > T.unOut + 16) return; const S = (PORT ? 210 : 240), y = CY + 40, ex = E.exit(prog(f, T.unOut, T.unOut + 16)), dr = E.inOut(prog(f, ...T.drift));
+  c.save(); c.globalAlpha = 1 - ex; c.letterSpacing = `${S * 0.08}px`;
+  letters(c, 'UNITY', CX, y, S, 'serif', C.ink, (i) => { const u = E.out(prog(f, T.un + i * 4, T.un + i * 4 + 26)), d = i - 2;
+    return { a: u * (1 - dr * 0.75), dy: (1 - u) * 40 + dr * Math.abs(d) * 24 * (d % 2 ? -1 : 1), dx: dr * d * (PORT ? 70 : 150), r: dr * d * 0.12, blur: dr * Math.abs(d) * 2.5 }; });
+  c.letterSpacing = '0px';
+  lineIn(c, 'is nothing but a pretense.', f, T.pretense, 5, y + (PORT ? 150 : 140), 64, 'serifI', C.pink);
   c.restore();
 }
 // ---- 8. everything is thought: the word rings outward, then even that goes; nothing
