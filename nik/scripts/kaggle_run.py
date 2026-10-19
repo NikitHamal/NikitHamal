@@ -60,6 +60,7 @@ FAST = '--diff-frac 0.25'          # diffusion stream on a 25% window: ~1.6x fas
 log('mode', MODE, json.dumps(CFG))
 subprocess.run('nvidia-smi; python -c "import torch;print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"', shell=True)
 subprocess.run(f'git clone -q {REPO} {W}/NikitHamal', shell=True, check=True)
+os.chdir(f'{W}/NikitHamal')      # every relative path below is inside the repo
 sh('pip -q install pyarrow numpy')
 P = CFG['preset']
 R = f'nik/runs/{P}'
