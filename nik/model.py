@@ -235,35 +235,58 @@ def two_stream_mask(L: int, B: int, offset: int, device) -> torch.Tensor:
     return torch.cat([top, bot], dim=0)
 
 
-def hybrid_loss(model: NikLM, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
-                diff_weight: float = 1.0, t_min: float = 0.1):
+def two_stream_mask_seg(L: int, B: int, offset: int, s: int, Ln: int, device) -> torch.Tensor:
+    """Like two_stream_mask, but the noisy stream covers only positions s..s+Ln-1.
+    Shape (Ln + L, Ln + L) for the sequence [noisy segment ; clean]."""
+    i = torch.arange(L, device=device)
+    blk = (i + offset) // B
+    pn = torch.arange(s, s + Ln, device=device)
+    bn = (pn + offset) // B
+    same = bn[:, None] == bn[None, :]
+    before = blk[None, :] < bn[:, None]
+    causal = i[None, :] <= i[:, None]
+    top = torch.cat([same, before], dim=1)
+    bot = torch.cat([torch.zeros(L, Ln, dtype=torch.bool, device=device), causal], dim=1)
+    return torch.cat([top, bot], dim=0)
+
+
+def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
+                diff_weight: float = 1.0, t_min: float = 0.1, diff_frac: float = 1.0):
     """x: (N, L+1) token ids. loss_mask: (N, L+1) 1 where tokens count as targets
-    (SFT: assistant tokens only). Returns (total, ar_loss, diff_loss)."""
-    cfg = model.cfg
+    (SFT: assistant tokens only). diff_frac < 1 trains the diffusion stream on a
+    random window of that fraction of the sequence (the AR stream always sees all
+    of it): attention cost drops from (2L)^2 to ((1+f)L)^2. Works with a DDP wrapper.
+    Returns (total, ar_loss, diff_loss)."""
+    core = getattr(model, 'module', model)
+    cfg = core.cfg
     N, L1 = x.shape
     L = L1 - 1
     clean, tgt = x[:, :L], x[:, 1:]
     lm = torch.ones_like(x, dtype=torch.bool) if loss_mask is None else loss_mask.bool()
     B = cfg.block
     offset = int(torch.randint(0, B, (1,)))
-    blk = (torch.arange(L, device=x.device) + offset) // B
-    nblk = int(blk.max()) + 1
-    t = torch.rand(N, nblk, device=x.device) * (1 - t_min) + t_min      # mask rate per block
-    m = torch.rand(N, L, device=x.device) < t[:, blk]
-    m &= lm[:, :L]                                                    # only corrupt target tokens
-    noisy = torch.where(m, torch.full_like(clean, cfg.mask_id), clean)
+    Ln = L if diff_frac >= 1 else max(B, int(round(L * diff_frac / B)) * B)
+    s = 0 if Ln >= L else int(torch.randint(0, L - Ln + 1, (1,)))
+    seg = clean[:, s:s + Ln]
+    pn = torch.arange(s, s + Ln, device=x.device)
+    bn = (pn + offset) // B
+    bn = bn - bn.min()
+    t = torch.rand(N, int(bn.max()) + 1, device=x.device) * (1 - t_min) + t_min      # mask rate per block
+    m = torch.rand(N, Ln, device=x.device) < t[:, bn]
+    m &= lm[:, s:s + Ln]                                                              # only corrupt target tokens
+    noisy = torch.where(m, torch.full_like(seg, cfg.mask_id), seg)
     inp = torch.cat([noisy, clean], dim=1)
-    pos = torch.cat([torch.arange(L, device=x.device)] * 2)
-    mask = two_stream_mask(L, B, offset, x.device)
+    pos = torch.cat([pn, torch.arange(L, device=x.device)])
+    mask = two_stream_mask_seg(L, B, offset, s, Ln, x.device)
     digits = None
     if cfg.abacus:   # per stream, so a run never continues across the [noisy ; clean] seam
-        digits = torch.cat([model.digit_index(noisy), model.digit_index(clean)], dim=1)
+        digits = torch.cat([core.digit_index(noisy), core.digit_index(clean)], dim=1)
     logits = model(inp, pos=pos, mask=mask, digits=digits)
-    ln, lc = logits[:, :L], logits[:, L:]
+    ln, lc = logits[:, :Ln], logits[:, Ln:]
     ar_w = lm[:, 1:].float()
     ar = (F.cross_entropy(lc.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
     mf = m.float()
-    df = (F.cross_entropy(ln.reshape(-1, cfg.vocab).float(), clean.reshape(-1), reduction='none') * mf.reshape(-1)).sum() / mf.sum().clamp(min=1)
+    df = (F.cross_entropy(ln.reshape(-1, cfg.vocab).float(), seg.reshape(-1), reduction='none') * mf.reshape(-1)).sum() / mf.sum().clamp(min=1)
     return ar + diff_weight * df, ar.detach(), df.detach()
 
 

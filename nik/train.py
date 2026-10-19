@@ -174,6 +174,7 @@ def main():
     ap.add_argument('--compile', action='store_true')
     ap.add_argument('--device', default='auto')
     ap.add_argument('--threads', type=int, default=0)
+    ap.add_argument('--diff-frac', type=float, default=1.0, help='diffusion stream covers this fraction of each window (speed)')
     ap.add_argument('--grad-ckpt', action='store_true', help='activation checkpointing per block (less memory, ~30% more compute)')
     ap.add_argument('--opt', choices=['adamw', 'muon'], default='adamw', help='muon: Muon for hidden matrices + AdamW for the rest')
     ap.add_argument('--ema', type=float, default=0.0, help='keep an EMA of weights (e.g. 0.999) and save it as the checkpoint')
@@ -185,6 +186,23 @@ def main():
         torch.set_num_threads(a.threads)
     device = a.device if a.device != 'auto' else ('cuda' if torch.cuda.is_available() else
                                                  'mps' if torch.backends.mps.is_available() else 'cpu')
+    # multi-GPU: launched with torchrun --nproc_per_node N (DistributedDataParallel)
+    world = int(os.environ.get('WORLD_SIZE', '1'))
+    rank = int(os.environ.get('RANK', '0'))
+    if world > 1:
+        import torch.distributed as dist
+        local = int(os.environ.get('LOCAL_RANK', '0'))
+        if torch.cuda.is_available():
+            dist.init_process_group('nccl')
+            torch.cuda.set_device(local)
+            device = f'cuda:{local}'
+        else:
+            dist.init_process_group('gloo')
+            device = 'cpu'
+    main_proc = rank == 0
+    if not main_proc:
+        import builtins
+        builtins.print = lambda *x, **k: None      # only rank 0 talks
     os.makedirs(a.out, exist_ok=True)
     torch.manual_seed(0)
 
@@ -217,11 +235,11 @@ def main():
 
     D = a.data
     if a.stage == 'pretrain':
-        train_b = Batches(os.path.join(D, 'pre_train.bin'))
+        train_b = Batches(os.path.join(D, 'pre_train.bin'), seed=100 + rank)
         val_b = Batches(os.path.join(D, 'pre_val.bin'), seed=1)
     else:
         train_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'),
-                          os.path.join(D, 'pre_train.bin'), a.mix)
+                          os.path.join(D, 'pre_train.bin'), a.mix, seed=100 + rank)
         val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1)
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
@@ -259,10 +277,15 @@ def main():
         return torch.autocast('cuda', dtype=amp_dtype) if use_cuda_amp else torch.autocast('cpu', enabled=False)
 
     fwd_model = torch.compile(model) if a.compile else model
+    if world > 1:
+        fwd_model = torch.nn.parallel.DistributedDataParallel(
+            fwd_model, device_ids=[int(os.environ.get('LOCAL_RANK', '0'))] if torch.cuda.is_available() else None)
     log = open(os.path.join(a.out, 'log.jsonl'), 'a')
     t0, tok_seen = time.time(), 0
 
     def save(tag='ckpt'):
+        if not main_proc:
+            return
         d = {'model': (ema or model).state_dict(), 'cfg': cfg.to_dict(), 'opt': opt.state_dict(), 'step': step, 'stage': a.stage}
         if ema is not None:
             d['model_raw'] = model.state_dict()     # resume continues from the raw weights
@@ -276,10 +299,10 @@ def main():
         for _ in range(a.accum):
             x, m = train_b.get(a.bs, L, device)
             with amp():
-                loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight)
+                loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight, diff_frac=a.diff_frac)
             scaler.scale(loss / a.accum).backward()
             tot += loss.item() / a.accum; ar += l_ar.item() / a.accum; df += l_df.item() / a.accum
-            tok_seen += x.numel()
+            tok_seen += x.numel() * world
         scaler.unscale_(opt)
         gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         scaler.step(opt); scaler.update(); opt.zero_grad(set_to_none=True)
@@ -292,20 +315,32 @@ def main():
         if step % 25 == 0 or step == 1:
             print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}) | lr {lr:.2e} | gn {float(gn):.2f} | '
                   f'{tok_seen / el:,.0f} tok/s | {el / 60:.1f} min', flush=True)
-        if step % a.eval_every == 0 or step == a.steps:
+        if (step % a.eval_every == 0 or step == a.steps) and main_proc:
             v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
             print(samples(ema or model, tok, a.stage), flush=True)
             log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': tot, 'min': el / 60}) + '\n'); log.flush()
             save()
-        if a.minutes and el > a.minutes * 60:
+        stop = bool(a.minutes and el > a.minutes * 60)
+        if world > 1:                                   # all ranks stop together
+            flag = torch.tensor([float(stop)], device=device)
+            torch.distributed.all_reduce(flag)
+            stop = flag.item() > 0
+        if stop:
             print(f'time limit reached at step {step}', flush=True)
             break
+    if world > 1:
+        torch.distributed.barrier()
+        if not main_proc:
+            torch.distributed.destroy_process_group()
+            return
     v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
     print(f'== final step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
     print(samples(ema or model, tok, a.stage), flush=True)
     save()
     print('saved', os.path.join(a.out, 'ckpt.pt'))
+    if world > 1:
+        torch.distributed.destroy_process_group()
 
 
 if __name__ == '__main__':

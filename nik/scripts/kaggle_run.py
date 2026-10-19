@@ -50,6 +50,13 @@ def export(ckpt, tag):
 
 
 os.makedirs(OUT, exist_ok=True)
+try:
+    import torch
+    NGPU = max(1, torch.cuda.device_count())
+except Exception:
+    NGPU = 1
+LAUNCH = f'torchrun --standalone --nproc_per_node {NGPU}' if NGPU > 1 else 'python'
+FAST = '--diff-frac 0.25'          # diffusion stream on a 25% window: ~1.6x faster (see kaggle_bench)
 log('mode', MODE, json.dumps(CFG))
 subprocess.run('nvidia-smi; python -c "import torch;print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"', shell=True)
 subprocess.run(f'git clone -q {REPO} {W}/NikitHamal', shell=True, check=True)
@@ -64,19 +71,20 @@ sh(f'python nik/data/gen_sft.py --out data/sft.jsonl --n {CFG["sft_n"]} --corpus
 sh('python nik/prepare.py --data data --tok nik/web/model/tokenizer.json', 'data.log')
 
 # ---- pretrain (Muon, time-annealed schedule)
-sh(f'python nik/train.py --stage pretrain --preset {P} --data data --out {R}/pre --steps 1000000 --minutes {CFG["pre_min"]} '
-   f'--bs {CFG["bs"]} --accum 2 --grad-ckpt --lr 3e-3 --warmup 500 --eval-every 1000 --opt muon', 'pretrain.log')
+log('gpus', NGPU, 'launch', LAUNCH)
+sh(f'{LAUNCH} nik/train.py --stage pretrain --preset {P} --data data --out {R}/pre --steps 1000000 --minutes {CFG["pre_min"]} '
+   f'--bs {CFG["bs"]} --lr 3e-3 --warmup 500 --eval-every 1000 --opt muon {FAST}', 'pretrain.log')
 shutil.copy(f'{R}/pre/log.jsonl', f'{OUT}/pretrain-log.jsonl')
 
 # ---- SFT
-sh(f'python nik/train.py --stage sft --init {R}/pre/ckpt.pt --data data --out {R}/sft --steps 1000000 --minutes {CFG["sft_min"]} '
-   f'--bs {CFG["bs"]} --accum 2 --grad-ckpt --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2 --opt muon --ema 0.998', 'sft.log')
+sh(f'{LAUNCH} nik/train.py --stage sft --init {R}/pre/ckpt.pt --data data --out {R}/sft --steps 1000000 --minutes {CFG["sft_min"]} '
+   f'--bs {CFG["bs"]} --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2 --opt muon --ema 0.998 {FAST}', 'sft.log')
 shutil.copy(f'{R}/sft/log.jsonl', f'{OUT}/sft-log.jsonl')
 export(f'{R}/sft/ckpt.pt', 'sft')
 
 # ---- verified self-improvement rounds
 sh(f'PRESET={P} DATA=data RUN={R} ROUNDS={CFG["rft_rounds"]} PROBLEMS={CFG["rft_problems"]} K=8 STEPS=1000000 '
-   f'RFT_MIN={CFG["rft_min"]} TRAIN_MIN={CFG["rft_train_min"]} BS={CFG["bs"]} EXTRA="--accum 2 --grad-ckpt" bash nik/scripts/rft.sh', 'rft.log')
+   f'RFT_MIN={CFG["rft_min"]} TRAIN_MIN={CFG["rft_train_min"]} BS={CFG["bs"]} EXTRA="{FAST}" LAUNCH="{LAUNCH}" bash nik/scripts/rft.sh', 'rft.log')
 last = f'{R}/rft{CFG["rft_rounds"]}/ckpt.pt'
 for r in range(1, CFG['rft_rounds'] + 1):
     for f in ('report.json', 'selfimprove.log'):
