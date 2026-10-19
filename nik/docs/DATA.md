@@ -29,7 +29,7 @@ After cleaning (drop lines with leftover foreign script or junk, normalize white
 
 ## SFT: chat, persona, reasoning
 
-`gen_sft.py` generates 60k–120k conversations from hand-written seeds. It is procedural, license-clean, and contains no copied model outputs.
+`gen_sft.py --corpus data/pretrain.txt` generates 60k–120k conversations. They come from hand-written seeds plus real corpus paragraphs, are license-clean, and contain no outputs copied from other models. Nothing in the app is scripted: every reply in `/chat` is sampled from the model.
 
 | category | what it teaches |
 |---|---|
@@ -40,6 +40,7 @@ After cleaning (drop lines with leftover foreign script or junk, normalize white
 | reason | word problems, comparison, weekdays, sequences, letter counting, time/money, syllogisms |
 | math | column addition with carries, subtraction with borrowing, long multiplication, division with remainder, percentages, multi-step shopping |
 | philosophy | short reflections in the voice of Nikit's essays |
+| write | **open-ended writing from real text**: "pokhara ko barema lekha", "continue: …", "euta samachar lekha". The targets are real corpus paragraphs (mostly Wikipedia), which gives tens of thousands of unique answers, so Nik learns to *write* instead of reciting a few canned replies |
 | multi | 2–4 turns stitched together, so the model uses earlier context |
 
 Reasoning and math answers carry a `think` trace. Only Nik's side of each conversation is learned (loss mask). During SFT, 20–25% of each batch is pretraining text, so the model keeps its general Nepali.
