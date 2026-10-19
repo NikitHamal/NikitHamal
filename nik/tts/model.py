@@ -48,22 +48,31 @@ def sinusoid(T: int, d: int, device) -> torch.Tensor:
 
 
 class FFTBlock(nn.Module):
-    """Pre-norm self-attention + convolutional FFN (FastSpeech-style)."""
+    """Pre-norm self-attention + FFN of (depthwise conv k -> pointwise linears).
+    The depthwise conv gives local context; the linears hold the weights and
+    quantise to int8 (onnxruntime-web has no ConvInteger kernel)."""
 
     def __init__(self, d, heads, ffn, k):
         super().__init__()
         self.n1, self.n2 = nn.LayerNorm(d), nn.LayerNorm(d)
-        self.att = nn.MultiheadAttention(d, heads, batch_first=True)
-        self.c1 = nn.Conv1d(d, ffn, k, padding=k // 2)
-        self.c2 = nn.Conv1d(ffn, d, 1)
+        self.heads = heads
+        self.qkv, self.proj = nn.Linear(d, 3 * d), nn.Linear(d, d)
+        self.dw = nn.Conv1d(d, d, k, padding=k // 2, groups=d)
+        self.p1, self.p2 = nn.Linear(d, ffn), nn.Linear(ffn, d)
         self.drop = nn.Dropout(0.1)
 
     def forward(self, x, pad):              # pad: (B, T) True = padding
-        h = self.n1(x)
-        a, _ = self.att(h, h, h, key_padding_mask=pad, need_weights=False)
-        x = x + self.drop(a)
-        h = self.n2(x).masked_fill(pad[..., None], 0).transpose(1, 2)
-        x = x + self.drop(self.c2(F.gelu(self.c1(h))).transpose(1, 2))
+        B, T, d = x.shape[0], x.shape[1], x.shape[2]
+        q, k, v = self.qkv(self.n1(x)).chunk(3, dim=-1)
+        sh = lambda t: t.reshape(B, -1, self.heads, d // self.heads).transpose(1, 2)  # noqa: E731  (shapes stay symbolic for ONNX)
+        q, k, v = sh(q), sh(k), sh(v)
+        att = (q @ k.transpose(-1, -2)) * (1.0 / math.sqrt(d // self.heads))
+        att = att.masked_fill(pad[:, None, None, :], -1e4).softmax(-1)
+        a = (att @ v).transpose(1, 2).reshape(B, -1, d)
+        x = x + self.drop(self.proj(a))
+        h = self.n2(x).masked_fill(pad[..., None], 0)
+        h = self.dw(h.transpose(1, 2)).transpose(1, 2)
+        x = x + self.drop(self.p2(F.gelu(self.p1(h))))
         return x.masked_fill(pad[..., None], 0)
 
 

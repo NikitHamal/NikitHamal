@@ -68,19 +68,25 @@ def main():
             os.replace(src, dst)
         else:
             from onnxruntime.quantization import quantize_dynamic, QuantType
-            quantize_dynamic(src, dst, weight_type=QuantType.QInt8)
+            # MatMul/Gemm only: onnxruntime-web has no ConvInteger kernel; convs stay fp32
+            quantize_dynamic(src, dst, weight_type=QuantType.QInt8, op_types_to_quantize=['MatMul', 'Gemm'])
             os.remove(src)
         files[n] = os.path.getsize(dst)
     # parity check against PyTorch
     s = {n: ort.InferenceSession(f'{a.out}/{n}.onnx', providers=['CPUExecutionProvider']) for n in ('enc', 'dec', 'voc')}
     with torch.no_grad():
-        ref = A.encode(ids, spk)[1].numpy()
-        got = s['enc'].run(None, {'ids': ids.numpy(), 'spk': spk.numpy()})[1]
+        ids2 = torch.randint(3, len(SYMBOLS), (1, 41))        # a different length than the export example
+        ref = A.encode(ids2, spk)[1].numpy()
+        got = s['enc'].run(None, {'ids': ids2.numpy(), 'spk': spk.numpy()})[1]
+        h2, mu2 = torch.randn(1, 113, d), torch.randn(1, 113, 80)
+        rd = Dec(A)(h2, mu2, spk).numpy()
+        gd = s['dec'].run(None, {'h': h2.numpy(), 'mu': mu2.numpy(), 'spk': spk.numpy()})[0]
+        mel = torch.randn(1, 80, 113)
         rv = V.spec(mel)[0].numpy(); gv = s['voc'].run(None, {'mel': mel.numpy()})[0]
     rel = lambda r, g: float(np.abs(r - g).mean() / (np.abs(r).mean() + 1e-9))  # noqa: E731
     counts = None
     meta = {'sr': 22050, 'n_fft': 1024, 'hop': 256, 'symbols': SYMBOLS, 'num_words': NUM, 'speakers': speakers,
-            'default_speaker': 0, 'bytes': files, 'parity': {'enc_mu': rel(ref, got), 'voc_re': rel(rv, gv)}}
+            'default_speaker': 0, 'bytes': files, 'parity': {'enc_mu': rel(ref, got), 'dec_mel': rel(rd, gd), 'voc_re': rel(rv, gv)}}
     json.dump(meta, open(f'{a.out}/tts.json', 'w'), indent=1)
     print(json.dumps({'bytes': files, 'total_mb': round(sum(files.values()) / 1e6, 2), 'parity': meta['parity']}, indent=1))
 

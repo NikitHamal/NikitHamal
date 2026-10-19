@@ -2,14 +2,15 @@
 // enc.onnx -> durations (expanded here) -> dec.onnx -> mel -> voc.onnx -> STFT -> iSTFT (here) -> WebAudio.
 // Mirrors nik/tts/text.py and torch.istft(center=True).
 
-const ORT_URL = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/ort.min.js';
+// onnxruntime-web 1.20.1 (MIT) is self-hosted so the voice works offline, like Nik.
+const ORT_URL = new URL('./vendor/ort/ort.wasm.min.js', import.meta.url).href;
 let ortReady = null;
 function loadOrt() {
   if (!ortReady) {
     ortReady = new Promise((res, rej) => {
       if (globalThis.ort) return res(globalThis.ort);
       const s = document.createElement('script');
-      s.src = ORT_URL; s.onload = () => { globalThis.ort.env.wasm.wasmPaths = ORT_URL.replace(/ort\.min\.js$/, ''); res(globalThis.ort); };
+      s.src = ORT_URL; s.onload = () => { globalThis.ort.env.wasm.wasmPaths = ORT_URL.replace(/ort\.wasm\.min\.js$/, ''); res(globalThis.ort); };
       s.onerror = () => rej(new Error('could not load onnxruntime-web'));
       document.head.append(s);
     });
