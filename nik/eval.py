@@ -66,6 +66,8 @@ def main():
     else:
         ck = torch.load(a.model, map_location='cpu')
         model = NikLM(NikConfig(**ck['cfg'])); model.load_state_dict(ck['model']); model.eval()
+    dev = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model.to(dev)
     tok = Tokenizer.load(a.tok)
     res = {}
 
@@ -91,7 +93,7 @@ def main():
         arr = np.memmap(val, dtype=np.uint16, mode='r')
         L, nll, n = model.cfg.ctx, 0.0, 0
         for i in range(0, min(len(arr) - L - 1, 40 * L), L):
-            x = torch.from_numpy(arr[i:i + L + 1].astype(np.int64))[None]
+            x = torch.from_numpy(arr[i:i + L + 1].astype(np.int64))[None].to(dev)
             lg = model(x[:, :-1])
             nll += torch.nn.functional.cross_entropy(lg[0], x[0, 1:], reduction='sum').item(); n += L
         res['val_ppl'] = math.exp(nll / n)

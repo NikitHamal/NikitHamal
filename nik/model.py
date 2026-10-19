@@ -285,8 +285,9 @@ def _sample(logits, temperature: float, top_p: float, generator=None):
 def generate_ar(model, prompt: list[int], max_new: int = 128, temperature: float = 0.7, top_p: float = 0.9,
                 stop: tuple[int, ...] = (2, 9)):
     ids = list(prompt)
+    dev = next(model.parameters()).device
     for _ in range(max_new):
-        ctx = torch.tensor([ids[-model.cfg.ctx:]])
+        ctx = torch.tensor([ids[-model.cfg.ctx:]], device=dev)
         nxt = _sample(model(ctx)[0, -1], temperature, top_p)
         ids.append(nxt)
         if nxt in stop:
@@ -308,8 +309,9 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
     cfg = model.cfg
     B, M = cfg.block, cfg.mask_id
     ids, passes = list(prompt), 1
+    dev = next(model.parameters()).device
     ctx = ids[-(cfg.ctx - 2 * B):]
-    t0 = _sample(model(torch.tensor([ctx]))[0, -1], temperature, top_p)
+    t0 = _sample(model(torch.tensor([ctx], device=dev))[0, -1], temperature, top_p)
     out = []
     while True:
         out.append(t0)
@@ -319,13 +321,13 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
         n = len(ctx)
         blk = [t0] + [M] * (B - 1)
         T = n + B
-        mask = torch.ones(T, T, dtype=torch.bool).tril()
+        mask = torch.ones(T, T, dtype=torch.bool, device=dev).tril()
         mask[n:, n:] = True
-        dl = model(torch.tensor([ctx + blk]), mask=mask)[0, n:]
+        dl = model(torch.tensor([ctx + blk], device=dev), mask=mask)[0, n:]
         passes += 1
         dl[:, [0, 1, M, 4, 5, 6]] = -float('inf')
         draft = [t0] + dl[1:].argmax(-1).tolist()
-        vl = model(torch.tensor([ctx + draft]))[0, n:]
+        vl = model(torch.tensor([ctx + draft], device=dev))[0, n:]
         passes += 1
         nxt = None
         for j in range(B):
