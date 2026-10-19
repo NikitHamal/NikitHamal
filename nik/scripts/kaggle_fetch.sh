@@ -2,6 +2,7 @@
 # Download a finished Kaggle run and publish it to /chat.
 #   bash nik/scripts/kaggle_fetch.sh full      (then commit + push nik/web/model)
 set -euo pipefail
+shopt -s nullglob
 cd "$(dirname "$0")/../.."
 MODE=${1:-full}
 USER_=$(kaggle config view | awk '/username/ {print $3}')
@@ -9,6 +10,13 @@ O=$(mktemp -d)
 for t in 1 2 3 4 5; do kaggle kernels output "$USER_/nik-train-$MODE" -p "$O" -o -q --file-pattern "^out/" && break; echo "retry in 60s"; sleep 60; done
 ls -la "$O" "$O/out" 2>/dev/null || true
 SRC=$O/out; [ -d "$SRC" ] || SRC=$O
+if [[ "$MODE" == tts* ]]; then                      # voice: publish the ONNX graphs + samples
+  mkdir -p nik/web/tts nik/web/tts/samples
+  cp "$SRC"/tts/*.onnx "$SRC"/tts/tts.json nik/web/tts/
+  cp "$SRC"/sample*.wav nik/web/tts/samples/ 2>/dev/null || true
+  cp "$SRC"/*.log.jsonl nik/web/tts/ 2>/dev/null || true
+  echo "published voice to nik/web/tts"; exit 0
+fi
 P=$(ls "$SRC"/*.bin | head -1); NAME=$(basename "$P" .bin)
 cp "$P" "nik/web/model/$NAME.bin"
 mkdir -p nik/web/model/logs
