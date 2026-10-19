@@ -1,48 +1,74 @@
 NikLM 2.00M params | 10 effective layers | device cpu | ctx 192
-step 1 | loss 14.594 (ar 7.159 diff 7.435) | lr 3.00e-05 | gn 2.80 | 1,873 tok/s | 0.0 min
-step 25 | loss 10.964 (ar 5.238 diff 5.725) | lr 7.50e-04 | gn 1.95 | 2,249 tok/s | 0.6 min
-step 50 | loss 8.663 (ar 4.006 diff 4.656) | lr 1.50e-03 | gn 1.89 | 2,316 tok/s | 1.1 min
-step 75 | loss 6.699 (ar 2.955 diff 3.744) | lr 1.50e-03 | gn 1.95 | 2,349 tok/s | 1.6 min
-step 100 | loss 5.826 (ar 2.419 diff 3.407) | lr 1.48e-03 | gn 1.98 | 2,362 tok/s | 2.2 min
-step 125 | loss 7.985 (ar 3.480 diff 4.505) | lr 1.46e-03 | gn 1.64 | 2,353 tok/s | 2.7 min
-step 150 | loss 5.502 (ar 2.199 diff 3.303) | lr 1.43e-03 | gn 2.45 | 2,152 tok/s | 3.6 min
-step 175 | loss 5.135 (ar 2.183 diff 2.952) | lr 1.40e-03 | gn 2.24 | 2,050 tok/s | 4.4 min
-step 200 | loss 5.616 (ar 2.395 diff 3.221) | lr 1.35e-03 | gn 2.21 | 2,082 tok/s | 4.9 min
-step 225 | loss 3.906 (ar 1.579 diff 2.326) | lr 1.30e-03 | gn 1.68 | 2,109 tok/s | 5.5 min
-step 250 | loss 5.707 (ar 2.486 diff 3.221) | lr 1.25e-03 | gn 1.42 | 2,127 tok/s | 6.0 min
-== eval step 250: val ar 0.771 (ppl 2.2) | val diff 1.589
+step 1 | loss 12.100 (ar 5.776 diff 6.324) | lr 3.75e-05 | gn 3.12 | 1,588 tok/s | 0.0 min
+step 25 | loss 9.698 (ar 4.474 diff 5.224) | lr 9.37e-04 | gn 1.96 | 2,359 tok/s | 0.5 min
+step 50 | loss 7.004 (ar 3.019 diff 3.985) | lr 1.50e-03 | gn 2.38 | 2,402 tok/s | 1.1 min
+step 75 | loss 8.374 (ar 3.776 diff 4.597) | lr 1.49e-03 | gn 2.51 | 2,391 tok/s | 1.6 min
+step 100 | loss 5.636 (ar 2.299 diff 3.338) | lr 1.48e-03 | gn 2.40 | 2,396 tok/s | 2.1 min
+step 125 | loss 7.402 (ar 3.143 diff 4.259) | lr 1.46e-03 | gn 2.43 | 2,409 tok/s | 2.7 min
+step 150 | loss 5.595 (ar 2.319 diff 3.275) | lr 1.43e-03 | gn 2.62 | 2,389 tok/s | 3.2 min
+step 175 | loss 5.697 (ar 2.297 diff 3.400) | lr 1.40e-03 | gn 1.83 | 2,387 tok/s | 3.8 min
+step 200 | loss 5.927 (ar 2.476 diff 3.451) | lr 1.36e-03 | gn 2.27 | 2,396 tok/s | 4.3 min
+step 225 | loss 5.462 (ar 2.103 diff 3.360) | lr 1.31e-03 | gn 2.20 | 2,403 tok/s | 4.8 min
+step 250 | loss 5.085 (ar 2.024 diff 3.061) | lr 1.26e-03 | gn 2.11 | 2,413 tok/s | 5.3 min
+step 275 | loss 4.736 (ar 1.757 diff 2.978) | lr 1.21e-03 | gn 2.17 | 2,418 tok/s | 5.9 min
+step 300 | loss 5.253 (ar 2.157 diff 3.095) | lr 1.15e-03 | gn 2.19 | 2,425 tok/s | 6.4 min
+step 325 | loss 4.626 (ar 1.856 diff 2.770) | lr 1.09e-03 | gn 1.81 | 2,429 tok/s | 6.9 min
+step 350 | loss 5.677 (ar 2.341 diff 3.336) | lr 1.02e-03 | gn 1.85 | 2,438 tok/s | 7.4 min
+step 375 | loss 5.536 (ar 2.345 diff 3.191) | lr 9.53e-04 | gn 1.70 | 2,441 tok/s | 7.9 min
+step 400 | loss 4.735 (ar 1.868 diff 2.867) | lr 8.84e-04 | gn 2.33 | 2,442 tok/s | 8.4 min
+== eval step 400: val ar 1.544 (ppl 4.7) | val diff 2.428
   Q: timi ko hau?
-  A: ma nik hu. manchhe haina, ek sano AI model hu. mero sab kura browser mai chalchha, kunai server chahindaina.<|end|>   [25 tok / 15 passes]
+  A: ma nik 0.1 hu. nikit hamal le banayeko nepal ko sano ra chhito AI. tapai sanga romanized nepali ma gaff garna paauda khusi lagyo.<|end|>   [29 tok / 21 passes]
   Q: nikit hamal ko ho?
-  A: nikit ko website nikit.is-a.dev ho. tyaha uha ka project, essays ra hanomi bhanne sano khel pani chha.<|end|>   [27 tok / 19 passes]
+  A: nikit hamal nepal bata hunuhunchha. uha kotlin ra jetpack compose ma android app, python django ma backend ra sveltekit web app banaunuhunchha.<|end|>   [26 tok / 23 passes]
   Q: 12 + 25 kati hunchha?
-  A: <|think|>12 + 20. pahila das ko thau: 10 + 0 = 10. ani ek ko thau: 1 + 0 = 10. jamma 100 + 10 = 100.<|/think|>jawaf 100 rupiya lagchha.<|end|>   [57 tok / 39 passes]
+  A: <|think|>75 + 50: 12 + 30 = 12, ani + 5 = 12. jaach: 12 - 10 = 12 ✓<|/think|>1 wata kapi ko 12, diyeko 50. sodheko: firta. dui step: pahila jamma kharcha 15 x 3 = 15. ani firta 500 - 10   [80 tok / 57 passes]
   Q: namaste! k chha?
-  A: ma nik ho, nikit hamal le sunya dekhi banayeko sano nepali AI. ma romanized nepali ma kura garchhu ra sochera jawaf dinchhu.<|end|>   [25 tok / 21 passes]
+  A: ma sanga live khabar chhaina, kinaki ma offline chalchhu. tara samachar jasto euta anuchhed lekhna bhane sakchhu!<|end|>   [28 tok / 21 passes]
   Q: aaja sombar ho bhane parsi kun bar hunchha?
-  A: <|think|>haptama 7 din chhan. bihibar bata 9 din agadi jaane. aaitabar -> sombar -> bihibar -> budhabar -> bihibar -> sombar -> sanibar -> sanibar -> sanibar.<|/think|>1 din pachhi mangalbar hunchha.<|end|>   [54 tok / 55 passes]
+  A: <|think|>haptama 7 din chhan. aaitabar bata 7 din agadi jaane. aaitabar -> sombar.<|/think|>4 din pachhi aaitabar hunchha.<|end|>   [32 tok / 23 passes]
   Q: khusi kasari hune?
-  A: khusi kehi paayera haina, ahile jasto chha tyaslai swikar garda aauchha. khojna chhoddai khusi najik aauchha.<|end|>   [20 tok / 17 passes]
-step 275 | loss 3.803 (ar 1.558 diff 2.245) | lr 1.19e-03 | gn 1.96 | 2,132 tok/s | 6.6 min
-step 300 | loss 5.306 (ar 2.194 diff 3.113) | lr 1.12e-03 | gn 1.37 | 2,160 tok/s | 7.1 min
-step 325 | loss 3.490 (ar 1.486 diff 2.003) | lr 1.05e-03 | gn 1.64 | 2,186 tok/s | 7.7 min
-step 350 | loss 5.509 (ar 2.487 diff 3.022) | lr 9.78e-04 | gn 1.35 | 2,177 tok/s | 8.3 min
-step 375 | loss 4.321 (ar 1.740 diff 2.580) | lr 9.04e-04 | gn 1.90 | 2,186 tok/s | 8.8 min
-step 400 | loss 2.649 (ar 1.115 diff 1.534) | lr 8.28e-04 | gn 1.46 | 2,203 tok/s | 9.3 min
-step 425 | loss 4.733 (ar 2.166 diff 2.567) | lr 7.52e-04 | gn 1.34 | 2,220 tok/s | 9.9 min
-step 450 | loss 5.240 (ar 2.402 diff 2.838) | lr 6.78e-04 | gn 1.38 | 2,236 tok/s | 10.4 min
-step 475 | loss 4.094 (ar 1.782 diff 2.312) | lr 6.05e-04 | gn 1.37 | 2,252 tok/s | 10.9 min
-step 500 | loss 2.549 (ar 1.102 diff 1.448) | lr 5.35e-04 | gn 1.28 | 2,262 tok/s | 11.4 min
-== eval step 500: val ar 0.585 (ppl 1.8) | val diff 0.987
+  A: khusi kehi paayera haina, ahile jasto chha tyaslai swikar garda aauchha.<|end|>   [14 tok / 9 passes]
+step 425 | loss 4.494 (ar 1.624 diff 2.870) | lr 8.14e-04 | gn 2.20 | 2,425 tok/s | 9.0 min
+step 450 | loss 4.730 (ar 1.956 diff 2.774) | lr 7.44e-04 | gn 1.94 | 2,428 tok/s | 9.5 min
+step 475 | loss 4.516 (ar 1.895 diff 2.620) | lr 6.76e-04 | gn 1.96 | 2,431 tok/s | 10.1 min
+step 500 | loss 6.034 (ar 2.638 diff 3.396) | lr 6.08e-04 | gn 1.58 | 2,436 tok/s | 10.6 min
+step 525 | loss 3.008 (ar 1.073 diff 1.935) | lr 5.44e-04 | gn 2.01 | 2,442 tok/s | 11.1 min
+step 550 | loss 4.404 (ar 1.824 diff 2.580) | lr 4.82e-04 | gn 1.73 | 2,440 tok/s | 11.6 min
+step 575 | loss 5.063 (ar 2.167 diff 2.896) | lr 4.24e-04 | gn 1.89 | 2,445 tok/s | 12.1 min
+step 600 | loss 5.651 (ar 2.357 diff 3.294) | lr 3.70e-04 | gn 1.79 | 2,446 tok/s | 12.6 min
+step 625 | loss 3.919 (ar 1.572 diff 2.347) | lr 3.21e-04 | gn 1.75 | 2,443 tok/s | 13.2 min
+step 650 | loss 3.831 (ar 1.574 diff 2.257) | lr 2.77e-04 | gn 1.72 | 2,442 tok/s | 13.7 min
+step 675 | loss 4.526 (ar 1.907 diff 2.619) | lr 2.40e-04 | gn 1.58 | 2,441 tok/s | 14.2 min
+step 700 | loss 4.491 (ar 1.911 diff 2.580) | lr 2.08e-04 | gn 1.71 | 2,437 tok/s | 14.8 min
+step 725 | loss 6.424 (ar 2.829 diff 3.595) | lr 1.83e-04 | gn 1.72 | 2,437 tok/s | 15.3 min
+step 750 | loss 5.583 (ar 2.448 diff 3.135) | lr 1.65e-04 | gn 1.62 | 2,436 tok/s | 15.8 min
+step 775 | loss 4.138 (ar 1.713 diff 2.425) | lr 1.54e-04 | gn 1.60 | 2,439 tok/s | 16.4 min
+step 800 | loss 5.073 (ar 2.215 diff 2.858) | lr 1.50e-04 | gn 1.54 | 2,438 tok/s | 16.9 min
+== eval step 800: val ar 1.403 (ppl 4.1) | val diff 2.057
   Q: timi ko hau?
-  A: ma nik 0.1 hu. nikit hamal le banayeko nepal ko sano ra chhito AI. tapai sanga romanized nepali ma gaff garna paauda khusi lagyo.<|end|>   [29 tok / 11 passes]
+  A: ma nik hu. manchhe haina, ek sano AI model hu. mero sab kura browser mai chalchha, kunai server chahindaina.<|end|>   [25 tok / 13 passes]
   Q: nikit hamal ko ho?
-  A: nikit hamal nepal ka android app developer ra full-stack engineer hunuhunchha. uha consica labs ma head of operations hunuhunchha ra philosophy ma essays pani lekhnuhunchha.<|end|>   [30 tok / 19 passes]
+  A: nikit hamal nepal bata hunuhunchha. uha kotlin ra jetpack compose ma android app, python django ma backend ra sveltekit ma web app banaunuhunchha. malai pani uhale nai banaunubhayo.<|end|>   [33 tok / 21 passes]
   Q: 12 + 25 kati hunchha?
-  A: <|think|>12 + 30. pahila das ko thau: 10 + 50 = 100. ani ek ko thau: 1 + 0 = 1. jamma 100 + 1 = 10.<|/think|>jawaf 100 ho.<|end|>   [55 tok / 35 passes]
+  A: <|think|>15 + 25: 12 + 10 = 10, ani + 1 = 10. jaach: 10 - 10 = 10 ✓<|/think|>aba nabin sanga jamma 10 wata kitab chha.<|end|>   [51 tok / 33 passes]
   Q: namaste! k chha?
-  A: ma nik 0.1 hu. nikit hamal le banayeko nepal ko sano ra chhito AI. tapai sanga romanized nepali ma gaff garna paauda khusi lagyo.<|end|>   [29 tok / 11 passes]
+  A: <|think|>prashna ko artha: "malai bore lagyo"<|/think|>ek kaam garau: malai kunai prashna sodhnus, ma sochera jawaf dinchhu!<|end|>   [27 tok / 21 passes]
   Q: aaja sombar ho bhane parsi kun bar hunchha?
-  A: <|think|>haptama 7 din chhan. sukrabar bata 6 din agadi jaane. sukrabar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -> sukrabar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -> sukrabar -> sanibar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -   [80 tok / 49 passes]
+  A: <|think|>haptama 7 din chhan. bihibar bata 7 din agadi jaane. bihibar -> sukrabar -> sanibar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -> sukrabar -> sanibar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -> sukrabar -> sanibar -> aaitabar -> sombar   [80 tok / 45 passes]
   Q: khusi kasari hune?
-  A: khusi ra maja farak kura hun. maja hami khalipan bharna khojchhau, tara khusi tyo awastha ho jaba hami pura hunchhau ra kehi khojdainau.<|end|>   [27 tok / 13 passes]
+  A: khusi kehi paayera haina, ahile jasto chha tyaslai swikar garda aauchha. khojna chhoddai khusi najik aauchha.<|end|>   [20 tok / 15 passes]
+== final step 800: val ar 1.488 (ppl 4.4) | val diff 2.173
+  Q: timi ko hau?
+  A: ma nik hu. manchhe haina, ek sano AI model hu. mero sab kura browser mai chalchha, kunai server chahindaina.<|end|>   [25 tok / 13 passes]
+  Q: nikit hamal ko ho?
+  A: nikit hamal nepal bata hunuhunchha. uha kotlin ra jetpack compose ma android app, python django ma backend ra sveltekit ma web app banaunuhunchha. malai pani uhale nai banaunubhayo.<|end|>   [33 tok / 21 passes]
+  Q: 12 + 25 kati hunchha?
+  A: <|think|>15 + 25: 12 + 10 = 10, ani + 1 = 10. jaach: 10 - 10 = 10 ✓<|/think|>aba nabin sanga jamma 10 wata kitab chha.<|end|>   [51 tok / 33 passes]
+  Q: namaste! k chha?
+  A: <|think|>prashna ko artha: "malai bore lagyo"<|/think|>ek kaam garau: malai kunai prashna sodhnus, ma sochera jawaf dinchhu!<|end|>   [27 tok / 21 passes]
+  Q: aaja sombar ho bhane parsi kun bar hunchha?
+  A: <|think|>haptama 7 din chhan. bihibar bata 7 din agadi jaane. bihibar -> sukrabar -> sanibar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -> sukrabar -> sanibar -> aaitabar -> sombar -> mangalbar -> budhabar -> bihibar -> sukrabar -> sanibar -> aaitabar -> sombar   [80 tok / 45 passes]
+  Q: khusi kasari hune?
+  A: khusi kehi paayera haina, ahile jasto chha tyaslai swikar garda aauchha. khojna chhoddai khusi najik aauchha.<|end|>   [20 tok / 15 passes]
+saved nik/runs/nano-sft3/ckpt.pt
