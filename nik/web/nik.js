@@ -211,6 +211,9 @@ export class NikModel {
     this.cfg = cfg; this.W = W; this.tok = tok;
     const c = cfg;
     this.maxT = 2 * c.block + 64;
+    this.Qraw = Q;
+    this.dsp = new Set(cfg.digit_sp || []); this.dns = new Set(cfg.digit_ns || []);
+    this.kpos = new Int16Array(cfg.ctx);   // abacus digit index of each cached position
     if (backend !== 'js') {
       try {
         this.kernel = new QKernel(Q, this.maxT, Math.max(c.d, c.ffn), Math.max(c.vocab, 2 * c.ffn));
@@ -254,6 +257,25 @@ export class NikModel {
     else matmul(X, T, this.W[name], inD, outD, Y);
   }
 
+  /** abacus digit index for ids[t] given the previous index (mirrors NikLM.digit_index) */
+  _digitIdx(id, prevK) {
+    if (!this.cfg.abacus) return 0;
+    if (this.dsp.has(id)) return 1;
+    if (this.dns.has(id)) return Math.min(this.cfg.abacus, prevK > 0 ? prevK + 1 : 1);
+    return 0;
+  }
+
+  _addRow(name, row, dst, off) {
+    const d = this.cfg.d;
+    if (this.kernel) {
+      const { q, s } = this.Qraw[name], sc = s[row], o = row * d;
+      for (let i = 0; i < d; i++) dst[off + i] += q[o + i] * sc;
+    } else {
+      const W = this.W[name];
+      for (let i = 0; i < d; i++) dst[off + i] += W[row * d + i];
+    }
+  }
+
   _embedRow(id, dst, off) {
     const d = this.cfg.d;
     if (this.kernel) {
@@ -292,7 +314,15 @@ export class NikModel {
     if (T > this.capT) throw new Error('batch too large');
     if (pos0 + T > c.ctx) throw new Error('context overflow');
     const B = this.buf, W = this.W, rep = H / KV, kvw = KV * hd, scale = 1 / Math.sqrt(hd);
-    for (let t = 0; t < T; t++) this._embedRow(ids[t], B.x, t * d);
+    let prevK = pos0 > 0 ? this.kpos[pos0 - 1] : 0;
+    for (let t = 0; t < T; t++) {
+      this._embedRow(ids[t], B.x, t * d);
+      if (c.abacus) {
+        const k = this._digitIdx(ids[t], prevK);
+        this.kpos[pos0 + t] = k; prevK = k;
+        this._addRow('abacus.weight', k, B.x, t * d);
+      }
+    }
     const lastKey = pos0 + T - 1;
     for (let l = 0; l < this.L; l++) {
       const p = `blocks.${Math.floor(l / c.n_repeat)}.`;

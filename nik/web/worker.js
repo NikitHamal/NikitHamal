@@ -39,16 +39,14 @@ function buildPrompt(messages) {
 
 const tick = () => new Promise((r) => setTimeout(r, 0));
 
-async function run(id, messages, opts) {
-  busy = true; stopFlag = false;
+// One full generation; streams deltas when `stream` is true. Returns the decoded parts.
+async function sampleOnce(id, prompt, opts, stream) {
   model.reset();
-  const prompt = buildPrompt(messages);
-  const t0 = performance.now();
-  let phase = 'answer', think = [], answer = [], sentThink = '', sentAnswer = '', stats = { tokens: 0, passes: 0 };
-  let first = true;
-  const gen = generate(model, prompt, opts);
-  let k = 0;
-  for (const ev of gen) {
+  let phase = 'answer', first = true, k = 0;
+  const think = [], answer = [];
+  let sentThink = '', sentAnswer = '', stats = { tokens: 0, passes: 0 };
+  const safe = (s) => s.replace(/\uFFFD+$/, '');
+  for (const ev of generate(model, prompt, opts)) {
     stats = ev;
     const t = ev.id;
     if (first && t === TOK.THINK) { phase = 'think'; first = false; continue; }
@@ -56,20 +54,52 @@ async function run(id, messages, opts) {
     if (t === TOK.ETHINK) { phase = 'answer'; continue; }
     if (t === TOK.END || t === TOK.EOS) break;
     if (t < 16) continue;
-    if (phase === 'think') think.push(t); else answer.push(t);
-    const th = model.tok.decode(think), an = model.tok.decode(answer);
-    // hold back an incomplete UTF-8 tail (shown as U+FFFD) until it completes
-    const safe = (s) => s.replace(/�+$/, '');
-    const dt = safe(th).slice(sentThink.length), da = safe(an).slice(sentAnswer.length);
-    if (dt || da) {
-      sentThink += dt; sentAnswer += da;
-      postMessage({ type: 'delta', id, think: dt, answer: da, phase });
+    (phase === 'think' ? think : answer).push(t);
+    if (stream) {
+      const th = safe(model.tok.decode(think)), an = safe(model.tok.decode(answer));
+      const dt = th.slice(sentThink.length), da = an.slice(sentAnswer.length);
+      if (dt || da) { sentThink += dt; sentAnswer += da; postMessage({ type: 'delta', id, think: dt, answer: da, phase }); }
     }
     if (++k % 2 === 0) await tick();
     if (stopFlag) break;
   }
+  return { think: model.tok.decode(think).trim(), answer: model.tok.decode(answer).trim(), stats, thought: think.length > 0 };
+}
+
+// The final number of an answer (what self-consistency votes on).
+const finalNumber = (s) => { const m = s.replace(/,/g, '').match(/-?\d+(\.\d+)?/g); return m ? m[m.length - 1] : null; };
+
+async function run(id, messages, opts) {
+  busy = true; stopFlag = false;
+  const prompt = buildPrompt(messages);
+  const t0 = performance.now();
+  const first = await sampleOnce(id, prompt, opts, true);
+  let tokens = first.stats.tokens, passes = first.stats.passes;
+  let vote = null;
+  // Self-consistency (Wang et al., 2022): for answers Nik reasoned about, sample
+  // more independent reasoning paths and keep the majority final answer.
+  const K = opts.vote ?? 5;
+  const n0 = finalNumber(first.answer);
+  if (!stopFlag && K > 1 && first.thought && n0 !== null) {
+    const paths = [first];
+    const sopts = { ...opts, temperature: Math.max(0.7, opts.temperature ?? 0.7) };
+    for (let i = 1; i < K && !stopFlag; i++) {
+      postMessage({ type: 'vote', id, i: i + 1, k: K });
+      const p = await sampleOnce(id, prompt, sopts, false);
+      tokens += p.stats.tokens; passes += p.stats.passes;
+      paths.push(p);
+    }
+    const counts = new Map();
+    for (const p of paths) { const n = finalNumber(p.answer); if (n !== null) counts.set(n, (counts.get(n) || 0) + 1); }
+    const [best, agree] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
+    vote = { agree, k: paths.length, answer: best };
+    if (best !== n0) {
+      const win = paths.find((p) => finalNumber(p.answer) === best);
+      postMessage({ type: 'replace', id, think: win.think, answer: win.answer });
+    }
+  }
   const ms = performance.now() - t0;
-  postMessage({ type: 'done', id, stats: { ...stats, ms, tps: stats.tokens / (ms / 1000), promptTokens: prompt.length }, stopped: stopFlag });
+  postMessage({ type: 'done', id, stats: { tokens, passes, ms, tps: tokens / (ms / 1000), promptTokens: prompt.length }, vote, stopped: stopFlag });
   busy = false;
 }
 
