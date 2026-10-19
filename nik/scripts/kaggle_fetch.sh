@@ -17,7 +17,7 @@ python3 - "$NAME" "$SRC" <<'PY'
 import datetime, json, os, sys
 name, src = sys.argv[1], sys.argv[2]
 ev = {}
-for t in ('rft', 'sft'):
+for t in ('rsi', 'rft', 'sft'):
     p = f'{src}/eval-{t}.json'
     if os.path.exists(p):
         ev[t] = {k: v for k, v in json.load(open(p)).items() if k != 'samples'}
