@@ -31,5 +31,5 @@ then echo "pretraining paused at the time cap; rerun this script to resume"; exi
 python nik/train.py --stage sft --init "$RUN/pre/ckpt.pt" --data "$DATA" --out "$RUN/sft" \
   --steps "$SFT_STEPS" --bs "$BS" --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2
 python nik/export.py --ckpt "$RUN/sft/ckpt.pt" --out "nik/web/model/$PRESET.bin"
-python nik/scripts/publish.py --preset "$PRESET" --run "$RUN"
+[ "${PUBLISH:-1}" = "1" ] && python nik/scripts/publish.py --preset "$PRESET" --run "$RUN"
 echo "done -> nik/web/model/$PRESET.bin (commit nik/web/model + nik/runs/*/log.jsonl and push)"
