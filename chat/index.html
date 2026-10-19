@@ -148,6 +148,7 @@
       <div class="row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
       <div class="row"><label>decoding</label><div class="seg" id="sMode"><button data-v="ar">ar</button><button data-v="ssbd">ssbd</button></div></div>
       <div class="row"><label>thinking</label><div class="seg" id="sVote"><button data-v="5">5 paths</button><button data-v="3">3 paths</button><button data-v="1">1 path</button></div></div>
+      <div class="row"><label>voice</label><div class="seg" id="sSpeak"><button data-v="off">manual</button><button data-v="on">auto-speak</button></div></div>
       <div class="row"><label>palette</label><div class="seg" id="sPal"><button data-v="default">default</button><button data-v="sepia">sepia</button><button data-v="slate">slate</button></div></div>
       <p><b>thinking paths</b>: when Nik reasons (socheko), it can think several times independently and answer with the consensus (self-consistency). Slower, more reliable. <b>ar</b>: one token per step through a hand-written WASM-SIMD int8 kernel, the fastest on CPUs. <b>ssbd</b> (self-speculative block diffusion): Nik drafts a whole block in parallel with its diffusion head and verifies it with its own AR head. It produces the same text in fewer sequential steps. Experimental here; it pays off on GPUs.</p>
     </div>
@@ -185,7 +186,7 @@
     const root = document.documentElement;
     const state = {
       msgs: JSON.parse(localStorage.getItem('nik-chat') || '[]'),
-      opts: Object.assign({ temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 200, mode: 'ar', vote: 5 }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
+      opts: Object.assign({ temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 200, mode: 'ar', vote: 5, speak: false }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
       ready: false, busy: false, cur: null, id: 0,
     };
     const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };
@@ -236,6 +237,24 @@
       sync(cur); el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; sync(b.dataset.v); on(b.dataset.v); }; };
     seg($('sMode'), state.opts.mode, (v) => { state.opts.mode = v; save(); });
     seg($('sVote'), String(state.opts.vote), (v) => { state.opts.vote = +v; save(); });
+    seg($('sSpeak'), state.opts.speak ? 'on' : 'off', (v) => { state.opts.speak = v === 'on'; save(); });
+
+    // ---------- voice (NikTTS, on-device; loaded on first use)
+    let ttsP = null;
+    const getTTS = () => (ttsP ||= import('/nik/web/tts.js').then((m) => m.NikTTS.load('/nik/web/tts')));
+    async function speak(text, btn) {
+      try {
+        if (btn) btn.textContent = 'awaj loading…';
+        const t = await getTTS();
+        if (btn) btn.textContent = 'boldai…';
+        await t.speak(text);
+      } catch (e) {
+        ttsP = null;
+        if (btn) btn.textContent = String(e.message || e).includes('no voice') ? 'awaj chhito aaudai chha' : 'awaj error';
+        return;
+      }
+      if (btn) btn.textContent = 'suna';
+    }
     seg($('sPal'), root.dataset.palette || 'default', (v) => { root.dataset.palette = v; localStorage.setItem('reader-palette', v); syncTheme(); });
     $('setBtn').onclick = (e) => { e.stopPropagation(); const o = $('pop').classList.toggle('open'); $('setBtn').setAttribute('aria-expanded', o); };
     document.addEventListener('click', (e) => { if (!$('pop').contains(e.target)) { $('pop').classList.remove('open'); $('setBtn').setAttribute('aria-expanded', false); } });
@@ -280,7 +299,9 @@
       const copy = el('button', null, 'copy');
       copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = 'copied'; setTimeout(() => (copy.textContent = 'copy'), 1200); });
       const retry = el('button', null, 'feri lekha'); retry.title = 'regenerate'; retry.onclick = () => regenerate(row);
-      meta.append(copy, retry);
+      const say = el('button', null, 'suna'); say.title = 'listen (on-device voice)'; say.onclick = () => speak(m.content, say);
+      meta.append(say, copy, retry);
+      row._say = say;
     }
     const hero = (show) => { $('hero').style.display = show ? '' : 'none'; };
     function rerender() {
@@ -330,6 +351,7 @@
         msg.stats = m.stats; msg.mode = state.opts.mode;
         if (!msg.content.trim()) { msg.content = '…'; p.text.textContent = msg.content; }
         fillMeta(row, msg);
+        if (state.opts.speak && msg.content && msg.content !== '…') speak(msg.content, row._say);
         state.cur = null; state.busy = false; save(); updateSend();
         setStatus(`ready · ${m.stats.tps.toFixed(0)} tok/s`, 'ready');
         toBottom();
