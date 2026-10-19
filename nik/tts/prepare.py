@@ -26,7 +26,8 @@ def main():
     ap.add_argument('--lexicon', default='', help='romanizer lexicon tsv (optional, improves romanization)')
     ap.add_argument('--limit', type=int, default=0)
     a = ap.parse_args()
-    if not os.path.exists(os.path.join(a.root, 'line_index.tsv')):
+    idx = next((os.path.join(a.root, f) for f in ('line_index.tsv', 'metadata.tsv', 'metadata.csv') if os.path.exists(os.path.join(a.root, f))), None)
+    if idx is None:
         base = os.path.dirname(a.root) or '.'
         os.makedirs(base, exist_ok=True)
         z = os.path.join(base, 'ne_np_female.zip')
@@ -34,12 +35,18 @@ def main():
             print('downloading', URL, flush=True)
             urllib.request.urlretrieve(URL, z)
         zipfile.ZipFile(z).extractall(base)
+        idx = os.path.join(a.root, 'line_index.tsv')
     from romanize import Romanizer
     rom = Romanizer.load(a.lexicon or None)
-    rows = [l.rstrip('\n').split('\t') for l in open(os.path.join(a.root, 'line_index.tsv'), encoding='utf-8') if '\t' in l]
+    rows = []
+    for l in open(idx, encoding='utf-8'):
+        parts = l.rstrip('\n').split('\t') if '\t' in l else l.rstrip('\n').split('|')
+        if len(parts) >= 2 and parts[0] and parts[-1]:
+            rows.append((os.path.splitext(os.path.basename(parts[0]))[0], parts[-1]))
     if a.limit:
         rows = rows[: a.limit]
-    spk_names = sorted({r[0].split('_')[1] for r in rows})
+    spk_of = lambda fn: fn.split('_')[1] if fn.count('_') >= 2 else '0'  # noqa: E731
+    spk_names = sorted({spk_of(r[0]) for r in rows})
     spk_id = {s: i for i, s in enumerate(spk_names)}
     items = []
     for i, (fn, txt) in enumerate(rows):
@@ -53,7 +60,7 @@ def main():
         ids = encode(r)
         m = mel(torch.from_numpy(w)[None])[0]
         items.append({'ids': np.array(ids, np.int16), 'text': normalize(r), 'mel': m.numpy().astype(np.float16),
-                      'wav': (w * 32767).astype(np.int16), 'spk': spk_id[fn.split('_')[1]]})
+                      'wav': (w * 32767).astype(np.int16), 'spk': spk_id[spk_of(fn)]})
         if i % 200 == 0:
             print(f'{i}/{len(rows)}  {r[:60]!r}', flush=True)
     dur = sum(len(x['wav']) for x in items) / 22050 / 3600
