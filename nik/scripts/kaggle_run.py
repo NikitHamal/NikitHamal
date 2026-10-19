@@ -18,7 +18,7 @@ CFG = {
     'smoke': dict(preset='nik-0.1', shards=1, news_lines=30000, stories=5000, sft_n=8000,
                   pre_min=4, sft_min=2, rft_rounds=1, rft_problems=40, rft_min=2, rft_train_min=1, bs=16),
     'full': dict(preset='nik-0.1', shards=2, news_lines=0, stories=80000, sft_n=120000,
-                 pre_min=420, sft_min=80, rft_rounds=2, rft_problems=3000, rft_min=30, rft_train_min=20, bs=16),
+                 pre_min=400, sft_min=80, rft_rounds=2, rft_problems=3000, rft_min=30, rft_train_min=20, bs=16),
 }[MODE]
 
 
