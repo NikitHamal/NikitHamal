@@ -12,6 +12,7 @@ sft:       data/sft.jsonl    -> data/sft_tok.bin + data/sft_mask.bin (1 = learn 
 from __future__ import annotations
 import argparse, json, os, sys
 from multiprocessing import Pool
+from pathlib import Path
 
 import numpy as np
 
@@ -80,6 +81,7 @@ def main():
             parts.append(arr)
             if k % 20 == 0:
                 print(f'pretrain chunk {k}/{len(chunks)}', flush=True)
+    if not parts: raise ValueError('Need at least two non-empty pretraining documents')
     train = np.concatenate(parts)
     _init(a.tok)
     val = _enc_docs(lines[:n_val])
@@ -92,16 +94,19 @@ def main():
 
 
 def prepare_sft(tok, data):
-    sft = os.path.join(data, 'sft.jsonl')
-    if os.path.exists(sft):
+    for source, prefix in [('sft.jsonl', 'sft'), ('sft_val.jsonl', 'sft_val')]:
+        path = Path(data) / source
+        if not path.exists():
+            if source == 'sft_val.jsonl':
+                raise ValueError('Independent sft_val.jsonl is required; never evaluate on training rows')
+            continue
         ids, mask = [], []
-        with open(sft) as f:
-            for line in f:
-                i, m = render_chat(tok, json.loads(line)['messages'])
-                ids += i; mask += m
-        np.array(ids, dtype=np.uint16).tofile(os.path.join(data, 'sft_tok.bin'))
-        np.array(mask, dtype=np.uint8).tofile(os.path.join(data, 'sft_mask.bin'))
-        print(f'sft: {len(ids):,} tokens, {sum(mask):,} supervised')
+        for line in path.read_text().splitlines():
+            i, m = render_chat(tok, json.loads(line)['messages'])
+            ids += i; mask += m
+        np.array(ids, dtype=np.uint16).tofile(Path(data) / (prefix + '_tok.bin'))
+        np.array(mask, dtype=np.uint8).tofile(Path(data) / (prefix + '_mask.bin'))
+        print(f'{prefix}: {len(ids):,} tokens, {sum(mask):,} supervised')
 
 
 if __name__ == '__main__':

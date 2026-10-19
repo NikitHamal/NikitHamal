@@ -1,40 +1,47 @@
-# Training Nik
+# Train and improve Nik
 
-## Quick start (GPU: Colab / Kaggle)
+The shipped seed experiment is trained from random weights, not a fine-tune of someone else's LLM. It is a starting point, not fluent general Nepali. Training outputs must be evaluated before updating the browser manifest.
 
-Open `nik/notebooks/nik_train.ipynb` in Colab or Kaggle with a T4 GPU and run all cells. It runs:
+## Environment
 
-```bash
-PRESET=nik-0.1 PRE_STEPS=30000 SFT_STEPS=6000 BS=48 bash nik/scripts/pipeline.sh
+From repository root, use Python 3.11+ and install `pip install -r nik/requirements.txt`. For CPU-only machines install PyTorch from its CPU wheel index to avoid CUDA downloads. The existing browser tokenizer is frozen at 4096 tokens. Changing it invalidates existing checkpoints.
+
+## Reproduce the short seed experiment
+
+```
+python nik/data/build_seed.py
+python nik/smoke_train.py --minutes 10 --out nik/runs/smoke
+python nik/export.py --ckpt nik/runs/smoke/weights.pt --out nik/web/model/nik-0.1.bin
+python nik/tests/check_model.py
+node nik/tests/runtime.mjs
+python nik/evaluate_seed.py --checkpoint nik/runs/smoke/weights.pt
 ```
 
-Each stage is skipped if its output already exists. Pretraining supports `--resume`.
+`smoke_train.py` refuses budgets over 20 minutes. It reserves time for saving, writes optimizer state every 200 steps, and saves compact weights separately. Use `--resume nik/runs/smoke/ckpt.pt` for another explicitly chosen short session. Each short run has its own 20-minute maximum; do not chain short runs to evade a total user-approved budget. The shipped run's wall time and seed are in `nik/reports/training.json`. Identical hardware/library versions are required for bit-for-bit reproducibility.
 
-## Stages
+## Expanded model on Colab/Kaggle/local GPU — user-run
 
-| stage | command | notes |
-|---|---|---|
-| corpus | `python nik/data/build_corpus.py --out data --shards 2` | ~10 min CPU per shard |
-| SFT data | `python nik/data/gen_sft.py --out data/sft.jsonl --n 120000` | seconds |
-| tokenizer | `python nik/tokenizer.py train --input data/pretrain.txt --sft data/sft.jsonl --out nik/web/model/tokenizer.json` | ~8 min CPU; **keep it fixed** once models are trained on it |
-| tokenize | `python nik/prepare.py --data data` | uint16 memmaps |
-| pretrain | `python nik/train.py --stage pretrain --preset nik-0.1 --data data --out nik/runs/nik-0.1/pre --steps 30000 --bs 48` | hybrid AR + diffusion loss |
-| SFT | `python nik/train.py --stage sft --init nik/runs/nik-0.1/pre/ckpt.pt --data data --out nik/runs/nik-0.1/sft --steps 6000 --lr 1e-3 --mix 0.2` | loss only on Nik's tokens |
-| export | `python nik/export.py --ckpt nik/runs/nik-0.1/sft/ckpt.pt --out nik/web/model/nik-0.1.bin` | int8, < 10 MB |
-| publish | `python nik/scripts/publish.py --preset nik-0.1 --run nik/runs/nik-0.1` | updates `manifest.json`; `/chat` loads it on reload |
+Open `nik/notebooks/nik_train.ipynb`. Start with preparation and inspection, not Run All on an hours-long job. GPU enablement is your choice. No API keys are needed.
 
-## Hyper-parameters (nik-0.1)
+1. Build the seed; review `nik/data/SOURCES.md`, and add substantial licensed, human-reviewed Romanized Nepali text and dialogue. The seed alone will not create broad fluency.
+2. Keep separate `data/sft.jsonl`, `data/sft_val.jsonl`, and `data/pretrain.txt`. A row has `messages` with `role`, `content`, and optional assistant `think`. Deduplicate before splitting; keep near-duplicate groups in the same split.
+3. `python nik/prepare.py --data data --workers 2`
+4. Run a bounded baseline:
 
-AdamW with β = (0.9, 0.95) and weight decay 0.1 on matrices. Peak LR is 3e-3 with 1k warmup steps and a cosine decay to 10%. Gradient clipping is 1.0. Precision is fp16 autocast with GradScaler on a T4, or bf16 on Ampere and newer. The context is 512 tokens (the two-stream input is 1024). A batch of 48 windows is about 24.6k clean tokens per step. 30k steps is about 740M tokens seen, roughly 12 epochs over the 62M-token corpus. That is past Chinchilla-optimal for 8M params, which is deliberate: tiny models keep improving with more passes (MobileLLM, SmolLM).
-
-## What gets pushed
-
-`nik/web/model/` holds the int8 `.bin`, `tokenizer.json`, `manifest.json` and `logs/*.jsonl`. Commit and push those. Checkpoints (`nik/runs/`) and data (`data/`) are git-ignored.
-
-## Local CPU runs
-
-The default `--minutes` cap keeps a laptop run short:
-
-```bash
-python nik/train.py --stage pretrain --preset nik-nano --data data --out nik/runs/nano-pre --minutes 18 --bs 16 --ctx 192
 ```
+python nik/train.py --stage pretrain --preset nik-0.1 --data data --out nik/runs/full/pre --minutes 18 --bs 8 --ctx 128 --resume
+```
+
+5. Only when you deliberately choose a longer session, use `--minutes 120 --allow-long-run`. Increase batch/context only after checking GPU memory. CPU full-model training is slow. Resume with the same data/tokenizer/configuration; optimizer and step are restored. Schedule length (`--steps`) should stay consistent across resumes.
+6. Run SFT on the trained base:
+
+```
+python nik/train.py --stage sft --init nik/runs/full/pre/ckpt.pt --data data --out nik/runs/full/sft --minutes 18 --bs 8 --ctx 128 --lr 0.0003 --mix 0.2
+```
+
+7. Evaluate both float and exported int8 weights, compare causal-only (`--diff-weight 0`) with hybrid training at equal wall time, inspect generated language with Nepali speakers. See `evaluate_seed.py` for a starting evaluation, not a complete benchmark. `eval.py` is an older exploratory suite with legacy persona expectations; prefer source-verified facts.
+8. `python nik/export.py --ckpt nik/runs/full/sft/ckpt.pt --out nik/web/model/nik-0.1.bin`
+9. `python nik/scripts/release_model.py --checkpoint nik/runs/full/sft/ckpt.pt --note 'Describe data, evaluation and limitations'` validates the size and writes SHA256 hashes, logs and the new manifest. Update evaluation reports before publication. Never swap a tokenizer without matching weights.
+10. Commit and push **your branch**: weights `.bin`, tokenizer, manifest, model card, reports, curated provenance and logs. For checkpoints larger than GitHub limits use release assets or your own storage with checksums; the shipped compact seed checkpoint is committed here. Push your branch, then tell the assistant to pull and iterate. Do not put credentials, dependencies or downloaded corpora in git.
+
+The full preset is approximately 8M parameters and should fit under 10 decimal MB after row-int8 export; exporter and release script enforce the actual byte budget. Download size is not the same as runtime RAM. Browser memory includes buffers, caches and WASM memory.

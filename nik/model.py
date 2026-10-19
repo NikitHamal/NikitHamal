@@ -237,7 +237,7 @@ def generate_ar(model, prompt: list[int], max_new: int = 128, temperature: float
                 stop: tuple[int, ...] = (2, 9)):
     ids = list(prompt)
     for _ in range(max_new):
-        ctx = torch.tensor([ids[-model.cfg.ctx:]])
+        ctx = torch.tensor([ids[-model.cfg.ctx:]], device=next(model.parameters()).device)
         nxt = _sample(model(ctx)[0, -1], temperature, top_p)
         ids.append(nxt)
         if nxt in stop:
@@ -256,6 +256,8 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
     kept while s_j == d_j; the first mismatch is emitted and becomes the next t0.
     Every emitted token is an AR sample, so outputs are AR-distributed (greedy
     output is identical to greedy AR). Returns (tokens, n_forward_passes)."""
+    if next(model.parameters()).device.type != 'cpu':
+        raise ValueError('Reference SSBD is CPU-only; use AR sampling during GPU training')
     cfg = model.cfg
     B, M = cfg.block, cfg.mask_id
     ids, passes = list(prompt), 1

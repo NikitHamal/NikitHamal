@@ -59,6 +59,9 @@ def export(ckpt_path: str, out: str):
         for b in blobs:
             f.write(b)
     size = os.path.getsize(out)
+    if size >= 10_000_000:
+        os.remove(out)
+        raise ValueError('Export exceeded 10,000,000-byte model budget')
     print(f'wrote {out}: {size / 1e6:.2f} MB, {sum(v.size for v in sd.values()) / 1e6:.2f}M params, '
           f'mean rel. quant error {np.mean(err) * 100:.2f}%')
     return out

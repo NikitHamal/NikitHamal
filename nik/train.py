@@ -79,7 +79,8 @@ def samples(model, tok, stage):
         for q in CHATS:
             ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
             prompt = ids[:-1] + [6]                       # drop <|eos|>, open Nik's turn
-            gen, passes = generate_ssbd(model, prompt, 80, temperature=0.0)
+            gen = generate_ar(model, prompt, 80, temperature=0.0)
+            passes = len(gen)
             out.append(f'  Q: {q}\n  A: {tok.decode(gen)}   [{len(gen)} tok / {passes} passes]')
     model.train()
     return '\n'.join(out)
@@ -95,7 +96,7 @@ def main():
     ap.add_argument('--tok', default=os.path.join(os.path.dirname(__file__), 'web/model/tokenizer.json'))
     ap.add_argument('--out', default='nik/runs/base')
     ap.add_argument('--steps', type=int, default=20000)
-    ap.add_argument('--minutes', type=float, default=0, help='stop after this many minutes (0 = no limit)')
+    ap.add_argument('--minutes', type=float, default=20, help='training loop budget, default 20 minutes')
     ap.add_argument('--bs', type=int, default=32)
     ap.add_argument('--accum', type=int, default=1)
     ap.add_argument('--ctx', type=int, default=0, help='override training context')
@@ -108,7 +109,10 @@ def main():
     ap.add_argument('--compile', action='store_true')
     ap.add_argument('--device', default='auto')
     ap.add_argument('--threads', type=int, default=0)
+    ap.add_argument('--allow-long-run', action='store_true', help='Explicit user-run opt-in for >20 minutes or unlimited training')
     a = ap.parse_args()
+    if (a.minutes <= 0 or a.minutes > 20) and not a.allow_long_run:
+        ap.error('Long training requires --allow-long-run; no long session starts by default')
 
     if a.threads:
         torch.set_num_threads(a.threads)
@@ -127,6 +131,7 @@ def main():
     if ck:
         model.load_state_dict(ck['model'])
     L = a.ctx or cfg.ctx
+    if L > cfg.ctx: ap.error('Training context cannot exceed model context')
     tok = Tokenizer.load(a.tok)
     assert tok.vocab_size == cfg.vocab, (tok.vocab_size, cfg.vocab)
     print(f'NikLM {model.n_params() / 1e6:.2f}M params | {cfg.n_layers} effective layers | device {device} | ctx {L}', flush=True)
@@ -138,7 +143,7 @@ def main():
     else:
         train_b = Batches(os.path.join(D, 'sft_tok.bin'), os.path.join(D, 'sft_mask.bin'),
                           os.path.join(D, 'pre_train.bin'), a.mix)
-        val_b = Batches(os.path.join(D, 'sft_tok.bin'), os.path.join(D, 'sft_mask.bin'), seed=1)
+        val_b = Batches(os.path.join(D, 'sft_val_tok.bin'), os.path.join(D, 'sft_val_mask.bin'), seed=1)
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
     no_decay = [p for n, p in model.named_parameters() if p.dim() < 2]
@@ -163,7 +168,9 @@ def main():
         torch.save({'model': model.state_dict(), 'cfg': cfg.to_dict(), 'opt': opt.state_dict(), 'step': step,
                     'stage': a.stage}, os.path.join(a.out, f'{tag}.pt'))
 
+    model.train()
     while step < a.steps:
+        if a.minutes and time.time() - t0 >= max(0, a.minutes * 60 - 30): break
         lr = lr_at(step, a.steps, a.lr, a.warmup)
         for g in opt.param_groups:
             g['lr'] = lr
@@ -183,7 +190,7 @@ def main():
         if step % 25 == 0 or step == 1:
             print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}) | lr {lr:.2e} | gn {float(gn):.2f} | '
                   f'{tok_seen / el:,.0f} tok/s | {el / 60:.1f} min', flush=True)
-        if step % a.eval_every == 0 or step == a.steps:
+        if (step % a.eval_every == 0 or step == a.steps) and (not a.minutes or el < a.minutes * 60 - 60):
             v_ar, v_df = evaluate(model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
             print(samples(model, tok, a.stage), flush=True)
@@ -194,7 +201,7 @@ def main():
             break
     v_ar, v_df = evaluate(model, val_b, L, device, amp=amp)
     print(f'== final step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
-    print(samples(model, tok, a.stage), flush=True)
+    log.write(json.dumps({'step':step,'val_ar':v_ar,'val_diff':v_df,'min':(time.time()-t0)/60})+'\n');log.flush()
     save()
     print('saved', os.path.join(a.out, 'ckpt.pt'))
 
