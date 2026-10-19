@@ -36,7 +36,7 @@ print('rftmix', len(mix), 'examples,', len(rft), 'verified self-generated traces
 PY
   python nik/prepare.py --data "$DATA" --sft-only --sft-name rftmix
   python nik/train.py --stage sft --sft-name rftmix --init "$prev" --data "$DATA" --out "$out" \
-    --steps "$STEPS" --bs "$BS" --lr 4e-4 --warmup 100 --eval-every 500 --mix 0.15 --ema 0.998 --opt muon --minutes "$TRAIN_MIN"
+    --steps "$STEPS" --bs "$BS" --lr 4e-4 --warmup 100 --eval-every 500 --mix 0.15 --ema 0.998 --opt muon --minutes "$TRAIN_MIN" ${EXTRA:-}
   prev="$out/ckpt.pt"
 done
 python nik/export.py --ckpt "$prev" --out "nik/web/model/$PRESET.bin"

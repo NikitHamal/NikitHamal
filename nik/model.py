@@ -29,6 +29,7 @@ from dataclasses import dataclass, asdict, field
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.utils.checkpoint
 
 
 @dataclass
@@ -148,6 +149,7 @@ class NikLM(nn.Module):
             self.register_buffer('_dns', torch.tensor(cfg.digit_ns or [-1], dtype=torch.long), persistent=False)
         self.blocks = nn.ModuleList(Block(cfg) for _ in range(cfg.n_unique))
         self.norm = RMSNorm(cfg.d, cfg.eps)
+        self.grad_ckpt = False        # activation checkpointing (train.py --grad-ckpt)
         self.apply(self._init)
         if cfg.abacus:
             nn.init.normal_(self.abacus.weight, std=0.02)
@@ -190,12 +192,22 @@ class NikLM(nn.Module):
             mask = torch.ones(T, T, dtype=torch.bool, device=idx.device).tril()
         cos, sin = rope_cache(self.cfg, int(pos.max()) + 1, idx.device)
         cos, sin = cos[pos].to(self.emb.weight.dtype), sin[pos].to(self.emb.weight.dtype)
+        if mask.dtype == torch.bool:
+            # additive float mask in the activation dtype lets SDPA pick the
+            # memory-efficient kernel instead of materialising T x T scores per layer
+            dt = self.emb.weight.dtype
+            if idx.is_cuda and torch.is_autocast_enabled():
+                dt = torch.get_autocast_dtype('cuda') if hasattr(torch, 'get_autocast_dtype') else torch.get_autocast_gpu_dtype()
+            mask = torch.zeros(mask.shape, dtype=dt, device=idx.device).masked_fill(~mask, float('-inf'))
         x = self.emb(idx)
         if self.cfg.abacus:
             x = x + self.abacus(self.digit_index(idx) if digits is None else digits)
         for b in self.blocks:
             for _ in range(self.cfg.n_repeat):
-                x = b(x, cos, sin, mask)
+                if self.grad_ckpt and self.training:
+                    x = torch.utils.checkpoint.checkpoint(b, x, cos, sin, mask, use_reentrant=False)
+                else:
+                    x = b(x, cos, sin, mask)
         return F.linear(self.norm(x), self.emb.weight)
 
 
