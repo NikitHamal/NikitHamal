@@ -63,11 +63,12 @@ def main():
     ap.add_argument('--val-frac', type=float, default=0.005)
     ap.add_argument('--workers', type=int, default=os.cpu_count() or 2)
     ap.add_argument('--sft-only', action='store_true')
+    ap.add_argument('--sft-name', default='sft', help='<name>.jsonl -> <name>_tok.bin / <name>_mask.bin')
     a = ap.parse_args()
 
     tok = Tokenizer.load(a.tok)
     if a.sft_only:
-        return prepare_sft(tok, a.data)
+        return prepare_sft(tok, a.data, a.sft_name)
     with open(os.path.join(a.data, 'pretrain.txt')) as f:
         lines = f.readlines()
     if a.max_docs:
@@ -88,20 +89,20 @@ def main():
     chars = sum(len(x) for x in lines)
     print(f'pretrain: {len(train):,} train tokens, {len(val):,} val tokens, {chars / max(1, len(train) + len(val)):.2f} chars/token')
 
-    prepare_sft(tok, a.data)
+    prepare_sft(tok, a.data, a.sft_name)
 
 
-def prepare_sft(tok, data):
-    sft = os.path.join(data, 'sft.jsonl')
+def prepare_sft(tok, data, name='sft'):
+    sft = os.path.join(data, f'{name}.jsonl')
     if os.path.exists(sft):
         ids, mask = [], []
         with open(sft) as f:
             for line in f:
                 i, m = render_chat(tok, json.loads(line)['messages'])
                 ids += i; mask += m
-        np.array(ids, dtype=np.uint16).tofile(os.path.join(data, 'sft_tok.bin'))
-        np.array(mask, dtype=np.uint8).tofile(os.path.join(data, 'sft_mask.bin'))
-        print(f'sft: {len(ids):,} tokens, {sum(mask):,} supervised')
+        np.array(ids, dtype=np.uint16).tofile(os.path.join(data, f'{name}_tok.bin'))
+        np.array(mask, dtype=np.uint8).tofile(os.path.join(data, f'{name}_mask.bin'))
+        print(f'{name}: {len(ids):,} tokens, {sum(mask):,} supervised')
 
 
 if __name__ == '__main__':

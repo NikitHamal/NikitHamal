@@ -44,11 +44,12 @@ async function sampleOnce(id, prompt, opts, stream) {
   model.reset();
   let phase = 'answer', first = true, k = 0;
   const think = [], answer = [];
-  let sentThink = '', sentAnswer = '', stats = { tokens: 0, passes: 0 };
+  let sentThink = '', sentAnswer = '', stats = { tokens: 0, passes: 0 }, lpSum = 0, lpN = 0;
   const safe = (s) => s.replace(/\uFFFD+$/, '');
   for (const ev of generate(model, prompt, opts)) {
     stats = ev;
     const t = ev.id;
+    if (ev.lp !== undefined) { lpSum += ev.lp; lpN++; }
     if (first && t === TOK.THINK) { phase = 'think'; first = false; continue; }
     first = false;
     if (t === TOK.ETHINK) { phase = 'answer'; continue; }
@@ -63,7 +64,8 @@ async function sampleOnce(id, prompt, opts, stream) {
     if (++k % 2 === 0) await tick();
     if (stopFlag) break;
   }
-  return { think: model.tok.decode(think).trim(), answer: model.tok.decode(answer).trim(), stats, thought: think.length > 0 };
+  return { think: model.tok.decode(think).trim(), answer: model.tok.decode(answer).trim(), stats, thought: think.length > 0,
+           conf: lpN ? Math.exp(lpSum / lpN) : 1 };
 }
 
 // The final number of an answer (what self-consistency votes on).
@@ -89,10 +91,16 @@ async function run(id, messages, opts) {
       tokens += p.stats.tokens; passes += p.stats.passes;
       paths.push(p);
     }
-    const counts = new Map();
-    for (const p of paths) { const n = finalNumber(p.answer); if (n !== null) counts.set(n, (counts.get(n) || 0) + 1); }
-    const [best, agree] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
-    vote = { agree, k: paths.length, answer: best };
+    // confidence-weighted vote: each path votes with the model's own mean token probability
+    const score = new Map(), count = new Map();
+    for (const p of paths) {
+      const n = finalNumber(p.answer);
+      if (n === null) continue;
+      score.set(n, (score.get(n) || 0) + p.conf);
+      count.set(n, (count.get(n) || 0) + 1);
+    }
+    const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    vote = { agree: count.get(best), k: paths.length, answer: best };
     if (best !== n0) {
       const win = paths.find((p) => finalNumber(p.answer) === best);
       postMessage({ type: 'replace', id, think: win.think, answer: win.answer });

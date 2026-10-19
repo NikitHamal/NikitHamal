@@ -442,13 +442,17 @@ async function fetchWithProgress(url, onProgress) {
 }
 
 // ------------------------------------------------------------------ sampling
-export function sample(logits, recent, { temperature = 0.7, topP = 0.9, repPenalty = 1.15, ban = [] } = {}) {
+// Log-probability of the most recent sample (read by generate for confidence-weighted voting).
+export const lastSample = { lp: 0 };
+
+export function sample(logits, recent, { temperature = 0.7, topP = 0.9, minP = 0.05, repPenalty = 1.15, ban = [] } = {}) {
   const V = logits.length;
   for (const id of recent) logits[id] = logits[id] > 0 ? logits[id] / repPenalty : logits[id] * repPenalty;
   for (const id of ban) logits[id] = -Infinity;
   if (temperature <= 0) {
     let best = 0;
     for (let i = 1; i < V; i++) if (logits[i] > logits[best]) best = i;
+    lastSample.lp = 0;
     return best;
   }
   let mx = -Infinity;
@@ -456,17 +460,19 @@ export function sample(logits, recent, { temperature = 0.7, topP = 0.9, repPenal
   const idx = [], p = [];
   let sum = 0;
   for (let i = 0; i < V; i++) {
+    // min-p: keep tokens whose probability is at least minP x the top token's (e is p/p_max)
     const e = Math.exp((logits[i] - mx) / temperature);
-    if (e > 1e-6) { idx.push(i); p.push(e); sum += e; }
+    if (e >= Math.max(1e-6, minP)) { idx.push(i); p.push(e); sum += e; }
   }
   const order = idx.map((_, k) => k).sort((a, b) => p[b] - p[a]);
   let cum = 0, cut = order.length;
   for (let k = 0; k < order.length; k++) { cum += p[order[k]] / sum; if (cum >= topP) { cut = k + 1; break; } }
   let tot = 0;
   for (let k = 0; k < cut; k++) tot += p[order[k]];
-  let r = Math.random() * tot;
-  for (let k = 0; k < cut; k++) { r -= p[order[k]]; if (r <= 0) return idx[order[k]]; }
-  return idx[order[0]];
+  let r = Math.random() * tot, pick = order[0];
+  for (let k = 0; k < cut; k++) { r -= p[order[k]]; if (r <= 0) { pick = order[k]; break; } }
+  lastSample.lp = Math.log(p[pick] / tot);
+  return idx[pick];
 }
 
 /**
@@ -487,7 +493,7 @@ export function* generate(model, promptIds, opts = {}) {
   if (mode === 'ar') {
     for (;;) {
       const t = sample(logits, recent(), so);
-      out.push(t); yield { id: t, ...stats() };
+      out.push(t); yield { id: t, lp: lastSample.lp, ...stats() };
       if (done(t)) return;
       logits = model.prefill([t]).slice(); passes++;
     }
