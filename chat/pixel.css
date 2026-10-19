@@ -1,0 +1,20 @@
+/* Nik's pixel workbench inherits the portfolio theme/palette variables. */
+body.nik{background:var(--bg);background-image:radial-gradient(var(--border-line) 1px,transparent 1px);background-size:16px 16px}
+.nk-top{border-bottom:2px solid var(--text-primary);backdrop-filter:none;background:var(--bg);padding-block:12px}
+.nk-title,.nk-hero h1{font-family:var(--font-mono);letter-spacing:-.07em;font-weight:600}
+.nk-title small{letter-spacing:0}.nk-top .nk-icon,.nk-back{border:1px solid var(--border-line);border-radius:3px;min-width:40px;min-height:40px}
+.nk-thread{max-width:880px;padding-top:30px}.nk-hero{padding-top:clamp(12px,4vh,45px)}
+.nk-hero h1{font-size:clamp(2rem,6vw,3.8rem);line-height:1.12;margin-block:8px 18px}
+.nk-hero p{max-width:37rem;font-size:.95rem}.nk-orb{display:none}.nk-scene{position:relative;margin:0 auto 24px;max-width:600px;height:150px;overflow:hidden;border-bottom:3px solid var(--text-primary)}
+.nk-scene::before{content:'';position:absolute;inset:12px 0 0;background:linear-gradient(transparent 95%,var(--border-line) 95%);background-size:100% 24px;opacity:.6;pointer-events:none}
+.nk-scene pixel-dog{position:absolute;left:18%;bottom:0;z-index:1}.nk-sun{position:absolute;right:12%;top:15px;width:28px;height:28px;background:#ca9250;box-shadow:0 -6px 0 -2px #ca9250,0 6px 0 -2px #ca9250,-6px 0 0 -2px #ca9250,6px 0 0 -2px #ca9250}
+.nk-caption{font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.14em;position:absolute;left:8px;top:9px;color:var(--text-muted)}
+.nk-fact,.nk-chip,.nk-box,.nk-pop,.nk-msg.user .nk-body{border-radius:2px}.nk-fact{background:var(--bg);border-style:dashed}
+.nk-chips{gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:28px}.nk-chip{border:1px solid var(--text-primary);box-shadow:3px 3px 0 var(--border-line);background:var(--bg);padding:16px;font-family:var(--font-mono);font-size:.82rem;text-wrap:pretty}
+.nk-chip:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--border-line)}.nk-chip span{font-size:.65rem;text-transform:uppercase;letter-spacing:.13em;margin-bottom:9px}
+.nk-av{border-radius:0;font-family:var(--font-mono);box-shadow:2px 2px 0 var(--border-line)}.nk-msg.user .nk-body{box-shadow:3px 3px 0 var(--border-line)}
+.nk-dock{background:var(--bg);border-top:1px solid var(--border-line);padding-bottom:max(14px,env(safe-area-inset-bottom))}.nk-box{border:2px solid var(--text-primary);box-shadow:4px 4px 0 var(--border-line);max-width:840px}.nk-send{border-radius:0;min-width:44px;min-height:44px}.nk-foot{max-width:840px;padding-inline:10px;line-height:1.5}
+.nk-pop{border:2px solid var(--text-primary);box-shadow:5px 5px 0 var(--border-line)}.nk-load{max-width:320px}.nk-bar,.nk-bar i{border-radius:0}
+.nk-lab{display:block;margin:16px auto;font:11px/1.7 var(--font-mono);max-width:580px;color:var(--text-muted)}.nk-lab a{color:var(--text-primary)}
+@media(max-width:500px){.nk-thread{padding:16px 12px}.nk-chips{grid-template-columns:1fr}.nk-hero h1{font-size:2.2rem}.nk-scene{height:120px;margin-bottom:20px}.nk-title small{display:none}.nk-top{gap:6px}.nk-chip{padding:12px}.nk-status{max-width:160px}.nk-hero{padding-inline:0}}
+@media(prefers-reduced-motion:reduce){.nik *{animation:none!important;scroll-behavior:auto!important;transition:none!important}.nk-scene pixel-dog{display:none}}

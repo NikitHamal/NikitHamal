@@ -16,6 +16,8 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="/css/remixicon.css?v=1" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css?v=18" />
+  <link rel="stylesheet" href="/chat/pixel.css" />
+  <script src="/js/pixel-dog.js?v=23" defer></script>
   <script>
     // theme + palette before first paint (same keys as the rest of the site)
     (function () {
@@ -162,19 +164,20 @@
     </div>
   </header>
 
-  <main class="nk-scroll" id="nkScroll">
+  <main class="nk-scroll" id="nkScroll" aria-label="Conversation">
     <div class="nk-thread" id="nkThread">
       <section class="nk-hero" id="nkHero">
-        <div class="nk-orb">n</div>
+        <div class="nk-scene" aria-label="A pixel dog in Nik’s workshop"><span class="nk-caption">nik / local intelligence lab</span><span class="nk-sun" aria-hidden="true"></span><pixel-dog width="220" scale="1.2" breed="rottie" home="40" start="sleep" sleep-after="20" aria-label="Interactive pixel dog, like the portfolio home page"></pixel-dog></div>
         <h1>namaste, ma nik.</h1>
         <p>A tiny language model for romanized Nepali, built from scratch by Nikit Hamal. Every word below is generated on <em>your</em> device. No server, no API.</p>
-        <div class="nk-facts" id="nkFacts"><span class="nk-fact">from scratch</span><span class="nk-fact">&lt; 10 MB</span><span class="nk-fact">runs offline</span><span class="nk-fact">thinks before answering</span></div>
+        <div class="nk-facts" id="nkFacts"><span class="nk-fact">from scratch</span><span class="nk-fact">&lt; 10 MB</span><span class="nk-fact">local inference</span><span class="nk-fact">experimental seed model</span></div>
+        <div class="nk-lab">A real neural model, starting small. This seed checkpoint can repeat itself, invent facts, and get arithmetic wrong. No canned answers or calculator behind the chat. <a href="/nik/reports/model-card.json">Model card ↗</a></div>
         <div class="nk-load" id="nkLoad"><div class="nk-bar"><i id="nkBar"></i></div><small id="nkLoadTxt">downloading weights…</small></div>
         <div class="nk-chips" id="nkChips">
-          <button class="nk-chip" data-q="namaste! k chha khabar?"><span>gaff</span>namaste! k chha khabar?</button>
+          <button class="nk-chip" data-q="k chha khabar?"><span>gaff</span>k chha khabar?</button>
           <button class="nk-chip" data-q="47 + 38 kati hunchha?"><span>hisab</span>47 + 38 kati hunchha?</button>
           <button class="nk-chip" data-q="nikit hamal ko ho?"><span>nikit</span>nikit hamal ko ho?</button>
-          <button class="nk-chip" data-q="aaja sombar ho bhane parsi kun bar hunchha?"><span>sochne</span>aaja sombar ho bhane parsi kun bar?</button>
+          <button class="nk-chip" data-q="programming kasari sikne?"><span>sochne</span>programming kasari sikne?</button>
         </div>
       </section>
     </div>
@@ -185,15 +188,16 @@
       <textarea id="nkIn" rows="1" placeholder="romanized nepali ma lekhnus… (e.g. timi ko hau?)" aria-label="Message Nik" enterkeyhint="send"></textarea>
       <button class="nk-send" id="nkSend" type="submit" aria-label="Send" disabled><i class="ri-send-plane-line"></i></button>
     </form>
-    <div class="nk-foot">nik is ~tiny and still learning: it can be wrong. · <a href="https://github.com/NikitHamal/NikitHamal/tree/main/nik">how it works</a></div>
+    <div class="nk-foot">nik 0.1 · generated locally · experimental, verify every calculation. · <a href="https://github.com/NikitHamal/NikitHamal/tree/main/nik">how it works</a></div>
   </footer>
 
   <script type="module">
     const $ = (id) => document.getElementById(id);
     const root = document.documentElement;
+    const readSaved = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
     const state = {
-      msgs: JSON.parse(localStorage.getItem('nik-chat') || '[]'),
-      opts: Object.assign({ temperature: 0.6, topP: 0.9, maxNew: 160, mode: 'ar' }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
+      msgs: readSaved('nik-chat', []),
+      opts: Object.assign({ temperature: 0.25, topP: 0.9, maxNew: 160, mode: 'ar' }, readSaved('nik-opts', {})),
       ready: false, busy: false, cur: null, id: 0,
     };
     const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };
@@ -288,7 +292,7 @@
         setStatus(`ready · ${(M.params / 1e6).toFixed(1)}M params · ${(M.bytes / 1e6).toFixed(1)} MB · on-device`, 'ready');
         $('nkFacts').append(el('span', 'nk-fact', `${M.name} · ${M.trained || ''}`.trim()));
         updateSend();
-        if (pending) { const q = pending; pending = null; send(q); }
+        if (pending) { pending = null; startGeneration(); }
       } else if (m.type === 'delta' && state.cur && m.id === state.id) {
         const { row, msg } = state.cur, p = row._parts;
         if (m.think) { msg.think = (msg.think || '') + m.think; p.det.hidden = false; p.pre.textContent = msg.think; if (!msg.content) p.det.open = true; }
@@ -318,7 +322,7 @@
     const updateSend = () => {
       const b = $('nkSend');
       if (state.busy) { b.disabled = false; b.innerHTML = '<span class="sq"></span>'; b.setAttribute('aria-label', 'Stop'); }
-      else { b.disabled = !input.value.trim(); b.innerHTML = '<i class="ri-send-plane-line"></i>'; b.setAttribute('aria-label', 'Send'); }
+      else { b.disabled = !state.ready || !input.value.trim(); b.innerHTML = '<i class="ri-send-plane-line"></i>'; b.setAttribute('aria-label', 'Send'); }
     };
     const autosize = () => { input.style.height = 'auto'; input.style.height = Math.min(180, input.scrollHeight) + 'px'; };
     input.addEventListener('input', () => { autosize(); updateSend(); });
@@ -336,7 +340,7 @@
     }
 
     function send(q) {
-      q = q.trim(); if (!q) return;
+      q = q.trim(); if (!q || state.busy) return;
       if (!state.ready) { pending = q; hero(false); state.msgs.push({ role: 'user', content: q }); renderMsg(state.msgs.at(-1)); setStatus('waiting for the model…', 'busy'); return; }
       hero(false);
       if (!(pending === null && state.msgs.at(-1)?.role === 'user' && state.msgs.at(-1).content === q)) {
@@ -357,10 +361,11 @@
     $('nkForm').onsubmit = (e) => {
       e.preventDefault();
       if (state.busy) { worker.postMessage({ type: 'stop' }); return; }
+      if (!state.ready) return;
       const q = input.value; input.value = ''; autosize(); updateSend(); send(q);
     };
     $('nkChips').onclick = (e) => { const b = e.target.closest('.nk-chip'); if (b) send(b.dataset.q); };
-    $('nkNew').onclick = () => { if (state.busy) worker.postMessage({ type: 'stop' }); state.msgs = []; save(); rerender(); input.focus(); };
+    $('nkNew').onclick = () => { if (state.busy) { worker.postMessage({ type: 'stop' }); state.cur = null; state.busy = false; state.id++; } pending = null; state.msgs = []; save(); rerender(); input.focus(); };
 
     rerender();
     if (matchMedia('(pointer:fine)').matches) input.focus();

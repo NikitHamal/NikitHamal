@@ -5,7 +5,10 @@ let model = null, meta = null, stopFlag = false, busy = false;
 const base = new URL('./model/', import.meta.url);
 
 async function load() {
-  meta = await fetch(new URL('manifest.json', base), { cache: 'no-cache' }).then((r) => r.json());
+  const response = await fetch(new URL('manifest.json', base), { cache: 'no-cache' });
+  if (!response.ok) throw new Error(`Model manifest unavailable (${response.status})`);
+  meta = await response.json();
+  if (!Number.isFinite(meta.bytes) || meta.bytes >= 10000000) throw new Error('Model exceeds the 10 MB budget');
   const v = encodeURIComponent(meta.version);
   model = await NikModel.load(new URL(`${meta.file}?v=${v}`, base), new URL(`tokenizer.json?v=${v}`, base),
     (got, total) => postMessage({ type: 'progress', got, total: total || meta.bytes }));
