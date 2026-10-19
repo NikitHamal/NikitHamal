@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ne" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+  <title>Nik 0.1 — a tiny Nepali LLM, in your browser</title>
+  <meta name="description" content="Chat with Nik, a tiny romanized-Nepali language model built from scratch by Nikit Hamal. Under 10 MB, runs entirely in your browser." />
+  <meta name="theme-color" content="#faf9f6" />
+  <link rel="canonical" href="https://nikit.is-a.dev/chat" />
+  <meta property="og:title" content="Nik 0.1 — a tiny Nepali LLM in your browser" />
+  <meta property="og:description" content="Built from scratch. Under 10 MB. No server — every word is generated on your device." />
+  <meta property="og:image" content="https://nikit.is-a.dev/assets/og-image.png" />
+  <link rel="icon" type="image/svg+xml" href="/assets/avatar-upright.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="/css/remixicon.css?v=1" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css?v=18" />
+  <script>
+    // theme + palette before first paint (same keys as the rest of the site)
+    (function () {
+      var t = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.setAttribute('data-palette', localStorage.getItem('reader-palette') || 'default');
+    })();
+  </script>
+  <style>
+    html, body { height: 100%; }
+    body.nik { margin: 0; background: var(--bg); color: var(--text-primary); font-family: var(--font-sans);
+      display: flex; flex-direction: column; min-height: 100dvh; overflow: hidden; }
+    .nik * { box-sizing: border-box; }
+    .nik button { font: inherit; color: inherit; }
+
+    /* header */
+    .nk-top { flex: none; display: flex; align-items: center; gap: 10px; padding: 10px max(14px, env(safe-area-inset-left));
+      padding-top: max(10px, env(safe-area-inset-top)); border-bottom: 1px solid var(--border-line);
+      background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); position: relative; z-index: 5; }
+    .nk-back { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: var(--radius-pill);
+      color: var(--text-secondary); text-decoration: none; transition: background var(--transition-fast); }
+    .nk-back:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .nk-brand { display: flex; flex-direction: column; min-width: 0; }
+    .nk-title { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; white-space: nowrap; }
+    .nk-title small { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; color: var(--text-muted); margin-left: 6px; letter-spacing: 0; }
+    .nk-status { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nk-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); flex: none; }
+    .nk-dot.ready { background: #22a06b; box-shadow: 0 0 0 3px color-mix(in srgb, #22a06b 22%, transparent); }
+    .nk-dot.busy { background: #e0a100; animation: nkPulse 1s var(--ease-in-out) infinite; }
+    .nk-dot.err { background: #d64545; }
+    @keyframes nkPulse { 50% { opacity: .35; } }
+    .nk-spacer { flex: 1; }
+    .nk-icon { width: 36px; height: 36px; border-radius: var(--radius-pill); border: 0; background: transparent; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 1.05rem;
+      transition: background var(--transition-fast), color var(--transition-fast); }
+    .nk-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .nk-icon:focus-visible, .nk-chip:focus-visible, .nk-send:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
+
+    /* settings popover */
+    .nk-pop { position: absolute; right: 12px; top: calc(100% + 6px); width: min(320px, calc(100vw - 24px)); background: var(--modal-bg);
+      border: 1px solid var(--border-line); border-radius: var(--radius-lg); padding: 14px; box-shadow: 0 18px 50px rgba(0,0,0,.14);
+      display: none; z-index: 20; }
+    .nk-pop.open { display: block; animation: nkIn var(--dur-2) var(--ease-out-expo); }
+    @keyframes nkIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } }
+    .nk-pop h3 { margin: 0 0 10px; font-size: .78rem; font-family: var(--font-mono); color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
+    .nk-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 0; font-size: .88rem; }
+    .nk-row label { color: var(--text-secondary); }
+    .nk-row output { font-family: var(--font-mono); font-size: .78rem; color: var(--text-muted); min-width: 34px; text-align: right; }
+    .nk-row input[type=range] { flex: 1; accent-color: var(--text-primary); }
+    .nk-seg { display: inline-flex; border: 1px solid var(--border-line); border-radius: var(--radius-pill); padding: 2px; }
+    .nk-seg button { border: 0; background: transparent; padding: 4px 10px; border-radius: var(--radius-pill); cursor: pointer; font-size: .78rem; color: var(--text-secondary); }
+    .nk-seg button[aria-pressed=true] { background: var(--pill-bg); color: var(--pill-text); }
+    .nk-note { font-size: .74rem; color: var(--text-muted); line-height: 1.45; margin: 12px 0 0; }
+
+    /* conversation */
+    .nk-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; scroll-behavior: smooth; }
+    .nk-thread { max-width: 760px; margin: 0 auto; padding: 22px 16px 28px; display: flex; flex-direction: column; gap: 18px; }
+    .nk-hero { text-align: center; padding: 8vh 8px 10px; }
+    .nk-orb { width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 22px; display: grid; place-items: center;
+      background: var(--pill-bg); color: var(--pill-text); font-family: var(--font-serif); font-size: 2rem; font-style: italic;
+      box-shadow: 0 10px 30px color-mix(in srgb, var(--text-primary) 18%, transparent); }
+    .nk-hero h1 { font-family: var(--font-serif); font-weight: 600; font-size: clamp(1.7rem, 4.5vw, 2.3rem); letter-spacing: -.02em; margin: 0 0 8px; }
+    .nk-hero p { color: var(--text-secondary); margin: 0 auto; max-width: 30rem; line-height: 1.55; font-size: .95rem; }
+    .nk-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px 0 6px; }
+    .nk-fact { font-family: var(--font-mono); font-size: .7rem; color: var(--text-muted); border: 1px solid var(--border-line); border-radius: var(--radius-pill); padding: 3px 9px; }
+    .nk-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; margin-top: 26px; text-align: left; }
+    .nk-chip { border: 1px solid var(--border-line); background: var(--bg-elevated); border-radius: var(--radius-md); padding: 11px 13px;
+      cursor: pointer; font-size: .9rem; color: var(--text-primary); transition: border-color var(--transition-fast), transform var(--dur-1) var(--ease-out-quart); }
+    .nk-chip span { display: block; font-size: .72rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 3px; }
+    .nk-chip:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+
+    .nk-msg { display: flex; gap: 10px; align-items: flex-start; animation: nkIn var(--dur-2) var(--ease-out-expo); }
+    .nk-msg.user { justify-content: flex-end; }
+    .nk-av { flex: none; width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--pill-bg);
+      color: var(--pill-text); font-family: var(--font-serif); font-style: italic; font-size: 1rem; margin-top: 2px; }
+    .nk-body { min-width: 0; max-width: 100%; }
+    .nk-msg.user .nk-body { max-width: min(85%, 560px); background: var(--bg-hover); border: 1px solid var(--border-line);
+      padding: 9px 14px; border-radius: 18px 18px 6px 18px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.55; }
+    .nk-text { line-height: 1.68; font-size: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; padding-top: 4px; }
+    .nk-text.live::after { content: ''; display: inline-block; width: .5em; height: 1.05em; vertical-align: -0.15em; margin-left: 2px;
+      background: var(--text-primary); border-radius: 2px; animation: nkBlink 1s steps(2) infinite; }
+    @keyframes nkBlink { 50% { opacity: 0; } }
+    .nk-think { margin: 2px 0 6px; border-left: 2px solid var(--border-strong); padding: 2px 0 2px 12px; }
+    .nk-think summary { cursor: pointer; list-style: none; font-family: var(--font-mono); font-size: .74rem; color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 6px; user-select: none; }
+    .nk-think summary::-webkit-details-marker { display: none; }
+    .nk-think summary::before { content: '›'; transition: transform var(--dur-1); display: inline-block; }
+    .nk-think[open] summary::before { transform: rotate(90deg); }
+    .nk-think pre { margin: 6px 0 0; font-family: var(--font-mono); font-size: .8rem; line-height: 1.6; color: var(--text-secondary);
+      white-space: pre-wrap; overflow-wrap: anywhere; }
+    .nk-meta { margin-top: 6px; font-family: var(--font-mono); font-size: .68rem; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap; }
+    .nk-meta button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--text-muted); font-size: .8rem; }
+    .nk-meta button:hover { color: var(--text-primary); }
+    .nk-err { color: #d64545; font-size: .9rem; }
+
+    /* composer */
+    .nk-dock { flex: none; padding: 10px 14px max(12px, env(safe-area-inset-bottom)); background: linear-gradient(to top, var(--bg) 70%, transparent); }
+    .nk-box { max-width: 760px; margin: 0 auto; display: flex; align-items: flex-end; gap: 8px; background: var(--bg-elevated);
+      border: 1px solid var(--border-strong); border-radius: 22px; padding: 6px 6px 6px 16px; box-shadow: 0 6px 24px rgba(0,0,0,.06);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast); }
+    .nk-box:focus-within { border-color: var(--text-secondary); box-shadow: 0 6px 30px rgba(0,0,0,.09); }
+    .nk-box textarea { flex: 1; border: 0; outline: 0; resize: none; background: transparent; color: var(--text-primary);
+      font: inherit; font-size: 1rem; line-height: 1.5; padding: 8px 0; max-height: 180px; min-height: 24px; }
+    .nk-box textarea::placeholder { color: var(--text-muted); }
+    .nk-send { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer; background: var(--pill-bg);
+      color: var(--pill-text); display: grid; place-items: center; font-size: 1.1rem; transition: transform var(--dur-1) var(--spring), opacity var(--transition-fast); }
+    .nk-send:hover { transform: scale(1.06); }
+    .nk-send:disabled { opacity: .35; cursor: default; transform: none; }
+    .nk-send .sq { width: 12px; height: 12px; border-radius: 3px; background: currentColor; }
+    .nk-foot { max-width: 760px; margin: 7px auto 0; text-align: center; font-size: .7rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .nk-foot a { color: inherit; }
+
+    /* loader */
+    .nk-load { max-width: 340px; margin: 18px auto 0; }
+    .nk-bar { height: 4px; border-radius: 4px; background: var(--bg-hover); overflow: hidden; }
+    .nk-bar i { display: block; height: 100%; width: 0; background: var(--text-primary); transition: width .2s ease; }
+    .nk-load small { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: .7rem; color: var(--text-muted); }
+    @media (max-width: 520px) { .nk-title small { display: none; } .nk-hero { padding-top: 5vh; } }
+    @media (prefers-reduced-motion: reduce) { .nik * { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body class="nik">
+  <header class="nk-top">
+    <a class="nk-back" href="/" aria-label="Back to nikit.is-a.dev"><i class="ri-arrow-left-line"></i></a>
+    <div class="nk-brand">
+      <div class="nk-title">nik <small id="nkVer">0.1</small></div>
+      <div class="nk-status" aria-live="polite"><span class="nk-dot" id="nkDot"></span><span id="nkStatus">loading model…</span></div>
+    </div>
+    <div class="nk-spacer"></div>
+    <button class="nk-icon" id="nkNew" title="New chat" aria-label="New chat"><i class="ri-add-line"></i></button>
+    <button class="nk-icon" id="nkTheme" title="Theme" aria-label="Toggle light / dark"><i class="ri-moon-line"></i></button>
+    <button class="nk-icon" id="nkSet" title="Settings" aria-label="Settings" aria-expanded="false"><i class="ri-apps-2-line"></i></button>
+    <div class="nk-pop" id="nkPop" role="dialog" aria-label="Generation settings">
+      <h3>generation</h3>
+      <div class="nk-row"><label for="sTemp">temperature</label><input id="sTemp" type="range" min="0" max="1.5" step="0.05"><output id="oTemp"></output></div>
+      <div class="nk-row"><label for="sTopP">top-p</label><input id="sTopP" type="range" min="0.5" max="1" step="0.01"><output id="oTopP"></output></div>
+      <div class="nk-row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
+      <div class="nk-row"><label>decoding</label>
+        <div class="nk-seg" id="sMode"><button data-v="ssbd">SSBD</button><button data-v="ar">AR</button></div></div>
+      <div class="nk-row"><label>palette</label>
+        <div class="nk-seg" id="sPal"><button data-v="default">default</button><button data-v="sepia">sepia</button><button data-v="slate">slate</button></div></div>
+      <p class="nk-note">SSBD = self-speculative block diffusion: Nik drafts several tokens at once with its diffusion head and checks them with its own autoregressive head. Same output distribution as AR, fewer sequential steps.</p>
+    </div>
+  </header>
+
+  <main class="nk-scroll" id="nkScroll">
+    <div class="nk-thread" id="nkThread">
+      <section class="nk-hero" id="nkHero">
+        <div class="nk-orb">n</div>
+        <h1>namaste, ma nik.</h1>
+        <p>A tiny language model for romanized Nepali, built from scratch by Nikit Hamal. Every word below is generated on <em>your</em> device. No server, no API.</p>
+        <div class="nk-facts" id="nkFacts"><span class="nk-fact">from scratch</span><span class="nk-fact">&lt; 10 MB</span><span class="nk-fact">runs offline</span><span class="nk-fact">thinks before answering</span></div>
+        <div class="nk-load" id="nkLoad"><div class="nk-bar"><i id="nkBar"></i></div><small id="nkLoadTxt">downloading weights…</small></div>
+        <div class="nk-chips" id="nkChips">
+          <button class="nk-chip" data-q="namaste! k chha khabar?"><span>gaff</span>namaste! k chha khabar?</button>
+          <button class="nk-chip" data-q="47 + 38 kati hunchha?"><span>hisab</span>47 + 38 kati hunchha?</button>
+          <button class="nk-chip" data-q="nikit hamal ko ho?"><span>nikit</span>nikit hamal ko ho?</button>
+          <button class="nk-chip" data-q="aaja sombar ho bhane parsi kun bar hunchha?"><span>sochne</span>aaja sombar ho bhane parsi kun bar?</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="nk-dock">
+    <form class="nk-box" id="nkForm" autocomplete="off">
+      <textarea id="nkIn" rows="1" placeholder="romanized nepali ma lekhnus… (e.g. timi ko hau?)" aria-label="Message Nik" enterkeyhint="send"></textarea>
+      <button class="nk-send" id="nkSend" type="submit" aria-label="Send" disabled><i class="ri-send-plane-line"></i></button>
+    </form>
+    <div class="nk-foot">nik is ~tiny and still learning: it can be wrong. · <a href="https://github.com/NikitHamal/NikitHamal/tree/main/nik">how it works</a></div>
+  </footer>
+
+  <script type="module">
+    const $ = (id) => document.getElementById(id);
+    const root = document.documentElement;
+    const state = {
+      msgs: JSON.parse(localStorage.getItem('nik-chat') || '[]'),
+      opts: Object.assign({ temperature: 0.6, topP: 0.9, maxNew: 160, mode: 'ssbd' }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
+      ready: false, busy: false, cur: null, id: 0,
+    };
+    const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };
+
+    // ---------- theme / palette
+    const themeIcon = () => { $('nkTheme').firstElementChild.className = root.dataset.theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line';
+      document.querySelector('meta[name=theme-color]').content = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#faf9f6'; };
+    $('nkTheme').onclick = () => { root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('theme', root.dataset.theme); themeIcon(); };
+    themeIcon();
+
+    // ---------- settings
+    const bindRange = (el, out, key, fmt) => { el.value = state.opts[key]; out.textContent = fmt(+el.value);
+      el.oninput = () => { state.opts[key] = +el.value; out.textContent = fmt(+el.value); save(); }; };
+    bindRange($('sTemp'), $('oTemp'), 'temperature', (v) => v.toFixed(2));
+    bindRange($('sTopP'), $('oTopP'), 'topP', (v) => v.toFixed(2));
+    bindRange($('sMax'), $('oMax'), 'maxNew', (v) => v);
+    const seg = (el, cur, on) => { const sync = (v) => el.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === v));
+      sync(cur); el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; sync(b.dataset.v); on(b.dataset.v); }; };
+    seg($('sMode'), state.opts.mode, (v) => { state.opts.mode = v; save(); });
+    seg($('sPal'), root.dataset.palette || 'default', (v) => { root.dataset.palette = v; localStorage.setItem('reader-palette', v); themeIcon(); });
+    $('nkSet').onclick = (e) => { e.stopPropagation(); const o = $('nkPop').classList.toggle('open'); $('nkSet').setAttribute('aria-expanded', o); };
+    document.addEventListener('click', (e) => { if (!$('nkPop').contains(e.target)) { $('nkPop').classList.remove('open'); $('nkSet').setAttribute('aria-expanded', false); } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') $('nkPop').classList.remove('open'); });
+
+    // ---------- status
+    const setStatus = (txt, kind) => { $('nkStatus').textContent = txt; $('nkDot').className = 'nk-dot ' + (kind || ''); };
+
+    // ---------- rendering
+    const scroller = $('nkScroll');
+    let stick = true;
+    scroller.addEventListener('scroll', () => { stick = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 80; });
+    const toBottom = (force) => { if (stick || force) scroller.scrollTop = scroller.scrollHeight; };
+
+    function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+    function renderMsg(m) {
+      const row = el('div', 'nk-msg ' + (m.role === 'user' ? 'user' : 'nik'));
+      if (m.role === 'user') { row.append(el('div', 'nk-body', m.content)); }
+      else {
+        row.append(el('div', 'nk-av', 'n'));
+        const body = el('div', 'nk-body');
+        const det = el('details', 'nk-think'); det.hidden = !m.think;
+        const sum = el('summary', null, 'socheko'); const pre = el('pre', null, m.think || '');
+        det.append(sum, pre);
+        const text = el('div', 'nk-text', m.content || '');
+        const meta = el('div', 'nk-meta');
+        body.append(det, text, meta);
+        row.append(body);
+        row._parts = { det, pre, text, meta, sum };
+        if (m.stats) fillMeta(row, m);
+      }
+      $('nkThread').append(row);
+      return row;
+    }
+
+    function fillMeta(row, m) {
+      const { meta } = row._parts; meta.textContent = '';
+      const s = m.stats;
+      if (s) {
+        meta.append(el('span', null, `${s.tokens} tok · ${s.tps.toFixed(0)} tok/s`));
+        if (s.passes) meta.append(el('span', null, `${(s.tokens / Math.max(1, s.passes)).toFixed(2)} tok/pass`));
+        if (m.mode) meta.append(el('span', null, m.mode));
+      }
+      const copy = el('button', null); copy.innerHTML = '<i class="ri-check-line" style="display:none"></i>copy';
+      copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = 'copied'; setTimeout(() => (copy.textContent = 'copy'), 1200); });
+      const retry = el('button', null, 'regenerate');
+      retry.onclick = () => regenerate(row);
+      meta.append(copy, retry);
+    }
+
+    function hero(show) { $('nkHero').style.display = show ? '' : 'none'; }
+    function rerender() {
+      [...$('nkThread').querySelectorAll('.nk-msg')].forEach((n) => n.remove());
+      hero(state.msgs.length === 0);
+      for (const m of state.msgs) renderMsg(m);
+      toBottom(true);
+    }
+
+    // ---------- worker
+    const worker = new Worker('/nik/web/worker.js', { type: 'module' });
+    worker.onmessage = (e) => {
+      const m = e.data;
+      if (m.type === 'progress') {
+        const pct = m.total ? Math.min(100, (100 * m.got) / m.total) : 0;
+        $('nkBar').style.width = pct + '%';
+        $('nkLoadTxt').textContent = `downloading weights… ${(m.got / 1e6).toFixed(1)} MB${m.total ? ' / ' + (m.total / 1e6).toFixed(1) + ' MB' : ''}`;
+        setStatus(`loading ${pct.toFixed(0)}%`, 'busy');
+      } else if (m.type === 'ready') {
+        state.ready = true; $('nkLoad').style.display = 'none';
+        const M = m.meta;
+        $('nkVer').textContent = M.name || '0.1';
+        setStatus(`ready · ${(M.params / 1e6).toFixed(1)}M params · ${(M.bytes / 1e6).toFixed(1)} MB · on-device`, 'ready');
+        $('nkFacts').append(el('span', 'nk-fact', `${M.name} · ${M.trained || ''}`.trim()));
+        updateSend();
+        if (pending) { const q = pending; pending = null; send(q); }
+      } else if (m.type === 'delta' && state.cur && m.id === state.id) {
+        const { row, msg } = state.cur, p = row._parts;
+        if (m.think) { msg.think = (msg.think || '') + m.think; p.det.hidden = false; p.pre.textContent = msg.think; if (!msg.content) p.det.open = true; }
+        if (m.answer) { msg.content += m.answer; p.text.textContent = msg.content; if (p.det.open && msg.think) { p.det.open = false; p.sum.textContent = 'socheko (' + msg.think.split(/\s+/).length + ' shabda)'; } }
+        toBottom();
+      } else if (m.type === 'done' && state.cur && m.id === state.id) {
+        const { row, msg } = state.cur;
+        row._parts.text.classList.remove('live');
+        msg.stats = m.stats; msg.mode = state.opts.mode;
+        if (!msg.content.trim()) { msg.content = msg.content.trim() || '…'; row._parts.text.textContent = msg.content; }
+        fillMeta(row, msg);
+        state.cur = null; state.busy = false; save(); updateSend();
+        setStatus(`ready · last: ${m.stats.tps.toFixed(0)} tok/s`, 'ready');
+        toBottom();
+      } else if (m.type === 'error') {
+        setStatus('error', 'err');
+        if (state.cur) { state.cur.row._parts.text.classList.remove('live'); state.cur.row._parts.text.append(el('div', 'nk-err', m.message)); state.cur = null; }
+        else { $('nkLoadTxt').textContent = 'could not load the model: ' + m.message; }
+        state.busy = false; updateSend();
+      }
+    };
+    worker.postMessage({ type: 'load' });
+
+    // ---------- send / stop
+    const input = $('nkIn');
+    let pending = null;
+    const updateSend = () => {
+      const b = $('nkSend');
+      if (state.busy) { b.disabled = false; b.innerHTML = '<span class="sq"></span>'; b.setAttribute('aria-label', 'Stop'); }
+      else { b.disabled = !input.value.trim(); b.innerHTML = '<i class="ri-send-plane-line"></i>'; b.setAttribute('aria-label', 'Send'); }
+    };
+    const autosize = () => { input.style.height = 'auto'; input.style.height = Math.min(180, input.scrollHeight) + 'px'; };
+    input.addEventListener('input', () => { autosize(); updateSend(); });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('nkForm').requestSubmit(); } });
+
+    function startGeneration() {
+      const msg = { role: 'nik', content: '', think: '' };
+      const row = renderMsg(msg); row._parts.text.classList.add('live');
+      state.cur = { row, msg }; state.busy = true; state.id++; updateSend();
+      setStatus('nik is writing…', 'busy');
+      const history = state.msgs.map(({ role, content }) => ({ role, content }));
+      state.msgs.push(msg);
+      worker.postMessage({ type: 'generate', id: state.id, messages: history, opts: state.opts });
+      toBottom(true);
+    }
+
+    function send(q) {
+      q = q.trim(); if (!q) return;
+      if (!state.ready) { pending = q; hero(false); state.msgs.push({ role: 'user', content: q }); renderMsg(state.msgs.at(-1)); setStatus('waiting for the model…', 'busy'); return; }
+      hero(false);
+      if (!(pending === null && state.msgs.at(-1)?.role === 'user' && state.msgs.at(-1).content === q)) {
+        state.msgs.push({ role: 'user', content: q }); renderMsg(state.msgs.at(-1));
+      }
+      startGeneration();
+    }
+
+    function regenerate(row) {
+      if (state.busy) return;
+      const rows = [...$('nkThread').querySelectorAll('.nk-msg')];
+      const i = rows.indexOf(row);
+      if (i < 0) return;
+      state.msgs = state.msgs.slice(0, i); rows.slice(i).forEach((r) => r.remove());
+      startGeneration();
+    }
+
+    $('nkForm').onsubmit = (e) => {
+      e.preventDefault();
+      if (state.busy) { worker.postMessage({ type: 'stop' }); return; }
+      const q = input.value; input.value = ''; autosize(); updateSend(); send(q);
+    };
+    $('nkChips').onclick = (e) => { const b = e.target.closest('.nk-chip'); if (b) send(b.dataset.q); };
+    $('nkNew').onclick = () => { if (state.busy) worker.postMessage({ type: 'stop' }); state.msgs = []; save(); rerender(); input.focus(); };
+
+    rerender();
+    if (matchMedia('(pointer:fine)').matches) input.focus();
+  </script>
+</body>
+</html>
