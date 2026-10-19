@@ -1,5 +1,20 @@
 # Training Nik
 
+## Fully automated (Kaggle API), no notebook clicking
+
+```bash
+bash nik/scripts/kaggle_launch.sh smoke   # ~25 min end-to-end check on Kaggle's 2x T4
+bash nik/scripts/kaggle_launch.sh full    # ~11 h: data -> 2-GPU pretrain -> SFT -> 2 verified self-improvement rounds -> eval
+bash nik/scripts/kaggle_fetch.sh full     # download out/, update nik/web/model + manifest, then commit & push
+```
+
+The runner (`nik/scripts/kaggle_run.py`) exports a usable model after every phase and keeps the better of SFT or RFT by eval score. It uses both T4s through DDP (`torchrun`), the Muon optimizer, a 25% diffusion window, and LR schedules that anneal to the wall-clock cap.
+
+**Measured on Kaggle T4s:**
+- Memory-efficient SDPA runs 6.4× faster than the math fallback.
+- The two-stream objective runs at 7.3k clean tok/s per GPU, against 17.3k for AR alone. That's why the noisy stream is windowed.
+- In a 300-step A/B, Muon reached val ppl 175 versus 511 for AdamW.
+
 ## Quick start (GPU: Colab / Kaggle)
 
 Open `nik/notebooks/nik_train.ipynb` in Colab or Kaggle with a T4 GPU and run all cells. It runs:
@@ -38,3 +53,11 @@ The default `--minutes` cap keeps a laptop run short:
 ```bash
 python nik/train.py --stage pretrain --preset nik-nano --data data --out nik/runs/nano-pre --minutes 18 --bs 16 --ctx 192
 ```
+
+## Self-improvement (verified rejection-sampling fine-tuning)
+
+```bash
+PRESET=nik-0.1 ROUNDS=2 bash nik/scripts/rft.sh
+```
+
+Each round, `nik/selfimprove.py` samples 8 reasoning paths for each fresh problem with a known answer. It keeps a path only if the final answer is right **and** every equation in the trace is arithmetically true, which rejects lucky guesses with broken reasoning. Weekday traces must start from the right day and count the right number of days. The kept paths are mixed with the original SFT data and the model is fine-tuned on them, with EMA and Muon. The report gives pass@1 and pass@8 per problem type.
