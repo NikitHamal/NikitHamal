@@ -3,6 +3,7 @@
 # (~/.kaggle/access_token or KAGGLE_API_TOKEN). Usage:
 #   bash nik/scripts/kaggle_launch.sh smoke     # ~15 min end-to-end check
 #   bash nik/scripts/kaggle_launch.sh full      # the real ~11 h run
+#   bash nik/scripts/kaggle_launch.sh tts-smoke | tts   # NikTTS (~6 h full)
 #   bash nik/scripts/kaggle_launch.sh rsi       # ~10 h recursive self-improvement from the full run's output
 #   kaggle kernels status <user>/nik-train-<mode>
 #   kaggle kernels output <user>/nik-train-<mode> -p out/
@@ -12,6 +13,7 @@ USER_=$(kaggle config view | awk '/username/ {print $3}')
 D=$(mktemp -d)
 SRC=kaggle_run.py; SOURCES='[]'
 if [ "$MODE" = "rsi" ]; then SRC=kaggle_rsi.py; SOURCES="[\"$USER_/nik-train-full\"]"; fi
+case "$MODE" in tts*) SRC=kaggle_tts.py;; esac
 sed "s/__MODE__/$MODE/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
 cat > "$D/kernel-metadata.json" <<JSON
 { "id": "$USER_/nik-train-$MODE", "title": "nik-train-$MODE", "code_file": "nik_train.py",
