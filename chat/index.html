@@ -41,7 +41,6 @@
       border-radius: var(--radius-pill); color: var(--text-secondary); cursor: pointer; font-size: 1rem; }
     .site-nav .nk-ctl:hover { color: var(--text-primary); background: var(--bg-hover); }
     .nk-brandmini { margin-right: auto; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-primary); }
-    .site-header { justify-content: space-between; }
     .nk-brandmini b { font-family: var(--font-display); font-weight: 400; font-size: 1.35rem; line-height: 1; }
     .nk-brandmini span { font-family: var(--font-pixel); font-size: .62rem; color: var(--text-muted); }
 
@@ -143,7 +142,7 @@
 <body class="nikchat">
   <div class="nk-wrap">
     <header class="site-header">
-      <a class="nk-brandmini" href="/chat" aria-label="Nik chat"><b>nik</b><span id="nkVer">0.1</span></a>
+      <span id="nkVer" hidden>0.1</span>
       <nav class="site-nav" aria-label="Primary">
         <a href="/" class="site-nav-link">Home</a>
         <a href="/writing" class="site-nav-link">Writing</a>
