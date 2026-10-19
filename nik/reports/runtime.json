@@ -1,0 +1,67 @@
+{
+  "bytes": 1222688,
+  "node": "v24.22.0",
+  "platform": "linux",
+  "arch": "x64",
+  "cases": [
+    {
+      "backend": "js",
+      "text": "namaste",
+      "maxError": 0.0000015497207641601562,
+      "relativeError": 7.956376144365581e-8,
+      "argmaxEqual": true
+    },
+    {
+      "backend": "js",
+      "text": "47 + 38 kati hunchha?",
+      "maxError": 0.0000026226043701171875,
+      "relativeError": 1.0855204596922569e-7,
+      "argmaxEqual": true
+    },
+    {
+      "backend": "js",
+      "text": "नेपाल 😀 <|nik|>",
+      "maxError": 0.00000476837158203125,
+      "relativeError": 2.3127372593790573e-7,
+      "argmaxEqual": true
+    },
+    {
+      "backend": "wasm",
+      "text": "namaste",
+      "maxError": 0.21387815475463867,
+      "relativeError": 0.010980655919732357,
+      "argmaxEqual": true
+    },
+    {
+      "backend": "wasm",
+      "text": "47 + 38 kati hunchha?",
+      "maxError": 0.10668587684631348,
+      "relativeError": 0.004415828151453393,
+      "argmaxEqual": true
+    },
+    {
+      "backend": "wasm",
+      "text": "नेपाल 😀 <|nik|>",
+      "maxError": 0.11352157592773438,
+      "relativeError": 0.005505979848148909,
+      "argmaxEqual": true
+    }
+  ],
+  "js": {
+    "backend": "js-f32",
+    "firstTokenMs": 21.926361999999983,
+    "totalMs": 100.57986799999998,
+    "tokens": 13,
+    "tokensPerSecond": 129.25051760855365,
+    "answer": "ma sikeka weigh prashna hun garae."
+  },
+  "wasm": {
+    "backend": "wasm-simd-int8",
+    "firstTokenMs": 1.4548389999999927,
+    "totalMs": 4.799574000000007,
+    "tokens": 13,
+    "tokensPerSecond": 2708.5737192509127,
+    "answer": "ma sikeka weigh prashna hun garae."
+  },
+  "greedyParity": true
+}

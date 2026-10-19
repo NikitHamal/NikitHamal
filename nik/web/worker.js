@@ -12,7 +12,7 @@ async function load() {
   const v = encodeURIComponent(meta.version);
   model = await NikModel.load(new URL(`${meta.file}?v=${v}`, base), new URL(`tokenizer.json?v=${v}`, base),
     (got, total) => postMessage({ type: 'progress', got, total: total || meta.bytes }));
-  postMessage({ type: 'ready', meta: { ...meta, params: countParams(model), ctx: model.cfg.ctx } });
+  postMessage({ type: 'ready', meta: { ...meta, params: model.nParams, ctx: model.cfg.ctx } });
 }
 
 function countParams(m) {

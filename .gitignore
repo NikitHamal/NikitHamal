@@ -13,3 +13,8 @@ nik/runs/
 data/
 *.pt
 __pycache__/
+# Version the actual Nik source directory (the broad data/ rule hid it before).
+!nik/data/
+!nik/data/**
+!nik/checkpoints/
+!nik/checkpoints/*.pt

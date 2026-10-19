@@ -197,7 +197,7 @@
     const readSaved = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
     const state = {
       msgs: readSaved('nik-chat', []),
-      opts: Object.assign({ temperature: 0.25, topP: 0.9, maxNew: 160, mode: 'ar' }, readSaved('nik-opts', {})),
+      opts: Object.assign({ temperature: 0.0, topP: 0.9, maxNew: 160, mode: 'ar' }, readSaved('nik-opts', {})),
       ready: false, busy: false, cur: null, id: 0,
     };
     const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };

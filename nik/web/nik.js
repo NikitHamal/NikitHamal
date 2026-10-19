@@ -209,6 +209,7 @@ export class NikModel {
 
   constructor({ cfg, W, Q }, tok, { backend = 'auto' } = {}) {
     this.cfg = cfg; this.W = W; this.tok = tok;
+    this.nParams = Object.values(W).reduce((n,w)=>n+w.length,0) + Object.values(Q).reduce((n,w)=>n+w.rows*w.cols,0);
     const c = cfg;
     this.maxT = 2 * c.block + 64;
     if (backend !== 'js') {
@@ -412,9 +413,9 @@ async function fetchWithProgress(url, onProgress) {
 }
 
 // ------------------------------------------------------------------ sampling
-export function sample(logits, recent, { temperature = 0.7, topP = 0.9, repPenalty = 1.15, ban = [] } = {}) {
+export function sample(logits, recent, { temperature = 0.7, topP = 0.9, repPenalty = 1.0, ban = [] } = {}) {
   const V = logits.length;
-  for (const id of recent) logits[id] = logits[id] > 0 ? logits[id] / repPenalty : logits[id] * repPenalty;
+  for (const id of new Set(recent)) logits[id] = logits[id] > 0 ? logits[id] / repPenalty : logits[id] * repPenalty;
   for (const id of ban) logits[id] = -Infinity;
   if (temperature <= 0) {
     let best = 0;

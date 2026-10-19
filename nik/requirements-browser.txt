@@ -1,0 +1,2 @@
+# Only needed for optional browser acceptance automation, not site/runtime.
+playwright>=1.50,<2
