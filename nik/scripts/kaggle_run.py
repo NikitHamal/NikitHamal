@@ -16,9 +16,9 @@ T0 = time.time()
 
 CFG = {
     'smoke': dict(preset='nik-0.1', shards=1, news_lines=30000, stories=5000, sft_n=8000,
-                  pre_min=4, sft_min=2, rft_rounds=1, rft_problems=40, rft_min=2, rft_train_min=1, bs=32),
+                  pre_min=4, sft_min=2, rft_rounds=1, rft_problems=40, rft_min=2, rft_train_min=1, bs=16),
     'full': dict(preset='nik-0.1', shards=2, news_lines=0, stories=80000, sft_n=120000,
-                 pre_min=420, sft_min=80, rft_rounds=2, rft_problems=3000, rft_min=30, rft_train_min=20, bs=32),
+                 pre_min=420, sft_min=80, rft_rounds=2, rft_problems=3000, rft_min=30, rft_train_min=20, bs=16),
 }[MODE]
 
 
@@ -65,18 +65,18 @@ sh('python nik/prepare.py --data data --tok nik/web/model/tokenizer.json', 'data
 
 # ---- pretrain (Muon, time-annealed schedule)
 sh(f'python nik/train.py --stage pretrain --preset {P} --data data --out {R}/pre --steps 1000000 --minutes {CFG["pre_min"]} '
-   f'--bs {CFG["bs"]} --lr 3e-3 --warmup 500 --eval-every 1000 --opt muon', 'pretrain.log')
+   f'--bs {CFG["bs"]} --accum 2 --grad-ckpt --lr 3e-3 --warmup 500 --eval-every 1000 --opt muon', 'pretrain.log')
 shutil.copy(f'{R}/pre/log.jsonl', f'{OUT}/pretrain-log.jsonl')
 
 # ---- SFT
 sh(f'python nik/train.py --stage sft --init {R}/pre/ckpt.pt --data data --out {R}/sft --steps 1000000 --minutes {CFG["sft_min"]} '
-   f'--bs {CFG["bs"]} --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2 --opt muon --ema 0.998', 'sft.log')
+   f'--bs {CFG["bs"]} --accum 2 --grad-ckpt --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2 --opt muon --ema 0.998', 'sft.log')
 shutil.copy(f'{R}/sft/log.jsonl', f'{OUT}/sft-log.jsonl')
 export(f'{R}/sft/ckpt.pt', 'sft')
 
 # ---- verified self-improvement rounds
 sh(f'PRESET={P} DATA=data RUN={R} ROUNDS={CFG["rft_rounds"]} PROBLEMS={CFG["rft_problems"]} K=8 STEPS=1000000 '
-   f'RFT_MIN={CFG["rft_min"]} TRAIN_MIN={CFG["rft_train_min"]} BS={CFG["bs"]} PUBLISH=0 bash nik/scripts/rft.sh', 'rft.log')
+   f'RFT_MIN={CFG["rft_min"]} TRAIN_MIN={CFG["rft_train_min"]} BS={CFG["bs"]} EXTRA="--accum 2 --grad-ckpt" bash nik/scripts/rft.sh', 'rft.log')
 last = f'{R}/rft{CFG["rft_rounds"]}/ckpt.pt'
 for r in range(1, CFG['rft_rounds'] + 1):
     for f in ('report.json', 'selfimprove.log'):
