@@ -5,17 +5,23 @@ let model = null, meta = null, stopFlag = false, busy = false;
 const base = new URL('./model/', import.meta.url);
 
 async function load() {
-  meta = await fetch(new URL('manifest.json', base), { cache: 'no-cache' }).then((r) => r.json());
+  const r = await fetch(new URL('manifest.json', base), { cache: 'no-cache' });
+  const ct = r.headers.get('content-type') || '';
+  if (!r.ok || !ct.includes('json')) {
+    postMessage({ type: 'error', code: 'no-model', message: 'no published model yet' });
+    return;
+  }
+  meta = await r.json();
   const v = encodeURIComponent(meta.version);
   model = await NikModel.load(new URL(`${meta.file}?v=${v}`, base), new URL(`tokenizer.json?v=${v}`, base),
     (got, total) => postMessage({ type: 'progress', got, total: total || meta.bytes }));
-  postMessage({ type: 'ready', meta: { ...meta, params: countParams(model), ctx: model.cfg.ctx } });
+  postMessage({ type: 'ready', meta: { ...meta, params: countParams(model), ctx: model.cfg.ctx, backend: model.backend } });
 }
 
 function countParams(m) {
-  let n = 0;
-  for (const w of Object.values(m.W)) n += w.length;
-  return n;
+  const c = m.cfg;
+  const per = c.d * (c.d + 2 * c.kv_heads * (c.d / c.heads) + c.d + 3 * c.ffn) + 2 * c.d + 2 * (c.d / c.heads);
+  return c.vocab * c.d + c.n_unique * per + c.d;
 }
 
 // Keep the prompt inside the context window: drop the oldest turns first.
