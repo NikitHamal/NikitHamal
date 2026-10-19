@@ -74,12 +74,12 @@ sh('python nik/prepare.py --data data --tok nik/web/model/tokenizer.json', 'data
 log('gpus', NGPU, 'launch', LAUNCH)
 sh(f'{LAUNCH} nik/train.py --stage pretrain --preset {P} --data data --out {R}/pre --steps 1000000 --minutes {CFG["pre_min"]} '
    f'--bs {CFG["bs"]} --lr 3e-3 --warmup 500 --eval-every 1000 --opt muon {FAST}', 'pretrain.log')
-shutil.copy(f'{R}/pre/log.jsonl', f'{OUT}/pretrain-log.jsonl')
+shutil.copy(f'{R}/pre/log.jsonl', f'{OUT}/pretrain-log.jsonl') if os.path.exists(f'{R}/pre/log.jsonl') else None
 
 # ---- SFT
 sh(f'{LAUNCH} nik/train.py --stage sft --init {R}/pre/ckpt.pt --data data --out {R}/sft --steps 1000000 --minutes {CFG["sft_min"]} '
    f'--bs {CFG["bs"]} --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2 --opt muon --ema 0.998 {FAST}', 'sft.log')
-shutil.copy(f'{R}/sft/log.jsonl', f'{OUT}/sft-log.jsonl')
+shutil.copy(f'{R}/sft/log.jsonl', f'{OUT}/sft-log.jsonl') if os.path.exists(f'{R}/sft/log.jsonl') else None
 export(f'{R}/sft/ckpt.pt', 'sft')
 
 # ---- verified self-improvement rounds

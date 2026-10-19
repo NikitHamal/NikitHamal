@@ -336,6 +336,7 @@ def main():
             return
     v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
     print(f'== final step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
+    log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'final': True, 'min': (time.time() - t0) / 60}) + '\n'); log.flush()
     print(samples(ema or model, tok, a.stage), flush=True)
     save()
     print('saved', os.path.join(a.out, 'ckpt.pt'))
