@@ -62,15 +62,25 @@ The `/chat` page shows `tok/pass` for each answer so you can watch the acceptanc
 
 The SFT data teaches Nik to open hard turns with `<|think|> … <|/think|>`, a short step-by-step trace in romanized Nepali (column arithmetic with carries, weekday walks, comparisons), and only then answer. The model itself decides whether to think: easy small-talk turns skip it. The UI shows the trace as a collapsible "socheko" (thought) block.
 
-## 5. Runtime (`web/nik.js`)
+## 5. Runtime (`web/nik.js` + `web/kernels/qgemm.wat`)
 
-- Pure JavaScript ES module running in a Web Worker. No WASM, no WebGPU, no libraries.
-- int8 weights with per-row f32 scales are dequantized once at load, which costs about 33 MB of RAM for nik-0.1.
-- KV cache per effective layer, a sliding window at the context limit, and chunked prefill.
+- An ES module running in a Web Worker. It has no libraries; the one custom kernel is assembled from hand-written WebAssembly text.
+- **`qgemm`, a WASM SIMD128 int8 GEMM.** Weights stay int8 in wasm memory, about 8 MB, never expanded to f32. Activations are quantized per token (absmax/127) just before each matmul. The inner loop sign-extends 16 int8 lanes to i16 and accumulates with `i32x4.dot_i16x8_s`, processing two tokens per weight-row load. The kernel is 602 bytes.
+- If WASM SIMD is unavailable, the engine falls back to an f32 JS path with 4-row register blocking.
+- KV cache per effective layer, chunked prefill, and a sliding window at the context limit.
 - Sampling: temperature, nucleus (top-p), and a repetition penalty over the last 48 tokens.
-- Parity with PyTorch is tested: max logit difference 8e-7 on a random model, in both causal and draft modes.
+- Parity: the f32 path matches PyTorch to 8e-7. The int8 path stays within about 2% of the logit range, with the same argmax on test prompts.
 
-Roadmap: a WASM-SIMD int8 dot-product kernel, a WebGPU path, and merging the verify pass with the next draft into one pass.
+Measured on a 2-vCPU cloud VM with Node 24 and nik-0.1 (8.26M params):
+
+| backend | 1-token step | throughput | 8-token batched pass |
+|---|---|---|---|
+| JS f32 | 24.0 ms | 42 tok/s | 4.75× a 1-token step |
+| **WASM SIMD int8** | **2.6 ms** | **~390 tok/s** | 6.3× a 1-token step |
+
+**What this means for SSBD.** On a CPU, the int8 kernel makes the model compute-bound, so a batched pass of `B` tokens costs almost `B` single steps. Plain AR is therefore the fastest choice there, and `/chat` defaults to it. SSBD wins when a step is memory- or latency-bound (GPU / WebGPU, larger models), and it still cuts the number of *sequential* steps. The `/chat` settings let you switch modes and compare `tok/pass`.
+
+Roadmap: a WebGPU backend (where SSBD pays off), merging the verify pass with the next draft into one pass, and 4-bit weights.
 
 ## References
 

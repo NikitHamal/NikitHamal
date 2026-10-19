@@ -155,10 +155,10 @@
       <div class="nk-row"><label for="sTopP">top-p</label><input id="sTopP" type="range" min="0.5" max="1" step="0.01"><output id="oTopP"></output></div>
       <div class="nk-row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
       <div class="nk-row"><label>decoding</label>
-        <div class="nk-seg" id="sMode"><button data-v="ssbd">SSBD</button><button data-v="ar">AR</button></div></div>
+        <div class="nk-seg" id="sMode"><button data-v="ar">AR</button><button data-v="ssbd">SSBD</button></div></div>
       <div class="nk-row"><label>palette</label>
         <div class="nk-seg" id="sPal"><button data-v="default">default</button><button data-v="sepia">sepia</button><button data-v="slate">slate</button></div></div>
-      <p class="nk-note">SSBD = self-speculative block diffusion: Nik drafts several tokens at once with its diffusion head and checks them with its own autoregressive head. Same output distribution as AR, fewer sequential steps.</p>
+      <p class="nk-note">AR = one token per step through a hand-written WASM-SIMD int8 kernel (fastest on CPU). SSBD = self-speculative block diffusion: Nik drafts a block in parallel with its diffusion head and verifies it with its own AR head. Same output distribution and fewer sequential steps, which pays off on GPUs (experimental here).</p>
     </div>
   </header>
 
@@ -193,7 +193,7 @@
     const root = document.documentElement;
     const state = {
       msgs: JSON.parse(localStorage.getItem('nik-chat') || '[]'),
-      opts: Object.assign({ temperature: 0.6, topP: 0.9, maxNew: 160, mode: 'ssbd' }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
+      opts: Object.assign({ temperature: 0.6, topP: 0.9, maxNew: 160, mode: 'ar' }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
       ready: false, busy: false, cur: null, id: 0,
     };
     const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };

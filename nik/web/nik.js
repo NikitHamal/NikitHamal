@@ -10,6 +10,8 @@
 //
 // Works in a Web Worker or on the main thread (ES module).
 
+import { QGEMM_WASM } from './kernels/kernels.js';
+
 const SPECIALS = ['<|pad|>', '<|bos|>', '<|eos|>', '<|mask|>', '<|sys|>', '<|user|>', '<|nik|>',
   '<|think|>', '<|/think|>', '<|end|>', '<|r1|>', '<|r2|>', '<|r3|>', '<|r4|>', '<|r5|>', '<|r6|>'];
 export const TOK = { PAD: 0, BOS: 1, EOS: 2, MASK: 3, SYS: 4, USER: 5, NIK: 6, THINK: 7, ETHINK: 8, END: 9 };
@@ -87,23 +89,82 @@ function parseBin(buf) {
   const hl = new DataView(buf).getUint32(4, true);
   const head = JSON.parse(new TextDecoder().decode(u8.slice(8, 8 + hl)));
   let base = 8 + hl; base += (16 - (base % 16)) % 16;
-  const W = {};
+  const W = {}, Q = {};
   for (const [name, t] of Object.entries(head.tensors)) {
     const n = t.shape.reduce((a, b) => a * b, 1);
     if (t.dtype === 'i8') {
       const q = new Int8Array(buf, base + t.offset, n);
       const s = new Float32Array(buf.slice(base + t.scale_offset, base + t.scale_offset + 4 * t.shape[0]));
-      const f = new Float32Array(n), cols = t.shape[1];
-      for (let r = 0; r < t.shape[0]; r++) {
-        const sc = s[r], o = r * cols;
-        for (let c = 0; c < cols; c++) f[o + c] = q[o + c] * sc;
-      }
-      W[name] = f;
+      Q[name] = { q, s, rows: t.shape[0], cols: t.shape[1] };
     } else {
       W[name] = new Float32Array(buf.slice(base + t.offset, base + t.offset + 4 * n));
     }
   }
-  return { cfg: head.config, W };
+  return { cfg: head.config, W, Q };
+}
+
+function dequant({ q, s, rows, cols }) {
+  const f = new Float32Array(rows * cols);
+  for (let r = 0; r < rows; r++) {
+    const sc = s[r], o = r * cols;
+    for (let c = 0; c < cols; c++) f[o + c] = q[o + c] * sc;
+  }
+  return f;
+}
+
+function b64bytes(b64) {
+  if (typeof atob === 'function') return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  return new Uint8Array(Buffer.from(b64, 'base64'));
+}
+
+/**
+ * int8 x int8 GEMM in WebAssembly SIMD. Weights live in wasm memory as int8;
+ * activations are quantised per token (absmax/127) right before each call.
+ */
+class QKernel {
+  constructor(Q, maxT, maxIn, maxOut) {
+    const mod = new WebAssembly.Module(b64bytes(QGEMM_WASM));
+    this.inst = new WebAssembly.Instance(mod, {});
+    this.mem = this.inst.exports.mem;
+    this.fn = this.inst.exports.qgemm;
+    let need = 0;
+    for (const t of Object.values(Q)) need += t.q.length + 4 * t.rows + 32;
+    const scratch = maxT * maxIn + 4 * maxT + 4 * maxT * maxOut + 64;
+    const pages = Math.ceil((need + scratch + 65536) / 65536);
+    const cur = this.mem.buffer.byteLength / 65536;
+    if (pages > cur) this.mem.grow(pages - cur);
+    let off = 64;
+    const u8 = new Uint8Array(this.mem.buffer);
+    this.t = {};
+    for (const [name, t] of Object.entries(Q)) {
+      off = (off + 15) & ~15;
+      const wq = off; u8.set(new Uint8Array(t.q.buffer, t.q.byteOffset, t.q.length), wq); off += t.q.length;
+      off = (off + 15) & ~15;
+      const ws = off; new Float32Array(this.mem.buffer, ws, t.rows).set(t.s); off += 4 * t.rows;
+      this.t[name] = { wq, ws, rows: t.rows, cols: t.cols };
+    }
+    off = (off + 15) & ~15; this.xq = off; off += maxT * maxIn;
+    off = (off + 15) & ~15; this.xs = off; off += 4 * maxT;
+    off = (off + 15) & ~15; this.y = off;
+    this.maxT = maxT; this.maxOut = maxOut;
+    this.x8 = new Int8Array(this.mem.buffer, this.xq, maxT * maxIn);
+    this.xsF = new Float32Array(this.mem.buffer, this.xs, maxT);
+    this.yF = new Float32Array(this.mem.buffer, this.y, maxT * maxOut);
+  }
+  /** Y (Float32Array, T x out) = X (T x in) @ W[name]^T */
+  mm(name, X, T, Y) {
+    const t = this.t[name], inD = t.cols, outD = t.rows;
+    for (let r = 0; r < T; r++) {
+      const o = r * inD;
+      let mx = 0;
+      for (let i = 0; i < inD; i++) { const a = Math.abs(X[o + i]); if (a > mx) mx = a; }
+      const sc = mx > 0 ? mx / 127 : 1, inv = 1 / sc;
+      this.xsF[r] = sc;
+      for (let i = 0; i < inD; i++) this.x8[o + i] = Math.round(X[o + i] * inv);
+    }
+    this.fn(this.xq, this.xs, T, t.wq, t.ws, inD, outD, this.y);
+    Y.set(this.yF.subarray(0, T * outD));
+  }
 }
 
 // Y[t, o] = sum_i X[t, i] * W[o, i]   (W row-major, out x in). 4-row register blocking.
@@ -146,9 +207,23 @@ export class NikModel {
     return new NikModel(parseBin(buf), new Tokenizer(tj));
   }
 
-  constructor({ cfg, W }, tok) {
+  constructor({ cfg, W, Q }, tok, { backend = 'auto' } = {}) {
     this.cfg = cfg; this.W = W; this.tok = tok;
     const c = cfg;
+    this.maxT = 2 * c.block + 64;
+    if (backend !== 'js') {
+      try {
+        this.kernel = new QKernel(Q, this.maxT, Math.max(c.d, c.ffn), Math.max(c.vocab, 2 * c.ffn));
+        this.embQ = Q['emb.weight'];
+        this.backend = 'wasm-simd-int8';
+      } catch (e) {
+        if (backend === 'wasm') throw e;   // no SIMD support: fall back to float JS
+      }
+    }
+    if (!this.kernel) {
+      for (const [name, t] of Object.entries(Q)) W[name] = dequant(t);
+      this.backend = 'js-f32';
+    }
     this.hd = c.d / c.heads;
     this.L = c.n_unique * c.n_repeat;
     const kvw = c.kv_heads * this.hd;
@@ -158,7 +233,6 @@ export class NikModel {
     const half = this.hd / 2;
     this.invFreq = new Float32Array(half);
     for (let i = 0; i < half; i++) this.invFreq[i] = 1 / Math.pow(c.rope_base, (2 * i) / this.hd);
-    this.maxT = 2 * c.block + 64;
     this._alloc(this.maxT);
   }
 
@@ -173,7 +247,20 @@ export class NikModel {
     this.capT = T;
   }
 
-  reset() { this.n = 0; }
+  reset() { this.n = 0; this._history = []; }
+
+  _mm(name, X, T, inD, outD, Y) {
+    if (this.kernel) this.kernel.mm(name, X, T, Y);
+    else matmul(X, T, this.W[name], inD, outD, Y);
+  }
+
+  _embedRow(id, dst, off) {
+    const d = this.cfg.d;
+    if (this.kernel) {
+      const { q, s } = this.embQ, sc = s[id], o = id * d;
+      for (let i = 0; i < d; i++) dst[off + i] = q[o + i] * sc;
+    } else dst.set(this.W['emb.weight'].subarray(id * d, id * d + d), off);
+  }
 
   _rope(v, off, pos) {
     const half = this.hd / 2;
@@ -202,17 +289,16 @@ export class NikModel {
    */
   forward(ids, pos0, nCausal = ids.length) {
     const c = this.cfg, T = ids.length, d = c.d, hd = this.hd, H = c.heads, KV = c.kv_heads;
-    if (T > this.capT) this._alloc(T);
+    if (T > this.capT) throw new Error('batch too large');
     if (pos0 + T > c.ctx) throw new Error('context overflow');
     const B = this.buf, W = this.W, rep = H / KV, kvw = KV * hd, scale = 1 / Math.sqrt(hd);
-    const emb = W['emb.weight'];
-    for (let t = 0; t < T; t++) B.x.set(emb.subarray(ids[t] * d, ids[t] * d + d), t * d);
+    for (let t = 0; t < T; t++) this._embedRow(ids[t], B.x, t * d);
     const lastKey = pos0 + T - 1;
     for (let l = 0; l < this.L; l++) {
       const p = `blocks.${Math.floor(l / c.n_repeat)}.`;
       rmsnorm(B.x, T, d, W[p + 'n1.weight'], c.eps, B.h);
-      matmul(B.h, T, W[p + 'q.weight'], d, H * hd, B.q);
-      matmul(B.h, T, W[p + 'kv.weight'], d, 2 * kvw, B.kv);
+      this._mm(p + 'q.weight', B.h, T, d, H * hd, B.q);
+      this._mm(p + 'kv.weight', B.h, T, d, 2 * kvw, B.kv);
       const Kc = this.K[l], Vc = this.V[l];
       for (let t = 0; t < T; t++) {
         const pos = pos0 + t;
@@ -249,10 +335,10 @@ export class NikModel {
           }
         }
       }
-      matmul(B.att, T, W[p + 'o.weight'], H * hd, d, B.o);
+      this._mm(p + 'o.weight', B.att, T, H * hd, d, B.o);
       for (let i = 0; i < T * d; i++) B.x[i] += B.o[i];
       rmsnorm(B.x, T, d, W[p + 'n2.weight'], c.eps, B.h);
-      matmul(B.h, T, W[p + 'up.weight'], d, 2 * c.ffn, B.gu);
+      this._mm(p + 'up.weight', B.h, T, d, 2 * c.ffn, B.gu);
       const F = c.ffn;
       for (let t = 0; t < T; t++) {
         for (let i = 0; i < F; i++) {
@@ -260,7 +346,7 @@ export class NikModel {
           B.act[t * F + i] = (g / (1 + Math.exp(-g))) * u;
         }
       }
-      matmul(B.act, T, W[p + 'down.weight'], F, d, B.o);
+      this._mm(p + 'down.weight', B.act, T, F, d, B.o);
       for (let i = 0; i < T * d; i++) B.x[i] += B.o[i];
     }
     rmsnorm(B.x, T, d, W['norm.weight'], c.eps, B.h);
@@ -269,7 +355,12 @@ export class NikModel {
 
   /** logits for row t of the last forward pass */
   logits(t, out = this.buf.logits) {
-    const c = this.cfg, d = c.d, h = this.buf.h, E = this.W['emb.weight'];
+    const c = this.cfg, d = c.d, h = this.buf.h;
+    if (this.kernel) {
+      this.kernel.mm('emb.weight', h.subarray(t * d, t * d + d), 1, out);
+      return out;
+    }
+    const E = this.W['emb.weight'];
     const ho = t * d;
     for (let v = 0; v < c.vocab; v++) {
       const eo = v * d;
