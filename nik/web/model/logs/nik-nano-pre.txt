@@ -1,0 +1,48 @@
+NikLM 2.00M params | 10 effective layers | device cpu | ctx 192
+step 1 | loss 16.680 (ar 8.347 diff 8.333) | lr 3.00e-05 | gn 4.70 | 1,582 tok/s | 0.0 min
+step 25 | loss 14.968 (ar 7.474 diff 7.493) | lr 7.50e-04 | gn 1.21 | 2,313 tok/s | 0.6 min
+step 50 | loss 14.392 (ar 7.170 diff 7.223) | lr 1.50e-03 | gn 0.66 | 2,349 tok/s | 1.1 min
+step 75 | loss 14.220 (ar 7.078 diff 7.142) | lr 2.25e-03 | gn 0.65 | 2,356 tok/s | 1.6 min
+step 100 | loss 14.169 (ar 6.984 diff 7.185) | lr 3.00e-03 | gn 0.67 | 2,387 tok/s | 2.2 min
+step 125 | loss 13.926 (ar 6.783 diff 7.144) | lr 3.00e-03 | gn 0.74 | 2,416 tok/s | 2.7 min
+step 150 | loss 13.611 (ar 6.630 diff 6.981) | lr 3.00e-03 | gn 0.74 | 2,425 tok/s | 3.2 min
+step 175 | loss 13.728 (ar 6.697 diff 7.031) | lr 3.00e-03 | gn 1.02 | 2,440 tok/s | 3.7 min
+step 200 | loss 13.557 (ar 6.583 diff 6.974) | lr 2.99e-03 | gn 0.87 | 2,455 tok/s | 4.2 min
+step 225 | loss 13.299 (ar 6.447 diff 6.853) | lr 2.99e-03 | gn 0.75 | 2,458 tok/s | 4.7 min
+step 250 | loss 13.175 (ar 6.408 diff 6.767) | lr 2.98e-03 | gn 1.06 | 2,461 tok/s | 5.2 min
+step 275 | loss 13.031 (ar 6.347 diff 6.684) | lr 2.98e-03 | gn 0.74 | 2,426 tok/s | 5.8 min
+step 300 | loss 12.869 (ar 6.233 diff 6.636) | lr 2.97e-03 | gn 0.70 | 2,259 tok/s | 6.8 min
+step 325 | loss 12.667 (ar 6.123 diff 6.544) | lr 2.96e-03 | gn 0.93 | 2,275 tok/s | 7.4 min
+step 350 | loss 12.572 (ar 6.023 diff 6.550) | lr 2.95e-03 | gn 0.80 | 2,282 tok/s | 7.9 min
+step 375 | loss 12.603 (ar 6.063 diff 6.540) | lr 2.94e-03 | gn 0.83 | 2,293 tok/s | 8.4 min
+step 400 | loss 12.276 (ar 5.870 diff 6.406) | lr 2.93e-03 | gn 0.74 | 2,288 tok/s | 9.0 min
+== eval step 400: val ar 6.069 (ppl 432.1) | val diff 6.580
+  [nepal ko rajdhani] ma dharasakeka thie.
+  [ma bholi bihana]  kam garnaka nam ho. ajayararech ra. kathmanduko nipanna utpadanko jajadhikar, surt abhishanka naliar. ba. kasant-dura
+  [hamro gaun ma]  paniuinan .
+step 425 | loss 12.482 (ar 5.966 diff 6.516) | lr 2.92e-03 | gn 0.80 | 2,273 tok/s | 9.6 min
+step 450 | loss 12.396 (ar 5.930 diff 6.466) | lr 2.90e-03 | gn 0.74 | 2,283 tok/s | 10.1 min
+step 475 | loss 12.371 (ar 5.957 diff 6.414) | lr 2.89e-03 | gn 0.77 | 2,275 tok/s | 10.7 min
+step 500 | loss 12.253 (ar 5.887 diff 6.367) | lr 2.88e-03 | gn 0.83 | 2,285 tok/s | 11.3 min
+step 525 | loss 12.167 (ar 5.817 diff 6.350) | lr 2.86e-03 | gn 0.83 | 2,293 tok/s | 11.8 min
+step 550 | loss 12.161 (ar 5.835 diff 6.326) | lr 2.84e-03 | gn 0.77 | 2,305 tok/s | 12.3 min
+step 575 | loss 12.245 (ar 5.848 diff 6.397) | lr 2.83e-03 | gn 0.73 | 2,309 tok/s | 12.8 min
+step 600 | loss 11.617 (ar 5.483 diff 6.133) | lr 2.81e-03 | gn 0.88 | 2,308 tok/s | 13.4 min
+step 625 | loss 11.977 (ar 5.714 diff 6.263) | lr 2.79e-03 | gn 0.79 | 2,315 tok/s | 13.9 min
+step 650 | loss 11.773 (ar 5.570 diff 6.203) | lr 2.77e-03 | gn 0.85 | 2,321 tok/s | 14.4 min
+step 675 | loss 12.127 (ar 5.728 diff 6.399) | lr 2.75e-03 | gn 0.80 | 2,326 tok/s | 14.9 min
+step 700 | loss 11.907 (ar 5.649 diff 6.258) | lr 2.73e-03 | gn 0.83 | 2,330 tok/s | 15.5 min
+step 725 | loss 11.744 (ar 5.534 diff 6.210) | lr 2.70e-03 | gn 0.79 | 2,333 tok/s | 16.0 min
+step 750 | loss 11.826 (ar 5.602 diff 6.224) | lr 2.68e-03 | gn 0.83 | 2,338 tok/s | 16.5 min
+step 775 | loss 11.607 (ar 5.435 diff 6.173) | lr 2.66e-03 | gn 0.86 | 2,342 tok/s | 17.0 min
+step 800 | loss 11.448 (ar 5.379 diff 6.069) | lr 2.63e-03 | gn 0.82 | 2,345 tok/s | 17.6 min
+== eval step 800: val ar 5.514 (ppl 248.2) | val diff 6.179
+  [nepal ko rajdhani] ma deshbare . 'rashakle ekalkeld hasti' pahilo samayama sarwajanik suru garepachhi malai snatotima marinal kasari ahile parikasma farkane raheko chha
+  [ma bholi bihana]  ek barsha dirghaun ma timi ma kagatma jakhlai ek golka hunchhan .
+  [hamro gaun ma]  bhane ek'
+time limit reached at step 819
+== final step 819: val ar 5.446 (ppl 231.8) | val diff 6.175
+  [nepal ko rajdhani] ko ghoshana bhaeko thiyo. 'kathmandu, kattik 23.005060273 ma ko karib 121 ghardhuri raheko chha. kunai tahako matahatko nirnaya dieko chha.
+  [ma bholi bihana]  84 bajedekhiko elo smirile rapraharile bharatiya nepali congressle kam gare. 4144 ma san 1909ma yahanko janasankhya 898 raheko thiyo
+  [hamro gaun ma]  pariwartan garera ? teu lagat nepal : pradeshsabha sadasya jilla sabha sadasya tatha ummedwar krishnabahadurva ummedwar, udyogka, sancharmantri, paryatan, sanchar, ajyan ra sanwidhanko bikas tatha bikas
+saved nik/runs/nano-pre/ckpt.pt
