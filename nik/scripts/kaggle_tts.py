@@ -14,8 +14,12 @@ os.chdir('/tmp/NikitHamal')
 sh('pip -q install soundfile onnx onnxruntime pyarrow')
 sh('python -c "import sys; sys.path.insert(0, \'nik/data\'); import build_corpus as b, os; os.makedirs(\'data_tts/raw\', exist_ok=True); '
    'b.build_lexicon(\'data_tts/raw\', \'data_tts/raw/lexicon.tsv\')"')
+import glob
+att = [os.path.dirname(os.path.dirname(w)) for w in glob.glob('/kaggle/input/**/wavs/*.wav', recursive=True)[:1]]
+root = att[0] if att else 'data_tts/ne_np_female'          # attached Kaggle dataset, else download from OpenSLR
+print('data root', root, flush=True)
 limit = '--limit 300' if 'smoke' in MODE else ''
-sh(f'python nik/tts/prepare.py --root data_tts/ne_np_female --out data_tts/set.pt --lexicon data_tts/raw/lexicon.tsv {limit} 2>&1 | tail -5')
+sh(f'python nik/tts/prepare.py --root {root} --out data_tts/set.pt --lexicon data_tts/raw/lexicon.tsv {limit} 2>&1 | tail -5')
 import torch
 ng = torch.cuda.device_count()
 a = f'CUDA_VISIBLE_DEVICES=0 python nik/tts/train.py --stage acoustic --data data_tts/set.pt --out nik/runs/tts --minutes {MIN} > {OUT}/acoustic.log 2>&1'

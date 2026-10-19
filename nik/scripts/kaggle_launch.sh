@@ -16,13 +16,14 @@ case "$MODE" in
   rsi1) SRC=kaggle_rsi.py; SOURCES="[\"$USER_/nik-train-full\"]";;
   rsi*) SRC=kaggle_rsi.py; N=${MODE#rsi}; SOURCES="[\"$USER_/nik-train-full\", \"$USER_/nik-train-rsi$((N-1))\"]";;
 esac
-case "$MODE" in tts*) SRC=kaggle_tts.py;; esac
+DATASETS='[]'
+case "$MODE" in tts*) SRC=kaggle_tts.py; DATASETS='["nepalicoder/nepali-tts"]';; esac
 sed "s/__MODE__/$MODE/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
 cat > "$D/kernel-metadata.json" <<JSON
 { "id": "$USER_/nik-train-$MODE", "title": "nik-train-$MODE", "code_file": "nik_train.py",
   "language": "python", "kernel_type": "script", "is_private": "true",
   "enable_gpu": "true", "enable_tpu": "false", "enable_internet": "true",
-  "dataset_sources": [], "competition_sources": [], "kernel_sources": $SOURCES, "model_sources": [] }
+  "dataset_sources": $DATASETS, "competition_sources": [], "kernel_sources": $SOURCES, "model_sources": [] }
 JSON
 kaggle kernels push -p "$D" --accelerator "${ACCELERATOR:-NvidiaTeslaT4}"
 echo "launched $USER_/nik-train-$MODE"
