@@ -59,12 +59,14 @@ class NikConfig:
 
 
 PRESETS = {
-    # ~8.2M params -> ~8.3 MB int8. The shipped model.
-    'nik-0.1': NikConfig(),
-    # ~1.6M params, for CPU smoke tests and fast iteration (~20 min on a laptop).
-    'nik-nano': NikConfig(d=160, n_unique=5, n_repeat=2, heads=5, kv_heads=1, ffn=432, ctx=256),
+    # ~20.5M params, 24 effective layers -> ~20.6 MB int8 (25 MB cap). The flagship.
+    'nik-0.1': NikConfig(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512),
+    # ~8.3M params -> ~8.4 MB int8 (the original <10 MB design).
+    'nik-small': NikConfig(),
     # ~4M params middle ground.
     'nik-mini': NikConfig(d=224, n_unique=6, n_repeat=2, heads=7, kv_heads=1, ffn=608, ctx=384),
+    # ~2M params, for CPU smoke tests and fast iteration.
+    'nik-nano': NikConfig(d=160, n_unique=5, n_repeat=2, heads=5, kv_heads=1, ffn=432, ctx=256),
 }
 
 

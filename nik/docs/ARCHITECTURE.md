@@ -4,19 +4,20 @@ Nik 0.1 is one small transformer that can generate in **two modes with the same 
 
 ## 1. Backbone: deep, thin, shared
 
-| | nik-0.1 | nik-mini | nik-nano |
-|---|---|---|---|
-| width `d` | 288 | 224 | 160 |
-| unique blocks × repeats | 8 × 2 = **16 effective layers** | 6 × 2 | 5 × 2 |
-| heads / KV heads (GQA) | 9 / 3 | 7 / 1 | 5 / 1 |
-| SwiGLU hidden | 768 | 608 | 432 |
-| vocab / context | 4096 / 512 | 4096 / 384 | 4096 / 256 |
-| params | 8.26M | 4.06M | 2.00M |
-| int8 file | ~8.3 MB | ~4.1 MB | ~2.1 MB |
+| | **nik-0.1** (flagship) | nik-small | nik-mini | nik-nano |
+|---|---|---|---|---|
+| width `d` | 384 | 288 | 224 | 160 |
+| unique blocks × repeats | 12 × 2 = **24 effective layers** | 8 × 2 = 16 | 6 × 2 | 5 × 2 |
+| heads / KV heads (GQA) | 12 / 4 | 9 / 3 | 7 / 1 | 5 / 1 |
+| SwiGLU hidden | 1024 | 768 | 608 | 432 |
+| vocab / context | 4096 / 512 | 4096 / 512 | 4096 / 384 | 4096 / 256 |
+| params | 20.46M | 8.26M | 4.06M | 2.00M |
+| int8 file | **20.7 MB** (cap 25 MB) | 8.4 MB | 4.1 MB | 2.1 MB |
+| browser speed (2-vCPU VM, WASM) | ~190 tok/s | ~370 tok/s | | |
 
 Choices for the sub-10M regime, mostly following MobileLLM (Liu et al., ICML 2024), which showed that at this size depth beats width and parameter sharing is nearly free quality:
 
-- **Immediate block-wise weight sharing.** Each block runs twice back to back. That gives 16 layers of computation from 8 layers of parameters. The repeat reuses weights already in cache, so it is cheap in the browser too.
+- **Immediate block-wise weight sharing.** Each block runs twice back to back. That gives 24 layers of computation from 12 layers of parameters. The repeat reuses weights already in cache, so it is cheap in the browser too.
 - **SwiGLU, RMSNorm (pre-norm), RoPE, and QK-norm.** QK-norm normalizes each head's queries and keys, which keeps attention logits bounded at the high learning rates a tiny model wants.
 - **GQA (3 KV heads).** This cuts the KV cache by 3×.
 - **Tied input/output embedding.** With a 4096-token vocab, the embedding is 1.2M params and is paid for once.

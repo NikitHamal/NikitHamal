@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # One-command Nik pipeline: data -> tokenizer -> pretrain -> SFT -> int8 export.
 #   PRESET=nik-0.1 PRE_STEPS=30000 SFT_STEPS=6000 bash nik/scripts/pipeline.sh
-# Defaults suit one Kaggle/Colab T4 (~3-4 h total). Re-runs skip finished stages and resume pretraining.
+# Defaults suit one Kaggle T4 (~4-5 h for the 20M flagship; resumable). Re-runs skip finished stages and resume pretraining.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 PRESET=${PRESET:-nik-0.1}
 DATA=${DATA:-data}
 SHARDS=${SHARDS:-2}
-PRE_STEPS=${PRE_STEPS:-20000}
+PRE_STEPS=${PRE_STEPS:-16000}
 MINUTES=${MINUTES:-0}          # cap pretraining wall-clock per session (Colab ~ 200); rerun to resume
 SFT_STEPS=${SFT_STEPS:-6000}
-BS=${BS:-48}
+BS=${BS:-32}
 RUN=${RUN:-nik/runs/$PRESET}
 TOK=nik/web/model/tokenizer.json
 mkdir -p "$DATA" "$RUN"
