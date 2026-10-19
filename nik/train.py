@@ -9,6 +9,8 @@ Use --minutes to cap wall-clock time; a checkpoint is always written at the end.
 from __future__ import annotations
 import argparse, json, math, os, sys, time
 
+import copy
+
 import numpy as np
 import torch
 
@@ -20,6 +22,68 @@ from prepare import render_chat  # noqa: E402
 PROMPTS = ['nepal ko rajdhani', 'ma bholi bihana', 'hamro gaun ma']
 CHATS = ['timi ko hau?', 'nikit hamal ko ho?', '12 + 25 kati hunchha?', 'namaste! k chha?',
          'aaja sombar ho bhane parsi kun bar hunchha?', 'khusi kasari hune?']
+
+
+def zeropower_ns(G, steps=5):
+    """Newton-Schulz iteration: approximately orthogonalise G (Muon's core op)."""
+    a, b, c = 3.4445, -4.7750, 2.0315
+    X = G.bfloat16() if G.is_cuda and torch.cuda.is_bf16_supported() else G.float()
+    X = X / (X.norm() + 1e-7)
+    tr = X.size(0) > X.size(1)
+    if tr:
+        X = X.T
+    for _ in range(steps):
+        A = X @ X.T
+        X = a * X + (b * A + c * A @ A) @ X
+    return (X.T if tr else X).to(G.dtype)
+
+
+class Muon(torch.optim.Optimizer):
+    """MomentUm Orthogonalized by Newton-schulz (Jordan et al., 2024; used in the
+    modded-nanoGPT speed records). For 2-D hidden weight matrices only; embeddings
+    and norms stay on AdamW. Updates are orthogonalised momentum, scaled so their
+    RMS matches AdamW's (Liu et al. 2025, "Muon is scalable"), so one LR schedule
+    drives both optimisers."""
+
+    def __init__(self, params, lr=0.02, momentum=0.95, wd=0.0):
+        super().__init__(params, dict(lr=lr, momentum=momentum, wd=wd))
+
+    @torch.no_grad()
+    def step(self):
+        for g in self.param_groups:
+            for p in g['params']:
+                if p.grad is None:
+                    continue
+                st = self.state[p]
+                buf = st.setdefault('m', torch.zeros_like(p.grad))
+                buf.mul_(g['momentum']).add_(p.grad)
+                upd = zeropower_ns(p.grad.add(buf, alpha=g['momentum']))
+                if g['wd']:
+                    p.mul_(1 - g['lr'] * g['wd'])
+                p.add_(upd, alpha=-g['lr'] * 0.2 * max(p.size(0), p.size(1)) ** 0.5)
+
+
+class MultiOpt:
+    """Drive several optimisers as one (works with GradScaler and the LR loop)."""
+
+    def __init__(self, opts):
+        self.opts = opts
+        self.param_groups = [g for o in opts for g in o.param_groups]
+
+    def step(self):
+        for o in self.opts:
+            o.step()
+
+    def zero_grad(self, set_to_none=True):
+        for o in self.opts:
+            o.zero_grad(set_to_none=set_to_none)
+
+    def state_dict(self):
+        return [o.state_dict() for o in self.opts]
+
+    def load_state_dict(self, sd):
+        for o, d in zip(self.opts, sd):
+            o.load_state_dict(d)
 
 
 class Batches:
@@ -47,10 +111,12 @@ class Batches:
         return x, m
 
 
-def lr_at(step, total, peak, warmup, floor=0.1):
+def lr_at(step, total, peak, warmup, floor=0.1, p_time=0.0):
+    """Warmup + cosine. With a wall-clock cap the schedule follows whichever is
+    further along, steps or time, so a capped run still ends fully annealed."""
     if step < warmup:
         return peak * (step + 1) / warmup
-    p = min(1.0, (step - warmup) / max(1, total - warmup))
+    p = min(1.0, max((step - warmup) / max(1, total - warmup), p_time))
     return peak * (floor + (1 - floor) * 0.5 * (1 + math.cos(math.pi * p)))
 
 
@@ -108,6 +174,9 @@ def main():
     ap.add_argument('--compile', action='store_true')
     ap.add_argument('--device', default='auto')
     ap.add_argument('--threads', type=int, default=0)
+    ap.add_argument('--opt', choices=['adamw', 'muon'], default='adamw', help='muon: Muon for hidden matrices + AdamW for the rest')
+    ap.add_argument('--ema', type=float, default=0.0, help='keep an EMA of weights (e.g. 0.999) and save it as the checkpoint')
+    ap.add_argument('--sft-name', default='sft', help='SFT token files <name>_tok.bin / <name>_mask.bin')
     ap.add_argument('--add-abacus', type=int, default=0, help='warm-start: add abacus digit embeddings to a checkpoint without them')
     a = ap.parse_args()
 
@@ -149,17 +218,36 @@ def main():
         train_b = Batches(os.path.join(D, 'pre_train.bin'))
         val_b = Batches(os.path.join(D, 'pre_val.bin'), seed=1)
     else:
-        train_b = Batches(os.path.join(D, 'sft_tok.bin'), os.path.join(D, 'sft_mask.bin'),
+        train_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'),
                           os.path.join(D, 'pre_train.bin'), a.mix)
-        val_b = Batches(os.path.join(D, 'sft_tok.bin'), os.path.join(D, 'sft_mask.bin'), seed=1)
+        val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1)
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
     no_decay = [p for n, p in model.named_parameters() if p.dim() < 2]
-    opt = torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}],
-                            lr=a.lr, betas=(0.9, 0.95), eps=1e-8, fused=(device == 'cuda'))
+    if a.opt == 'muon':
+        hidden = [p for n, p in model.named_parameters() if p.dim() == 2 and n.startswith('blocks.')]
+        hid = {id(p) for p in hidden}
+        decay = [p for p in decay if id(p) not in hid]
+        opt = MultiOpt([Muon(hidden, lr=a.lr, wd=a.wd),
+                        torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}],
+                                          lr=a.lr, betas=(0.9, 0.95), eps=1e-8)])
+    else:
+        opt = torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}],
+                                lr=a.lr, betas=(0.9, 0.95), eps=1e-8, fused=(device == 'cuda'))
     step = 0
     if a.resume and ck and 'opt' in ck:
-        opt.load_state_dict(ck['opt']); step = ck['step']
+        try:
+            opt.load_state_dict(ck['opt']); step = ck['step']
+        except (ValueError, KeyError, TypeError):
+            print('optimizer state not compatible (different --opt); restarting optimizer', flush=True)
+            step = ck['step']
+        if 'model_raw' in ck:
+            model.load_state_dict(ck['model_raw'], strict=False)
+    ema = None
+    if a.ema:
+        ema = copy.deepcopy(model).eval()
+        for p in ema.parameters():
+            p.requires_grad_(False)
 
     use_cuda_amp = device == 'cuda'
     amp_dtype = torch.bfloat16 if use_cuda_amp and torch.cuda.is_bf16_supported() else torch.float16
@@ -173,11 +261,13 @@ def main():
     t0, tok_seen = time.time(), 0
 
     def save(tag='ckpt'):
-        torch.save({'model': model.state_dict(), 'cfg': cfg.to_dict(), 'opt': opt.state_dict(), 'step': step,
-                    'stage': a.stage}, os.path.join(a.out, f'{tag}.pt'))
+        d = {'model': (ema or model).state_dict(), 'cfg': cfg.to_dict(), 'opt': opt.state_dict(), 'step': step, 'stage': a.stage}
+        if ema is not None:
+            d['model_raw'] = model.state_dict()     # resume continues from the raw weights
+        torch.save(d, os.path.join(a.out, f'{tag}.pt'))
 
     while step < a.steps:
-        lr = lr_at(step, a.steps, a.lr, a.warmup)
+        lr = lr_at(step, a.steps, a.lr, a.warmup, p_time=(time.time() - t0) / (a.minutes * 60) if a.minutes else 0.0)
         for g in opt.param_groups:
             g['lr'] = lr
         tot = ar = df = 0.0
@@ -191,23 +281,27 @@ def main():
         scaler.unscale_(opt)
         gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         scaler.step(opt); scaler.update(); opt.zero_grad(set_to_none=True)
+        if ema is not None:
+            with torch.no_grad():
+                for pe, pm in zip(ema.parameters(), model.parameters()):
+                    pe.lerp_(pm, 1 - a.ema)
         step += 1
         el = time.time() - t0
         if step % 25 == 0 or step == 1:
             print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}) | lr {lr:.2e} | gn {float(gn):.2f} | '
                   f'{tok_seen / el:,.0f} tok/s | {el / 60:.1f} min', flush=True)
         if step % a.eval_every == 0 or step == a.steps:
-            v_ar, v_df = evaluate(model, val_b, L, device, amp=amp)
+            v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
-            print(samples(model, tok, a.stage), flush=True)
+            print(samples(ema or model, tok, a.stage), flush=True)
             log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': tot, 'min': el / 60}) + '\n'); log.flush()
             save()
         if a.minutes and el > a.minutes * 60:
             print(f'time limit reached at step {step}', flush=True)
             break
-    v_ar, v_df = evaluate(model, val_b, L, device, amp=amp)
+    v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
     print(f'== final step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
-    print(samples(model, tok, a.stage), flush=True)
+    print(samples(ema or model, tok, a.stage), flush=True)
     save()
     print('saved', os.path.join(a.out, 'ckpt.pt'))
 

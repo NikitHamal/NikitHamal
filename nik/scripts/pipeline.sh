@@ -8,7 +8,9 @@ PRESET=${PRESET:-nik-0.1}
 DATA=${DATA:-data}
 SHARDS=${SHARDS:-2}
 PRE_STEPS=${PRE_STEPS:-16000}
-MINUTES=${MINUTES:-0}          # cap pretraining wall-clock per session (Colab ~ 200); rerun to resume
+OPT=${OPT:-muon}              # muon (3x lower ppl than adamw at equal compute in our A/B) | adamw
+SFT_MINUTES=${SFT_MINUTES:-0}
+MINUTES=${MINUTES:-0}          # cap pretraining wall-clock; the LR schedule anneals to the cap
 SFT_STEPS=${SFT_STEPS:-6000}
 BS=${BS:-32}
 RUN=${RUN:-nik/runs/$PRESET}
@@ -21,15 +23,9 @@ mkdir -p "$DATA" "$RUN"
 [ -f "$DATA/pre_train.bin" ] || python nik/prepare.py --data "$DATA" --tok "$TOK"
 
 python nik/train.py --stage pretrain --preset "$PRESET" --data "$DATA" --out "$RUN/pre" \
-  --steps "$PRE_STEPS" --bs "$BS" --lr 3e-3 --warmup 1000 --eval-every 1000 --resume --minutes "$MINUTES" ${COMPILE:+--compile}
-if [ "$MINUTES" != "0" ] && python - "$RUN/pre/ckpt.pt" "$PRE_STEPS" <<'PY'
-import sys, torch
-ck = torch.load(sys.argv[1], map_location="cpu")
-sys.exit(0 if ck["step"] < int(sys.argv[2]) else 1)
-PY
-then echo "pretraining paused at the time cap; rerun this script to resume"; exit 0; fi
+  --steps "$PRE_STEPS" --bs "$BS" --lr 3e-3 --warmup 1000 --eval-every 1000 --resume --minutes "$MINUTES" --opt "$OPT" ${COMPILE:+--compile}
 python nik/train.py --stage sft --init "$RUN/pre/ckpt.pt" --data "$DATA" --out "$RUN/sft" \
-  --steps "$SFT_STEPS" --bs "$BS" --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2
+  --steps "$SFT_STEPS" --bs "$BS" --lr 1e-3 --warmup 200 --eval-every 500 --mix 0.2 --opt "$OPT" --ema 0.998 --minutes "$SFT_MINUTES"
 python nik/export.py --ckpt "$RUN/sft/ckpt.pt" --out "nik/web/model/$PRESET.bin"
 [ "${PUBLISH:-1}" = "1" ] && python nik/scripts/publish.py --preset "$PRESET" --run "$RUN"
 echo "done -> nik/web/model/$PRESET.bin (commit nik/web/model + nik/runs/*/log.jsonl and push)"

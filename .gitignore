@@ -10,6 +10,6 @@ pixel-avatar/
 Thumbs.db
 # nik: local data & checkpoints
 nik/runs/
-data/
+/data/
 *.pt
 __pycache__/

@@ -327,3 +327,37 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
             break
         t0 = nxt
     return out, passes
+
+
+@torch.no_grad()
+def generate_batch(model, prompt: list[int], n: int = 8, max_new: int = 160, temperature: float = 0.8,
+                   min_p: float = 0.05, stop: tuple[int, ...] = (2, 9)):
+    """Sample n continuations of one prompt in parallel (used for self-improvement
+    and self-consistency). min-p sampling: keep tokens with p >= min_p * p_max,
+    which stays coherent at higher temperatures better than top-p for small models.
+    Returns [(tokens, mean_logprob)]."""
+    dev = next(model.parameters()).device
+    x = torch.tensor([prompt] * n, device=dev)
+    done = torch.zeros(n, dtype=torch.bool, device=dev)
+    lp_sum = torch.zeros(n, device=dev)
+    lens = torch.zeros(n, device=dev)
+    out = [[] for _ in range(n)]
+    stop_t = torch.tensor(stop, device=dev)
+    for _ in range(max_new):
+        ctx = x[:, -model.cfg.ctx:]
+        logits = model(ctx)[:, -1].float()
+        logits[:, [0, 1, 3, 4, 5]] = -float('inf')
+        p = torch.softmax(logits / max(temperature, 1e-4), -1)
+        p = torch.where(p >= min_p * p.max(-1, keepdim=True).values, p, torch.zeros_like(p))
+        nxt = torch.multinomial(p / p.sum(-1, keepdim=True), 1).squeeze(1)
+        lp = torch.log_softmax(logits, -1).gather(1, nxt[:, None]).squeeze(1)
+        live = ~done
+        lp_sum += lp * live
+        lens += live.float()
+        for i in torch.nonzero(live).flatten().tolist():
+            out[i].append(int(nxt[i]))
+        done |= torch.isin(nxt, stop_t)
+        x = torch.cat([x, nxt[:, None]], 1)
+        if bool(done.all()):
+            break
+    return [(o, float(lp_sum[i] / lens[i].clamp(min=1))) for i, o in enumerate(out)]
