@@ -1,0 +1,12 @@
+{
+  "name": "nik nano",
+  "file": "nik-nano.bin",
+  "bytes": 2056672,
+  "version": "2026-10-19T19:35Z",
+  "trained": "pre 800 + sft 500 steps",
+  "val": {
+    "pre": 5.5143373012542725,
+    "sft": 0.5848573260009289
+  },
+  "note": "first CPU-trained preview (18 min pretrain + 12 min SFT on 2 vCPUs); the GPU-trained nik-0.1 replaces it"
+}

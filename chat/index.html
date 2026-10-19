@@ -16,196 +16,168 @@
   <link rel="icon" type="image/svg+xml" href="/assets/avatar-upright.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600&family=Silkscreen&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;500;600&family=Silkscreen&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link href="/css/remixicon.css?v=1" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css?v=18" />
   <script>
-    (function(){var t=localStorage.getItem('theme');if(!t){t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}var r=document.documentElement;r.setAttribute('data-theme',t);r.setAttribute('data-palette',localStorage.getItem('reader-palette')||'default');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('motion');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0e0e10':'#faf9f6')})();
+    (function(){var t=localStorage.getItem('theme');if(!t){t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}var r=document.documentElement;r.setAttribute('data-theme',t);r.setAttribute('data-palette',localStorage.getItem('reader-palette')||'default')})();
   </script>
   <style>
-    /* ===== Nik chat — built on the homepage's pixel-art language (pixel sky, pixel dog, stepped frames, Silkscreen) ===== */
-    body.nikchat { --px-ink: var(--text-primary); --px-shadow: rgba(20, 16, 40, .22); --px-paper: var(--bg-elevated);
-      font-family: 'Poppins', var(--font-sans); min-height: 100dvh; }
-    [data-theme="dark"] body.nikchat { --px-ink: #e8e2cf; --px-shadow: rgba(0, 0, 0, .55); }
-    .nikchat * { box-sizing: border-box; }
-    .nk-wrap { position: relative; z-index: 2; max-width: 760px; margin: 0 auto; padding: 12px 18px 0; }
-    .nk-px { font-family: var(--font-pixel); letter-spacing: .02em; }
-    /* the pixel frame: four hard edges with notched corners + a stepped hard drop shadow (same as link previews) */
-    .px-frame { background: var(--px-paper);
-      box-shadow: 0 -3px 0 0 var(--px-ink), 0 3px 0 0 var(--px-ink), -3px 0 0 0 var(--px-ink), 3px 0 0 0 var(--px-ink),
-                  3px 6px 0 0 var(--px-shadow), 6px 3px 0 0 var(--px-shadow), 0 9px 0 0 var(--px-shadow), 6px 6px 0 0 var(--px-shadow); }
-    .px-frame.soft { box-shadow: 0 -2px 0 0 var(--border-strong), 0 2px 0 0 var(--border-strong), -2px 0 0 0 var(--border-strong), 2px 0 0 0 var(--border-strong); }
+    html, body { height: 100%; }
+    body.nk { margin: 0; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; background: var(--bg); color: var(--text-primary);
+      font-family: 'Poppins', var(--font-sans); --px: var(--text-primary); --pxs: rgba(20, 16, 40, .16); --pixel: 'Silkscreen', var(--font-mono); }
+    [data-theme="dark"] body.nk { --px: #e8e2cf; --pxs: rgba(0, 0, 0, .5); }
+    .nk * { box-sizing: border-box; }
+    .nk button { font: inherit; color: inherit; }
+    .pxl { font-family: var(--pixel); letter-spacing: .02em; text-transform: lowercase; }
+    /* stepped pixel frame (hard edges, notched corners, hard offset shadow) */
+    .frame { background: var(--bg-elevated);
+      box-shadow: 0 -2px 0 0 var(--px), 0 2px 0 0 var(--px), -2px 0 0 0 var(--px), 2px 0 0 0 var(--px), 4px 4px 0 0 var(--pxs); }
+    .frame-soft { background: var(--bg-elevated);
+      box-shadow: 0 -2px 0 0 var(--border-strong), 0 2px 0 0 var(--border-strong), -2px 0 0 0 var(--border-strong), 2px 0 0 0 var(--border-strong); }
 
-    /* header controls (inside the shared .site-header) */
-    .site-nav .nk-ctl { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border: 0; background: none;
-      border-radius: var(--radius-pill); color: var(--text-secondary); cursor: pointer; font-size: 1rem; }
-    .site-nav .nk-ctl:hover { color: var(--text-primary); background: var(--bg-hover); }
-    .nk-brandmini { margin-right: auto; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-primary); }
-    .nk-brandmini b { font-family: var(--font-display); font-weight: 400; font-size: 1.35rem; line-height: 1; }
-    .nk-brandmini span { font-family: var(--font-pixel); font-size: .62rem; color: var(--text-muted); }
+    /* ---------- header */
+    .top { flex: none; display: flex; align-items: center; gap: 10px; padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
+      border-bottom: 2px solid var(--border-line); background: var(--bg); }
+    .ic { width: 36px; height: 36px; border: 0; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      color: var(--text-secondary); font-size: 1.05rem; text-decoration: none; }
+    .ic:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .ic:focus-visible, .chip:focus-visible, .send:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand canvas { width: 30px; height: 30px; image-rendering: pixelated; flex: none; }
+    .brand-t { display: flex; flex-direction: column; min-width: 0; }
+    .brand-t b { font-family: 'Instrument Serif', var(--font-serif); font-weight: 400; font-size: 1.45rem; line-height: 1; }
+    .brand-t b i { font-size: 1.05rem; color: var(--text-muted); }
+    .status { display: flex; align-items: center; gap: 6px; font-size: .58rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+    .dot { width: 6px; height: 6px; background: var(--text-muted); flex: none; }
+    .dot.ready { background: #2f9e5b; } .dot.busy { background: #d99a00; animation: blink .6s steps(2) infinite; } .dot.err { background: #d64545; }
+    .grow { flex: 1; }
 
-    /* hero */
-    .nk-hero { padding: 26px 0 8px; }
-    .nk-namerow { display: flex; align-items: flex-end; gap: 8px; margin: -40px 0 6px; }
-    .nk-name { font-family: var(--font-display); font-weight: 400; font-size: 3.4rem; letter-spacing: -.01em; line-height: 1; margin: 0; flex-shrink: 0; }
-    .nk-name i { font-style: italic; }
-    .nk-namerow pixel-dog { flex: 1 1 auto; min-width: 0; line-height: 0; pointer-events: none; margin: 0 0 4px -2px; }
-    .nk-tag { font-family: var(--font-pixel); font-size: .74rem; color: var(--text-muted); text-transform: lowercase; margin: 0 0 14px; }
-    .nk-lead { font-size: .95rem; line-height: 1.7; color: var(--text-secondary); max-width: 34rem; margin: 0 0 18px; }
-    .nk-lead em { color: var(--text-primary); font-style: normal; font-weight: 500; }
-    .nk-facts { display: flex; flex-wrap: wrap; gap: 12px 14px; margin: 4px 0 26px; }
-    .nk-fact { font-family: var(--font-pixel); font-size: .64rem; padding: 5px 8px 4px; color: var(--text-primary); background: var(--bg-elevated); }
-    .nk-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin: 0 0 18px; }
-    .nk-chip { text-align: left; border: 0; cursor: pointer; padding: 11px 13px 12px; color: var(--text-primary); font: 500 .88rem/1.4 'Poppins', var(--font-sans);
-      transition: transform .45s var(--spring); }
-    .nk-chip small { display: block; font: .58rem/1 var(--font-pixel); color: var(--text-muted); margin-bottom: 6px; text-transform: lowercase; }
-    .nk-chip:hover { transform: translate(-2px, -2px) rotate(-.4deg); }
-    .nk-chip:active { transform: translate(2px, 2px); }
+    /* ---------- settings */
+    .pop { position: absolute; right: 14px; top: 58px; z-index: 30; width: min(320px, calc(100vw - 28px)); padding: 16px; display: none; }
+    .pop.open { display: block; animation: rise .25s var(--ease-out-expo); }
+    .pop h3 { margin: 0 0 12px; font-size: .66rem; font-weight: 400; }
+    .row { display: flex; align-items: center; gap: 10px; margin: 12px 0; font-size: .82rem; color: var(--text-secondary); }
+    .row label { width: 92px; flex: none; }
+    .row input[type=range] { flex: 1; accent-color: var(--text-primary); }
+    .row output { width: 36px; text-align: right; font: .74rem var(--font-mono); color: var(--text-muted); }
+    .seg { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+    .seg button { border: 0; cursor: pointer; padding: 5px 8px 4px; font: .56rem/1 var(--pixel); background: var(--bg-hover); color: var(--text-secondary); }
+    .seg button[aria-pressed=true] { background: var(--pill-bg); color: var(--pill-text); }
+    .pop p { margin: 12px 0 0; font-size: .74rem; line-height: 1.55; color: var(--text-muted); }
 
-    /* loader: a segmented pixel bar */
-    .nk-load { margin: 6px 0 22px; }
-    .nk-bar { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; height: 12px; padding: 3px; }
-    .nk-bar i { background: var(--bg-hover); }
-    .nk-bar i.on { background: var(--px-ink); }
-    .nk-load small { display: block; margin-top: 10px; font-family: var(--font-pixel); font-size: .62rem; color: var(--text-muted); }
+    /* ---------- conversation */
+    .scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+    .thread { max-width: 820px; margin: 0 auto; padding: 26px 18px 30px; display: flex; flex-direction: column; gap: 24px; }
+    .hero { padding: 7vh 0 4px; }
+    .hero h1 { font-family: 'Instrument Serif', var(--font-serif); font-weight: 400; font-size: clamp(2.3rem, 6vw, 3.2rem); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 10px; }
+    .hero h1 i { color: var(--text-muted); }
+    .hero p { color: var(--text-secondary); margin: 0 0 18px; max-width: 36rem; line-height: 1.7; font-size: .95rem; }
+    .facts { display: flex; flex-wrap: wrap; gap: 10px 12px; margin: 0 0 26px; }
+    .fact { font-size: .58rem; padding: 5px 8px 4px; color: var(--text-secondary); }
+    .chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+    .chip { text-align: left; border: 0; cursor: pointer; padding: 11px 13px 12px; font-size: .9rem; line-height: 1.4; transition: transform .25s var(--ease-out-expo); }
+    .chip small { display: block; font-size: .54rem; color: var(--text-muted); margin-bottom: 6px; }
+    .chip:hover { transform: translate(-2px, -2px); }
+    .chip:active { transform: translate(1px, 1px); }
+    .load { margin: 0 0 26px; }
+    .bar { display: grid; grid-template-columns: repeat(32, 1fr); gap: 2px; height: 10px; padding: 2px; }
+    .bar i { background: var(--bg-hover); } .bar i.on { background: var(--px); }
+    .load small { display: block; margin-top: 10px; font-size: .58rem; color: var(--text-muted); }
 
-    /* thread */
-    .nk-thread { display: flex; flex-direction: column; gap: 26px; padding: 8px 0 170px; }
-    .nk-msg { display: flex; gap: 12px; align-items: flex-start; animation: nkPop .38s var(--spring) both; }
-    @keyframes nkPop { from { opacity: 0; transform: translateY(8px) scale(.97); } }
-    .nk-msg.user { justify-content: flex-end; }
-    .nk-msg.user .nk-body { max-width: min(82%, 540px); padding: 9px 13px 10px; background: var(--pill-bg); color: var(--pill-text);
-      --px-ink: var(--pill-bg); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; font-size: .95rem; }
-    .nk-av { flex: none; width: 36px; height: 36px; margin-top: 2px; image-rendering: pixelated; }
-    .nk-msg.nik .nk-body { flex: 1; min-width: 0; padding: 12px 15px 10px; }
-    .nk-who { font-family: var(--font-pixel); font-size: .6rem; color: var(--text-muted); margin-bottom: 6px; display: flex; gap: 8px; align-items: center; }
-    .nk-text { line-height: 1.75; font-size: .97rem; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.6em; }
-    .nk-text.live::after { content: ''; display: inline-block; width: 8px; height: 14px; vertical-align: -2px; margin-left: 3px;
-      background: var(--text-primary); animation: nkBlink .8s steps(2) infinite; }
-    @keyframes nkBlink { 50% { opacity: 0; } }
-    .nk-think { margin: 0 0 8px; padding: 8px 10px; background: var(--bg-hover); }
-    .nk-think summary { cursor: pointer; list-style: none; font-family: var(--font-pixel); font-size: .62rem; color: var(--text-secondary);
-      display: flex; align-items: center; gap: 6px; user-select: none; }
-    .nk-think summary::-webkit-details-marker { display: none; }
-    .nk-think summary::before { content: '▸'; display: inline-block; transition: transform .2s steps(2); }
-    .nk-think[open] summary::before { transform: rotate(90deg); }
-    .nk-think .dots::after { content: ''; animation: nkDots 1.2s steps(4) infinite; }
-    @keyframes nkDots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
-    .nk-think pre { margin: 8px 0 2px; font: .78rem/1.65 var(--font-mono); color: var(--text-secondary); white-space: pre-wrap; overflow-wrap: anywhere; }
-    .nk-meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-family: var(--font-pixel); font-size: .56rem; color: var(--text-muted); }
-    .nk-meta button { border: 0; background: none; padding: 0; cursor: pointer; font: inherit; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; }
-    .nk-meta button:hover { color: var(--text-primary); }
-    .nk-err { color: #d64545; font-size: .85rem; margin-top: 6px; }
+    .msg { display: flex; gap: 12px; align-items: flex-start; animation: rise .3s var(--ease-out-expo) both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+    .msg.user { justify-content: flex-end; }
+    .msg.user .body { max-width: min(80%, 560px); padding: 9px 14px 10px; background: var(--pill-bg); color: var(--pill-text);
+      white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; font-size: .96rem; box-shadow: 4px 4px 0 0 var(--pxs); }
+    .av { flex: none; width: 32px; height: 32px; image-rendering: pixelated; margin-top: 2px; }
+    .msg.nik .body { flex: 1; min-width: 0; padding-top: 3px; }
+    .text { line-height: 1.75; font-size: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.5em; }
+    .text.live::after { content: ''; display: inline-block; width: 8px; height: 15px; vertical-align: -2px; margin-left: 3px; background: var(--text-primary); animation: blink .8s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .think { margin: 0 0 10px; padding: 8px 11px; }
+    .think summary { cursor: pointer; list-style: none; font-size: .58rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; user-select: none; }
+    .think summary::-webkit-details-marker { display: none; }
+    .think summary::before { content: '▸'; display: inline-block; transition: transform .15s steps(2); }
+    .think[open] summary::before { transform: rotate(90deg); }
+    .think .dots::after { content: ''; animation: dots 1.2s steps(4) infinite; }
+    @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+    .think pre { margin: 8px 0 2px; font: .8rem/1.65 var(--font-mono); color: var(--text-secondary); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: .52rem; color: var(--text-muted); opacity: .85; }
+    .meta button { border: 0; background: none; padding: 0; cursor: pointer; font: inherit; color: var(--text-muted); }
+    .meta button:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
+    .err { color: #d64545; font-size: .85rem; margin-top: 6px; }
 
-    /* composer dock */
-    .nk-dock { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; padding: 18px 18px max(14px, env(safe-area-inset-bottom));
-      background: linear-gradient(to top, var(--bg) 62%, color-mix(in srgb, var(--bg) 0%, transparent)); }
-    .nk-box { max-width: 724px; margin: 0 auto; display: flex; align-items: flex-end; gap: 10px; padding: 8px 8px 8px 14px; }
-    .nk-box textarea { flex: 1; border: 0; outline: 0; resize: none; background: transparent; color: var(--text-primary);
-      font: 400 .98rem/1.55 'Poppins', var(--font-sans); padding: 7px 0; max-height: 170px; min-height: 26px; }
-    .nk-box textarea::placeholder { color: var(--text-muted); }
-    .nk-send { flex: none; width: 40px; height: 40px; border: 0; cursor: pointer; background: var(--pill-bg); color: var(--pill-text);
-      display: grid; place-items: center; box-shadow: 3px 3px 0 0 var(--px-shadow); transition: transform .3s var(--spring), box-shadow .2s steps(2); }
-    .nk-send:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 0 var(--px-shadow); }
-    .nk-send:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--px-shadow); }
-    .nk-send:disabled { opacity: .3; cursor: default; }
-    .nk-send svg { width: 18px; height: 18px; image-rendering: pixelated; shape-rendering: crispEdges; }
-    .nk-foot { max-width: 724px; margin: 10px auto 0; display: flex; justify-content: space-between; gap: 10px; font-family: var(--font-pixel); font-size: .55rem; color: var(--text-muted); }
-    .nk-foot a { color: inherit; }
-    .nk-status { display: inline-flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .nk-dot { width: 6px; height: 6px; background: var(--text-muted); flex: none; }
-    .nk-dot.ready { background: #2f9e5b; } .nk-dot.busy { background: #d99a00; animation: nkBlink .6s steps(2) infinite; } .nk-dot.err { background: #d64545; }
-
-    /* settings sheet */
-    .nk-pop { position: fixed; z-index: 60; top: 70px; right: max(14px, calc(50% - 370px)); width: min(330px, calc(100vw - 28px)); padding: 16px; display: none; }
-    .nk-pop.open { display: block; animation: nkPop .3s var(--spring); }
-    .nk-pop h3 { margin: 0 0 12px; font-family: var(--font-pixel); font-size: .7rem; font-weight: 400; color: var(--text-primary); }
-    .nk-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; font-size: .82rem; color: var(--text-secondary); }
-    .nk-row label { width: 92px; flex: none; }
-    .nk-row input[type=range] { flex: 1; accent-color: var(--text-primary); }
-    .nk-row output { width: 36px; text-align: right; font-family: var(--font-mono); font-size: .74rem; color: var(--text-muted); }
-    .nk-seg { display: inline-flex; gap: 6px; flex-wrap: wrap; }
-    .nk-seg button { border: 0; cursor: pointer; padding: 5px 8px 4px; font: .58rem/1 var(--font-pixel); background: var(--bg-hover); color: var(--text-secondary); }
-    .nk-seg button[aria-pressed=true] { background: var(--pill-bg); color: var(--pill-text); }
-    .nk-pop p { margin: 12px 0 0; font-size: .74rem; line-height: 1.55; color: var(--text-muted); }
-
-    @media (max-width: 600px) {
-      .nk-name { font-size: 2.7rem; }
-      .nk-namerow { flex-wrap: wrap; margin-top: 0; }
-      .nk-namerow pixel-dog { flex: 1 1 100%; margin-top: -54px; }
-      .nk-wrap { padding: 8px 14px 0; }
-      .nk-foot .hide-sm { display: none; }
-    }
-    @media (prefers-reduced-motion: reduce) { .nikchat * { animation: none !important; transition: none !important; } }
+    /* ---------- composer */
+    .dock { flex: none; padding: 10px 16px max(12px, env(safe-area-inset-bottom)); background: var(--bg); }
+    .box { max-width: 784px; margin: 0 auto; display: flex; align-items: flex-end; gap: 10px; padding: 7px 7px 7px 14px; }
+    .box textarea { flex: 1; border: 0; outline: 0; resize: none; background: transparent; color: var(--text-primary);
+      font: 400 1rem/1.55 'Poppins', var(--font-sans); padding: 7px 0; max-height: 180px; min-height: 26px; }
+    .box textarea::placeholder { color: var(--text-muted); }
+    .send { flex: none; width: 40px; height: 40px; border: 0; cursor: pointer; background: var(--pill-bg); color: var(--pill-text);
+      display: grid; place-items: center; transition: transform .2s var(--ease-out-expo); }
+    .send:hover:not(:disabled) { transform: translate(-1px, -1px); }
+    .send:active:not(:disabled) { transform: translate(1px, 1px); }
+    .send:disabled { background: var(--bg-hover); color: var(--text-muted); cursor: default; }
+    .send svg { width: 16px; height: 16px; shape-rendering: crispEdges; }
+    .foot { max-width: 784px; margin: 9px auto 0; text-align: center; font-size: .52rem; color: var(--text-muted); }
+    .foot a { color: inherit; }
+    @media (max-width: 560px) { .hide-sm { display: none; } .thread { padding: 18px 14px 24px; } .hero { padding-top: 4vh; } }
+    @media (prefers-reduced-motion: reduce) { .nk * { animation: none !important; transition: none !important; } }
   </style>
 </head>
-<body class="nikchat">
-  <div class="nk-wrap">
-    <header class="site-header">
-      <span id="nkVer" hidden>0.1</span>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="/" class="site-nav-link">Home</a>
-        <a href="/writing" class="site-nav-link">Writing</a>
-        <span class="site-divider" aria-hidden="true"></span>
-        <button class="nk-ctl" id="nkNew" title="New chat" aria-label="New chat"><i class="ri-add-line"></i></button>
-        <button class="nk-ctl" id="nkSet" title="Settings" aria-label="Settings" aria-expanded="false"><i class="ri-apps-2-line"></i></button>
-        <span class="site-controls">
-          <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme"><span class="theme-icon" aria-hidden="true"></span></button>
-        </span>
-      </nav>
-    </header>
-
-    <section class="nk-hero" id="nkHero">
-      <div class="nk-namerow">
-        <h1 class="nk-name">nik <i>0.1</i></h1>
-        <pixel-dog width="230" scale="1.3" breed="rottie" home="36" start="sleep" sleep-after="12" aria-hidden="true"></pixel-dog>
+<body class="nk">
+  <header class="top">
+    <a class="ic" href="/" aria-label="Back to nikit.is-a.dev"><i class="ri-arrow-left-line"></i></a>
+    <div class="brand">
+      <canvas id="brandFace" width="12" height="12" aria-hidden="true"></canvas>
+      <div class="brand-t">
+        <b>nik <i id="ver">0.1</i></b>
+        <div class="status pxl" aria-live="polite"><span class="dot" id="dot"></span><span id="status">loading…</span></div>
       </div>
-      <p class="nk-tag">nepal's tiny llm · romanized nepali · built from scratch</p>
-      <p class="nk-lead">namaste! I'm <em>nik</em>, a language model Nikit built from zero: tokenizer, transformer, training and this engine. I'm under 10 MB and I think before I answer. Every word below is generated <em>on your device</em>. No server, no API.</p>
-      <div class="nk-facts">
-        <span class="nk-fact px-frame soft">&lt;10 mb</span><span class="nk-fact px-frame soft">ar + diffusion</span>
-        <span class="nk-fact px-frame soft">wasm-simd int8</span><span class="nk-fact px-frame soft">offline</span><span class="nk-fact px-frame soft" id="nkTrained">training…</span>
-      </div>
-      <div class="nk-load" id="nkLoad">
-        <div class="nk-bar px-frame soft" id="nkBar"></div>
-        <small id="nkLoadTxt">downloading weights…</small>
-      </div>
-      <div class="nk-chips" id="nkChips">
-        <button class="nk-chip px-frame" data-q="namaste! k chha khabar?"><small>gaff</small>namaste! k chha khabar?</button>
-        <button class="nk-chip px-frame" data-q="347 + 285 kati hunchha?"><small>hisab</small>347 + 285 kati hunchha?</button>
-        <button class="nk-chip px-frame" data-q="nikit hamal ko ho?"><small>nikit</small>nikit hamal ko ho?</button>
-        <button class="nk-chip px-frame" data-q="aaja sombar ho bhane parsi kun bar hunchha?"><small>sochne</small>aaja sombar bhae parsi kun bar?</button>
-      </div>
-    </section>
-
-    <main class="nk-thread" id="nkThread" aria-live="polite"></main>
-  </div>
-
-  <div class="nk-pop px-frame" id="nkPop" role="dialog" aria-label="Generation settings">
-    <h3>settings</h3>
-    <div class="nk-row"><label for="sTemp">temperature</label><input id="sTemp" type="range" min="0" max="1.5" step="0.05"><output id="oTemp"></output></div>
-    <div class="nk-row"><label for="sTopP">top-p</label><input id="sTopP" type="range" min="0.5" max="1" step="0.01"><output id="oTopP"></output></div>
-    <div class="nk-row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
-    <div class="nk-row"><label>decoding</label><div class="nk-seg" id="sMode"><button data-v="ar">ar</button><button data-v="ssbd">ssbd</button></div></div>
-    <div class="nk-row"><label>palette</label><div class="nk-seg" id="sPal"><button data-v="default">default</button><button data-v="sepia">sepia</button><button data-v="slate">slate</button></div></div>
-    <p><b>ar</b>: one token per step through a hand-written WASM-SIMD int8 kernel, the fastest on CPUs. <b>ssbd</b> (self-speculative block diffusion): Nik drafts a whole block in parallel with its diffusion head and verifies it with its own AR head. It produces the same text in fewer sequential steps. Experimental here; it pays off on GPUs.</p>
-  </div>
-
-  <footer class="nk-dock">
-    <form class="nk-box px-frame" id="nkForm" autocomplete="off">
-      <textarea id="nkIn" rows="1" placeholder="romanized nepali ma lekhnus… (timi ko hau?)" aria-label="Message Nik" enterkeyhint="send"></textarea>
-      <button class="nk-send" id="nkSend" type="submit" aria-label="Send" disabled></button>
-    </form>
-    <div class="nk-foot">
-      <span class="nk-status"><span class="nk-dot" id="nkDot"></span><span id="nkStatus">loading…</span></span>
-      <span class="hide-sm">tiny &amp; still learning: it can be wrong · <a href="https://github.com/NikitHamal/NikitHamal/tree/main/nik">how it works</a></span>
     </div>
+    <div class="grow"></div>
+    <button class="ic" id="newBtn" title="New chat" aria-label="New chat"><i class="ri-add-line"></i></button>
+    <button class="ic" id="themeBtn" title="Light / dark" aria-label="Toggle light / dark"><i class="ri-moon-line"></i></button>
+    <button class="ic" id="setBtn" title="Settings" aria-label="Settings" aria-expanded="false"><i class="ri-apps-2-line"></i></button>
+    <div class="pop frame" id="pop" role="dialog" aria-label="Generation settings">
+      <h3 class="pxl">settings</h3>
+      <div class="row"><label for="sTemp">temperature</label><input id="sTemp" type="range" min="0" max="1.5" step="0.05"><output id="oTemp"></output></div>
+      <div class="row"><label for="sTopP">top-p</label><input id="sTopP" type="range" min="0.5" max="1" step="0.01"><output id="oTopP"></output></div>
+      <div class="row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
+      <div class="row"><label>decoding</label><div class="seg" id="sMode"><button data-v="ar">ar</button><button data-v="ssbd">ssbd</button></div></div>
+      <div class="row"><label>palette</label><div class="seg" id="sPal"><button data-v="default">default</button><button data-v="sepia">sepia</button><button data-v="slate">slate</button></div></div>
+      <p><b>ar</b>: one token per step through a hand-written WASM-SIMD int8 kernel, the fastest on CPUs. <b>ssbd</b> (self-speculative block diffusion): Nik drafts a whole block in parallel with its diffusion head and verifies it with its own AR head. It produces the same text in fewer sequential steps. Experimental here; it pays off on GPUs.</p>
+    </div>
+  </header>
+
+  <main class="scroll" id="scroll">
+    <div class="thread" id="thread">
+      <section class="hero" id="hero">
+        <h1>namaste, ma nik <i>0.1</i></h1>
+        <p>A tiny language model for romanized Nepali, built from scratch by Nikit Hamal. I think before I answer, and every word is generated on <b>your</b> device. No server, no API.</p>
+        <div class="facts pxl">
+          <span class="fact frame-soft">&lt; 10 mb</span><span class="fact frame-soft">ar + diffusion</span><span class="fact frame-soft">wasm-simd int8</span><span class="fact frame-soft">offline</span><span class="fact frame-soft" id="trained">…</span>
+        </div>
+        <div class="load" id="load"><div class="bar frame-soft" id="bar"></div><small class="pxl" id="loadTxt">downloading weights…</small></div>
+        <div class="chips" id="chips">
+          <button class="chip frame" data-q="namaste! k chha khabar?"><small class="pxl">gaff</small>namaste! k chha khabar?</button>
+          <button class="chip frame" data-q="347 + 285 kati hunchha?"><small class="pxl">hisab</small>347 + 285 kati hunchha?</button>
+          <button class="chip frame" data-q="nikit hamal ko ho?"><small class="pxl">nikit</small>nikit hamal ko ho?</button>
+          <button class="chip frame" data-q="pokhara ko barema lekha"><small class="pxl">lekhne</small>pokhara ko barema lekha</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="dock">
+    <form class="box frame" id="form" autocomplete="off">
+      <textarea id="input" rows="1" placeholder="romanized nepali ma lekhnus… (timi ko hau?)" aria-label="Message Nik" enterkeyhint="send"></textarea>
+      <button class="send" id="send" type="submit" aria-label="Send" disabled></button>
+    </form>
+    <div class="foot pxl">nik is tiny and still learning, so it can be wrong<span class="hide-sm"> · <a href="https://github.com/NikitHamal/NikitHamal/tree/main/nik">how it works</a></span></div>
   </footer>
 
-  <script src="/js/pixel-dog.js?v=23" defer></script>
-  <script src="/js/pixel-sky.js?v=10" data-mode="calm" defer></script>
-  <script src="/js/sound.js?v=3" defer></script>
-  <script src="/js/app.js?v=2" defer></script>
   <script type="module">
     const $ = (id) => document.getElementById(id);
     const root = document.documentElement;
@@ -217,35 +189,39 @@
     const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };
     const isDark = () => root.dataset.theme === 'dark';
 
-    // ---------- pixel bits: send arrow + Nik's face (blinks; mouth moves while writing)
-    const SEND = ['....x....', '...xxx...', '..xxxxx..', '.xx.x.xx.', 'x...x...x', '....x....', '....x....', '....x....', '....x....'];
-    const STOP = ['xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx'];
-    const svgPix = (rows) => { const w = rows[0].length, h = rows.length; let r = '';
-      rows.forEach((row, y) => [...row].forEach((c, x) => { if (c === 'x') r += `<rect x="${x}" y="${y}" width="1" height="1"/>`; }));
-      return `<svg viewBox="0 0 ${w} ${h}" fill="currentColor" aria-hidden="true">${r}</svg>`; };
+    // ---------- theme
+    const syncTheme = () => { $('themeBtn').firstElementChild.className = isDark() ? 'ri-sun-line' : 'ri-moon-line';
+      document.querySelector('meta[name=theme-color]').content = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#faf9f6'; };
+    $('themeBtn').onclick = () => { root.dataset.theme = isDark() ? 'light' : 'dark'; localStorage.setItem('theme', root.dataset.theme); syncTheme(); };
+    syncTheme();
+
+    // ---------- pixel bits: Nik's face (blinks; mouth moves while writing) + send / stop glyphs
     const FACE = ['..kkkkkkkk..', '.kbbbbbbbbk.', 'kbbbbbbbbbbk', 'kbbwwbbwwbbk', 'kbbwebbwebbk', 'kbbbbbbbbbbk', 'kbpbbbbbbpbk', 'kbbbbmmbbbbk', 'kbbbbbbbbbbk', '.kbbbbbbbbk.', '..kkkkkkkk..', '....k..k....'];
     const faces = new Set();
-    function drawFace(cv, t, talking) {
+    function drawFace(cv, t, talk) {
       const g = cv.getContext('2d'), dk = isDark();
-      const pal = { k: dk ? '#e8e2cf' : '#18181b', b: dk ? '#2b2a33' : '#f6c453', w: '#ffffff', e: '#18181b', p: dk ? '#a4566e' : '#f08aa6', m: dk ? '#e8e2cf' : '#7a3b10' };
+      const pal = { k: dk ? '#e8e2cf' : '#18181b', b: dk ? '#33313b' : '#f6c453', w: '#ffffff', e: '#18181b', p: dk ? '#a4566e' : '#f08aa6', m: dk ? '#e8e2cf' : '#7a3b10' };
       g.clearRect(0, 0, 12, 12);
-      const blink = (Math.floor(t / 180) % 22) === 0;
+      const blink = Math.floor(t / 160) % 25 === 0, open = talk && Math.floor(t / 110) % 2;
       FACE.forEach((row, y) => [...row].forEach((c, x) => {
-        let col = pal[c];
-        if (!col) return;
-        if (blink && (c === 'w' || c === 'e') && y === 4) col = pal.b;
-        if (blink && c === 'w' && y === 3) col = pal.k;
-        if (c === 'm' && talking && (Math.floor(t / 120) % 2)) col = pal.b;
+        let col = pal[c]; if (!col) return;
+        if (blink && y === 4 && (c === 'w' || c === 'e')) col = pal.b;
+        if (blink && y === 3 && c === 'w') col = pal.k;
         g.fillStyle = col; g.fillRect(x, y, 1, 1);
       }));
-      if (talking && Math.floor(t / 120) % 2) { g.fillStyle = pal.m; g.fillRect(5, 7, 2, 2); }
+      if (open) { g.fillStyle = pal.m; g.fillRect(5, 7, 2, 2); }
     }
-    function face() { const c = document.createElement('canvas'); c.width = c.height = 12; c.className = 'nk-av'; faces.add(c); drawFace(c, 1, false); return c; }
+    const brand = $('brandFace'); faces.add(brand);
+    function face() { const c = document.createElement('canvas'); c.width = c.height = 12; c.className = 'av'; faces.add(c); return c; }
     (function loop(t) { for (const c of faces) { if (!c.isConnected) { faces.delete(c); continue; } drawFace(c, t, c.dataset.talk === '1'); } requestAnimationFrame(loop); })(0);
+    const glyph = (rows) => { let r = ''; rows.forEach((row, y) => [...row].forEach((c, x) => { if (c === 'x') r += `<rect x="${x}" y="${y}" width="1" height="1"/>`; }));
+      return `<svg viewBox="0 0 ${rows[0].length} ${rows.length}" fill="currentColor" aria-hidden="true">${r}</svg>`; };
+    const SEND = glyph(['....x....', '...xxx...', '..xxxxx..', '.xx.x.xx.', 'x...x...x', '....x....', '....x....', '....x....', '....x....']);
+    const STOP = glyph(['xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx', 'xxxxxxx']);
 
-    // ---------- pixel loader
-    const bar = $('nkBar'); for (let i = 0; i < 24; i++) bar.append(document.createElement('i'));
-    const setBar = (f) => [...bar.children].forEach((c, i) => c.classList.toggle('on', i < Math.round(f * 24)));
+    // ---------- loader
+    const bar = $('bar'); for (let i = 0; i < 32; i++) bar.append(document.createElement('i'));
+    const setBar = (f) => [...bar.children].forEach((c, i) => c.classList.toggle('on', i < Math.round(f * 32)));
 
     // ---------- settings
     const bindRange = (el, out, key, fmt) => { el.value = state.opts[key]; out.textContent = fmt(+el.value);
@@ -256,122 +232,119 @@
     const seg = (el, cur, on) => { const sync = (v) => el.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === v));
       sync(cur); el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; sync(b.dataset.v); on(b.dataset.v); }; };
     seg($('sMode'), state.opts.mode, (v) => { state.opts.mode = v; save(); });
-    seg($('sPal'), root.dataset.palette || 'default', (v) => { root.dataset.palette = v; localStorage.setItem('reader-palette', v); });
-    $('nkSet').onclick = (e) => { e.stopPropagation(); const o = $('nkPop').classList.toggle('open'); $('nkSet').setAttribute('aria-expanded', o); };
-    document.addEventListener('click', (e) => { if (!$('nkPop').contains(e.target) && e.target !== $('nkSet')) { $('nkPop').classList.remove('open'); $('nkSet').setAttribute('aria-expanded', false); } });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') $('nkPop').classList.remove('open'); });
-
-    const setStatus = (txt, kind) => { $('nkStatus').textContent = txt; $('nkDot').className = 'nk-dot ' + (kind || ''); };
+    seg($('sPal'), root.dataset.palette || 'default', (v) => { root.dataset.palette = v; localStorage.setItem('reader-palette', v); syncTheme(); });
+    $('setBtn').onclick = (e) => { e.stopPropagation(); const o = $('pop').classList.toggle('open'); $('setBtn').setAttribute('aria-expanded', o); };
+    document.addEventListener('click', (e) => { if (!$('pop').contains(e.target)) { $('pop').classList.remove('open'); $('setBtn').setAttribute('aria-expanded', false); } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') $('pop').classList.remove('open'); });
+    const setStatus = (txt, kind) => { $('status').textContent = txt; $('dot').className = 'dot ' + (kind || ''); };
 
     // ---------- rendering
+    const scroller = $('scroll');
     let stick = true;
-    addEventListener('scroll', () => { stick = innerHeight + scrollY > document.documentElement.scrollHeight - 140; }, { passive: true });
-    const toBottom = (force) => { if (stick || force) scrollTo({ top: document.documentElement.scrollHeight, behavior: force ? 'smooth' : 'auto' }); };
+    scroller.addEventListener('scroll', () => { stick = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 90; }, { passive: true });
+    const toBottom = (force) => { if (stick || force) scroller.scrollTop = scroller.scrollHeight; };
     function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
     function renderMsg(m) {
-      const row = el('div', 'nk-msg ' + (m.role === 'user' ? 'user' : 'nik'));
-      if (m.role === 'user') row.append(el('div', 'nk-body px-frame', m.content));
+      const row = el('div', 'msg ' + (m.role === 'user' ? 'user' : 'nik'));
+      if (m.role === 'user') row.append(el('div', 'body', m.content));
       else {
         const av = face();
-        const body = el('div', 'nk-body px-frame');
-        const who = el('div', 'nk-who', 'nik');
-        const det = el('details', 'nk-think'); det.hidden = !m.think;
-        const sum = el('summary'); sum.append(el('span', null, 'socheko'));
+        const body = el('div', 'body');
+        const det = el('details', 'think frame-soft'); det.hidden = !m.think;
+        const sum = el('summary', 'pxl'); const lab = el('span', null, m.think ? `socheko · ${m.think.split(/\s+/).length} shabda` : 'socheko'); sum.append(lab);
         const pre = el('pre', null, m.think || '');
         det.append(sum, pre);
-        const text = el('div', 'nk-text', m.content || '');
-        const meta = el('div', 'nk-meta');
-        body.append(who, det, text, meta);
+        const text = el('div', 'text', m.content || '');
+        const meta = el('div', 'meta pxl');
+        body.append(det, text, meta);
         row.append(av, body);
-        row._p = { av, det, pre, text, meta, sum };
+        row._p = { av, det, pre, text, meta, lab };
         if (m.stats) fillMeta(row, m);
       }
-      $('nkThread').append(row);
+      $('thread').append(row);
       return row;
     }
     function fillMeta(row, m) {
       const { meta } = row._p; meta.textContent = '';
       const s = m.stats;
       if (s) {
-        meta.append(el('span', null, `${s.tokens} tok`), el('span', null, `${s.tps.toFixed(0)} tok/s`));
+        meta.append(el('span', null, `${s.tokens} tok · ${s.tps.toFixed(0)} tok/s`));
         if (m.mode === 'ssbd' && s.passes) meta.append(el('span', null, `${(s.tokens / Math.max(1, s.passes)).toFixed(2)} tok/pass`));
       }
       const copy = el('button', null, 'copy');
-      copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = 'copied!'; setTimeout(() => (copy.textContent = 'copy'), 1200); });
-      const retry = el('button', null, 'feri lekha');
-      retry.title = 'regenerate';
-      retry.onclick = () => regenerate(row);
+      copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = 'copied'; setTimeout(() => (copy.textContent = 'copy'), 1200); });
+      const retry = el('button', null, 'feri lekha'); retry.title = 'regenerate'; retry.onclick = () => regenerate(row);
       meta.append(copy, retry);
     }
-    const hero = (show) => { $('nkChips').style.display = show ? '' : 'none'; };
+    const hero = (show) => { $('hero').style.display = show ? '' : 'none'; };
     function rerender() {
-      $('nkThread').textContent = '';
+      [...$('thread').querySelectorAll('.msg')].forEach((n) => n.remove());
       hero(state.msgs.length === 0);
       for (const m of state.msgs) renderMsg(m);
-      if (state.msgs.length) toBottom(true);
+      toBottom(true);
     }
 
-    // ---------- the model lives in a worker
+    // ---------- model (Web Worker)
     const worker = new Worker('/nik/web/worker.js', { type: 'module' });
+    let pending = null;
     worker.onmessage = (e) => {
       const m = e.data;
       if (m.type === 'progress') {
         const f = m.total ? Math.min(1, m.got / m.total) : 0;
-        setBar(f);
-        $('nkLoadTxt').textContent = `downloading weights… ${(m.got / 1e6).toFixed(1)} / ${(m.total / 1e6).toFixed(1)} mb`;
+        setBar(f); $('loadTxt').textContent = `downloading weights… ${(m.got / 1e6).toFixed(1)} / ${(m.total / 1e6).toFixed(1)} mb`;
         setStatus(`loading ${(f * 100).toFixed(0)}%`, 'busy');
       } else if (m.type === 'ready') {
-        state.ready = true; setBar(1); $('nkLoad').style.display = 'none';
+        state.ready = true; setBar(1); $('load').style.display = 'none';
         const M = m.meta;
-        $('nkVer').textContent = (M.name || 'nik 0.1').replace('nik ', '');
-        $('nkTrained').textContent = M.trained || 'ready';
-        setStatus(`ready · ${(M.params / 1e6).toFixed(1)}m params · ${(M.bytes / 1e6).toFixed(1)} mb · ${M.backend}`, 'ready');
+        $('ver').textContent = (M.name || 'nik 0.1').replace(/^nik\s*/, '');
+        $('trained').textContent = M.trained || 'ready';
+        setStatus(`ready · ${(M.params / 1e6).toFixed(1)}m params · ${(M.bytes / 1e6).toFixed(1)} mb · on-device`, 'ready');
         updateSend();
-        if (pending) { const q = pending; pending = null; startGeneration(q); }
+        if (pending) { pending = null; startGeneration(); }
       } else if (m.type === 'delta' && state.cur && m.id === state.id) {
         const { row, msg } = state.cur, p = row._p;
         if (m.think) { msg.think = (msg.think || '') + m.think; p.det.hidden = false; p.pre.textContent = msg.think;
-          if (!msg.content) { p.det.open = true; p.sum.firstChild.textContent = 'socheko'; p.sum.firstChild.className = 'dots'; } }
+          if (!msg.content) { p.det.open = true; p.lab.className = 'dots'; p.lab.textContent = 'socheko'; } }
         if (m.answer) {
-          if (!msg.content && msg.think) { p.det.open = false; p.sum.firstChild.className = ''; p.sum.firstChild.textContent = `socheko · ${msg.think.split(/\s+/).length} shabda`; }
+          if (!msg.content && msg.think) { p.det.open = false; p.lab.className = ''; p.lab.textContent = `socheko · ${msg.think.split(/\s+/).length} shabda`; }
           msg.content += m.answer; p.text.textContent = msg.content;
         }
         toBottom();
       } else if (m.type === 'done' && state.cur && m.id === state.id) {
-        const { row, msg } = state.cur;
-        row._p.text.classList.remove('live'); row._p.av.dataset.talk = '0';
-        if (msg.think) { row._p.sum.firstChild.className = ''; row._p.sum.firstChild.textContent = `socheko · ${msg.think.split(/\s+/).length} shabda`; }
+        const { row, msg } = state.cur, p = row._p;
+        p.text.classList.remove('live'); p.av.dataset.talk = '0'; brand.dataset.talk = '0';
+        if (msg.think) { p.lab.className = ''; p.lab.textContent = `socheko · ${msg.think.split(/\s+/).length} shabda`; }
         msg.stats = m.stats; msg.mode = state.opts.mode;
-        if (!msg.content.trim()) { msg.content = '…'; row._p.text.textContent = msg.content; }
+        if (!msg.content.trim()) { msg.content = '…'; p.text.textContent = msg.content; }
         fillMeta(row, msg);
         state.cur = null; state.busy = false; save(); updateSend();
         setStatus(`ready · ${m.stats.tps.toFixed(0)} tok/s`, 'ready');
         toBottom();
       } else if (m.type === 'error') {
-        if (state.cur) { const p = state.cur.row._p; p.text.classList.remove('live'); p.av.dataset.talk = '0'; p.text.append(el('div', 'nk-err', m.message)); state.cur = null; setStatus('error', 'err'); }
-        else if (m.code === 'no-model') { $('nkLoadTxt').textContent = 'nik is in training right now. the first weights land here in a few minutes. refresh soon!'; setStatus('training…', 'busy'); $('nkTrained').textContent = 'in training'; }
-        else { $('nkLoadTxt').textContent = 'could not load the model: ' + m.message; setStatus('error', 'err'); }
+        brand.dataset.talk = '0';
+        if (state.cur) { const p = state.cur.row._p; p.text.classList.remove('live'); p.av.dataset.talk = '0'; p.text.append(el('div', 'err', m.message)); state.cur = null; setStatus('error', 'err'); }
+        else if (m.code === 'no-model') { $('loadTxt').textContent = 'nik is in training right now. new weights land here soon, so refresh in a bit!'; setStatus('in training…', 'busy'); }
+        else { $('loadTxt').textContent = 'could not load the model: ' + m.message; setStatus('error', 'err'); }
         state.busy = false; updateSend();
       }
     };
     worker.postMessage({ type: 'load' });
 
     // ---------- composer
-    const input = $('nkIn');
-    let pending = null;
+    const input = $('input');
     function updateSend() {
-      const b = $('nkSend');
-      if (state.busy) { b.disabled = false; b.innerHTML = svgPix(STOP); b.setAttribute('aria-label', 'Stop'); }
-      else { b.disabled = !input.value.trim(); b.innerHTML = svgPix(SEND); b.setAttribute('aria-label', 'Send'); }
+      const b = $('send');
+      if (state.busy) { b.disabled = false; b.innerHTML = STOP; b.setAttribute('aria-label', 'Stop'); }
+      else { b.disabled = !input.value.trim(); b.innerHTML = SEND; b.setAttribute('aria-label', 'Send'); }
     }
-    const autosize = () => { input.style.height = 'auto'; input.style.height = Math.min(170, input.scrollHeight) + 'px'; };
+    const autosize = () => { input.style.height = 'auto'; input.style.height = Math.min(180, input.scrollHeight) + 'px'; };
     input.addEventListener('input', () => { autosize(); updateSend(); });
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('nkForm').requestSubmit(); } });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); $('form').requestSubmit(); } });
 
     function startGeneration() {
       const msg = { role: 'nik', content: '', think: '' };
-      const row = renderMsg(msg); row._p.text.classList.add('live'); row._p.av.dataset.talk = '1';
+      const row = renderMsg(msg); row._p.text.classList.add('live'); row._p.av.dataset.talk = '1'; brand.dataset.talk = '1';
       state.cur = { row, msg }; state.busy = true; state.id++; updateSend();
       setStatus('nik lekhdai chha…', 'busy');
       const history = state.msgs.map(({ role, content }) => ({ role, content }));
@@ -383,23 +356,23 @@
       q = q.trim(); if (!q || state.busy) return;
       hero(false);
       state.msgs.push({ role: 'user', content: q }); renderMsg(state.msgs.at(-1)); save();
-      if (!state.ready) { pending = q; setStatus('waiting for the model…', 'busy'); toBottom(true); return; }
+      if (!state.ready) { pending = true; setStatus('waiting for the model…', 'busy'); toBottom(true); return; }
       startGeneration();
     }
     function regenerate(row) {
       if (state.busy || !state.ready) return;
-      const rows = [...$('nkThread').children], i = rows.indexOf(row);
+      const rows = [...$('thread').querySelectorAll('.msg')], i = rows.indexOf(row);
       if (i < 0) return;
       state.msgs = state.msgs.slice(0, i); rows.slice(i).forEach((r) => r.remove());
       startGeneration();
     }
-    $('nkForm').onsubmit = (e) => {
+    $('form').onsubmit = (e) => {
       e.preventDefault();
       if (state.busy) { worker.postMessage({ type: 'stop' }); return; }
       const q = input.value; input.value = ''; autosize(); updateSend(); send(q);
     };
-    $('nkChips').onclick = (e) => { const b = e.target.closest('.nk-chip'); if (b) send(b.dataset.q); };
-    $('nkNew').onclick = () => { if (state.busy) worker.postMessage({ type: 'stop' }); state.msgs = []; save(); rerender(); scrollTo({ top: 0, behavior: 'smooth' }); input.focus(); };
+    $('chips').onclick = (e) => { const b = e.target.closest('.chip'); if (b) send(b.dataset.q); };
+    $('newBtn').onclick = () => { if (state.busy) worker.postMessage({ type: 'stop' }); state.msgs = []; save(); rerender(); input.focus(); };
 
     rerender(); updateSend();
     if (matchMedia('(pointer:fine)').matches) input.focus({ preventScroll: true });
