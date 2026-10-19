@@ -247,54 +247,46 @@ def generate_ar(model, prompt: list[int], max_new: int = 128, temperature: float
 
 @torch.no_grad()
 def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: float = 0.0, top_p: float = 0.9,
-                  stop: tuple[int, ...] = (2, 9), draft_steps: int = 1):
-    """Self-Speculative Block Diffusion: draft B tokens in parallel with the
-    diffusion stream, verify them with the AR stream, keep the agreeing prefix
-    plus one AR token. Greedy (temperature 0) output is identical to AR greedy.
-    Returns (tokens, n_forward_passes)."""
+                  stop: tuple[int, ...] = (2, 9)):
+    """Self-Speculative Block Diffusion (mirrors web/nik.js `generate`).
+
+    t0 is sampled from the AR head. The block [t0, M, ..., M] is denoised in
+    parallel by the diffusion stream to draft d1..d_{B-1}. One causal pass then
+    verifies: walking left to right, the AR head samples s_j and the draft token is
+    kept while s_j == d_j; the first mismatch is emitted and becomes the next t0.
+    Every emitted token is an AR sample, so outputs are AR-distributed (greedy
+    output is identical to greedy AR). Returns (tokens, n_forward_passes)."""
     cfg = model.cfg
     B, M = cfg.block, cfg.mask_id
-    ids, passes = list(prompt), 0
-    while len(ids) - len(prompt) < max_new:
-        n = len(ids)
-        ctx = ids[-(cfg.ctx - B):]
-        off = n - len(ctx)
-        # --- draft: prefix (causal) + B masks (bidirectional, see whole prefix)
-        draft = [M] * B
-        for s in range(draft_steps):
-            T = len(ctx) + B
-            mask = torch.ones(T, T, dtype=torch.bool).tril()
-            mask[len(ctx):, len(ctx):] = True
-            logits = model(torch.tensor([ctx + draft]), mask=mask)[0, len(ctx):]
-            passes += 1
-            conf, pred = torch.softmax(logits.float(), -1).max(-1)
-            if s == draft_steps - 1:
-                draft = [int(p) if d == M else d for p, d in zip(pred, draft)]
-            else:  # iterative unmasking: commit the most confident half
-                order = conf.argsort(descending=True)[: max(1, B // 2)]
-                for j in order.tolist():
-                    if draft[j] == M:
-                        draft[j] = int(pred[j])
-        # --- verify with the causal stream
-        seq = torch.tensor([ctx + draft])
-        logits = model(seq)[0, len(ctx) - 1:]
+    ids, passes = list(prompt), 1
+    ctx = ids[-(cfg.ctx - 2 * B):]
+    t0 = _sample(model(torch.tensor([ctx]))[0, -1], temperature, top_p)
+    out = []
+    while True:
+        out.append(t0)
+        if t0 in stop or len(out) >= max_new:
+            break
+        ctx = (ids + out[:-1])[-(cfg.ctx - 2 * B):]
+        n = len(ctx)
+        blk = [t0] + [M] * (B - 1)
+        T = n + B
+        mask = torch.ones(T, T, dtype=torch.bool).tril()
+        mask[n:, n:] = True
+        dl = model(torch.tensor([ctx + blk]), mask=mask)[0, n:]
         passes += 1
-        accepted = []
-        for j in range(B + 1):
-            tok = _sample(logits[j], temperature, top_p)
-            if j < B and tok == draft[j]:
-                accepted.append(tok)
-                if tok in stop:
-                    break
+        dl[:, [0, 1, M, 4, 5, 6]] = -float('inf')
+        draft = [t0] + dl[1:].argmax(-1).tolist()
+        vl = model(torch.tensor([ctx + draft]))[0, n:]
+        passes += 1
+        nxt = None
+        for j in range(B):
+            s_ = _sample(vl[j], temperature, top_p)
+            if j + 1 < B and s_ == draft[j + 1]:
+                out.append(s_)
+                if s_ in stop or len(out) >= max_new:
+                    return out, passes
                 continue
-            accepted.append(tok)       # the AR correction / bonus token
+            nxt = s_
             break
-        ids.extend(accepted)
-        if any(t in stop for t in accepted):
-            break
-        del off
-    out = ids[len(prompt):]
-    for j, t in enumerate(out):
-        if t in stop:
-            return out[: j + 1], passes
-    return out[:max_new], passes
+        t0 = nxt
+    return out, passes
