@@ -146,8 +146,9 @@
       <div class="row"><label for="sTopP">top-p</label><input id="sTopP" type="range" min="0.5" max="1" step="0.01"><output id="oTopP"></output></div>
       <div class="row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
       <div class="row"><label>decoding</label><div class="seg" id="sMode"><button data-v="ar">ar</button><button data-v="ssbd">ssbd</button></div></div>
+      <div class="row"><label>thinking</label><div class="seg" id="sVote"><button data-v="5">5 paths</button><button data-v="3">3 paths</button><button data-v="1">1 path</button></div></div>
       <div class="row"><label>palette</label><div class="seg" id="sPal"><button data-v="default">default</button><button data-v="sepia">sepia</button><button data-v="slate">slate</button></div></div>
-      <p><b>ar</b>: one token per step through a hand-written WASM-SIMD int8 kernel, the fastest on CPUs. <b>ssbd</b> (self-speculative block diffusion): Nik drafts a whole block in parallel with its diffusion head and verifies it with its own AR head. It produces the same text in fewer sequential steps. Experimental here; it pays off on GPUs.</p>
+      <p><b>thinking paths</b>: when Nik reasons (socheko), it can think several times independently and answer with the consensus (self-consistency). Slower, more reliable. <b>ar</b>: one token per step through a hand-written WASM-SIMD int8 kernel, the fastest on CPUs. <b>ssbd</b> (self-speculative block diffusion): Nik drafts a whole block in parallel with its diffusion head and verifies it with its own AR head. It produces the same text in fewer sequential steps. Experimental here; it pays off on GPUs.</p>
     </div>
   </header>
 
@@ -183,7 +184,7 @@
     const root = document.documentElement;
     const state = {
       msgs: JSON.parse(localStorage.getItem('nik-chat') || '[]'),
-      opts: Object.assign({ temperature: 0.6, topP: 0.9, maxNew: 160, mode: 'ar' }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
+      opts: Object.assign({ temperature: 0.6, topP: 0.9, maxNew: 200, mode: 'ar', vote: 5 }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
       ready: false, busy: false, cur: null, id: 0,
     };
     const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };
@@ -232,6 +233,7 @@
     const seg = (el, cur, on) => { const sync = (v) => el.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === v));
       sync(cur); el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; sync(b.dataset.v); on(b.dataset.v); }; };
     seg($('sMode'), state.opts.mode, (v) => { state.opts.mode = v; save(); });
+    seg($('sVote'), String(state.opts.vote), (v) => { state.opts.vote = +v; save(); });
     seg($('sPal'), root.dataset.palette || 'default', (v) => { root.dataset.palette = v; localStorage.setItem('reader-palette', v); syncTheme(); });
     $('setBtn').onclick = (e) => { e.stopPropagation(); const o = $('pop').classList.toggle('open'); $('setBtn').setAttribute('aria-expanded', o); };
     document.addEventListener('click', (e) => { if (!$('pop').contains(e.target)) { $('pop').classList.remove('open'); $('setBtn').setAttribute('aria-expanded', false); } });
@@ -269,6 +271,7 @@
       const { meta } = row._p; meta.textContent = '';
       const s = m.stats;
       if (s) {
+        if (m.vote) meta.append(el('span', null, `${m.vote.k} bato · ${m.vote.agree}/${m.vote.k} sahamat`));
         meta.append(el('span', null, `${s.tokens} tok · ${s.tps.toFixed(0)} tok/s`));
         if (m.mode === 'ssbd' && s.passes) meta.append(el('span', null, `${(s.tokens / Math.max(1, s.passes)).toFixed(2)} tok/pass`));
       }
@@ -311,8 +314,15 @@
           msg.content += m.answer; p.text.textContent = msg.content;
         }
         toBottom();
+      } else if (m.type === 'vote' && state.cur && m.id === state.id) {
+        setStatus(`arko bato sochdai… ${m.i}/${m.k}`, 'busy');
+        state.cur.row._p.lab.textContent = `socheko · ${m.i}/${m.k} bato`;
+      } else if (m.type === 'replace' && state.cur && m.id === state.id) {
+        const { row, msg } = state.cur, p = row._p;
+        msg.think = m.think; msg.content = m.answer; p.pre.textContent = m.think; p.text.textContent = m.answer; p.det.hidden = !m.think;
       } else if (m.type === 'done' && state.cur && m.id === state.id) {
         const { row, msg } = state.cur, p = row._p;
+        if (m.vote) msg.vote = m.vote;
         p.text.classList.remove('live'); p.av.dataset.talk = '0'; brand.dataset.talk = '0';
         if (msg.think) { p.lab.className = ''; p.lab.textContent = `socheko · ${msg.think.split(/\s+/).length} shabda`; }
         msg.stats = m.stats; msg.mode = state.opts.mode;

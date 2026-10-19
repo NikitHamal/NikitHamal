@@ -122,12 +122,19 @@ def main():
         ck = torch.load(os.path.join(a.out, 'ckpt.pt'), map_location='cpu')
     elif a.init:
         ck = torch.load(a.init, map_location='cpu')
-    cfg = NikConfig(**ck['cfg']) if ck else PRESETS[a.preset]
+    tok = Tokenizer.load(a.tok)
+    if ck:
+        cfg = NikConfig(**ck['cfg'])
+    else:
+        import dataclasses
+        cfg = dataclasses.replace(PRESETS[a.preset])
+        if cfg.abacus:
+            cfg.digit_sp = [tok.encode(f' {d}', allow_special=False)[0] for d in range(10)]
+            cfg.digit_ns = [tok.encode(str(d), allow_special=False)[0] for d in range(10)]
     model = NikLM(cfg).to(device)
     if ck:
         model.load_state_dict(ck['model'])
     L = a.ctx or cfg.ctx
-    tok = Tokenizer.load(a.tok)
     assert tok.vocab_size == cfg.vocab, (tok.vocab_size, cfg.vocab)
     print(f'NikLM {model.n_params() / 1e6:.2f}M params | {cfg.n_layers} effective layers | device {device} | ctx {L}', flush=True)
 

@@ -24,7 +24,7 @@ Tiny-model choices (MobileLLM, Liu et al. 2024; SmolLM; Gemma):
 """
 from __future__ import annotations
 import math
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 
 import torch
 import torch.nn as nn
@@ -45,6 +45,12 @@ class NikConfig:
     rope_base: float = 10000.0
     eps: float = 1e-5
     mask_id: int = 3           # <|mask|>
+    # Abacus digit embeddings (McLeish et al., 2024): every digit token gets an
+    # extra learned embedding for its position inside its number (1, 2, 3, ...),
+    # so column arithmetic can align place values. 0 disables.
+    abacus: int = 0
+    digit_sp: list = field(default_factory=list)    # " 0".." 9" token ids (start a number)
+    digit_ns: list = field(default_factory=list)    # "0".."9" token ids (continue a number)
 
     @property
     def head_dim(self) -> int:
@@ -60,13 +66,13 @@ class NikConfig:
 
 PRESETS = {
     # ~20.5M params, 24 effective layers -> ~20.6 MB int8 (25 MB cap). The flagship.
-    'nik-0.1': NikConfig(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512),
+    'nik-0.1': NikConfig(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     # ~8.3M params -> ~8.4 MB int8 (the original <10 MB design).
-    'nik-small': NikConfig(),
+    'nik-small': NikConfig(abacus=20),
     # ~4M params middle ground.
-    'nik-mini': NikConfig(d=224, n_unique=6, n_repeat=2, heads=7, kv_heads=1, ffn=608, ctx=384),
+    'nik-mini': NikConfig(d=224, n_unique=6, n_repeat=2, heads=7, kv_heads=1, ffn=608, ctx=384, abacus=20),
     # ~2M params, for CPU smoke tests and fast iteration.
-    'nik-nano': NikConfig(d=160, n_unique=5, n_repeat=2, heads=5, kv_heads=1, ffn=432, ctx=256),
+    'nik-nano': NikConfig(d=160, n_unique=5, n_repeat=2, heads=5, kv_heads=1, ffn=432, ctx=256, abacus=20),
 }
 
 
@@ -136,9 +142,17 @@ class NikLM(nn.Module):
         super().__init__()
         self.cfg = cfg
         self.emb = nn.Embedding(cfg.vocab, cfg.d)
+        if cfg.abacus:
+            self.abacus = nn.Embedding(cfg.abacus + 1, cfg.d, padding_idx=0)
+            self.register_buffer('_dsp', torch.tensor(cfg.digit_sp or [-1], dtype=torch.long), persistent=False)
+            self.register_buffer('_dns', torch.tensor(cfg.digit_ns or [-1], dtype=torch.long), persistent=False)
         self.blocks = nn.ModuleList(Block(cfg) for _ in range(cfg.n_unique))
         self.norm = RMSNorm(cfg.d, cfg.eps)
         self.apply(self._init)
+        if cfg.abacus:
+            nn.init.normal_(self.abacus.weight, std=0.02)
+            with torch.no_grad():
+                self.abacus.weight[0].zero_()
         for b in self.blocks:   # scaled residual init (GPT-2 / MobileLLM)
             nn.init.normal_(b.o.weight, std=0.02 / math.sqrt(2 * cfg.n_layers))
             nn.init.normal_(b.down.weight, std=0.02 / math.sqrt(2 * cfg.n_layers))
@@ -151,8 +165,24 @@ class NikLM(nn.Module):
     def n_params(self) -> int:
         return sum(p.numel() for p in self.parameters())
 
-    def forward(self, idx, pos=None, mask=None):
-        """idx: (N, T). pos: (T,) positions (default arange). mask: (T, T) bool, True = may attend."""
+    def digit_index(self, idx):
+        """Position of each digit inside its number: 1, 2, 3, ... (0 = not a digit).
+        A space-prefixed digit (" 4") starts a number; a bare digit continues one.
+        Causal: depends only on the current and earlier tokens."""
+        sp = torch.isin(idx, self._dsp)
+        ns = torch.isin(idx, self._dns)
+        dig = sp | ns
+        prev = torch.zeros_like(dig)
+        prev[:, 1:] = dig[:, :-1]
+        start = dig & (sp | ~prev)
+        t = torch.arange(idx.shape[1], device=idx.device).expand_as(idx)
+        last = torch.where(start, t, torch.full_like(t, -1)).cummax(dim=1).values
+        k = torch.where(dig & (last >= 0), t - last + 1, torch.zeros_like(t))
+        return k.clamp(max=self.cfg.abacus)
+
+    def forward(self, idx, pos=None, mask=None, digits=None):
+        """idx: (N, T). pos: (T,) positions (default arange). mask: (T, T) bool, True = may attend.
+        digits: optional precomputed abacus indices (N, T)."""
         N, T = idx.shape
         if pos is None:
             pos = torch.arange(T, device=idx.device)
@@ -161,6 +191,8 @@ class NikLM(nn.Module):
         cos, sin = rope_cache(self.cfg, int(pos.max()) + 1, idx.device)
         cos, sin = cos[pos].to(self.emb.weight.dtype), sin[pos].to(self.emb.weight.dtype)
         x = self.emb(idx)
+        if self.cfg.abacus:
+            x = x + self.abacus(self.digit_index(idx) if digits is None else digits)
         for b in self.blocks:
             for _ in range(self.cfg.n_repeat):
                 x = b(x, cos, sin, mask)
@@ -211,7 +243,10 @@ def hybrid_loss(model: NikLM, x: torch.Tensor, loss_mask: torch.Tensor | None = 
     inp = torch.cat([noisy, clean], dim=1)
     pos = torch.cat([torch.arange(L, device=x.device)] * 2)
     mask = two_stream_mask(L, B, offset, x.device)
-    logits = model(inp, pos=pos, mask=mask)
+    digits = None
+    if cfg.abacus:   # per stream, so a run never continues across the [noisy ; clean] seam
+        digits = torch.cat([model.digit_index(noisy), model.digit_index(clean)], dim=1)
+    logits = model(inp, pos=pos, mask=mask, digits=digits)
     ln, lc = logits[:, :L], logits[:, L:]
     ar_w = lm[:, 1:].float()
     ar = (F.cross_entropy(lc.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
