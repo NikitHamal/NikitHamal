@@ -13,6 +13,6 @@ dependency-free JavaScript inference engine. It runs **in the browser** on nikit
 | Architecture | NikLM: hybrid autoregressive and block-diffusion transformer |
 | Decoding | **SSBD**, self-speculative block diffusion (draft in parallel, verify causally, same weights) |
 | Reasoning | `<|think|> … <|/think|>` traces before answering |
-| Runtime | pure JS, Web Worker, no server, works offline |
+| Runtime | JS + a hand-written WASM-SIMD int8 GEMM kernel (~390 tok/s on a 2-vCPU VM), Web Worker, no server, works offline |
 
 Work in progress. See `docs/` for the architecture, data pipeline and training guide.
