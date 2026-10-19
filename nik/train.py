@@ -108,6 +108,7 @@ def main():
     ap.add_argument('--compile', action='store_true')
     ap.add_argument('--device', default='auto')
     ap.add_argument('--threads', type=int, default=0)
+    ap.add_argument('--add-abacus', type=int, default=0, help='warm-start: add abacus digit embeddings to a checkpoint without them')
     a = ap.parse_args()
 
     if a.threads:
@@ -125,6 +126,10 @@ def main():
     tok = Tokenizer.load(a.tok)
     if ck:
         cfg = NikConfig(**ck['cfg'])
+        if a.add_abacus and not cfg.abacus:
+            cfg.abacus = a.add_abacus
+            cfg.digit_sp = [tok.encode(f' {d}', allow_special=False)[0] for d in range(10)]
+            cfg.digit_ns = [tok.encode(str(d), allow_special=False)[0] for d in range(10)]
     else:
         import dataclasses
         cfg = dataclasses.replace(PRESETS[a.preset])
@@ -133,7 +138,8 @@ def main():
             cfg.digit_ns = [tok.encode(str(d), allow_special=False)[0] for d in range(10)]
     model = NikLM(cfg).to(device)
     if ck:
-        model.load_state_dict(ck['model'])
+        missing, unexpected = model.load_state_dict(ck['model'], strict=False)
+        assert not unexpected and all(k.startswith('abacus') for k in missing), (missing, unexpected)
     L = a.ctx or cfg.ctx
     assert tok.vocab_size == cfg.vocab, (tok.vocab_size, cfg.vocab)
     print(f'NikLM {model.n_params() / 1e6:.2f}M params | {cfg.n_layers} effective layers | device {device} | ctx {L}', flush=True)
