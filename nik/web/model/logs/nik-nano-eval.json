@@ -1,0 +1,43 @@
+{
+  "math_acc": 0.0,
+  "persona_acc": 0.8571428571428571,
+  "samples": [
+    {
+      "q": "timi ko hau?",
+      "a": "ma nik 0.1 hu. nikit hamal le banayeko nepal ko sano ra chhito AI. tapai sanga romanized nepali ma gaff garna paauda khusi lagyo.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "timilai kasle banayo?",
+      "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nikit hamal ko ho?",
+      "a": "nikit hamal nepal ka android app developer ra full-stack engineer hunuhunchha. uha consica labs ma head of operations hunuhunchha ra philosophy ma essays pani lekhnuhunchha.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nepal ko rajdhani kaha ho?",
+      "a": "nepal ko rajdhani kathmandu ho.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nikit ko email ke ho?",
+      "a": "nikit lai iamnikithamal@gmail.com ma email garna sakinchha. linkedin ma linkedin.com/in/nikithamal ra x ma @nikithamal pani chha.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nepal ma kati wata pradesh chhan?",
+      "a": "nepal ma 7 wata pradesh chhan: koshi, madhesh, bagmati, gandaki, lumbini, karnali ra sudurpashchim.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "sagarmatha kati aglo chha?",
+      "a": "sansar ko sabai bhanda aglo himal sagarmatha ho. yasko uchai 8888.88 meter chha ra yo nepal ma parchha.<|end|>",
+      "ok": false
+    }
+  ],
+  "val_ppl": 277.9603706372527,
+  "ssbd_tokens_per_pass": 1.7468354430379747
+}
