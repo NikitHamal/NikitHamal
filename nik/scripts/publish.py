@@ -21,7 +21,7 @@ for stage in ('pre', 'sft'):
         logs[stage] = rows[-1] if rows else {}
         os.makedirs(os.path.join(here, 'logs'), exist_ok=True)
         shutil.copy(p, os.path.join(here, 'logs', f'{a.preset}-{stage}.jsonl'))
-now = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%MZ')
+now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%MZ')
 man = {'name': a.preset.replace('nik-', 'nik '), 'file': f, 'bytes': os.path.getsize(path), 'version': now,
        'trained': f"pre {logs.get('pre', {}).get('step', '?')} + sft {logs.get('sft', {}).get('step', '?')} steps",
        'val': {k: v.get('val_ar') for k, v in logs.items()}, 'note': a.note}

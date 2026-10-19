@@ -27,7 +27,7 @@ On Kaggle: *New Notebook → File → Import notebook → GitHub* → `NikitHama
 
 | model | where trained | size | notes |
 |---|---|---|---|
-| `nik-nano` (live now) | 2-vCPU sandbox, ~30–60 min total | 2.1 MB | preview: fluent romanized Nepali and correct persona facts; arithmetic is not reliable yet |
+| `nik-nano` (live now) | 2-vCPU sandbox, three rounds of ≤20 min | 2.1 MB | preview: has learned the reasoning *format* (interpret → think → check → answer) but at 2M params often picks the wrong intent; arithmetic is unreliable |
 | `nik-0.1` | **your GPU run** (Kaggle T4, ~4–5 h, resumable) | 20.7 MB | 10× the parameters, 24 effective layers, about 25× the training tokens |
 
 Eval (`python nik/eval.py --model nik/web/model/<name>.bin --data data`) for the CPU preview: persona facts 6/7, math 0/40, val ppl 278, SSBD 1.75 tok/pass.

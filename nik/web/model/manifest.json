@@ -1,12 +1,12 @@
 {
   "name": "nik nano",
   "file": "nik-nano.bin",
-  "bytes": 2056672,
-  "version": "2026-10-19T19:35Z",
-  "trained": "pre 800 + sft 500 steps",
+  "bytes": 2060352,
+  "version": "2026-10-19T21:02Z",
+  "trained": "pre 650 + sft 800 steps",
   "val": {
-    "pre": 5.5143373012542725,
-    "sft": 0.5848573260009289
+    "pre": 4.185606449842453,
+    "sft": 1.4032544419169426
   },
-  "note": "first CPU-trained preview (18 min pretrain + 12 min SFT on 2 vCPUs); the GPU-trained nik-0.1 replaces it"
+  "note": "CPU preview r3 (2M params): coherent corpus + stories, abacus digits, verified traces, intent-grounded thinking. The GPU-trained 20M nik-0.1 replaces it."
 }
