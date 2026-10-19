@@ -32,7 +32,7 @@ def log(*a):
 def sh(cmd, logname=None):
     log('$', cmd)
     with open(f'{OUT}/{logname}' if logname else os.devnull, 'a') as lf:
-        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd=f'{W}/NikitHamal')
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd='/tmp/NikitHamal')
         for line in p.stdout:
             sys.stdout.write(line)
             lf.write(line)
@@ -59,8 +59,8 @@ LAUNCH = f'torchrun --standalone --nproc_per_node {NGPU}' if NGPU > 1 else 'pyth
 FAST = '--diff-frac 0.25'          # diffusion stream on a 25% window: ~1.6x faster (see kaggle_bench)
 log('mode', MODE, json.dumps(CFG))
 subprocess.run('nvidia-smi; python -c "import torch;print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"', shell=True)
-subprocess.run(f'git clone -q {REPO} {W}/NikitHamal', shell=True, check=True)
-os.chdir(f'{W}/NikitHamal')      # every relative path below is inside the repo
+subprocess.run(f'git clone -q {REPO} /tmp/NikitHamal', shell=True, check=True)
+os.chdir('/tmp/NikitHamal')       # repo + data live outside /kaggle/working so outputs stay small      # every relative path below is inside the repo
 sh('pip -q install pyarrow numpy')
 P = CFG['preset']
 R = f'nik/runs/{P}'

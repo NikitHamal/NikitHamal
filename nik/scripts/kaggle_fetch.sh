@@ -6,7 +6,7 @@ cd "$(dirname "$0")/../.."
 MODE=${1:-full}
 USER_=$(kaggle config view | awk '/username/ {print $3}')
 O=$(mktemp -d)
-kaggle kernels output "$USER_/nik-train-$MODE" -p "$O" -o >/dev/null
+for t in 1 2 3 4 5; do kaggle kernels output "$USER_/nik-train-$MODE" -p "$O" -o -q --file-pattern "^out/" && break; echo "retry in 60s"; sleep 60; done
 ls -la "$O" "$O/out" 2>/dev/null || true
 SRC=$O/out; [ -d "$SRC" ] || SRC=$O
 P=$(ls "$SRC"/*.bin | head -1); NAME=$(basename "$P" .bin)
