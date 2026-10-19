@@ -8,3 +8,8 @@ pixel-avatar/
 *.log
 .DS_Store
 Thumbs.db
+# nik: local data & checkpoints
+nik/runs/
+data/
+*.pt
+__pycache__/
