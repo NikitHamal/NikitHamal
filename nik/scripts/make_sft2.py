@@ -85,6 +85,7 @@ def main():
                 kept[c] = kept.get(c, 0) + 1
     rows += open(tpath).readlines()
     if use_gold:
+        subprocess.run([sys.executable, os.path.join(gold_dir, 'check.py')], check=True)   # valid, exact, no test leaks
         g, ng = gold_rows(gold_dir, a.gold_rep, R)
         rows += g
         print(f'gold: {ng} conversations x {a.gold_rep} = {len(g)} rows', flush=True)

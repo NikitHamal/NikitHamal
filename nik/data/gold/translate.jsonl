@@ -1,6 +1,3 @@
-{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"we are reading\" nepali ma bhana."}, {"role": "nik", "content": "\"we are reading\" lai nepali ma \"hami padhdai chhau\" bhanchha."}]}
-{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"ma khana khadai chhu\" english ma k ho?"}, {"role": "nik", "content": "\"ma khana khadai chhu\" ko english \"I am eating food\" ho."}]}
-{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"river\" lai nepali ma k bhanchha?"}, {"role": "nik", "content": "\"river\" lai nepali ma \"nadi\" bhanchha."}]}
 {"cat": "gold-translate", "messages": [{"role": "user", "content": "translate: \"where is the bus park?\""}, {"role": "nik", "content": "\"bus park kaha chha?\""}]}
 {"cat": "gold-translate", "messages": [{"role": "user", "content": "\"mero ghar pokhara ma chha\" english ma lekha"}, {"role": "nik", "content": "\"My house is in Pokhara.\""}]}
 {"cat": "gold-translate", "messages": [{"role": "user", "content": "\"I love my country\" lai nepali ma"}, {"role": "nik", "content": "\"ma mero desh lai maya garchhu.\""}]}
