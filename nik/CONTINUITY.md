@@ -18,6 +18,10 @@ goals, state, decisions, and open tasks. Update it whenever something important 
 - Never put credentials (Kaggle token, GitHub tokens) in the repo or logs.
 - Chat UI: clean, full-width, subtle pixel-art touches; no dog/sky/topbar.
 - Don't ship a model unless it beats the live one on the evals below.
+- **Other agents push to this same `main` branch (e.g. `festivals/`: festival videos, photos, wish cards). Never delete,
+  revert or overwrite their files or commits.** Always `git fetch && git merge --ff-only origin/main` (or rebase) before
+  committing, and push only your own changed paths. (2026-10-20: an old full-tree push helper deleted `festivals/` twice;
+  the festival agent restored it in 247f5f7. The helper is now diff-based and aborts on conflicts.)
 
 ## Layout (all under `nik/`)
 - `model.py` NikLM (decoder-only, RMSNorm, RoPE, QK-norm, SwiGLU, GQA, tied emb, weight-shared blocks,
@@ -64,6 +68,9 @@ goals, state, decisions, and open tasks. Update it whenever something important 
    memorisation engine; make_sft2 drops every v1 row that has a think.
 
 ## Current state / open tasks (update me)
+- [ ] **molab** (free RTX Pro 6000, 96 GB): open `nik/notebooks/nik_molab.py` from GitHub on https://molab.marimo.io, attach GPU,
+      Start. It runs `nik/scripts/run_v3.py` (baseline evals -> v3 SFT -> RSI -> evals -> best model) and offers a results zip;
+      the owner attaches the zip in chat. Then: compare `summary.json`, publish `nik-0.1.best.bin` if it beats live.
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.
 - [ ] Kaggle `nik-train-tts2` (TTS v2) running; when done: `kaggle kernels output iamnikithamal/nik-train-tts2 -p /tmp/tts2 --file-pattern '^out/'`,
@@ -72,6 +79,8 @@ goals, state, decisions, and open tasks. Update it whenever something important 
 - Kaggle dataset `iamnikithamal/nik-cluster-out` holds the B300 phase-2 models and logs. The owner was asked to rotate the Kaggle token.
 
 ## How to push (sandbox without git credentials)
-Commit locally, then push the tree via the GitHub API helper (outside the repo):
+`git fetch -q && git merge --ff-only origin/main` first, commit, then push via the GitHub API helper (outside the repo;
+it uploads only the paths your local commits changed since the merge-base, on top of the current remote head, and aborts
+if another agent changed the same path):
 `python3 -I /tmp/tools/ghpush.py /workspace/NikitHamal NikitHamal/NikitHamal main main && git fetch -q && git reset -q --soft origin/main`.
 With normal git credentials, plain `git push origin main` works.
