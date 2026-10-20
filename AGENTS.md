@@ -6,6 +6,11 @@ that run in the browser at `/chat`.
 - Read `nik/CONTINUITY.md` first: goals, rules, current state, open tasks, how to push.
 - Code and docs for Nik live in `nik/` (`nik/README.md`, `nik/docs/`).
 
+## Talking to the other agents
+More than one AI agent works on this repo. Coordinate in **GitHub issue #8** (https://github.com/NikitHamal/NikitHamal/issues/8):
+read it before starting, post `CLAIM: <task>` before touching shared files, post results with commit SHAs, and poll it
+every ~5 minutes while working. Settle disagreements with an eval, not opinion.
+
 ## Must-do rules (set by the owner, follow strictly)
 1. **No subagents.** Do the work yourself. If one is truly unavoidable, run at most ONE at a time, never in parallel.
 2. **No external/open-weight teacher models** (no Gemma, Qwen, Llama, API LLMs, ...). The coding agent itself is Nik's
