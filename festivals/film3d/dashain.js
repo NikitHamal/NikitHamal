@@ -118,17 +118,17 @@ shot(CUES.DURGA, CUES.NAVA, () => {
   const s = new THREE.Scene(); s.background = new THREE.Color(0x050307); s.environment = env;
   s.add(new THREE.AmbientLight(0x302018, 1)); const key = new THREE.DirectionalLight(0xfff0d8, 2.2); key.position.set(3, 6, 8); s.add(key); const back = new THREE.DirectionalLight(0xff5040, 1.6); back.position.set(-4, 2, -6); s.add(back);
   const beamM = c => new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
-  const beams = [[-9, 10, -2, 0xffd68a], [9, 10, -2, 0xffffff], [0, -10, -3, 0xff8a6a]].map(([x, y, z, c]) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1, 8, 1, true), beamM(c)); m.userData.from = new THREE.Vector3(x, y, z); s.add(m); return m; });
+  const beams = [[-9, 10, -2, 0xffd68a], [9, 10, -2, 0xffffff], [0, -10, -3, 0xff8a6a]].map(([x, y, z, c]) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.06, 1, 16, 1, true), beamM(c)); m.userData.from = new THREE.Vector3(x, y, z); s.add(m); return m; });
   const bindu = new THREE.Mesh(new THREE.SphereGeometry(0.3, 32, 16), basic(RED)); s.add(bindu);
   const tr = trishul(); tr.scale.setScalar(0.9); s.add(tr); const W10 = weapons(), ring = new THREE.Group(); W10.forEach((w, i) => { const a = i / 10 * Math.PI * 2; w.position.set(Math.cos(a) * 4.2, Math.sin(a) * 4.2 + 1.2, 0); w.userData.a = a; w.scale.setScalar(0.9); ring.add(w); }); s.add(ring);
   const halo = new THREE.Mesh(new THREE.RingGeometry(3.2, 3.24, 128), basic(0xf2c14e, { transparent: true, opacity: 0.7 })); halo.position.set(0, 1.2, -0.6); s.add(halo);
-  const c = cam(38); return { s, c, update(t) { const lt = t - CUES.DURGA, conv = E.inOut(prog(lt, 0, 2.0)), form = E.out(prog(t, CUES.DURGA_FORM, CUES.DURGA_FORM + 1.0));
+  const c = cam(38); return { s, c, update(t) { const lt = t - CUES.DURGA, conv = E.out(prog(lt, -0.5, 1.4)), form = E.out(prog(t, CUES.DURGA_FORM, CUES.DURGA_FORM + 1.0));
     beams.forEach(b => { const a = b.userData.from, e = a.clone().lerp(new THREE.Vector3(0, 1.2, 0), conv); const mid = a.clone().add(e).multiplyScalar(0.5); b.position.copy(mid); b.scale.set(1, a.distanceTo(e) + 0.001, 1); b.lookAt(e); b.rotateX(Math.PI / 2); b.visible = form < 0.6; b.material.opacity = 0.85 * (1 - form); });
     bindu.position.set(0, 1.2, 0); bindu.scale.setScalar(conv * (1 + form * 0.2)); bindu.visible = conv > 0.01;
     tr.visible = form > 0; tr.scale.setScalar(0.9 * form); tr.position.set(0, mix(-1, 0.4, form), -0.2); tr.rotation.y = mix(-1.2, 0, form) + Math.sin(lt * 0.6) * 0.12;
     ring.visible = form > 0; ring.rotation.z = lt * 0.12; W10.forEach((w, i) => { const k = E.out(prog(t, CUES.DURGA_FORM + 0.2 + i * 0.06, CUES.DURGA_FORM + 0.9 + i * 0.06)); w.scale.setScalar(0.9 * k); w.rotation.set(lt * 0.5 + i, lt * 0.7, -ring.rotation.z); });
     halo.scale.setScalar(form); halo.visible = form > 0; c.position.set(Math.sin(lt * 0.25) * 1.2, 1.2, mix(15, 12.5, E.dolly(prog(lt, 0, 5.1)))); c.lookAt(0, 1.0, 0); },
-    ov(t) { scrim(t, CUES.DURGA + 0.2, CUES.NAVA, 1500, 0.4); frag('देवताहरूको तेज', t, CUES.DURGA + 0.3, CUES.DURGA + 1.85, W / 2, 1600, 84); frag('एउटै शक्तिमा', t, CUES.DURGA + 2.0, CUES.DURGA_FORM - 0.1, W / 2, 1600, 84, { accent: REDC });
+    ov(t) { scrim(t, CUES.DURGA + 0.2, CUES.NAVA, 1500, 0.4); frag('देवताहरूको तेज', t, CUES.DURGA + 0.3, CUES.DURGA + 1.65, W / 2, 1600, 84); frag('एउटै शक्तिमा', t, CUES.DURGA + 2.15, CUES.DURGA_FORM - 0.1, W / 2, 1600, 84, { accent: REDC });
       frag('दुर्गा', t, CUES.DURGA_FORM + 0.25, CUES.NAVA - 0.1, W / 2, 1660, 230, { accent: REDC, col: GOLD }); } };
 });
 
@@ -251,7 +251,7 @@ shot(CUES.LIFE, CUES.POV, () => {
   const c = cam(40); return { s, c, update(t) { const lt = t - CUES.LIFE, i = Math.min(3, Math.floor(lt / (2 * bC))), lt2 = lt - i * 2 * bC;
     pg.visible = i === 0; ks.forEach(k => k.visible = i === 1); bus.visible = i === 2; elder.visible = kidsG.visible = i === 3; pg.userData.set(Math.sin(lt * Math.PI * 2 / (4 * bC)) * 0.8);
     ks.forEach((k, j) => { k.userData.tail(t + j); k.rotation.set(0.1, Math.sin(t + j) * 0.3, Math.sin(t * 1.2 + j) * 0.2); });
-    if (i === 0) { c.position.set(9, 4, 14); c.lookAt(0, 5, 0); } else if (i === 1) { c.position.set(0, 2, 10); c.lookAt(0, 16, -20); } else if (i === 2) { bus.position.x = mix(-8, 8, lt2 / (2 * bC)); c.position.set(0, 2.4, 13); c.lookAt(0, 2, 0); } else { c.position.set(1.2, 1.9, 9.5); c.lookAt(1.0, 1.2, 2); } },
+    if (i === 0) { c.position.set(16, 5, 24); c.lookAt(0, 5.5, 0); } else if (i === 1) { c.position.set(0, 2, 10); c.lookAt(0, 16, -20); } else if (i === 2) { bus.position.x = mix(-6, 6, lt2 / (2 * bC)); c.position.set(0, 3.5, 24); c.lookAt(0, 2.6, 0); } else { c.position.set(1.2, 1.9, 9.5); c.lookAt(1.0, 1.2, 2); } },
     ov(t) { const lt = t - CUES.LIFE, i = Math.min(3, Math.floor(lt / (2 * bC))), s0 = CUES.LIFE + i * 2 * bC; const L = [['पिङ', 'बाँसको, गाउँ मिलेर'], ['चङ्गा', 'हरेक छतबाट'], ['घर फर्किने बाटो', 'सिङ्गो देश घरतिर'], ['ठूलाबडाको आशीर्वाद', 'पालैपालो']][i];
       scrim(t, CUES.LIFE, CUES.POV, 1520, 0.4); frag(L[0], t, s0 + 0.05, s0 + 2 * bC - 0.1, W / 2, 1620, 120, { accent: REDC, maxW: 980 }); frag(L[1], t, s0 + 0.3, s0 + 2 * bC - 0.1, W / 2, 1720, 52, { weight: 500 }); } };
 }, { tr: 'whip' });
