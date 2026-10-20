@@ -132,12 +132,16 @@ class Batches:
         return x, m
 
 
-def lr_at(step, total, peak, warmup, floor=0.1, p_time=0.0):
-    """Warmup + cosine. With a wall-clock cap the schedule follows whichever is
-    further along, steps or time, so a capped run still ends fully annealed."""
+def lr_at(step, total, peak, warmup, floor=0.1, p_time=0.0, sched='cosine', decay_frac=0.2):
+    """Warmup + cosine, or WSD (warmup-stable-decay: peak until 1-decay_frac, then linear to floor; MiniCPM /
+    DeepSeek). With a wall-clock cap the schedule follows whichever is further along, steps or time, so a capped
+    run still ends fully annealed."""
     if step < warmup:
         return peak * (step + 1) / warmup
     p = min(1.0, max((step - warmup) / max(1, total - warmup), p_time))
+    if sched == 'wsd':
+        d = (p - (1 - decay_frac)) / decay_frac
+        return peak if d <= 0 else peak * (1 - (1 - floor) * min(1.0, d))
     return peak * (floor + (1 - floor) * 0.5 * (1 + math.cos(math.pi * p)))
 
 
@@ -188,6 +192,9 @@ def main():
     ap.add_argument('--ctx', type=int, default=0, help='override training context')
     ap.add_argument('--lr', type=float, default=3e-3)
     ap.add_argument('--warmup', type=int, default=500)
+    ap.add_argument('--sched', choices=['cosine', 'wsd'], default='cosine')
+    ap.add_argument('--decay-frac', type=float, default=0.2, help='wsd: final fraction of the run spent decaying')
+    ap.add_argument('--lr-floor', type=float, default=0.1)
     ap.add_argument('--wd', type=float, default=0.1)
     ap.add_argument('--diff-weight', type=float, default=1.0)
     ap.add_argument('--user-w', type=float, default=0.0, help='sft, pure AR: loss weight on user/prompt tokens (0 = answers only)')
@@ -314,7 +321,8 @@ def main():
         torch.save(d, os.path.join(a.out, f'{tag}.pt'))
 
     while step < a.steps:
-        lr = lr_at(step, a.steps, a.lr, a.warmup, p_time=(time.time() - t0) / (a.minutes * 60) if a.minutes else 0.0)
+        lr = lr_at(step, a.steps, a.lr, a.warmup, floor=a.lr_floor, p_time=(time.time() - t0) / (a.minutes * 60) if a.minutes else 0.0,
+                   sched=a.sched, decay_frac=a.decay_frac)
         for g in opt.param_groups:
             g['lr'] = lr
         tot = ar = df = 0.0
