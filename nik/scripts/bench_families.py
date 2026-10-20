@@ -138,7 +138,18 @@ def main():
         b1, _ = load(p1)
         b2, _ = load(p2)
         f1, f2 = breakdown(b1), breakdown(b2)
+        # IMPORTANT: bench.py draws every item from ONE rng stream and generates the arith
+        # block first, so the item set of --n 8 is NOT a subset of --n 16 (measured: only
+        # 3 of 24 word items are shared).  A per-family delta between two runs with
+        # different item sets is NOT a paired comparison - only compare.py's paired dump
+        # (the same items for both models) is.
+        q1 = {r.get('q', '') for r in b1}
+        q2 = {r.get('q', '') for r in b2}
+        shared = len(q1 & q2)
         print(f'\n=== per-family delta: {os.path.basename(p2)} vs {os.path.basename(p1)} ===')
+        if shared < min(len(q1), len(q2)) * 0.9:
+            print(f'  NOTE: the two runs share only {shared}/{min(len(q1), len(q2))} of their items '
+                  f'-> DIFFERENT item sets, so this delta is NOT paired. Compare with compare.py (paired).')
         for key in sorted(set(f1) | set(f2)):
             v1, v2 = f1.get(key, [0, 0]), f2.get(key, [0, 0])
             d = v2[0] - v1[0]
