@@ -72,6 +72,15 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## 2026-10-20 night: v4b shipped (live on /chat)
+- v4b = v4 + 40 min balanced SFT on sft6: NikBench 66.0% (82/96 arith, 2/24 word, 11/24 reason), understanding **16/26** (v4: 4/26),
+  eval.py math 95.5%, persona 1.0, chat_check 15/15, stress.py strict **59/103** (v4: 38), browser engine greedy 22/36 (v4 19, B300 13).
+  Previous: nik-0.1.v4.bin, nik-0.1.b300.bin. Logs nik/web/model/logs/v4b/. Leak check: chat.py/write.py user turns vs probes ->
+  only the setup turn of one memory probe is similar (food preference), never a scored question.
+- RSI on v4b running on molab (nik/runs/v4brsi); ship only if it beats v4b.
+- Next targets: word problems (0-2/24: regressed during v4 pre-training after step 7k, likely compose.py surface memorisation),
+  reasoning 11/24, reading 4/10, translation 5/10. Next mix sft7: fixed read.py (Codex), more word problems with varied prose.
+
 ## 2026-10-20 evening (Claude, workspace-50): v4 shipped
 - **Live on /chat: v4** (instruction pre-training from scratch, `run_v4.py`, 150 min on molab): NikBench 63.2% (was 39.6%),
   eval.py math 93.5% (57%), understanding 5/26 (3/26), chat_check 15/15 (11/15), stress.py 38/103 (24/103), persona 0.86 (1.0).
