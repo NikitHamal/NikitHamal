@@ -51,6 +51,10 @@ goals, state, decisions, and open tasks. Update it whenever something important 
    Fix: `data/teacher/compose.py`: compositional problems (random 2-5 event chains, distractors, steps grounded per sentence),
    after Physics of LMs 2.1 (iGSM). 14% of the mix; colmath 10%.
 
+5. Harness bug (fixed 2026-10-20): SFT batches were random windows over concatenated conversations, so most windows started
+   mid-conversation and trained answers whose question was cut off (a direct cause of "answers without reading").
+   `train.py Batches` now starts SFT windows at <|bos|>. Every SFT/RSI before this fix had the bug.
+
 ## Current state / open tasks (update me)
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.
