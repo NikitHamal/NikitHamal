@@ -21,6 +21,7 @@ import argparse, glob, json, os, re, shutil, subprocess, sys, time
 
 ap = argparse.ArgumentParser()
 ap.add_argument('--pre-min', type=float, default=150)
+ap.add_argument('--pre-tokens', type=float, default=0, help='stage A token budget (overrides time: steps = tokens / (bs x 512)); token-matched ablations')
 ap.add_argument('--sft-min', type=float, default=25)
 ap.add_argument('--rsi-min', type=float, default=30)
 ap.add_argument('--teacher', type=int, default=1500000)
@@ -130,8 +131,10 @@ if a.init_pre:
     os.makedirs(f'nik/runs/{a.tag}pre', exist_ok=True)
     shutil.copy(a.init_pre, f'nik/runs/{a.tag}pre/ckpt.pt')
 else:
-  sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps 100000000 '
-     f'--minutes {a.pre_min} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
+  pre_steps = int(a.pre_tokens // (bs * 512)) if a.pre_tokens else 100000000
+  say('stage A', f'{pre_steps} steps (token-matched {a.pre_tokens:.0f})' if a.pre_tokens else f'{a.pre_min} min')
+  sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps {pre_steps} '
+     f'--minutes {a.pre_min if not a.pre_tokens else 0} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
      f'--opt muon --ema 0.999 --sched {a.sched} {compile_flag}', log=f'{a.tag}pre.log', quiet=True)
 sys.path.insert(0, 'nik')
 from model import PRESETS  # noqa: E402
