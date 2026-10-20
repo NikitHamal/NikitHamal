@@ -19,7 +19,18 @@ Gates (defaults, override with --min-*):
   * no regression on understanding / stress / chat_check / persona / math
   * bench overall not worse than --max-regress
   * at least one held-out word family off zero (the real prize)
-  * at least --min-heldout held-out families or reason families off zero
+
+Verdicts (exit codes):
+  0  SHIP          every gate passed
+  1  DO NOT SHIP   a gate failed
+  2  CANNOT DECIDE a required gate could not be compared (not a failure!)
+
+The third verdict matters: the bench rows are only comparable when the two logs share
+their item set.  bench.py draws every item from one rng stream and generates the arith
+block first, so `--n 8` is NOT a subset of `--n 16` (measured: 17/140 shared items).
+Every gate derived from those rows is then reported as SKIP and the tool refuses to
+produce a verdict.  A FAIL on an invalid comparison is worse than no gate at all.
+Use `bench.py --nested-items` (same item set for every --n) or compare the same --n.
 """
 from __future__ import annotations
 
@@ -32,7 +43,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from bench_families import breakdown, family  # noqa: E402
+from bench_families import breakdown  # noqa: E402
 
 # the families that are held out: the model cannot have seen them in training
 HELD_OUT_PREFIXES = ('bus (English)', 'bagaincha', 'boxes of apples', 'kaksha', 'kitab',
@@ -91,6 +102,15 @@ def score_of(d):
     return res
 
 
+def item_sets_comparable(old, new, min_shared=0.9):
+    """do the two bench logs contain (about) the same items?"""
+    qo, qn = old.get('questions') or set(), new.get('questions') or set()
+    if not qo or not qn:
+        return True, len(qo & qn), 0
+    shared = len(qo & qn)
+    return shared >= min_shared * min(len(qo), len(qn)), shared, min(len(qo), len(qn))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--old', default='nik/web/model/logs/v4c', help='the live model logs')
@@ -104,62 +124,96 @@ def main():
 
     old = score_of(load_dir(a.old))
     new = score_of(load_dir(a.new))
-    lines, ok = [], True
+    lines, failed, blocked = [], [], []
 
     def gate(name, passed, detail):
-        nonlocal ok
-        ok = ok and passed
         lines.append((('PASS' if passed else 'FAIL'), name, detail))
+        if not passed:
+            failed.append(name)
+
+    def skip(name, detail, blocking=False):
+        """a gate that could not be evaluated.  blocking=True means: no verdict."""
+        lines.append(('SKIP', name, detail))
+        if blocking:
+            blocked.append(name)
 
     if old['understand'] is not None and new['understand'] is not None:
         gate('understanding', new['understand'] >= old['understand'],
              f"{old['understand']}/26 -> {new['understand']}/26")
+    elif new['understand'] is not None:
+        skip('understanding', 'no old log to compare against')
     if old['stress'] is not None and new['stress'] is not None:
         gate('stress (strict)', new['stress'] >= old['stress'],
              f"{old['stress']}/{old.get('stress_of', '?')} -> {new['stress']}/{new.get('stress_of', '?')}")
     if old['chat'] and new['chat']:
-        gate('chat_check', new['chat'][0] >= old['chat'][0], f"{old['chat'][0]}/{old['chat'][1]} -> {new['chat'][0]}/{new['chat'][1]}")
+        gate('chat_check', new['chat'][0] >= old['chat'][0],
+             f"{old['chat'][0]}/{old['chat'][1]} -> {new['chat'][0]}/{new['chat'][1]}")
     if old['persona'] is not None and new['persona'] is not None:
         gate('persona', new['persona'] >= old['persona'], f"{old['persona']} -> {new['persona']}")
     if old['math'] is not None and new['math'] is not None:
         gate('math', new['math'] >= old['math'] - 0.02, f"{old['math']} -> {new['math']}")
+
+    # ---- the bench rows: comparable only if the two logs share their item set ----
+    comparable, shared, smaller = item_sets_comparable(old, new)
+    rows_note = ''
     if old['bench'] is not None and new['bench'] is not None:
-        # the two logs must share their item set, otherwise the comparison is invalid:
-        # bench.py draws from one rng stream and the arith block comes first, so the
-        # --n 8 items are NOT a subset of --n 16 (bench.py --nested-items fixes this).
-        qo, qn = old['questions'], new['questions']
-        shared = len(qo & qn)
-        if qo and qn and shared < 0.9 * min(len(qo), len(qn)):
-            lines.append(('SKIP', 'bench overall',
-                          f"{old['bench']:.3f} -> {new['bench']:.3f} NOT COMPARABLE: the logs share only "
-                          f"{shared}/{min(len(qo), len(qn))} items (different --n item sets). Use compare.py "
-                          f"(paired) on one dumped item set."))
-        else:
+        if comparable:
             gate('bench overall', new['bench'] >= old['bench'] - a.max_regress,
                  f"{old['bench']:.3f} -> {new['bench']:.3f} (max regress {a.max_regress})")
-    comparable = not (old['questions'] and new['questions']
-                      and len(old['questions'] & new['questions'])
-                      < 0.9 * min(len(old['questions']), len(new['questions'])))
+        else:
+            rows_note = (f"the two logs share only {shared}/{smaller} items (different --n item sets). "
+                         f"Use compare.py (paired) on one dumped item set, or bench.py --nested-items.")
+            skip('bench overall', f"NOT COMPARABLE: {rows_note}", blocking=True)
     if new['families']:
-        tag = '' if comparable else ' (indicative: different item sets)'
-        gate('held-out word families off zero', new['heldout_off_zero'] >= a.min_heldout,
-             f"{old['heldout_off_zero']} -> {new['heldout_off_zero']} (need >= {a.min_heldout}){tag}")
-        gate('reason iteration families off zero', new['reason_off_zero'] >= 0,
-             f"{old['reason_off_zero']} -> {new['reason_off_zero']}")
+        if comparable:
+            gate('held-out word families off zero', new['heldout_off_zero'] >= a.min_heldout,
+                 f"{old['heldout_off_zero']} -> {new['heldout_off_zero']} (need >= {a.min_heldout})")
+            gate('reason iteration families off zero', new['reason_off_zero'] >= 0,
+                 f"{old['reason_off_zero']} -> {new['reason_off_zero']}")
+            # a family that was off zero in the live model must not fall back to zero:
+            # the count above hides exactly that (2 -> 1 still passes ">= 1").
+            fell = []
+            for k, v in new['families'].items():
+                if v[0] == 0 and old['families'].get(k, [0, 0])[0] > 0:
+                    fell.append(k)
+            gate('no family fell back to zero', not fell,
+                 'none' if not fell else ', '.join(sorted(fell)))
+        else:
+            skip('held-out word families off zero',
+                 f"NOT COMPARABLE: {rows_note} (indicative only: "
+                 f"{old['heldout_off_zero']} -> {new['heldout_off_zero']})", blocking=True)
+            skip('reason iteration families off zero',
+                 f"NOT COMPARABLE: {rows_note} (indicative only: "
+                 f"{old['reason_off_zero']} -> {new['reason_off_zero']})", blocking=True)
+            skip('no family fell back to zero',
+                 f"NOT COMPARABLE: {rows_note}", blocking=True)
     if a.min_understand and new['understand'] is not None:
-        gate('understanding floor', new['understand'] >= a.min_understand, f"{new['understand']} >= {a.min_understand}")
+        gate('understanding floor', new['understand'] >= a.min_understand,
+             f"{new['understand']} >= {a.min_understand}")
     if a.min_stress and new['stress'] is not None:
         gate('stress floor', new['stress'] >= a.min_stress, f"{new['stress']} >= {a.min_stress}")
 
+    if blocked:
+        verdict, code = 'CANNOT DECIDE', 2
+    elif failed:
+        verdict, code = 'DO NOT SHIP', 1
+    else:
+        verdict, code = 'SHIP', 0
+
     if a.json:
-        print(json.dumps({'ok': ok, 'old': old, 'new': new,
+        print(json.dumps({'verdict': verdict, 'ok': code == 0, 'exit': code,
+                          'blocked': blocked, 'failed': failed,
+                          'old': old, 'new': new,
                           'gates': [{'status': s, 'name': n, 'detail': d} for s, n, d in lines]}, indent=1))
-        return 0 if ok else 1
+        return code
 
     print(f'old: {a.old}\nnew: {a.new}\n')
     for s, n, d in lines:
         print(f'  [{s}] {n:38s} {d}')
-    print(f'\nVERDICT: {"SHIP" if ok else "DO NOT SHIP"}')
+    print(f'\nVERDICT: {verdict}')
+    if blocked:
+        print('  (a required gate could not be compared - this is NOT a failure of the candidate;'
+              '\n   re-run with the same --n on both sides, or with bench.py --nested-items.)')
     if new['families']:
         print('\nper-family (the aggregate hides this):'
               + ('' if comparable else '  [INDICATIVE: the two logs do not share their item set]'))
@@ -168,7 +222,7 @@ def main():
             n = new['families'][k]
             mark = '  <-- moved' if n[0] != o[0] else ''
             print(f'  {o[0]:2d}/{o[1]:<2d} -> {n[0]:2d}/{n[1]:<2d}  {k}{mark}')
-    return 0 if ok else 1
+    return code
 
 
 if __name__ == '__main__':
