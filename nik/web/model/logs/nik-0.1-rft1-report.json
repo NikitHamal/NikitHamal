@@ -1,0 +1,48 @@
+{
+  "add": {
+    "problems": 138,
+    "pass@1": 0.616,
+    "pass@8": 0.862
+  },
+  "day": {
+    "problems": 65,
+    "pass@1": 0.688,
+    "pass@8": 1.0
+  },
+  "div": {
+    "problems": 49,
+    "pass@1": 0.173,
+    "pass@8": 0.551
+  },
+  "mul": {
+    "problems": 97,
+    "pass@1": 0.054,
+    "pass@8": 0.062
+  },
+  "price": {
+    "problems": 69,
+    "pass@1": 0.547,
+    "pass@8": 0.754
+  },
+  "sub": {
+    "problems": 89,
+    "pass@1": 0.42,
+    "pass@8": 0.708
+  },
+  "word+": {
+    "problems": 51,
+    "pass@1": 0.164,
+    "pass@8": 0.353
+  },
+  "word-": {
+    "problems": 56,
+    "pass@1": 0.248,
+    "pass@8": 0.321
+  },
+  "ALL": {
+    "problems": 614,
+    "pass@1": 0.392,
+    "pass@8": 0.599,
+    "kept_traces": 373
+  }
+}
