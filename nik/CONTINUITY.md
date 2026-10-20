@@ -67,14 +67,20 @@ goals, state, decisions, and open tasks. Update it whenever something important 
    Found: old chat rows' "bujheko: <canonical intent>" thinks map any question to one of ~120 stored intents = the
    memorisation engine; make_sft2 drops every v1 row that has a think.
 
+## Teacher data (2026-10-20 owner decision)
+No external or open-weight teacher models. The coding agent (Claude) is the teacher: hand-written gold conversations in
+`nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
+plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
+
 ## Current state / open tasks (update me)
 - [ ] **molab** (free RTX Pro 6000, 96 GB): open `nik/notebooks/nik_molab.py` from GitHub on https://molab.marimo.io, attach GPU,
       Start. It runs `nik/scripts/run_v3.py` (baseline evals -> v3 SFT -> RSI -> evals -> best model) and offers a results zip;
       the owner attaches the zip in chat. Then: compare `summary.json`, publish `nik-0.1.best.bin` if it beats live.
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.
-- [ ] Kaggle `nik-train-tts2` (TTS v2) running; when done: `kaggle kernels output iamnikithamal/nik-train-tts2 -p /tmp/tts2 --file-pattern '^out/'`,
-      compare with v1, publish to `nik/web/tts/` only if clearly better.
+- [x] TTS v2 shipped 2026-10-20 (native Nepali phonemes + 60k lexicon, OT-CFM decoder 10 steps, vocoder fine-tune; 9.9 MB;
+      3 s of speech in 0.12 s on CPU). v1 archived in `nik/web/tts/v1/` (to roll back, copy its files up one level).
+      Automatic ASR scoring was not possible (transcription API returned 402); the owner checks `nik/web/tts/samples/` by ear.
 - [ ] After any new model: run `eval.py`, `eval_understand.py`, `bench.py` on live vs new; ship only if better; update manifest + this file.
 - Kaggle dataset `iamnikithamal/nik-cluster-out` holds the B300 phase-2 models and logs. The owner was asked to rotate the Kaggle token.
 

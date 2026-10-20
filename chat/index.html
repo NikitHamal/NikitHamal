@@ -248,7 +248,7 @@
       // never lock the button: a press always re-checks (a stale 404 from a deploy or cache must not stick)
       if (voiceReady === false) { b.textContent = 'suna'; b.title = 'listen (on-device voice)'; }
     }
-    const getTTS = () => (ttsP ||= import('/nik/web/tts.js?v=2').then((m) => m.NikTTS.load('/nik/web/tts')));
+    const getTTS = () => (ttsP ||= import('/nik/web/tts.js?v=3').then((m) => m.NikTTS.load('/nik/web/tts')));
     async function speak(text, btn) {
       try {
         if (btn) btn.textContent = 'awaj loading…';
