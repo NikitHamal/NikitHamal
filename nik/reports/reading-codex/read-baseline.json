@@ -1,0 +1,107 @@
+{
+  "model_sha256": "44707c82953681daa2eef7b3e9357bde5740f9e247d5329b8ed71e80df467783",
+  "score": 1,
+  "of": 10,
+  "rows": [
+    {
+      "prompt": "\"binod ko pasal butwal ma chha ra usko didi ko pasal pokhara ma.\" binod ko didi ko pasal kaha?",
+      "raw": "windows of jiwan ko lagi dherai mahattwapurna chha. tapai ko mehanat le arulai pani faida pugchha.<|end|>",
+      "answer": "windows of jiwan ko lagi dherai mahattwapurna chha. tapai ko mehanat le arulai pani faida pugchha.",
+      "expected": [
+        "pokhara"
+      ],
+      "ok": false,
+      "seconds": 1.107
+    },
+    {
+      "prompt": "\"kamal le 4 ota kalam ra 3 ota kapi kinyo.\" kamal le kati kapi kinyo?",
+      "raw": "<|think|>kalam: 4 ota kitab: 4 x 15 = 60, kapi: 3 x 15 = 45. jamma: 60 + 45 = 105.<|/think|>kamal le jamma 105 wata kapi kinyo.<|end|>",
+      "answer": "kamal le jamma 105 wata kapi kinyo.",
+      "expected": [
+        "3"
+      ],
+      "ok": false,
+      "seconds": 1.874
+    },
+    {
+      "prompt": "\"sarita doctor hun, unka shriman pilot.\" sarita ko shriman k kaam garchhan?",
+      "raw": "<|think|>nata hernu: sarita, pilot; sarita.<|/think|>sarita le shrimati lai dherai khusi lagyo.<|end|>",
+      "answer": "sarita le shrimati lai dherai khusi lagyo.",
+      "expected": [
+        "pilot"
+      ],
+      "ok": false,
+      "seconds": 0.702
+    },
+    {
+      "prompt": "\"bus 8 baje aauchha bhaneko thiyo tara 9 baje aayo.\" bus kati dhilo aayo?",
+      "raw": "<|think|>9 baje aayo, tyasaile 10 baje aadhar x 2 ghanta = 7 ghanta.<|/think|>bus 7 ghanta aayo.<|end|>",
+      "answer": "bus 7 ghanta aayo.",
+      "expected": [
+        "1 ghanta|ek ghanta"
+      ],
+      "ok": false,
+      "seconds": 0.855
+    },
+    {
+      "prompt": "\"nima lai momo man parchha tara chowmein man pardaina.\" nima lai chowmein man parchha?",
+      "raw": "<|think|>thulo haru ko mol nikalchhu: nima lai 3. ani \"nima\" le malai momo man parchha.<|/think|>ho, tapai ko jawaf thik chha!<|end|>",
+      "answer": "ho, tapai ko jawaf thik chha!",
+      "expected": [
+        "haina|pardaina"
+      ],
+      "ok": false,
+      "seconds": 1.328
+    },
+    {
+      "prompt": "\"hamro gaun ma 3 ota dhara chhan, euta bigreko chha.\" kati dhara chaleko chha?",
+      "raw": "<|think|>3, bigreko bhaneko 2 ra 3 le 2/3. 1/3 bhaneko 2 ra 3 ko bigreko: 1/3 = 2/3. ani 2/3 = 4/3.<|/think|>2 ra 3/3 = 2/3 hunchha.<|end|>",
+      "answer": "2 ra 3/3 = 2/3 hunchha.",
+      "expected": [
+        "2"
+      ],
+      "ok": true,
+      "seconds": 2.23
+    },
+    {
+      "prompt": "\"rajan sombar dekhi sukrabar office janchha.\" rajan sanibar office janchha?",
+      "raw": "rajanak thau ma 'raja' ko pwainta ho.<|end|>",
+      "answer": "rajanak thau ma 'raja' ko pwainta ho.",
+      "expected": [
+        "haina|jaadaina|janna"
+      ],
+      "ok": false,
+      "seconds": 0.53
+    },
+    {
+      "prompt": "\"meena le aaja 5 km hidin, hijo 3 km.\" dui din ma jamma kati?",
+      "raw": "<|think|>3 + 3 = 6 bhag.<|/think|>duitai barabar 6 km.<|end|>",
+      "answer": "duitai barabar 6 km.",
+      "expected": [
+        "8"
+      ],
+      "ok": false,
+      "seconds": 0.506
+    },
+    {
+      "prompt": "\"ganesh ko kukur ko naam moti ho.\" ganesh ko biralo ko naam k ho?",
+      "raw": "bujhe, tapai ko kukur ko biralo.<|end|>",
+      "answer": "bujhe, tapai ko kukur ko biralo.",
+      "expected": [
+        "chhaina|thaha|bhaneko"
+      ],
+      "ok": false,
+      "seconds": 0.311
+    },
+    {
+      "prompt": "\"ilam ma chiya kheti dherai hunchha.\" ilam kun kheti ko lagi prasiddha?",
+      "raw": "ilam ramro | suntala | suntala | kera. ulto.<|end|>",
+      "answer": "ilam ramro | suntala | suntala | kera. ulto.",
+      "expected": [
+        "chiya"
+      ],
+      "ok": false,
+      "seconds": 0.533
+    }
+  ]
+}
