@@ -78,6 +78,49 @@ def _(mo, refresh):
 
 
 @app.cell
+def _(mo, refresh):
+    import glob as _g, json as _j, os as _o, re as _re, subprocess as _sp, datetime as _dt
+    import marimo as _mo
+    refresh
+    _c = [p for d in ('/tmp/nik_out5', '/tmp/nik_out4', '/tmp/mid2', '/tmp/mid') for p in _g.glob(f'{d}/und*.json') + _g.glob(f'{d}/understand-*.json')]
+    _c = [p for p in _c if 'live' not in p] or _c
+    _p = max(_c, key=_o.path.getmtime) if _c else None
+    _parts = []
+    if _p:
+        _u = _j.load(open(_p))
+        _when = (_dt.datetime.fromtimestamp(_o.path.getmtime(_p), _dt.timezone.utc) + _dt.timedelta(minutes=345)).strftime('%H:%M')
+        _src = {'/tmp/mid': 'v4 snapshot @ 32 min', '/tmp/mid2': 'v4 snapshot @ 59 min'}.get(_o.path.dirname(_p), _o.path.basename(_p))
+        _rows = [{'pass': {True: 'PASS', False: 'fail', None: '-'}[r['pass']], 'kind': r['kind'], 'question': r['q'], 'Nik answered': r['a']} for r in _u['rows']]
+        _parts += [_mo.md(f"### Latest eval answers: **{_src}** ({_when} Nepal time) · understanding **{_u['score']}/{_u['of']}**"),
+                   _mo.ui.table(_rows, page_size=30, selection=None)]
+        _b = _p.replace('und.json', 'bench.json').replace('understand-', 'bench-')
+        if _o.path.exists(_b):
+            _bb = _j.load(open(_b))
+            _items = sorted(_bb.get('rows', []), key=lambda it: (not it['cat'].startswith(('word', 'reason')), it['cat']))
+            def _fmt(o):
+                o = str(o); th = _re.search(r'<\|think\|>(.*?)<\|/think\|>', o, _re.S)
+                ans = _re.sub(r'<\|think\|>.*?<\|/think\|>', '', o, flags=_re.S).replace('<|end|>', '').strip()
+                return ans, (th.group(1)[:220] if th else '')
+            if _items:
+                _parts += [_mo.md(f"**NikBench answers** ({100 * _bb['overall']:.1f}% overall · {_bb['groups']})"),
+                           _mo.ui.table([{'ok': 'PASS' if it['ok'] else 'fail', 'category': it['cat'], 'question': it['q'], 'correct': it['gold'],
+                                          'Nik answered': _fmt(it['out'])[0], 'Nik thought': _fmt(it['out'])[1]} for it in _items],
+                                        page_size=15, selection=None)]
+    # newest in-training samples (greedy answers at the last eval checkpoint)
+    _log = max([l for l in _g.glob('/tmp/nik_out5/v5*.log') + _g.glob('/tmp/nik_out4/v4pre.log') if _o.path.exists(l)], key=_o.path.getmtime, default=None)
+    if _log:
+        _t = open(_log).read()
+        _i = _t.rfind('== eval')
+        if _i >= 0:
+            _blk = _t[_i:].split('\nstep ')[0]
+            _qa = _re.findall(r'Q: (.*)\n\s*A: (.*?)\s+\[', _blk)
+            _parts += [_mo.md(f"**Training samples at the last checkpoint** (`{_o.path.basename(_log)}`: {_blk.splitlines()[0][3:]})"),
+                       _mo.ui.table([{'question': q, 'Nik answered': a.replace('<|end|>', '')} for q, a in _qa], selection=None)]
+    _mo.vstack(_parts or [_mo.md('no eval yet')])
+    return
+
+
+@app.cell
 def _(mo):
     pack = mo.ui.run_button(label="Pack results zip")
     pack
