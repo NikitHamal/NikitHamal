@@ -89,7 +89,7 @@ class MultiOpt:
 class Batches:
     """Random windows of length ctx+1 from token arrays (+ optional loss mask)."""
 
-    def __init__(self, tok_path, mask_path=None, mix_path=None, mix_frac=0.0, seed=0):
+    def __init__(self, tok_path, mask_path=None, mix_path=None, mix_frac=0.0, seed=0, split=None):
         self.tok = np.memmap(tok_path, dtype=np.uint16, mode='r')
         self.mask = np.memmap(mask_path, dtype=np.uint8, mode='r') if mask_path else None
         self.mix = np.memmap(mix_path, dtype=np.uint16, mode='r') if mix_path else None
@@ -102,6 +102,9 @@ class Batches:
         if self.mask is not None:
             st = np.flatnonzero(np.asarray(self.tok) == 1)
             self.starts = st[st < len(self.tok) - 2] if len(st) else None
+            if self.starts is not None and split:           # last 0.5% of (shuffled) conversations = held-out val
+                k = max(1, len(self.starts) // 200)
+                self.starts = self.starts[-k:] if split == 'val' else self.starts[:-k]
 
     def get(self, n, L, device):
         xs, ms = [], []
@@ -152,7 +155,7 @@ def evaluate(model, batches, L, device, n_batches=8, bs=16, amp=None):
 
 
 @torch.no_grad()
-def samples(model, tok, stage):
+def samples(model, tok, stage, use_ssbd=True):
     model.eval()
     out = []
     if stage == 'pretrain':
@@ -163,7 +166,7 @@ def samples(model, tok, stage):
         for q in CHATS:
             ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
             prompt = ids[:-1] + [6]                       # drop <|eos|>, open Nik's turn
-            gen, passes = generate_ssbd(model, prompt, 80, temperature=0.0)
+            gen, passes = generate_ssbd(model, prompt, 80, temperature=0.0) if use_ssbd else (generate_ar(model, prompt, 80, temperature=0.0), 0)
             out.append(f'  Q: {q}\n  A: {tok.decode(gen)}   [{len(gen)} tok / {passes} passes]')
     model.train()
     return '\n'.join(out)
@@ -258,8 +261,8 @@ def main():
         val_b = Batches(os.path.join(D, 'pre_val.bin'), seed=1)
     else:
         train_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'),
-                          os.path.join(D, 'pre_train.bin'), a.mix, seed=100 + rank)
-        val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1)
+                          os.path.join(D, 'pre_train.bin'), a.mix, seed=100 + rank, split='train')
+        val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1, split='val')
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
     no_decay = [p for n, p in model.named_parameters() if p.dim() < 2]
@@ -327,8 +330,9 @@ def main():
         scaler.step(opt); scaler.update(); opt.zero_grad(set_to_none=True)
         if ema is not None:
             with torch.no_grad():
+                dec = min(a.ema, (1 + step) / (10 + step))   # warmup: EMA must not keep the random init
                 for pe, pm in zip(ema.parameters(), model.parameters()):
-                    pe.lerp_(pm, 1 - a.ema)
+                    pe.lerp_(pm, 1 - dec)
         step += 1
         el = time.time() - t0
         if step % 25 == 0 or step == 1:
@@ -338,7 +342,7 @@ def main():
         if (step % a.eval_every == 0 or step == a.steps) and main_proc:
             v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
-            print(samples(ema or model, tok, a.stage), flush=True)
+            print(samples(ema or model, tok, a.stage, use_ssbd=a.diff_weight > 0), flush=True)
             log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': float(tot), 'min': el / 60}) + '\n'); log.flush()
             save()
         stop = bool(a.minutes and el > a.minutes * 60)
@@ -357,7 +361,7 @@ def main():
     v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
     print(f'== final step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
     log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'final': True, 'min': (time.time() - t0) / 60}) + '\n'); log.flush()
-    print(samples(ema or model, tok, a.stage), flush=True)
+    print(samples(ema or model, tok, a.stage, use_ssbd=a.diff_weight > 0), flush=True)
     save()
     print('saved', os.path.join(a.out, 'ckpt.pt'))
     if world > 1:
