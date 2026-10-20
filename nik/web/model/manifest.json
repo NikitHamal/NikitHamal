@@ -1,12 +1,14 @@
 {
-  "name": "nik nano",
-  "file": "nik-nano.bin",
-  "bytes": 2060352,
-  "version": "2026-10-19T21:02Z",
-  "trained": "pre 650 + sft 800 steps",
-  "val": {
-    "pre": 4.185606449842453,
-    "sft": 1.4032544419169426
+  "name": "nik 0.1",
+  "file": "nik-0.1.bin",
+  "bytes": 20689696,
+  "version": "2026-10-20T08:45Z",
+  "trained": "kaggle 2xT4 \u00b7 10 h \u00b7 pretrain + sft + 2 rounds verified self-improvement",
+  "eval": {
+    "math_acc": 0.225,
+    "persona_acc": 1.0,
+    "val_ppl": 22.794374910834303,
+    "ssbd_tokens_per_pass": 3.1517857142857144
   },
-  "note": "CPU preview r3 (2M params): coherent corpus + stories, abacus digits, verified traces, intent-grounded thinking. The GPU-trained 20M nik-0.1 replaces it."
+  "note": "20.5M params, 24 effective layers, abacus digits, Muon; self-improvement raised math 16.5% -> 22.5%"
 }
