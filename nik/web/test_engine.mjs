@@ -13,6 +13,8 @@ const items = JSON.parse(readFileSync(itemsPath, 'utf8'));
 const CFG = {
   browser: { temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 440, mode: 'ar', vote: 5 },
   greedy: { temperature: 0, maxNew: 440, mode: 'ar', vote: 1 },
+  'greedy+calc': { temperature: 0, maxNew: 440, mode: 'ar', vote: 1, calc: true },
+  'browser+calc': { temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 440, mode: 'ar', vote: 5, calc: true },
   vote5: { temperature: 0, maxNew: 440, mode: 'ar', vote: 5 },
 }[cfgName];
 

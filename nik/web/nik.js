@@ -441,6 +441,40 @@ async function fetchWithProgress(url, onProgress) {
   return buf.buffer;
 }
 
+// ------------------------------------------------------------------ verified arithmetic ("exact pencil")
+// When the model has just written `EXPR =` (scratchpad or answer), the exact value is emitted for it; the model
+// still decides what to compute and writes every other token. Mirrors nik/calc.py (exact rationals, inexact
+// division left to the model, one digit token banned after a forced number).
+const gcd = (a, b) => { a = a < 0n ? -a : a; b = b < 0n ? -b : b; while (b) [a, b] = [b, a % b]; return a; };
+function frac(n, d = 1n) { if (d < 0n) { n = -n; d = -d; } const g = gcd(n, d) || 1n; return [n / g, d / g]; }
+function parseNum(t) { const [i, f = ''] = t.split('.'); return frac(BigInt(i + f), 10n ** BigInt(f.length)); }
+export function calcEvaluate(expr) {
+  const toks = expr.match(/\d+(?:\.\d+)?|[-+x*\/]/g);
+  const vals = [parseNum(toks[0])], ops = [];
+  for (let i = 1; i < toks.length; i += 2) {
+    const op = toks[i], v = parseNum(toks[i + 1]), L = vals[vals.length - 1];
+    if (op === 'x' || op === '*') vals[vals.length - 1] = frac(L[0] * v[0], L[1] * v[1]);
+    else if (op === '/') { if (v[0] === 0n) return null; vals[vals.length - 1] = frac(L[0] * v[1], L[1] * v[0]); }
+    else { ops.push(op); vals.push(v); }
+  }
+  let r = vals[0];
+  ops.forEach((op, k) => { const v = vals[k + 1]; r = frac(op === '+' ? r[0] * v[1] + v[0] * r[1] : r[0] * v[1] - v[0] * r[1], r[1] * v[1]); });
+  if (r[1] === 1n) return r[0].toString();
+  if (expr.includes('/')) return null;
+  let d = r[1], k = 0n; while (d % 2n === 0n) d /= 2n; while (d % 5n === 0n) d /= 5n;
+  if (d !== 1n) return null;
+  const s = (Number(r[0]) / Number(r[1])).toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+  return s.length <= 12 ? s : null;
+}
+const CALC_TAIL = /(?:^|[^\d.\/])(\d+(?:\.\d+)?(?:\s*[-+x*\/]\s*\d+(?:\.\d+)?)+)\s*=\s?$/;
+export function calcForce(tok, out) {
+  const tail = tok.decode(out.slice(-48));
+  const m = CALC_TAIL.exec(tail);
+  if (!m) return null;
+  const v = calcEvaluate(m[1]);
+  return v == null ? null : tok.encode(tail.endsWith(' ') ? v : ' ' + v);
+}
+
 // ------------------------------------------------------------------ sampling
 // Log-probability of the most recent sample (read by generate for confidence-weighted voting).
 export const lastSample = { lp: 0 };
@@ -484,7 +518,8 @@ export function sample(logits, recent, { temperature = 0.7, topP = 0.9, minP = 0
  * each emitted token. Stops at <|end|> / <|eos|> or maxNew.
  */
 export function* generate(model, promptIds, opts = {}) {
-  const { mode = 'ssbd', stop = [TOK.END, TOK.EOS] } = opts;
+  const { stop = [TOK.END, TOK.EOS], calc = false } = opts;
+  const mode = calc ? 'ar' : (opts.mode ?? 'ssbd');      // verified arithmetic runs on the exact AR path
   const c = model.cfg, Bk = c.block;
   const ban = [TOK.PAD, TOK.BOS, TOK.MASK, TOK.SYS, TOK.USER, TOK.NIK];
   if (!model._exempt) {        // tokens made only of digits, spaces, operators and punctuation
@@ -503,11 +538,23 @@ export function* generate(model, promptIds, opts = {}) {
   const done = (t) => stop.includes(t) || out.length >= maxNew;
 
   if (mode === 'ar') {
+    if (calc && !model._digits) {
+      model._digits = [];
+      for (let i = 0; i < c.vocab; i++) { const t = model.tok.decode([i]).trim(); if (t && /^\d+$/.test(t)) model._digits.push(i); }
+    }
+    let banDigits = false;
     for (;;) {
-      const t = sample(logits, recent(), so);
+      const t = sample(logits, recent(), banDigits ? { ...so, ban: ban.concat(model._digits) } : so);
+      banDigits = false;
       out.push(t); yield { id: t, lp: lastSample.lp, ...stats() };
       if (done(t)) return;
       logits = model.prefill([t]).slice(); passes++;
+      const f = calc ? calcForce(model.tok, out) : null;
+      if (f && f.length) {
+        for (const x of f) { out.push(x); yield { id: x, lp: 0, forced: true, ...stats() }; }
+        if (out.length >= maxNew) return;
+        logits = model.prefill(f).slice(); passes++; banDigits = true;
+      }
     }
   }
 
