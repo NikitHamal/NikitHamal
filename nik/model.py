@@ -263,6 +263,12 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
     L = L1 - 1
     clean, tgt = x[:, :L], x[:, 1:]
     lm = torch.ones_like(x, dtype=torch.bool) if loss_mask is None else loss_mask.bool()
+    if diff_weight <= 0:   # pure autoregressive: no diffusion stream, all compute on next-token prediction
+        lm = torch.ones_like(x, dtype=torch.bool) if loss_mask is None else loss_mask.bool()
+        logits = model(clean)
+        ar_w = lm[:, 1:].float()
+        ar = (F.cross_entropy(logits.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
+        return ar, ar.detach(), torch.zeros((), device=x.device)
     B = cfg.block
     offset = int(torch.randint(0, B, (1,)))
     Ln = L if diff_frac >= 1 else max(B, int(round(L * diff_frac / B)) * B)

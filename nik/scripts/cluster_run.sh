@@ -48,9 +48,12 @@ fi
 ls -la data | tee -a "$OUT/run.log"
 T0=$(date +%s)   # the training budget starts now
 
+SKIP_PRETRAIN=${SKIP_PRETRAIN:-0}  # 1 = reuse $RUN/pre/ckpt.pt (phase 2: new SFT data / settings)
+SFT_NAME=${SFT_NAME:-sft}          # data/<name>_tok.bin
+SFT_DIFF_W=${SFT_DIFF_W:-1.0}      # 0 = pure autoregressive SFT + RSI (all capacity on next-token quality)
 # ---- torch.compile smoke test (falls back to eager if the stack can't compile)
 COMPILE_FLAG=""
-if [ "${COMPILE:-1}" = "1" ]; then
+if [ "${COMPILE:-1}" = "1" ] && [ "$SKIP_PRETRAIN" != "1" ]; then
   if timeout 600 $LAUNCH nik/train.py --stage pretrain --preset "$PRESET" --data data --out /tmp/nik_compile_test --steps 12 --bs "$BS" \
        --eval-every 1000000 --opt muon --diff-frac 0.25 --compile > "$OUT/compile_test.log" 2>&1; then
     COMPILE_FLAG="--compile"; log "torch.compile OK"
@@ -61,15 +64,19 @@ fi
 
 # ---- pretrain (Muon, bf16, windowed diffusion stream, time-annealed LR)
 PRE_MIN=$(pct 57)
+if [ "$SKIP_PRETRAIN" = "1" ] && [ -f "$RUN/pre/ckpt.pt" ]; then
+  log "skipping pretrain (reusing $RUN/pre/ckpt.pt)"
+else
 log "pretrain ${PRE_MIN} min on $NGPU GPUs"
 $LAUNCH nik/train.py --stage pretrain --preset "$PRESET" --data data --out "$RUN/pre" --steps 100000000 --minutes "$PRE_MIN" \
   --bs "$BS" --lr 3e-3 --warmup 300 --eval-every 1000 --opt muon --diff-frac 0.25 $COMPILE_FLAG 2>&1 | tee "$OUT/pretrain.log" | grep -E "eval|final|step [0-9]*000 " || true
+fi
 cp "$RUN/pre/log.jsonl" "$OUT/pretrain-log.jsonl"
 
 # ---- SFT (chat + persona + 120k audited teacher examples)
-SFT_MIN=$(pct 10)
+SFT_MIN=${SFT_MIN:-$(pct 10)}
 log "sft ${SFT_MIN} min"
-$LAUNCH nik/train.py --stage sft --init "$RUN/pre/ckpt.pt" --data data --out "$RUN/sft" --steps 100000000 --minutes "$SFT_MIN" \
+$LAUNCH nik/train.py --stage sft --init "$RUN/pre/ckpt.pt" --data data --sft-name "$SFT_NAME" --diff-weight "$SFT_DIFF_W" --out "$RUN/sft" --steps 100000000 --minutes "$SFT_MIN" \
   --bs "$SFT_BS" --lr 1e-3 --warmup 100 --eval-every 500 --mix 0.15 --opt muon --ema 0.998 --diff-frac 0.25 $COMPILE_FLAG 2>&1 | tee "$OUT/sft.log" | grep -E "eval|final" || true
 cp "$RUN/sft/log.jsonl" "$OUT/sft-log.jsonl"
 python3 nik/export.py --ckpt "$RUN/sft/ckpt.pt" --out "$OUT/$PRESET.bin"
@@ -77,10 +84,10 @@ python3 nik/eval.py --model "$OUT/$PRESET.bin" --data data --n-math 300 --out "$
 cp "$RUN/sft/ckpt.pt" "$OUT/ckpt-sft.pt"
 
 # ---- RSI: parallel verified self-improvement with a held-out promotion gate
-RSI_MIN=$(pct 25)
+RSI_MIN=${RSI_MIN:-$(pct 25)}
 log "rsi ${RSI_MIN} min"
 python3 nik/rsi.py --init "$RUN/sft/ckpt.pt" --data data --out "$RUN/rsi" --generations 20 --problems $((NGPU * 250)) --k 8 \
-  --collect-min 6 --train-min 5 --bs "$SFT_BS" --heldout-n 6 --workers "$NGPU" --launch "$LAUNCH" --budget-min "$RSI_MIN" 2>&1 | tee "$OUT/rsi.log" | grep -E "^gen|final" || true
+  --collect-min 6 --train-min 5 --bs "$SFT_BS" --heldout-n 6 --diff-weight "$SFT_DIFF_W" --workers "$NGPU" --launch "$LAUNCH" --budget-min "$RSI_MIN" 2>&1 | tee "$OUT/rsi.log" | grep -E "^gen|final" || true
 cp "$RUN/rsi/log.jsonl" "$OUT/rsi-log.jsonl" 2>/dev/null || true
 if [ -f "$RUN/rsi/champion.pt" ]; then
   python3 nik/export.py --ckpt "$RUN/rsi/champion.pt" --out "$OUT/$PRESET.rsi.bin"
