@@ -48,15 +48,27 @@ def row_assistant_chars(row):
     return n
 
 
+def row_prefix(row, n=24):
+    """the first n characters of the user turn: a cheap proxy for surface diversity
+    (a category can be audit-clean and still be one template repeated)."""
+    for m in row.get('messages', []):
+        if m.get('role') == 'user':
+            return m.get('content', '')[:n]
+    return ''
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--jsonl', required=True, help='mix .jsonl (e.g. data/sft7.jsonl)')
     ap.add_argument('--sample', type=int, default=0, help='tokenise this many random rows exactly')
     ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--top-prefixes', type=int, default=0,
+                    help='also show the most common user-turn prefixes per category (surface diversity)')
     ap.add_argument('--json', action='store_true')
     a = ap.parse_args()
 
     per = {}
+    prefixes = {}
     total_rows = total_chars = total_asst = 0
     reservoir = []
     R = random.Random(a.seed)
@@ -78,6 +90,9 @@ def main():
             total_rows += 1
             total_chars += ch
             total_asst += c['asst_chars'] - c['asst_chars']  # keep totals simple
+            if a.top_prefixes:
+                p = prefixes.setdefault(cat, {})
+                p[row_prefix(row)] = p.get(row_prefix(row), 0) + 1
             if a.sample and len(reservoir) < a.sample:
                 reservoir.append(row)
             elif a.sample and R.random() < 0.02:
@@ -129,6 +144,15 @@ def main():
             if 'exact_tokens_per_row' in r:
                 print(f'  {r["cat"]:26s} {r["exact_tokens_per_row"]:8.1f} tok/row  '
                       f'{r["exact_token_share"] * 100:6.2f}% of the sampled tokens')
+    if a.top_prefixes:
+        print('\nsurface diversity (most common user-turn prefixes):')
+        for cat, p in sorted(prefixes.items(), key=lambda kv: -per[kv[0]]['rows']):
+            top = sorted(p.items(), key=lambda kv: -kv[1])[:5]
+            share = top[0][1] / max(per[cat]['rows'], 1)
+            distinct = len(p)
+            print(f'  {cat}: {distinct} distinct prefixes, most common covers {share:.0%} of the rows')
+            for txt, n in top:
+                print(f'      {n:6d}  {txt!r}')
 
 
 if __name__ == '__main__':
