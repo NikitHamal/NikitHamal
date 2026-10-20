@@ -73,9 +73,12 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
 ## Current state / open tasks (update me)
-- [ ] **molab** (free RTX Pro 6000, 96 GB): open `nik/notebooks/nik_molab.py` from GitHub on https://molab.marimo.io, attach GPU,
-      Start. It runs `nik/scripts/run_v3.py` (baseline evals -> v3 SFT -> RSI -> evals -> best model) and offers a results zip;
-      the owner attaches the zip in chat. Then: compare `summary.json`, publish `nik-0.1.best.bin` if it beats live.
+- [ ] **v4 on molab (running since 2026-10-20 ~15:05 UTC, driven by Claude via marimo pair)**: `nik/scripts/run_v4.py --bs 256
+      --pre-min 150 --sft-min 25 --rsi-min 30`: instruction pre-training FROM SCRATCH (55% corpus + 45% conversations incl.
+      gold x16, user-token loss 0.1), then SFT (+0.3 diffusion so SSBD keeps working), then RSI. Out: `/tmp/nik_out4/` on the
+      molab box (`summary.json`, bins, logs). bs 256 + compile = ~300k tok/s, 54 GB VRAM. v3 (SFT on the live model) was
+      stopped at 37 min: same memorising base, samples still wrong, and it halved v4's GPU share.
+      Notebook: `nik/notebooks/nik_molab.py` (pipeline picker, detached runs, live log).
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.
 - [x] TTS v2 shipped 2026-10-20 (native Nepali phonemes + 60k lexicon, OT-CFM decoder 10 steps, vocoder fine-tune; 9.9 MB;
