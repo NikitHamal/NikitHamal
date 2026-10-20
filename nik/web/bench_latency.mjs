@@ -22,6 +22,7 @@ import { NikModel, Tokenizer, parseBin } from './nik.js';
 const PRESETS = {
   'nik-0.1':   { d: 384, n_unique: 12, n_repeat: 2, heads: 12, kv_heads: 4, ffn: 1024, ctx: 512, abacus: 20 },
   'nik-0.1r3': { d: 384, n_unique: 12, n_repeat: 3, heads: 12, kv_heads: 4, ffn: 1024, ctx: 512, abacus: 20 },
+  'nik-0.1w': { d: 384, n_unique: 14, n_repeat: 2, heads: 12, kv_heads: 4, ffn: 1024, ctx: 512, abacus: 20 },
   'nik-0.2f':  { d: 640, n_unique: 16, n_repeat: 2, heads: 10, kv_heads: 2, ffn: 1792, ctx: 512, abacus: 20 },
   'nik-0.2t':  { d: 640, n_unique: 16, n_repeat: 2, heads: 10, kv_heads: 2, ffn: 1792, ctx: 512, abacus: 20, ternary: true },
 };
@@ -148,6 +149,7 @@ const preset = opt('preset', '');
 const NTOK = parseInt(opt('tokens', '32'), 10);
 const PREFILL = parseInt(opt('prefill', '64'), 10);
 const BUDGET_S = parseFloat(opt('budget', '3'));
+const REPS = Math.max(1, parseInt(opt('reps', '3'), 10));
 
 if (!binPath && !preset) {
   console.error('usage: node bench_latency.mjs --bin <model.bin> | --preset <name> [--tokens N] [--json]');
@@ -155,68 +157,97 @@ if (!binPath && !preset) {
 }
 
 const tok = new Tokenizer(JSON.parse(readFileSync(new URL('./model/tokenizer.json', import.meta.url))));
-let model, cfg, label, fmt;
-if (binPath) {
-  const buf = readFileSync(binPath);
-  const parsed = parseBin(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
-  cfg = parsed.cfg; fmt = 'int8'; label = binPath;
-  model = new NikModel(parsed, tok);
-} else {
-  if (!PRESETS[preset]) { console.error('unknown preset', preset); process.exit(2); }
-  const s = synthetic(preset);
-  cfg = s.cfg; fmt = PRESETS[preset].ternary ? 'ternary' : 'int8'; label = preset + ' (synthetic weights)';
-  validateShapes(cfg, s.Q, s.W);
-  model = new NikModel(s, tok);
+
+/** build a model for a preset (synthetic weights) or for a .bin */
+function build(which, bin) {
+  if (bin) {
+    const buf = readFileSync(bin);
+    const parsed = parseBin(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+    return { model: new NikModel(parsed, tok), cfg: parsed.cfg, fmt: 'int8', label: bin };
+  }
+  if (!PRESETS[which]) { console.error('unknown preset', which); process.exit(2); }
+  const s = synthetic(which);
+  validateShapes(s.cfg, s.Q, s.W);
+  return {
+    model: new NikModel(s, tok), cfg: s.cfg,
+    fmt: PRESETS[which].ternary ? 'ternary' : 'int8',
+    label: which + ' (synthetic weights)',
+  };
 }
 
-const b = budget(cfg, fmt);
-const prompt = tok.encode('nepal ko rajdhani kathmandu ho. aaja ko hawa kasto chha?').slice(0, PREFILL);
-prompt.unshift(1);
+/** measure AR decode speed + memory for a built model.
+ *  The decode loop is repeated `reps` times and the BEST (lowest ms/token) is kept:
+ *  a laptop's throughput drifts by 10-15% with thermal/load noise, and the first
+ *  run of a process is often the fastest, so a single shot is not comparable. */
+function measure(built) {
+  const { model, cfg, fmt, label } = built;
+  const b = budget(cfg, fmt);
+  const prompt = tok.encode('nepal ko rajdhani kathmandu ho. aaja ko hawa kasto chha?').slice(0, PREFILL);
+  prompt.unshift(1);
 
-model.reset();
-const t0 = process.hrtime.bigint();
-model.prefill(prompt);
-const t1 = process.hrtime.bigint();
-let logits = model.logits(0);
-// warmup: the first tokens pay for the kernel's first touch of each buffer
-for (let i = 0; i < 4; i++) {
-  let best = 0;
-  for (let v = 1; v < logits.length; v++) if (logits[v] > logits[best]) best = v;
-  logits = model.prefill([best]);
-}
-const tw = process.hrtime.bigint();
-let n = 0;
-for (let i = 0; i < NTOK; i++) {
-  let best = 0;
-  for (let v = 1; v < logits.length; v++) if (logits[v] > logits[best]) best = v;
-  logits = model.prefill([best]);
-  n++;
-}
-const t2 = process.hrtime.bigint();
-const decodeMs = Number(t2 - tw) / 1e6;
-const prefillMs = Number(t1 - t0) / 1e6;
-const warmupMs = Number(tw - t1) / 1e6;
-const msPerTok = decodeMs / n;
-const tokPerSec = 1000 / msPerTok;
-const mem = process.memoryUsage();
-let nanLogits = 0;
-for (let v = 0; v < logits.length; v++) if (Number.isNaN(logits[v])) nanLogits++;
+  model.reset();
+  const t0 = process.hrtime.bigint();
+  model.prefill(prompt);
+  const t1 = process.hrtime.bigint();
+  let logits = model.logits(0);
+  // warmup: the first tokens pay for the kernel's first touch of each buffer
+  for (let i = 0; i < 4; i++) {
+    let best = 0;
+    for (let v = 1; v < logits.length; v++) if (logits[v] > logits[best]) best = v;
+    logits = model.prefill([best]);
+  }
+  const tw = process.hrtime.bigint();
+  let n = 0, bestMs = Infinity;
+  for (let rep = 0; rep < REPS; rep++) {
+    const r0 = process.hrtime.bigint();
+    for (let i = 0; i < NTOK; i++) {
+      let best = 0;
+      for (let v = 1; v < logits.length; v++) if (logits[v] > logits[best]) best = v;
+      logits = model.prefill([best]);
+      n++;
+    }
+    const ms = Number(process.hrtime.bigint() - r0) / 1e6 / NTOK;
+    if (ms < bestMs) bestMs = ms;
+  }
+  const t2 = process.hrtime.bigint();
+  const decodeMs = Number(t2 - tw) / 1e6;
+  const prefillMs = Number(t1 - t0) / 1e6;
+  const warmupMs = Number(tw - t1) / 1e6;
+  const msPerTok = bestMs;
+  const tokPerSec = 1000 / msPerTok;
+  const mem = process.memoryUsage();
+  let nanLogits = 0;
+  for (let v = 0; v < logits.length; v++) if (Number.isNaN(logits[v])) nanLogits++;
 
-const out = {
-  label, backend: model.backend, preset: preset || null,
-  params: b.params, fileBytes: Math.round(b.fileBytes), fileMB: +(b.fileBytes / 1e6).toFixed(2),
-  kvF32MB: +(b.kvF32 / 1e6).toFixed(2), kvInt8MB: +(b.kvInt8 / 1e6).toFixed(2),
-  modelRamMB: +(bytesOf(model) / 1e6).toFixed(1),
-  rssMB: +(mem.rss / 1e6).toFixed(1),
-  gflopsPerToken: +b.gflops.toFixed(3),
-  prefillMs: +prefillMs.toFixed(1), warmupMs: +warmupMs.toFixed(1), decodeMs: +decodeMs.toFixed(1),
-  msPerToken: +msPerTok.toFixed(2), tokPerSec: +tokPerSec.toFixed(1),
-  nanLogits,
-  tokensInBudget: Math.floor(BUDGET_S * tokPerSec),
-  weightBytesPerToken: Math.round(b.fileBytes),
-  note: 'tok/s measured with the current int8 engine path; a ternary kernel keeps the same MAC count '
-      + '(WASM SIMD has no popcount) and only changes weight bytes per token',
-};
+  return {
+    label, backend: model.backend, preset: preset || null, format: fmt,
+    params: b.params, fileBytes: Math.round(b.fileBytes), fileMB: +(b.fileBytes / 1e6).toFixed(2),
+    kvF32MB: +(b.kvF32 / 1e6).toFixed(2), kvInt8MB: +(b.kvInt8 / 1e6).toFixed(2),
+    modelRamMB: +(bytesOf(model) / 1e6).toFixed(1),
+    rssMB: +(mem.rss / 1e6).toFixed(1),
+    gflopsPerToken: +b.gflops.toFixed(3),
+    prefillMs: +prefillMs.toFixed(1), warmupMs: +warmupMs.toFixed(1), decodeMs: +decodeMs.toFixed(1),
+    msPerToken: +msPerTok.toFixed(2), tokPerSec: +tokPerSec.toFixed(1),
+    nanLogits,
+    tokensInBudget: Math.floor(BUDGET_S * tokPerSec),
+    weightBytesPerToken: Math.round(b.fileBytes),
+  };
+}
+
+const refPreset = opt('ref', '');
+const refBin = opt('ref-bin', '');
+// the reference is measured FIRST: the first model measured in a process is the fastest
+// (cold caches, no thermal throttling), so measuring it first removes the order bias
+let ref = (refPreset || refBin) ? measure(build(refPreset, refBin)) : null;
+const built = build(preset, binPath);
+const out = measure(built);
+
+if (ref) {
+  out.ref = { label: ref.label, tokPerSec: ref.tokPerSec, gflopsPerToken: ref.gflopsPerToken };
+  out.speedRatio = +(out.tokPerSec / ref.tokPerSec).toFixed(3);
+  out.flopsRatio = +(out.gflopsPerToken / ref.gflopsPerToken).toFixed(3);
+  out.computeFloorTokPerSec = +(ref.tokPerSec / out.flopsRatio).toFixed(1);
+}
 
 if (has('json')) {
   console.log(JSON.stringify(out, null, 1));
@@ -224,10 +255,31 @@ if (has('json')) {
   console.log(`model          : ${out.label}`);
   console.log(`backend        : ${out.backend}`);
   console.log(`params         : ${(out.params / 1e6).toFixed(2)} M`);
-  console.log(`file (${fmt.padEnd(7)}) : ${out.fileMB} MB   [weight bytes streamed per token: ${out.weightBytesPerToken}]`);
+  console.log(`file (${out.format.padEnd(7)}) : ${out.fileMB} MB   [weight bytes/token in the shipped file: ${out.weightBytesPerToken}]`);
   console.log(`KV cache f32   : ${out.kvF32MB} MB   (int8: ${out.kvInt8MB} MB)   <- not covered by the 25 MB cap`);
   console.log(`RAM (model)    : ${out.modelRamMB} MB   |  process RSS ${out.rssMB} MB`);
   console.log(`FLOPs/token    : ${out.gflopsPerToken} GFLOP`);
-  console.log(`speed          : ${out.msPerToken} ms/token  =  ${out.tokPerSec} tok/s   (prefill ${out.prefillMs} ms)`);
+  console.log(`speed          : ${out.msPerToken} ms/token  =  ${out.tokPerSec} tok/s   (prefill ${out.prefillMs} ms, best of ${REPS})`);
   console.log(`budget         : in ${BUDGET_S}s this model can emit ~${out.tokensInBudget} tokens`);
+  if (ref) {
+    const exp = 1 / out.flopsRatio;
+    console.log(`vs ${ref.label}: ${out.speedRatio}x the speed, ${out.flopsRatio}x the FLOPs/token `
+      + `-> FLOP-predicted ${exp.toFixed(2)}x`);
+    const gap = Math.abs(out.speedRatio - exp) / exp;
+    if (gap > 0.25) {
+      console.log(`                NOTE: measured ${(gap * 100).toFixed(0)}% away from the FLOP prediction.`);
+      console.log(`                On a busy machine the run-to-run spread is ~10-15%, so a gap this size`);
+      console.log(`                means the shape is NOT following the FLOP ratio (bandwidth or a bad fit).`);
+    } else {
+      console.log(`                within noise of the FLOP prediction (a busy machine drifts ~10-15%).`);
+      console.log(`                For a decision, re-measure on the same 2-vCPU box as ARCHITECTURE.md.`);
+    }
+    console.log(`                compute-only floor for this shape = ${out.computeFloorTokPerSec} tok/s`);
+  }
+  if (out.format === 'ternary') {
+    console.log(`note           : measured with the int8 engine path; the synthetic model streams `
+      + `${(out.params / 1e6).toFixed(1)} MB of int8 weight bytes/token.`);
+    console.log(`                the shipped 2-bit file streams ${out.weightBytesPerToken} bytes/token with the same MAC`);
+    console.log(`                count, so a real ternary kernel should land between this number and the floor above.`);
+  }
 }
