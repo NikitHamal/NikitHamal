@@ -95,6 +95,13 @@ class Batches:
         self.mix = np.memmap(mix_path, dtype=np.uint16, mode='r') if mix_path else None
         self.mix_frac = mix_frac
         self.rng = np.random.default_rng(seed)
+        # SFT: windows start at a conversation boundary (<|bos|>), so every answer is trained with
+        # its question in view. Random offsets used to start mid-conversation and taught the model
+        # to produce answers whose question had been cut off.
+        self.starts = None
+        if self.mask is not None:
+            st = np.flatnonzero(np.asarray(self.tok) == 1)
+            self.starts = st[st < len(self.tok) - 2] if len(st) else None
 
     def get(self, n, L, device):
         xs, ms = [], []
@@ -102,6 +109,17 @@ class Batches:
             if self.mix is not None and self.rng.random() < self.mix_frac:
                 i = int(self.rng.integers(0, len(self.mix) - L - 1))
                 xs.append(self.mix[i:i + L + 1]); ms.append(np.ones(L + 1, np.uint8))
+                continue
+            if self.starts is not None:
+                i = int(self.starts[self.rng.integers(0, len(self.starts))])
+                w = np.asarray(self.tok[i:i + L + 1])
+                if len(w) < L + 1:                     # last conversations: pad, no loss on padding
+                    pad = L + 1 - len(w)
+                    xs.append(np.concatenate([w, np.full(pad, 2, np.uint16)]))
+                    ms.append(np.concatenate([np.asarray(self.mask[i:i + L + 1]), np.zeros(pad, np.uint8)]))
+                    continue
+                xs.append(w)
+                ms.append(self.mask[i:i + L + 1])
                 continue
             i = int(self.rng.integers(0, len(self.tok) - L - 1))
             xs.append(self.tok[i:i + L + 1])
