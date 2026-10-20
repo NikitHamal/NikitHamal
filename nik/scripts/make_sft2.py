@@ -50,6 +50,8 @@ def main():
     ap.add_argument('--parts', type=int, default=1, help='build the teacher set in N parallel processes (different seeds)')
     ap.add_argument('--gold', default=None, help='dir of hand-written gold jsonl (default nik/data/gold if it exists; "none" to skip)')
     ap.add_argument('--gold-rep', type=int, default=16)
+    ap.add_argument('--chat', type=int, default=0, help='rows of everyday conversation from data/teacher/chat.py (no think)')
+    ap.add_argument('--keep-all', action='store_true', help='keep every v1 chat/persona row (balance a task-heavy mix)')
     a = ap.parse_args()
     R = random.Random(a.seed)
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -69,6 +71,8 @@ def main():
     gold_dir = a.gold or os.path.join(root, 'data/gold')
     use_gold = a.gold != 'none' and os.path.isdir(gold_dir)
     keep = KEEP_WITH_GOLD if use_gold else KEEP
+    if a.keep_all:
+        keep = {k: 1.0 for k in KEEP}
     rows, kept = [], {}
     src = os.path.join(a.data, 'sft.jsonl')
     if not os.path.exists(src):          # no v1 file: regenerate the chat/persona rows (no corpus -> no "write" rows)
@@ -84,6 +88,15 @@ def main():
                 rows.append(line if line.endswith('\n') else line + '\n')
                 kept[c] = kept.get(c, 0) + 1
     rows += open(tpath).readlines()
+    if a.chat:
+        sys.path.insert(0, os.path.join(root, 'data/teacher'))
+        import chat
+        from augment import augment_example
+        RC = random.Random(a.seed + 7)
+        for _ in range(a.chat):
+            e = augment_example(chat.sample(RC), RC, 0.5)
+            rows.append(json.dumps({'cat': e['kind'], 'gold': None, 'messages': e['messages']}, ensure_ascii=False) + '\n')
+        print(f'chat: {a.chat} everyday-conversation rows', flush=True)
     if use_gold:
         subprocess.run([sys.executable, os.path.join(gold_dir, 'check.py')], check=True)   # valid, exact, no test leaks
         g, ng = gold_rows(gold_dir, a.gold_rep, R)
