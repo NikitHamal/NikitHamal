@@ -553,7 +553,7 @@ export function* generate(model, promptIds, opts = {}) {
       let guard = null;
       if (ledger && thinkStart >= 0) {
         const text = model.tok.decode(out.slice(thinkStart));
-        if (headerState(text).inHeader) guard = model._digitIds.filter(([, d]) => !ledgerCtx.includes(d)).map(([id]) => id);
+        if (headerState(text).inValue) guard = model._digitIds.filter(([, d]) => !ledgerCtx.includes(d)).map(([id]) => id);
       }
       let sampleOpts = guard && guard.length ? { ...so, ban: ban.concat(guard) } : so;
       if (banDigits) sampleOpts = { ...sampleOpts, ban: sampleOpts.ban.concat(model._digits) };

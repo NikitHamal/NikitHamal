@@ -130,11 +130,20 @@ export function bindingScore(expected, predicted) {
 // This is a decoding constraint (the token is never sampled), not a preset reply.
 
 export function headerState(text) {
-  if (typeof text !== 'string') return { inHeader: false };
+  if (typeof text !== 'string') return { inHeader: false, inValue: false };
   const at = text.lastIndexOf('dieko:');
-  if (at < 0) return { inHeader: false };
+  if (at < 0) return { inHeader: false, inValue: false };
   const after = text.slice(at + 'dieko:'.length);
-  return { inHeader: !/sodheko\s*:|[\r\n]/i.test(after) };
+  const inHeader = !/sodheko\s*:|[\r\n]/i.test(after);
+  let inValue = false;
+  if (inHeader) {
+    const open = after.lastIndexOf('[');
+    const close = after.lastIndexOf(']');
+    // Only the text after `=` inside the current `[role=value]` is a value;
+    // role names may contain digits (`buy1_count`, `items0`) and must not be banned.
+    if (open >= 0 && close < open) inValue = after.indexOf('=', open) >= 0;
+  }
+  return { inHeader, inValue };
 }
 
 export function digitTokenIds(tok, vocab) {
