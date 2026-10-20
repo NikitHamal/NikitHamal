@@ -30,6 +30,7 @@ ap.add_argument('--user-w', type=float, default=0.1)
 ap.add_argument('--preset', default='nik-0.1')
 ap.add_argument('--data-name', default='sft4', help='SFT mix data/<name>_tok.bin (built if missing)')
 ap.add_argument('--sched', default='cosine', choices=['cosine', 'wsd'])
+ap.add_argument('--init-pre', default=None, help='skip stage A: start stage B from this checkpoint (evaluated first)')
 ap.add_argument('--tag', default='v4', help='run name: nik/runs/<tag>pre, out/nik-0.1.<tag>*.bin')
 ap.add_argument('--bs', type=int, default=0, help='0 = probe 64/128/256/384 and take the fastest')
 ap.add_argument('--out', default='out')
@@ -88,7 +89,10 @@ def evaluate(tag, binpath):
     sh(f'{PY} nik/eval.py --model {binpath} --data data --n-math 200 --out {OUT}/eval-{tag}.json', log=f'eval-{tag}.log', check=False, quiet=True)
     b = json.load(open(f'{OUT}/bench-{tag}.json')); u = json.load(open(f'{OUT}/understand-{tag}.json'))
     e = json.load(open(f'{OUT}/eval-{tag}.json')) if os.path.exists(f'{OUT}/eval-{tag}.json') else {}
-    scores[tag] = {'nikbench': round(b['overall'], 4), 'groups': {k: f'{o}/{t}' for k, (o, t) in b['groups'].items()},
+    cg = subprocess.run(f'{PY} nik/chat_check.py --model {binpath}', shell=True, capture_output=True, text=True)
+    open(f'{OUT}/chat-{tag}.log', 'w').write(cg.stdout + cg.stderr)
+    chat_ok = cg.returncode == 0
+    scores[tag] = {'chat_ok': chat_ok, 'chat': (cg.stdout.strip().splitlines() or ['?'])[-1], 'nikbench': round(b['overall'], 4), 'groups': {k: f'{o}/{t}' for k, (o, t) in b['groups'].items()},
                    'understand': f'{u["score"]}/{u["of"]}', 'understand_frac': u['score'] / u['of'],
                    'math_acc': e.get('math_acc'), 'persona_acc': e.get('persona_acc'), 'bin': binpath}
     json.dump(scores, open(f'{OUT}/summary.json', 'w'), indent=1)
@@ -122,9 +126,13 @@ say('batch', bs, '| compile', bool(compile_flag))
 lr_scale = (bs / 64) ** 0.5
 
 # 2. stage A: instruction pre-training from scratch
-sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps 100000000 '
-   f'--minutes {a.pre_min} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
-   f'--opt muon --ema 0.999 --sched {a.sched} {compile_flag}', log=f'{a.tag}pre.log', quiet=True)
+if a.init_pre:
+    os.makedirs(f'nik/runs/{a.tag}pre', exist_ok=True)
+    shutil.copy(a.init_pre, f'nik/runs/{a.tag}pre/ckpt.pt')
+else:
+  sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps 100000000 '
+     f'--minutes {a.pre_min} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
+     f'--opt muon --ema 0.999 --sched {a.sched} {compile_flag}', log=f'{a.tag}pre.log', quiet=True)
 sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}pre/ckpt.pt --out {OUT}/nik-0.1.{a.tag}pre.bin')
 evaluate(f'{a.tag}pre', f'{OUT}/nik-0.1.{a.tag}pre.bin')
 
@@ -148,7 +156,7 @@ if a.rsi_min > 0:
         evaluate(f'{a.tag}rsi', f'{OUT}/nik-0.1.{a.tag}rsi.bin')
 
 # 5. best
-ok = {k: v for k, v in scores.items() if isinstance(v, dict) and ((v.get('persona_acc') or 0) >= 0.8 or k == 'live')}
+ok = {k: v for k, v in scores.items() if isinstance(v, dict) and (k == 'live' or ((v.get('persona_acc') or 0) >= 0.8 and v.get('chat_ok')))}
 best = max(ok, key=lambda k: ok[k]['nikbench'] + ok[k]['understand_frac'])
 shutil.copy(scores[best]['bin'], f'{OUT}/nik-0.1.best.bin')
 scores['best'] = best
