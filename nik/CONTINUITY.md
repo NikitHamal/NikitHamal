@@ -55,6 +55,14 @@ goals, state, decisions, and open tasks. Update it whenever something important 
    mid-conversation and trained answers whose question was cut off (a direct cause of "answers without reading").
    `train.py Batches` now starts SFT windows at <|bos|>. Every SFT/RSI before this fix had the bug.
 
+6. Flaw hunt with the real browser engine (`node nik/web/test_engine.mjs <bin> <items.json> greedy|browser|vote5`, items from
+   `python nik/bench.py --dump items.json --n 6`). Live model on 108 items: greedy 30.6%, chat defaults 34.3%, vote5 31.5%.
+   Fixed: repetition penalty hit digits (and compounded per repeat), replies capped at 200 tokens (cut reasoning),
+   Devanagari input not understood (now `web/romanize.js`, parity 3003/3003 with the Python romanizer),
+   math edge cases added to colmath (zero, negative results, 7-digit, decimal compare, unit facts).
+   Found: old chat rows' "bujheko: <canonical intent>" thinks map any question to one of ~120 stored intents = the
+   memorisation engine; make_sft2 drops every v1 row that has a think.
+
 ## Current state / open tasks (update me)
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.

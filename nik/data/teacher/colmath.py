@@ -58,6 +58,8 @@ def mul1_steps(a, d):
 
 def col_add(R):
     a, b = ndigit(R, 1, 6), ndigit(R, 1, 6)
+    if R.random() < 0.08:                      # big round numbers: 1000000 + 1
+        a, b = 10 ** R.randint(3, 7) * R.randint(1, 9), R.randint(1, 999)
     c = a + b
     q = pick(R, [f'{a} + {b} kati hunchha?', f'{a} ra {b} jodda kati?', f'{a} ma {b} thapda kati hunchha?', f'jod: {a} + {b}', f'{a} plus {b}?',
                  f'what is {a} + {b}?'])
@@ -67,6 +69,11 @@ def col_add(R):
 
 def col_sub(R):
     a, b = sorted([ndigit(R, 1, 6), ndigit(R, 1, 6)], reverse=True)
+    if R.random() < 0.15 and a != b:           # negative result: small - big
+        q = pick(R, [f'{b} - {a} kati hunchha?', f'what is {b} - {a}?', f'{b} bata {a} ghataunda kati?'])
+        think = (f'{a} chai {b} bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha. pahila {a} - {b} nikalchhu: {sub_steps(a, b)}. '
+                 f'{a} - {b} = {a - b}, tyasaile {b} - {a} = -{a - b}.')
+        return ex(q, think, pick(R, [f'{b} - {a} = -{a - b}.', f'jawaf -{a - b} ho.']), -(a - b), 'sub')
     c = a - b
     q = pick(R, [f'{a} - {b} kati hunchha?', f'{a} bata {b} ghataunda kati?', f'ghatau: {a} - {b}', f'what is {a} - {b}?', f'{a} minus {b}?'])
     think = f'thau anusar ek bata suru garchhu. {sub_steps(a, b)}. tyasaile {a} - {b} = {c}. jaach: {c} + {b} = {a}.'
@@ -74,6 +81,10 @@ def col_sub(R):
 
 
 def col_mul(R):
+    if R.random() < 0.06:                      # zero rule
+        a = ndigit(R, 1, 5)
+        q = pick(R, [f'0 x {a} kati?', f'{a} x 0 kati hunchha?', f'what is {a} x 0?'])
+        return ex(q, f'kunai pani sankhya lai 0 le gunda 0 hunchha: {a} x 0 = 0.', 'jawaf 0 ho.', 0, 'mul')
     a = ndigit(R, 2, 4)
     b = ndigit(R, 1, 2) if R.random() < 0.6 else R.randint(2, 9)
     b = max(b, 2)
@@ -112,7 +123,40 @@ def col_div(R):
     return ex(q, think, a, qv, 'div')
 
 
-FAMILIES = [(col_add, 3), (col_sub, 3), (col_mul, 4), (col_div, 2)]
+UNITS = [('din', 'ghanta', 24), ('ghanta', 'minute', 60), ('minute', 'second', 60), ('hapta', 'din', 7), ('barsha', 'mahina', 12),
+         ('kilometer', 'meter', 1000), ('meter', 'centimeter', 100), ('kilo', 'gram', 1000), ('liter', 'milliliter', 1000), ('darjan', 'wata', 12),
+         ('rupiya', 'paisa', 100)]
+
+
+def units(R):
+    big, small, f = pick(R, UNITS)
+    k = 1 if R.random() < 0.35 else R.randint(2, 12)
+    if k == 1:
+        q = pick(R, [f'ek {big} ma kati {small} hunchha?', f'1 {big} = kati {small}?', f'{big} ma kati {small}?'])
+        return ex(q, f'yo napne ekai ko niyam ho: ek {big} barabar {f} {small}.', f'ek {big} ma {f} {small} hunchha.', f, 'units')
+    q = pick(R, [f'{k} {big} ma kati {small}?', f'{k} {big} lai {small} ma lekha.'])
+    return ex(q, f'ek {big} ma {f} {small} hunchha. {k} {big} ma {k} x {f} = {k * f} {small}.', f'{k} {big} ma {k * f} {small} hunchha.', k * f, 'units')
+
+
+def dec_compare(R):
+    a = R.randint(1, 99) / (10 if R.random() < 0.5 else 100)
+    b = R.randint(1, 99) / (10 if R.random() < 0.5 else 100)
+    if a == b:
+        b = round(b + 0.01, 2)
+    sa, sb = f'{a:g}', f'{b:g}'
+    pa, pb = f'{a:.2f}', f'{b:.2f}'
+    big = sa if a > b else sb
+    q = pick(R, [f'kun thulo: {sa} ki {sb}?', f'{sa} ra {sb} madhye kun thulo?', f'which is bigger, {sa} or {sb}?'])
+    ia, fa = pa.split('.'); ib, fb = pb.split('.')
+    if ia != ib:
+        think = f'pahila purnanka bhag herchhu: {sa} ko {ia} ra {sb} ko {ib}. {max(int(ia), int(ib))} thulo, tyasaile {big} thulo.'
+    else:
+        think = (f'purnanka bhag barabar ({ia}). dashamlav pachhi ank barabar banaunchhu: {sa} = {pa}, {sb} = {pb}. '
+                 f'saya bhag ma tulana: {fa} ra {fb}. {max(fa, fb)} thulo, tyasaile {big} thulo.')
+    return ex(q, think, f'{big} thulo ho.', big, 'decimal')
+
+
+FAMILIES = [(col_add, 3), (col_sub, 3), (col_mul, 4), (col_div, 2), (units, 1), (dec_compare, 0.8)]
 
 
 def sample(R):
