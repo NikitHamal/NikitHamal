@@ -25,6 +25,21 @@ else:   # rebuild a small data dir (SFT replay + val)
 import torch
 n = max(1, torch.cuda.device_count())
 launch = f'torchrun --standalone --nproc_per_node {n}' if n > 1 else 'python'
+# teacher data joins the replay mix; segment 1 first runs a short "teach" SFT stage on it
+subprocess.run('python nik/data/teacher/build.py --n 40000 --seed 11 --out data/teacher.jsonl', shell=True, check=True)
+if os.path.exists('data/sft.jsonl'):
+    if os.path.islink('data/sft.jsonl'):
+        shutil.copy(os.path.realpath('data/sft.jsonl'), 'data/sft.jsonl.tmp'); os.replace('data/sft.jsonl.tmp', 'data/sft.jsonl')
+    subprocess.run('cat data/teacher.jsonl >> data/sft.jsonl', shell=True, check=True)
+else:
+    shutil.copy('data/teacher.jsonl', 'data/sft.jsonl')
+if not rsi:
+    subprocess.run('python nik/prepare.py --data data --sft-only', shell=True, check=True)
+    teach = (f'{launch} nik/train.py --stage sft --init {init} --data data --out nik/runs/teach --steps 1000000 --minutes 40 --bs 16 '
+             f'--lr 6e-4 --warmup 100 --eval-every 1000000 --mix 0.15 --opt muon --ema 0.998 --diff-frac 0.25')
+    print('$', teach, flush=True)
+    subprocess.run(teach, shell=True, check=True)
+    init = 'nik/runs/teach/ckpt.pt'
 cmd = (f'RSI_BUDGET=150 python nik/rsi.py --init {init} --data data --out nik/runs/rsi --generations 12 --problems 1400 --k 8 '
        f'--collect-min 25 --train-min 15 --bs 16 --heldout-n 6 --budget-min {int(os.environ.get('RSI_BUDGET', '150'))} --launch "{launch}"')
 print('$', cmd, flush=True)
