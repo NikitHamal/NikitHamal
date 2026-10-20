@@ -30,35 +30,54 @@ import time
 import urllib.error
 import urllib.request
 
+# The source ids are the ones in the licence registry (nik/data/corpus_v2/manifest.py,
+# Local-A's file): a document whose source is not in the registry fails the audit gate,
+# so the ids here and there must be the same strings.
 HF = 'https://huggingface.co/datasets'
 HF_TREE = 'https://huggingface.co/api/datasets'
 
 # kind: how the file is turned into documents
 # reported_license: what the API said when we wrote this; manifest.py is authoritative
 SOURCES = {
-    'sakonii': {
+    'sakonii_news': {
         'kind': 'parquet', 'column': 'text', 'repo': 'Sakonii/nepalitext-language-model-dataset',
         'reported_license': 'cc0-1.0',
         'url': HF + '/Sakonii/nepalitext-language-model-dataset/resolve/main/data/train-{shard:05d}-of-00014.parquet',
         'note': 'news/web lines; 14 shards of ~198 MB; the corpus v1 already used 1 shard',
     },
-    'wiki_hf': {
-        'kind': 'jsonl', 'text_field': 'devanagari_text',
-        'repo': 'sabin1234/NEPALI_TO_ROMANIZED_WIKIPEDIA',
-        'reported_license': 'apache-2.0',
-        'url': HF + '/sabin1234/NEPALI_TO_ROMANIZED_WIKIPEDIA/resolve/main/nepali_romanized.jsonl',
-        'note': 'wikipedia in Devanagari (the corpus v1 source); has a romanized twin we do not use',
-    },
-    'newiki': {
+    'wikipedia_ne': {
         'kind': 'wiki_xml', 'repo': None, 'reported_license': 'cc-by-sa-4.0',
         'url': 'https://dumps.wikimedia.org/newiki/latest/newiki-latest-pages-articles.xml.bz2',
         'note': 'the real ne.wikipedia dump, single bz2 stream (not the multistream one)',
     },
-    'indiccorp': {
+    'wikipedia_ne_hf': {
+        'kind': 'jsonl', 'text_field': 'devanagari_text',
+        'repo': 'sabin1234/NEPALI_TO_ROMANIZED_WIKIPEDIA',
+        'reported_license': 'apache-2.0',
+        'url': HF + '/sabin1234/NEPALI_TO_ROMANIZED_WIKIPEDIA/resolve/main/nepali_romanized.jsonl',
+        'note': 'wikipedia in Devanagari, pre-stripped; the corpus v1 source',
+        'registry_id': 'wikipedia_ne',
+    },
+    'indiccorp_ne': {
         'kind': 'txt', 'repo': 'ai4bharat/IndicCorpV2',
         'reported_license': 'see-manifest',
         'url': HF + '/ai4bharat/IndicCorpV2/resolve/main/data/ne.txt',
         'note': '14 GB of Nepali web text; one document per line; needs the box, not a laptop',
+    },
+    'culturax_ne': {
+        'kind': 'hf_stream', 'repo': 'facebook/culturax', 'split': 'ne',
+        'reported_license': 'see-manifest', 'url': '',
+        'note': 'gated: needs HF_TOKEN in the environment; the ne split of culturax',
+    },
+    'oscar_ne': {
+        'kind': 'hf_stream', 'repo': 'allenai/oscar', 'split': 'ne',
+        'reported_license': 'see-manifest', 'url': '',
+        'note': 'gated: needs HF_TOKEN in the environment',
+    },
+    'madlad_ne': {
+        'kind': 'hf_stream', 'repo': 'google/madlad400', 'split': 'ne',
+        'reported_license': 'see-manifest', 'url': '',
+        'note': 'gated: needs HF_TOKEN in the environment',
     },
 }
 
@@ -160,13 +179,13 @@ def read_wiki_xml(path):
                 elem.clear()
 
 
-def write_docs(out_path, docs):
+def write_docs(out_path, docs, source_label=None):
     n = 0
     chars = 0
     with open(out_path, 'w', encoding='utf8') as f:
         for doc_id, text in docs:
-            f.write(json.dumps({'source': doc_id[0], 'doc_id': doc_id[1], 'text': text},
-                               ensure_ascii=False) + '\n')
+            f.write(json.dumps({'source': source_label or doc_id[0], 'doc_id': doc_id[1],
+                                'text': text}, ensure_ascii=False) + '\n')
             n += 1
             chars += len(text)
     return n, chars
@@ -220,11 +239,27 @@ def fetch_source(name, out_dir, shard=0, max_docs=0, urls=()):
                 if t:
                     yield (name, f'{name}-{i:07d}'), t
         docs = _txt()
+    elif spec['kind'] == 'hf_stream':
+        try:
+            from datasets import load_dataset
+        except ImportError:
+            raise SystemExit('the gated sources need the `datasets` package: pip install datasets')
+        tok = hf_token()
+        if not tok:
+            raise SystemExit(f'{name} is gated: put HF_TOKEN in the environment (never in the repo)')
+        ds = load_dataset(spec['repo'], spec.get('split'), split='train', streaming=True, token=tok)
+
+        def _stream():
+            for i, d in enumerate(ds):
+                t = d.get('text') or d.get('content') or ''
+                if t and t.strip():
+                    yield (name, f'{name}-{i:07d}'), t
+        docs = _stream()
     else:
         raise SystemExit(f'unknown kind {spec["kind"]}')
     if max_docs:
         docs = (d for i, d in enumerate(docs) if i < max_docs)
-    n, chars = write_docs(out_jsonl, docs)
+    n, chars = write_docs(out_jsonl, docs, spec.get('registry_id', name))
     meta = {
         'source': name, 'url': url, 'bytes': size, 'human': human(size), 'sha256': digest,
         'docs': n, 'chars': chars, 'kind': spec['kind'],
