@@ -35,7 +35,7 @@ class TestFrame(unittest.TestCase):
         self.assertEqual(len(row['messages']), 2)
         self.assertEqual(row['messages'][0]['role'], 'user')
         self.assertEqual(row['messages'][1]['role'], 'nik')
-        self.assertIn('steps', row['messages'][1])
+        self.assertIn('think', row['messages'][1])
 
     def test_all_scenes_are_reachable(self):
         R = random.Random(11)
@@ -58,7 +58,7 @@ class TestFrame(unittest.TestCase):
     def test_rows_are_multi_step(self):
         R = random.Random(13)
         for _ in range(300):
-            steps = frame.sample(R)['messages'][1]['steps']
+            steps = frame.sample(R)['messages'][1]['think']
             self.assertGreaterEqual(steps.count('='), 2, f'not a chain: {steps}')
 
     def test_cli_writes_rows(self):

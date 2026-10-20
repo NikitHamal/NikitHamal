@@ -281,7 +281,7 @@ def sample(R):
     user, steps, ans, gold = sc(R)
     return {'cat': 'math-word-frame', 'gold': gold,
             'messages': [{'role': 'user', 'content': user},
-                         {'role': 'nik', 'content': ans, 'steps': steps}]}
+                         {'role': 'nik', 'content': ans, 'think': steps}]}
 
 
 def check(row):
@@ -289,7 +289,7 @@ def check(row):
     ans = row['messages'][-1]['content']
     if row['gold'] not in ans:
         return f'gold {row["gold"]} not in the answer'
-    for part in row['messages'][-1].get('steps', '').split('. '):
+    for part in row['messages'][-1].get('think', '').split('. '):
         if '=' not in part:
             continue
         lhs, rhs = part.split('=', 1)
