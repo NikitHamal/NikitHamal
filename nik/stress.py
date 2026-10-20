@@ -101,10 +101,13 @@ def looped(t):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--model', required=True)
+    ap.add_argument('--calc', action='store_true', help='verified arithmetic decoding (calc.py)')
     ap.add_argument('--out', default=None)
     ap.add_argument('--max-new', type=int, default=200)
     a = ap.parse_args()
     tok = Tokenizer.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'web/model/tokenizer.json'))
+    from calc import Calc
+    calc = Calc(tok) if a.calc else None
     model = load_any(a.model).eval()
     rows, score, scored, by = [], 0, 0, {}
     for cat, prompt, want in P:
@@ -114,7 +117,7 @@ def main():
             msgs.append({'role': 'user', 'content': t})
             ids, _ = render_chat(tok, msgs)
             with torch.no_grad():
-                g = generate_ar(model, ids[:-1] + [6], a.max_new, temperature=0.0)
+                g = generate_ar(model, ids[:-1] + [6], a.max_new, temperature=0.0, calc=calc)
             out = tok.decode(g)
             th = re.search(r'<\|think\|>(.*?)<\|/think\|>', out, re.S)
             ans = re.sub(r'<\|think\|>.*?(<\|/think\|>|$)', '', out, flags=re.S).replace('<|end|>', '').strip()
