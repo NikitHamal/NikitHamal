@@ -133,13 +133,14 @@ else:
   sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps 100000000 '
      f'--minutes {a.pre_min} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
      f'--opt muon --ema 0.999 --sched {a.sched} {compile_flag}', log=f'{a.tag}pre.log', quiet=True)
-sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}pre/ckpt.pt --out {OUT}/nik-0.1.{a.tag}pre.bin')
-evaluate(f'{a.tag}pre', f'{OUT}/nik-0.1.{a.tag}pre.bin')
+if f'{a.tag}pre' not in scores:                    # (already scored when a crashed run is resumed)
+    sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}pre/ckpt.pt --out {OUT}/nik-0.1.{a.tag}pre.bin')
+    evaluate(f'{a.tag}pre', f'{OUT}/nik-0.1.{a.tag}pre.bin')
 
 # 3. stage B: SFT (answers only, lower LR, less corpus)
 if a.sft_min > 0:
     sh(f'{launch} nik/train.py --stage sft --init nik/runs/{a.tag}pre/ckpt.pt --data data --sft-name {a.data_name} --out nik/runs/{a.tag} '
-       f'--steps 100000000 --minutes {a.sft_min} --bs {bs} --lr {6e-4 * lr_scale:.2e} --warmup 100 --eval-every 1000 --mix 0.2 '
+       f'--steps 100000000 --minutes {a.sft_min} --bs {bs // 2} --accum 2 --lr {6e-4 * lr_scale:.2e} --warmup 100 --eval-every 1000 --mix 0.2 '
        f'--diff-weight 0.3 --diff-frac 0.25 '
        f'--opt muon --ema 0.998 {compile_flag}', log=f'{a.tag}sft.log', quiet=True)
     sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}/ckpt.pt --out {OUT}/nik-0.1.{a.tag}.bin')
