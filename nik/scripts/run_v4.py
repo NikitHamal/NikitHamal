@@ -28,6 +28,9 @@ ap.add_argument('--gold-rep', type=int, default=16)
 ap.add_argument('--mix', type=float, default=0.55, help='stage A: fraction of corpus windows')
 ap.add_argument('--user-w', type=float, default=0.1)
 ap.add_argument('--preset', default='nik-0.1')
+ap.add_argument('--data-name', default='sft4', help='SFT mix data/<name>_tok.bin (built if missing)')
+ap.add_argument('--sched', default='cosine', choices=['cosine', 'wsd'])
+ap.add_argument('--tag', default='v4', help='run name: nik/runs/<tag>pre, out/nik-0.1.<tag>*.bin')
 ap.add_argument('--bs', type=int, default=0, help='0 = probe 64/128/256/384 and take the fastest')
 ap.add_argument('--out', default='out')
 ap.add_argument('--bench-n', type=int, default=8)
@@ -73,8 +76,8 @@ if not os.path.exists('data/pre_train.bin'):
     say('downloading pretrain bins from Kaggle nik-data')
     sh(f'{PY} -m pip -q install kaggle', check=False)
     sh("kaggle kernels output iamnikithamal/nik-data -p . -o -q --file-pattern '^data/(pre_train|pre_val)\\.bin$|^data/sft\\.jsonl$'")
-if not os.path.exists('data/sft4_tok.bin'):
-    sh(f'{PY} nik/scripts/make_sft2.py --data data --teacher {a.teacher} --parts {max(2, os.cpu_count() or 4)} --seed 41 --name sft4 '
+if not os.path.exists(f'data/{a.data_name}_tok.bin'):
+    sh(f'{PY} nik/scripts/make_sft2.py --data data --teacher {a.teacher} --parts {max(2, os.cpu_count() or 4)} --seed 41 --name {a.data_name} '
        f'--gold-rep {a.gold_rep}')
 scores = json.load(open(f'{OUT}/summary.json')) if os.path.exists(f'{OUT}/summary.json') else {}
 
@@ -101,7 +104,7 @@ compile_flag, bs = '', a.bs or 64
 if torch.cuda.is_available():
     best = None
     for b in ([a.bs] if a.bs else [64, 128, 256, 384]):
-        rc = sh(f'timeout 900 {launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name sft4 --diff-weight 0 '
+        rc = sh(f'timeout 900 {launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 '
                 f'--out /tmp/nik_probe --steps 150 --bs {b} --eval-every 1000000 --opt muon --compile', log=f'probe_bs{b}.log', check=False, quiet=True)
         txt = open(f'{OUT}/probe_bs{b}.log').read()
         # marginal rate between step 75 and 150 (cumulative tok/s includes the compile time)
@@ -119,30 +122,30 @@ say('batch', bs, '| compile', bool(compile_flag))
 lr_scale = (bs / 64) ** 0.5
 
 # 2. stage A: instruction pre-training from scratch
-sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name sft4 --diff-weight 0 --out nik/runs/v4pre --steps 100000000 '
+sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps 100000000 '
    f'--minutes {a.pre_min} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
-   f'--opt muon --ema 0.999 {compile_flag}', log='v4pre.log', quiet=True)
-sh(f'{PY} nik/export.py --ckpt nik/runs/v4pre/ckpt.pt --out {OUT}/nik-0.1.v4pre.bin')
-evaluate('v4pre', f'{OUT}/nik-0.1.v4pre.bin')
+   f'--opt muon --ema 0.999 --sched {a.sched} {compile_flag}', log=f'{a.tag}pre.log', quiet=True)
+sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}pre/ckpt.pt --out {OUT}/nik-0.1.{a.tag}pre.bin')
+evaluate(f'{a.tag}pre', f'{OUT}/nik-0.1.{a.tag}pre.bin')
 
 # 3. stage B: SFT (answers only, lower LR, less corpus)
 if a.sft_min > 0:
-    sh(f'{launch} nik/train.py --stage sft --init nik/runs/v4pre/ckpt.pt --data data --sft-name sft4 --out nik/runs/v4 '
+    sh(f'{launch} nik/train.py --stage sft --init nik/runs/{a.tag}pre/ckpt.pt --data data --sft-name {a.data_name} --out nik/runs/{a.tag} '
        f'--steps 100000000 --minutes {a.sft_min} --bs {bs} --lr {6e-4 * lr_scale:.2e} --warmup 100 --eval-every 1000 --mix 0.2 '
        f'--diff-weight 0.3 --diff-frac 0.25 '
-       f'--opt muon --ema 0.998 {compile_flag}', log='v4sft.log', quiet=True)
-    sh(f'{PY} nik/export.py --ckpt nik/runs/v4/ckpt.pt --out {OUT}/nik-0.1.v4.bin')
-    evaluate('v4', f'{OUT}/nik-0.1.v4.bin')
-base = 'nik/runs/v4/ckpt.pt' if a.sft_min > 0 else 'nik/runs/v4pre/ckpt.pt'
+       f'--opt muon --ema 0.998 {compile_flag}', log=f'{a.tag}sft.log', quiet=True)
+    sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}/ckpt.pt --out {OUT}/nik-0.1.{a.tag}.bin')
+    evaluate(a.tag, f'{OUT}/nik-0.1.{a.tag}.bin')
+base = f'nik/runs/{a.tag}/ckpt.pt' if a.sft_min > 0 else f'nik/runs/{a.tag}pre/ckpt.pt'
 
 # 4. RSI
 if a.rsi_min > 0:
-    sh(f'{PY} nik/rsi.py --init {base} --data data --out nik/runs/v4rsi --generations 20 --problems {ngpu * 300} --k 8 '
+    sh(f'{PY} nik/rsi.py --init {base} --data data --out nik/runs/{a.tag}rsi --generations 20 --problems {ngpu * 300} --k 8 '
        f'--collect-min 5 --train-min 4 --bs 32 --heldout-n 6 --diff-weight 0 --workers {ngpu} --launch "{launch}" --budget-min {a.rsi_min}',
-       log='v4rsi.log', check=False, quiet=True)
-    if os.path.exists('nik/runs/v4rsi/champion.pt'):
-        sh(f'{PY} nik/export.py --ckpt nik/runs/v4rsi/champion.pt --out {OUT}/nik-0.1.v4rsi.bin')
-        evaluate('v4rsi', f'{OUT}/nik-0.1.v4rsi.bin')
+       log=f'{a.tag}rsi.log', check=False, quiet=True)
+    if os.path.exists(f'nik/runs/{a.tag}rsi/champion.pt'):
+        sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}rsi/champion.pt --out {OUT}/nik-0.1.{a.tag}rsi.bin')
+        evaluate(f'{a.tag}rsi', f'{OUT}/nik-0.1.{a.tag}rsi.bin')
 
 # 5. best
 ok = {k: v for k, v in scores.items() if isinstance(v, dict) and ((v.get('persona_acc') or 0) >= 0.8 or k == 'live')}
@@ -150,6 +153,6 @@ best = max(ok, key=lambda k: ok[k]['nikbench'] + ok[k]['understand_frac'])
 shutil.copy(scores[best]['bin'], f'{OUT}/nik-0.1.best.bin')
 scores['best'] = best
 json.dump(scores, open(f'{OUT}/summary.json', 'w'), indent=1)
-for f in glob.glob('nik/runs/v4*/log.jsonl'):
+for f in glob.glob(f'nik/runs/{a.tag}*/log.jsonl'):
     shutil.copy(f, f'{OUT}/{f.split("/")[-2]}-log.jsonl')
 say('DONE. best =', best, '| results in', OUT)
