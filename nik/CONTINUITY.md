@@ -72,7 +72,21 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
-## 2026-10-20 night: v4b shipped (live on /chat)
+## 2026-10-20 late night: v4c shipped (live on /chat), multi-agent team
+- **Live: v4c** = v4b + 15 min SFT on sft7 (Grounded Ledger 4%, grounded read.py, weekday ordinal). Paired McNemar vs v4b (288 items):
+  reasoning +12.5 pp (p=0.031); understanding 19/26 (16), stress 64/103 (59), chat 15/15, persona 1.0, math 94.5%. Word problems still ~0/48.
+  Logs: nik/web/model/logs/v4c (incl. compare.txt). Previous: nik-0.1.v4b.bin, nik-0.1.v4.bin, nik-0.1.b300.bin.
+- Team (issue #9 design review, #8 coordination): Claude (molab GPU, merges, shipping), Codex (reading/grounding), Local-A Qoder (ledger.py,
+  compare.py, bench_ledger.py, ledger-engine guard branch), Local-C MiniMax (model_budget.py, bench_latency.mjs, quant_probe.py, frame.py,
+  iter.py, mix_budget.py). Decisions by paired evals (compare.py), gates: understanding, stress, chat_check, persona, NikBench/math within 2 pp.
+- Ablation (300M tokens, sft6): arm A (20M from scratch) = NikBench 61.1%, understanding 17/26 => the data mix matters more than size so far.
+  Ternary (BitLinear, nik-0.2t) is implemented but parked until a token-matched capacity test; browser cost measured 3.4-4x slower.
+- molab box was recycled once (old URL 410): all /tmp state is lost when that happens; keep results in the repo / Kaggle dataset nik-ship.
+- Never `pkill -f` with a pattern that also matches your own command (it froze the notebook kernel once).
+- TTS: Kyutai Pocket TTS v3 has an official new-language fine-tuning recipe (finetune_language.yaml); Nepali data: OpenSLR 43 (2.3 h) +
+  OpenSLR 54 (~160 h). Phonon (gradium) has no training code and its browser runtime (xn) loads only its own checkpoints. Open TTS track in #9.
+
+## 2026-10-20 night: v4b shipped
 - v4b = v4 + 40 min balanced SFT on sft6: NikBench 66.0% (82/96 arith, 2/24 word, 11/24 reason), understanding **16/26** (v4: 4/26),
   eval.py math 95.5%, persona 1.0, chat_check 15/15, stress.py strict **59/103** (v4: 38), browser engine greedy 22/36 (v4 19, B300 13).
   Previous: nik-0.1.v4.bin, nik-0.1.b300.bin. Logs nik/web/model/logs/v4b/. Leak check: chat.py/write.py user turns vs probes ->
