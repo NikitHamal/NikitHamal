@@ -78,6 +78,27 @@ class TestBudget(unittest.TestCase):
         b = budget(cfg('nik-0.1'), ctx=256)
         self.assertAlmostEqual(b['kv_f32_bytes'] * 2, a['kv_f32_bytes'], places=0)
 
+    def test_nik_01w_uses_the_unused_budget(self):
+        """nik-0.1w (14 unique blocks): the largest count that still fits the 25 MB cap
+        at the current width (+15% params, +16% FLOPs, still int8 -> no new tooling)."""
+        a = budget(cfg('nik-0.1'))
+        w = budget(cfg('nik-0.1w'))
+        self.assertLess(w['file_bytes'], 25e6)
+        self.assertGreater(w['params'] / a['params'], 1.1)
+        self.assertGreater(w['gflops_per_token'] / a['gflops_per_token'], 1.1)
+        self.assertLess(w['gflops_per_token'] / a['gflops_per_token'], 1.25)
+        # 15 unique blocks would not fit -> the cap really is the binding constraint
+        from model_budget import fit
+        self.assertEqual(fit('nik-0.1')['n_unique'], 14)
+
+    def test_fit_finds_the_same_block_count_as_the_preset(self):
+        """the shipped nik-0.1w preset must be exactly the config that --fit finds."""
+        from model_budget import fit
+        f = fit('nik-0.1')
+        self.assertEqual(f['n_unique'], 14)
+        self.assertEqual(f['n_repeat'], 2)
+        self.assertLessEqual(f['file_bytes'], 25e6)
+
 
 if __name__ == '__main__':
     unittest.main()

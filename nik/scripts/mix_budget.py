@@ -1,0 +1,207 @@
+"""Token budget for an SFT mix (Local-C, issue #9).
+
+A mix is usually described in *rows* ("10% ledger"), but rows differ in length by 3x,
+so a row share is not a token share.  The token share is what decides whether a format
+is learned and whether it crowds the others out.  Measured on sft6:
+
+    average sft6 row          96.8 tokens
+    one math-word-ledger row  286.9 tokens  (2.96x)  -> a 10% row branch is a ~32% token branch
+
+This script reports rows AND estimated tokens per category for a mix .jsonl:
+
+    python nik/scripts/mix_budget.py --jsonl data/sft7.jsonl
+    python nik/scripts/mix_budget.py --jsonl data/sft6.jsonl --sample 2000   # exact on a sample
+    python nik/scripts/mix_budget.py --jsonl data/sft7.jsonl --json
+
+It streams the file (no full load) and estimates tokens from characters using the
+3.97 chars/token measured for this tokenizer (ARCHITECTURE.md).  With --sample it
+also tokenises a random subset exactly, to calibrate the estimate.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import random
+import sys
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, REPO)
+CHARS_PER_TOKEN = 3.97   # ARCHITECTURE.md: this BPE averages 3.97 characters per token
+
+
+def row_chars(row):
+    """characters of the rendered conversation (user + assistant content + think)."""
+    n = 0
+    for m in row.get('messages', []):
+        n += len(m.get('content', ''))
+        n += len(m.get('think', '') or '')
+    return n
+
+
+def row_assistant_chars(row):
+    n = 0
+    for m in row.get('messages', []):
+        if m.get('role') == 'nik':
+            n += len(m.get('content', ''))
+            n += len(m.get('think', '') or '')
+    return n
+
+
+def row_prefix(row, n=24):
+    """the first n characters of the user turn: a cheap proxy for surface diversity
+    (a category can be audit-clean and still be one template repeated)."""
+    for m in row.get('messages', []):
+        if m.get('role') == 'user':
+            return m.get('content', '')[:n]
+    return ''
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--jsonl', required=True, help='mix .jsonl (e.g. data/sft7.jsonl)')
+    ap.add_argument('--sample', type=int, default=0, help='tokenise this many random rows exactly')
+    ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--top-prefixes', type=int, default=0,
+                    help='also show the most common user-turn prefixes per category (surface diversity)')
+    ap.add_argument('--audit', type=int, default=0,
+                    help='run nik/data/teacher/audit.py over N random rows per category and report kept/total')
+    ap.add_argument('--ctx', type=int, default=0,
+                    help='check that the rows fit a context window of this many tokens (0 = off)')
+    ap.add_argument('--json', action='store_true')
+    a = ap.parse_args()
+
+    per = {}
+    prefixes = {}
+    total_rows = total_chars = total_asst = 0
+    reservoir = []
+    R = random.Random(a.seed)
+    with open(a.jsonl, encoding='utf8') as f:
+        for i, line in enumerate(f):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            cat = row.get('cat', '?')
+            c = per.setdefault(cat, {'rows': 0, 'chars': 0, 'asst_chars': 0})
+            ch = row_chars(row)
+            c['rows'] += 1
+            c['chars'] += ch
+            c['asst_chars'] += row_assistant_chars(row)
+            total_rows += 1
+            total_chars += ch
+            total_asst += c['asst_chars'] - c['asst_chars']  # keep totals simple
+            if a.top_prefixes:
+                p = prefixes.setdefault(cat, {})
+                p[row_prefix(row)] = p.get(row_prefix(row), 0) + 1
+            if a.sample and len(reservoir) < a.sample:
+                reservoir.append(row)
+            elif a.sample and R.random() < 0.02:
+                reservoir[R.randrange(len(reservoir))] = row
+
+    exact = {}
+    if a.sample and reservoir:
+        from tokenizer import Tokenizer
+        from prepare import render_chat
+        tok = Tokenizer.load(os.path.join(REPO, 'web', 'model', 'tokenizer.json'))
+        for row in reservoir:
+            ids, _ = render_chat(tok, row['messages'])
+            cat = row.get('cat', '?')
+            e = exact.setdefault(cat, {'rows': 0, 'tokens': 0})
+            e['rows'] += 1
+            e['tokens'] += len(ids)
+        print(f'exact tokenisation of {len(reservoir)} sampled rows', file=sys.stderr)
+
+    rows = []
+    for cat, v in per.items():
+        est = v['chars'] / CHARS_PER_TOKEN
+        row = {'cat': cat, 'rows': v['rows'],
+               'row_share': v['rows'] / max(total_rows, 1),
+               'est_tokens': round(est),
+               'token_share': est / max(total_chars / CHARS_PER_TOKEN, 1e-9),
+               'tokens_per_row': est / max(v['rows'], 1)}
+        if cat in exact:
+            e = exact[cat]
+            row['exact_tokens_per_row'] = e['tokens'] / e['rows']
+            row['exact_token_share'] = (e['tokens'] / e['rows'] * v['rows']) / max(
+                sum(exact[c]['tokens'] / exact[c]['rows'] * per[c]['rows'] for c in exact), 1e-9)
+        rows.append(row)
+    rows.sort(key=lambda r: -r['est_tokens'])
+
+    if a.json:
+        print(json.dumps({'file': a.jsonl, 'rows': total_rows, 'est_tokens': round(total_chars / CHARS_PER_TOKEN),
+                          'categories': rows}, indent=1))
+        return
+
+    print(f'{a.jsonl}: {total_rows:,} rows, ~{total_chars / CHARS_PER_TOKEN:,.0f} tokens '
+          f'(estimate at {CHARS_PER_TOKEN} chars/token)')
+    print(f'{"category":26s} {"rows":>9s} {"row %":>7s} {"~tokens":>12s} {"token %":>8s} {"tok/row":>8s}')
+    for r in rows:
+        print(f'{r["cat"]:26s} {r["rows"]:9,d} {r["row_share"] * 100:6.2f}% {r["est_tokens"]:12,d} '
+              f'{r["token_share"] * 100:7.2f}% {r["tokens_per_row"]:8.1f}')
+    if exact:
+        print('\nexact (sampled):')
+        for r in rows:
+            if 'exact_tokens_per_row' in r:
+                print(f'  {r["cat"]:26s} {r["exact_tokens_per_row"]:8.1f} tok/row  '
+                      f'{r["exact_token_share"] * 100:6.2f}% of the sampled tokens')
+    if a.top_prefixes:
+        print('\nsurface diversity (most common user-turn prefixes):')
+        for cat, p in sorted(prefixes.items(), key=lambda kv: -per[kv[0]]['rows']):
+            top = sorted(p.items(), key=lambda kv: -kv[1])[:5]
+            share = top[0][1] / max(per[cat]['rows'], 1)
+            distinct = len(p)
+            print(f'  {cat}: {distinct} distinct prefixes, most common covers {share:.0%} of the rows')
+            for txt, n in top:
+                print(f'      {n:6d}  {txt!r}')
+
+    if a.audit or a.ctx:
+        print('\nper-category checks:')
+        sys.path.insert(0, os.path.join(REPO, 'data', 'teacher'))
+        from audit import check as audit_check
+        from tokenizer import Tokenizer
+        from prepare import render_chat
+        tok = Tokenizer.load(os.path.join(REPO, 'web', 'model', 'tokenizer.json')) if a.ctx else None
+        R2 = random.Random(a.seed + 1)
+        for cat, v in sorted(per.items(), key=lambda kv: -kv[1]['rows']):
+            # draw a sample of this category's rows
+            sample_rows = []
+            with open(a.jsonl, encoding='utf8') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        row = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if row.get('cat') == cat:
+                        sample_rows.append(row)
+            R2.shuffle(sample_rows)
+            sample_rows = sample_rows[:a.audit] if a.audit else []
+            fails, longest = 0, 0
+            for row in sample_rows:
+                if a.audit:
+                    errs = audit_check(row)
+                    if errs:
+                        fails += 1
+                if a.ctx and tok is not None:
+                    try:
+                        ids, _ = render_chat(tok, row.get('messages', []))
+                        longest = max(longest, len(ids))
+                    except Exception:
+                        longest = max(longest, 10 ** 9)
+            bits = []
+            if a.audit and sample_rows:
+                bits.append(f'audit {len(sample_rows) - fails}/{len(sample_rows)} kept')
+            if a.ctx and tok is not None:
+                bits.append(f'longest {longest} tok' + ('  OVER CTX!' if longest > a.ctx else ''))
+            if bits:
+                print(f'  {cat:26s} ' + ' | '.join(bits))
+
+
+if __name__ == '__main__':
+    main()

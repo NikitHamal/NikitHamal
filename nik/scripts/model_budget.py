@@ -33,6 +33,7 @@ import sys
 PRESETS = {
     'nik-0.1':   dict(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     'nik-0.1r3': dict(d=384, n_unique=12, n_repeat=3, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
+    'nik-0.1w': dict(d=384, n_unique=14, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     'nik-0.2f':  dict(d=640, n_unique=16, n_repeat=2, heads=10, kv_heads=2, ffn=1792, ctx=512, abacus=20),
     'nik-0.2t':  dict(d=640, n_unique=16, n_repeat=2, heads=10, kv_heads=2, ffn=1792, ctx=512, abacus=20),
 }
