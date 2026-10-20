@@ -28,7 +28,7 @@ launch = f'torchrun --standalone --nproc_per_node {n}' if n > 1 else 'python'
 left = MIN - (time.time() - T0) / 60 - 30          # keep 30 min for export + evals + bench
 with open(f'{OUT}/sft3.log', 'w') as lf:
     p = subprocess.Popen(f'{launch} nik/train.py --stage sft --init init.pt --data data --sft-name sft3 --diff-weight 0 --out nik/runs/sft3 '
-                         f'--steps 100000000 --minutes {max(10, int(left))} --bs 32 --lr 6e-4 --warmup 100 --eval-every 1000 --mix 0.3 '
+                         f'--steps 100000000 --minutes {max(10, int(left))} --bs 16 --accum 2 --lr 6e-4 --warmup 100 --eval-every 1000 --mix 0.3 '
                          f'--opt muon --ema 0.998', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in p.stdout:
         sys.stdout.write(line); lf.write(line); lf.flush()
