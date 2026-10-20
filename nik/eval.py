@@ -62,7 +62,8 @@ def main():
     a = ap.parse_args()
     torch.set_grad_enabled(False)
     if a.model.endswith('.bin'):
-        model = load_exported(a.model)
+        from eval_understand import load_any
+        model = load_any(a.model)   # .bin or .pt (ternary models are evaluated from the checkpoint)
     else:
         ck = torch.load(a.model, map_location='cpu')
         model = NikLM(NikConfig(**ck['cfg'])); model.load_state_dict(ck['model']); model.eval()
