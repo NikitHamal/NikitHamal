@@ -64,6 +64,10 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--top-prefixes', type=int, default=0,
                     help='also show the most common user-turn prefixes per category (surface diversity)')
+    ap.add_argument('--audit', type=int, default=0,
+                    help='run nik/data/teacher/audit.py over N random rows per category and report kept/total')
+    ap.add_argument('--ctx', type=int, default=0,
+                    help='check that the rows fit a context window of this many tokens (0 = off)')
     ap.add_argument('--json', action='store_true')
     a = ap.parse_args()
 
@@ -153,6 +157,50 @@ def main():
             print(f'  {cat}: {distinct} distinct prefixes, most common covers {share:.0%} of the rows')
             for txt, n in top:
                 print(f'      {n:6d}  {txt!r}')
+
+    if a.audit or a.ctx:
+        print('\nper-category checks:')
+        sys.path.insert(0, os.path.join(REPO, 'data', 'teacher'))
+        from audit import check as audit_check
+        from tokenizer import Tokenizer
+        from prepare import render_chat
+        tok = Tokenizer.load(os.path.join(REPO, 'web', 'model', 'tokenizer.json')) if a.ctx else None
+        R2 = random.Random(a.seed + 1)
+        for cat, v in sorted(per.items(), key=lambda kv: -kv[1]['rows']):
+            # draw a sample of this category's rows
+            sample_rows = []
+            with open(a.jsonl, encoding='utf8') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        row = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if row.get('cat') == cat:
+                        sample_rows.append(row)
+            R2.shuffle(sample_rows)
+            sample_rows = sample_rows[:a.audit] if a.audit else []
+            fails, longest = 0, 0
+            for row in sample_rows:
+                if a.audit:
+                    errs = audit_check(row)
+                    if errs:
+                        fails += 1
+                if a.ctx and tok is not None:
+                    try:
+                        ids, _ = render_chat(tok, row.get('messages', []))
+                        longest = max(longest, len(ids))
+                    except Exception:
+                        longest = max(longest, 10 ** 9)
+            bits = []
+            if a.audit and sample_rows:
+                bits.append(f'audit {len(sample_rows) - fails}/{len(sample_rows)} kept')
+            if a.ctx and tok is not None:
+                bits.append(f'longest {longest} tok' + ('  OVER CTX!' if longest > a.ctx else ''))
+            if bits:
+                print(f'  {cat:26s} ' + ' | '.join(bits))
 
 
 if __name__ == '__main__':
