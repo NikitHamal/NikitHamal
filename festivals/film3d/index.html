@@ -1,0 +1,16 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Festival films (3D)</title>
+<link rel="stylesheet" href="../lib/fonts.css">
+<canvas id="c" width="1080" height="1920" style="width:540px"></canvas>
+<script type="importmap">{ "imports": { "three": "../lib/vendor/three.module.min.js" } }</script>
+<script src="../lib/px.js"></script>
+<script type="module">
+// index.html?film=dashain  ->  window.film.{frame(f), total}, window.filmReady
+const q = new URLSearchParams(location.search), name = q.get('film') || 'dashain';
+await import(`./${name}.js`);
+await PX.fonts([{ spec: '500 40px Mukta' }, { spec: '700 40px Mukta' }, { spec: '800 40px Mukta' }, { spec: '40px Tiro' }, { spec: '40px Yatra' }]);
+await window.FILM.load();
+window.film = { total: window.FILM.total, frame: f => window.FILM.frame(f) }; window.filmReady = true;
+if (q.get('f')) window.FILM.frame(+q.get('f'));
+</script>

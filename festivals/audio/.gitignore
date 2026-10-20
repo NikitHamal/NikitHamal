@@ -1,0 +1,5 @@
+# Licensed audio is fetched at build time (tools/fetch_audio.py), never redistributed in the repo.
+*.wav
+*.mp3
+*.ogg
+*.flac
