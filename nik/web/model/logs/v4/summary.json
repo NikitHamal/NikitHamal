@@ -1,0 +1,32 @@
+{
+ "live": {
+  "nikbench": 0.3958,
+  "groups": {
+   "arith": "47/96",
+   "word": "0/24",
+   "reason": "10/24"
+  },
+  "understand": "3/26",
+  "understand_frac": 0.11538461538461539,
+  "math_acc": 0.57,
+  "persona_acc": 1.0,
+  "bin": "/tmp/nik_out4b/nik-0.1.live.bin",
+  "chat_ok": true,
+  "chat": "chat sanity: 11/15 ok"
+ },
+ "v4bpre": {
+  "chat_ok": true,
+  "chat": "chat sanity: 15/15 ok",
+  "nikbench": 0.6319,
+  "groups": {
+   "arith": "79/96",
+   "word": "0/24",
+   "reason": "12/24"
+  },
+  "understand": "5/26",
+  "understand_frac": 0.19230769230769232,
+  "math_acc": 0.935,
+  "persona_acc": 0.8571428571428571,
+  "bin": "/tmp/nik_out4b/nik-0.1.v4bpre.bin"
+ }
+}
