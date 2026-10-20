@@ -12,7 +12,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import colmath, compose, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
+import colmath, compose, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -45,6 +45,9 @@ def one(R):
 
 
 def _one(R):
+    if R.random() < 0.10:   # P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
+        d = ledger.sample(R)
+        return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
     k = R.random()
     if k < 0.10:     # one general column algorithm for + - x / at every size (1-6 digits)
         return to_example(colmath.sample(R), 'math', R)
