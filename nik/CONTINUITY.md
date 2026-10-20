@@ -79,6 +79,11 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
       molab box (`summary.json`, bins, logs). bs 256 + compile = ~300k tok/s, 54 GB VRAM. v3 (SFT on the live model) was
       stopped at 37 min: same memorising base, samples still wrong, and it halved v4's GPU share.
       Notebook: `nik/notebooks/nik_molab.py` (pipeline picker, detached runs, live log).
+      Mid-run v4 snapshots (NikBench n=8): 32 min 66.7% (arith 81/96, word 5/24, reason 10/24), understanding 6/26;
+      59 min 66.7%, understanding 4/26 (live: 39.6%, 3/26). Math up a lot; reading/translation still weak.
+- [ ] **v5 queued on molab** (`/tmp/chain_v5.sh` starts it when v4 ends): `run_v4.py --data-name sft5 --tag v5 --sched wsd
+      --pre-min 180`, out `/tmp/nik_out5/`. sft5 = teacher v5 (read.py reading worlds 14%, skills.py 10%, 2.29M unique rows)
+      + 549 gold x16. Compare v4 vs v5 vs live; ship the best only if it beats live.
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.
 - [x] TTS v2 shipped 2026-10-20 (native Nepali phonemes + 60k lexicon, OT-CFM decoder 10 steps, vocoder fine-tune; 9.9 MB;
