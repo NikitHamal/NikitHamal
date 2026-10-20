@@ -1,0 +1,61 @@
+{
+  "read": {
+    "samples": 100000,
+    "coverage": {
+      "checked": 100000
+    },
+    "by_kind": {
+      "read-unknown": 9850,
+      "read-lookup": 36226,
+      "read-compare": 13979,
+      "read-memory": 17961,
+      "read-english": 5998,
+      "read-yesno": 15986
+    },
+    "failures": {},
+    "examples": []
+  },
+  "understand": {
+    "samples": 100000,
+    "coverage": {
+      "skipped": 80087,
+      "checked": 19913
+    },
+    "by_kind": {
+      "grammar": 13940,
+      "vocab": 11954,
+      "list": 6037,
+      "textop": 10056,
+      "memory": 7938,
+      "intro": 6010,
+      "context": 6110,
+      "reading": 11975,
+      "translate": 9906,
+      "recall": 12143,
+      "format": 3931
+    },
+    "failures": {},
+    "examples": []
+  },
+  "understand2": {
+    "samples": 100000,
+    "coverage": {
+      "skipped": 72903,
+      "checked": 27097
+    },
+    "by_kind": {
+      "en-grammar": 13736,
+      "format": 8200,
+      "empathy": 4026,
+      "english-math": 10356,
+      "sentiment": 4055,
+      "memory-long": 21459,
+      "honest": 7977,
+      "english-read": 5638,
+      "list": 13585,
+      "yesno": 10968
+    },
+    "failures": {},
+    "examples": []
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "baseline": {
+    "samples": 100000,
+    "day_questions": 1682,
+    "unstated_day_answers": 543
+  },
+  "candidate": {
+    "samples": 100000,
+    "day_questions": 1682,
+    "unstated_day_answers": 0
+  }
+}

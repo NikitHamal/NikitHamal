@@ -67,7 +67,7 @@ def say(R, p, fact):
     if fact == 'venue':
         v = _past(g, 'gayo', 'gain')
         return R.choice([f"{p['day']} {n} {p['time']} {p['venue']} {v}", f"{n} {p['day']} {p['venue']} {v}, {p['time']}",
-                         f"{p['time']} {n} {p['venue']} tira {v}"])
+                         f"{p['day']} {p['time']} {n} {p['venue']} tira {v}"])
     if fact == 'pet':
         return R.choice([f"{n} ko euta {p['pet']} chha, jasko naam {p['pet_name']} ho", f"{n} le {p['pet_name']} naam ko {p['pet']} paleko chha"])
     raise KeyError(fact)

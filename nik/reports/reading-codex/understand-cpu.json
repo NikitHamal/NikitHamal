@@ -1,0 +1,168 @@
+{
+ "score": 4,
+ "of": 26,
+ "rows": [
+  {
+   "kind": "memory",
+   "q": "ma kun thau bata hu?",
+   "a": "tapai le bhannu bhayeko anusar: \"u sutdai chha\"",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "bhai kati barsha ko bhayo?",
+   "a": "bhai ko naam lucky chha.",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "maile kun kura dherai man parchha bhaneko?",
+   "a": "tapai lai man parne khana momo ho.",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "ma aile kaha baschhu?",
+   "a": "tapai aile butwal ma basnuhunchha.",
+   "pass": false
+  },
+  {
+   "kind": "honest",
+   "q": "mero naam binod ho. mero buwa ko naam k ho?",
+   "a": "yo what is buwa ko naam.",
+   "pass": false
+  },
+  {
+   "kind": "reading",
+   "q": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo pyaj kinyo?",
+   "a": "ho, lagchha.",
+   "pass": false
+  },
+  {
+   "kind": "reading",
+   "q": "\"sunita doctor ho ra uski bahini engineer.\" sunita ko bahini k kaam garchhe?",
+   "a": "haspital argon Nepal is Kathmandu.",
+   "pass": false
+  },
+  {
+   "kind": "yesno",
+   "q": "\"ram ghar gayo tara shyam school mai basyo.\" ke shyam ghar gayo?",
+   "a": "sunera dukha lagyo. chinta nagarnus, bistarai thik hunchha. ma sanga kura garna sakinchha.",
+   "pass": false
+  },
+  {
+   "kind": "translate",
+   "q": "\"we are reading\" nepali ma bhana.",
+   "a": "nepali ma: \"hami padhdai chhau\".",
+   "pass": true
+  },
+  {
+   "kind": "translate",
+   "q": "\"ma khana khadai chhu\" english ma k ho?",
+   "a": "english ma: \"I am khana mai khau\".",
+   "pass": false
+  },
+  {
+   "kind": "vocab",
+   "q": "\"river\" lai nepali ma k bhanchha?",
+   "a": "\"river\" lai nepali ma \"nadi\" bhaninchha.",
+   "pass": true
+  },
+  {
+   "kind": "grammar",
+   "q": "\"u kheldai chha\" lai negative banau.",
+   "a": "\"u kheldai chha\" ulto: \"kukanai mula\".",
+   "pass": false
+  },
+  {
+   "kind": "grammar",
+   "q": "\"kalam\" ko plural?",
+   "a": "\"kalam\" ko plural \"kalam\" ho.",
+   "pass": false
+  },
+  {
+   "kind": "en-grammar",
+   "q": "\"children\" ko singular k ho?",
+   "a": "\"children\" ko plural \"children\" ho.",
+   "pass": false
+  },
+  {
+   "kind": "en-grammar",
+   "q": "correct this: \"he go to market.\"",
+   "a": "\"go\" ko past tense \"went\" ho.",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "Asha had 12 balloons and 5 flew away. How many does she have now?",
+   "a": "Asha had 17 down now.",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "What is the capital of Nepal? answer in english.",
+   "a": "\"would masse in Nepal\" ra \"playing\" lekhinchha.",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "7, 42, 19, 3 madhye sabai bhanda sano kun?",
+   "a": "7 thulo ho.",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "5, 9, 2 lai thulo bata sano kram ma lekha.",
+   "a": "jamma 11 wata orlent -5, LCM 11.",
+   "pass": false
+  },
+  {
+   "kind": "textop",
+   "q": "\"nepal\" ulto lekha.",
+   "a": "\"nepal\" ko rashtriya chara danfe ho.",
+   "pass": false
+  },
+  {
+   "kind": "textop",
+   "q": "\"kathmandu\" ma kati akshar chha?",
+   "a": "\"biratnagar\" ma 7 akshar chhan.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?",
+   "a": "<|think|>clifor bechne ra 1000 rupiya bank ma 1200 rupiya bhayo. mol le 1000 rupiya firta paunchha. usko ghar ma 2 jana chhan.",
+   "pass": true
+  },
+  {
+   "kind": "math",
+   "q": "mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?",
+   "a": "sujata lai ajhai 1300 rupiya chahinchha.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "15 ko 20 percent kati?",
+   "a": "<|think|>15 ko 20% 30 hunchha.",
+   "pass": false
+  },
+  {
+   "kind": "context",
+   "q": "kaksha ma 14 keta ra 17 keti chhan. keti kati le badhi chhan?",
+   "a": "keti 1.",
+   "pass": false
+  },
+  {
+   "kind": "empathy",
+   "q": "aaja mero exam naramro bhayo, ekdam dukhi chhu.",
+   "a": "sunera dukha lagyo. chinta nagarnus, bistarai thik hunchha. ma sanga kura garna sakinchha.",
+   "pass": null
+  },
+  {
+   "kind": "persona",
+   "q": "timi lai kasle banako ho?",
+   "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "pass": true
+  }
+ ]
+}
