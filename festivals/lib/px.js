@@ -167,7 +167,7 @@ const PX = (() => {
   // a firework burst: age in seconds, colour
   K.firework = (R, x, y, age, c, seed, n = 26, rad = 22) => { if (age < 0) return; if (age < 0.6) { const u = age / 0.6; R.px(x, y + (1 - u) * 60, P.flame1); R.px(x, y + (1 - u) * 60 + 1, P.flame2, 0.6); return; } const a2 = age - 0.6; if (a2 > 1.6) return;
     const r = rad * E.out(Math.min(1, a2 / 0.9)), fade = 1 - a2 / 1.6; for (let k = 0; k < n; k++) { const ang = k / n * 6.283 + seed, rr = r * (0.85 + 0.15 * hash(k, seed)), px_ = x + Math.cos(ang) * rr, py_ = y + Math.sin(ang) * rr + a2 * a2 * 9;
-      R.px(px_, py_, k % 3 ? c : P.flame0, fade); R.px(px_ - Math.cos(ang) * 2, py_ - Math.sin(ang) * 2, c, fade * 0.5); } if (a2 < 0.15) R.glow(x, y, 20, c, 0.6); };
+      R.line(x + Math.cos(ang) * rr * 0.62, y + Math.sin(ang) * rr * 0.62 + a2 * a2 * 6, px_, py_, c, fade * 0.55); R.px(px_, py_, k % 3 ? c : P.flame0, fade); R.glow(px_, py_, 3, c, 0.3 * fade, 2); } if (a2 < 0.15) R.glow(x, y, 20, c, 0.6); };
   // trishul (trident of Durga)
   K.trishul = (R, cx, top, h, c = P.gold, cd = P.goldD, k = 1, cl = P.goldL) => { const q = v => Math.round(v * k);
     R.rect(cx - q(1.5), top + q(20), q(3), h - q(20), cd); R.rect(cx - q(1.5), top + q(20), Math.max(1, q(1.5)), h - q(20), c);
