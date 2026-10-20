@@ -11,6 +11,7 @@
 // Works in a Web Worker or on the main thread (ES module).
 
 import { QGEMM_WASM } from './kernels/kernels.js';
+import { headerState, digitTokenIds } from './ledger.js';
 
 const SPECIALS = ['<|pad|>', '<|bos|>', '<|eos|>', '<|mask|>', '<|sys|>', '<|user|>', '<|nik|>',
   '<|think|>', '<|/think|>', '<|end|>', '<|r1|>', '<|r2|>', '<|r3|>', '<|r4|>', '<|r5|>', '<|r6|>'];
@@ -518,10 +519,15 @@ export function sample(logits, recent, { temperature = 0.7, topP = 0.9, minP = 0
  * each emitted token. Stops at <|end|> / <|eos|> or maxNew.
  */
 export function* generate(model, promptIds, opts = {}) {
-  const { stop = [TOK.END, TOK.EOS], calc = false } = opts;
-  const mode = calc ? 'ar' : (opts.mode ?? 'ssbd');      // verified arithmetic runs on the exact AR path
+  const { stop = [TOK.END, TOK.EOS], calc = false, ledger = false } = opts;
+  const mode = (calc || ledger) ? 'ar' : (opts.mode ?? 'ssbd');  // calc and the ledger guard use the exact AR path
   const c = model.cfg, Bk = c.block;
   const ban = [TOK.PAD, TOK.BOS, TOK.MASK, TOK.SYS, TOK.USER, TOK.NIK];
+  let ledgerCtx = '', thinkStart = -1;
+  if (ledger) {
+    ledgerCtx = model.tok.decode(promptIds);
+    if (!model._digitIds) model._digitIds = digitTokenIds(model.tok, c.vocab);
+  }
   if (!model._exempt) {        // tokens made only of digits, spaces, operators and punctuation
     model._exempt = new Set();
     for (let i = 0; i < c.vocab; i++) { const t = model.tok.decode([i]); if (t && /^[0-9\s+\-x*\/=().,:;%]+$/.test(t)) model._exempt.add(i); }
@@ -544,9 +550,17 @@ export function* generate(model, promptIds, opts = {}) {
     }
     let banDigits = false;
     for (;;) {
-      const t = sample(logits, recent(), banDigits ? { ...so, ban: ban.concat(model._digits) } : so);
+      let guard = null;
+      if (ledger && thinkStart >= 0) {
+        const text = model.tok.decode(out.slice(thinkStart));
+        if (headerState(text).inHeader) guard = model._digitIds.filter(([, d]) => !ledgerCtx.includes(d)).map(([id]) => id);
+      }
+      let sampleOpts = guard && guard.length ? { ...so, ban: ban.concat(guard) } : so;
+      if (banDigits) sampleOpts = { ...sampleOpts, ban: sampleOpts.ban.concat(model._digits) };
+      const t = sample(logits, recent(), sampleOpts);
       banDigits = false;
       out.push(t); yield { id: t, lp: lastSample.lp, ...stats() };
+      if (t === TOK.THINK) thinkStart = out.length;
       if (done(t)) return;
       logits = model.prefill([t]).slice(); passes++;
       const f = calc ? calcForce(model.tok, out) : null;

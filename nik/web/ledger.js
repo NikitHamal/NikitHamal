@@ -123,3 +123,25 @@ export function bindingScore(expected, predicted) {
     recall,
   };
 }
+
+// ---------------------------------------------------------------- decode-time guard
+// While the model is inside the `dieko:` header, the browser can prevent hallucinated
+// binding digits: only digits that occur anywhere in the prompt/context are allowed.
+// This is a decoding constraint (the token is never sampled), not a preset reply.
+
+export function headerState(text) {
+  if (typeof text !== 'string') return { inHeader: false };
+  const at = text.lastIndexOf('dieko:');
+  if (at < 0) return { inHeader: false };
+  const after = text.slice(at + 'dieko:'.length);
+  return { inHeader: !/sodheko\s*:|[\r\n]/i.test(after) };
+}
+
+export function digitTokenIds(tok, vocab) {
+  const ids = [];
+  for (let i = 0; i < vocab; i++) {
+    const t = tok.decode([i]);
+    if (typeof t === 'string' && /^ ?[0-9]$/.test(t)) ids.push([i, t.trim()]);
+  }
+  return ids;
+}
