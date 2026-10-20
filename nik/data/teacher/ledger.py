@@ -250,10 +250,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--n', type=int, default=5000)
     ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--variants', type=int, default=1,
+                    help='counterfactual variants per skeleton (same surface story, different numbers)')
     ap.add_argument('--out', default='nik/data/teacher/ledger_5k.jsonl')
     a = ap.parse_args()
     R = random.Random(a.seed)
-    rows = [sample(R) for _ in range(a.n)]
+    rows = []
+    if a.variants > 1:
+        while len(rows) < a.n:
+            rows.extend(sample_variants(R, a.variants))
+        rows = rows[:a.n]
+    else:
+        rows = [sample(R) for _ in range(a.n)]
     import os
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
     with open(a.out, 'w') as f:
