@@ -55,10 +55,11 @@ def check(ex):
     return errs
 
 
-def audit(rows, verbose=True):
+def audit(rows, verbose=True, seen=None):
+    """seen: optional set of user-turn keys shared across calls (incremental builds)."""
     fails = collections.Counter()
     by_kind = collections.Counter()
-    good, seen = [], set()
+    good, seen = [], (set() if seen is None else seen)
     for ex in rows:
         key = json.dumps([m['content'] for m in ex['messages'] if m['role'] == 'user'])
         e = check(ex)

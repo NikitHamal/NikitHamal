@@ -176,6 +176,7 @@ def main():
     ap.add_argument('--generations', type=int, default=6)
     ap.add_argument('--problems', type=int, default=1400)
     ap.add_argument('--k', type=int, default=8)
+    ap.add_argument('--diff-weight', type=float, default=1.0, help='0 = pure autoregressive training')
     ap.add_argument('--collect-min', type=float, default=25)
     ap.add_argument('--train-min', type=float, default=15)
     ap.add_argument('--bs', type=int, default=16)
@@ -249,7 +250,7 @@ def main():
         cand_dir = os.path.join(a.out, f'gen{g}')
         cmd = (f'{a.launch} {os.path.join(here, "train.py")} --stage sft --sft-name rsi --init {champ} --data {a.data} --out {cand_dir} '
                f'--steps 1000000 --minutes {a.train_min} --bs {a.bs} --lr {lr} --warmup 50 --eval-every 1000000 --mix 0.15 '
-               f'--opt muon --ema 0.995 --diff-frac 0.25 --tok {a.tok}')
+               f'--opt muon --ema 0.995 --diff-frac 0.25 --diff-weight {a.diff_weight} --tok {a.tok}')
         subprocess.run(cmd, shell=True, check=True)
         cand = load(os.path.join(cand_dir, 'ckpt.pt'), dev)
         score = heldout(cand, tok, a.data, a.heldout_n)
