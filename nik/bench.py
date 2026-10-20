@@ -1,4 +1,4 @@
-"""NikBench: held-out math + reasoning benchmark with per-category accuracy.
+﻿"""NikBench: held-out math + reasoning benchmark with per-category accuracy.
 
 Templates here are written separately from the training generators (different wording and
 structure), numbers come from a fixed seed, and scoring is exact match on the final number of
@@ -101,14 +101,43 @@ def reason(R):
 ARITH = ['add2', 'add3', 'add4', 'add5', 'sub3', 'sub4', 'mul2x1', 'mul3x1', 'mul2x2', 'mul3x2', 'div3', 'div4']
 
 
-def items(n, seed=2026):
-    R = random.Random(seed)
-    out = [('arith-' + k,) + arith(R, k) for k in ARITH for _ in range(n)]
-    while len([o for o in out if o[0] == 'word']) < 3 * n:
-        q, g = word(R)
+def items(n, seed=2026, nested=False):
+    """The benchmark items.
+
+    nested=False (default, unchanged): every item comes from ONE rng stream and the
+    arith block is generated first, so the item set of --n 8 is NOT a subset of the item
+    set of --n 16 (measured on the shipped logs: the n=8 and n=16 runs shared only 3 of
+    24 word items).  Cross-n comparisons are therefore unpaired, and only a paired
+    evaluation on one dumped item set is valid (what compare.py does).
+
+    nested=True: one rng stream PER CATEGORY, so --n 4 is a subset of --n 8 is a subset
+    of --n 16, and the live_eval trend (n=4) becomes directly comparable with the
+    decision eval (n=16).  The seeds are derived arithmetically (not from hash(),
+    which is salted per process).  It changes the item set, so it is opt-in: the
+    historical scores stay comparable with the default.
+    """
+    if not nested:
+        R = random.Random(seed)
+        out = [('arith-' + k,) + arith(R, k) for k in ARITH for _ in range(n)]
+        while len([o for o in out if o[0] == 'word']) < 3 * n:
+            q, g = word(R)
+            if g is not None and g >= 0:
+                out.append(('word', q, g))
+        out += [('reason',) + reason(R) for _ in range(3 * n)]
+        return out
+    out = []
+    for i, k in enumerate(ARITH):
+        R = random.Random(seed * 1000 + i)
+        out += [('arith-' + k,) + arith(R, k) for _ in range(n)]
+    Rw = random.Random(seed * 1000 + 900)
+    words = []
+    while len(words) < 3 * n:
+        q, g = word(Rw)
         if g is not None and g >= 0:
-            out.append(('word', q, g))
-    out += [('reason',) + reason(R) for _ in range(3 * n)]
+            words.append(('word', q, g))
+    out += words
+    Rr = random.Random(seed * 1000 + 901)
+    out += [('reason',) + reason(Rr) for _ in range(3 * n)]
     return out
 
 
@@ -125,9 +154,10 @@ def main():
     ap.add_argument('--calc', action='store_true', help='verified arithmetic decoding (calc.py)')
     ap.add_argument('--out', default='')
     ap.add_argument('--dump', default='', help='write the items as JSON (for web/test_engine.mjs) and exit')
+    ap.add_argument('--nested-items', action='store_true', help='one rng stream per category, so --n 4 is a subset of --n 8 is a subset of --n 16 (changes the item set: the historical scores are then a different benchmark)')
     a = ap.parse_args()
     if a.dump:
-        json.dump(items(a.n), open(a.dump, 'w'))
+        json.dump(items(a.n, nested=a.nested_items), open(a.dump, 'w'))
         return
     torch.set_grad_enabled(False)
     tok = Tokenizer.load(a.tok)
@@ -135,7 +165,7 @@ def main():
     calc = Calc(tok) if a.calc else None
     model = load_any(a.model)
     res, rows = {}, []
-    for cat, q, g in items(a.n):
+    for cat, q, g in items(a.n, nested=a.nested_items):
         ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
         text = tok.decode(generate_ar(model, ids[:-1] + [6], 320, temperature=0.0, calc=calc))
         ans = text.split('<|/think|>')[-1]
