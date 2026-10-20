@@ -10,7 +10,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import math_gen, math2, reason_gen, reason2, understand, understand2  # noqa: E402
+import colmath, math_gen, math2, reason_gen, reason2, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -44,19 +44,21 @@ def one(R):
 
 def _one(R):
     k = R.random()
-    if k < 0.24:
+    if k < 0.12:     # one general column algorithm for + - x / at every size (1-6 digits)
+        return to_example(colmath.sample(R), 'math', R)
+    if k < 0.26:
         return to_example(math_gen.sample(R), 'math', R)
     if k < 0.37:
         return to_example(math2.sample(R), 'math', R)
-    if k < 0.50:
+    if k < 0.49:
         return to_example(reason_gen.sample(R), 'reason', R)
-    if k < 0.60:
+    if k < 0.58:
         e = reason2.sample(R)
         return {'cat': f'reason-{e["kind"]}', 'gold': e['gold'], 'messages': e['messages']}
-    if k < 0.89:     # understanding: answers built from the user's own words (anti-memorisation)
+    if k < 0.88:     # understanding: answers built from the user's own words (anti-memorisation)
         e = (understand if R.random() < 0.5 else understand2).sample(R)
         return {'cat': f'understand-{e["kind"]}', 'gold': e['gold'], 'messages': e['messages']}
-    if k < 0.95:
+    if k < 0.94:
         return explanation(R)
     a = to_example(math_gen.sample(R) if R.random() < 0.6 else reason_gen.sample(R), 'math', R)
     b = to_example(math_gen.sample(R) if R.random() < 0.5 else reason_gen.sample(R), 'math', R, lead=False)

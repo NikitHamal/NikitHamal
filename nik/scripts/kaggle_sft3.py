@@ -21,10 +21,11 @@ import struct, torch  # noqa: E402
 from export import load_exported  # noqa: E402
 raw = open(src, 'rb').read(); hl = struct.unpack('<I', raw[4:8])[0]
 torch.save({'model': load_exported(src).state_dict(), 'cfg': json.loads(raw[8:8 + hl])['config']}, 'init.pt')
+sh(f'python nik/bench.py --model {src} --n 8 --out {OUT}/bench-live.json | tail -16')
 sh(f'python nik/scripts/make_sft2.py --data data --teacher {os.environ.get("TEACHER", "1000000")} --parts 4 --seed 31 --name sft3 2>&1 | grep -v "by category"')
 n = max(1, torch.cuda.device_count())
 launch = f'torchrun --standalone --nproc_per_node {n}' if n > 1 else 'python'
-left = MIN - (time.time() - T0) / 60 - 20          # keep 20 min for export + evals
+left = MIN - (time.time() - T0) / 60 - 30          # keep 30 min for export + evals + bench
 with open(f'{OUT}/sft3.log', 'w') as lf:
     p = subprocess.Popen(f'{launch} nik/train.py --stage sft --init init.pt --data data --sft-name sft3 --diff-weight 0 --out nik/runs/sft3 '
                          f'--steps 100000000 --minutes {max(10, int(left))} --bs 32 --lr 6e-4 --warmup 100 --eval-every 1000 --mix 0.3 '
@@ -36,6 +37,7 @@ shutil.copy('nik/runs/sft3/log.jsonl', f'{OUT}/sft3-log.jsonl')
 sh(f'python nik/export.py --ckpt nik/runs/sft3/ckpt.pt --out {OUT}/nik-0.1.v3.bin')
 sh(f'python nik/eval.py --model {OUT}/nik-0.1.v3.bin --data data --n-math 300 --out {OUT}/eval-v3.json | head -8')
 sh(f'python nik/eval_understand.py --model {OUT}/nik-0.1.v3.bin --out {OUT}/understand-v3.json | tail -30')
+sh(f'python nik/bench.py --model {OUT}/nik-0.1.v3.bin --n 8 --out {OUT}/bench-v3.json | tail -16')
 shutil.copy('nik/runs/sft3/ckpt.pt', f'{OUT}/ckpt-sft3.pt')
 json.dump({'minutes': (time.time() - T0) / 60}, open(f'{OUT}/summary-v3.json', 'w'))
 print('SFT3 DONE', flush=True)
