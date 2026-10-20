@@ -5,6 +5,7 @@
 import collections, json, re, sys
 
 from verify import check_equations, evaluate
+from grounding import check as check_grounding
 
 # Nik writes in one consistent style: chat-style spellings are fine in USER turns only.
 NON_STYLE = re.compile(r'\b(xa|xu|xau|xan|xaina|hunxa|garxu|garxa|cha|chu|chau|chaina|tmro|tmi|vayo|vanne|k cha)\b')
@@ -52,6 +53,8 @@ def check(ex):
             errs.append(f'answer-missing-gold({gold})')
         if kind.startswith(('math', 'reason')) and 'followup' not in kind and not msgs[-1].get('think'):
             errs.append('no-think')
+    if kind.startswith('read-'):
+        errs.extend('grounding:' + error for error in check_grounding(ex))
     return errs
 
 

@@ -1,0 +1,487 @@
+{
+  "seed": 9381,
+  "score": 1,
+  "of": 24,
+  "rows": [
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "chess khelne",
+        "messages": [
+          {
+            "role": "user",
+            "content": "bato ma dherai bhid thiyo. shankar ko ruchi chess khelne ho. shankar ko man parne khana aalu paratha ho.\nshankar ko ruchi k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "shankar lai chess khelne man parchha.",
+            "think": "passage ma: \"shankar ko ruchi chess khelne ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pahilo niyam sabai bhanda ma chha, tyasaile shanta lagchha.<|/think|>ho, shankar ko ruchi k ho?<|end|>",
+      "answer": "ho, shankar ko ruchi k ho?",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "ghumna jaane",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"sushma pesa le sampadak ho. gaun ma mela lageko thiyo. sushma ko ruchi ghumna jaane ho. sushma ko man parne khana pani puri ho. nima ahile 65 barsha pugyo. laxmi nurse ko kaam garchhin. laxmi le bazaar bata 15 liter dudh kinin.\" sushma ko hobby k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "sushma lai ghumna jaane man parchha.",
+            "think": "passage ma: \"sushma ko ruchi ghumna jaane ho\"."
+          }
+        ]
+      },
+      "raw": "la, sushma ko ho.<|end|>",
+      "answer": "la, sushma ko ho.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "32",
+        "messages": [
+          {
+            "role": "user",
+            "content": "\"januka ko ruchi cycle chalaune ho. lhamu ko umer 32 barsha ho.\" lhamu kati barsha ko bhayo?"
+          },
+          {
+            "role": "nik",
+            "content": "lhamu 32 barsha ki ho.",
+            "think": "passage ma: \"lhamu ko umer 32 barsha ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>32 + 32 = 64.<|/think|> lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lha",
+      "answer": "lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lhaum lha",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "11",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo padha: \"niraj ko ruchi movie herne ho. kamala le 11 cup coffee kinin. kamala lai lassi man parchha. niraj le 13 liter tel kinyo.\" kamala le kati coffee liyo?"
+          },
+          {
+            "role": "nik",
+            "content": "kamala sanga 11 cup coffee chha.",
+            "think": "passage ma: \"kamala le 11 cup coffee kinin\"."
+          }
+        ]
+      },
+      "raw": "<|think|>ka kaam: 1/2 / 10 = 1/3 bhag prati din. 1/3 + 11 / 10 = 1/3.<|/think|>1/3 + 13 x 4 = 1.<|end|>",
+      "answer": "1/3 + 13 x 4 = 1.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "samosa",
+        "messages": [
+          {
+            "role": "user",
+            "content": "chiya pasal ma radio bajirahethyo. mingma ko ruchi movie herne ho. gopal bidyarthi ko kaam garchha. smriti ko man parne khana samosa ho. gopal lai kheti garne man parchha. aba bhana, smriti lai kun khana man parchha?"
+          },
+          {
+            "role": "nik",
+            "content": "smriti lai samosa man parchha.",
+            "think": "passage ma: \"smriti ko man parne khana samosa ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pahila purnanka ko (farak) ra \"sankhya\" batauchhu: chiya, pharsi, khar, chitiksa, araba, pharsi. tyasaile yo prashna ma uttar tira chhaina.<|/think|>yo prashna: suru ma uttar tira, baya modda pashchim tira, daya modda uttar tira.<|end|>",
+      "answer": "yo prashna: suru ma uttar tira, baya modda pashchim tira, daya modda uttar tira.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "inaruwa",
+        "messages": [
+          {
+            "role": "user",
+            "content": "ganesh le bhote naam ko kukur paleko chha. kalpana le raja naam ko suga paleko chha. gita ahile 28 barsha pugin. kalpana inaruwa ma baschhin. sabai jana khusi thiye.\nkalpana kaha baschha?"
+          },
+          {
+            "role": "nik",
+            "content": "kalpana inaruwa ma baschhin.",
+            "think": "passage ma: \"kalpana inaruwa ma baschhin\"."
+          }
+        ]
+      },
+      "raw": "<|think|>user ko bhawana khusi chha, tyasai anusar jawaf dine.<|/think|>wah, kalpana ko suga chha.<|end|>",
+      "answer": "wah, kalpana ko suga chha.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "cycle chalaune",
+        "messages": [
+          {
+            "role": "user",
+            "content": "kahani: suju le 14 ota jhola kinin. bazaar ma naya pasal khuleko thiyo. suju ko euta machha chha, jasko naam tommy ho. bipin ko man parne khana aalu paratha ho. amrit ko umer 43 barsha ho. bipin lai cycle chalaune man parchha. bipin ko ruchi k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "bipin lai cycle chalaune man parchha.",
+            "think": "passage ma: \"bipin lai cycle chalaune man parchha\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pasal ma molus: pencil: 15 rupiya; aanp: 20 rupiya; kapi: 430 rupiya; syau: 25 rupiya. sabai bhanda mahango kun ho? mol haru tulana garchhu: pencil 15, aanp 20, kapi 43, syau 25. sabai bhanda thulo 43, jun kapi ko ho.<|/think|>sabai bhanda mahango kapi ho, 43 rupiya.<|end|>",
+      "answer": "sabai bhanda mahango kapi ho, 43 rupiya.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "15",
+        "messages": [
+          {
+            "role": "user",
+            "content": "rajesh designer ho. sunita sanga 15 ota kera chha. gita ko euta bhaisi chha, jasko naam tiger ho. ram ko euta kharayo chha, jasko naam kalu ho.\nkera kati ota thiyo sunita ko?"
+          },
+          {
+            "role": "nik",
+            "content": "sunita sanga 15 ota kera chha.",
+            "think": "passage ma: \"sunita sanga 15 ota kera chha\"."
+          }
+        ]
+      },
+      "raw": "<|think|>bharatiya media mamila bibhagle janaeko chha.<|end|>",
+      "answer": "",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "7",
+        "messages": [
+          {
+            "role": "user",
+            "content": "\"bus dhilo aayo. laxmi ko man parne khana sekuwa ho. laxmi ko ruchi flute bajaune ho. sneha sanga 7 liter tel chha.\"\n\ntel kati liter thiyo sneha ko?"
+          },
+          {
+            "role": "nik",
+            "content": "sneha sanga 7 liter tel chha.",
+            "think": "passage ma: \"sneha sanga 7 liter tel chha\"."
+          }
+        ]
+      },
+      "raw": "<|think|>\"buwa\" ko ruchi flue.<|end|>",
+      "answer": "",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "7",
+        "messages": [
+          {
+            "role": "user",
+            "content": "sombar mingma beluka 7 baje bank gayo. mingma lai pauri khelne man parchha. bijay ko man parne khana masu bhat ho. bijay ko euta bhaisi chha, jasko naam raja ho.\nmingma kati baje gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "mingma beluka 7 baje gayo.",
+            "think": "passage ma: \"sombar mingma beluka 7 baje bank gayo\"."
+          }
+        ]
+      },
+      "raw": "<|think|>nafa: pahilo din 0.<|end|>",
+      "answer": "",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "darchula",
+        "messages": [
+          {
+            "role": "user",
+            "content": "\"sabita lai hiking jaane man parchha. lhamu aaitabar pustakalaya gain, bihana 6 baje. sabita darchula ko ho. lhamu pasale ko kaam garchhin.\" sabita ko ghar kaha chha?"
+          },
+          {
+            "role": "nik",
+            "content": "sabita darchula ko ho.",
+            "think": "passage ma: \"sabita darchula ko ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>nata hernu: sabita ko euta kaam: 1 / (2) = 2 din.<|/think|>duitai man parne dherai jaso 2 din.<|end|>",
+      "answer": "duitai man parne dherai jaso 2 din.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "yoga garne",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"utsav le 11 ota kurta kinyo. arjun ko euta bhaisi chha, jasko naam tiger ho. arjun ko shokh yoga garne ho.\" arjun lai k garna man parchha?"
+          },
+          {
+            "role": "nik",
+            "content": "arjun lai yoga garne man parchha.",
+            "think": "passage ma: \"arjun ko shokh yoga garne ho\"."
+          }
+        ]
+      },
+      "raw": "dherai jaso thula manchhe lai 7 dekhi 9 ota kurta kinyo. usle kurta katyo, yo kurta katyo.<|end|>",
+      "answer": "dherai jaso thula manchhe lai 7 dekhi 9 ota kurta kinyo. usle kurta katyo, yo kurta katyo.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "college",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"mangalbar kiran diuso 12 baje college gayo. purna mangalbar chautari gayo, beluka 5 baje. kiran lai momo man parchha.\" kiran kaha gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "kiran college gayo.",
+            "think": "passage ma: \"mangalbar kiran diuso 12 baje college gayo\"."
+          }
+        ]
+      },
+      "raw": "<|think|>user ko jawaf janchnu chha, tyasaile afai step step hisab garchhu. prashna jamma kineko momo ko matra ho, umer ra pariwar ko sankhya yaha kam chhaina. bihana 30 ra beluka 5: 30 + 5 = 35.<|/think|>najik hunuhunchha, tara alikati galti bhayo. sahi jawaf 35 ho, 35 haina. kiran le jamma 35 wata momo kinyo.<|end|>",
+      "answer": "najik hunuhunchha, tara alikati galti bhayo. sahi jawaf 35 ho, 35 haina. kiran le jamma 35 wata momo kinyo.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "8",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"durga le tiger naam ko biralo paleko chha. sarina nuwakot ma baschhin. sanibar sarina raati 8 baje mandir gain. nabin ko shokh cycle chalaune ho. jamuna le 4 bottle pani kinin. nabin khotang ma baschha.\" sarina kati baje gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "sarina raati 8 baje gain.",
+            "think": "passage ma: \"sanibar sarina raati 8 baje mandir gain\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pasaorda: 8 + 4 = 12.<|/think|>Inchyate that that mis a sarna parne ho.<|end|>",
+      "answer": "Inchyate that that mis a sarna parne ho.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "wakil",
+        "messages": [
+          {
+            "role": "user",
+            "content": "kahani: bimala pesa le wakil ho. chiya pasal ma radio bajirahethyo. gaurav ko umer 22 barsha ho. gopal ko ruchi kheti garne ho. bimala k ho, kaam ko hisab le?"
+          },
+          {
+            "role": "nik",
+            "content": "bimala wakil ho.",
+            "think": "passage ma: \"bimala pesa le wakil ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pahila bimala ko ahile ko umer: 22 + 22 = 44 barsha. 7 barsha pachhi: 44 + 7 = 51 barsha.<|/think|>22 barsha pachhi bimala ko umer 51 barsha.<|end|>",
+      "answer": "22 barsha pachhi bimala ko umer 51 barsha.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "10",
+        "messages": [
+          {
+            "role": "user",
+            "content": "\"rupa ahile 26 barsha pugin. sameer pesa le chitrakar ho. bus dhilo aayo. pratik pesa le shikshak ho. pratik ko umer 10 barsha ho.\"\n\npratik kati barsha ko ho?"
+          },
+          {
+            "role": "nik",
+            "content": "pratik 10 barsha ko ho.",
+            "think": "passage ma: \"pratik ko umer 10 barsha ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>10 + 10 = 20.<|/think|>duitai barabar bhag: 20 / 10 = 1.<|end|>",
+      "answer": "duitai barabar bhag: 20 / 10 = 1.",
+      "ok": true
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "pasal",
+        "messages": [
+          {
+            "role": "user",
+            "content": "anil ko ghar itahari ma chha. sabai jana khusi thiye. bihana 7 baje kabita pasal tira gain. aba bhana, kabita kaha gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "kabita pasal gain.",
+            "think": "passage ma: \"bihana 7 baje kabita pasal tira gain\"."
+          }
+        ]
+      },
+      "raw": "<|think|>user ko jawaf janchnu chha, tyasaile afai step step hisab garchhu. pahila pratyek saman ko mol nikalchhu: kera: 7 x 5 = 35, chakleti: 6 x 5 = 30, ball: 7 x 5 = 35. jamma kharcha: 35 + 30 + 35 = 190 rupiya. ani firta: 500 - 190 = 310 rupiya.<|/think|>najik hunuhunchha, tara alikati galti bhayo. sahi jawaf 310 ho, 31 haina. anita le 310 rupiya firta paunchha.<|end|>",
+      "answer": "najik hunuhunchha, tara alikati galti bhayo. sahi jawaf 310 ho, 31 haina. anita le 310 rupiya firta paunchha.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "mimi",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"pramila lekhapal ho. pramila ko euta bhenda chha, jasko naam mimi ho. sushma ko shokh yoga garne ho. pramila aaitabar office gain, beluka 5 baje.\" pramila ko bhenda ko naam k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "pramila ko bhenda ko naam mimi ho.",
+            "think": "passage ma: \"pramila ko euta bhenda chha, jasko naam mimi ho\"."
+          }
+        ]
+      },
+      "raw": "pramila ko bhenda ko madhyam le barchha nata thapchha. ko bhenda ko madhyam le pani bhenda ko prakar ma talachha, dekhi ko rup ma talachha ra jara bata jodera chamkidaina. bhenda ko chhana thulo hunchha.<|end|>",
+      "answer": "pramila ko bhenda ko madhyam le barchha nata thapchha. ko bhenda ko madhyam le pani bhenda ko prakar ma talachha, dekhi ko rup ma talachha ra jara bata jodera chamkidaina. bhenda ko chhana thulo hunchha.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "ilam",
+        "messages": [
+          {
+            "role": "user",
+            "content": "dilip sanga 10 ota sel roti chha. gita lai ful ropne man parchha. mamata ilam bata ho. bihana 10 baje dawa hospital tira gayo. aba bhana, mamata kun thau ko ho?"
+          },
+          {
+            "role": "nik",
+            "content": "mamata ilam ko ho.",
+            "think": "passage ma: \"mamata ilam bata ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>yaskar lai ek line ma milauchhu (10 + 10 = 20, baki 10 - 2 = 8. tyasaile 8:20.<|/think|>abachana ma 8 wata sel roti chha.<|end|>",
+      "answer": "abachana ma 8 wata sel roti chha.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "tiger",
+        "messages": [
+          {
+            "role": "user",
+            "content": "karma ko ruchi basketball khelne ho. sarita aaitabar pasal gain, beluka 7 baje. karma ko euta ghoda chha, jasko naam tiger ho. parbati ko euta kukhura chha, jasko naam goldie ho. parbati ko man parne khana burger ho. asmit professor ho. aba bhana, karma ko ghoda ko naam k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "karma ko ghoda ko naam tiger ho.",
+            "think": "passage ma: \"karma ko euta ghoda chha, jasko naam tiger ho\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pasaor-haru karla makers jasta dekhinchhan. karla maxes ko perb ho: karla makers afno jiwan ko uttar tira modyo.<|/think|>katha le ma byapari, quantkesh, ra mahilaharu ko antar ramro chha.<|end|>",
+      "answer": "katha le ma byapari, quantkesh, ra mahilaharu ko antar ramro chha.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "lekhapal",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"renu ahile 63 barsha pugin. ajay lekhapal ko kaam garchha. renu sanga 9 ota diyo chha. ajay le mimi naam ko biralo paleko chha.\" ajay k kaam garchha?"
+          },
+          {
+            "role": "nik",
+            "content": "ajay lekhapal ho.",
+            "think": "passage ma: \"ajay lekhapal ko kaam garchha\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pahila renu lai kukhura maandaa khutta: 63 x 2 = 126. tara jamma 73 chhan, farak: 73 - 126 = 57. har bakhra le kukhura bhanda 2 khutta badhi dinchha: 57 / 2 = 28. kukhura: 63 - 28 = 35. jaach: 35 x 2 + 28 x 4 = 73, milyo.<|/think|>28 wata bakhra ra 35 wata kukhura chhan.<|end|>",
+      "answer": "28 wata bakhra ra 35 wata kukhura chhan.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "ghoda",
+        "messages": [
+          {
+            "role": "user",
+            "content": "\"sapana le puntu naam ko kukur paleko chha. pradip ko umer 62 barsha ho. aastha ko kaam gayak ko ho. pradip le mimi naam ko ghoda paleko chha. chiya pasal ma radio bajirahethyo. sapana pesa le nurse ho.\" pradip le kun janawar paleko chha?"
+          },
+          {
+            "role": "nik",
+            "content": "pradip le ghoda paleko chha, naam mimi.",
+            "think": "passage ma: \"pradip le mimi naam ko ghoda paleko chha\"."
+          }
+        ]
+      },
+      "raw": "prakash le uttar tirasal gareko ho.<|end|>",
+      "answer": "prakash le uttar tirasal gareko ho.",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "cycle chalaune",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo kura padhera bhana: \"nirajan ko umer 65 barsha ho. nirajan ko ruchi gita gaune ho. ishan pokhara bata ho. ishan lai cycle chalaune man parchha. ishan hajam ko kaam garchha. sombar nirajan diuso 3 baje pokhari gayo.\" ishan ko ruchi k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "ishan lai cycle chalaune man parchha.",
+            "think": "passage ma: \"ishan lai cycle chalaune man parchha\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pahilo kura -3 mahina, dosro ra tesro kista ma farak chha (3 - 1) = 1/3).<|end|>",
+      "answer": "",
+      "ok": false
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "khichadi",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo padha: \"phurba lai football khelne man parchha. kamal lai movie herne man parchha. phurba ko euta suga chha, jasko naam chhoti ho. beluka halka pani paryo. kamal lai sabai bhanda khichadi mitho lagchha. phurba solukhumbu ma baschha. kamal ko umer 57 barsha ho.\" kamal ko favourite khana k ho?"
+          },
+          {
+            "role": "nik",
+            "content": "kamal lai khichadi man parchha.",
+            "think": "passage ma: \"kamal lai sabai bhanda khichadi mitho lagchha\"."
+          }
+        ]
+      },
+      "raw": "<|think|>pahilo niyam sabai bhanda machha. phurba model ho, tyasaile niyam kukur ma pani lagu hunchha.<|/think|>ho, phurba ko pani fal ho.<|end|>",
+      "answer": "ho, phurba ko pani fal ho.",
+      "ok": false
+    }
+  ]
+}
