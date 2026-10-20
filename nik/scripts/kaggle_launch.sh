@@ -19,11 +19,12 @@ case "$MODE" in
 esac
 DATASETS='[]'
 case "$MODE" in
+  v4c) SRC=kaggle_v4c.py; DATASETS="[\"$USER_/nik-ship\"]"; SOURCES="[\"$USER_/nik-data\"]";;
   sft3) SRC=kaggle_sft3.py; DATASETS="[\"$USER_/nik-cluster-out\"]"; SOURCES="[\"$USER_/nik-data\"]";;
   tts2) SRC=kaggle_tts2.py; DATASETS='["nepalicoder/nepali-tts"]'; SOURCES="[\"$USER_/nik-train-tts\"]";;
   tts*) SRC=kaggle_tts.py; DATASETS='["nepalicoder/nepali-tts"]';;
 esac
-MINUTES=${TTS_MIN:-270}; [ "$MODE" = "sft3" ] && MINUTES=${SFT3_MIN:-150}
+MINUTES=${TTS_MIN:-270}; [ "$MODE" = "sft3" ] && MINUTES=${SFT3_MIN:-150}; [ "$MODE" = "v4c" ] && MINUTES=${V4C_MIN:-90}
 sed "s/__MODE__/$MODE/; s/__MIN__/$MINUTES/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
 cat > "$D/kernel-metadata.json" <<JSON
 { "id": "$USER_/nik-train-$MODE", "title": "nik-train-$MODE", "code_file": "nik_train.py",
