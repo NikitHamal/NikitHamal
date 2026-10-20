@@ -240,7 +240,13 @@
     seg($('sSpeak'), state.opts.speak ? 'on' : 'off', (v) => { state.opts.speak = v === 'on'; save(); });
 
     // ---------- voice (NikTTS, on-device; loaded on first use)
-    let ttsP = null;
+    let ttsP = null, voiceReady = null;
+    fetch('/nik/web/tts/tts.json', { method: 'HEAD', cache: 'no-cache' })
+      .then((r) => { voiceReady = r.ok; document.querySelectorAll('.say-btn').forEach(markSay); })
+      .catch(() => { voiceReady = false; });
+    function markSay(b) {
+      if (voiceReady === false) { b.textContent = 'suna (awaj training ma)'; b.title = 'Nik\'s voice is still training on Kaggle, it will appear here automatically'; b.disabled = true; b.style.opacity = '.6'; }
+    }
     const getTTS = () => (ttsP ||= import('/nik/web/tts.js').then((m) => m.NikTTS.load('/nik/web/tts')));
     async function speak(text, btn) {
       try {
@@ -299,7 +305,7 @@
       const copy = el('button', null, 'copy');
       copy.onclick = () => navigator.clipboard.writeText(m.content).then(() => { copy.textContent = 'copied'; setTimeout(() => (copy.textContent = 'copy'), 1200); });
       const retry = el('button', null, 'feri lekha'); retry.title = 'regenerate'; retry.onclick = () => regenerate(row);
-      const say = el('button', null, 'suna'); say.title = 'listen (on-device voice)'; say.onclick = () => speak(m.content, say);
+      const say = el('button', 'say-btn', 'suna'); say.title = 'listen (on-device voice)'; say.onclick = () => speak(m.content, say); markSay(say);
       meta.append(say, copy, retry);
       row._say = say;
     }
