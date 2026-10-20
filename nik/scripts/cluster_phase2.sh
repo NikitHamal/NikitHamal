@@ -18,7 +18,8 @@ echo "[phase2 $(date -u +%H:%M:%S)] data ready; waiting for pretraining to finis
 # cluster_run.sh logs "sft N min" only after the pretrain checkpoint is saved
 until grep -qE '\] sft [0-9]+ min' "$OUT/run.log" 2>/dev/null; do sleep 10; done
 echo "[phase2 $(date -u +%H:%M:%S)] pretraining done; stopping the old SFT"
-pkill -f 'cluster_run.sh' || true
+# kill only the phase-1 runner (by PID, never this script or its children)
+for pid in $(pgrep -f 'bash .*nik/scripts/cluster_run\.sh' || true); do [ "$pid" != "$$" ] && kill "$pid" 2>/dev/null || true; done
 pkill -f 'train.py --stage sft' || true
 sleep 15
 pkill -9 -f 'train.py --stage sft' || true
