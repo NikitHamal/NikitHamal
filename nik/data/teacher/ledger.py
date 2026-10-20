@@ -6,11 +6,11 @@ not mis-add; it binds the wrong quantity or picks the wrong operation (12/12 ins
 An equation-only trace reproduces the same mistake. So every trace here starts with an
 *extractive* ledger that binds each number to a role before any arithmetic:
 
-    dieko: [items0=12] [add1=5] [buy2_count=3] [buy2_price=20] [note3=34]
-    sodheko: items_final
-    sutra: items_final = items0 + add1 - buy2_count
-    hisab: 12 + 5 = 17; 17 - 3 = 14
-    jaach: 14 + 3 = 17
+    dieko: [money0=1200] [buy1_count=3] [buy1_price=150] [items0=29]
+    sodheko: money_final
+    sutra: cost1 = buy1_count * buy1_price; money_final = money0 - cost1
+    hisab: 3 * 150 = 450; 1200 - 450 = 750
+    jaach: 750 + 450 = 1200
 
 Every `[role=value]` value is copied verbatim from the user turn, so a JS validator can
 reject a hallucinated binding at decode time. `sample_variants` renders the same event
@@ -33,8 +33,8 @@ ITEMS = [('kalam', 'wata'), ('kapi', 'wata'), ('syau', 'wata'), ('anda', 'wata')
          ('pencil', 'wata'), ('biskut', 'packet')]
 PEOPLE = ['sathi', 'didi', 'bhai', 'aama', 'buwa', 'hajaram', 'chhimeki', 'shikshak', 'mama', 'kauju']
 EVENTS = ['add', 'remove', 'buy', 'sell', 'pack', 'share']
-DISTRACT = [('age', '{n} barsha ho'), ('windows', 'ghar ma {n} wata jhyal chhan'),
-            ('minutes', 'school pugna {n} minute lagchha'), ('degrees', 'aaja tapkram {n} degree chha')]
+DISTRACT = [('age', '{name} {n} barsha ko ho'), ('windows', '{name} ko ghar ma {n} wata jhyal chhan'),
+            ('minutes', '{name} lai school pugna {n} minute lagchha'), ('degrees', 'aaja tapkram {n} degree chha')]
 
 
 def _used_numbers(spec, row_bindings):
@@ -53,9 +53,9 @@ def make_spec(R):
     events = []
     for _ in range(n_events):
         events.append(R.choice(EVENTS))
-    if money_ask and not any(e in ('buy', 'sell') for e in events):
-        events[R.randrange(len(events))] = R.choice(['buy', 'sell'])
-    if not money_ask and not any(e in ('add', 'remove', 'buy', 'sell', 'pack', 'share') for e in events):
+    if money_ask:
+        events[R.randrange(len(events))] = 'buy'   # always renders; guarantees a money step
+    elif not any(e in ('add', 'buy', 'pack') for e in events):
         events[0] = 'add'
     distractor = R.choice(DISTRACT) if R.random() < 0.35 else None
     return {'name': name, 'item': item, 'unit': unit, 'start_items': start_items,
@@ -86,19 +86,29 @@ def _say(variant, name, item, event, n, p, g, e, m, who):
                 f'{g} wata baakas aaye, pratyek ma {e} wata {item} thiyo.']
     else:
         opts = [f'usle sabai {item} {m} jana ma barabar baadyo ra aafno bhag matra rakhyo.',
-                f'sabai {item} {m} jana ma barabar bhag lagaune bhandaa ek bhag matra rakhyo.']
+                f'sabai {item} {m} jana ma barabar bhag lagaune bhanda ek bhag matra rakhyo.']
     return opts[variant % len(opts)]
 
 
 def render(spec, R):
-    """Render one number assignment for the spec: sentences, bindings, verified steps."""
+    """Render one number assignment: sentences, bindings, and a query-focused chain.
+
+    The `hisab` chain contains only the steps needed for `sodheko`, in the same
+    order as `sutra`, and its last result is the gold. Every operand is either a
+    `dieko` value or an earlier hisab result. Values for the other state stay in
+    `dieko` as distractors.
+    """
     name, item, unit = spec['name'], spec['item'], spec['unit']
     items, money = spec['start_items'], spec['start_money']
     bindings = OrderedDict([('items0', items), ('money0', money)])
     sents = [f'{name} sanga {items} wata {item} chha.', f'{name} sanga {money} rupiya pani chha.']
-    steps, checks = [], []
-    sym = 'items0'
-    sym_money = 'money0'
+    item_steps, money_steps = [], []
+    item_var, money_var = 'items0', 'money0'
+    item_n = money_n = 0
+
+    def push(steps, target, expr, eq, value, reverse):
+        steps.append({'target': target, 'expr': expr, 'eq': eq, 'value': value, 'reverse': reverse})
+
     for i, ev in enumerate(spec['events'], 1):
         who = spec['who'][i - 1]
         variant = spec['surface']['events'][i - 1]
@@ -107,19 +117,21 @@ def render(spec, R):
             before = items; items += n
             bindings[f'add{i}'] = n
             sents.append(_say(variant, name, item, 'add', n, 0, 0, 0, 0, who))
-            steps.append(f'{before} + {n} = {items}')
-            checks.append(('items_final', f'{items} - {n} = {before}'))
-            sym += f' + add{i}'
+            item_n += 1
+            push(item_steps, f'items{item_n}', f'{item_var} + add{i}',
+                 f'{before} + {n} = {items}', items, f'{items} - {n} = {before}')
+            item_var = f'items{item_n}'
         elif ev == 'remove' and items >= 1:
             n = R.randint(1, items)
             before = items; items -= n
             bindings[f'remove{i}'] = n
             sents.append(_say(variant, name, item, 'remove', n, 0, 0, 0, 0, who))
-            steps.append(f'{before} - {n} = {items}')
-            checks.append(('items_final', f'{items} + {n} = {before}'))
-            sym += f' - remove{i}'
+            item_n += 1
+            push(item_steps, f'items{item_n}', f'{item_var} - remove{i}',
+                 f'{before} - {n} = {items}', items, f'{items} + {n} = {before}')
+            item_var = f'items{item_n}'
         elif ev == 'buy':
-            n = R.randint(1, min(8, max(1, items + 8)))
+            n = R.randint(1, 8)
             p = R.randint(2, 50) * 5
             if n * p > money:
                 n = max(1, money // max(1, p))
@@ -131,12 +143,15 @@ def render(spec, R):
             bindings[f'buy{i}_count'] = n
             bindings[f'buy{i}_price'] = p
             sents.append(_say(variant, name, item, 'buy', n, p, 0, 0, 0, who))
-            steps.append(f'{n} * {p} = {cost}')
-            steps.append(f'{before_m} - {cost} = {money}')
-            checks.append(('items_final', f'{items} - {n} = {before_i}'))
-            checks.append(('money_final', f'{money} + {cost} = {before_m}'))
-            sym += f' + buy{i}_count'
-            sym_money += f' - buy{i}_count * buy{i}_price'
+            item_n += 1
+            push(item_steps, f'items{item_n}', f'{item_var} + buy{i}_count',
+                 f'{before_i} + {n} = {items}', items, f'{items} - {n} = {before_i}')
+            item_var = f'items{item_n}'
+            push(money_steps, f'cost{i}', f'buy{i}_count * buy{i}_price', f'{n} * {p} = {cost}', cost, None)
+            money_n += 1
+            push(money_steps, f'money{money_n}', f'{money_var} - cost{i}',
+                 f'{before_m} - {cost} = {money}', money, f'{money} + {cost} = {before_m}')
+            money_var = f'money{money_n}'
         elif ev == 'sell' and items >= 1:
             n = R.randint(1, items)
             p = R.randint(2, 40) * 5
@@ -145,22 +160,26 @@ def render(spec, R):
             bindings[f'sell{i}_count'] = n
             bindings[f'sell{i}_price'] = p
             sents.append(_say(variant, name, item, 'sell', n, p, 0, 0, 0, who))
-            steps.append(f'{n} * {p} = {n * p}')
-            steps.append(f'{before_m} + {n * p} = {money}')
-            checks.append(('items_final', f'{items} + {n} = {before_i}'))
-            checks.append(('money_final', f'{money} - {n * p} = {before_m}'))
-            sym += f' - sell{i}_count'
-            sym_money += f' + sell{i}_count * sell{i}_price'
+            item_n += 1
+            push(item_steps, f'items{item_n}', f'{item_var} - sell{i}_count',
+                 f'{before_i} - {n} = {items}', items, f'{items} + {n} = {before_i}')
+            item_var = f'items{item_n}'
+            push(money_steps, f'revenue{i}', f'sell{i}_count * sell{i}_price', f'{n} * {p} = {n * p}', n * p, None)
+            money_n += 1
+            push(money_steps, f'money{money_n}', f'{money_var} + revenue{i}',
+                 f'{before_m} + {n * p} = {money}', money, f'{money} - {n * p} = {before_m}')
+            money_var = f'money{money_n}'
         elif ev == 'pack':
             g, e = R.randint(2, 6), R.randint(2, 12)
-            before = items; items += g * e
+            before = items; add = g * e; items += add
             bindings[f'pack{i}_groups'] = g
             bindings[f'pack{i}_per'] = e
             sents.append(_say(variant, name, item, 'pack', 0, 0, g, e, 0, who))
-            steps.append(f'{g} * {e} = {g * e}')
-            steps.append(f'{before} + {g * e} = {items}')
-            checks.append(('items_final', f'{items} - {g * e} = {before}'))
-            sym += f' + pack{i}_groups * pack{i}_per'
+            push(item_steps, f'pack_add{i}', f'pack{i}_groups * pack{i}_per', f'{g} * {e} = {add}', add, None)
+            item_n += 1
+            push(item_steps, f'items{item_n}', f'{item_var} + pack_add{i}',
+                 f'{before} + {add} = {items}', items, f'{items} - {add} = {before}')
+            item_var = f'items{item_n}'
         elif ev == 'share' and items >= 2:
             divs = [m for m in range(2, 7) if items % m == 0]
             if not divs:
@@ -169,9 +188,10 @@ def render(spec, R):
             before = items; items //= m
             bindings[f'share{i}_people'] = m
             sents.append(_say(variant, name, item, 'share', 0, 0, 0, 0, m, who))
-            steps.append(f'{before} / {m} = {items}')
-            checks.append(('items_final', f'{items} * {m} = {before}'))
-            sym = f'({sym}) / share{i}_people'
+            item_n += 1
+            push(item_steps, f'items{item_n}', f'{item_var} / share{i}_people',
+                 f'{before} / {m} = {items}', items, f'{items} * {m} = {before}')
+            item_var = f'items{item_n}'
     # one distractor fact: bound in the ledger, never used in the arithmetic
     if spec['distractor']:
         kind, tmpl = spec['distractor']
@@ -184,27 +204,31 @@ def render(spec, R):
             v = 61
         role = f'note{kind}'
         bindings[role] = v
-        sents.insert(min(spec['surface']['distractor_pos'], len(sents)), f'{name} ko {tmpl.format(n=v)}.')
+        sents.insert(min(spec['surface']['distractor_pos'], len(sents)), f'{tmpl.format(name=name, n=v)}.')
     ask = spec['ask']
-    gold = money if ask == 'money_final' else items
+    steps = item_steps if ask == 'items_final' else money_steps
+    if not steps:
+        return None
+    steps[-1]['target'] = ask
+    gold = steps[-1]['value']
+    sutra = '; '.join(f'{s["target"]} = {s["expr"]}' for s in steps)
+    hisab = '; '.join(s['eq'] for s in steps)
+    check = steps[-1]['reverse']
     qv = spec['surface']['question'] % 3
     if ask == 'items_final':
         q = [f'antya ma {name} sanga kati wata {item} chha?',
              f'aba jamma kati {item} bhayo?', f'kati wata {item} baki chha?'][qv]
         answer = f'antya ma {gold} wata {item} hunchha.'
-        sutra = f'items_final = {sym}'
         unit_text = f'wata {item}'
     else:
         q = [f'antya ma {name} sanga kati rupiya chha?', f'aba kati rupiya baki chha?',
              f'usko sanga kati paisa baki bhayo?'][qv]
         answer = f'antya ma {gold} rupiya hunchha.'
-        sutra = f'money_final = {sym_money}'
         unit_text = 'rupiya'
-    check = next((c for t, c in reversed(checks) if t == ask), f'{gold} = {gold}')
     ledger = (f'dieko: ' + ' '.join(f'[{k}={v}]' for k, v in bindings.items()) + '\n'
               f'sodheko: {ask}\n'
               f'sutra: {sutra}\n'
-              f'hisab: ' + ('; '.join(steps) if steps else f'{gold} = {gold}') + '\n'
+              f'hisab: {hisab}\n'
               f'jaach: {check}')
     question = ' '.join(sents) + ' ' + q
     return {'cat': 'math-word-ledger', 'gold': str(gold),
@@ -214,7 +238,11 @@ def render(spec, R):
 
 
 def sample(R):
-    return render(make_spec(R), R)
+    for _ in range(10):
+        row = render(make_spec(R), R)
+        if row is not None:
+            return row
+    raise RuntimeError('ledger: could not render a spec with a non-empty asked chain')
 
 
 _EVENT_ROLE = {'add': 'add{}', 'remove': 'remove{}', 'buy': 'buy{}_count', 'sell': 'sell{}_count',
@@ -238,6 +266,8 @@ def sample_variants(R, k=3, attempts=6):
     best_score, best = -1, None
     for _ in range(attempts):
         variants = [render(spec, R) for _ in range(k)]
+        if any(v is None for v in variants):
+            continue
         score = sum(_complete(spec, v) for v in variants)
         if score > best_score:
             best_score, best = score, variants
