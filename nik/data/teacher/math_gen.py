@@ -334,7 +334,24 @@ def clock(R):
     return ex(q, think + f' tyasaile {eh}:{em:02d}.', f'class {eh}:{em:02d} baje sakiyo.', f'{eh}:{em:02d}', 'time')
 
 
-FAMILIES = [(add_column, 3), (sub_column, 3), (mul_partial, 3), (division, 2), (fraction_add, 2), (fraction_of, 2), (percent_of, 2),
+def give_get(R):
+    """The everyday story shapes Nik scored worst on in self-improvement (16-25%)."""
+    n, (it, unit) = pick(R, NAMES), pick(R, ITEMS)
+    a = R.randint(5, 999)
+    if R.random() < 0.5:
+        b = R.randint(2, 500)
+        who = pick(R, ['aama le', 'buwa le', 'sathi le', 'didi le', 'hajurbuwa le'])
+        q = f'{n} sanga {a} {unit} {it} thiyo. {who} {b} {unit} thap dinubhayo. aba jamma kati bhayo?'
+        think = f'dieko: pahila {a}, thap {b}. sodheko: jamma. thap bhaneko jodnu. {a} + {b} = {a + b}. jaach: {a + b} - {b} = {a}, milyo.'
+        return ex(q, think, f'aba {n} sanga jamma {a + b} {unit} {it} chha.', a + b, 'multistep')
+    b = R.randint(1, a)
+    to = pick(R, ['sathi lai', 'bhai lai', 'chhimeki lai', 'school ma'])
+    q = f'{n} sanga {a} {unit} {it} chha. usle {b} {unit} {to} diyo. aba {n} sanga kati {it} baki chha?'
+    think = f'dieko: suru ma {a}, diyo {b}. sodheko: baki. dinu bhaneko ghatnu. {a} - {b} = {a - b}. jaach: {a - b} + {b} = {a}, milyo.'
+    return ex(q, think, f'{n} sanga aba {a - b} {unit} {it} baki chha.', a - b, 'multistep')
+
+
+FAMILIES = [(add_column, 3), (sub_column, 3), (mul_partial, 5), (division, 3.5), (give_get, 3), (fraction_add, 2), (fraction_of, 2), (percent_of, 2),
             (discount, 1.5), (shopping, 2), (profit_loss, 1.5), (simple_interest, 1.5), (average, 1.5), (speed, 2), (units, 2),
             (geometry, 2), (linear_eq, 2), (ratio, 1.5), (lcm_hcf, 1.5), (prime_check, 1), (squares, 1), (bus_passengers, 1.5),
             (ages, 1.5), (savings, 1.5), (clock, 1)]
