@@ -46,6 +46,11 @@ goals, state, decisions, and open tasks. Update it whenever something important 
    fix = `augment.py` phrasing augmentation. Math: 3-digit addition broken because the training scratchpads
    used size-specific tricks ("das ko thau") => fix = uniform column algorithm (`colmath.py`).
 
+4. NikBench baseline, live model (n=4/category, 72 items): **43.1%** overall: arith 47.9% (add5 0/4, sub3 0/4, div4 0/4), reason 66.7%,
+   **multi-step word problems 0/12**. The model doesn't read word problems; it recites the closest training problem with its numbers.
+   Fix: `data/teacher/compose.py`: compositional problems (random 2-5 event chains, distractors, steps grounded per sentence),
+   after Physics of LMs 2.1 (iGSM). 14% of the mix; colmath 10%.
+
 ## Current state / open tasks (update me)
 - [ ] Kaggle `nik-train-sft3` (queued 2026-10-20 ~12:35 UTC) clones main when it starts, so it trains on augmented phrasing + column math
       (colmath.py) from the live model and runs NikBench before/after. Fetch: `kaggle kernels output iamnikithamal/nik-train-sft3 -p /tmp/sft3 --file-pattern '^out/'`.
