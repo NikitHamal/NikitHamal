@@ -10,7 +10,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import colmath, math_gen, math2, reason_gen, reason2, understand, understand2  # noqa: E402
+import colmath, compose, math_gen, math2, reason_gen, reason2, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -44,18 +44,20 @@ def one(R):
 
 def _one(R):
     k = R.random()
-    if k < 0.12:     # one general column algorithm for + - x / at every size (1-6 digits)
+    if k < 0.10:     # one general column algorithm for + - x / at every size (1-6 digits)
         return to_example(colmath.sample(R), 'math', R)
-    if k < 0.26:
+    if k < 0.24:     # compositional multi-step word problems (no fixed template; grounded steps)
+        return to_example(compose.sample(R), 'math', R)
+    if k < 0.33:
         return to_example(math_gen.sample(R), 'math', R)
-    if k < 0.37:
+    if k < 0.42:
         return to_example(math2.sample(R), 'math', R)
-    if k < 0.49:
+    if k < 0.52:
         return to_example(reason_gen.sample(R), 'reason', R)
-    if k < 0.58:
+    if k < 0.60:
         e = reason2.sample(R)
         return {'cat': f'reason-{e["kind"]}', 'gold': e['gold'], 'messages': e['messages']}
-    if k < 0.88:     # understanding: answers built from the user's own words (anti-memorisation)
+    if k < 0.87:     # understanding: answers built from the user's own words (anti-memorisation)
         e = (understand if R.random() < 0.5 else understand2).sample(R)
         return {'cat': f'understand-{e["kind"]}', 'gold': e['gold'], 'messages': e['messages']}
     if k < 0.94:
