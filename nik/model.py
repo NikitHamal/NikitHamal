@@ -314,12 +314,22 @@ def _sample(logits, temperature: float, top_p: float, generator=None):
 
 @torch.no_grad()
 def generate_ar(model, prompt: list[int], max_new: int = 128, temperature: float = 0.7, top_p: float = 0.9,
-                stop: tuple[int, ...] = (2, 9)):
+                stop: tuple[int, ...] = (2, 9), calc=None):
+    """calc: optional calc.Calc -> verified arithmetic decoding (digits after "EXPR =" are computed exactly)."""
     ids = list(prompt)
     dev = next(model.parameters()).device
-    for _ in range(max_new):
+    ban = False
+    while len(ids) - len(prompt) < max_new:
+        if calc is not None:
+            f = calc.force(ids[len(prompt):])
+            if f:
+                ids += f; ban = True
+                continue
         ctx = torch.tensor([ids[-model.cfg.ctx:]], device=dev)
-        nxt = _sample(model(ctx)[0, -1], temperature, top_p)
+        logits = model(ctx)[0, -1]
+        if ban:                                   # the forced number is complete: no digit may be appended
+            logits = logits.clone(); logits[list(calc.digit_ids)] = -1e9; ban = False
+        nxt = _sample(logits, temperature, top_p)
         ids.append(nxt)
         if nxt in stop:
             break

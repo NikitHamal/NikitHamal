@@ -122,6 +122,7 @@ def main():
     ap.add_argument('--model', default='')
     ap.add_argument('--tok', default=os.path.join(os.path.dirname(__file__), 'web/model/tokenizer.json'))
     ap.add_argument('--n', type=int, default=15, help='items per arithmetic category (word/reason get 3n each)')
+    ap.add_argument('--calc', action='store_true', help='verified arithmetic decoding (calc.py)')
     ap.add_argument('--out', default='')
     ap.add_argument('--dump', default='', help='write the items as JSON (for web/test_engine.mjs) and exit')
     a = ap.parse_args()
@@ -130,11 +131,13 @@ def main():
         return
     torch.set_grad_enabled(False)
     tok = Tokenizer.load(a.tok)
+    from calc import Calc
+    calc = Calc(tok) if a.calc else None
     model = load_any(a.model)
     res, rows = {}, []
     for cat, q, g in items(a.n):
         ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
-        text = tok.decode(generate_ar(model, ids[:-1] + [6], 320, temperature=0.0))
+        text = tok.decode(generate_ar(model, ids[:-1] + [6], 320, temperature=0.0, calc=calc))
         ans = text.split('<|/think|>')[-1]
         ok = final_number(ans) == str(g)
         c = res.setdefault(cat, [0, 0]); c[0] += ok; c[1] += 1
