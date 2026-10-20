@@ -26,6 +26,10 @@ log() { echo "[nik $(date -u +%H:%M:%S) +$(( ($(date +%s) - T0) / 60 ))m] $*" | 
 pct() { python3 -c "print(max(1, int($BUDGET_MIN * $1 / 100)))"; }
 
 python3 -m pip -q install numpy pyarrow kaggle 2>/dev/null || true
+# results only survive the node if they can be uploaded: check the Kaggle login before spending GPU time
+if [ "${UPLOAD:-1}" = "1" ] && ! kaggle datasets list --mine >/dev/null 2>&1; then
+  echo "ERROR: Kaggle login missing (export KAGGLE_API_TOKEN=...). Results could not be uploaded. Set UPLOAD=0 to run anyway."; exit 1
+fi
 NGPU=$(python3 -c "import torch; print(max(1, torch.cuda.device_count()))")
 python3 -c "import torch; print('torch', torch.__version__, 'gpus', torch.cuda.device_count(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu', 'bf16', torch.cuda.is_available() and torch.cuda.is_bf16_supported())" | tee -a "$OUT/run.log"
 LAUNCH="torchrun --standalone --nproc_per_node $NGPU"
@@ -115,6 +119,6 @@ if [ "${UPLOAD:-1}" = "1" ] && command -v kaggle >/dev/null && { [ -n "${KAGGLE_
   U=$(kaggle config view | awk '/username/ {print $3}')
   rm -f "$OUT"/ckpt-*.pt.tmp
   printf '{"title":"nik-cluster-out","id":"%s/nik-cluster-out","licenses":[{"name":"CC0-1.0"}]}' "$U" > "$OUT/dataset-metadata.json"
-  kaggle datasets create -p "$OUT" -q 2>/dev/null || kaggle datasets version -p "$OUT" -m "run $(date -u +%F-%H%M)" -q
+  kaggle datasets create -p "$OUT" -q || kaggle datasets version -p "$OUT" -m "run $(date -u +%F-%H%M)" -q
   log "uploaded to kaggle dataset $U/nik-cluster-out (private)"
 fi
