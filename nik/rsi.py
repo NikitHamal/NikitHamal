@@ -107,7 +107,7 @@ def heldout(model, tok, data, n_per_level=8, seed=777):
 
 
 @torch.no_grad()
-def probe_and_collect(model, tok, levels, n_problems, k, temperature, R, minutes):
+def probe_and_collect(model, tok, levels, n_problems, k, temperature, R, minutes, with_counts=False):
     """Sample K paths per problem at the current levels; return verified traces + pass rates."""
     stats = {s: [0, 0] for s in SKILLS}          # [samples, correct, (+1 per rationalized trace)]
     traces, t0 = [], time.time()
@@ -137,7 +137,34 @@ def probe_and_collect(model, tok, levels, n_problems, k, temperature, R, minutes
             break
     rates = {s: (v[1] / v[0] if v[0] else 0.0) for s, v in stats.items()}
     print('rationalized traces:', sum(len(v) - 2 for v in stats.values()), flush=True)
+    if with_counts:
+        return traces, rates, {s: [v[0], v[1]] for s, v in stats.items()}
     return traces, rates
+
+
+def collect_parallel(a, champ, levels, g, k):
+    """Run probe_and_collect on every GPU at once (one process per GPU, disjoint seeds)."""
+    n = a.workers
+    procs, outs = [], []
+    for w in range(n):
+        o = os.path.join(a.out, f'collect_g{g}_w{w}.json')
+        outs.append(o)
+        env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(w)) if torch.cuda.is_available() else dict(os.environ)
+        cmd = [sys.executable, os.path.abspath(__file__), '--collect-worker', o, '--init', champ, '--data', a.data, '--tok', a.tok,
+               '--levels', json.dumps(levels), '--seed', str(10_000 + 97 * g + w), '--problems', str(max(1, a.problems // n)),
+               '--k', str(k), '--collect-min', str(a.collect_min)]
+        procs.append(subprocess.Popen(cmd, env=env))
+    for p in procs:
+        p.wait()
+    traces, tot = [], {s: [0, 0] for s in SKILLS}
+    for o in outs:
+        if not os.path.exists(o):
+            continue
+        d = json.load(open(o))
+        traces += d['traces']
+        for s, (n_, c_) in d['counts'].items():
+            tot[s][0] += n_; tot[s][1] += c_
+    return traces, {s: (v[1] / v[0] if v[0] else 0.0) for s, v in tot.items()}
 
 
 def main():
@@ -156,11 +183,21 @@ def main():
     ap.add_argument('--ppl-tolerance', type=float, default=0.05, help='max relative ppl increase allowed at the gate')
     ap.add_argument('--min-traces', type=int, default=50)
     ap.add_argument('--heldout-n', type=int, default=8, help='held-out problems per skill per level')
+    ap.add_argument('--workers', type=int, default=1, help='parallel collection processes (one per GPU)')
+    ap.add_argument('--collect-worker', default=None, help=argparse.SUPPRESS)
+    ap.add_argument('--levels', default=None, help=argparse.SUPPRESS)
+    ap.add_argument('--seed', type=int, default=0, help=argparse.SUPPRESS)
     ap.add_argument('--budget-min', type=float, default=0, help='stop starting new generations after this many minutes')
     a = ap.parse_args()
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
-    os.makedirs(a.out, exist_ok=True)
     tok = Tokenizer.load(a.tok)
+    if a.collect_worker:                      # child process of collect_parallel
+        model = load(a.init, dev)
+        R = random.Random(a.seed)
+        traces, rates, counts = probe_and_collect(model, tok, json.loads(a.levels), a.problems, a.k, 0.8, R, a.collect_min, with_counts=True)
+        json.dump({'traces': traces, 'counts': counts}, open(a.collect_worker, 'w'), ensure_ascii=False)
+        return
+    os.makedirs(a.out, exist_ok=True)
     logf = open(os.path.join(a.out, 'log.jsonl'), 'a')
     T0 = time.time()
 
@@ -173,12 +210,17 @@ def main():
     print('gen 0 held-out', json.dumps(best), flush=True)
     logf.write(json.dumps({'gen': 0, 'heldout': best, 'levels': levels}) + '\n'); logf.flush()
 
+    gen_min = a.collect_min + a.train_min + 3          # first estimate of one generation's length
     for g in range(1, a.generations + 1):
-        if a.budget_min and (time.time() - T0) / 60 > a.budget_min:
-            print('budget reached', flush=True)
+        tg = time.time()
+        if a.budget_min and (time.time() - T0) / 60 + gen_min > a.budget_min:
+            print(f'budget reached (a generation takes ~{gen_min:.0f} min)', flush=True)
             break
         R = random.Random(10_000 + g)
-        traces, rates = probe_and_collect(model, tok, levels, a.problems, k, 0.8, R, a.collect_min)
+        if a.workers > 1:
+            traces, rates = collect_parallel(a, champ, levels, g, k)
+        else:
+            traces, rates = probe_and_collect(model, tok, levels, a.problems, k, 0.8, R, a.collect_min)
         # self-curriculum: move each skill toward its competence edge
         new_levels = dict(levels)
         for s, r in rates.items():
@@ -226,6 +268,7 @@ def main():
         logf.write(json.dumps({'gen': g, 'heldout': score, 'champion': best, 'promoted': promoted, 'traces': len(traces),
                                'rates': rates, 'levels': levels, 'k': k, 'minutes': (time.time() - T0) / 60}) + '\n'); logf.flush()
         shutil.rmtree(cand_dir, ignore_errors=True) if not promoted else None
+        gen_min = (time.time() - tg) / 60
     print('final champion', json.dumps(best), flush=True)
 
 
