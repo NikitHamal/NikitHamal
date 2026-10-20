@@ -22,6 +22,7 @@ import { NikModel, Tokenizer, parseBin } from './nik.js';
 const PRESETS = {
   'nik-0.1':   { d: 384, n_unique: 12, n_repeat: 2, heads: 12, kv_heads: 4, ffn: 1024, ctx: 512, abacus: 20 },
   'nik-0.1r3': { d: 384, n_unique: 12, n_repeat: 3, heads: 12, kv_heads: 4, ffn: 1024, ctx: 512, abacus: 20 },
+  'nik-0.1u14': { d: 384, n_unique: 14, n_repeat: 2, heads: 12, kv_heads: 4, ffn: 1024, ctx: 512, abacus: 20 },
   'nik-0.2f':  { d: 640, n_unique: 16, n_repeat: 2, heads: 10, kv_heads: 2, ffn: 1792, ctx: 512, abacus: 20 },
   'nik-0.2t':  { d: 640, n_unique: 16, n_repeat: 2, heads: 10, kv_heads: 2, ffn: 1792, ctx: 512, abacus: 20, ternary: true },
 };
@@ -230,4 +231,9 @@ if (has('json')) {
   console.log(`FLOPs/token    : ${out.gflopsPerToken} GFLOP`);
   console.log(`speed          : ${out.msPerToken} ms/token  =  ${out.tokPerSec} tok/s   (prefill ${out.prefillMs} ms)`);
   console.log(`budget         : in ${BUDGET_S}s this model can emit ~${out.tokensInBudget} tokens`);
+  if (fmt === 'ternary') {
+    console.log(`note           : measured with the int8 engine path (${out.weightBytesPerToken} weight bytes/token).`);
+    console.log(`                a 2-bit kernel would stream ${out.fileBytes} bytes/token instead -> the real ternary`);
+    console.log(`                speed is between this number and ${(out.tokPerSec * 0 + (1000 / (out.msPerToken * 3.6))).toFixed(1)} tok/s (FLOP-scaled).`);
+  }
 }
