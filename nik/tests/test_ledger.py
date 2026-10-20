@@ -69,6 +69,30 @@ class GeneratedRows(unittest.TestCase):
                     ledger_scoring.has_value(user, value),
                     f'row {index}: role {role} value {value!r} is not in user turn {user!r}')
 
+    def test_hisab_derives_gold(self):
+        # Every hisab step must use only dieko values or earlier results, and the
+        # last result must be the gold. This catches skipped planning steps that
+        # audit.check cannot see (the final answer can still be right).
+        rng = random.Random(23)
+        for index in range(5000):
+            row = ledger.sample(rng)
+            think = row['messages'][1]['think']
+            dieko = re.search(r'dieko:\s*(.*)', think).group(1)
+            hisab = re.search(r'hisab:\s*(.*)', think).group(1)
+            allowed = set(re.findall(r'\[[^=]+=([^\]]+)\]', dieko))
+            result = None
+            for step in hisab.split(';'):
+                numbers = re.findall(r'-?\d+(?:\.\d+)?', step)
+                self.assertGreaterEqual(len(numbers), 3, f'row {index}: bad step {step!r}\n{think}')
+                *operands, result = numbers
+                for operand in operands:
+                    self.assertIn(operand, allowed,
+                                  f'row {index}: operand {operand} in {step!r} is neither a dieko value nor an earlier result; '
+                                  f'allowed={sorted(allowed)}\n{think}')
+                allowed.add(result)
+            self.assertEqual(result, row['gold'],
+                             f'row {index}: last hisab result {result} != gold {row["gold"]}\n{think}')
+
 
 class CounterfactualSurface(unittest.TestCase):
     def test_counterfactuals_share_surface(self):
