@@ -47,6 +47,19 @@ class TestBenchFamilies(unittest.TestCase):
             self.assertIn('per-family delta', out)
             self.assertIn('+1', out)
 
+    def test_understand_probes_by_kind(self):
+        with tempfile.TemporaryDirectory() as d:
+            u = os.path.join(d, 'u.json')
+            json.dump({'score': 1, 'of': 3, 'rows': [
+                {'kind': 'memory', 'q': 'q1', 'a': 'a1', 'pass': True},
+                {'kind': 'memory', 'q': 'q2', 'a': 'a2', 'pass': False},
+                {'kind': 'grammar', 'q': 'q3', 'a': 'a3', 'pass': True}]}, open(u, 'w'))
+            out = subprocess.run([sys.executable, SCRIPT, '--understand', u],
+                                 capture_output=True, text=True).stdout
+            self.assertIn('memory', out)
+            self.assertIn('1/2', out)
+            self.assertIn('failing probes', out)
+
 
 if __name__ == '__main__':
     unittest.main()

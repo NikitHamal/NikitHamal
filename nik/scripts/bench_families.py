@@ -73,14 +73,28 @@ def load(path):
     return j.get('rows') or [], j
 
 
+def understanding_report(path):
+    """per-kind breakdown of the understanding probes (eval_understand.py JSON)."""
+    j = json.load(open(path, encoding='utf8'))
+    rows = j.get('rows') or []
+    by = {}
+    for r in rows:
+        v = by.setdefault(r.get('kind', '?'), [0, 0])
+        v[0] += 1 if r.get('pass') else 0
+        v[1] += 1
+    fails = [r for r in rows if r.get('pass') is False]
+    return by, fails, j
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--json', action='append', default=[], help='a saved bench JSON (repeatable)')
+    ap.add_argument('--understand', default='', help='a saved eval_understand.py JSON')
     ap.add_argument('--json-out', default='')
     ap.add_argument('--show-failures', action='store_true')
     a = ap.parse_args()
-    if not a.json:
-        ap.error('need --json')
+    if not a.json and not a.understand:
+        ap.error('need --json or --understand')
 
     report = {}
     for path in a.json:
@@ -99,12 +113,25 @@ def main():
             dead = sum(1 for _, v in items if v[0] == 0)
             print(f'  {cat}: {dead}/{len(items)} families at zero')
             for f, v in items:
-                mark = '  <-- held out' if v[0] == 0 else ''
+                mark = '  <-- at zero' if v[0] == 0 else ''
                 print(f'    {v[0]:2d}/{v[1]:<2d} {f}{mark}')
         if a.show_failures:
             for r in rows:
                 if not r.get('ok'):
                     print(f'    FAIL [{r.get("cat")}] gold={r.get("gold")} {r.get("q", "")[:70]}')
+
+    if a.understand:
+        by, fails, j = understanding_report(a.understand)
+        report[a.understand] = {'score': j.get('score'), 'of': j.get('of'),
+                                'by_kind': {k: {'right': v[0], 'total': v[1]} for k, v in sorted(by.items())}}
+        print(f'\n=== {a.understand}  ({j.get("score")}/{j.get("of")}) ===')
+        for k, v in sorted(by.items(), key=lambda kv: kv[1][1]):
+            mark = '  <-- at zero' if v[0] == 0 else ''
+            print(f'    {v[0]:2d}/{v[1]:<2d} {k}{mark}')
+        if fails:
+            print(f'  failing probes ({len(fails)}):')
+            for r in fails:
+                print(f'    [{r.get("kind")}] {r.get("q", "")[:58]} -> {(r.get("a") or "")[:70]}')
 
     if len(a.json) == 2:
         p1, p2 = a.json
