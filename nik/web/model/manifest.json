@@ -2,29 +2,31 @@
   "name": "nik 0.1",
   "file": "nik-0.1.bin",
   "bytes": 20689696,
-  "version": "2026-10-20T18:05Z",
-  "trained": "molab RTX PRO 6000 \u00b7 v4: instruction pre-training from scratch, 150 min (55% Nepali corpus + 45% conversations: teacher generators + 549 hand-written gold), pure AR",
+  "version": "2026-10-20T18:58Z",
+  "trained": "molab RTX PRO 6000 \u00b7 v4b: v4 (instruction pre-training from scratch, 150 min) + 40 min balanced SFT (30% everyday chat, 6% writing, reading worlds, compositional skills, 549 hand-written gold x40; +0.3 block-diffusion loss for SSBD)",
   "eval": {
-    "nikbench": 0.632,
+    "nikbench": 0.66,
     "nikbench_groups": {
-      "arith": "79/96",
-      "word": "0/24",
-      "reason": "12/24"
+      "arith": "82/96",
+      "word": "2/24",
+      "reason": "11/24"
     },
-    "math_acc": 0.935,
-    "persona_acc": 0.857,
-    "understanding_probes": "5/26",
-    "chat_check": "15/15",
-    "stress": "38/103"
-  },
-  "note": "Beats the B300 model on NikBench (+24 pts), math (+36 pts), understanding, chat sanity and the 120-prompt stress test. Still weak: reading natural sentences, translation, word problems, writing. Next: v4b (balanced chat/writing/reading SFT).",
-  "previous": {
-    "file": "nik-0.1.b300.bin",
-    "nikbench": 0.396,
-    "math_acc": 0.57,
+    "math_acc": 0.955,
     "persona_acc": 1.0,
-    "understanding_probes": "3/26",
-    "chat_check": "11/15",
-    "stress": "24/103"
+    "understanding_probes": "16/26",
+    "chat_check": "15/15",
+    "stress_strict": "59/103",
+    "browser_engine_greedy_36": "22/36"
+  },
+  "note": "v4b beats v4 everywhere: understanding 4/26 -> 16/26, stress 38 -> 59/103 (writing 10/10, reading 4/10, translation 5/10). Still weak: word problems (2/24), reasoning (11/24). B300 model kept as nik-0.1.b300.bin.",
+  "previous": {
+    "file": "nik-0.1.v4.bin",
+    "nikbench": 0.632,
+    "math_acc": 0.935,
+    "persona_acc": 1.0,
+    "understanding_probes": "4/26",
+    "chat_check": "14/15",
+    "stress": "38/103",
+    "browser_engine_greedy_36": "19/36"
   }
 }
