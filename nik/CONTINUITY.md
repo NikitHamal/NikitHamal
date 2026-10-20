@@ -72,6 +72,20 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## 2026-10-20 evening (Claude, workspace-50): v4 shipped
+- **Live on /chat: v4** (instruction pre-training from scratch, `run_v4.py`, 150 min on molab): NikBench 63.2% (was 39.6%),
+  eval.py math 93.5% (57%), understanding 5/26 (3/26), chat_check 15/15 (11/15), stress.py 38/103 (24/103), persona 0.86 (1.0).
+  Previous model: `nik/web/model/nik-0.1.b300.bin`. Logs: `nik/web/model/logs/v4/`.
+- Lessons: (1) EMA 0.999 without warmup kept random init -> garbage samples/ckpts (fixed: EMA warmup). (2) Cutting everyday chat to
+  ~1% made greetings trigger looping math scratchpads (fixed: `chat.py`, `chat_check.py` gate). (3) Writing requests drift into news
+  text without writing data (`write.py`). (4) Verified arithmetic must check *completed* equations, not force at the first "="
+  (`calc.py` v2: +1 pt; v1 cost 4 pts). (5) Don't run data builds + evals beside a training run: host OOM killed the run at 144/150 min.
+- Running: **v4b** = v4 + 40 min balanced SFT (`sft6`: 30% chat.py, 6% write.py, read.py, skills.py, gold x40) + RSI, out `/tmp/nik_out4b/`
+  on molab. Ship if it beats v4 on NikBench + understanding + chat_check + stress.py.
+- Tools: `nik/stress.py` (120 prompts), `nik/chat_check.py`, `nik/scripts/live_eval.py`, `nik/calc.py` (+ /chat "exact arithmetic").
+- Moving files molab -> repo: upload a Kaggle dataset from molab (`iamnikithamal/nik-ship`), download with `kaggle datasets download -f`.
+- Other agents: coordinate in GitHub issue #8.
+
 ## Current state / open tasks (update me)
 - [ ] **v4 on molab (running since 2026-10-20 ~15:05 UTC, driven by Claude via marimo pair)**: `nik/scripts/run_v4.py --bs 256
       --pre-min 150 --sft-min 25 --rsi-min 30`: instruction pre-training FROM SCRATCH (55% corpus + 45% conversations incl.
