@@ -6,21 +6,27 @@ import numpy as np
 import torch
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from model import Acoustic, TTSConfig, Vocoder  # noqa: E402
+from model import Acoustic, AcousticCFM, TTSConfig, Vocoder  # noqa: E402
+import phonemes  # noqa: E402
 from text import encode  # noqa: E402
 
 
 def load(run, dev='cpu'):
-    ca = torch.load(os.path.join(run, 'acoustic.pt'), map_location='cpu', weights_only=False)
+    v2 = os.path.exists(os.path.join(run, 'acoustic2.pt'))
+    ca = torch.load(os.path.join(run, 'acoustic2.pt' if v2 else 'acoustic.pt'), map_location='cpu', weights_only=False)
     cv = torch.load(os.path.join(run, 'vocoder.pt'), map_location='cpu', weights_only=False)
-    A = Acoustic(TTSConfig(**ca['cfg'])); A.load_state_dict(ca['model'])
+    A = (AcousticCFM if v2 else Acoustic)(TTSConfig(**ca['cfg'])); A.load_state_dict(ca['model'])
+    lex = os.path.join(run, 'lexicon.json')
+    if v2 and os.path.exists(lex) and not phonemes.LEX:
+        phonemes.load_lexicon(lex)
     V = Vocoder(TTSConfig(**cv['cfg'])); V.load_state_dict(cv['model'])
     return A.to(dev).eval(), V.to(dev).eval(), ca.get('speakers', [])
 
 
 @torch.no_grad()
 def synth(A, V, text, spk=0, speed=1.0):
-    x = torch.tensor([encode(text)])
+    ids = phonemes.encode_phones(phonemes.roman_text(text)) if isinstance(A, AcousticCFM) else encode(text)
+    x = torch.tensor([ids])
     m = A.infer(x, torch.tensor([spk]), speed)
     w = V(m)[0].numpy()
     return w / max(1e-4, np.abs(w).max()) * 0.9

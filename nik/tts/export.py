@@ -13,6 +13,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from synth import load  # noqa: E402
 from text import SYMBOLS, NUM  # noqa: E402
+import phonemes  # noqa: E402
+from model import AcousticCFM  # noqa: E402
 
 
 class Enc(torch.nn.Module):
@@ -28,6 +30,15 @@ class Dec(torch.nn.Module):
     def forward(self, h, mu, spk):
         pad = torch.zeros(h.shape[0], h.shape[1], dtype=torch.bool, device=h.device)
         return self.A.decode(h, mu, spk, pad)
+
+
+class VField(torch.nn.Module):
+    """v2: one flow-matching step's vector field; the browser runs the ODE loop."""
+    def __init__(self, A):
+        super().__init__(); self.A = A
+    def forward(self, x, t, h, mu, spk):
+        pad = torch.zeros(h.shape[0], h.shape[1], dtype=torch.bool, device=h.device)
+        return self.A.vfield(x, t, h, mu, spk, pad)
 
 
 class Voc(torch.nn.Module):
@@ -53,11 +64,18 @@ def main():
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     A, V, speakers = load(a.run)
+    v2 = isinstance(A, AcousticCFM)
+    syms = phonemes.SYMBOLS if v2 else SYMBOLS
     d = A.c.d
-    ids = torch.randint(3, len(SYMBOLS), (1, 23)); spk = torch.tensor([0])
+    ids = torch.randint(3, len(syms), (1, 23)); spk = torch.tensor([0])
     export(Enc(A), (ids, spk), f'{a.out}/enc.f32.onnx', ['ids', 'spk'], ['h', 'mu', 'logd'], {'ids': {1: 'T'}, 'h': {1: 'T'}, 'mu': {1: 'T'}, 'logd': {1: 'T'}})
     h = torch.randn(1, 57, d); mu = torch.randn(1, 57, 80)
-    export(Dec(A), (h, mu, spk), f'{a.out}/dec.f32.onnx', ['h', 'mu', 'spk'], ['mel'], {'h': {1: 'F'}, 'mu': {1: 'F'}, 'mel': {1: 'F'}})
+    if v2:
+        xx, tt = torch.randn(1, 57, 80), torch.tensor([0.3])
+        export(VField(A), (xx, tt, h, mu, spk), f'{a.out}/dec.f32.onnx', ['x', 't', 'h', 'mu', 'spk'], ['v'],
+               {'x': {1: 'F'}, 'h': {1: 'F'}, 'mu': {1: 'F'}, 'v': {1: 'F'}})
+    else:
+        export(Dec(A), (h, mu, spk), f'{a.out}/dec.f32.onnx', ['h', 'mu', 'spk'], ['mel'], {'h': {1: 'F'}, 'mu': {1: 'F'}, 'mel': {1: 'F'}})
     mel = torch.randn(1, 80, 57)
     export(Voc(V), (mel,), f'{a.out}/voc.f32.onnx', ['mel'], ['re', 'im'], {'mel': {2: 'F'}, 're': {2: 'F'}, 'im': {2: 'F'}})
     import onnxruntime as ort
@@ -75,19 +93,28 @@ def main():
     # parity check against PyTorch
     s = {n: ort.InferenceSession(f'{a.out}/{n}.onnx', providers=['CPUExecutionProvider']) for n in ('enc', 'dec', 'voc')}
     with torch.no_grad():
-        ids2 = torch.randint(3, len(SYMBOLS), (1, 41))        # a different length than the export example
+        ids2 = torch.randint(3, len(syms), (1, 41))        # a different length than the export example
         ref = A.encode(ids2, spk)[1].numpy()
         got = s['enc'].run(None, {'ids': ids2.numpy(), 'spk': spk.numpy()})[1]
         h2, mu2 = torch.randn(1, 113, d), torch.randn(1, 113, 80)
-        rd = Dec(A)(h2, mu2, spk).numpy()
-        gd = s['dec'].run(None, {'h': h2.numpy(), 'mu': mu2.numpy(), 'spk': spk.numpy()})[0]
+        if v2:
+            x2, t2 = torch.randn(1, 113, 80), torch.tensor([0.5])
+            rd = VField(A)(x2, t2, h2, mu2, spk).numpy()
+            gd = s['dec'].run(None, {'x': x2.numpy(), 't': t2.numpy(), 'h': h2.numpy(), 'mu': mu2.numpy(), 'spk': spk.numpy()})[0]
+        else:
+            rd = Dec(A)(h2, mu2, spk).numpy()
+            gd = s['dec'].run(None, {'h': h2.numpy(), 'mu': mu2.numpy(), 'spk': spk.numpy()})[0]
         mel = torch.randn(1, 80, 113)
         rv = V.spec(mel)[0].numpy(); gv = s['voc'].run(None, {'mel': mel.numpy()})[0]
     rel = lambda r, g: float(np.abs(r - g).mean() / (np.abs(r).mean() + 1e-9))  # noqa: E731
     counts = None
-    meta = {'sr': 22050, 'n_fft': 1024, 'hop': 256, 'symbols': SYMBOLS, 'num_words': NUM, 'speakers': speakers,
+    meta = {'version': 2 if v2 else 1, 'sr': 22050, 'n_fft': 1024, 'hop': 256, 'symbols': syms, 'num_words': NUM, 'speakers': speakers,
+            'mel_mean': float(A.mel_mean) if v2 else 0.0, 'mel_std': float(A.mel_std) if v2 else 1.0, 'cfm_steps': 10, 'cfm_temperature': 0.667,
             'default_speaker': 0, 'bytes': files, 'parity': {'enc_mu': rel(ref, got), 'dec_mel': rel(rd, gd), 'voc_re': rel(rv, gv)}}
     json.dump(meta, open(f'{a.out}/tts.json', 'w'), indent=1)
+    if v2 and os.path.exists(os.path.join(a.run, 'lexicon.json')):
+        import shutil
+        shutil.copy(os.path.join(a.run, 'lexicon.json'), f'{a.out}/lexicon.json')
     print(json.dumps({'bytes': files, 'total_mb': round(sum(files.values()) / 1e6, 2), 'parity': meta['parity']}, indent=1))
 
 

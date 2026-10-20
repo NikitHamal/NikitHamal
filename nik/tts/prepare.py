@@ -15,6 +15,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'data'))
 from audio import load_wav, mel  # noqa: E402
 from text import encode, normalize  # noqa: E402
+from phonemes import deva_text, encode_phones  # noqa: E402
 
 URL = 'https://www.openslr.org/resources/43/ne_np_female.zip'
 
@@ -59,7 +60,8 @@ def main():
         r = rom(txt)
         ids = encode(r)
         m = mel(torch.from_numpy(w)[None])[0]
-        items.append({'ids': np.array(ids, np.int16), 'text': normalize(r), 'mel': m.numpy().astype(np.float16),
+        ph = encode_phones(deva_text(txt))        # v2: exact phonemes from the Devanagari transcript
+        items.append({'ids': np.array(ids, np.int16), 'phones': np.array(ph, np.int16), 'text': normalize(r), 'mel': m.numpy().astype(np.float16),
                       'wav': (w * 32767).astype(np.int16), 'spk': spk_id[spk_of(fn)]})
         if i % 200 == 0:
             print(f'{i}/{len(rows)}  {r[:60]!r}', flush=True)

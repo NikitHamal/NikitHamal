@@ -15,7 +15,8 @@ import torch.nn.functional as F
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from audio import HOP, mel as melspec  # noqa: E402
-from model import Acoustic, Discriminators, TTSConfig, Vocoder  # noqa: E402
+from model import Acoustic, AcousticCFM, Discriminators, TTSConfig, Vocoder  # noqa: E402
+import phonemes  # noqa: E402
 from text import SYMBOLS  # noqa: E402
 
 
@@ -33,8 +34,8 @@ def acoustic_batches(items, bs, R):
             yield c
 
 
-def collate_acoustic(items, idx, dev):
-    xs = [torch.from_numpy(items[i]['ids'].astype(np.int64)) for i in idx]
+def collate_acoustic(items, idx, dev, key='ids'):
+    xs = [torch.from_numpy(items[i][key].astype(np.int64)) for i in idx]
     ms = [torch.from_numpy(items[i]['mel'].astype(np.float32)) for i in idx]
     xl = torch.tensor([len(x) for x in xs]); ml = torch.tensor([m.shape[1] for m in ms])
     X = torch.zeros(len(idx), int(xl.max()), dtype=torch.long)
@@ -47,7 +48,9 @@ def collate_acoustic(items, idx, dev):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--stage', choices=['acoustic', 'vocoder'], required=True)
+    ap.add_argument('--stage', choices=['acoustic', 'acoustic2', 'vocoder'], required=True)
+    ap.add_argument('--init-ckpt', default='', help='vocoder: continue from this checkpoint (e.g. the v1 vocoder)')
+    ap.add_argument('--favor-spk', default='', help='vocoder: speaker name sampled 3x more often (consistent main voice)')
     ap.add_argument('--data', default='data_tts/set.pt')
     ap.add_argument('--out', default='nik/runs/tts')
     ap.add_argument('--minutes', type=float, default=60)
@@ -68,9 +71,19 @@ def main():
     t0, step = time.time(), 0
     cap = a.minutes * 60
 
-    if a.stage == 'acoustic':
+    if a.stage in ('acoustic', 'acoustic2'):
         bs, lr = a.bs or 32, a.lr or 1e-3
-        model = Acoustic(cfg).to(dev)
+        key = 'ids'
+        if a.stage == 'acoustic2':
+            key = 'phones'
+            cfg = TTSConfig(n_sym=len(phonemes.SYMBOLS), n_spk=max(1, len(D['speakers'])))
+            allm = np.concatenate([x['mel'].astype(np.float32).ravel()[::7] for x in items])
+            mean, std = float(allm.mean()), float(allm.std())
+            model = AcousticCFM(cfg, mean, std).to(dev)
+            ck_path = os.path.join(a.out, 'acoustic2.pt')
+            print(f'acoustic2 (flow matching) mel mean {mean:.3f} std {std:.3f}', flush=True)
+        else:
+            model = Acoustic(cfg).to(dev)
         opt = torch.optim.AdamW(model.parameters(), lr=lr, betas=(0.9, 0.98), weight_decay=0.01)
         if a.resume and os.path.exists(ck_path):
             ck = torch.load(ck_path, weights_only=False); model.load_state_dict(ck['model']); opt.load_state_dict(ck['opt']); step = ck['step']
@@ -80,14 +93,15 @@ def main():
             p = max(step / a.steps, (time.time() - t0) / cap)
             for g in opt.param_groups:
                 g['lr'] = lr_at(p, lr)
-            X, xl, M, ml, spk = collate_acoustic(items, next(it), dev)
+            X, xl, M, ml, spk = collate_acoustic(items, next(it), dev, key)
             loss, parts = model.loss(X, xl, M, ml, spk)
             opt.zero_grad(set_to_none=True); loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0); opt.step(); step += 1
             if step % 50 == 0:
                 print(f'step {step} | {json.dumps({k: round(v, 4) for k, v in parts.items()})} | {(time.time() - t0) / 60:.1f} min', flush=True)
             if step % 1000 == 0 or p >= 1:
-                torch.save({'model': model.state_dict(), 'opt': opt.state_dict(), 'step': step, 'cfg': cfg.to_dict(), 'speakers': D['speakers']}, ck_path)
+                torch.save({'model': model.state_dict(), 'opt': opt.state_dict(), 'step': step, 'cfg': cfg.to_dict(), 'speakers': D['speakers'],
+                            'kind': a.stage}, ck_path)
                 log.write(json.dumps({'step': step, **parts, 'min': (time.time() - t0) / 60}) + '\n'); log.flush()
             if p >= 1:
                 break
@@ -99,7 +113,16 @@ def main():
         if a.resume and os.path.exists(ck_path):
             ck = torch.load(ck_path, weights_only=False)
             G.load_state_dict(ck['model']); Dn.load_state_dict(ck['disc']); og.load_state_dict(ck['og']); od.load_state_dict(ck['od']); step = ck['step']
+        if a.init_ckpt and not (a.resume and os.path.exists(ck_path)):
+            ck = torch.load(a.init_ckpt, map_location='cpu', weights_only=False)
+            G.load_state_dict(ck['model'])
+            if 'disc' in ck:
+                Dn.load_state_dict(ck['disc'])
+            print('vocoder: continuing from', a.init_ckpt, 'step', ck.get('step'), flush=True)
         long_items = [x for x in items if x['mel'].shape[1] > a.seg_frames + 2]
+        if a.favor_spk and a.favor_spk in D['speakers']:
+            fav = D['speakers'].index(a.favor_spk)
+            long_items = long_items + [x for x in long_items if x['spk'] == fav] * 2
         print(f'vocoder: G {sum(p.numel() for p in G.parameters()) / 1e6:.2f}M, D {sum(p.numel() for p in Dn.parameters()) / 1e6:.2f}M', flush=True)
         S = a.seg_frames
         while step < a.steps:
@@ -116,7 +139,7 @@ def main():
             m, y = torch.stack(mels).to(dev), torch.stack(wavs).to(dev)
             yh = G(m)[:, :y.shape[1]]
             yh = F.pad(yh, (0, y.shape[1] - yh.shape[1]))
-            adv = step >= 1000                      # a short reconstruction-only warmup stabilises GAN training
+            adv = step >= 1000 or bool(a.init_ckpt)  # warmup only when training from scratch
             if adv:
                 ld = 0.0
                 for (rr, _), (ff, _) in zip(Dn(y), Dn(yh.detach())):
