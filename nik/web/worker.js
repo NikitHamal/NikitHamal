@@ -1,5 +1,6 @@
 // Web Worker host for Nik: loads the model off the main thread and streams tokens.
 import { NikModel, renderChat, generate, TOK } from './nik.js';
+import { romanize, hasDevanagari } from './romanize.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
 const base = new URL('./model/', import.meta.url);
@@ -27,7 +28,8 @@ function countParams(m) {
 // Keep the prompt inside the context window: drop the oldest turns first.
 function buildPrompt(messages) {
   const budget = Math.floor(model.cfg.ctx * 0.55);
-  let msgs = messages.slice();
+  // Nik reads romanized Nepali: transliterate Devanagari the user types (input only)
+  let msgs = messages.map((m) => (m.role === 'user' && hasDevanagari(m.content) ? { ...m, content: romanize(m.content) } : m));
   let ids = renderChat(model.tok, msgs);
   while (ids.length > budget && msgs.length > 1) {
     msgs = msgs.slice(msgs.length > 2 ? 2 : 1);
