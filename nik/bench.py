@@ -119,11 +119,15 @@ def final_number(text):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--model', required=True)
+    ap.add_argument('--model', default='')
     ap.add_argument('--tok', default=os.path.join(os.path.dirname(__file__), 'web/model/tokenizer.json'))
     ap.add_argument('--n', type=int, default=15, help='items per arithmetic category (word/reason get 3n each)')
     ap.add_argument('--out', default='')
+    ap.add_argument('--dump', default='', help='write the items as JSON (for web/test_engine.mjs) and exit')
     a = ap.parse_args()
+    if a.dump:
+        json.dump(items(a.n), open(a.dump, 'w'))
+        return
     torch.set_grad_enabled(False)
     tok = Tokenizer.load(a.tok)
     model = load_any(a.model)

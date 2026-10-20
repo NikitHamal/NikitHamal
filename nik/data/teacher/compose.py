@@ -77,7 +77,7 @@ def event(R, st, en):
     return None
 
 
-def problem(R):
+def problem(R, n_events=None):
     en = R.random() < 0.25
     n = pick(R, NAMES)
     st = world(R); st['item'] = pick(R, ITEMS)
@@ -86,10 +86,13 @@ def problem(R):
     if st['items']:
         sents.append(f'{n} sanga {st["items"]} wata {I[0]} chha.' if not en else f'{n.title()} has {st["items"]} {I[1]}.')
         steps.append(f'suru ma {I[0]} {st["items"]}')
+    else:
+        sents.append(f'suru ma {n} sanga kunai {I[0]} thiyena.' if not en else f'At first {n.title()} has no {I[1]}.')
+        steps.append(f'suru ma {I[0]} 0')
     if st['money']:
         sents.append(f'{n} sanga {st["money"]} rupiya pani chha.' if not en else f'{n.title()} also has {st["money"]} rupees.')
         steps.append(f'suru ma paisa {st["money"]}')
-    want = R.randint(2, 5)
+    want = n_events or R.randint(2, 5)
     tries = 0
     while len(sents) < want + 2 and tries < 20:
         tries += 1
