@@ -187,6 +187,7 @@ def main():
     ap.add_argument('--warmup', type=int, default=500)
     ap.add_argument('--wd', type=float, default=0.1)
     ap.add_argument('--diff-weight', type=float, default=1.0)
+    ap.add_argument('--user-w', type=float, default=0.0, help='sft, pure AR: loss weight on user/prompt tokens (0 = answers only)')
     ap.add_argument('--mix', type=float, default=0.25, help='sft: fraction of pretrain windows mixed in')
     ap.add_argument('--eval-every', type=int, default=500)
     ap.add_argument('--compile', action='store_true')
@@ -317,9 +318,9 @@ def main():
         for _ in range(a.accum):
             x, m = train_b.get(a.bs, L, device)
             with amp():
-                loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight, diff_frac=a.diff_frac)
+                loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight, diff_frac=a.diff_frac, user_w=a.user_w)
             scaler.scale(loss / a.accum).backward()
-            tot += loss.item() / a.accum; ar += l_ar.item() / a.accum; df += l_df.item() / a.accum
+            tot += loss.detach() / a.accum; ar += l_ar / a.accum; df += l_df / a.accum   # tensors: no GPU sync per step
             tok_seen += x.numel() * world
         scaler.unscale_(opt)
         gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -331,13 +332,14 @@ def main():
         step += 1
         el = time.time() - t0
         if step % 25 == 0 or step == 1:
+            tot, ar, df = float(tot), float(ar), float(df)
             print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}) | lr {lr:.2e} | gn {float(gn):.2f} | '
                   f'{tok_seen / el:,.0f} tok/s | {el / 60:.1f} min', flush=True)
         if (step % a.eval_every == 0 or step == a.steps) and main_proc:
             v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
             print(samples(ema or model, tok, a.stage), flush=True)
-            log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': tot, 'min': el / 60}) + '\n'); log.flush()
+            log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': float(tot), 'min': el / 60}) + '\n'); log.flush()
             save()
         stop = bool(a.minutes and el > a.minutes * 60)
         if world > 1:                                   # all ranks stop together

@@ -1,0 +1,22 @@
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"we are reading\" nepali ma bhana."}, {"role": "nik", "content": "\"we are reading\" lai nepali ma \"hami padhdai chhau\" bhanchha."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"ma khana khadai chhu\" english ma k ho?"}, {"role": "nik", "content": "\"ma khana khadai chhu\" ko english \"I am eating food\" ho."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"river\" lai nepali ma k bhanchha?"}, {"role": "nik", "content": "\"river\" lai nepali ma \"nadi\" bhanchha."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "translate: \"where is the bus park?\""}, {"role": "nik", "content": "\"bus park kaha chha?\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"mero ghar pokhara ma chha\" english ma lekha"}, {"role": "nik", "content": "\"My house is in Pokhara.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"I love my country\" lai nepali ma"}, {"role": "nik", "content": "\"ma mero desh lai maya garchhu.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"aaja dherai jado chha\" translate in english"}, {"role": "nik", "content": "\"It is very cold today.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"she is a teacher\" nepali ma k hunchha?"}, {"role": "nik", "content": "\"uni shikshika hunuhunchha.\" (ya casual ma \"u teacher ho\".)"}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"kitab\" ko english k ho?"}, {"role": "nik", "content": "\"kitab\" ko english \"book\" ho."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"thank you very much\" nepali ma kasari bhanne?"}, {"role": "nik", "content": "\"dherai dherai dhanyabad\" bhanna sakinchha."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"timi kaha jaadai chhau?\" english ma"}, {"role": "nik", "content": "\"Where are you going?\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "english to nepali: \"The children are playing in the field.\""}, {"role": "nik", "content": "\"keta keti haru maidan ma kheldai chhan.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"bholi pani parchha hola\" english ma"}, {"role": "nik", "content": "\"It will probably rain tomorrow.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"happy\" lai nepali ma k bhanchhan? ani \"sad\"?"}, {"role": "nik", "content": "\"happy\" lai \"khusi\" ra \"sad\" lai \"dukhi\" bhanchhan."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"I am learning to code\" nepali ma bhana"}, {"role": "nik", "content": "\"ma coding garna sikdai chhu.\""}, {"role": "user", "content": "ani \"my friend helps me\" ni?"}, {"role": "nik", "content": "\"mero sathi le malai sahayog garchha.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"mero aama khana pakaudai hunuhunchha\" english"}, {"role": "nik", "content": "\"My mother is cooking food.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"window\" lai nepali ma k bhanne?"}, {"role": "nik", "content": "\"window\" lai nepali ma \"jhyal\" bhanchha."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"what is your name?\" nepali ma, respect sanga"}, {"role": "nik", "content": "\"tapai ko naam k ho?\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"ma timi lai bholi phone garchhu\" english"}, {"role": "nik", "content": "\"I will call you tomorrow.\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"water\" ra \"fire\" nepali ma"}, {"role": "nik", "content": "\"water\" = \"pani\", \"fire\" = \"aago\"."}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"How much does this cost?\" lai nepali ma"}, {"role": "nik", "content": "\"yo kati ko ho?\" ya \"yasko mol kati ho?\""}]}
+{"cat": "gold-translate", "messages": [{"role": "user", "content": "\"school bida chha\" english ma"}, {"role": "nik", "content": "\"School is closed (on holiday).\""}]}
