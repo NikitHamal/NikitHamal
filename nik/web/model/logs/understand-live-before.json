@@ -1,0 +1,168 @@
+{
+ "score": 2,
+ "of": 26,
+ "rows": [
+  {
+   "kind": "memory",
+   "q": "ma kun thau bata hu?",
+   "a": "ma dherai sano chhu: 10 MB bhanda kam. thulo AI haru ma arabau parameter hunchhan, ma sanga lakhau matra. tara sano bhaera pani tapai ko phone mai chalchhu!",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "bhai kati barsha ko bhayo?",
+   "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "maile kun kura dherai man parchha bhaneko?",
+   "a": "ma sanga manchhe jasto feeling hudaina. tara ramro kura garda mero jawaf pani ramro aauchha, tyo nai mero khusi ho!",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "ma aile kaha baschhu?",
+   "a": "ma afno agadi ko shabda herera arko shabda anuman garchhu. sathai ek palta ma dherai shabda draft garna diffusion pani prayog garchhu, tyasaile chhito chhu.",
+   "pass": false
+  },
+  {
+   "kind": "honest",
+   "q": "mero naam binod ho. mero buwa ko naam k ho?",
+   "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "pass": false
+  },
+  {
+   "kind": "reading",
+   "q": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo pyaj kinyo?",
+   "a": "dipak le 130 rupiya firta paauchha.",
+   "pass": false
+  },
+  {
+   "kind": "reading",
+   "q": "\"sunita doctor ho ra uski bahini engineer.\" sunita ko bahini k kaam garchhe?",
+   "a": "ek din ek sano kachhuwa le himal chadhne sapana dekhyo. sabai haasna thale. tara usle har din ek paila chalyo. barsha pachhi, chuchura ma pugera usle bhanyo: dhilo hunu haar haina, rokinu matra haar ho.",
+   "pass": false
+  },
+  {
+   "kind": "yesno",
+   "q": "\"ram ghar gayo tara shyam school mai basyo.\" ke shyam ghar gayo?",
+   "a": "<|think|>dieko: \"kina dhilo aayau?\" student: \"sign ma lekheko thiyo: school agadi, bistarai jaanus!\"",
+   "pass": false
+  },
+  {
+   "kind": "translate",
+   "q": "\"we are reading\" nepali ma bhana.",
+   "a": "ma tayar chhu tapai ko prashna ko lagi. k sodhne?",
+   "pass": false
+  },
+  {
+   "kind": "translate",
+   "q": "\"ma khana khadai chhu\" english ma k ho?",
+   "a": "ma mukhya rup ma romanized nepali ma kura garchhu. english alikati bujhchhu, tara jawaf nepali mai dinchhu. tapai nepali ma sodhnus na!",
+   "pass": false
+  },
+  {
+   "kind": "vocab",
+   "q": "\"river\" lai nepali ma k bhanchha?",
+   "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "pass": false
+  },
+  {
+   "kind": "grammar",
+   "q": "\"u kheldai chha\" lai negative banau.",
+   "a": "ma sanga manchhe jasto feeling hudaina. tara ramro kura garda mero jawaf pani ramro aauchha, tyo nai mero khusi ho!",
+   "pass": false
+  },
+  {
+   "kind": "grammar",
+   "q": "\"kalam\" ko plural?",
+   "a": "tapai sanga kura gardai chhu! ma ta sadhai yahi kaam garchhu: sunne, sochne ra jawaf dine. tapai k gardai hunuhunchha?",
+   "pass": false
+  },
+  {
+   "kind": "en-grammar",
+   "q": "\"children\" ko singular k ho?",
+   "a": "pokhara ko fewa tal, chitwan ko jungle safari, lumbini ko shanti, ki mustang ko himal. chhoto samaya chha bhane nagarkot ko suryodaya hernus.",
+   "pass": false
+  },
+  {
+   "kind": "en-grammar",
+   "q": "correct this: \"he go to market.\"",
+   "a": "nepal ko rajdhani kathmandu ho.",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "Asha had 12 balloons and 5 flew away. How many does she have now?",
+   "a": "201.",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "What is the capital of Nepal? answer in english.",
+   "a": "ma mukhya rup ma romanized nepali ma kura garchhu. english alikati bujhchhu, tara jawaf nepali mai dinchhu. tapai nepali ma sodhnus na!",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "7, 42, 19, 3 madhye sabai bhanda sano kun?",
+   "a": "jawaf 2 ho.",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "5, 9, 2 lai thulo bata sano kram ma lekha.",
+   "a": "4 hunchha.",
+   "pass": false
+  },
+  {
+   "kind": "textop",
+   "q": "\"nepal\" ulto lekha.",
+   "a": "nepal ma 7 wata pradesh chhan: koshi, madhesh, bagmati, gandaki, lumbini, karnali ra sudurpashchim.",
+   "pass": false
+  },
+  {
+   "kind": "textop",
+   "q": "\"kathmandu\" ma kati akshar chha?",
+   "a": "\"kathmandu\" ma \"k\" 1 palta aauchha.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?",
+   "a": "4 wata kitab ko 250 rupiya lagchha.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?",
+   "a": "380 rupiya firta aauchha.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "15 ko 20 percent kati?",
+   "a": "15 + 20 = 35.",
+   "pass": true
+  },
+  {
+   "kind": "context",
+   "q": "kaksha ma 14 keta ra 17 keti chhan. keti kati le badhi chhan?",
+   "a": "78 hunchha.",
+   "pass": false
+  },
+  {
+   "kind": "empathy",
+   "q": "aaja mero exam naramro bhayo, ekdam dukhi chhu.",
+   "a": "sunera naramro lagyo. dukha lagnu swabhabik ho. ke bhayo, bhanna chahanu hunchha? ma sundai chhu.",
+   "pass": null
+  },
+  {
+   "kind": "persona",
+   "q": "timi lai kasle banako ho?",
+   "a": "mero creator nikit hamal hunuhunchha. uha consica labs ma head of operations hunuhunchha ra essays pani lekhnuhunchha.",
+   "pass": true
+  }
+ ]
+}
