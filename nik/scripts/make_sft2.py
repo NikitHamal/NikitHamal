@@ -51,6 +51,7 @@ def main():
     ap.add_argument('--gold', default=None, help='dir of hand-written gold jsonl (default nik/data/gold if it exists; "none" to skip)')
     ap.add_argument('--gold-rep', type=int, default=16)
     ap.add_argument('--chat', type=int, default=0, help='rows of everyday conversation from data/teacher/chat.py (no think)')
+    ap.add_argument('--write', type=int, default=0, help='rows of requested writing from data/teacher/write.py')
     ap.add_argument('--keep-all', action='store_true', help='keep every v1 chat/persona row (balance a task-heavy mix)')
     a = ap.parse_args()
     R = random.Random(a.seed)
@@ -97,6 +98,15 @@ def main():
             e = augment_example(chat.sample(RC), RC, 0.5)
             rows.append(json.dumps({'cat': e['kind'], 'gold': None, 'messages': e['messages']}, ensure_ascii=False) + '\n')
         print(f'chat: {a.chat} everyday-conversation rows', flush=True)
+    if a.write:
+        sys.path.insert(0, os.path.join(root, 'data/teacher'))
+        import write as wgen
+        from augment import augment_example
+        RW = random.Random(a.seed + 11)
+        for _ in range(a.write):
+            e = augment_example(wgen.sample(RW), RW, 0.5)
+            rows.append(json.dumps({'cat': e['kind'], 'gold': None, 'messages': e['messages']}, ensure_ascii=False) + '\n')
+        print(f'write: {a.write} writing rows', flush=True)
     if use_gold:
         subprocess.run([sys.executable, os.path.join(gold_dir, 'check.py')], check=True)   # valid, exact, no test leaks
         g, ng = gold_rows(gold_dir, a.gold_rep, R)
