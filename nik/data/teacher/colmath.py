@@ -1,0 +1,119 @@
+"""One general algorithm per operation (column addition/subtraction with carries/borrows,
+long multiplication by digits, long division), for every number size from 1 to 6 digits.
+Size-specific tricks ("das ko thau: 10 + 40") gave right answers for 2 digits and wrong ones
+for 3+, and self-improvement reinforced them; a single algorithm generalises to any length.
+Every intermediate step is an equation the verifier checks.
+"""
+import random
+
+from math_gen import pick, ex
+
+PLACE = ['ek', 'das', 'saya', 'hajar', 'das hajar', 'lakh', 'das lakh', 'karod']
+
+
+def ndigit(R, lo, hi):
+    k = R.randint(lo, hi)
+    return R.randint(10 ** (k - 1) if k > 1 else 0, 10 ** k - 1)
+
+
+def add_steps(a, b):
+    da, db = str(a)[::-1], str(b)[::-1]
+    steps, carry = [], 0
+    for i in range(max(len(da), len(db))):
+        x = int(da[i]) if i < len(da) else 0
+        y = int(db[i]) if i < len(db) else 0
+        s = x + y + carry
+        steps.append(f'{PLACE[i]}: {x} + {y}' + (f' + {carry}' if carry else '') + f' = {s}' + (f', {s % 10} lekhne, {s // 10} haat' if s >= 10 else ''))
+        carry = s // 10
+    if carry:
+        steps.append(f'bacheko haat {carry} agadi lekhne')
+    return '. '.join(steps)
+
+
+def sub_steps(a, b):
+    da, db = str(a)[::-1], str(b)[::-1]
+    steps, borrow = [], 0
+    for i in range(len(da)):
+        x = int(da[i]) - borrow
+        y = int(db[i]) if i < len(db) else 0
+        if x < y:
+            steps.append(f'{PLACE[i]}: {x} bata {y} ghatdaina, 1 sapati: {x + 10} - {y} = {x + 10 - y}')
+            borrow = 1
+        else:
+            steps.append(f'{PLACE[i]}: {x} - {y} = {x - y}')
+            borrow = 0
+    return '. '.join(steps)
+
+
+def mul1_steps(a, d):
+    """a x single digit d, digit by digit with carries."""
+    da = str(a)[::-1]
+    steps, carry = [], 0
+    for i, ch in enumerate(da):
+        p = int(ch) * d + carry
+        steps.append(f'{ch} x {d}' + (f' + {carry}' if carry else '') + f' = {p}' + (f', {p % 10} lekhne, {p // 10} haat' if p >= 10 and i < len(da) - 1 else ''))
+        carry = p // 10 if i < len(da) - 1 else 0
+    return '; '.join(steps)
+
+
+def col_add(R):
+    a, b = ndigit(R, 1, 6), ndigit(R, 1, 6)
+    c = a + b
+    q = pick(R, [f'{a} + {b} kati hunchha?', f'{a} ra {b} jodda kati?', f'{a} ma {b} thapda kati hunchha?', f'jod: {a} + {b}', f'{a} plus {b}?',
+                 f'what is {a} + {b}?'])
+    think = f'thau anusar ek bata suru garchhu. {add_steps(a, b)}. tyasaile {a} + {b} = {c}.'
+    return ex(q, think, pick(R, [f'{a} + {b} = {c}.', f'jawaf {c} ho.']), c, 'add')
+
+
+def col_sub(R):
+    a, b = sorted([ndigit(R, 1, 6), ndigit(R, 1, 6)], reverse=True)
+    c = a - b
+    q = pick(R, [f'{a} - {b} kati hunchha?', f'{a} bata {b} ghataunda kati?', f'ghatau: {a} - {b}', f'what is {a} - {b}?', f'{a} minus {b}?'])
+    think = f'thau anusar ek bata suru garchhu. {sub_steps(a, b)}. tyasaile {a} - {b} = {c}. jaach: {c} + {b} = {a}.'
+    return ex(q, think, pick(R, [f'{a} - {b} = {c}.', f'jawaf {c} ho.']), c, 'sub')
+
+
+def col_mul(R):
+    a = ndigit(R, 2, 4)
+    b = ndigit(R, 1, 2) if R.random() < 0.6 else R.randint(2, 9)
+    b = max(b, 2)
+    q = pick(R, [f'{a} x {b} kati hunchha?', f'{a} lai {b} le gunda kati?', f'gun: {a} x {b}', f'what is {a} x {b}?', f'{a} * {b} = ?'])
+    if b < 10:
+        think = f'{a} lai {b} le ank ank gari gunchhu (ek bata): {mul1_steps(a, b)}. tyasaile {a} x {b} = {a * b}.'
+    else:
+        t, o = divmod(b, 10)
+        parts = []
+        if o:
+            parts.append(f'{a} x {o}: {mul1_steps(a, o)}, so {a} x {o} = {a * o}')
+        parts.append(f'{a} x {t}: {mul1_steps(a, t)}, so {a} x {t} = {a * t}, das ko thau ma bhayeko le {a * t} x 10 = {a * t * 10}')
+        total = f'{a * o} + {a * t * 10}' if o else f'{a * t * 10}'
+        think = (f'{b} ma {t} das ra {o} ek chhan. ' + '. '.join(parts) + '. ' +
+                 (f'aba jodchhu: {add_steps(a * o, a * t * 10)}. ' if o else '') + f'tyasaile {a} x {b} = {total} = {a * b}.')
+    return ex(q, think.replace(', so ', ', tyasaile '), pick(R, [f'{a} x {b} = {a * b}.', f'jawaf {a * b} ho.']), a * b, 'mul')
+
+
+def col_div(R):
+    d = R.randint(2, 9)
+    qv = ndigit(R, 2, 4)
+    r = R.randint(0, d - 1) if R.random() < 0.3 else 0
+    n = d * qv + r
+    q = pick(R, [f'{n} / {d} kati hunchha?', f'{n} lai {d} le bhag garda kati?', f'what is {n} / {d}?', f'bhag: {n} / {d}'])
+    steps, cur, out = [], 0, ''
+    for ch in str(n):
+        cur = cur * 10 + int(ch)
+        k = cur // d
+        if out or k:
+            steps.append(f'{cur} ma {d} {k} palta: {d} x {k} = {d * k}, baki {cur} - {d * k} = {cur - d * k}')
+            out += str(k)
+        cur -= k * d
+    think = f'lamo bhag, baya bata: ' + '. '.join(steps) + f'. bhagfal {qv}' + (f', sesh {r}' if r else '') + '.'
+    think += f' jaach: {d} x {qv}' + (f' + {r}' if r else '') + f' = {n}.'
+    a = (f'{n} lai {d} le bhag garda {qv} aauchha, sesh {r}.' if r else pick(R, [f'{n} / {d} = {qv}.', f'jawaf {qv} ho.']))
+    return ex(q, think, a, qv, 'div')
+
+
+FAMILIES = [(col_add, 3), (col_sub, 3), (col_mul, 4), (col_div, 2)]
+
+
+def sample(R):
+    return R.choices([f for f, _ in FAMILIES], weights=[w for _, w in FAMILIES])[0](R)

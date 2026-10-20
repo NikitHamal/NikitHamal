@@ -47,6 +47,8 @@ def main():
         for line in open(src):
             d = json.loads(line)
             c = d.get('cat') or ''
+            if any(m.get('think') for m in d.get('messages', [])):   # old math scratchpads (size-specific tricks): drop
+                continue
             if R.random() < KEEP.get(c, 0.0):
                 rows.append(line if line.endswith('\n') else line + '\n')
                 kept[c] = kept.get(c, 0) + 1

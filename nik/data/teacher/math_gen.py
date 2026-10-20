@@ -351,7 +351,7 @@ def give_get(R):
     return ex(q, think, f'{n} sanga aba {a - b} {unit} {it} baki chha.', a - b, 'multistep')
 
 
-FAMILIES = [(add_column, 3), (sub_column, 3), (mul_partial, 5), (division, 3.5), (give_get, 3), (fraction_add, 2), (fraction_of, 2), (percent_of, 2),
+FAMILIES = [(add_column, 1), (sub_column, 1), (mul_partial, 5), (division, 3.5), (give_get, 3), (fraction_add, 2), (fraction_of, 2), (percent_of, 2),
             (discount, 1.5), (shopping, 2), (profit_loss, 1.5), (simple_interest, 1.5), (average, 1.5), (speed, 2), (units, 2),
             (geometry, 2), (linear_eq, 2), (ratio, 1.5), (lcm_hcf, 1.5), (prime_check, 1), (squares, 1), (bus_passengers, 1.5),
             (ages, 1.5), (savings, 1.5), (clock, 1)]
