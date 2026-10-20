@@ -241,13 +241,14 @@
 
     // ---------- voice (NikTTS, on-device; loaded on first use)
     let ttsP = null, voiceReady = null;
-    fetch('/nik/web/tts/tts.json', { method: 'HEAD', cache: 'no-cache' })
+    fetch('/nik/web/tts/tts.json?t=' + Date.now(), { method: 'HEAD', cache: 'no-store' })
       .then((r) => { voiceReady = r.ok; document.querySelectorAll('.say-btn').forEach(markSay); })
       .catch(() => { voiceReady = false; });
     function markSay(b) {
-      if (voiceReady === false) { b.textContent = 'suna (awaj training ma)'; b.title = 'Nik\'s voice is still training on Kaggle, it will appear here automatically'; b.disabled = true; b.style.opacity = '.6'; }
+      // never lock the button: a press always re-checks (a stale 404 from a deploy or cache must not stick)
+      if (voiceReady === false) { b.textContent = 'suna'; b.title = 'listen (on-device voice)'; }
     }
-    const getTTS = () => (ttsP ||= import('/nik/web/tts.js').then((m) => m.NikTTS.load('/nik/web/tts')));
+    const getTTS = () => (ttsP ||= import('/nik/web/tts.js?v=2').then((m) => m.NikTTS.load('/nik/web/tts')));
     async function speak(text, btn) {
       try {
         if (btn) btn.textContent = 'awaj loading…';
@@ -256,7 +257,7 @@
         await t.speak(text);
       } catch (e) {
         ttsP = null;
-        if (btn) btn.textContent = String(e.message || e).includes('no voice') ? 'awaj chhito aaudai chha' : 'awaj error';
+        if (btn) { btn.textContent = String(e.message || e).includes('no voice') ? 'awaj bhetiyena, feri thichnus' : 'awaj error, feri thichnus'; btn.title = String(e.message || e); }
         return;
       }
       if (btn) btn.textContent = 'suna';
