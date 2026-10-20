@@ -1,0 +1,168 @@
+{
+ "score": 19,
+ "of": 26,
+ "rows": [
+  {
+   "kind": "memory",
+   "q": "ma kun thau bata hu?",
+   "a": "tapai aile dharan ma basnuhunchha.",
+   "pass": true
+  },
+  {
+   "kind": "memory",
+   "q": "bhai kati barsha ko bhayo?",
+   "a": "bhai 12 barsha ko hunuhunchha.",
+   "pass": true
+  },
+  {
+   "kind": "memory",
+   "q": "maile kun kura dherai man parchha bhaneko?",
+   "a": "tapai lai momo bhanda chiya man parchha.",
+   "pass": true
+  },
+  {
+   "kind": "memory",
+   "q": "ma aile kaha baschhu?",
+   "a": "tapai aile lalitpur ma basnuhunchha.",
+   "pass": true
+  },
+  {
+   "kind": "honest",
+   "q": "mero naam binod ho. mero buwa ko naam k ho?",
+   "a": "haina, binod ko naam naam bhaneko chhaina, tyasaile ma bhanna sakdina.",
+   "pass": true
+  },
+  {
+   "kind": "reading",
+   "q": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo pyaj kinyo?",
+   "a": "gopal le 1 kilo bhannu bhayeko 2 ho.",
+   "pass": true
+  },
+  {
+   "kind": "reading",
+   "q": "\"sunita doctor ho ra uski bahini engineer.\" sunita ko bahini k kaam garchhe?",
+   "a": "sunita ko bahini ko kaam bhaneko \"sunita doctor ho ramailo pani ramro.",
+   "pass": false
+  },
+  {
+   "kind": "yesno",
+   "q": "\"ram ghar gayo tara shyam school mai basyo.\" ke shyam ghar gayo?",
+   "a": "ho, shyam school gayo.",
+   "pass": false
+  },
+  {
+   "kind": "translate",
+   "q": "\"we are reading\" nepali ma bhana.",
+   "a": "\"we are reading\" lai nepali ma \"hami padhdai chhau\" bhanchha.",
+   "pass": true
+  },
+  {
+   "kind": "translate",
+   "q": "\"ma khana khadai chhu\" english ma k ho?",
+   "a": "\"ma khana khadai chhu\" ko english \"I am eating food.\" ho.",
+   "pass": true
+  },
+  {
+   "kind": "vocab",
+   "q": "\"river\" lai nepali ma k bhanchha?",
+   "a": "\"river\" lai nepali ma \"nadi\" bhaninchha.",
+   "pass": true
+  },
+  {
+   "kind": "grammar",
+   "q": "\"u kheldai chha\" lai negative banau.",
+   "a": "\"u kheldai chhaina\"",
+   "pass": true
+  },
+  {
+   "kind": "grammar",
+   "q": "\"kalam\" ko plural?",
+   "a": "\"kalam\" ko bahubachan \"kalamharu\" ho.",
+   "pass": true
+  },
+  {
+   "kind": "en-grammar",
+   "q": "\"children\" ko singular k ho?",
+   "a": "\"children\" ko singular \"child\" ho.",
+   "pass": true
+  },
+  {
+   "kind": "en-grammar",
+   "q": "correct this: \"he go to market.\"",
+   "a": "sahi: \"he goes to market.\"",
+   "pass": true
+  },
+  {
+   "kind": "english",
+   "q": "Asha had 12 balloons and 5 flew away. How many does she have now?",
+   "a": "Asha has 17 does now.",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "What is the capital of Nepal? answer in english.",
+   "a": "Bacvally a nb ko plural: \"eats the every day.\"",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "7, 42, 19, 3 madhye sabai bhanda sano kun?",
+   "a": "sabai bhanda sano 3 ho.",
+   "pass": true
+  },
+  {
+   "kind": "list",
+   "q": "5, 9, 2 lai thulo bata sano kram ma lekha.",
+   "a": "9, 5, 2",
+   "pass": true
+  },
+  {
+   "kind": "textop",
+   "q": "\"nepal\" ulto lekha.",
+   "a": "\"nepal\" ulto: \"lapen\".",
+   "pass": true
+  },
+  {
+   "kind": "textop",
+   "q": "\"kathmandu\" ma kati akshar chha?",
+   "a": "\"kathmandu\" ma 8 akshar chhan.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?",
+   "a": "kitab 40% bhaneko 10.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?",
+   "a": "aba 320 rupiya baki chha.",
+   "pass": true
+  },
+  {
+   "kind": "math",
+   "q": "15 ko 20 percent kati?",
+   "a": "15 ko 20% = 3.",
+   "pass": true
+  },
+  {
+   "kind": "context",
+   "q": "kaksha ma 14 keta ra 17 keti chhan. keti kati le badhi chhan?",
+   "a": "kaksha ma 7 jana chhan.",
+   "pass": false
+  },
+  {
+   "kind": "empathy",
+   "q": "aaja mero exam naramro bhayo, ekdam dukhi chhu.",
+   "a": "sunera dukha lagyo. chinta nagarnus, bistarai thik hunchha. ma sanga kura garna sakinchha.",
+   "pass": null
+  },
+  {
+   "kind": "persona",
+   "q": "timi lai kasle banako ho?",
+   "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "pass": true
+  }
+ ]
+}
