@@ -52,6 +52,10 @@ class NikConfig:
     abacus: int = 0
     digit_sp: list = field(default_factory=list)    # " 0".." 9" token ids (start a number)
     digit_ns: list = field(default_factory=list)    # "0".."9" token ids (continue a number)
+    # Ternary weights (BitNet b1.58, Ma et al. 2024): every Linear in the blocks is trained quantization-aware to
+    # {-1, 0, +1} x one scale per matrix, activations to int8 per token (straight-through gradients). 1.58 bits/weight
+    # (packed 2 bits) lets ~4x more parameters fit the same 25 MB budget, and the browser matmul becomes add/subtract.
+    ternary: bool = False
 
     @property
     def head_dim(self) -> int:
@@ -67,6 +71,10 @@ class NikConfig:
 
 PRESETS = {
     # ~20.5M params, 24 effective layers -> ~20.6 MB int8 (25 MB cap). The flagship.
+    # ~73M params with ternary block weights: 70M x 2 bits + int8 embeddings ~= 20 MB (same budget as nik-0.1, 3.5x params).
+    'nik-0.2t': NikConfig(d=640, n_unique=16, n_repeat=2, heads=10, kv_heads=2, ffn=1792, ctx=512, abacus=20, ternary=True),
+    # same shape at full precision (for the ablation: is ternary the loss, or the size?)
+    'nik-0.2f': NikConfig(d=640, n_unique=16, n_repeat=2, heads=10, kv_heads=2, ffn=1792, ctx=512, abacus=20),
     'nik-0.1': NikConfig(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     # ~8.3M params -> ~8.4 MB int8 (the original <10 MB design).
     'nik-small': NikConfig(abacus=20),
@@ -103,20 +111,36 @@ def apply_rope(x, cos, sin):
     return torch.stack((o1, o2), dim=-1).flatten(-2)
 
 
+class BitLinear(nn.Linear):
+    """BitNet b1.58 linear: ternary weights (absmean scale), int8 per-token activations, straight-through estimator.
+    Same parameter names/shapes as nn.Linear, so checkpoints, Muon and init are unchanged."""
+
+    def forward(self, x):
+        w = self.weight
+        s = w.abs().mean().clamp(min=1e-5)
+        wq = (w / s).round().clamp(-1, 1) * s
+        w = w + (wq - w).detach()
+        a = x.abs().amax(dim=-1, keepdim=True).clamp(min=1e-5) / 127.0
+        xq = (x / a).round().clamp(-128, 127) * a
+        x = x + (xq - x).detach()
+        return F.linear(x, w)
+
+
 class Block(nn.Module):
     def __init__(self, cfg: NikConfig):
         super().__init__()
         self.cfg = cfg
         hd = cfg.head_dim
         self.n1 = RMSNorm(cfg.d, cfg.eps)
-        self.q = nn.Linear(cfg.d, cfg.heads * hd, bias=False)
-        self.kv = nn.Linear(cfg.d, 2 * cfg.kv_heads * hd, bias=False)
-        self.o = nn.Linear(cfg.heads * hd, cfg.d, bias=False)
+        Lin = BitLinear if cfg.ternary else nn.Linear
+        self.q = Lin(cfg.d, cfg.heads * hd, bias=False)
+        self.kv = Lin(cfg.d, 2 * cfg.kv_heads * hd, bias=False)
+        self.o = Lin(cfg.heads * hd, cfg.d, bias=False)
         self.qn = RMSNorm(hd, cfg.eps)
         self.kn = RMSNorm(hd, cfg.eps)
         self.n2 = RMSNorm(cfg.d, cfg.eps)
-        self.up = nn.Linear(cfg.d, 2 * cfg.ffn, bias=False)    # [gate ; up] fused
-        self.down = nn.Linear(cfg.ffn, cfg.d, bias=False)
+        self.up = Lin(cfg.d, 2 * cfg.ffn, bias=False)    # [gate ; up] fused
+        self.down = Lin(cfg.ffn, cfg.d, bias=False)
 
     def forward(self, x, cos, sin, mask):
         cfg = self.cfg
