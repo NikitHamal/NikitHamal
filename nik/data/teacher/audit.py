@@ -50,7 +50,7 @@ def check(ex):
                     errs.append(f'answer!=gold({gold})')
         elif str(gold).lower() not in ans:
             errs.append(f'answer-missing-gold({gold})')
-        if kind.startswith(('math', 'reason')) and not msgs[-1].get('think'):
+        if kind.startswith(('math', 'reason')) and 'followup' not in kind and not msgs[-1].get('think'):
             errs.append('no-think')
     return errs
 

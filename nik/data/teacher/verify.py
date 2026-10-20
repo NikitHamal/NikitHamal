@@ -8,7 +8,7 @@ from fractions import Fraction
 import re
 
 NUM = r'\d+(?:\.\d+)?'
-EXPR = rf'(?:\(\s*)*{NUM}(?:\s*(?:[+\-x*/()]|{NUM}))*'   # a period only counts inside a decimal number
+EXPR = rf'(?:\(\s*)*-?{NUM}(?:\s*(?:[+\-x*/()]|{NUM}))*'   # a period only counts inside a decimal number
 CHAIN = re.compile(rf'(?<![\w.])({EXPR}(?:\s*=\s*{EXPR})+)')
 
 
