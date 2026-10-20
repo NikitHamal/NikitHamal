@@ -2,14 +2,14 @@
 and run the understanding probes + a light NikBench. Results go to <out>/<tag>_step<N>/ and a trend file
 <out>/trend.jsonl (one line per evaluated checkpoint). The molab notebook panel reads them.
 
-    python nik/scripts/live_eval.py --runs nik/runs --out /tmp/nik_live --every 15 --bench-n 4
+    python nik/scripts/live_eval.py --runs nik/runs --out /tmp/nik_live --every 1 --bench-n 4
 """
 import argparse, glob, json, os, shutil, subprocess, sys, time
 
 ap = argparse.ArgumentParser()
 ap.add_argument('--runs', default='nik/runs')
 ap.add_argument('--out', default='/tmp/nik_live')
-ap.add_argument('--every', type=float, default=15)
+ap.add_argument('--every', type=float, default=1, help='minutes between checks; every new checkpoint (saved each 1000 steps) is evaluated')
 ap.add_argument('--bench-n', type=int, default=4)
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
