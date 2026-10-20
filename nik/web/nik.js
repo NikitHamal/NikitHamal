@@ -445,9 +445,13 @@ async function fetchWithProgress(url, onProgress) {
 // Log-probability of the most recent sample (read by generate for confidence-weighted voting).
 export const lastSample = { lp: 0 };
 
-export function sample(logits, recent, { temperature = 0.7, topP = 0.9, minP = 0.05, repPenalty = 1.15, ban = [] } = {}) {
+export function sample(logits, recent, { temperature = 0.7, topP = 0.9, minP = 0.05, repPenalty = 1.15, ban = [], exempt = null } = {}) {
   const V = logits.length;
-  for (const id of recent) logits[id] = logits[id] > 0 ? logits[id] / repPenalty : logits[id] * repPenalty;
+  // repetition penalty never touches digits / operators / punctuation: arithmetic repeats them by nature
+  for (const id of new Set(recent)) {
+    if (exempt && exempt.has(id)) continue;
+    logits[id] = logits[id] > 0 ? logits[id] / repPenalty : logits[id] * repPenalty;
+  }
   for (const id of ban) logits[id] = -Infinity;
   if (temperature <= 0) {
     let best = 0;
@@ -480,12 +484,20 @@ export function sample(logits, recent, { temperature = 0.7, topP = 0.9, minP = 0
  * each emitted token. Stops at <|end|> / <|eos|> or maxNew.
  */
 export function* generate(model, promptIds, opts = {}) {
-  const { maxNew = 160, mode = 'ssbd', stop = [TOK.END, TOK.EOS] } = opts;
+  const { mode = 'ssbd', stop = [TOK.END, TOK.EOS] } = opts;
   const c = model.cfg, Bk = c.block;
   const ban = [TOK.PAD, TOK.BOS, TOK.MASK, TOK.SYS, TOK.USER, TOK.NIK];
-  const so = { ...opts, ban };
+  if (!model._exempt) {        // tokens made only of digits, spaces, operators and punctuation
+    model._exempt = new Set();
+    for (let i = 0; i < c.vocab; i++) { const t = model.tok.decode([i]); if (t && /^[0-9\s+\-x*\/=().,:;%]+$/.test(t)) model._exempt.add(i); }
+  }
+  const so = { ...opts, ban, exempt: model._exempt };
+  // Nik was trained with a 512-token window: keep prompt + reply inside it (no sliding mid-reasoning)
+  const maxNew = Math.max(16, Math.min(opts.maxNew ?? 160, c.ctx - promptIds.length - 2 * Bk - 4));
   let logits = model.prefill(promptIds).slice();
-  const out = [], recent = () => out.slice(-48);
+  const out = [];
+  // no repetition penalty inside <|think|>: step-by-step work legitimately repeats words ("ek:", "haat", "lekhne")
+  const recent = () => (out.lastIndexOf(TOK.THINK) > out.lastIndexOf(TOK.ETHINK) ? [] : out.slice(-48));
   let passes = 0;
   const stats = () => ({ tokens: out.length, passes });
   const done = (t) => stop.includes(t) || out.length >= maxNew;

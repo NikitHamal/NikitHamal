@@ -27,12 +27,13 @@ import numpy as np
 import torch
 
 sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'teacher'))
 from model import NikConfig, NikLM, generate_ar, generate_batch  # noqa: E402
 from prepare import render_chat  # noqa: E402
 from selfimprove import DAYS, ITEMS, NAMES, correct, split, steps_valid  # noqa: E402
 from tokenizer import Tokenizer  # noqa: E402
 
-SKILLS = ['add', 'sub', 'mul', 'div', 'word', 'price', 'day']
+SKILLS = ['add', 'sub', 'mul', 'div', 'word', 'price', 'day', 'compose']
 MAX_LEVEL = 6
 
 
@@ -59,6 +60,12 @@ def make(skill: str, level: int, R: random.Random):
             return f'{n_} sanga {a} wata {it} thiyo. aama le {b} wata thap dinubhayo. aba jamma kati bhayo?', a + b, 'word+'
         a, b = max(a, b), min(a, b)
         return f'{n_} sanga {a} wata {it} chha. usle {b} wata sathi lai diyo. aba {n_} sanga kati {it} baki chha?', a - b, 'word-'
+    if skill == 'compose':      # multi-step word problem, no fixed template; level = number of events
+        import compose
+        while True:
+            e = compose.problem(R, n_events=1 + min(level, 4))
+            if e:
+                return e['q'], int(e['gold']), 'compose'
     if skill == 'price':
         price, qty = R.choice([5, 10, 15, 20, 25, 30, 45, 50]) * (10 if level > 3 else 1), R.randint(2, 4 + 2 * level)
         return f'ek wata {R.choice(ITEMS)} ko {price} rupiya parchha. {qty} wata kinda kati rupiya lagchha?', price * qty, 'price'

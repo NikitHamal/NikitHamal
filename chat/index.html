@@ -145,7 +145,7 @@
       <div class="row"><label for="sTemp">temperature</label><input id="sTemp" type="range" min="0" max="1.5" step="0.05"><output id="oTemp"></output></div>
       <div class="row"><label for="sTopP">top-p</label><input id="sTopP" type="range" min="0.5" max="1" step="0.01"><output id="oTopP"></output></div>
       <div class="row"><label for="sMinP">min-p</label><input id="sMinP" type="range" min="0" max="0.3" step="0.01"><output id="oMinP"></output></div>
-      <div class="row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="256" step="8"><output id="oMax"></output></div>
+      <div class="row"><label for="sMax">max tokens</label><input id="sMax" type="range" min="32" max="480" step="8"><output id="oMax"></output></div>
       <div class="row"><label>decoding</label><div class="seg" id="sMode"><button data-v="ar">ar</button><button data-v="ssbd">ssbd</button></div></div>
       <div class="row"><label>thinking</label><div class="seg" id="sVote"><button data-v="5">5 paths</button><button data-v="3">3 paths</button><button data-v="1">1 path</button></div></div>
       <div class="row"><label>voice</label><div class="seg" id="sSpeak"><button data-v="off">manual</button><button data-v="on">auto-speak</button></div></div>
@@ -186,10 +186,10 @@
     const root = document.documentElement;
     const state = {
       msgs: JSON.parse(localStorage.getItem('nik-chat') || '[]'),
-      opts: Object.assign({ temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 200, mode: 'ar', vote: 5, speak: false }, JSON.parse(localStorage.getItem('nik-opts') || '{}')),
+      opts: Object.assign({ temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 440, mode: 'ar', vote: 5, speak: false }, JSON.parse(localStorage.getItem('nik-opts-v2') || '{}')),
       ready: false, busy: false, cur: null, id: 0,
     };
-    const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts', JSON.stringify(state.opts)); };
+    const save = () => { localStorage.setItem('nik-chat', JSON.stringify(state.msgs.slice(-40))); localStorage.setItem('nik-opts-v2', JSON.stringify(state.opts)); };
     const isDark = () => root.dataset.theme === 'dark';
 
     // ---------- theme
