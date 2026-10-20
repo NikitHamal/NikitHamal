@@ -133,9 +133,16 @@ else:
   sh(f'{launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name {a.data_name} --diff-weight 0 --out nik/runs/{a.tag}pre --steps 100000000 '
      f'--minutes {a.pre_min} --bs {bs} --lr {3e-3 * lr_scale:.2e} --warmup 300 --eval-every 1000 --mix {a.mix} --user-w {a.user_w} '
      f'--opt muon --ema 0.999 --sched {a.sched} {compile_flag}', log=f'{a.tag}pre.log', quiet=True)
+sys.path.insert(0, 'nik')
+from model import PRESETS  # noqa: E402
+TERNARY = PRESETS[a.preset].ternary     # int8 export would store the latent fp weights: evaluate the checkpoint itself
 if f'{a.tag}pre' not in scores:                    # (already scored when a crashed run is resumed)
-    sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}pre/ckpt.pt --out {OUT}/nik-0.1.{a.tag}pre.bin')
-    evaluate(f'{a.tag}pre', f'{OUT}/nik-0.1.{a.tag}pre.bin')
+    if TERNARY:
+        shutil.copy(f'nik/runs/{a.tag}pre/ckpt.pt', f'{OUT}/{a.tag}pre.pt')
+        evaluate(f'{a.tag}pre', f'{OUT}/{a.tag}pre.pt')
+    else:
+        sh(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}pre/ckpt.pt --out {OUT}/nik-0.1.{a.tag}pre.bin')
+        evaluate(f'{a.tag}pre', f'{OUT}/nik-0.1.{a.tag}pre.bin')
 
 # 3. stage B: SFT (answers only, lower LR, less corpus)
 if a.sft_min > 0:
