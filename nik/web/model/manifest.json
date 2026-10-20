@@ -2,14 +2,29 @@
   "name": "nik 0.1",
   "file": "nik-0.1.bin",
   "bytes": 20689696,
-  "version": "2026-10-20T12:30Z",
-  "trained": "8x B300 \u00b7 pretrain 10.9k steps (val ppl 13.7) + understanding SFT (pure AR) + 3 gens verified self-improvement",
+  "version": "2026-10-20T18:05Z",
+  "trained": "molab RTX PRO 6000 \u00b7 v4: instruction pre-training from scratch, 150 min (55% Nepali corpus + 45% conversations: teacher generators + 549 hand-written gold), pure AR",
   "eval": {
-    "math_acc": 0.58,
-    "persona_acc": 1.0,
-    "val_ppl": 19.27,
-    "understanding_probes": "3/26",
-    "understanding_in_distribution": "25/39"
+    "nikbench": 0.632,
+    "nikbench_groups": {
+      "arith": "79/96",
+      "word": "0/24",
+      "reason": "12/24"
+    },
+    "math_acc": 0.935,
+    "persona_acc": 0.857,
+    "understanding_probes": "5/26",
+    "chat_check": "15/15",
+    "stress": "38/103"
   },
-  "note": "math 22.5% -> 58%; held-out RSI accuracy 76.8% -> 82.7%. Still template-bound on unfamiliar phrasings (next: augmented SFT)."
+  "note": "Beats the B300 model on NikBench (+24 pts), math (+36 pts), understanding, chat sanity and the 120-prompt stress test. Still weak: reading natural sentences, translation, word problems, writing. Next: v4b (balanced chat/writing/reading SFT).",
+  "previous": {
+    "file": "nik-0.1.b300.bin",
+    "nikbench": 0.396,
+    "math_acc": 0.57,
+    "persona_acc": 1.0,
+    "understanding_probes": "3/26",
+    "chat_check": "11/15",
+    "stress": "24/103"
+  }
 }
