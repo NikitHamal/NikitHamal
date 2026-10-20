@@ -11,6 +11,9 @@
 # <user>/nik-cluster-out, so Claude can fetch and publish it.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
+# use the node venv made by setup_node.sh if present
+[ -z "${VIRTUAL_ENV:-}" ] && [ -f .venv/bin/activate ] && source .venv/bin/activate
+python3 -c "import torch" 2>/dev/null || { echo "PyTorch missing: run  bash nik/scripts/setup_node.sh  first"; exit 1; }
 BUDGET_MIN=${BUDGET_MIN:-150}
 PRESET=${PRESET:-nik-0.1}
 BS=${BS:-64}                      # per GPU; 8 GPUs x 64 x 513 = 263k tokens / step

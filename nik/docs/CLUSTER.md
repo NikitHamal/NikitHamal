@@ -29,6 +29,7 @@ Choose **B300**. The model is small (d = 384), so neither GPU is compute-bound; 
 # on the node
 export KAGGLE_API_TOKEN=<your token>
 git clone https://github.com/NikitHamal/NikitHamal.git && cd NikitHamal
+bash nik/scripts/setup_node.sh                      # venv + newest verified PyTorch CUDA wheel for this GPU (B300 = sm_103)
 BUDGET_MIN=150 bash nik/scripts/cluster_run.sh      # then tell Claude "fetch cluster"
 ```
 
