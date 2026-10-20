@@ -20,11 +20,24 @@ def main():
     ap.add_argument('--data', default='data')
     ap.add_argument('--teacher', type=int, default=200000)
     ap.add_argument('--seed', type=int, default=21)
+    ap.add_argument('--name', default='sft2', help='output data/<name>.jsonl and <name>_tok.bin')
+    ap.add_argument('--parts', type=int, default=1, help='build the teacher set in N parallel processes (different seeds)')
     a = ap.parse_args()
     R = random.Random(a.seed)
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    tpath = os.path.join(a.data, 'teacher2.jsonl')
-    subprocess.run([sys.executable, os.path.join(root, 'data/teacher/build.py'), '--n', str(a.teacher), '--seed', str(a.seed), '--out', tpath], check=True)
+    tpath = os.path.join(a.data, f'teacher_{a.name}.jsonl')
+    per = a.teacher // a.parts
+    procs = [subprocess.Popen([sys.executable, os.path.join(root, 'data/teacher/build.py'), '--n', str(per), '--seed', str(a.seed + 1000 * i),
+                               '--out', f'{tpath}.part{i}'], stdout=subprocess.DEVNULL) for i in range(a.parts)]
+    assert all(p.wait() == 0 for p in procs), 'teacher build failed'
+    seen = set()
+    with open(tpath, 'w') as f:                       # merge parts, dropping cross-part duplicates
+        for i in range(a.parts):
+            for line in open(f'{tpath}.part{i}'):
+                k = json.dumps([m['content'] for m in json.loads(line)['messages'] if m['role'] == 'user'])
+                if k not in seen:
+                    seen.add(k); f.write(line)
+            os.remove(f'{tpath}.part{i}')
     rows, kept = [], {}
     src = os.path.join(a.data, 'sft.jsonl')
     if not os.path.exists(src):          # no v1 file: regenerate the chat/persona rows (no corpus -> no "write" rows)
@@ -39,11 +52,11 @@ def main():
                 kept[c] = kept.get(c, 0) + 1
     rows += open(tpath).readlines()
     R.shuffle(rows)
-    with open(os.path.join(a.data, 'sft2.jsonl'), 'w') as f:
+    with open(os.path.join(a.data, f'{a.name}.jsonl'), 'w') as f:
         f.writelines(rows)
-    print('kept from v1:', kept, '| teacher:', a.teacher, '| total', len(rows), flush=True)
+    print('kept from v1:', kept, '| teacher:', len(seen), '| total', len(rows), flush=True)
     subprocess.run([sys.executable, os.path.join(root, 'prepare.py'), '--data', a.data, '--tok', os.path.join(root, 'web/model/tokenizer.json'),
-                    '--sft-only', '--sft-name', 'sft2'], check=True)
+                    '--sft-only', '--sft-name', a.name], check=True)
 
 
 if __name__ == '__main__':

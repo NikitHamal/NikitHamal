@@ -12,6 +12,7 @@ import argparse, json, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import math_gen, math2, reason_gen, reason2, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
+from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
 from explain2 import GOLD2  # noqa: E402
 ALL_GOLD = GOLD + GOLD2
@@ -38,6 +39,10 @@ def explanation(R):
 
 
 def one(R):
+    return augment_example(_one(R), R)
+
+
+def _one(R):
     k = R.random()
     if k < 0.24:
         return to_example(math_gen.sample(R), 'math', R)

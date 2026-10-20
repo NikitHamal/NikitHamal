@@ -30,13 +30,15 @@ def long_memory(R):
     pet_name = pick(R, ['tommy', 'kale', 'bhunte', 'lucky', 'chinu', 'moti'])
     sib = R.randint(1, 4)
     facts = {
-        'naam': (f'mero naam {n} ho.', f'namaste {n}! ramro naam.', n),
-        'thau': (f'ma {p} ma baschhu.', f'{p}! tyo thau ko mausam kasto chha?', p),
-        'khana': (f'malai {f} sabai bhanda man parchha.', f'{f} mitho hunchha, malai pani ramro lagchha.', f),
-        'ruchi': (f'phursad ma ma {h} rumaauchhu.', f'{h} ramro ruchi ho!', h),
-        'kaam': (f'ma {j} hu.', f'{j} ko kaam mahattwapurna chha.', j),
+        'naam': (pick(R, [f'mero naam {n} ho.', f'ma {n} hu.', f'hi, ma {n}.', f'malai {n} bhanchhan.', f'{n} ho mero naam.']), f'namaste {n}! ramro naam.', n),
+        'thau': (pick(R, [f'ma {p} ma baschhu.', f'ma {p} bata hu.', f'mero ghar {p} ma chha.', f'{p} mero ghar ho.', f'ahile {p} ma basdai chhu.']),
+                 f'{p}! tyo thau ko mausam kasto chha?', p),
+        'khana': (pick(R, [f'malai {f} sabai bhanda man parchha.', f'mero favourite khana {f} ho.', f'{f} bhaye ta ma jahile pani khanchhu.']),
+                  f'{f} mitho hunchha, malai pani ramro lagchha.', f),
+        'ruchi': (pick(R, [f'phursad ma ma {h} rumaauchhu.', f'mero hobby {h} ho.', f'khali samaya ma {h} man parchha.']), f'{h} ramro ruchi ho!', h),
+        'kaam': (pick(R, [f'ma {j} hu.', f'ma {j} ko kaam garchhu.', f'pesa le ma {j} hu.']), f'{j} ko kaam mahattwapurna chha.', j),
         'pet': (f'mero euta {pet_np} chha, usko naam {pet_name} ho.', f'{pet_name} ramro naam ho! {pet_np} sanga khelna ramailo hunchha.', pet_name),
-        'sib': (f'mero {sib} jana daju bhai didi bahini chhan.', f'{sib} jana! ghar ma ramailo hola.', str(sib)),
+        'sib': (pick(R, [f'mero {sib} jana daju bhai didi bahini chhan.', f'hami ghar ma {sib} jana sibling chhau, ma bahek.']), f'{sib} jana! ghar ma ramailo hola.', str(sib)),
     }
     keys = R.sample(list(facts), R.randint(3, 5))
     small = [('aaja mausam kasto chha hola?', 'ma mausam herna sakdina, tara jhyal bata heryo bhane thaha hunchha.'),
@@ -62,13 +64,15 @@ def long_memory(R):
         m += [{'role': 'user', 'content': f'actually mero ramro naam {n2} ho, {n} ta ghar ko naam ho.'},
               {'role': 'nik', 'content': f'bujhe, ma tapailai {n2} bhanera bolaunchhu.'}]
         gold = n2
-    ask = {'naam': ('mero naam k ho?', f'tapai ko naam {gold} ho.'),
-           'thau': ('ma aile kaha baschhu?', f'tapai aile {gold} ma basnuhunchha.'),
-           'khana': ('malai sabai bhanda kun khana man parchha?', f'tapailai {gold} sabai bhanda man parchha.'),
-           'ruchi': ('ma phursad ma k garchhu?', f'tapai phursad ma {gold} rumaaunuhunchha.'),
-           'kaam': ('ma k kaam garchhu?', f'tapai {gold} hunuhunchha.'),
-           'pet': ('mero pet ko naam k ho?', f'tapai ko {pet_np} ko naam {gold} ho.'),
-           'sib': ('mero kati jana daju bhai didi bahini chhan?', f'tapai ka {gold} jana daju bhai didi bahini chhan.')}
+    ask = {'naam': (pick(R, ['mero naam k ho?', 'mero naam yaad chha?', 'ma ko hu, bhana ta?', 'maile mero naam k bhaneko thiye?']), f'tapai ko naam {gold} ho.'),
+           'thau': (pick(R, ['ma aile kaha baschhu?', 'mero ghar kata ho?', 'ma kun sahar ma chhu?', 'maile kaha basne bhaneko?']), f'tapai aile {gold} ma basnuhunchha.'),
+           'khana': (pick(R, ['malai sabai bhanda kun khana man parchha?', 'mero favourite khana k ho?', 'maile kun khana man parchha bhaneko thiye?']),
+                     f'tapailai {gold} sabai bhanda man parchha.'),
+           'ruchi': (pick(R, ['ma phursad ma k garchhu?', 'mero hobby k ho?', 'khali samaya ma ma k garna rumaauchhu?']), f'tapai phursad ma {gold} rumaaunuhunchha.'),
+           'kaam': (pick(R, ['ma k kaam garchhu?', 'mero pesa k ho?', 'maile aafno kaam k bhaneko thiye?']), f'tapai {gold} hunuhunchha.'),
+           'pet': (pick(R, ['mero pet ko naam k ho?', f'mero {pet_np} ko naam yaad chha?']), f'tapai ko {pet_np} ko naam {gold} ho.'),
+           'sib': (pick(R, ['mero kati jana daju bhai didi bahini chhan?', 'malai kati jana sibling chhan bhaneko thiye?']),
+                   f'tapai ka {gold} jana daju bhai didi bahini chhan.')}
     q, a = ask[target]
     if R.random() < 0.4:                                   # summary question instead
         q = 'ahile samma mero barema timi lai k k thaha chha?'
@@ -186,13 +190,18 @@ def list_ops(R):
     return ex(f'yi shabda haru lai a-b-c kram ma milaunus: {", ".join(words)}', f'kram ma: {", ".join(sorted(words))}.', sorted(words)[0], 'list')
 
 
-POS = ['aaja ma dherai khusi chhu', 'yo khana ekdam mitho chha', 'mero result ramro aayo', 'sathi haru sanga ramailo bhayo', 'yo film ekdam ramro thiyo']
-NEG = ['aaja mero din naramro gayo', 'ma ekdam thakit ra dukhi chhu', 'yo khana ali pani mitho chhaina', 'exam ma fail bhaye', 'mero phone haraayo']
+POS_EV = ['mero result aayo', 'naya job paaye', 'sathi haru sanga ghumna gaye', 'aama le mitho khana pakaunubhayo', 'exam ma pass bhaye',
+          'mero team le match jityo', 'naya phone kine', 'didi ko bihe ramro sang sakiyo', 'project sakiyo', 'scholarship paaye']
+NEG_EV = ['exam naramro bhayo', 'mero phone haraayo', 'ma bimar chhu', 'sathi sanga jhagada bhayo', 'job bata nikaliye', 'ghar ko yaad aayo',
+          'mero kukur haraayo', 'result ramro aayena', 'paisa sakiyo', 'boss le gali garyo', 'interview ma fail bhaye']
+POS_FEEL = ['dherai khusi chhu', 'ekdam ramailo lagyo', 'kati khusi lagyo', 'ekdam excited chhu', 'man ramro bhayo']
+NEG_FEEL = ['dukhi chhu', 'ekdam udas chhu', 'man naramro bhayo', 'tension ma chhu', 'runa man lagyo', 'thakit ra nirash chhu']
 
 
 def sentiment(R):
     pos = R.random() < 0.5
-    s = pick(R, POS if pos else NEG)
+    when = pick(R, ['aaja ', 'hijo ', '', 'bharkhar '])
+    s = when + pick(R, POS_EV if pos else NEG_EV) + pick(R, [', ', ' ani ', '. ']) + pick(R, POS_FEEL if pos else NEG_FEEL)
     if R.random() < 0.5:
         a = 'yo wakya sakaratmak (khusi) bhawana ko ho.' if pos else 'yo wakya nakaratmak (dukhi) bhawana ko ho.'
         return ex(f'"{s}" - yo wakya khusi ko ho ki dukhi ko?', a, 'khusi' if pos else 'dukhi', 'sentiment')
