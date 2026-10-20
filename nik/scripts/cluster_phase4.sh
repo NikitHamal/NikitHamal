@@ -13,7 +13,9 @@ say() { echo "[phase4 $(date -u +%H:%M:%S)] $*"; }
 NGPU=$(python3 -c "import torch; print(max(1, torch.cuda.device_count()))")
 LAUNCH="torchrun --standalone --nproc_per_node $NGPU"; [ "$NGPU" = "1" ] && LAUNCH=python3
 say "waiting for phase 3 to upload"
-until grep -q 'uploaded phase 3\|\] done' "$OUT/phase3.log" 2>/dev/null && ! pgrep -f 'cluster_phase3\.sh' >/dev/null; do sleep 15; done
+# wait for the phase-3 outputs themselves (process-name checks are fooled by idle tmux shells)
+until [ -f "$OUT/understand-v3.json" ] && [ -f "$OUT/ckpt-sft3.pt" ]; do sleep 15; done
+sleep ${UPLOAD_WAIT:-120}   # let the phase-3 upload finish before GPUs get busy again
 [ -f "$RUN/sft3/ckpt.pt" ] || { say "no phase-3 checkpoint, nothing to do"; exit 0; }
 say "RSI on v3 for $BUDGET min"
 python3 nik/rsi.py --init "$RUN/sft3/ckpt.pt" --data data --out "$RUN/rsi4" --generations 20 --problems $((NGPU * 250)) --k 8 \
