@@ -102,12 +102,17 @@ if torch.cuda.is_available():
     best = None
     for b in ([a.bs] if a.bs else [64, 128, 256, 384]):
         rc = sh(f'timeout 900 {launch} nik/train.py --stage sft --preset {a.preset} --data data --sft-name sft4 --diff-weight 0 '
-                f'--out /tmp/nik_probe --steps 60 --bs {b} --eval-every 1000000 --opt muon --compile', log=f'probe_bs{b}.log', check=False, quiet=True)
+                f'--out /tmp/nik_probe --steps 150 --bs {b} --eval-every 1000000 --opt muon --compile', log=f'probe_bs{b}.log', check=False, quiet=True)
         txt = open(f'{OUT}/probe_bs{b}.log').read()
-        tps = [float(x.replace(',', '')) for x in re.findall(r'\| ([\d,]+) tok/s', txt)]
-        say(f'probe bs {b}: rc {rc} | {tps[-1] if tps else 0:,.0f} tok/s')
-        if rc == 0 and tps and (best is None or tps[-1] > best[1] * 1.05):
-            best = (b, tps[-1])
+        # marginal rate between step 75 and 150 (cumulative tok/s includes the compile time)
+        pts = {int(st): float(t.replace(',', '')) for st, t in re.findall(r'step (\d+) \|.*?\| ([\d,]+) tok/s', txt)}
+        rate = 0.0
+        if 75 in pts and 150 in pts:
+            n1, n2 = 75 * b * 512, 150 * b * 512
+            rate = (n2 - n1) / (n2 / pts[150] - n1 / pts[75])
+        say(f'probe bs {b}: rc {rc} | {rate:,.0f} tok/s after compile')
+        if rc == 0 and rate and (best is None or rate > best[1] * 1.05):
+            best = (b, rate)
     if best:
         compile_flag, bs = '--compile', best[0]
 say('batch', bs, '| compile', bool(compile_flag))
