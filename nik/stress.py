@@ -11,6 +11,7 @@ from eval_understand import load_any  # noqa: E402
 from model import generate_ar  # noqa: E402
 from prepare import render_chat  # noqa: E402
 from tokenizer import Tokenizer  # noqa: E402
+from read_scoring import matches as read_matches  # noqa: E402
 
 # (category, prompt or [turns], expected substrings (any-of groups: all groups must match; '|' = alternatives), None = manual)
 P = [
@@ -104,6 +105,7 @@ def main():
     ap.add_argument('--calc', action='store_true', help='verified arithmetic decoding (calc.py)')
     ap.add_argument('--out', default=None)
     ap.add_argument('--max-new', type=int, default=200)
+    ap.add_argument('--category', choices=sorted({cat for cat, _, _ in P}), help='run one category without changing its prompts')
     a = ap.parse_args()
     tok = Tokenizer.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'web/model/tokenizer.json'))
     from calc import Calc
@@ -111,6 +113,8 @@ def main():
     model = load_any(a.model).eval()
     rows, score, scored, by = [], 0, 0, {}
     for cat, prompt, want in P:
+        if a.category and cat != a.category:
+            continue
         turns = prompt if isinstance(prompt, list) else [prompt]
         msgs, out = [], ''
         for t in turns:                                      # earlier turns are answered by the model itself
@@ -129,7 +133,8 @@ def main():
         if len(ans) < 2: flags.append('empty')
         ok = None
         if want is not None:
-            ok = all(any(alt in low for alt in grp.split('|')) for grp in want) and not flags
+            matched = read_matches(ans, want) if cat == 'read' else all(any(alt in low for alt in grp.split('|')) for grp in want)
+            ok = matched and not flags
             scored += 1; score += ok
             by.setdefault(cat, [0, 0]); by[cat][0] += ok; by[cat][1] += 1
         rows.append({'cat': cat, 'prompt': turns, 'answer': ans, 'think': th.group(1) if th else '', 'ok': ok, 'flags': flags})

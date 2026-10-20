@@ -1,0 +1,113 @@
+{
+  "seed": 821,
+  "samples": 100000,
+  "kinds": {
+    "read-unknown": 9850,
+    "read-lookup": 36226,
+    "read-compare": 13979,
+    "read-memory": 17961,
+    "read-english": 5998,
+    "read-yesno": 15986
+  },
+  "ungrounded_day": {
+    "read-lookup": 342,
+    "read-memory": 201
+  },
+  "examples": [
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "sombar",
+        "messages": [
+          {
+            "role": "user",
+            "content": "kahani: raati 8 baje bikash gym tira gayo. saroj ko kaam lekhapal ko ho. sunaina le bazaar bata 15 ota aanp kinin. bikash ko ruchi pakaune ho. bikash bhairahawa ma baschha. bikash kun bar gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "bikash sombar gayo.",
+            "think": "passage ma: \"raati 8 baje bikash gym tira gayo\"."
+          }
+        ],
+        "cat": "read-lookup"
+      },
+      "current_auditor_errors": []
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "aaitabar",
+        "messages": [
+          {
+            "role": "user",
+            "content": "passage: \"beluka 7 baje deepa park tira gain. sabai jana khusi thiye. sushil developer ho.\"\nprashna: deepa kun bar gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "deepa aaitabar gain.",
+            "think": "passage ma: \"beluka 7 baje deepa park tira gain\"."
+          }
+        ],
+        "cat": "read-lookup"
+      },
+      "current_auditor_errors": []
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "sanibar",
+        "messages": [
+          {
+            "role": "user",
+            "content": "kahani: shyam ahile 35 barsha pugyo. bihana 9 baje lakpa office tira gayo. shyam lai sabai bhanda chiya mitho lagchha. bihibar shyam beluka 7 baje college gayo. lakpa kun bar gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "lakpa sanibar gayo.",
+            "think": "passage ma: \"bihana 9 baje lakpa office tira gayo\"."
+          }
+        ],
+        "cat": "read-lookup"
+      },
+      "current_auditor_errors": []
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "sanibar",
+        "messages": [
+          {
+            "role": "user",
+            "content": "yo padha: \"nisha sanga 12 ota bakhra chha. dawa shikshak ko kaam garchha. dawa le jhyape naam ko bakhra paleko chha. raati 8 baje rupa hospital tira gain. rupa 75 barsha ki ho. rupa pesa le sikarmi ho.\" rupa kun bar gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "rupa sanibar gain.",
+            "think": "passage ma: \"raati 8 baje rupa hospital tira gain\"."
+          }
+        ],
+        "cat": "read-lookup"
+      },
+      "current_auditor_errors": []
+    },
+    {
+      "example": {
+        "kind": "read-lookup",
+        "gold": "sombar",
+        "messages": [
+          {
+            "role": "user",
+            "content": "passage: \"utsav ahile 37 barsha pugyo. raati 8 baje mohan thana tira gayo. beluka 7 baje utsav khet tira gayo. mohan pesa le byapari ho. mohan lai sabai bhanda juju dhau mitho lagchha.\"\nprashna: mohan kun bar gayo?"
+          },
+          {
+            "role": "nik",
+            "content": "mohan sombar gayo.",
+            "think": "passage ma: \"raati 8 baje mohan thana tira gayo\"."
+          }
+        ],
+        "cat": "read-lookup"
+      },
+      "current_auditor_errors": []
+    }
+  ]
+}

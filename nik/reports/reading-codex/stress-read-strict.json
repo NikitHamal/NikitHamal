@@ -1,0 +1,112 @@
+{
+ "score": 0,
+ "of": 10,
+ "by_cat": {
+  "read": [
+   0,
+   10
+  ]
+ },
+ "rows": [
+  {
+   "cat": "read",
+   "prompt": [
+    "\"binod ko pasal butwal ma chha ra usko didi ko pasal pokhara ma.\" binod ko didi ko pasal kaha?"
+   ],
+   "answer": "windows of jiwan ko lagi dherai mahattwapurna chha. tapai ko mehanat le arulai pani faida pugchha.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"kamal le 4 ota kalam ra 3 ota kapi kinyo.\" kamal le kati kapi kinyo?"
+   ],
+   "answer": "kamal le jamma 105 wata kapi kinyo.",
+   "think": "kalam: 4 ota kitab: 4 x 15 = 60, kapi: 3 x 15 = 45. jamma: 60 + 45 = 105.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"sarita doctor hun, unka shriman pilot.\" sarita ko shriman k kaam garchhan?"
+   ],
+   "answer": "sarita le shrimati lai dherai khusi lagyo.",
+   "think": "nata hernu: sarita, pilot; sarita.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"bus 8 baje aauchha bhaneko thiyo tara 9 baje aayo.\" bus kati dhilo aayo?"
+   ],
+   "answer": "bus 7 ghanta aayo.",
+   "think": "9 baje aayo, tyasaile 10 baje aadhar x 2 ghanta = 7 ghanta.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"nima lai momo man parchha tara chowmein man pardaina.\" nima lai chowmein man parchha?"
+   ],
+   "answer": "ho, tapai ko jawaf thik chha!",
+   "think": "thulo haru ko mol nikalchhu: nima lai 3. ani \"nima\" le malai momo man parchha.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"hamro gaun ma 3 ota dhara chhan, euta bigreko chha.\" kati dhara chaleko chha?"
+   ],
+   "answer": "2 ra 3/3 = 2/3 hunchha.",
+   "think": "3, bigreko bhaneko 2 ra 3 le 2/3. 1/3 bhaneko 2 ra 3 ko bigreko: 1/3 = 2/3. ani 2/3 = 4/3.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"rajan sombar dekhi sukrabar office janchha.\" rajan sanibar office janchha?"
+   ],
+   "answer": "rajanak thau ma 'raja' ko pwainta ho.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"meena le aaja 5 km hidin, hijo 3 km.\" dui din ma jamma kati?"
+   ],
+   "answer": "duitai barabar 6 km.",
+   "think": "3 + 3 = 6 bhag.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"ganesh ko kukur ko naam moti ho.\" ganesh ko biralo ko naam k ho?"
+   ],
+   "answer": "bujhe, tapai ko kukur ko biralo.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"ilam ma chiya kheti dherai hunchha.\" ilam kun kheti ko lagi prasiddha?"
+   ],
+   "answer": "ilam ramro | suntala | suntala | kera. ulto.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  }
+ ]
+}
