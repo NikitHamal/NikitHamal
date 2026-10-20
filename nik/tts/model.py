@@ -257,3 +257,71 @@ class Discriminators(nn.Module):
 
     def forward(self, x):
         return [d(x) for d in self.ds]
+
+
+# ------------------------------------------------------------------ v2: flow-matching decoder (Matcha-TTS style)
+class AcousticCFM(Acoustic):
+    """Encoder + MAS durations as in Acoustic, but the decoder is a conditional
+    flow-matching (OT-CFM, Lipman et al. 2023; Matcha-TTS, Mehta et al. 2024) vector
+    field: it learns to transport Gaussian noise to the real mel *distribution*, so
+    the output keeps natural pitch movement and texture instead of the over-smoothed
+    average an L1 decoder produces (the "robotic" v1 sound). Mels are normalised with
+    dataset mean/std so noise and data share a scale."""
+
+    def __init__(self, c: TTSConfig, mel_mean: float = -5.5, mel_std: float = 2.2):
+        super().__init__(c)
+        self.register_buffer('mel_mean', torch.tensor(float(mel_mean)))
+        self.register_buffer('mel_std', torch.tensor(float(mel_std)))
+        self.t_mlp = nn.Sequential(nn.Linear(c.d, c.d), nn.SiLU(), nn.Linear(c.d, c.d))
+        self.v_in = nn.Linear(2 * N_MELS + c.d, c.d)
+        # self.dec (FFT blocks) + self.out are reused from Acoustic as the vector-field network
+        del self.dec_in
+
+    def norm(self, m):
+        return (m - self.mel_mean) / self.mel_std
+
+    def denorm(self, m):
+        return m * self.mel_std + self.mel_mean
+
+    def vfield(self, x, t, h_exp, mu_exp, spk, fpad):
+        """x (B,F,80) noisy mel at time t (B,) -> velocity (B,F,80)."""
+        te = self.t_mlp(sinusoid(1000, self.c.d, x.device)[(t * 999).long().clamp(0, 999)])[:, None]
+        z = self.v_in(torch.cat([x, mu_exp, h_exp], -1)) + te + sinusoid(x.shape[1], self.c.d, x.device) + self.spk(spk)[:, None]
+        for b in self.dec:
+            z = b(z, fpad)
+        return self.out(z)
+
+    def loss(self, x, xlen, mel, mlen, spk, sigma_min: float = 1e-4):
+        mel = self.norm(mel.transpose(1, 2))                                   # (B, Tm, 80) normalised
+        h, mu, logd = self.encode(x, spk)
+        with torch.no_grad():
+            lp = -0.5 * ((mel[:, None, :, :] - mu.float()[:, :, None, :]) ** 2).sum(-1)
+            path = mas(lp, xlen, mlen)
+        dur = path.sum(-1)
+        tmask = (torch.arange(x.shape[1], device=x.device)[None] < xlen[:, None]).float()
+        l_dur = (((logd - torch.log1p(dur)) ** 2) * tmask).sum() / tmask.sum()
+        pt = path.transpose(1, 2)
+        mu_exp, h_exp = pt @ mu, pt @ h
+        fmask = (torch.arange(mel.shape[1], device=x.device)[None] < mlen[:, None])
+        fm = fmask[..., None].float()
+        l_prior = (((mu_exp - mel) ** 2) * fm).sum() / (fm.sum() * N_MELS)
+        t = torch.rand(mel.shape[0], device=x.device)
+        x0 = torch.randn_like(mel)
+        xt = (1 - (1 - sigma_min) * t[:, None, None]) * x0 + t[:, None, None] * mel
+        u = mel - (1 - sigma_min) * x0
+        v = self.vfield(xt, t, h_exp, mu_exp, spk, ~fmask)
+        l_cfm = (((v - u) ** 2) * fm).sum() / (fm.sum() * N_MELS)
+        return l_cfm + l_prior + l_dur, {'cfm': l_cfm.item(), 'prior': l_prior.item(), 'dur': l_dur.item()}
+
+    @torch.no_grad()
+    def infer(self, x, spk, speed: float = 1.0, steps: int = 10, temperature: float = 0.667):
+        h, mu, logd = self.encode(x, spk)
+        d = torch.clamp(torch.round((torch.exp(logd) - 1) / speed), min=1).long()[0]
+        idx = torch.repeat_interleave(torch.arange(x.shape[1], device=x.device), d)
+        h_exp, mu_exp = h[:, idx], mu[:, idx]
+        fpad = torch.zeros(1, len(idx), dtype=torch.bool, device=x.device)
+        z = torch.randn(1, len(idx), N_MELS, device=x.device) * temperature
+        for i in range(steps):
+            t = torch.full((1,), i / steps, device=x.device)
+            z = z + self.vfield(z, t, h_exp, mu_exp, spk, fpad) / steps
+        return self.denorm(z).transpose(1, 2)                                  # (1, 80, Tm) raw log-mel

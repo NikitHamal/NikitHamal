@@ -40,6 +40,27 @@ export function makeNormalizer(meta) {
   };
 }
 
+// ---------------------------------------------------------------- v2 phoneme front-end (mirror of nik/tts/phonemes.py)
+const R_VOW = [['aa', 'aa'], ['ai', 'ai'], ['au', 'au'], ['ee', 'i'], ['oo', 'u'], ['a', 'a'], ['i', 'i'], ['u', 'u'], ['e', 'e'], ['o', 'o']];
+const R_CONS = [['chh', 'ch'], ['ch', 'c'], ['kh', 'kh'], ['gh', 'gh'], ['jh', 'jh'], ['th', 'th'], ['dh', 'dh'], ['ph', 'ph'], ['bh', 'bh'],
+  ['sh', 's'], ['ng', 'ng'], ['gy', 'g y'], ['ksh', 'k s'], ['k', 'k'], ['g', 'g'], ['c', 'c'], ['j', 'j'], ['t', 't'], ['d', 'd'], ['n', 'n'],
+  ['p', 'p'], ['f', 'ph'], ['b', 'b'], ['v', 'bh'], ['m', 'm'], ['y', 'y'], ['r', 'r'], ['l', 'l'], ['w', 'w'], ['s', 's'], ['h', 'h'],
+  ['q', 'k'], ['x', 'ch'], ['z', 'j']];
+const PH_VOWELS = new Set(['a', 'aa', 'i', 'u', 'e', 'o', 'ai', 'au']);
+function romanRules(w) {
+  const out = [];
+  let i = 0;
+  outer: while (i < w.length) {
+    for (const [src, ph] of [...R_VOW, ...R_CONS]) {
+      if (w.startsWith(src, i)) { out.push(...ph.split(' ')); i += src.length; continue outer; }
+    }
+    i++;
+  }
+  const nv = out.filter((p) => PH_VOWELS.has(p)).length;
+  if (nv >= 2 && out.length >= 2 && out[out.length - 1] === 'a' && !PH_VOWELS.has(out[out.length - 2]) && out[out.length - 2] !== '~') out[out.length - 1] = 'aa';
+  return out;
+}
+
 // ---------------------------------------------------------------- iSTFT
 function fftInPlace(re, im, inverse) {
   const n = re.length;
@@ -88,6 +109,7 @@ export class NikTTS {
   static async load(base, onProgress) {
     const ort = await loadOrt();
     const meta = await fetch(`${base}/tts.json?t=${Date.now()}`, { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error('no voice published yet'); return r.json(); });
+    if (meta.version === 2) meta.lexicon = await fetch(`${base}/lexicon.json?v=${meta.bytes.dec}`).then((r) => (r.ok ? r.json() : {}));
     const opts = { executionProviders: ['wasm'], graphOptimizationLevel: 'all' };
     const sess = {};
     let done = 0;
@@ -104,7 +126,27 @@ export class NikTTS {
     this.id = new Map(meta.symbols.map((c, i) => [c, i]));
   }
 
+  phonemes(text) {
+    const lex = this.meta.lexicon || {}, toks = [];
+    for (const m of this.norm(text).matchAll(/[a-z']+|[.,?!\-]/g)) {
+      const s = m[0];
+      if ('.,?!-'.includes(s)) { if (toks[toks.length - 1] === ' ') toks.pop(); toks.push(s, ' '); continue; }
+      const w = s.replace(/'/g, '');
+      const start = toks.length < 2 || ['.', '?', '!', ','].includes(toks[toks.length - 2]);
+      if (w === 'ma') { toks.push(...(start ? ['m', 'a'] : ['m', 'aa']), ' '); continue; }
+      toks.push(...(lex[w] ? lex[w].split(' ') : romanRules(w)), ' ');
+    }
+    while (toks[toks.length - 1] === ' ') toks.pop();
+    return toks;
+  }
+
   encode(text) {
+    if (this.meta.version === 2) {
+      const ids = [1];
+      for (const p of this.phonemes(text)) if (this.id.has(p)) ids.push(this.id.get(p));
+      ids.push(2);
+      return ids;
+    }
     const ids = [1];
     for (const c of this.norm(text)) if (this.id.has(c)) ids.push(this.id.get(c));
     ids.push(2);
@@ -124,8 +166,28 @@ export class NikTTS {
     for (let t = 0; t < T; t++) for (let r = 0; r < dur[t]; r++, f++) {
       he.set(h.subarray(t * d, t * d + d), f * d); me.set(mu.subarray(t * 80, t * 80 + 80), f * 80);
     }
-    const dm = await this.s.dec.run({ h: new ort.Tensor('float32', he, [1, Fr, d]), mu: new ort.Tensor('float32', me, [1, Fr, 80]), spk });
-    const mel = dm.mel.data;                                   // (1, Fr, 80) -> (1, 80, Fr)
+    let mel;
+    if (this.meta.version === 2) {
+      // flow matching: integrate the learned vector field from noise to speech (Euler, N steps)
+      const N = this.meta.cfm_steps || 10, temp = this.meta.cfm_temperature ?? 0.667;
+      const z = new Float32Array(Fr * 80);
+      for (let i = 0; i < z.length; i += 2) {
+        const u = Math.random() || 1e-9, v = Math.random(), r = Math.sqrt(-2 * Math.log(u));
+        z[i] = r * Math.cos(2 * Math.PI * v) * temp; if (i + 1 < z.length) z[i + 1] = r * Math.sin(2 * Math.PI * v) * temp;
+      }
+      const H = new ort.Tensor('float32', he, [1, Fr, d]), MU = new ort.Tensor('float32', me, [1, Fr, 80]);
+      for (let s = 0; s < N; s++) {
+        const o = await this.s.dec.run({ x: new ort.Tensor('float32', z, [1, Fr, 80]), t: new ort.Tensor('float32', Float32Array.from([s / N]), [1]), h: H, mu: MU, spk });
+        const v = o.v.data;
+        for (let i = 0; i < z.length; i++) z[i] += v[i] / N;
+      }
+      const mm = this.meta.mel_mean, ms = this.meta.mel_std;
+      for (let i = 0; i < z.length; i++) z[i] = z[i] * ms + mm;
+      mel = z;
+    } else {
+      const dm = await this.s.dec.run({ h: new ort.Tensor('float32', he, [1, Fr, d]), mu: new ort.Tensor('float32', me, [1, Fr, 80]), spk });
+      mel = dm.mel.data;
+    }                                                          // (1, Fr, 80) -> (1, 80, Fr)
     const mt = new Float32Array(80 * Fr);
     for (let i = 0; i < Fr; i++) for (let k = 0; k < 80; k++) mt[k * Fr + i] = mel[i * 80 + k];
     const v = await this.s.voc.run({ mel: new ort.Tensor('float32', mt, [1, 80, Fr]) });

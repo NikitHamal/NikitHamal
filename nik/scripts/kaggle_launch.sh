@@ -17,8 +17,11 @@ case "$MODE" in
   rsi*) SRC=kaggle_rsi.py; N=${MODE#rsi}; SOURCES="[\"$USER_/nik-train-full\", \"$USER_/nik-train-rsi$((N-1))\"]";;
 esac
 DATASETS='[]'
-case "$MODE" in tts*) SRC=kaggle_tts.py; DATASETS='["nepalicoder/nepali-tts"]';; esac
-sed "s/__MODE__/$MODE/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
+case "$MODE" in
+  tts2) SRC=kaggle_tts2.py; DATASETS='["nepalicoder/nepali-tts"]'; SOURCES="[\"$USER_/nik-train-tts\"]";;
+  tts*) SRC=kaggle_tts.py; DATASETS='["nepalicoder/nepali-tts"]';;
+esac
+sed "s/__MODE__/$MODE/; s/__MIN__/${TTS_MIN:-270}/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
 cat > "$D/kernel-metadata.json" <<JSON
 { "id": "$USER_/nik-train-$MODE", "title": "nik-train-$MODE", "code_file": "nik_train.py",
   "language": "python", "kernel_type": "script", "is_private": "true",
