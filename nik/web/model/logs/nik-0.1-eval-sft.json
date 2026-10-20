@@ -1,5 +1,5 @@
 {
-  "math_acc": 0.165,
+  "math_acc": 0.5733333333333334,
   "persona_acc": 1.0,
   "samples": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "q": "timilai kasle banayo?",
-      "a": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.<|end|>",
+      "a": "mero creator nikit hamal hunuhunchha. uha consica labs ma head of operations hunuhunchha ra essays pani lekhnuhunchha.<|end|>",
       "ok": true
     },
     {
@@ -38,6 +38,6 @@
       "ok": true
     }
   ],
-  "val_ppl": 21.843489686056746,
-  "ssbd_tokens_per_pass": 2.675
+  "val_ppl": 18.92875382840453,
+  "ssbd_tokens_per_pass": 0.5277777777777778
 }
