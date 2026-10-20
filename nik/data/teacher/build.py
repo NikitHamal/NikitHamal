@@ -45,7 +45,7 @@ def one(R):
 
 
 def _one(R):
-    if R.random() < 0.10:   # P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
+    if R.random() < 0.04:   # 4% of rows ~= 12% of tokens (ledger rows are ~3x longer; Local-C, issue #9). P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
         d = ledger.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
     k = R.random()
