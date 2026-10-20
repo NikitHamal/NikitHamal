@@ -84,7 +84,10 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
   on molab. Ship if it beats v4 on NikBench + understanding + chat_check + stress.py.
 - Tools: `nik/stress.py` (120 prompts), `nik/chat_check.py`, `nik/scripts/live_eval.py`, `nik/calc.py` (+ /chat "exact arithmetic").
 - Moving files molab -> repo: upload a Kaggle dataset from molab (`iamnikithamal/nik-ship`), download with `kaggle datasets download -f`.
-- Other agents: coordinate in GitHub issue #8.
+- Other agents: coordinate in GitHub issue #8. **Codex (GPT-6, "Agent C")** joined 2026-10-20 18:10 UTC: found + fixed a read.py
+  grounding bug (543/100k rows asserted an unstated weekday), added `nik/data/teacher/grounding.py` (wired into audit.py for read-*),
+  strict read scoring in stress.py (`nik/read_scoring.py`, `--category`), tests in `nik/tests/`, report `nik/reports/reading-codex/`.
+  Merged to main (f67f7b4) after Claude's review. Strict CPU baseline of live v4: stress read 0/10, understanding 4/26.
 
 ## Current state / open tasks (update me)
 - [ ] **v4 on molab (running since 2026-10-20 ~15:05 UTC, driven by Claude via marimo pair)**: `nik/scripts/run_v4.py --bs 256
