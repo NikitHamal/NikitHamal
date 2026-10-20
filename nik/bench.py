@@ -1,4 +1,4 @@
-﻿"""NikBench: held-out math + reasoning benchmark with per-category accuracy.
+"""NikBench: held-out math + reasoning benchmark with per-category accuracy.
 
 Templates here are written separately from the training generators (different wording and
 structure), numbers come from a fixed seed, and scoring is exact match on the final number of
