@@ -149,6 +149,7 @@ const preset = opt('preset', '');
 const NTOK = parseInt(opt('tokens', '32'), 10);
 const PREFILL = parseInt(opt('prefill', '64'), 10);
 const BUDGET_S = parseFloat(opt('budget', '3'));
+const REPS = Math.max(1, parseInt(opt('reps', '3'), 10));
 
 if (!binPath && !preset) {
   console.error('usage: node bench_latency.mjs --bin <model.bin> | --preset <name> [--tokens N] [--json]');
@@ -174,7 +175,10 @@ function build(which, bin) {
   };
 }
 
-/** measure AR decode speed + memory for a built model */
+/** measure AR decode speed + memory for a built model.
+ *  The decode loop is repeated `reps` times and the BEST (lowest ms/token) is kept:
+ *  a laptop's throughput drifts by 10-15% with thermal/load noise, and the first
+ *  run of a process is often the fastest, so a single shot is not comparable. */
 function measure(built) {
   const { model, cfg, fmt, label } = built;
   const b = budget(cfg, fmt);
@@ -193,18 +197,23 @@ function measure(built) {
     logits = model.prefill([best]);
   }
   const tw = process.hrtime.bigint();
-  let n = 0;
-  for (let i = 0; i < NTOK; i++) {
-    let best = 0;
-    for (let v = 1; v < logits.length; v++) if (logits[v] > logits[best]) best = v;
-    logits = model.prefill([best]);
-    n++;
+  let n = 0, bestMs = Infinity;
+  for (let rep = 0; rep < REPS; rep++) {
+    const r0 = process.hrtime.bigint();
+    for (let i = 0; i < NTOK; i++) {
+      let best = 0;
+      for (let v = 1; v < logits.length; v++) if (logits[v] > logits[best]) best = v;
+      logits = model.prefill([best]);
+      n++;
+    }
+    const ms = Number(process.hrtime.bigint() - r0) / 1e6 / NTOK;
+    if (ms < bestMs) bestMs = ms;
   }
   const t2 = process.hrtime.bigint();
   const decodeMs = Number(t2 - tw) / 1e6;
   const prefillMs = Number(t1 - t0) / 1e6;
   const warmupMs = Number(tw - t1) / 1e6;
-  const msPerTok = decodeMs / n;
+  const msPerTok = bestMs;
   const tokPerSec = 1000 / msPerTok;
   const mem = process.memoryUsage();
   let nanLogits = 0;
@@ -225,15 +234,15 @@ function measure(built) {
   };
 }
 
+const refPreset = opt('ref', '');
+const refBin = opt('ref-bin', '');
+// the reference is measured FIRST: the first model measured in a process is the fastest
+// (cold caches, no thermal throttling), so measuring it first removes the order bias
+let ref = (refPreset || refBin) ? measure(build(refPreset, refBin)) : null;
 const built = build(preset, binPath);
 const out = measure(built);
 
-// optional reference model measured in the same run (same machine state)
-let ref = null;
-const refPreset = opt('ref', '');
-const refBin = opt('ref-bin', '');
-if (refPreset || refBin) {
-  ref = measure(build(refPreset, refBin));
+if (ref) {
   out.ref = { label: ref.label, tokPerSec: ref.tokPerSec, gflopsPerToken: ref.gflopsPerToken };
   out.speedRatio = +(out.tokPerSec / ref.tokPerSec).toFixed(3);
   out.flopsRatio = +(out.gflopsPerToken / ref.gflopsPerToken).toFixed(3);
@@ -250,11 +259,21 @@ if (has('json')) {
   console.log(`KV cache f32   : ${out.kvF32MB} MB   (int8: ${out.kvInt8MB} MB)   <- not covered by the 25 MB cap`);
   console.log(`RAM (model)    : ${out.modelRamMB} MB   |  process RSS ${out.rssMB} MB`);
   console.log(`FLOPs/token    : ${out.gflopsPerToken} GFLOP`);
-  console.log(`speed          : ${out.msPerToken} ms/token  =  ${out.tokPerSec} tok/s   (prefill ${out.prefillMs} ms)`);
+  console.log(`speed          : ${out.msPerToken} ms/token  =  ${out.tokPerSec} tok/s   (prefill ${out.prefillMs} ms, best of ${REPS})`);
   console.log(`budget         : in ${BUDGET_S}s this model can emit ~${out.tokensInBudget} tokens`);
   if (ref) {
+    const exp = 1 / out.flopsRatio;
     console.log(`vs ${ref.label}: ${out.speedRatio}x the speed, ${out.flopsRatio}x the FLOPs/token `
-      + `-> ${out.speedRatio >= 1 / out.flopsRatio ? 'at least as efficient as the reference' : 'less efficient than the reference'}`);
+      + `-> FLOP-predicted ${exp.toFixed(2)}x`);
+    const gap = Math.abs(out.speedRatio - exp) / exp;
+    if (gap > 0.25) {
+      console.log(`                NOTE: measured ${(gap * 100).toFixed(0)}% away from the FLOP prediction.`);
+      console.log(`                On a busy machine the run-to-run spread is ~10-15%, so a gap this size`);
+      console.log(`                means the shape is NOT following the FLOP ratio (bandwidth or a bad fit).`);
+    } else {
+      console.log(`                within noise of the FLOP prediction (a busy machine drifts ~10-15%).`);
+      console.log(`                For a decision, re-measure on the same 2-vCPU box as ARCHITECTURE.md.`);
+    }
     console.log(`                compute-only floor for this shape = ${out.computeFloorTokPerSec} tok/s`);
   }
   if (out.format === 'ternary') {
