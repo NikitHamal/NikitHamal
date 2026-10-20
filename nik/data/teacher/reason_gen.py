@@ -105,6 +105,10 @@ def weekday(R):
     j = (i + k) % 7
     q = f'aaja {DAYS[i]} ho. {k} din pachhi kun bar hunchha?'
     think = f'hapta ma 7 din hunchhan, tyasaile {k} lai 7 le bhag garchhu: 7 x {k // 7} = {7 * (k // 7)}, baki {k} - {7 * (k // 7)} = {k % 7}. {DAYS[i]} bata {k % 7} din agadi gaye {DAYS[j]} aauchha.'
+    if R.random() < 0.3:     # ordinal answer form (NikBench asks for the day's number; issue #9, Local-A)
+        q = q[:-1] + R.choice([' jawaf number ma deu (aaitabar = 1, sombar = 2, ..., sanibar = 7).',
+                               ' bar ko sankhya bhana: aaitabar 1, sombar 2 ... sanibar 7.', ' (number ma: aaitabar 1 dekhi sanibar 7)'])
+        return ex(q, think + f' {DAYS[j]} ko kram number {j + 1}.', f'{k} din pachhi {DAYS[j]} hunchha, arthat {j + 1} number.', str(j + 1), 'calendar')
     return ex(q, think, f'{k} din pachhi {DAYS[j]} hunchha.', DAYS[j], 'calendar')
 
 
