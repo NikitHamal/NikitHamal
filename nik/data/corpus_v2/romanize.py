@@ -57,6 +57,15 @@ def analyse(doc_text, rom):
     return out, len(leftover) / total, len(guessed) / total, leftover, guessed
 
 
+def dev_char_ratio(text):
+    """the audit gate (Local-A's corpus_audit.py) rejects a document when more than
+    --max-dev-chars of its *characters* are Devanagari.  Same rule here, so the two
+    halves of the pipeline cannot disagree."""
+    if not text:
+        return 0.0
+    return sum(1 for c in text if DEVA.match(c)) / len(text)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--in', dest='inp', required=True, help='cleaned jsonl (Devanagari)')
@@ -64,6 +73,9 @@ def main():
     ap.add_argument('--report', default='')
     ap.add_argument('--lex', default=os.environ.get('NIK_LEXICON', ''), help='lexicon tsv')
     ap.add_argument('--max-leftover', type=float, default=0.02, help='hard per-doc gate')
+    ap.add_argument('--max-dev-chars', type=float, default=0.01,
+                    help='hard per-doc gate: share of characters that may stay Devanagari '
+                         '(the same rule the corpus audit gate uses)')
     ap.add_argument('--max-rule-rate', type=float, default=0.35, help='reported per-doc rate')
     ap.add_argument('--strict-rule', action='store_true', help='also reject on the rule rate')
     ap.add_argument('--top', type=int, default=40, help='how many missed words to report')
@@ -95,6 +107,11 @@ def main():
             out, lr, rr, lw, gw = analyse(text, rom)
             if lr > a.max_leftover:
                 rejects['romanize_leftover'] += 1
+                leftover_words.update(lw)
+                rule_words.update(gw)
+                continue
+            if dev_char_ratio(out) > a.max_dev_chars:
+                rejects['devanagari_chars'] += 1
                 leftover_words.update(lw)
                 rule_words.update(gw)
                 continue
