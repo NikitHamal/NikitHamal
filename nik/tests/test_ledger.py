@@ -95,6 +95,18 @@ class CounterfactualSurface(unittest.TestCase):
         self.assertGreaterEqual(distinct, 90,
                                 f'only {distinct}/100 specs produced 2+ distinct golds')
 
+    def test_sample_variants_prefers_same_surface(self):
+        # sample_variants retries to avoid number-dependent event skips; it should
+        # deliver strict counterfactual triples for the large majority of specs.
+        rng = random.Random(17)
+        same = 0
+        for _ in range(200):
+            variants = ledger.sample_variants(rng, 3)
+            self.assertEqual(len(variants), 3)
+            surfaces = {skeleton(v['messages'][0]['content']) for v in variants}
+            same += len(surfaces) == 1
+        self.assertGreaterEqual(same, 180, f'only {same}/200 strict triples')
+
 
 class Scoring(unittest.TestCase):
     def setUp(self):

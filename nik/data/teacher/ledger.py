@@ -217,10 +217,33 @@ def sample(R):
     return render(make_spec(R), R)
 
 
-def sample_variants(R, k=3):
-    """Same event skeleton, k different number assignments (counterfactual training)."""
+_EVENT_ROLE = {'add': 'add{}', 'remove': 'remove{}', 'buy': 'buy{}_count', 'sell': 'sell{}_count',
+               'pack': 'pack{}_groups', 'share': 'share{}_people'}
+
+
+def _complete(spec, row):
+    """True if every event in the spec actually rendered (no number-dependent skip)."""
+    bindings = row['ledger']['bindings']
+    return all(_EVENT_ROLE[event].format(i) in bindings for i, event in enumerate(spec['events'], 1))
+
+
+def sample_variants(R, k=3, attempts=6):
+    """Same event skeleton and surface wording, k different number assignments.
+
+    A number-dependent branch can skip an event (unaffordable buy, non-divisible
+    share, exhausted remove), which changes the story. Retry a few times and keep
+    the triple with the most complete variants.
+    """
     spec = make_spec(R)
-    return [render(spec, R) for _ in range(k)]
+    best_score, best = -1, None
+    for _ in range(attempts):
+        variants = [render(spec, R) for _ in range(k)]
+        score = sum(_complete(spec, v) for v in variants)
+        if score > best_score:
+            best_score, best = score, variants
+        if score == k:
+            break
+    return best
 
 
 def main():
