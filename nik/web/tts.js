@@ -87,7 +87,7 @@ export function istft(RE, IM, F, T, nFft = 1024, hop = 256) {
 export class NikTTS {
   static async load(base, onProgress) {
     const ort = await loadOrt();
-    const meta = await fetch(`${base}/tts.json`, { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error('no voice published yet'); return r.json(); });
+    const meta = await fetch(`${base}/tts.json?t=${Date.now()}`, { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error('no voice published yet'); return r.json(); });
     const opts = { executionProviders: ['wasm'], graphOptimizationLevel: 'all' };
     const sess = {};
     let done = 0;
