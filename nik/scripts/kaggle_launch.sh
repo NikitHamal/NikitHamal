@@ -5,6 +5,7 @@
 #   bash nik/scripts/kaggle_launch.sh full      # the real ~11 h run
 #   bash nik/scripts/kaggle_launch.sh tts-smoke | tts   # NikTTS (~6 h full)
 #   bash nik/scripts/kaggle_launch.sh rsi1      # ~3 h RSI segment from the full run; rsi2, rsi3, ... continue from the previous segment
+#   bash nik/scripts/kaggle_launch.sh sft3      # phase-3 augmented SFT on the shipped B300 model (SFT3_MIN=150)
 #   kaggle kernels status <user>/nik-train-<mode>
 #   kaggle kernels output <user>/nik-train-<mode> -p out/
 set -euo pipefail
@@ -18,10 +19,12 @@ case "$MODE" in
 esac
 DATASETS='[]'
 case "$MODE" in
+  sft3) SRC=kaggle_sft3.py; DATASETS="[\"$USER_/nik-cluster-out\"]"; SOURCES="[\"$USER_/nik-data\"]";;
   tts2) SRC=kaggle_tts2.py; DATASETS='["nepalicoder/nepali-tts"]'; SOURCES="[\"$USER_/nik-train-tts\"]";;
   tts*) SRC=kaggle_tts.py; DATASETS='["nepalicoder/nepali-tts"]';;
 esac
-sed "s/__MODE__/$MODE/; s/__MIN__/${TTS_MIN:-270}/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
+MINUTES=${TTS_MIN:-270}; [ "$MODE" = "sft3" ] && MINUTES=${SFT3_MIN:-150}
+sed "s/__MODE__/$MODE/; s/__MIN__/$MINUTES/" "$(dirname "$0")/$SRC" > "$D/nik_train.py"
 cat > "$D/kernel-metadata.json" <<JSON
 { "id": "$USER_/nik-train-$MODE", "title": "nik-train-$MODE", "code_file": "nik_train.py",
   "language": "python", "kernel_type": "script", "is_private": "true",
