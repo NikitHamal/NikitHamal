@@ -12,7 +12,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import colmath, compose, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
+import colmath, compose, frame, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -45,6 +45,14 @@ def one(R):
 
 
 def _one(R):
+    x = R.random()
+    if x < 0.05:            # held-out-style word frames with distractors (frame.py, Local-C, issue #9)
+        d = frame.sample(R)
+        return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if x < 0.08:            # iterate-a-rule sequences, one line per step (iter.py, Local-C): sequence/pattern were 0/11
+        import iter as itgen
+        d = itgen.make(R)
+        return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
     if R.random() < 0.04:   # 4% of rows ~= 12% of tokens (ledger rows are ~3x longer; Local-C, issue #9). P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
         d = ledger.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
