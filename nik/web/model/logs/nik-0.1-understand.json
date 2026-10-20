@@ -1,0 +1,168 @@
+{
+ "score": 3,
+ "of": 26,
+ "rows": [
+  {
+   "kind": "memory",
+   "q": "ma kun thau bata hu?",
+   "a": "kosh chha. yo ankada heraun.",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "bhai kati barsha ko bhayo?",
+   "a": "12 din pachhi asar 17 gate hunchha.",
+   "pass": true
+  },
+  {
+   "kind": "memory",
+   "q": "maile kun kura dherai man parchha bhaneko?",
+   "a": "ma afno agadi ko shabda herera arko shabda anuman garchhu. sathai ek palta ma dherai shabda draft garna diffusion pani prayog garchhu, tyasaile chhito chhu.",
+   "pass": false
+  },
+  {
+   "kind": "memory",
+   "q": "ma aile kaha baschhu?",
+   "a": "tapai aile butwal ma basnuhunchha.",
+   "pass": false
+  },
+  {
+   "kind": "honest",
+   "q": "mero naam binod ho. mero buwa ko naam k ho?",
+   "a": "<|think|>buwa ko naam binod. nepal ko news ra wikipedia padhera ma nepali sikeko hu.",
+   "pass": false
+  },
+  {
+   "kind": "reading",
+   "q": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo pyaj kinyo?",
+   "a": "mero naam nik ho. ma ek sano language model hu, jaslai nikit hamal le scratch bata banaunubhayo. 10 MB bhanda sano chhu tara kura garna sakchhu!",
+   "pass": false
+  },
+  {
+   "kind": "reading",
+   "q": "\"sunita doctor ho ra uski bahini engineer.\" sunita ko bahini k kaam garchhe?",
+   "a": "hunchha! aru kehi sodhne ho?",
+   "pass": false
+  },
+  {
+   "kind": "yesno",
+   "q": "\"ram ghar gayo tara shyam school mai basyo.\" ke shyam ghar gayo?",
+   "a": "aba tapkram 19 degree bhayo.",
+   "pass": false
+  },
+  {
+   "kind": "translate",
+   "q": "\"we are reading\" nepali ma bhana.",
+   "a": "nikit hamal le malai sunya dekhi banaunubhayo: afnai romanizer, tokenizer, transformer model, training ra yo browser engine. nepal ko news ra wikipedia padhera ma nepali sikeko hu.",
+   "pass": false
+  },
+  {
+   "kind": "translate",
+   "q": "\"ma khana khadai chhu\" english ma k ho?",
+   "a": "ma romanized nepali ma kura garna, sano hisab sochera garna, nikit ko barema bataauna ra nepal ko barema sadharan jankari dina sakchhu. ma sano model hu, tyasaile kahile kahi galti pani garna sakchhu.",
+   "pass": false
+  },
+  {
+   "kind": "vocab",
+   "q": "\"river\" lai nepali ma k bhanchha?",
+   "a": "mero didi ko shriman lai bhinaju bhaninchha.",
+   "pass": false
+  },
+  {
+   "kind": "grammar",
+   "q": "\"u kheldai chha\" lai negative banau.",
+   "a": "<|think|>usko kura thik ho, maile galti gare hola. ma nikit le banaeko sano AI hu ra ajhai training ma chhu. k sodhnu bhayeko thiyo?",
+   "pass": false
+  },
+  {
+   "kind": "grammar",
+   "q": "\"kalam\" ko plural?",
+   "a": "dal bhat tarkari kasto hola? \"dal bhat power, 24 hour!\" chhito chahiyo bhane chau chau ki momo pani ramro.",
+   "pass": false
+  },
+  {
+   "kind": "en-grammar",
+   "q": "\"children\" ko singular k ho?",
+   "a": "singolumanik sankhya ho, baki sabai studio incharensa hun.",
+   "pass": false
+  },
+  {
+   "kind": "en-grammar",
+   "q": "correct this: \"he go to market.\"",
+   "a": "ekdam thik chhu! mero swasthya bhaneko mero code ho, ra aaja sab thik chalirahechha. tapai lai kasto chha?",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "Asha had 12 balloons and 5 flew away. How many does she have now?",
+   "a": "25 hunchha.",
+   "pass": false
+  },
+  {
+   "kind": "english",
+   "q": "What is the capital of Nepal? answer in english.",
+   "a": "hunchha, aaram garnus. ramro nidra parne kamana!",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "7, 42, 19, 3 madhye sabai bhanda sano kun?",
+   "a": "<|think|>farak chha, sabai bhanda thulo jod ho. 7 ra 19 ko lasa 19 ho.",
+   "pass": false
+  },
+  {
+   "kind": "list",
+   "q": "5, 9, 2 lai thulo bata sano kram ma lekha.",
+   "a": "ma dherai sano chhu: 10 MB bhanda kam. thulo AI haru ma arabau parameter hunchhan, ma sanga lakhau matra. tara sano bhaera pani tapai ko phone mai chalchhu!",
+   "pass": false
+  },
+  {
+   "kind": "textop",
+   "q": "\"nepal\" ulto lekha.",
+   "a": "'euta kabita lekha\" ko ulto 'bolda ramrai' lekhinchha.",
+   "pass": false
+  },
+  {
+   "kind": "textop",
+   "q": "\"kathmandu\" ma kati akshar chha?",
+   "a": "ma sanga live khabar chhaina, kinaki ma offline chalchhu. tara samachar jasto euta anuchhed lekhna bhane sakchhu!",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?",
+   "a": "450 / 4 = 125 hunchha.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?",
+   "a": "aba anita sanga jamma 680 wata kalam chha.",
+   "pass": false
+  },
+  {
+   "kind": "math",
+   "q": "15 ko 20 percent kati?",
+   "a": "15 ko 20% = 3.",
+   "pass": true
+  },
+  {
+   "kind": "context",
+   "q": "kaksha ma 14 keta ra 17 keti chhan. keti kati le badhi chhan?",
+   "a": "<|think|>najik hunuhunchha, tara alikati galti bhayo. sahi jawaf 14 ho, 16 haina. praharile laisensa parikshama nepali senaka 18 jana senaseviko sahabhagilai nai parsaka prahari uparikshak arun bahadur ranabhatle goli hanera maridieko khulasa bhaeko chha .",
+   "pass": false
+  },
+  {
+   "kind": "empathy",
+   "q": "aaja mero exam naramro bhayo, ekdam dukhi chhu.",
+   "a": "khusi lagyo. aaja kehi naya sikne ho ki gaff garne?",
+   "pass": null
+  },
+  {
+   "kind": "persona",
+   "q": "timi lai kasle banako ho?",
+   "a": "mero creator nikit hamal hunuhunchha. uha consica labs ma head of operations hunuhunchha ra essays pani lekhnuhunchha.",
+   "pass": true
+  }
+ ]
+}
