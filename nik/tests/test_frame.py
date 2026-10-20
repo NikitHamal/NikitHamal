@@ -35,7 +35,24 @@ class TestFrame(unittest.TestCase):
         self.assertEqual(len(row['messages']), 2)
         self.assertEqual(row['messages'][0]['role'], 'user')
         self.assertEqual(row['messages'][1]['role'], 'nik')
-        self.assertIn('steps', row['messages'][1])
+        # the scratchpad must be in 'think': that is the key audit.py inspects, and
+        # audit.check() rejects a math row whose assistant turn has no think block.
+        self.assertIn('think', row['messages'][1])
+        self.assertTrue(row['messages'][1]['think'].strip())
+
+    def test_rows_pass_the_real_audit(self):
+        """the rows must survive nik/data/teacher/audit.py, which is what build.py
+        filters on.  (This is how the 'steps' vs 'think' bug was found: with the wrong
+        key every single row was rejected with 'no-think'.)"""
+        from audit import audit
+        R = random.Random(99)
+        rows = []
+        for _ in range(500):
+            d = frame.sample(R)
+            rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
+        ok, _ = audit(rows, verbose=False, seen=None)
+        self.assertGreater(len(ok) / len(rows), 0.95,
+                           f'only {len(ok)}/{len(rows)} rows survived the audit')
 
     def test_all_scenes_are_reachable(self):
         R = random.Random(11)
@@ -58,7 +75,7 @@ class TestFrame(unittest.TestCase):
     def test_rows_are_multi_step(self):
         R = random.Random(13)
         for _ in range(300):
-            steps = frame.sample(R)['messages'][1]['steps']
+            steps = frame.sample(R)['messages'][1]['think']
             self.assertGreaterEqual(steps.count('='), 2, f'not a chain: {steps}')
 
     def test_cli_writes_rows(self):

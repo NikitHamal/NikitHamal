@@ -1,4 +1,4 @@
-"""Arithmetic wrapped in varied frames (Local-C, issue #9).
+﻿"""Arithmetic wrapped in varied frames (Local-C, issue #9).
 
 Why this exists (measured, issue #9): the model scores **82/96 on arithmetic** and
 **0/19 on held-out word-problem templates**, and it fails even `4 x 250` when it
@@ -101,7 +101,7 @@ def scene_tickets(R):
     pay = people - free
     cost = price * pay
     user = (f'{n} ra sathi ko {people} jana lai {R.choice(PLACES)} ko ticket {price} {R.choice(["rupiya", "rupiya"])} ko kine. '
-            f'{free} jana lai ticket free cha. {_distract(R)} jamma kati rupiya tiru paryo?')
+            f'{free} jana lai ticket free chha. {_distract(R)} jamma kati rupiya tiru paryo?')
     steps = _steps([('ticket kineko', f'{pay} x {price}', cost)], f'{cost} / {price} = {pay} jana, milyo')
     ans = f'jamma {cost} rupiya tiru paryo.'
     return user, steps, ans, str(cost)
@@ -249,10 +249,10 @@ def scene_boxes(R):
     bad = _q(R, 1, 9)
     good = boxes * each - bad
     user = (f'{boxes} ota box ma {each} wata {R.choice(["aalu", "momo", "kursi"])} chhan. '
-            f'{_distract(R)} jamma {bad} wata nasak cha. kati wata thik cha?')
+            f'{_distract(R)} jamma {bad} wata nasak chha. kati wata thik cha?')
     steps = _steps([('jamma', f'{boxes} x {each}', boxes * each),
                     ('thik', f'{boxes * each} - {bad}', good)], f'{good} + {bad} = {boxes * each}, milyo')
-    ans = f'{good} wata thik cha.'
+    ans = f'{good} wata thik chha.'
     return user, steps, ans, str(good)
 
 
@@ -276,12 +276,18 @@ SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, sc
 
 
 def sample(R):
-    """one row in the shape the SFT mix expects: {'cat', 'gold', 'messages'}"""
+    """one row in the shape the SFT mix expects: {'cat', 'gold', 'messages'}.
+
+    The scratchpad goes in the 'think' key (not 'steps'): that is what
+    nik/data/teacher/audit.py inspects, and audit.check() rejects a math row without
+    a think block ('no-think').  The gold rows in nik/data/gold/ use 'steps' because
+    they do not go through build.py's audit.
+    """
     sc = R.choice(SCENES)
     user, steps, ans, gold = sc(R)
     return {'cat': 'math-word-frame', 'gold': gold,
             'messages': [{'role': 'user', 'content': user},
-                         {'role': 'nik', 'content': ans, 'steps': steps}]}
+                         {'role': 'nik', 'content': ans, 'think': steps}]}
 
 
 def check(row):
