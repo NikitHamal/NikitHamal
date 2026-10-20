@@ -18,7 +18,8 @@ TOK=nik/web/model/tokenizer.json
 mkdir -p "$DATA" "$RUN"
 
 [ -f "$DATA/pretrain.txt" ] || python nik/data/build_corpus.py --out "$DATA" --shards "$SHARDS"
-[ -f "$DATA/sft.jsonl" ]    || python nik/data/gen_sft.py --out "$DATA/sft.jsonl" --n 120000 --corpus "$DATA/pretrain.txt"
+[ -f "$DATA/sft.jsonl" ]    || { python nik/data/gen_sft.py --out "$DATA/sft.jsonl" --n 120000 --corpus "$DATA/pretrain.txt" && \
+                               python nik/data/teacher/build.py --n 40000 --seed 1 --out "$DATA/teacher.jsonl" && cat "$DATA/teacher.jsonl" >> "$DATA/sft.jsonl"; }
 [ -f "$TOK" ]               || python nik/tokenizer.py train --input "$DATA/pretrain.txt" --sft "$DATA/sft.jsonl" --out "$TOK"
 [ -f "$DATA/pre_train.bin" ] || python nik/prepare.py --data "$DATA" --tok "$TOK"
 

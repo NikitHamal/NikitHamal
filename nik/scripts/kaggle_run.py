@@ -69,6 +69,8 @@ R = f'nik/runs/{P}'
 sh(f'python nik/data/build_corpus.py --out data --shards {CFG["shards"]} --stories {CFG["stories"]}'
    + (f' --max-news-lines {CFG["news_lines"]}' if CFG['news_lines'] else ''), 'data.log')
 sh(f'python nik/data/gen_sft.py --out data/sft.jsonl --n {CFG["sft_n"]} --corpus data/pretrain.txt', 'data.log')
+# teacher data: audited math / reasoning / explanations (nik/data/teacher)
+sh(f'python nik/data/teacher/build.py --n {CFG["sft_n"] // 3} --seed 1 --out data/teacher.jsonl && cat data/teacher.jsonl >> data/sft.jsonl', 'data.log')
 sh('python nik/prepare.py --data data --tok nik/web/model/tokenizer.json', 'data.log')
 
 # ---- pretrain (Muon, time-annealed schedule)
