@@ -298,6 +298,62 @@ def scene_pct_more(R):
     return user, steps, ans, str(total)
 
 
+def scene_money_minus(R):
+    """'I had M, S was spent, what is left' - the one shape the model cannot do.
+
+    Measured on the live model (issue #9, `nik/scripts/seq2step_probe.py`): the bare
+    subtraction `500 - 180 = ?` is **11/11** correct, but the same subtraction inside
+    a sentence (`mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?`) is
+    **2/11** - the model invents the operand (it answered 2250 for `2000 - 750`).  So
+    the arithmetic is fine and the *reading* is not: the model does not bind the two
+    amounts in the text to their roles.
+
+    So this scene teaches exactly that: name the two roles first
+    (`paisa: 2000. kharcha: 750.`), then compute.  The phrasing is deliberately wide
+    (8 shapes, two orders, an optional distractor) so the model learns the *binding*,
+    not a template: the evaluation probe's own sentence is never reproduced (the
+    numbers differ and the wording differs), and `nik/scripts/seq2step_probe.py` is
+    the held-out measurement.
+    """
+    money = R.choice([120, 150, 200, 250, 300, 350, 400, 450, 500, 600, 640, 700, 750,
+                       800, 900, 950, 1000, 1200, 1500, 1750, 2000, 2500, 2750])
+    spent = R.choice([v for v in (20, 25, 30, 40, 45, 50, 60, 75, 80, 90, 95, 100, 110, 120,
+                                  125, 150, 180, 200, 220, 250, 300, 320, 340, 450, 500,
+                                  625, 750, 1000) if v < money])
+    left = money - spent
+    n = R.choice(NAMES)
+    dis = _distract(R) + ' '
+    shape = R.randrange(8)
+    if shape == 0:
+        user = (f'mero sanga {money} rupaya thiyo. {spent} rupaya kharid. {dis}'
+                f'aba kati rupaya baki chha?')
+    elif shape == 1:
+        user = (f'{n} sanga {money} rupaya chha. {spent} rupaya kharcha bhayo. {dis}'
+                f'aba kati rupiya baki hunchha?')
+    elif shape == 2:
+        user = (f'mero paas {money} rupaya rakhyo. {spent} ko bill aayo. {dis}'
+                f'kati rupaya baaki chha?')
+    elif shape == 3:
+        user = (f'{spent} rupaya kharcha bhayo. mero sanga {money} rupaya thiyo. {dis}'
+                f'aba kati rupiya baki chha?')
+    elif shape == 4:
+        user = (f'ma sanga {money} rupaya thiyera {spent} jana kina gare. {dis}'
+                f'aba kati rupaya bachcha?')
+    elif shape == 5:
+        user = (f'{n} le {money} rupaya jodera rakheko, {spent} rupaya kinagaryo. {dis}'
+                f'aba kati rupiya baki cha?')
+    elif shape == 6:
+        user = (f'mero sanga {money} rupiya thiyo. {spent} kharcha laagyo. {dis}'
+                f'kati rupiya baki hunchha?')
+    else:
+        user = (f'{spent} rupiya kina garera {money} rupaya bata kati bachyo? {dis}')
+    steps = (f'paisa: {money}. kharcha: {spent}. hisab: {money} - {spent} = {left}. '
+             f'jaach: {left} + {spent} = {money}, milyo')
+    ans = R.choice([f'aba {left} rupiya baki chha.', f'{left} rupiya baki hunchha.',
+                    f'baki {left} rupiya chha.', f'aba {left} rupaya baaki chha.'])
+    return user, steps, ans, str(left)
+
+
 SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, scene_time,
           scene_bus, scene_basket, scene_discount, scene_saving, scene_recharge, scene_cricket,
           scene_boxes, scene_pct_more]
@@ -308,10 +364,12 @@ def sample(R):
 
     The scratchpad goes in the 'think' key (not 'steps'): that is what
     nik/data/teacher/audit.py inspects, and audit.check() rejects a math row without
-    a think block ('no-think').  The gold rows in nik/data/gold/ use 'steps' because
-    they do not go through build.py's audit.
+    a think block ('no-think').  The gold rows in nik/data/gold/ use 'steps' because they
+    do not go through build.py's audit.
     """
-    sc = R.choice(SCENES)
+    # the money-minus-one-expense shape gets a real share: the 14 other scenes are
+    # 14 different skills, each of them rare, and a skill that is rare is not learned.
+    sc = scene_money_minus if R.random() < 0.35 else R.choice(SCENES)
     user, steps, ans, gold = sc(R)
     return {'cat': 'math-word-frame', 'gold': gold,
             'messages': [{'role': 'user', 'content': user},
