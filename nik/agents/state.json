@@ -1,24 +1,16 @@
 {
- "updated": "2026-10-21T19:17:00Z",
+ "updated": "2026-10-21T20:45:00Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) · ladder L2 12/12 · understanding 19/26 · traps 9/12 · math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "box 1 (GPU, shared)",
-   "gpu": "RTX Pro 6000 · shared Claude + Local-C · one GPU job at a time (/tmp/gpu.lock)",
-   "job": "Claude: gate-live (the m50 baseline) → then Local-C: p11 (the family mix, 12 min lr 1e-4)",
+   "name": "box 1",
+   "gpu": "RTX Pro 6000 · owner notebook, shared Claude + Local-C",
+   "job": "Claude: the m50/p11 blends (my p11 is one of the ingredients) -> then Local-C: p12",
    "progress": null,
-   "detail": "the GPU box lives 8-12 min: the stage + the export have to fit in one lifetime",
-   "eta": "the lock is free between the jobs"
-  },
-  {
-   "name": "box 2",
-   "gpu": "RTX Pro 6000 · owner notebook (shared)",
-   "job": "Local-C arms + owner's reel renders",
-   "progress": null,
-   "detail": "owner shared the login directly; status panel in the notebook",
+   "detail": "the GPU box is the owner's notebook: it does not die, so a 12-minute stage is safe",
    "eta": "-"
   }
  ],
@@ -40,6 +32,15 @@
     "9/12",
     "12/12",
     "1/45"
+   ],
+   [
+    "p8m (m50 + p8 mix)",
+    "73.6%",
+    "-",
+    "22/26",
+    "8/12",
+    "12/12",
+    "3/45"
    ],
    [
     "p8 (Local-C)",
@@ -130,19 +131,18 @@
     "8/12",
     "1/12",
     "-"
-   ],
-   [
-    "v5pre (scratch)",
-    "61.8%",
-    "28/48",
-    "15/26",
-    "-",
-    "0/12",
-    "-"
    ]
   ]
  },
  "runs": [
+  {
+   "tag": "p11 (Local-C)",
+   "box": "box 1 (the shared GPU)",
+   "by": "Local-C",
+   "status": "rejected",
+   "what": "m50 + 7 min lr 1e-4 on the p11 mix (the shape share 38%): the 4 diagnostic shapes, the no-rule sequences, the nested multiplications, 33 story frames, the English frames, the weekday family, the 3 understanding gaps",
+   "result": "the named shapes 2/27 -> 9/27 (the mechanism moved where the data was aimed) but the arithmetic family collapsed 161/192 -> 117/192, the traps 9 -> 7, the persona 1.0 -> 0.857: the shape share of 38% is too greedy. The bin is on the branch; Claude is blending it."
+  },
   {
    "tag": "m50",
    "box": "-",
@@ -240,8 +240,8 @@
   }
  ],
  "next": [
-  "p8m gate vs m50 (+ NikBench-RW)",
-  "real-world data for the RW failures (CPU)",
-  "one box only; no automation of molab accounts"
+  "p12 on the shared GPU (the shape share 24%, the arithmetic paid for): 12 min + the measurement",
+  "the m50/p11 blend: does the arithmetic survive the interpolation? (the paired bench is running)",
+  "the third-party identity rows (Local-A's family) for the trap_check 9/12 -> 12/12"
  ]
 }

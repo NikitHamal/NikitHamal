@@ -32,12 +32,18 @@ if [ -z "$MIX" ]; then
   # The share of *shape* rows (the frames + the role family) is what moves the held-out
   # word family, and it was measured three times: 17% -> 14/48, 22% -> 17/48, 30% -> 19/48
   # (p8, p9, P3).  So: the frames 150k + the roles 100k = 250k of ~830k rows = 30%.
-  FAM="roles:100000,frame:150000,iter:25000,math:110000,colmath:50000,understand:50000,read:40000,skills:40000,vocab:12000,correct:20000,reduce:110000"
+  # p12: p11's data with the shape share back at the measured sweet spot.  p11 (the
+  # shape share 38%) moved the named shapes 2/27 -> 9/27 but the arithmetic family
+  # collapsed 161/192 -> 117/192 and the word family did not move (10 -> 11).  So:
+  # the shapes 24% (the word family tracked the share: 17% -> 14/48, 22% -> 17/48,
+  # 30% -> 19/48), the arithmetic rows up, the base slice 15%, the persona rows up
+  # (the persona fell 1.0 -> 0.857) and the understanding rows up (the traps fell).
+  FAM="roles:90000,frame:110000,iter:25000,math:160000,colmath:70000,understand:70000,read:40000,skills:40000,vocab:12000,correct:20000,reduce:110000"
   MIX=${TAG}_mix
   if [ ! -f "data/${MIX}_tok.bin" ]; then
     say "build the mix $MIX"
     $PY nik/scripts/polish_mix.py --data data --base sft13 --name "$MIX" --families "$FAM" \
-      --persona 25000 --chat 80000 --share 0.10 > "$OUT/mix.log" 2>&1
+      --persona 35000 --chat 80000 --share 0.15 > "$OUT/mix.log" 2>&1
     tail -3 "$OUT/mix.log"
   fi
 fi
