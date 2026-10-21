@@ -43,18 +43,25 @@ def gold_rows(gold_dir, rep, R):
 
 # questions whose answer depends on the conversation (the probe's name/value differs from any training row)
 CONTEXT_Q = {'mero naam k ho', 'mero naam k ho?'}
+# trap_check follow-ups that only ask about an earlier turn: generic memory questions, the answer is in the context
+TRAP_CONTEXT_Q = {'mero naam k ho?', 'mero kukur ko naam k ho?', 'mero didi ko naam k ho?', 'mero bhai kati barsha ko?'}
 
 
 def _drop_eval_prompts(rows, root):
-    """Held-out gates stay held out: drop any row whose user turn is an exact eval_understand or stress prompt
-    (write.py had 5 stress prompts verbatim). chat_check is a sanity gate of generic greetings and is not filtered."""
+    """Held-out gates stay held out: drop any row whose user turn is an exact eval_understand, stress or trap_check
+    prompt (write.py had 5 stress prompts verbatim; names.py emitted the trap sentences "mero naam nikit ho" and
+    "ma nikit, kathmandu bata"). chat_check is a sanity gate of generic greetings and is not filtered."""
     sys.path.insert(0, os.path.join(root, 'scripts'))
     import leak_audit as la
     norm = lambda t: ' '.join(t.lower().split()).strip(' ?!.')
     held = {norm(q) for q in la._prompts_understand(os.path.join(root, 'eval_understand.py')) + la._prompts_stress(os.path.join(root, 'stress.py'))}
     held -= {norm(q) for q in CONTEXT_Q}
+    held |= {norm(q) for q in la._prompts_trap_check(os.path.join(root, 'trap_check.py'))} - {norm(q) for q in TRAP_CONTEXT_Q}
+    sys.path.insert(0, root)
+    import bench_rw   # NikBench-RW prompts are held out too
+    held |= {norm(v[-1] if isinstance(v, list) else v) for g in bench_rw.G for v in g[3]}   # scored turns only
     out = [r for r in rows if not any(m['role'] == 'user' and norm(m['content']) in held for m in json.loads(r)['messages'])]
-    print(f'eval-prompt guard: dropped {len(rows) - len(out)} rows with an exact understand/stress prompt', flush=True)
+    print(f'eval-prompt guard: dropped {len(rows) - len(out)} rows with an exact understand/stress/trap prompt', flush=True)
     return out
 
 

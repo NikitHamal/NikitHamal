@@ -1,0 +1,41 @@
+[ok  ] give           kasle sel roti diyo? -> aashish le dinesh lai 6 wata sel roti diyo.
+                 kasle sel roti payo? -> aashish le dinesh lai 6 wata sel roti diyo.
+[FAIL] negation       bikram lai kwati man parchha? -> bikram = man parne raichha. sangai khana jaanus na!
+                 bikram lai tama man parchha? -> bidyarthi ko aafnai desh, ramro chai haina, yo kaha bata tul
+[FAIL] temporal       srijana le pachhi kati kilo chura lyai? -> 25 kilo chiya baki chhan.
+                 srijana le pahile kati kilo chura lyai? -> 15 jana purano dolma sanga 15 kilo.
+[FAIL] distractor     kati wata ghadi ramro chhan? -> 33 wata ghadi baki chhan.
+                 jamma kati wata ghadi chhan? -> 1 jana sanga 1 wata ghadi chhan.
+[FAIL] coref          manisha ko dai ko kaam k ho? -> passage ma manisha ko kaam bhaneko chhaina, tyasaile ma bhan
+                 manisha k kaam garchhin? -> passage ma manisha ko kaam bhaneko chhaina, tyasaile ma bhan
+[FAIL] compare        ko jetho ho? -> thik chha, bujhe.
+                 ko sano ko ho? -> bujhe!
+[FAIL] units          jamma kati rupiya tiryo? -> aba 20 rupiya tiryo.
+                 kati kilo bhutuwa kinyo? -> 4 kilo jamma 4 rupiya chha.
+[FAIL] sequence       arko number kati? -> jamma 135 hunchha.
+                 ke le gunera badhyo? -> 243 ghera = 243 hunchha.
+[FAIL] buy-not        manisha le ke kinyo? -> manisha le chura kinyo tara.
+                 ke manisha le kwati kinyo? -> ho, manisha le chura kinyo.
+[FAIL] role           kasle tiffin bokyo? -> dinesh le tiffic exam eyo.
+                 kasko tiffin thiyo? -> dinesh ko tiffic tiffic ho.
+[FAIL] negation2      rojina kaha baschha? -> rojina janakpur ma baschhin.
+                 ke rojina janakpur ma baschha? -> ho, rojina janakpur ma baschhin.
+[FAIL] quantity       kati wata topi baki chha? -> 7 wata bakipi baki chhan.
+                 kati wata bechyo? -> aba -1 wata topi chha.
+[FAIL] order          ko pahile aayo? -> hunchha, bujhe.
+                 ko pachhi aayo? -> bujhe!
+[FAIL] distractor2    ek wata chata ko kati parchha? -> chatata ko 15% = 15.
+                 kati wata chata kinyo? -> 16 wata chatata 200 rupiya chha.
+[FAIL] coref2         sneha kaha padhchha? -> sneha lumbini ma baschhin.
+                 sneha ko dai ko naam k ho? -> sneha ko bahini sneha ho.
+[FAIL] compare2       kasko jutta ko size thulo? -> koshi ko thau anusar ek bata suru garchhu.
+                 dinesh ko size kati? -> jawaf -371 ho.
+[FAIL] units2         jamma kati mitar kinyo? -> jamma 32 mitar kinyo.
+                 kati mitar dori kinyo? -> jamma 402 mitter dori paryo.
+[FAIL] sequence2      arko number kati? -> aru number 22 hunchha.
+                 kati le ghatcha? -> 32 = 32.
+[ok  ] went-not       sunil kaha gayo? -> sunil damak gayo.
+                 ke sunil janakpur gayo? -> haina, sunil janakpur haina, damak ma gayo.
+[FAIL] role2          raju le ke diyo? -> raju le rojina lai ghadi diyo.
+                 rojina le ke dii? -> rojina le sabai dii ko kura wata syau dii.
+reading bench: items 9/40  pairs 2/20

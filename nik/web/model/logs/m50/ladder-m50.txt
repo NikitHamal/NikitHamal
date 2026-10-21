@@ -1,0 +1,8 @@
+L1-1step         12/12  operand-coverage 1.00  invented 9.1
+L2-2step         12/12  operand-coverage 1.00  invented 14.3
+L3-intermediate-given 12/12  operand-coverage 1.00  invented 10.2
+L4-chain-2line   6/12  operand-coverage 0.81  invented 3.8
+word-formula     0/10  operand-coverage 0.50  invented 4.2
+word-orig        2/10  operand-coverage 0.83  invented 5.5
+word-para        0/10  operand-coverage 0.63  invented 4.3
+ALL 44/78  (/tmp/nik_out_mix23/m50.bin, greedy)

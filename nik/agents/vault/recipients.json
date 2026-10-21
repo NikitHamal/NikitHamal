@@ -1,0 +1,11 @@
+{
+ "_doc": "Approved vault keys (public lines only). A key is added only after the owner approves its fingerprint in /agents or issue #8. 'sealers' may write boxes.vault.json; open refuses vaults from anyone else.",
+ "sealers": [
+  "Claude"
+ ],
+ "keys": {
+  "Claude": "nik-vault-pub:Claude:BRTkBtwzSy/74RRluqd0c0Vcv3ySA4yd5FtP4lZyNT0=:Joqs2wulf/2zCRAxOf8vBuTYfr4unXqeHXwbGM8fhcQ=",
+  "Local-C": "nik-vault-pub:Local-C:18zET4et2srfRb1NhezzVTV2+4ddRXWY8gvItbMqSmA=:IFEfco1+lopHk0VbFHBwH6n2vtW1tX1xKGSzcAGXFJU=",
+  "Local-Cb": "nik-vault-pub:Local-Cb:2yuOduw5o4Dq+eTxo5hj8z5Zb/kcY4ZuuzZ9VG9ApCo=:pcBkQFH7aU/qiDioaQ+dC41+LgU9LufBK0R1Bp0UMNU="
+ }
+}

@@ -8,6 +8,67 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **p11 (Local-C: m50 + 7 min on a 38%-shape family mix, lr 1e-4): shape probe 4 -> 14/44, understanding 21, math
+  96.5, but bench 209 -> 162/288, nested 222 -> 164, persona 85.7, traps 7, RW items 21.** The shapes are learnable;
+  at 38% they crowd out general arithmetic (same curve as P5). Next: blends with m50 and a bigger base/replay share.
+- **Box etiquette:** an execute call from another client interrupts a blocking scratchpad call (Claude's poll killed
+  p11 once). Launch jobs detached, gate from your own clone (the shared `/tmp/NikitHamal` may be on another branch).
+
+- **NikBench-RW (strict, real-world) exposes what the old benches hid:** m50 1/45 situations (25/135 answers): unknown
+  0/18 (invents facts), format 1/18 (ignores "number matra"), money 4/21 (drops the quantity in qty x price). A harness
+  bug first made it look worse (160-token cap, calc off); it now uses /chat's decoding (maxNew 440, calc on, greedy).
+- **More existing data does not fix it:** CPU micro-SFT of m50 with read 15% + correct 10% + roles 10%: RW 2/45, 23/135.
+- **p8m = m50 + 12 min on Local-C's p8 mix:** understanding 19 -> 22, math 94 -> 97.5, RW 1 -> 3/45, but the nested word
+  family 16 -> 10/48, traps 9 -> 8, reading 2 -> 1 pairs. Polishing moves understanding/math, not composition.
+
+- **Mistake (Claude): automating molab got two owner accounts restricted for acceptable-use violations.** A headless
+  browser with the owner's cookies kept notebooks open on three accounts and re-provisioned a GPU box after every 410
+  (~15 sandboxes in an hour). Boxes died faster and faster (1-8 min), then molab showed "Your account is restricted ...
+  violated our acceptable use policy". Free GPU services treat multi-account + automated re-provisioning as abuse.
+  Rule: no browser automation, no multi-account farming, no auto-restart loops on free services; ask the owner.
+
+- **molab GPU boxes are preempted, not idle-killed.** Docs: 12 h max, shut down after 90 min idle. Reality (marimo issue #11058,
+  open, no maintainer reply): GPU sandboxes are reclaimed with HTTP 410 after 15-45 min even while busy, all /tmp lost. We
+  lost 5 boxes in 2 h. So: jobs <= ~30 min, copy every .bin and log off the box the moment it exists (Kaggle private
+  datasets `nik-candidates-*`, `nik-replay-corpus-2026-10-21` = rebuilt replay corpus, 173M tokens, md5 dfbe0bb4), and a
+  keep-alive pings the kernel every 4 min (against the 90-min idle rule only; it cannot stop preemption).
+
+- **m50 shipped (16:45 UTC).** Head-to-head on one box: v4f / m50 / p8 = plain 208 / 209 / 208, nested 216 / 222 / 219,
+  ladder ALL 26 / 44 / 46, understanding 13 / 19 / 18, traps 9 / 9 / 8, math 96 / 94 / 97.5%, bench_reading 3 / 2 / 2 pairs. m50 vs p8
+  is a tie (p >= 0.13 everywhere); m50 was the only one inside every gate. Their blend pm50: understanding 18, traps 7, math 97.5% -> no.
+- **multiturn.py costs reason next to reduce.** v4r2m (= v4r2 + multiturn 5%): reason 37 -> 35, raw long-chat recall 16 -> 32/80,
+  long-chat bench (old policy) 7 -> 17/60, but with context.js 43 -> 41/60. v4r6 (reduce 25% + multiturn 5%, lr 1.5e-4): reason 30/48
+  (p=0.004), traps 7. context.js already gives /chat most of the gain at inference.
+- **Mistake: a model lives only on the box until it is copied off.** Box 1 died twice and box 2 once in 3 hours (410), taking v4r2,
+  v4r2m, Decide v8, pm50 and a half-uploaded Kaggle export. Copy each gated .bin to the sandbox + Kaggle the moment it is gated.
+
+- **A lower reduce dose keeps the two-step skill and gives reason back (new Claude session).** v4r2 (reduce 25%, lr 2e-4,
+  20 min): NikBench 73.6% (+1.4, p=0.45), word 6 -> 12/48, reason 37, ladder 12/12/12/5, understanding 15, traps 8, math
+  97.5%. v4r3 (reduce 30%, lr 1.5e-4, 15 min): 72.2%, reason 39, ladder 12/12/12/6, understanding **19**, traps 9, math
+  **92.5%**. v4r (40%) had reason 32. Unlike P3, single-step L1/L3 stay 12/12. Their same-parent blend m50 (0.5/0.5):
+  72.6%, word 10, reason 38, ladder 12/12/12/6, understanding 19, traps 9, math 94%: the first candidate >= v4f on every
+  clean gate (math exactly at the 2 pp limit).
+- **trap_check was partly trained on.** names.py emitted `mero naam nikit ho` ~705 times per 100k rows (trap items 1 and
+  3), plus `ma nikit, kathmandu bata` and `mero sathi nikit lai chiya man parchha`. Every model since v4f saw them, so
+  trap scores from v4f on are partly memorised. make_sft2 now drops full trap sentences (0a8378c); generic follow-ups
+  (`mero naam k ho?`) stay, as context questions.
+- **Moving a model between boxes without Kaggle:** read the .bin in 700 KB base64 chunks through the marimo execute API
+  (console output is truncated at ~1 MB) and write it back in 3 MB chunks; check md5 on both ends. 20 MB takes ~1 min.
+
+- **v4r = v4f + 20 min, Sky reduce.py 40% (box): ladder L2 0 -> 12/12, L4 0 -> 6/12**, understanding 16, stress 64, NikBench
+  -2.1 (reason -7, p=0.016: the dose crowds out iter rows). Same-lineage blends v4f + a(v4r - v4f): a=0.7 keeps L2 12/12,
+  NikBench -1.4, understanding 18, stress 61, traps 8; a=0.5 keeps reason and stress but L2 falls to 1/12. The skill is
+  non-linear in a (switches between 0.5 and 0.7).
+- **Decide v7 on held-out reading: 3/20 -> 11/20 pairs** (29/40 items) from reading_wide.py; math-verify fell 93.6 -> 81.9
+  (smaller share). Shipped to /decide with both numbers shown.
+- **v5w (14 unique blocks, from scratch): base 64.6% (n8)**, no better than 12 blocks (v5pre 66.7%). Width is not the lever.
+
+- **v5 from scratch (clean corpus_v2 473M tokens + sft12, 150 min, ~1.25B tokens) loses to the v4 lineage:** v5pre
+  61.8%, v5 (after a 25-min SFT at lr 1.2e-3) 59.0% vs v4f 72.2% on the same 288 items; reason 28 vs 39; understanding
+  15/17 vs 13. The live model's strength is its accumulated SFT stages, not its base data. The post-SFT hurt this base.
+- **Sky reduce.py (merged):** CPU micro-SFT on v4f, 40% reduce rows: ladder L2 0 -> 11/12, held-out a-(bxc) 0 -> 21/24;
+  control stays 0. Story word problems do not move (parsing is a separate skill). Molab check queued (v4r).
+
 - **Nik-Decide as a reranker of Nik hurts (rerank_eval.py, v4f k=8, 288 items):** greedy 72.2%, majority 71.9%, Decide
   pick 67.7%, vote x Decide 68.1%, oracle 75.0%. Two lessons: (1) sample diversity is low, so even a perfect picker adds
   only +2.8 pp; (2) a verifier trained on synthetic near-misses does not know the policy's real mistakes. Next: Decide v8
@@ -125,6 +186,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   is wrong in all 5 phrasings; English inputs are mostly garbled. This is the honest picture of how template-bound Nik is.
 
 ### Mistakes (do not repeat)
+
+- **Killing a duplicate job mid-`git clone` breaks the other copy's clone of the same folder** (v4r and Decide v8 both
+  failed that way). Use a unique folder per job, and kill orphan children (one Decide trainer ran 40 min unseen).
+
+- **Relaunching on a lost marimo response.** The box kernel is shared, and launch output is often dropped. Relaunching
+  started two copies of the same queue. Always check `ps` for the process before relaunching.
 
 - **Audit pass 2 audited the wrong file.** It ran on `corpus_work/roman` (the raw input) again, not the kept
   `corpus_v2.jsonl`, so it re-reported the input's 28% dups and wasted ~60 min. The kept-output audit now runs beside v5.

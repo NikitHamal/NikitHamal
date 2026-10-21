@@ -72,6 +72,32 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-21 ~19:15 UTC
+- **Live: m50.** Gate = `bash nik/scripts/full_gate.sh <bin> <tag>` on a GPU box (all gates in parallel vs live, verdict SHIP
+  only if >= live on every row: bench plain+nested, understanding, math/persona, NikBench-RW, shape_probe, bench_reading,
+  ladder, traps; stress/chat are contaminated sanity rows). Owner's bar: **zero regressions, real gains everywhere**.
+- **New strict benchmark NikBench-RW** (`nik/bench_rw.py`): m50 1/45 groups, 25/135 items; p8m 3/45. Local-C's
+  `shape_probe.py`: m50 2/27, p8m 4/27. More of the existing read/correct/roles data does NOT move RW (CPU test) -> new
+  purpose-built data is needed (spec in #8, assigned to Local-C who owns data; Claude owns gate/merge/ship).
+- **p8m** (m50 + 12 min on p8 mix): und 22, math 97.5, RW 3/45, shapes 4/27, but nested word 16->10, traps 8, reading
+  1/20 -> not shipped. Bin: sandbox + Kaggle `nik-p8m-bin` (may not exist; md5 52d2e0e4).
+- **GPU: the owner opens molab notebooks by hand and pastes the pair URL+token in chat.** Box 1 is shared Claude + Local-C
+  via the vault; protocol: one GPU job at a time via `/tmp/gpu.lock`, chunks <= 9 min, artefacts off the box at once,
+  work dirs `/tmp/claude` `/tmp/localc`. **Launch jobs detached (setsid nohup ... &)**: an execute call from another
+  agent interrupts a blocking scratchpad call (Claude's status check killed Local-C's p11 at 19:29). Do not call the box while the lock names someone else. A status panel (marimo `mo.ui.refresh` cards + refresh button) sits at the top
+  of each notebook. **Never automate molab accounts** (two owner accounts were restricted for that; see molab/README.md).
+- Kaggle is storage only: `nik-replay-corpus-2026-10-21` (173M-token replay corpus), `nik-candidates-2026-10-21`, `nik-p8m-mix`.
+- Owner wants: continuous loop, status messages mid-work, /agents (#8, state.json) current, docs current.
+
+## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
+- **Live: m50** = 0.5·v4r2 + 0.5·v4r3 (same-parent blend, both v4f + reduce.py 25-30%). Paired vs v4f: NikBench plain 72.6% (72.2),
+  nested 77.1% (75.0), ladder L2 0 -> 12/12, understanding 19/26 (13), traps 9 (9), math 94% (96). Rollback: nik/web/model/nik-0.1.v4f.bin.
+  Logs nik/web/model/logs/m50/. Runner-up: Local-C p8 (PR #10, tied; traps 8). Candidates are on Kaggle `iamnikithamal/nik-candidates-2026-10-21`
+  (m50, p8, v4r3; private).
+- **Boxes die often (410).** Three boxes were lost today. Keep every candidate .bin off the box as soon as it is gated (sandbox + Kaggle dataset).
+  Box-to-box: relay through the sandbox (`marimo /api/kernel/execute`, 700 KB base64 reads, 3 MB writes, md5 both ends).
+- `MULTITURN_SHARE` stays 0: two box runs (v4r2m, v4r6) show it costs reason next to reduce (37 -> 35, 39 -> 30).
+
 ## Session context (update every session) - 2026-10-21 ~05:50 UTC
 - **Live:** v4f (shipped 2026-10-21 on the owner's call over the understanding gate: NikBench 72.2%, reason 39/48, word 6/48, traps 9/12, understanding 13/26). Rollback: nik/web/model/nik-0.1.v4c.bin.
 - **Boxes (molab only, never Kaggle):** box 1 runs LLM jobs via `nik/scripts/molab_run.sh`-style scripts, dashboard auto-detects runs

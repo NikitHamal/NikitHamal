@@ -1,25 +1,17 @@
 {
- "updated": "2026-10-21T11:30:18Z",
+ "updated": "2026-10-21T20:34:46Z",
  "live": {
-  "model": "v4f",
-  "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
+  "model": "m50",
+  "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU 100% \u00b7 64620 MiB",
-   "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
-   "progress": 0.22149999999999997,
-   "detail": "step 4675 \u00b7 231,089 tok/s \u00b7 44.3 min of stage \u00b7  \u00b7 running: train.py",
-   "eta": "v5w results ~14:00 UTC"
-  },
-  {
-   "name": "box 2",
-   "gpu": "GPU 93% \u00b7 34015 MiB",
-   "job": "v5 from scratch on clean corpus_v2 + sft12 (stage A 150 min -> SFT 25 -> gates vs v4f)",
-   "progress": 0.75,
-   "detail": "step 10075 \u00b7 147,043 tok/s \u00b7 150.0 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
-   "eta": "~12:30 UTC"
+   "gpu": "RTX Pro 6000 \u00b7 owner notebook, shared Claude + Local-C",
+   "job": "Claude: full_gate on blends m50 + a(p11 - m50), a = 0.3 / 0.5",
+   "progress": null,
+   "detail": "one job at a time via /tmp/gpu.lock; status panel in the notebook",
+   "eta": "-"
   }
  ],
  "scoreboard": {
@@ -28,16 +20,99 @@
    "reason",
    "und",
    "traps",
-   "L2"
+   "L2",
+   "RW"
   ],
   "rows": [
    [
-    "v4f (live)",
+    "m50 (live)",
+    "72.6%",
+    "38/48",
+    "19/26",
+    "9/12",
+    "12/12",
+    "1/45"
+   ],
+   [
+    "p8m (m50 + p8 mix)",
+    "73.6%",
+    "-",
+    "22/26",
+    "8/12",
+    "12/12",
+    "3/45"
+   ],
+   [
+    "p11 (Local-C, shapes 38%)",
+    "56.3%",
+    "-",
+    "21/26",
+    "7/12",
+    "-",
+    "2/45"
+   ],
+   [
+    "p8 (Local-C)",
+    "72.2%",
+    "38/48",
+    "18/26",
+    "8/12",
+    "12/12",
+    "-"
+   ],
+   [
+    "v4f (previous)",
     "72.2%",
     "39/48",
     "13/26",
     "9/12",
-    "0/12"
+    "0/12",
+    "-"
+   ],
+   [
+    "v4r2 (v4f+reduce 25%, lr 2e-4)",
+    "73.6%",
+    "37/48",
+    "15/26",
+    "8/12",
+    "12/12",
+    "-"
+   ],
+   [
+    "v4r3 (v4f+reduce 30%, lr 1.5e-4)",
+    "72.2%",
+    "39/48",
+    "19/26",
+    "9/12",
+    "12/12",
+    "-"
+   ],
+   [
+    "b7 = v4f+0.7(v4r-v4f)",
+    "70.8%",
+    "37/48",
+    "18/26",
+    "8/12",
+    "12/12",
+    "-"
+   ],
+   [
+    "b60",
+    "71.5%",
+    "39/48",
+    "17/26",
+    "8/12",
+    "7/12",
+    "-"
+   ],
+   [
+    "v4r (v4f+reduce)",
+    "70.1%",
+    "32/48",
+    "16/26",
+    "-",
+    "12/12",
+    "-"
    ],
    [
     "v4m",
@@ -45,82 +120,120 @@
     "35/48",
     "16/26",
     "9/12",
-    "0/12"
+    "0/12",
+    "-"
    ],
    [
-    "v4f3 (Local-C)",
-    "63.2%",
-    "28/48",
+    "v4f4 (Local-C)",
+    "67.4%",
+    "29/48",
     "20/26",
-    "8/12",
-    "1/12"
-   ],
-   [
-    "v4c",
-    "62.5%",
-    "27/48",
-    "19/26",
-    "5/12",
-    "0/12"
+    "9/12",
+    "1/12",
+    "-"
    ]
   ]
  },
  "runs": [
   {
-   "tag": "v5",
-   "box": "box 2",
+   "tag": "m50",
+   "box": "-",
    "by": "Claude",
-   "status": "SFT",
-   "what": "from scratch on clean corpus_v2; base (pre-SFT) quick check: NikBench 66.7% (n8), word 5/24, und 15/26, math 95%; 25-min SFT running"
+   "status": "shipped",
+   "what": "0.5 v4r2 + 0.5 v4r3",
+   "result": "live 16:45 UTC"
   },
   {
-   "tag": "v5w",
+   "tag": "pm50",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "14 unique blocks, stage A 150 min"
+   "status": "rejected",
+   "what": "0.5 p8 + 0.5 m50",
+   "result": "und 18, traps 7, math 97.5%, reading 3/20 (box 2 died before bench)"
   },
   {
-   "tag": "v4f4 arms E-H",
+   "tag": "h2h",
    "box": "box 2",
-   "by": "Local-C",
-   "status": "running",
-   "what": "roles dose 20%, gate-prompt filter, persona rows"
+   "by": "Claude",
+   "status": "done",
+   "what": "ship gate: live v4f vs m50 vs p8, same box, plain + nested n16",
+   "result": "v4f/m50/p8 plain 208/209/208, nested 216/222/219, und 13/19/18, traps 9/9/8, math 96/94/97.5 -> m50 ships"
   },
   {
-   "tag": "tv25",
-   "box": "box 2",
-   "by": "Local-A",
-   "status": "claimed",
-   "what": "weight-space persona fix v4f4 + 0.25(v4f3-v4c); needs a paired check vs live v4f"
-  },
-  {
-   "tag": "tvF5",
+   "tag": "v4r6",
    "box": "box 2",
    "by": "Claude",
    "status": "rejected",
-   "what": "v4f + 0.5(v4f4-v4c)",
-   "result": "-3.8 pp vs v4f, understanding 12: task vectors do not cross lineages"
+   "what": "v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%: m50's balance in one run",
+   "result": "NikBench 69.1%, reason 30/48 (p=0.004), traps 7, math 92.5%, L2 12/12"
+  },
+  {
+   "tag": "v4r2m",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "done",
+   "what": "v4r2 recipe + NIK_MULTITURN_SHARE=0.05 (one variable vs v4r2); + longchat/memory_long",
+   "result": "NikBench 72.6%, reason 35, word 10, L2 12/12, und 19, traps 8, math 95%; raw long-chat 7->17/60, recall 16->32/80 (box 1, bin lost)"
+  },
+  {
+   "tag": "mix23",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "done",
+   "what": "same-parent blends of v4r2 and v4r3 (m50 = 0.5/0.5, m30 = 0.7 v4r2 + 0.3 v4r3): keep L2 12/12 + v4r2's math with v4r3's understanding",
+   "result": "m50: NikBench 72.6% (+0.3), word 10, reason 38, ladder 12/12/12/6, und 19, traps 9, math 94%, reading 2/20; m30 worse (und 16, traps 8). m50 proposed for ship (#11)"
+  },
+  {
+   "tag": "decide-v8",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "lost",
+   "what": "Decide + Nik's own sampled answers (policy_data); then bench_reading + rerank_eval",
+   "result": "bench_reading 11/20 pairs (= v7); box 1 recycled before rerank_eval"
+  },
+  {
+   "tag": "v4r2",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "done",
+   "what": "v4f + 20 min lr 2e-4, reduce 25%",
+   "result": "NikBench 73.6% (+1.4, p=0.45), word 6->12/48, reason 37 (-2), L1/L2/L3/L4 12/12/12/5, und 15, traps 8, math 97.5%, chat 15"
+  },
+  {
+   "tag": "v4r3",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "done",
+   "what": "v4f + 15 min lr 1.5e-4, reduce 30%",
+   "result": "NikBench 72.2% (=), arith -2.1, word 6->10/48, reason 39, L2 12/12, L4 6, und 19, traps 9, math 92.5% (-3.5)"
+  },
+  {
+   "tag": "blends",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "done",
+   "result": "b7: L2 12/12, und 18, -1.4 pp, stress 61, traps 8; b60: L2 7/12, -0.7 pp, und 17, stress 59"
+  },
+  {
+   "tag": "v4r",
+   "box": "box 2",
+   "by": "Claude + Sky",
+   "status": "done",
+   "what": "live v4f + 20 min lr 2e-4, Sky reduce.py at 40% of rows; target L2 >= 6/12, NikBench within 2 pp",
+   "result": "L2 0->12/12, L4 0->6/12, und 16, NikBench -2.1 (reason -7, p=0.016)"
   },
   {
    "tag": "decide-v7",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "+ reading_wide (10 relations, bench_reading vocab held out), math-word, memory-latest; 75 min. Baseline v5 on bench_reading (strict, both orders): 17/40 items, 3/20 pairs"
-  },
-  {
-   "tag": "rerank",
-   "box": "box 1",
-   "by": "Claude",
-   "status": "running",
-   "what": "Nik v4f samples 8 answers per NikBench item, Decide v5 picks"
+   "status": "shipped",
+   "what": "+ reading_wide, math-word, memory-latest; target bench_reading pairs >= 8/20 (v5: 3/20)",
+   "result": "bench_reading 3/20 -> 11/20 pairs; math-verify 81.9% (v5 93.6)"
   }
  ],
  "next": [
-  "v5 gates vs v4f (~12:30 UTC)",
-  "v5w from scratch (14 blocks) ~15:00 UTC",
-  "Local-A tv20 vs live v4f (same items)",
-  "Sky reduce.py rewrite traces -> molab 20-min run"
+  "p11 (Local-C) -> full_gate",
+  "RW-targeted data (Local-C, spec in #8)",
+  "ship only a zero-regression candidate"
  ]
 }

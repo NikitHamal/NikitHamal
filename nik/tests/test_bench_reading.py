@@ -15,9 +15,9 @@ from bench_reading import PAIRS, answer_after_think, contains  # noqa: E402
 
 
 class ReadingBenchTest(unittest.TestCase):
-    def test_twenty_pairs(self):
-        self.assertEqual(len(PAIRS), 20)
-        self.assertEqual(len({p['tag'] for p in PAIRS}), 20)
+    def test_pair_count(self):
+        self.assertEqual(len(PAIRS), 50)   # v2: 20 -> 50 pairs (Claude, 2026-10-21)
+        self.assertEqual(len({p['tag'] for p in PAIRS}), 50)
 
     def test_contexts_unique(self):
         self.assertEqual(len({p['ctx'] for p in PAIRS}), len(PAIRS))

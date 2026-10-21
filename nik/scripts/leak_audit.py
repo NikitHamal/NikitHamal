@@ -9,8 +9,9 @@ the fixed prompts of the eval sets.
     python nik/scripts/leak_audit.py data/behavior.jsonl
     python nik/scripts/leak_audit.py mix.jsonl --max-exact 0 --show 10
 
-Fatal by default: eval_understand, chat_check, stress. `bench_hard` overlaps are
-reported as advisory because one identity item (`mero naam nikit ho`) is intentionally
+Fatal by default: eval_understand, chat_check, stress. `bench_hard` and `trap_check` overlaps are
+reported as advisory (trap_check's generic follow-ups such as `mero naam k ho?` are context questions;
+`make_sft2.py` drops rows with its full trap sentences) because one identity item (`mero naam nikit ho`) is intentionally
 trained - the unseen items are the honest measurement. Exact match = normalised
 lowercase, collapsed spaces, trailing punctuation stripped.
 
@@ -66,12 +67,19 @@ def _prompts_bench_hard(path):
     return out
 
 
+def _prompts_trap_check(path):
+    src = _read(path)
+    m = re.search(r'TRAPS\s*=\s*\[(.*?)\n\]', src, re.S)
+    return [q for turns in re.findall(r"\(\[([^\]]*)\]", m.group(1)) for q in _quoted(turns)] if m else []
+
+
 def collect_prompts(root=ROOT):
     out = {}
     out['eval_understand'] = _prompts_understand(os.path.join(root, 'nik', 'eval_understand.py'))
     out['chat_check'] = _prompts_chat_check(os.path.join(root, 'nik', 'chat_check.py'))
     out['stress'] = _prompts_stress(os.path.join(root, 'nik', 'stress.py'))
     out['bench_hard'] = _prompts_bench_hard(os.path.join(root, 'nik', 'bench_hard.py'))
+    out['trap_check'] = _prompts_trap_check(os.path.join(root, 'nik', 'trap_check.py'))
     return {k: [p for p in v if p.strip()] for k, v in out.items() if v}
 
 

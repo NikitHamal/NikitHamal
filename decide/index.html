@@ -69,7 +69,7 @@
 
   <h1>Nik-Decide</h1>
   <p class="lead">A 5.4M-parameter <b>decision model</b>, built from scratch. It doesn't write text: it reads the question, the passage and every option at once and picks one in <b>a single pass</b>, with a confidence for each option. It runs entirely on your device.</p>
-  <div class="pills"><span class="pill">v5 · Oct 2026</span><span class="pill">5.4M params · 10.9 MB</span><span class="pill">one forward pass</span><span class="pill">no server</span></div>
+  <div class="pills"><span class="pill">v7 · Oct 2026</span><span class="pill">5.4M params · 10.9 MB</span><span class="pill">one forward pass</span><span class="pill">no server</span></div>
 
   <div class="grid">
     <div class="card">
@@ -87,11 +87,14 @@
   </div>
 
   <div class="skills">
-    <div class="skill"><b>99.6%</b><span>reading yes / no</span></div>
+    <div class="skill"><b>11/20</b><span>held-out reading pairs (new names and objects; v5: 3/20)</span></div>
+    <div class="skill"><b>99.7%</b><span>reading yes / no</span></div>
     <div class="skill"><b>100%</b><span>"that wasn't said"</span></div>
-    <div class="skill"><b>92.9%</b><span>answer from a passage</span></div>
-    <div class="skill"><b>93.6%</b><span>checking a math answer</span></div>
-    <div class="skill"><b>96.8%</b><span>checking a working step</span></div>
+    <div class="skill"><b>92.7%</b><span>answer from a passage</span></div>
+    <div class="skill"><b>99.3%</b><span>a word problem's final answer</span></div>
+    <div class="skill"><b>95.2%</b><span>checking a working step</span></div>
+    <div class="skill"><b>81.9%</b><span>checking a math answer (v5: 93.6%)</span></div>
+    <div class="skill"><b>100%</b><span>latest correction wins</span></div>
     <div class="skill"><b>100%</b><span>what kind of message it is</span></div>
   </div>
 
@@ -99,7 +102,7 @@
     <h3>What it is for</h3>
     Nik (the chat model) writes; Nik-Decide checks and routes. It can tell whether a passage supports a claim, notice when something was never mentioned, pick an answer from a text, verify an arithmetic result, spot a working line that uses a number the question never gave, and tell chat from math, reading, persona, language or writing requests.
     <h3>Limits</h3>
-    Held-out accuracies above are on Nik's own audited generators, not on open-world text. Outside these task types its choices are guesses. For yes/no, write the options the way it learned them: <code>ho, pokhara</code> / <code>haina, pokhara haina</code> / <code>thaha chhaina</code>.
+    The percentages above are held-out rows from Nik's own audited generators; the 11/20 is Local-A's hand-written reading test with vocabulary it never saw (both answers of a pair, both option orders, must be right). On open-world text expect the lower number. Outside these task types its choices are guesses. For yes/no, write the options the way it learned them: <code>ho, pokhara</code> / <code>haina, pokhara haina</code> / <code>thaha chhaina</code>.
   </div>
 </div>
 
@@ -114,6 +117,8 @@
     ['Not mentioned', 'ram ko umer kati ho?', 'sita pokhara ma baschhin. ram doctor ho.', ['ho', 'haina', 'thaha chhaina']],
     ['Answer from passage', 'gopal le kati kilo pyaj kinyo?', 'gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.', ['3', '2', '5', 'aalu']],
     ['Check the math', '348 + 275 kati hunchha?', '', ['613', '623', '633', '326']],
+    ['Who gave it?', 'kasle kitab diyo?', 'pramila le santosh lai 4 wata kitab diyo. santosh le pachhi ek wata saathi lai diyo.', ['pramila', 'santosh', 'saathi']],
+    ['Before / after', 'pachhi kati kilo lyayo?', 'binod le pahile 6 kilo aalu lyayo, pachhi 2 kilo thapyo.', ['6', '2', '8']],
     ['Check a step', 'yo prashna ko sahi hisab ko line kun ho?', 'ram sanga 50 rupiya chha. usle 3 wata kalam kinyo, ek ko 12 rupiya. kati baki?', ['3 x 12 = 36', '13 x 12 = 156', '3 + 12 = 15', '3 x 12 = 38']],
     ['Route: "mero naam nikit ho"', 'mero naam nikit ho', '', INTENTS],
     ['Route: "nikit ko ho?"', 'nikit ko ho?', '', INTENTS],
@@ -125,7 +130,7 @@
   let nd = null;
   fill(0);
   (async () => {
-    const [tj, bin] = await Promise.all([fetch('/nik/web/model/tokenizer.json').then((r) => r.json()), fetch('/nik/web/decide/decide-v5.bin').then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })]);
+    const [tj, bin] = await Promise.all([fetch('/nik/web/model/tokenizer.json').then((r) => r.json()), fetch('/nik/web/decide/decide-v7.bin').then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })]);
     nd = new NikDecide(parseDecide(bin), new Tokenizer(tj));
     $('go').disabled = false; $('go').textContent = 'Decide';
     run();
