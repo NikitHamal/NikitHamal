@@ -110,7 +110,7 @@ def set_map(sc, A, variant="rise"):
             w = root.matrix_world @ v
             c = world_to_camera_view(sc, cam, w); mk[k_] = (c.x, 1 - c.y, c.z)
         update.marks = mk
-    update.marks = {}
+    update.marks = {}; update.world = marks
     return update
 
 

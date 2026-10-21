@@ -121,7 +121,60 @@ def _load(p):
     return np.asarray(im).astype(np.float32)
 
 
+KEYS = json.load(open(f"{B}/keys/keys.json")) if os.path.exists(f"{B}/keys/keys.json") else None
+KMARKS = json.load(open(f"{B}/keys/marks.json")) if os.path.exists(f"{B}/keys/marks.json") else {}
+_kc = {}
+
+
+def _key(sid, k):
+    p = f"{B}/keys/s{sid}_{k}.png"
+    if p not in _kc: _kc[p] = Image.open(p).convert("RGB") if os.path.exists(p) else Image.new("RGB", (W, H))
+    return _kc[p]
+
+
+def push(sid, u):
+    """The 2D camera on a locked key: a slow push-in with a small drift; returns the crop window (x0, y0, w, h) in 0..1."""
+    z = 1.0 + 0.085 * ease(u); cw, ch = 1 / z, 1 / z
+    dx = [0.5, 0.45, 0.55, 0.5][sid % 4]; dy = [0.5, 0.52, 0.48, 0.46][(sid // 4) % 4]
+    cx = 0.5 + (dx - 0.5) * ease(u); cy = 0.5 + (dy - 0.5) * ease(u)
+    return cx - cw / 2, cy - ch / 2, cw, ch
+
+
+def key_blend(sid, t, d):
+    """Which key(s) show at shot time t: hold each key, dissolve around the midpoint between key times."""
+    src = 21 if sid == 22 else sid
+    us = KEYS[str(src)][1]; xf = KEYS[str(src)][2]; tk = [x * d for x in us]
+    if src != sid: return [(src, 0, 1.0)]
+    for k in range(len(tk) - 1):
+        m = (tk[k] + tk[k + 1]) / 2; w = max(1e-3, min(xf, tk[k + 1] - tk[k]))
+        if t < m + w / 2:
+            a = ease((t - (m - w / 2)) / w)
+            return [(src, k, 1 - a), (src, k + 1, a)] if a > 0 else [(src, k, 1.0)]
+    return [(src, len(tk) - 1, 1.0)]
+
+
+def plate_keys(f, sid):
+    s = BY[sid]; t = f / FPS - s["start"]; u = t / s["dur"]
+    x0, y0, cw, ch = push(sid, u); out = None
+    for src, k, a in key_blend(sid, t, s["dur"]):
+        im = _key(src, k); iw, ih = im.size
+        box = (x0 * iw, y0 * ih, (x0 + cw) * iw, (y0 + ch) * ih)
+        arr = np.asarray(im.resize((W, H), Image.BICUBIC, box=box)).astype(np.float32)
+        out = arr * a if out is None else out + arr * a
+    return out
+
+
+def key_marks(sid, f):
+    s = BY[sid]; t = f / FPS - s["start"]; u = t / s["dur"]
+    src, k, a = max(key_blend(sid, t, s["dur"]), key=lambda x: x[2])
+    mk = KMARKS.get(f"{sid}_{k}")
+    if not mk: return None
+    x0, y0, cw, ch = push(sid, u)
+    return {n: ((x - x0) / cw, (y - y0) / ch, z) for n, (x, y, z) in mk.items()}
+
+
 def plate(f, sid):
+    if KEYS is not None and sid != 11: return plate_keys(f, sid)
     p = f"{B}/plates/{f:05d}.png"
     if os.path.exists(p): return _load(p)
     # missing frame (e.g. plates rendered on twos): nearest earlier existing frame inside the shot
@@ -191,8 +244,8 @@ def frame(f):
             over(fr, ln, (W - ln.shape[1]) / 2, 860, a)
     if sid in (8, 10):
         mp = f"{B}/plates/marks_{sid}.json"
-        if os.path.exists(mp):
-            mk = json.load(open(mp)).get(str(f))
+        if KEYS is not None or os.path.exists(mp):
+            mk = key_marks(sid, f) if KEYS is not None else json.load(open(mp)).get(str(f))
             if mk:
                 for name, (x, y, z) in mk.items():
                     if sid == 8 and name == "gorkha": continue
