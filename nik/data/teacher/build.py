@@ -12,7 +12,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import colmath, compose, frame, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
+import colmath, compose, correct, frame, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -49,6 +49,9 @@ def _one(R):
     if x < 0.05:            # held-out-style word frames with distractors (frame.py, Local-C, issue #9)
         d = frame.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if 0.08 <= x < 0.12:    # memory with updates/corrections, latest value wins (correct.py; v4f regressed on this)
+        d = correct.sample(R)
+        return {'cat': d['cat'], 'gold': None, 'messages': d['messages']}
     if x < 0.08:            # iterate-a-rule sequences, one line per step (iter.py, Local-C): sequence/pattern were 0/11
         import iter as itgen
         d = itgen.make(R)
