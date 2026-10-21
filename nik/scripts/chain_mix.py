@@ -34,7 +34,7 @@ if not os.path.isdir(TEACHER):
     TEACHER = os.path.join(ROOT, 'nik', 'data', 'teacher')
 sys.path.insert(0, TEACHER)
 
-CHAIN_CATS = ('math-word-frame', 'reason-iter')
+CHAIN_CATS = ('math-word-frame', 'reason-iter', 'math-reduce')
 
 
 def eval_prompts():
@@ -128,7 +128,7 @@ def row_prompt(d):
 
 
 
-def chain_rows(n_frame, n_iter, n_roles, seed, symbolic=True):
+def chain_rows(n_frame, n_iter, n_roles, seed, symbolic=True, n_reduce=0):
     import frame
     import iter as itgen
     R = random.Random(seed)
@@ -143,6 +143,11 @@ def chain_rows(n_frame, n_iter, n_roles, seed, symbolic=True):
         import roles
         d = roles.sample(R)
         rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
+    for _ in range(n_reduce):
+        import reduce as red
+        d = red.sample(R)
+        rows.append({'cat': d.get('cat', 'math-reduce'), 'gold': d.get('gold'),
+                     'messages': d['messages']})
     return rows
 
 
@@ -157,6 +162,10 @@ def main():
                     help='share of rows that are grounded-role rows (roles.py): bind the '
                          'numbers in a text to their roles, then compute (issue #9)')
     ap.add_argument('--seed', type=int, default=77)
+    ap.add_argument('--reduce', type=float, default=0.0,
+                    help="share of rows that are reduce.py rows (Sky's symbolic two-step: "
+                         "v4f + 40%% of them took ladder L2 from 0/12 to 12/12, but that dose "
+                         "crowded out the iteration rows and cost the reason family)")
     ap.add_argument('--symbolic', type=int, default=1,
                     help='1: the symbolic two-step gets 25% of the role rows; 0: it does not')
     ap.add_argument('--persona', type=int, default=0,
@@ -209,13 +218,14 @@ def main():
                   f'(stress / chat_check / held-out probes)', flush=True)
         rows = keep
         n_base = len(rows)
-    share = a.frame + a.iter + a.roles
+    share = a.frame + a.iter + a.roles + a.reduce
     total = n_base + int(round(share / max(1e-9, 1 - share) * n_base))
     n_frame = int(round(a.frame * total))
     n_iter = int(round(a.iter * total))
     n_roles = int(round(a.roles * total))
+    n_reduce = int(round(a.reduce * total))
     os.environ['ROLES_SYMBOLIC'] = '1' if a.symbolic else '0'
-    extra = chain_rows(n_frame, n_iter, n_roles, a.seed, a.symbolic)
+    extra = chain_rows(n_frame, n_iter, n_roles, a.seed, a.symbolic, n_reduce)
     for e in extra:
         rows.append(json.dumps(e, ensure_ascii=False))
     random.Random(a.seed + 1).shuffle(rows)
@@ -223,8 +233,8 @@ def main():
     with open(out_path, 'w', encoding='utf8') as f:
         f.write('\n'.join(rows) + '\n')
     print(f'base {a.base}: {n_base} rows ({dropped} chain rows removed) '
-          f'+ {n_frame} frame + {n_iter} iter + {n_roles} roles = {len(rows)} -> {out_path}',
-          flush=True)
+          f'+ {n_frame} frame + {n_iter} iter + {n_roles} roles + {n_reduce} reduce '
+          f'= {len(rows)} -> {out_path}', flush=True)
     print(f'chain share: {100 * (n_frame + n_iter) / max(1, len(rows)):.1f}% of rows, '
           f'roles share: {100 * n_roles / max(1, len(rows)):.1f}%', flush=True)
     if not a.no_tokenize:
