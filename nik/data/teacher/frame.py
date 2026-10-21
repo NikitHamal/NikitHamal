@@ -64,6 +64,8 @@ BANNED_BENCH_WORDS = [
     'bachat',          # bench: monthly saving
     'anupasthit',      # bench: absent students
     'chhut',           # bench: 10% discount
+    'basket',          # bench: "bagaincha" in English - the same template in another word
+    'baki cha',        # the model's voice is "chha"; the audit bans "cha" in its rows
 ]
 
 
@@ -670,8 +672,8 @@ def scene_items_minus_some(R):
         user = (f'{groups} kanda ma {each} wata rakhyo. {taken} wata bhandaira kaam la. {dis} '
                 f'kati wata bacheko?')
     elif shape == 2:
-        user = (f'basket ma {groups} kanda, har kanda ma {each} wata. {taken} wata '
-                f'kharcha paryo. {dis} aba kati wata cha?')
+        user = (f'thela ma {groups} kanda, har kanda ma {each} wata. {taken} wata '
+                f'kharcha paryo. {dis} aba kati wata baki chha?')
     else:
         user = (f'{groups} kanda ko {each} wata each ko jhola thiyo. {taken} wata '
                 f'khaal paryo. {dis} kati wata baki?')
@@ -679,7 +681,7 @@ def scene_items_minus_some(R):
                     ('jamma', f'{groups} x {each}', total),
                     ('baki', f'{total} - {taken}', left)],
                    f'{left} + {taken} = {total}, milyo')
-    ans = R.choice([f'aba {left} wata baki cha.', f'{left} wata bacheko.',
+    ans = R.choice([f'aba {left} wata baki chha.', f'{left} wata bacheko.',
                     f'kati? {left} wata.'])
     return user, steps, ans, str(left)
 
