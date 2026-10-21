@@ -79,6 +79,39 @@ def eval_prompts():
     return {norm(t) for t in texts if t.strip()}
 
 
+def persona_rows(n, seed):
+    """Extra identity/persona rows (nik/data/gen_sft.py).
+
+    Why (issue #9): the mix keeps only 12-20% of the v1 chat file, so the persona
+    rows are ~1,300 out of ~880,000 (0.15%).  With the grounded-role family added at
+    12% the share halves again, and the persona gate (which is strict: 1.0) drops to
+    0.857.  The persona behaviour is *fragile because it is rare*, not because it is
+    hard - so the fix is to put the rows back in.
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('gen_sft_mod',
+                                                  os.path.join(ROOT, 'nik', 'data', 'gen_sft.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    R = random.Random(seed)
+    gens = [mod.identity, mod.nikit]
+    rows, seen = [], set()
+    tries = 0
+    while len(rows) < n and tries < n * 20:
+        tries += 1
+        g = gens[R.randrange(len(gens))]
+        d = g()
+        for m in d['messages']:
+            if m['role'] == 'user':
+                m['content'] = mod.chat_noise(m['content'])
+        key = d['messages'][0]['content']
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append({'cat': d.get('cat', 'identity'), 'gold': None, 'messages': d['messages']})
+    return rows
+
+
 def norm(s):
     """lower, drop the punctuation and collapse the spaces - the comparison key"""
     s = s.lower().strip()
@@ -124,6 +157,8 @@ def main():
                     help='share of rows that are grounded-role rows (roles.py): bind the '
                          'numbers in a text to their roles, then compute (issue #9)')
     ap.add_argument('--seed', type=int, default=77)
+    ap.add_argument('--persona', type=int, default=0,
+                    help='extra identity/persona rows to add (the mix keeps only ~0.15% of them)')
     ap.add_argument('--keep-eval-prompts', action='store_true',
                     help='do not drop the rows that repeat a gate prompt (stress / chat_check)')
     ap.add_argument('--no-tokenize', action='store_true')
@@ -146,6 +181,13 @@ def main():
             continue
         rows.append(line)
     n_base = len(rows)
+    if a.persona:
+        extra_persona = persona_rows(a.persona, a.seed + 5)
+        banned0 = eval_prompts()
+        extra_persona = [r for r in extra_persona if norm(row_prompt(r)) not in banned0]
+        for r in extra_persona:
+            rows.append(json.dumps(r, ensure_ascii=False))
+        print(f'+ {len(extra_persona)} extra persona/identity rows', flush=True)
     if not a.keep_eval_prompts:
         banned = eval_prompts()
         keep = []
