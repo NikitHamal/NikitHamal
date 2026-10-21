@@ -19,12 +19,25 @@ from selfimprove import correct, split  # noqa: E402
 from tokenizer import Tokenizer  # noqa: E402
 
 
+SKILL_LEVEL = {s: 1 for s in ['add', 'sub', 'mul', 'div', 'word', 'price', 'compose', 'day']}
+
+
+def adapt(skill, rate):
+    """keep each skill where groups are mixed (20-80% correct): only mixed groups carry GRPO signal"""
+    if skill in SKILL_LEVEL:
+        if rate > 0.8:
+            SKILL_LEVEL[skill] = min(6, SKILL_LEVEL[skill] + 1)
+        elif rate < 0.2:
+            SKILL_LEVEL[skill] = max(0, SKILL_LEVEL[skill] - 1)
+
+
 def problem(R):
-    """-> (question, checker(answer_text) -> bool)"""
+    """-> (question, checker(answer_text) -> bool, skill)"""
     k = R.random()
     if k < 0.45:
-        q, gold, _ = make(R.choice(['add', 'sub', 'mul', 'div', 'word', 'price', 'compose', 'day']), R.randint(0, 4), R)
-        return q, (lambda a, g=gold: correct(a, g))
+        sk = R.choice(list(SKILL_LEVEL))
+        q, gold, _ = make(sk, SKILL_LEVEL[sk], R)
+        return q, (lambda a, g=gold: correct(a, g)), sk
     if k < 0.65:
         import frame
         d = frame.sample(R)
@@ -43,9 +56,10 @@ def problem(R):
     if q is None or d.get('gold') in (None, ''):
         return problem(R)
     g = str(d['gold']).lower()
+    src = d.get('cat') or d.get('kind') or 'gen'
     if re.fullmatch(r'-?\d+', g):
-        return q, (lambda a, gi=int(g): correct(a, gi))
-    return q, (lambda a, gs=g: gs in a.lower())
+        return q, (lambda a, gi=int(g): correct(a, gi)), src
+    return q, (lambda a, gs=g: gs in a.lower()), src
 
 
 def seq_logprob(model, prompt_lens, seqs, dev):
@@ -66,7 +80,7 @@ def main():
     ap.add_argument('--out', default='nik/runs/grpo')
     ap.add_argument('--minutes', type=float, default=30)
     ap.add_argument('--B', type=int, default=16, help='problems per step')
-    ap.add_argument('--G', type=int, default=8, help='samples per problem')
+    ap.add_argument('--G', type=int, default=12, help='samples per problem')
     ap.add_argument('--lr', type=float, default=3e-6)
     ap.add_argument('--beta', type=float, default=0.04)
     ap.add_argument('--temp', type=float, default=0.8)
@@ -88,7 +102,7 @@ def main():
         pol.eval()
         seqs, plens, adv, rewards = [], [], [], []
         for _ in range(a.B):
-            q, check = problem(R)
+            q, check, sk = problem(R)
             pr = prompt_ids(tok, q)[-(cfg.ctx - a.max_new):]
             with torch.no_grad():
                 outs = generate_batch(pol, pr, n=a.G, max_new=a.max_new, temperature=a.temp)
@@ -98,6 +112,7 @@ def main():
                 think, ans = split(text)
                 r.append(float(check(ans)) + (0.1 if '<|/think|>' in text or '<|think|>' not in text else 0.0))
             rewards += r
+            adapt(sk, sum(1 for x in r if x >= 1.0) / len(r))
             rt = torch.tensor(r)
             if rt.std() < 1e-6:
                 continue                                  # no signal in this group
@@ -121,7 +136,8 @@ def main():
             torch.nn.utils.clip_grad_norm_(pol.parameters(), 1.0); opt.step(); opt.zero_grad(set_to_none=True)
         step += 1
         acc = sum(1 for x in rewards if x >= 1.0) / max(1, len(rewards))
-        rec = {'step': step, 'reward_acc': round(acc, 4), 'groups_with_signal': len(seqs) // a.G, 'min': round((time.time() - t0) / 60, 1)}
+        rec = {'step': step, 'reward_acc': round(acc, 4), 'groups_with_signal': len(seqs) // a.G, 'min': round((time.time() - t0) / 60, 1),
+               'levels': dict(SKILL_LEVEL)}
         log.write(json.dumps(rec) + '\n'); log.flush()
         if step % 5 == 0:
             print(rec, flush=True)
