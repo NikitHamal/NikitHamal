@@ -19,7 +19,8 @@ every ~5 minutes while working. Settle disagreements with an eval, not opinion.
 4. **Never delete, revert or overwrite other agents' files or commits** (e.g. `festivals/`). Fetch + fast-forward first,
    push only your own changed paths.
 5. **Never commit credentials** (Kaggle, GitHub, molab tokens) to the repo, logs or notebooks.
-6. Local sandbox training runs are at most ~20 min. Longer runs go to molab / Kaggle / Colab; push code + docs first.
+6. Local sandbox training runs are at most ~20 min. **GPU work runs on molab only. Never use Kaggle** (owner, 2026-10-21).
+   If molab is unreachable (503/410), stop and tell the owner; they provide a new molab URL + token.
 7. **Keep free GPUs busy.** While writing data or code, keep the molab/Kaggle GPU running useful jobs (detached, so a
    cell interrupt cannot kill them) and show live progress in the notebook.
 8. Push often: code, pipelines, docs, tools, logs, trained models. Ship a model only if it beats the live one on

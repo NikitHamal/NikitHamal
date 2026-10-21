@@ -72,6 +72,8 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## Rule (2026-10-21): molab only, never Kaggle. If molab is down, tell the owner and wait for new keys.
+
 ## 2026-10-20 late night: v4c shipped (live on /chat), multi-agent team
 - **Live: v4c** = v4b + 15 min SFT on sft7 (Grounded Ledger 4%, grounded read.py, weekday ordinal). Paired McNemar vs v4b (288 items):
   reasoning +12.5 pp (p=0.031); understanding 19/26 (16), stress 64/103 (59), chat 15/15, persona 1.0, math 94.5%. Word problems still ~0/48.
