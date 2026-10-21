@@ -52,6 +52,8 @@ def main():
     ap.add_argument('--gold-rep', type=int, default=16)
     ap.add_argument('--chat', type=int, default=0, help='rows of everyday conversation from data/teacher/chat.py (no think)')
     ap.add_argument('--write', type=int, default=0, help='rows of requested writing from data/teacher/write.py')
+    ap.add_argument('--names', type=int, default=0, help='entity-mention rows (names.py): names as the user/friend, not persona questions')
+    ap.add_argument('--max-same-reply', type=int, default=0, help='cap identical assistant replies across the whole mix (0 = off)')
     ap.add_argument('--keep-all', action='store_true', help='keep every v1 chat/persona row (balance a task-heavy mix)')
     a = ap.parse_args()
     R = random.Random(a.seed)
@@ -112,6 +114,27 @@ def main():
         g, ng = gold_rows(gold_dir, a.gold_rep, R)
         rows += g
         print(f'gold: {ng} conversations x {a.gold_rep} = {len(g)} rows', flush=True)
+    if a.names:
+        sys.path.insert(0, os.path.join(root, 'data/teacher'))
+        import names as ngen
+        from augment import augment_example
+        RN = random.Random(a.seed + 13)
+        for _ in range(a.names):
+            e = augment_example(ngen.sample(RN), RN, 0.5)
+            rows.append(json.dumps(e, ensure_ascii=False) + '\n')
+        print(f'names: {a.names} entity-mention rows', flush=True)
+    if a.max_same_reply:      # recitation fix: no single assistant reply may dominate (gold x40, canned persona/chat replies)
+        R.shuffle(rows)
+        seen_r, kept_rows, dropped = {}, [], 0
+        for line in rows:
+            d = json.loads(line)
+            key = ' || '.join(m['content'].strip().lower() for m in d['messages'] if m['role'] == 'nik')
+            seen_r[key] = seen_r.get(key, 0) + 1
+            if seen_r[key] > a.max_same_reply:
+                dropped += 1; continue
+            kept_rows.append(line)
+        rows = kept_rows
+        print(f'max-same-reply {a.max_same_reply}: dropped {dropped} rows whose reply was already used {a.max_same_reply}x', flush=True)
     R.shuffle(rows)
     with open(os.path.join(a.data, f'{a.name}.jsonl'), 'w') as f:
         f.writelines(rows)
