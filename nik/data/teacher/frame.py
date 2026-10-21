@@ -65,7 +65,6 @@ BANNED_BENCH_WORDS = [
     'anupasthit',      # bench: absent students
     'chhut',           # bench: 10% discount
     'basket',          # bench: "bagaincha" in English - the same template in another word
-    'baki cha',        # the model's voice is "chha"; the audit bans "cha" in its rows
 ]
 
 
