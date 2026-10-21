@@ -847,6 +847,73 @@ def scene_boxes_remainder(R):
     return user, steps, ans, str(boxes)
 
 
+# ---------------------------------------------------------------- the English frames
+# The understanding probe "Asha had 12 balloons and 5 flew away. How many does she
+# have now?" failed with "Tasha has 17" - the model *added* and changed the name.  The
+# English word problems are the same shapes as the Nepali ones, and the bench has an
+# English family too ("A bus travels at ... km per hour"), so the shapes are taught in
+# English as well.  The nouns and the names are all different from the probe's.
+
+EN_NAMES = ['Ram', 'Sita', 'Gita', 'Bishal', 'Nisha', 'Hari', 'Manisha', 'Prakash', 'Asmita']
+EN_THINGS = [('marbles', 'oma'), ('stickers', 'sticker'), ('crayons', 'crayon'),
+             ('stamps', 'stamp'), ('cookies', 'cookie'), ('pencils', 'pencil'),
+             ('cards', 'card'), ('shells', 'shell')]
+
+
+def _en_scene(R, kind):
+    """One English word problem: the question in English, the answer in English."""
+    name = R.choice(EN_NAMES)
+    thing, np = R.choice(EN_THINGS)
+    if kind == 'minus':
+        a, b = R.randint(8, 40), R.randint(2, 7)
+        q = f'{name} had {a} {thing} and {b} of them were given away. How many are left?'
+        ans = f'{name} has {a - b} {thing} now.'
+        steps = _steps([('total', f'{a}', a), ('away', f'{b}', b), ('left', f'{a} - {b}', a - b)],
+                       f'{a - b} + {b} = {a}, milyo')
+        return q, steps, ans, str(a - b)
+    if kind == 'mul':
+        each, n = R.choice([15, 25, 40, 55, 70, 95]), R.randint(3, 6)
+        q = f'{name} bought {n} {thing} at {each} rupees each. How much did {name} pay in total?'
+        ans = f'{name} paid {each * n} rupees in total.'
+        steps = _steps([('one', f'{each}', each), ('count', f'{n}', n), ('total', f'{each} x {n}', each * n)],
+                       f'{each} x {n} = {each * n}, milyo')
+        return q, steps, ans, str(each * n)
+    if kind == 'mul-minus':
+        each, n, used = R.choice([12, 20, 30, 45, 60]), R.randint(3, 6), R.randint(2, 9)
+        q = (f'{name} had {each * n} {thing} in {n} boxes, {used} per box. '
+             f'{used} of them were broken. How many are good?')
+        total = each * n
+        ans = f'{total - used} {thing} are good.'
+        steps = _steps([('per box', f'{each}', each), ('boxes', f'{n}', n),
+                        ('total', f'{each} x {n}', total), ('good', f'{total} - {used}', total - used)],
+                       f'{total - used} + {used} = {total}, milyo')
+        return q, steps, ans, str(total - used)
+    if kind == 'percent':
+        price, pct, n = R.choice([200, 300, 400, 500, 800]), R.choice([10, 20, 25, 50]), R.randint(2, 5)
+        off = price * pct // 100
+        q = f'One {np} costs {price} rupees. With a {pct}% discount, how much do {n} of them cost?'
+        ans = f'{n} of them cost {(price - off) * n} rupees.'
+        steps = _steps([('price', f'{price}', price), ('off', f'{price} x {pct} / 100', off),
+                        ('one', f'{price} - {off}', price - off),
+                        ('total', f'{price - off} x {n}', (price - off) * n)],
+                       f'{(price - off) * n} / {n} = {price - off}, milyo')
+        return q, steps, ans, str((price - off) * n)
+    # the division
+    total, per = R.choice([24, 36, 48, 60, 72, 96]), R.choice([4, 6, 8, 12])
+    q = f'{total} {thing} are put into boxes of {per}. How many boxes are there?'
+    ans = f'There are {total // per} boxes.'
+    steps = _steps([('total', f'{total}', total), ('per box', f'{per}', per),
+                    ('boxes', f'{total} / {per}', total // per)],
+                   f'{per} x {total // per} = {total}, milyo')
+    return q, steps, ans, str(total // per)
+
+
+def scene_english(R):
+    """One of the English word problems (the same shapes, English surfaces)."""
+    kind = R.choice(['minus', 'mul', 'mul-minus', 'percent', 'divide'])
+    return _en_scene(R, kind)
+
+
 SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, scene_time,
           scene_bus, scene_basket, scene_discount, scene_saving, scene_recharge, scene_cricket,
           scene_boxes, scene_pct_more,
@@ -860,7 +927,9 @@ SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, sc
           scene_percent_each_item, scene_half_minus,
           # the three-step shapes (the ladder's L4 is 6/12: the third step is next)
           scene_three_money_steps, scene_group_discount,
-          scene_half_each, scene_boxes_remainder]
+          scene_half_each, scene_boxes_remainder,
+          # the English frames (the same shapes, English surfaces)
+          scene_english]
 
 
 def sample(R):
