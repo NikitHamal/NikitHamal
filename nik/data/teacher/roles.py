@@ -585,10 +585,17 @@ def sample(R, scene=None):
         # it gets a real share of the role rows instead of the 1/14 it would get from
         # the uniform draw - a skill that is rare is not learned (the money scene
         # needed 35% of the frame rows for the same reason).
-        if R.random() < 0.25:
-            scene = scene_nested_expr if R.random() < 0.5 else scene_chain_expr
+        # ROLES_SYMBOLIC=0 switches them off, for the A/B against a mix without them.
+        if os.environ.get('ROLES_SYMBOLIC', '1') == '1':
+            if R.random() < 0.25:
+                scene = scene_nested_expr if R.random() < 0.5 else scene_chain_expr
+            else:
+                scene = R.choice(SCENES)
         else:
-            scene = R.choice(SCENES)
+            # ROLES_SYMBOLIC=0: the symbolic scenes are out of the mix entirely, for a
+            # clean A/B against a mix that has none of them.
+            scene = R.choice([f for f in SCENES
+                              if f not in (scene_nested_expr, scene_chain_expr)])
     return scene(R)
 
 

@@ -128,7 +128,7 @@ def row_prompt(d):
 
 
 
-def chain_rows(n_frame, n_iter, n_roles, seed):
+def chain_rows(n_frame, n_iter, n_roles, seed, symbolic=True):
     import frame
     import iter as itgen
     R = random.Random(seed)
@@ -157,6 +157,8 @@ def main():
                     help='share of rows that are grounded-role rows (roles.py): bind the '
                          'numbers in a text to their roles, then compute (issue #9)')
     ap.add_argument('--seed', type=int, default=77)
+    ap.add_argument('--symbolic', type=int, default=1,
+                    help='1: the symbolic two-step gets 25% of the role rows; 0: it does not')
     ap.add_argument('--persona', type=int, default=0,
                     help='extra identity/persona rows to add (the mix keeps only ~0.15% of them)')
     ap.add_argument('--keep-eval-prompts', action='store_true',
@@ -212,7 +214,8 @@ def main():
     n_frame = int(round(a.frame * total))
     n_iter = int(round(a.iter * total))
     n_roles = int(round(a.roles * total))
-    extra = chain_rows(n_frame, n_iter, n_roles, a.seed)
+    os.environ['ROLES_SYMBOLIC'] = '1' if a.symbolic else '0'
+    extra = chain_rows(n_frame, n_iter, n_roles, a.seed, a.symbolic)
     for e in extra:
         rows.append(json.dumps(e, ensure_ascii=False))
     random.Random(a.seed + 1).shuffle(rows)
