@@ -8,6 +8,19 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **A lower reduce dose keeps the two-step skill and gives reason back (new Claude session).** v4r2 (reduce 25%, lr 2e-4,
+  20 min): NikBench 73.6% (+1.4, p=0.45), word 6 -> 12/48, reason 37, ladder 12/12/12/5, understanding 15, traps 8, math
+  97.5%. v4r3 (reduce 30%, lr 1.5e-4, 15 min): 72.2%, reason 39, ladder 12/12/12/6, understanding **19**, traps 9, math
+  **92.5%**. v4r (40%) had reason 32. Unlike P3, single-step L1/L3 stay 12/12. Their same-parent blend m50 (0.5/0.5):
+  72.6%, word 10, reason 38, ladder 12/12/12/6, understanding 19, traps 9, math 94%: the first candidate >= v4f on every
+  clean gate (math exactly at the 2 pp limit).
+- **trap_check was partly trained on.** names.py emitted `mero naam nikit ho` ~705 times per 100k rows (trap items 1 and
+  3), plus `ma nikit, kathmandu bata` and `mero sathi nikit lai chiya man parchha`. Every model since v4f saw them, so
+  trap scores from v4f on are partly memorised. make_sft2 now drops full trap sentences (0a8378c); generic follow-ups
+  (`mero naam k ho?`) stay, as context questions.
+- **Moving a model between boxes without Kaggle:** read the .bin in 700 KB base64 chunks through the marimo execute API
+  (console output is truncated at ~1 MB) and write it back in 3 MB chunks; check md5 on both ends. 20 MB takes ~1 min.
+
 - **v4r = v4f + 20 min, Sky reduce.py 40% (box): ladder L2 0 -> 12/12, L4 0 -> 6/12**, understanding 16, stress 64, NikBench
   -2.1 (reason -7, p=0.016: the dose crowds out iter rows). Same-lineage blends v4f + a(v4r - v4f): a=0.7 keeps L2 12/12,
   NikBench -1.4, understanding 18, stress 61, traps 8; a=0.5 keeps reason and stress but L2 falls to 1/12. The skill is
