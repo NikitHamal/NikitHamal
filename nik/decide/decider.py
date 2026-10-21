@@ -16,6 +16,7 @@ class Decider(nn.Module):
         layer = nn.TransformerEncoderLayer(d, heads, ffn, dropout=0.0, activation='gelu', batch_first=True, norm_first=True)
         self.enc = nn.TransformerEncoder(layer, layers, enable_nested_tensor=False)
         self.norm = nn.LayerNorm(d)
+        self.qmix = nn.Linear(2 * d, d)
         self.score = nn.Sequential(nn.Linear(3 * d, d), nn.GELU(), nn.Linear(d, 1))
 
     def forward(self, ids, seg, pad):
@@ -25,7 +26,9 @@ class Decider(nn.Module):
         h = self.norm(self.enc(x, src_key_padding_mask=pad))
         valid = (~pad).float()
         q = ((seg == 0).float() * valid).unsqueeze(-1)
-        qv = (h * q).sum(1) / q.sum(1).clamp(min=1)
+        # question vector = [bos] summary token + mean of the question (the mean alone washes out the one decisive
+        # fact in yes/no; v0 sat at chance on read-yesno)
+        qv = self.qmix(torch.cat([h[:, 0], (h * q).sum(1) / q.sum(1).clamp(min=1)], -1))
         out = []
         for k in range(1, 9):
             m = ((seg == k).float() * valid).unsqueeze(-1)

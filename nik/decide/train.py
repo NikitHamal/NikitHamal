@@ -85,6 +85,7 @@ def main():
         if step % 200 == 0:
             print(f'step {step} | loss {loss.item():.4f} | {(time.time() - t1) / 60:.1f} min', flush=True)
         if step % 2000 == 0:
+            torch.save({'model': model.state_dict(), 'cfg': {}, 'step': step}, os.path.join(a.out, 'decide.pt'))
             ev = evaluate(model, held, dev)
             print('held-out', json.dumps(ev), flush=True); log.write(json.dumps({'step': step, 'eval': ev}) + '\n'); log.flush()
     ev = evaluate(model, held, dev)
