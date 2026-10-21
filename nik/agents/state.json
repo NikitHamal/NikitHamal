@@ -1,17 +1,17 @@
 {
- "updated": "2026-10-21T17:01:23Z",
+ "updated": "2026-10-21T17:06:16Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "molab",
-   "gpu": "offline - no box alive (3 boxes returned 410 between 16:35 and 17:05 UTC)",
-   "job": "waiting for the owner",
+   "name": "box 2",
+   "gpu": "GPU \u00b7 up 17:05 UTC",
+   "job": "Claude: replay-corpus rebuild (-> Kaggle) + Decide v8 re-run",
    "progress": null,
-   "detail": "box access for agents: nik/agents/vault (PROTOCOL.md)",
-   "eta": "-"
+   "detail": "access: nik/agents/vault",
+   "eta": "corpus ~18:00 UTC"
   }
  ],
  "scoreboard": {
