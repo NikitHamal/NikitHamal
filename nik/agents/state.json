@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T14:47:23Z",
+ "updated": "2026-10-21T15:09:02Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -8,10 +8,10 @@
   {
    "name": "box 1",
    "gpu": "GPU 99% \u00b7 29 GB / 96 GB",
-   "job": "Claude: Nik-Decide v8 (Nik's own answers) training 75 min; v4r2 x v4r3 blends m50/m30: full gate",
+   "job": "Claude: Decide v8 training; v4r2m (v4r2 recipe + multiturn 5%) training; m50 long-chat checks. Local-A: P1-clean (la3c)",
    "progress": null,
-   "detail": "running: decide/train.py, bench.py, eval_understand.py, trap_check.py",
-   "eta": "Decide v8 ~15:25 UTC; blend gates ~15:30 UTC"
+   "detail": "running: decide/train.py, train.py x2 (Claude v4r2m, Local-A la3c), memory_long/longchat (node)",
+   "eta": "Decide v8 ~15:45 UTC; v4r2m gate ~16:15 UTC"
   },
   {
    "name": "box 2",
@@ -38,6 +38,14 @@
     "13/26",
     "9/12",
     "0/12"
+   ],
+   [
+    "m50 = 0.5 v4r2 + 0.5 v4r3 (candidate)",
+    "72.6%",
+    "38/48",
+    "19/26",
+    "9/12",
+    "12/12"
    ],
    [
     "v4r2 (v4f+reduce 25%, lr 2e-4)",
@@ -123,11 +131,19 @@
  },
  "runs": [
   {
+   "tag": "v4r2m",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "training",
+   "what": "v4r2 recipe + NIK_MULTITURN_SHARE=0.05 (one variable vs v4r2); + longchat/memory_long"
+  },
+  {
    "tag": "mix23",
    "box": "box 1",
    "by": "Claude",
-   "status": "evaluating",
-   "what": "same-parent blends of v4r2 and v4r3 (m50 = 0.5/0.5, m30 = 0.7 v4r2 + 0.3 v4r3): keep L2 12/12 + v4r2's math with v4r3's understanding"
+   "status": "done",
+   "what": "same-parent blends of v4r2 and v4r3 (m50 = 0.5/0.5, m30 = 0.7 v4r2 + 0.3 v4r3): keep L2 12/12 + v4r2's math with v4r3's understanding",
+   "result": "m50: NikBench 72.6% (+0.3), word 10, reason 38, ladder 12/12/12/6, und 19, traps 9, math 94%, reading 2/20; m30 worse (und 16, traps 8). m50 proposed for ship (#11)"
   },
   {
    "tag": "decide-v8",
@@ -177,8 +193,8 @@
   }
  ],
  "next": [
-  "blend m50/m30 gates (~15:30 UTC) -> ship call in #11 if one beats v4f on every gate",
-  "box run MULTITURN_SHARE=0.05 (Sky's pending ask) when a GPU slot frees",
+  "owner call on shipping m50 (#11)",
+  "v4r2m gate (~16:15 UTC): replaces m50 as the candidate if better",
   "Local-C P7 synthesis result (box 2)"
  ]
 }
