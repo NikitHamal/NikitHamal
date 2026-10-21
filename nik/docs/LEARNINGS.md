@@ -8,6 +8,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **p11 (Local-C: m50 + 7 min on a 38%-shape family mix, lr 1e-4): shape probe 4 -> 14/44, understanding 21, math
+  96.5, but bench 209 -> 162/288, nested 222 -> 164, persona 85.7, traps 7, RW items 21.** The shapes are learnable;
+  at 38% they crowd out general arithmetic (same curve as P5). Next: blends with m50 and a bigger base/replay share.
+- **Box etiquette:** an execute call from another client interrupts a blocking scratchpad call (Claude's poll killed
+  p11 once). Launch jobs detached, gate from your own clone (the shared `/tmp/NikitHamal` may be on another branch).
+
 - **NikBench-RW (strict, real-world) exposes what the old benches hid:** m50 1/45 situations (25/135 answers): unknown
   0/18 (invents facts), format 1/18 (ignores "number matra"), money 4/21 (drops the quantity in qty x price). A harness
   bug first made it look worse (160-token cap, calc off); it now uses /chat's decoding (maxNew 440, calc on, greedy).
