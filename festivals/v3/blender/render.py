@@ -36,7 +36,8 @@ SHOTS = {
 
 def assets():
     a = {"tex": {"verse": f"{ROOT}/build/type/verse.png"},
-         "nepal": f"{ROOT}/../lib/nepal.json", "dem": f"{ROOT}/build/dem.npy"}
+         "nepal": f"{ROOT}/../lib/nepal.json", "dem": f"{ROOT}/build/dem.npy",
+         "bull": f"{ROOT}/build/ph/models/bull_head/bull_head.gltf", "ph": f"{ROOT}/build/ph"}
     if os.path.exists(f"{ROOT}/build/dem.json"):
         a["dem_bounds"] = json.load(open(f"{ROOT}/build/dem.json"))["bounds"]
     return a

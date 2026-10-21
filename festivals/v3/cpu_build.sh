@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # CPU molab build (20 cores): keyframe stills per shot -> composite (dissolves + 2D push) -> film; then the wish cards.
 #   setsid nohup bash festivals/v3/cpu_build.sh > /tmp/reels/cpu_build.log 2>&1 &
+unset PYTHONPATH PYTHONSAFEPATH
 set -uo pipefail
 export PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw UV_NO_CACHE=1
 V="$(cd "$(dirname "$0")" && pwd)"; cd "$V"; mkdir -p build/logs out

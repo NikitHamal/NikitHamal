@@ -2,6 +2,7 @@
 # v3 Dashain film, end to end ON MOLAB (never local):   bash festivals/v3/build.sh [stage...]
 # stages: setup dem type audio plates composite mux   (default: all, in order; each one skips work already done)
 # env: SAMPLES (48) EVERY (1 = every frame) GPU_JOBS (parallel Blender processes, 3) SHOTS ("1 2 3 ..." subset)
+unset PYTHONPATH PYTHONSAFEPATH
 set -euo pipefail
 export PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw UV_CACHE_DIR=/tmp/reels/uvcache
 V="$(cd "$(dirname "$0")" && pwd)"; cd "$V"; mkdir -p build/logs

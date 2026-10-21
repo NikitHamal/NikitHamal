@@ -1,6 +1,6 @@
 """Sets for the open and the myth: lamp room, manuscript, Mahishasura, the gods' light + trishul, the moon, Rama's arrow.
 Each set builder returns update(t, d) where t is seconds into the shot and d the shot length."""
-import math
+import math, os
 import bpy
 import numpy as np
 from mathutils import Vector
@@ -102,16 +102,33 @@ def set_demon(sc, A, variant="rise"):
     world((0.002, 0.0, 0.0), 0)
     sc.render.use_motion_blur = False
     hm = noisy(mat("hide", (0.012, 0.009, 0.008), rough=0.6, sss=0.02), 25, 0.5, 0.2, 0.6)
-    mb = bpy.data.metaballs.new("head"); mb.resolution = mb.render_resolution = 0.03
-    head = link(bpy.data.objects.new("head", mb)); mb.materials.append(hm)
-    for (x, y, z, r) in [(0, 0, 0, 0.42), (0, -0.25, -0.18, 0.3), (0, -0.42, -0.32, 0.22), (0.22, 0.05, 0.05, 0.25), (-0.22, 0.05, 0.05, 0.25),
-                         (0, 0.25, -0.35, 0.45), (0, 0.4, -0.75, 0.6)]:
-        e = mb.elements.new(); e.co = (x, y, z); e.radius = r
-    horn_m = noisy(mat("horn", (0.05, 0.04, 0.035), rough=0.35, coat=0.4), 40, 0.4, 0.15, 0.4)
-    horns = [_horn("hornR", 1, horn_m)[0], _horn("hornL", -1, horn_m)[0]]
     eye_m = emission("ember", (1.0, 0.22, 0.03), 0.0)
-    eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.04, location=(s * 0.16, -0.37, 0.03)) for i, s in enumerate((1, -1))]
-    for e in eyes: e.scale = (1.3, 0.6, 0.7)
+    bull = A.get("bull")
+    if bull and os.path.exists(bull):
+        # Poly Haven "Bull Head" (CC0): a scanned bronze sculpture, re-toned as a dark, old idol of Mahishasura
+        bpy.ops.import_scene.gltf(filepath=bull)
+        head = [o for o in bpy.context.selected_objects if o.type == "MESH"][0]
+        head.scale = (3.2, 3.2, 3.2); head.location = (0, 0, -1.25); head.rotation_euler = (0, 0, A.get("bull_rot", 0.0))
+        m = head.data.materials[0]; nt = m.node_tree; p = nt.nodes["Principled BSDF"]
+        tex = [l.from_socket for l in nt.links if l.to_socket == p.inputs["Base Color"]]
+        if tex:
+            mul = nt.nodes.new("ShaderNodeMix"); mul.data_type = "RGBA"; mul.blend_type = "MULTIPLY"; mul.inputs[0].default_value = 1.0
+            mul.inputs[7].default_value = (0.28, 0.2, 0.17, 1)
+            nt.links.new(tex[0], mul.inputs[6]); nt.links.new(mul.outputs[2], p.inputs["Base Color"])
+        _set(p, ["Coat Weight", "Clearcoat"], 0.25)
+        horns = []
+        eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.028, location=(s * A.get("eye_x", 0.2), A.get("eye_y", -0.2), A.get("eye_z", -0.3))) for i, s in enumerate((1, -1))]
+        for e in eyes: e.scale = (1.4, 0.6, 0.8)
+    else:
+        mb = bpy.data.metaballs.new("head"); mb.resolution = mb.render_resolution = 0.03
+        head = link(bpy.data.objects.new("head", mb)); mb.materials.append(hm)
+        for (x, y, z, r) in [(0, 0, 0, 0.42), (0, -0.25, -0.18, 0.3), (0, -0.42, -0.32, 0.22), (0.22, 0.05, 0.05, 0.25), (-0.22, 0.05, 0.05, 0.25),
+                             (0, 0.25, -0.35, 0.45), (0, 0.4, -0.75, 0.6)]:
+            e = mb.elements.new(); e.co = (x, y, z); e.radius = r
+        horn_m = noisy(mat("horn", (0.05, 0.04, 0.035), rough=0.35, coat=0.4), 40, 0.4, 0.15, 0.4)
+        horns = [_horn("hornR", 1, horn_m)[0], _horn("hornL", -1, horn_m)[0]]
+        eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.04, location=(s * 0.16, -0.37, 0.03)) for i, s in enumerate((1, -1))]
+        for e in eyes: e.scale = (1.3, 0.6, 0.7)
     # cracked ground glowing from below
     g = prim("plane", "ground", None, size=14, location=(0, 0, -1.05))
     gm = bpy.data.materials.new("cracks"); gm.use_nodes = True; nt = gm.node_tree; p = nt.nodes["Principled BSDF"]

@@ -4,6 +4,7 @@
 # Order: setup -> (CPU, background: dem, type, audio) -> GPU test stills (one per shot, small) -> per shot:
 # plates -> composite -> out/shots/shot_NN.mp4. Every finished file lands in out/ and is pulled off the box at once.
 # Skips anything already in out/ (re-upload pulled files to resume on a fresh box).
+unset PYTHONPATH PYTHONSAFEPATH
 set -uo pipefail
 export PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw UV_CACHE_DIR=/tmp/reels/uvcache
 V="$(cd "$(dirname "$0")" && pwd)"; cd "$V"; mkdir -p build/logs out/shots out/tests
