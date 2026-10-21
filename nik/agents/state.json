@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T18:01:48Z",
+ "updated": "2026-10-21T18:35:12Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -7,27 +7,11 @@
  "boxes": [
   {
    "name": "box 2",
-   "gpu": "RTX Pro 6000 \u00b7 auto-managed",
-   "job": "Claude: p8m (m50 + p8 mix, 12 min) -> gate vs m50",
+   "gpu": "RTX Pro 6000 \u00b7 owner's notebook (one account, used normally)",
+   "job": "Claude: p8m (m50 + p8 mix, 12 min) -> gate vs m50 incl. NikBench-RW",
    "progress": null,
-   "detail": "resumable stages on Kaggle (nik-p8m-*)",
-   "eta": "~18:35 UTC"
-  },
-  {
-   "name": "box 3",
-   "gpu": "RTX Pro 6000 \u00b7 auto-managed",
-   "job": "Claude: Decide v8 (Nik's own answers) + owner's reel renders",
-   "progress": null,
-   "detail": "resumable (nik-decide8-*)",
-   "eta": "~19:10 UTC"
-  },
-  {
-   "name": "box 4",
-   "gpu": "RTX Pro 6000 \u00b7 auto-managed",
-   "job": "Local-C (vault)",
-   "progress": null,
-   "detail": "",
-   "eta": "-"
+   "detail": "live status panel in the notebook (auto refresh 10 s + refresh button); stages saved to Kaggle",
+   "eta": "~19:20 UTC"
   }
  ],
  "scoreboard": {
@@ -36,7 +20,8 @@
    "reason",
    "und",
    "traps",
-   "L2"
+   "L2",
+   "RW"
   ],
   "rows": [
    [
@@ -45,7 +30,8 @@
     "38/48",
     "19/26",
     "9/12",
-    "12/12"
+    "12/12",
+    "1/45"
    ],
    [
     "p8 (Local-C)",
@@ -53,7 +39,8 @@
     "38/48",
     "18/26",
     "8/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "v4f (previous)",
@@ -61,7 +48,8 @@
     "39/48",
     "13/26",
     "9/12",
-    "0/12"
+    "0/12",
+    "-"
    ],
    [
     "v4r2 (v4f+reduce 25%, lr 2e-4)",
@@ -69,7 +57,8 @@
     "37/48",
     "15/26",
     "8/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "v4r3 (v4f+reduce 30%, lr 1.5e-4)",
@@ -77,7 +66,8 @@
     "39/48",
     "19/26",
     "9/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "b7 = v4f+0.7(v4r-v4f)",
@@ -85,7 +75,8 @@
     "37/48",
     "18/26",
     "8/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "b60",
@@ -93,7 +84,8 @@
     "39/48",
     "17/26",
     "8/12",
-    "7/12"
+    "7/12",
+    "-"
    ],
    [
     "v4r (v4f+reduce)",
@@ -101,7 +93,8 @@
     "32/48",
     "16/26",
     "-",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "v4m",
@@ -109,7 +102,8 @@
     "35/48",
     "16/26",
     "9/12",
-    "0/12"
+    "0/12",
+    "-"
    ],
    [
     "v4f4 (Local-C)",
@@ -117,7 +111,8 @@
     "29/48",
     "20/26",
     "9/12",
-    "1/12"
+    "1/12",
+    "-"
    ],
    [
     "v4f3 (Local-C)",
@@ -125,7 +120,8 @@
     "28/48",
     "20/26",
     "8/12",
-    "1/12"
+    "1/12",
+    "-"
    ],
    [
     "v5pre (scratch)",
@@ -133,7 +129,8 @@
     "28/48",
     "15/26",
     "-",
-    "0/12"
+    "0/12",
+    "-"
    ]
   ]
  },
@@ -235,8 +232,8 @@
   }
  ],
  "next": [
-  "p8m gate vs m50 -> ship call",
-  "Local-C arms on box 4",
-  "Decide v8 rerank"
+  "p8m gate vs m50 (+ NikBench-RW)",
+  "real-world data for the RW failures (CPU)",
+  "one box only; no automation of molab accounts"
  ]
 }
