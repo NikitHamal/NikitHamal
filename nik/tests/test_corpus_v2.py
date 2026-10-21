@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 NIK = Path(__file__).resolve().parents[1]
 CORPUS = NIK / 'data' / 'corpus_v2'
@@ -111,6 +112,52 @@ class AuditTests(unittest.TestCase):
         self.assertGreaterEqual(result['sources']['sakonii_news']['short'], 1)
         self.assertGreaterEqual(result['sources']['mystery']['unknown_source'], 1)
         self.assertTrue(result['licence_errors'])
+
+    def test_contaminated_doc_is_dropped_from_out_corpus(self):
+        prompt = 'euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?'
+        rows = [
+            {'source': 'sakonii_news', 'doc_id': 1, 'text': long_doc(10)},
+            {'source': 'sakonii_news', 'doc_id': 2, 'text': prompt + ' ' + long_doc(11)},
+            {'source': 'sakonii_news', 'doc_id': 3, 'text': long_doc(12)},
+        ]
+        idx = contamination.EvalIndex({'bench': [prompt]})
+        out = tempfile.mktemp(suffix='.jsonl')
+        try:
+            result = corpus_audit.run_audit(self.write(rows), eval_index=idx, min_tokens=0,
+                                            sample_n=10, out_corpus=out)
+            self.assertTrue(result['pass'], result['reasons'])
+            self.assertEqual((result['kept'], result['contaminated'], result['written']), (2, 1, 2))
+            self.assertTrue(any('contamination' in w for w in result['warnings']))
+            lines = [json.loads(line) for line in open(out, encoding='utf-8')]
+            self.assertEqual(len(lines), 2)
+            self.assertNotIn(prompt, ' '.join(x['text'] for x in lines))
+        finally:
+            if os.path.exists(out):
+                os.unlink(out)
+
+    def test_main_does_not_rewrite_raw_docs_into_out_corpus(self):
+        prompt = 'euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?'
+        rows = [
+            {'source': 'sakonii_news', 'doc_id': 1, 'text': long_doc(20)},
+            {'source': 'sakonii_news', 'doc_id': 2, 'text': prompt + ' ' + long_doc(21)},
+            {'source': 'sakonii_news', 'doc_id': 3, 'text': long_doc(22)},
+        ]
+        docs = self.write(rows)
+        out = tempfile.mktemp(suffix='.jsonl')
+        report = tempfile.mktemp(suffix='.json')
+        try:
+            with mock.patch.object(sys, 'argv', ['corpus_audit.py', '--docs', docs, '--out', report,
+                                                 '--out-corpus', out, '--min-tokens', '0']):
+                with self.assertRaises(SystemExit) as cm:
+                    corpus_audit.main()
+            self.assertEqual(cm.exception.code, 0)
+            lines = [json.loads(line) for line in open(out, encoding='utf-8')]
+            self.assertEqual(len(lines), 2)
+            self.assertNotIn(prompt, ' '.join(x['text'] for x in lines))
+        finally:
+            for path in (docs, out, report):
+                if os.path.exists(path):
+                    os.unlink(path)
 
     def test_token_estimate(self):
         rows = [{'source': 'sakonii_news', 'doc_id': 1, 'text': 'a' * 400}]
