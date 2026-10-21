@@ -53,7 +53,7 @@ ITER_FAMILIES = ('arithmetic sequence', 'geometric pattern')
 
 def load_dir(d):
     out = {'bench': None, 'understand': None, 'stress': None, 'eval': None, 'chat': None,
-           'ladder': None}
+           'ladder': None, 'trap': None}
     for pat, key in (('bench*.json', 'bench'), ('understand*.json', 'understand'),
                      ('stress*.json', 'stress'), ('eval-*.json', 'eval'), ('ladder*.json', 'ladder')):
         files = sorted(glob.glob(os.path.join(d, pat)))
@@ -65,6 +65,9 @@ def load_dir(d):
     chats = sorted(glob.glob(os.path.join(d, 'chat-*.log')))
     if chats:
         out['chat'] = open(chats[-1], encoding='utf8', errors='replace').read()
+    traps = sorted(glob.glob(os.path.join(d, 'trap-*.log')))
+    if traps:
+        out['trap'] = open(traps[-1], encoding='utf8', errors='replace').read()
     return out
 
 
@@ -119,6 +122,15 @@ def score_of(d):
         m = re.search(r'chat sanity: (\d+)/(\d+)', d['chat'])
         if m:
             res['chat'] = (int(m.group(1)), int(m.group(2)))
+    if d.get('trap'):
+        ok = len(re.findall(r'^\[ok', d['trap'], flags=re.M))
+        bad = len(re.findall(r'^\[FAIL', d['trap'], flags=re.M))
+        res['traps'] = (ok, ok + bad)
+    if res['families']:
+        res['word_total'] = (sum(v[0] for k, v in res['families'].items() if k.startswith('word/')),
+                             sum(v[1] for k, v in res['families'].items() if k.startswith('word/')))
+        res['reason_total'] = (sum(v[0] for k, v in res['families'].items() if k.startswith('reason/')),
+                               sum(v[1] for k, v in res['families'].items() if k.startswith('reason/')))
     return res
 
 
@@ -142,6 +154,9 @@ def main():
     ap.add_argument('--ladder-may-stay-zero', action='store_true',
                     help='do not require the multi-step ladder to move off zero')
     ap.add_argument('--json', action='store_true')
+    ap.add_argument('--target', type=float, default=0,
+                    help='the owner\'s target: every metric must gain at least this much '
+                         '(percentage points for the rates, items for the counts)')
     a = ap.parse_args()
 
     old = score_of(load_dir(a.old))
@@ -250,6 +265,89 @@ def main():
         if ls_old and ls_new:
             gate('ladder multi-step off zero', bool(moved) or a.ladder_may_stay_zero,
                  f"moved: {', '.join(moved) if moved else 'nothing'} (need L2 or L4 off zero)")
+
+    # ---- the target mode: +N on every metric ---------------------------------
+    if a.target:
+        t = a.target
+        rows = []
+
+        def want(name, old_v, new_v, unit, maximum=None, indicative=False, scale=1.0):
+            """One metric of the target table.
+
+            A metric that is already at its ceiling cannot gain +t (the ladder L1 is
+            12/12), so for those the requirement becomes *no regression* - the target
+            is 'every metric moves up or is already maxed', not 'every metric grows
+            by t'.  The rates are shown in percentage points, because that is how the
+            owner states them ('the bench 77.1% -> 82%').
+            """
+            if old_v is None or new_v is None:
+                rows.append(('SKIP', name, 'not measured on both sides', unit, 0.0, False))
+                return
+            o, n = old_v * scale, new_v * scale
+            delta = n - o
+            at_ceiling = maximum is not None and o >= maximum - 1e-9
+            if at_ceiling:
+                ok = n >= o - 1e-9
+                status = 'PASS' if ok else 'FAIL'
+                detail = f'{o:g} -> {n:g}  (at the ceiling, no regression allowed)'
+            else:
+                ok = delta >= t - 1e-9
+                status = 'PASS' if ok else 'FAIL'
+                detail = f'{o:g} -> {n:g}  (delta {delta:+g}, need +{t:g})'
+            rows.append((status, name, detail, unit, delta, indicative))
+
+        bench_n = len(new.get('questions') or old.get('questions') or [])
+        want('bench overall', old['bench'], new['bench'], 'pp',
+             maximum=100.0, scale=100.0)
+        if old.get('word_total') and new.get('word_total'):
+            want('held-out word family', old['word_total'][0], new['word_total'][0], 'items',
+                 maximum=new['word_total'][1])
+        if old.get('reason_total') and new.get('reason_total'):
+            want('reason family', old['reason_total'][0], new['reason_total'][0], 'items',
+                 maximum=new['reason_total'][1])
+        want('understanding', old['understand'], new['understand'], 'probes', maximum=26)
+        if old.get('traps') and new.get('traps'):
+            want('trap_check', old['traps'][0], new['traps'][0], 'probes',
+                 maximum=new['traps'][1])
+        for lvl, label in (('L1-1step', 'ladder L1'), ('L2-2step', 'ladder L2'),
+                           ('L3-intermediate-given', 'ladder L3'), ('L4-chain-2line', 'ladder L4')):
+            if lvl in ls_new and lvl in ls_old:
+                want(label, ls_old[lvl][0], ls_new[lvl][0], 'items', maximum=ls_new[lvl][1])
+        if old['math'] is not None and new['math'] is not None:
+            want('math', old['math'], new['math'], 'pp', maximum=100.0, scale=100.0)
+        if old['persona'] is not None and new['persona'] is not None:
+            want('persona', old['persona'], new['persona'], 'acc', maximum=1.0)
+        if old['chat'] and new['chat']:
+            want('chat_check', old['chat'][0], new['chat'][0], 'probes', maximum=new['chat'][1])
+        # the stress and the chat prompts are contaminated (the same prompts are in the
+        # training mix thousands of times), so they are reported but never decisive
+        if old['stress'] is not None and new['stress'] is not None:
+            want('stress (contaminated - indicative only)', old['stress'], new['stress'],
+                 'prompts', maximum=new.get('stress_of'), indicative=True)
+
+        if not a.json:
+            print(f'target: every metric must gain at least {t:g}\n')
+            print(f'  {"":6s} {"metric":38s} {"old -> new":34s} unit')
+            for st, name, detail, unit, delta, ind in rows:
+                print(f'  [{st:4s}] {name:38s} {detail:34s} {unit}' + ('   (indicative)' if ind else ''))
+        t_failed = [r[1] for r in rows if r[0] == 'FAIL' and not r[5]]
+        t_skipped = [r[1] for r in rows if r[0] == 'SKIP']
+        if not a.json:
+            print()
+        if t_skipped:
+            print(f'  {len(t_skipped)} metric(s) could not be compared: {", ".join(t_skipped)}')
+        if t_failed:
+            print(f'  {len(t_failed)} metric(s) below the +{t:g} target: {", ".join(t_failed)}')
+        if t_failed:
+            verdict, code = 'DO NOT SHIP', 1
+        elif t_skipped:
+            verdict, code = 'CANNOT DECIDE', 2
+        else:
+            verdict, code = 'SHIP', 0
+        if a.json:
+            print(json.dumps({'verdict': verdict, 'ok': code == 0, 'exit': code,
+                              'target': t, 'rows': rows}, indent=1))
+            return code
 
     if blocked:
         verdict, code = 'CANNOT DECIDE', 2
