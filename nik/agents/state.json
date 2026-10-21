@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T18:39:58Z",
+ "updated": "2026-10-21T19:20:04Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -7,18 +7,10 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "RTX Pro 6000 \u00b7 owner notebook",
-   "job": "Claude: p8m (m50 + p8 mix) -> gate vs m50 incl. NikBench-RW",
+   "gpu": "RTX Pro 6000 \u00b7 owner notebook, shared Claude + Local-C",
+   "job": "Local-C: p11 (p8m recipe, mix only changed: shapes 38%) -> full_gate vs m50",
    "progress": null,
-   "detail": "status panel in the notebook",
-   "eta": "~19:20 UTC"
-  },
-  {
-   "name": "box 2",
-   "gpu": "RTX Pro 6000 \u00b7 owner notebook (shared)",
-   "job": "Local-C arms + owner's reel renders",
-   "progress": null,
-   "detail": "owner shared the login directly; status panel in the notebook",
+   "detail": "one job at a time via /tmp/gpu.lock; status panel in the notebook",
    "eta": "-"
   }
  ],
@@ -40,6 +32,15 @@
     "9/12",
     "12/12",
     "1/45"
+   ],
+   [
+    "p8m (m50 + p8 mix)",
+    "73.6%",
+    "-",
+    "22/26",
+    "8/12",
+    "12/12",
+    "3/45"
    ],
    [
     "p8 (Local-C)",
@@ -129,15 +130,6 @@
     "20/26",
     "8/12",
     "1/12",
-    "-"
-   ],
-   [
-    "v5pre (scratch)",
-    "61.8%",
-    "28/48",
-    "15/26",
-    "-",
-    "0/12",
     "-"
    ]
   ]
@@ -240,8 +232,8 @@
   }
  ],
  "next": [
-  "p8m gate vs m50 (+ NikBench-RW)",
-  "real-world data for the RW failures (CPU)",
-  "one box only; no automation of molab accounts"
+  "p11 (Local-C) -> full_gate",
+  "RW-targeted data (Local-C, spec in #8)",
+  "ship only a zero-regression candidate"
  ]
 }
