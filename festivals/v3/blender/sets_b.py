@@ -42,10 +42,7 @@ def set_map(sc, A, variant="rise"):
     q = ins[:-1, :-1] & ins[1:, :-1] & ins[:-1, 1:] & ins[1:, 1:]
     a = idx[:-1, :-1][q]; b = idx[:-1, 1:][q]; c = idx[1:, 1:][q]; d = idx[1:, :-1][q]
     F = np.stack([a, b, c, d], 1)
-    me = bpy.data.meshes.new("relief"); me.vertices.add(len(V)); me.vertices.foreach_set("co", V.ravel())
-    me.loops.add(len(F) * 4); me.loops.foreach_set("vertex_index", F.ravel())
-    me.polygons.add(len(F)); me.polygons.foreach_set("loop_start", np.arange(0, len(F) * 4, 4)); me.polygons.foreach_set("loop_total", np.full(len(F), 4))
-    me.update(); me.validate()
+    me = bpy.data.meshes.new("relief"); me.from_pydata(V.tolist(), [], F.tolist()); me.update(calc_edges=True)
     hgt = me.attributes.new("h", "FLOAT", "POINT"); hgt.data.foreach_set("value", np.repeat(H.ravel(), 1))
     for p in me.polygons: p.use_smooth = True
     relief = link(bpy.data.objects.new("relief", me))
@@ -84,7 +81,7 @@ def set_map(sc, A, variant="rise"):
     sun = light("SUN", (0, 0, 0), 3.5, (1.0, 0.85, 0.7), size=0.03); sun.rotation_euler = (math.radians(62), 0, math.radians(-35))
     skyl = light("AREA", (0, -8, 6), 120, (0.5, 0.6, 1.0), size=8, look=(0, 0, 0))
     glare(sc, 1.0, 7, -0.6)
-    cam = camera((0.6, -6.2, 3.2), (0.2, 0.2, 0), 50, dof=6.5, fstop=8)
+    cam = camera((0.0, -19.0, 10.0), (0.2, 0.3, 0), 50, dof=21, fstop=11)
     root = bpy.data.objects.new("map", None); link(root)
     for o in (relief, wall, edge, pin_k, pin_g, route): o.parent = root
     marks = {"ktm": ktm + Vector((0, 0, 0.06)), "gorkha": gorkha + Vector((0, 0, 0.06)),
@@ -96,7 +93,8 @@ def set_map(sc, A, variant="rise"):
             k = ease(u / 0.55)
             root.location = (0, 0, lerp(-1.2, 0, k)); root.rotation_euler = (lerp(-0.5, 0, k), 0, lerp(0.25, 0, k))
             pin_m.node_tree.nodes["Emission"].inputs[1].default_value = 40 * ease((u - 0.55) / 0.15) * (0.75 + 0.25 * math.sin(t * 6))
-            aim(cam, lerp((0.6, -7.0, 3.8), (0.3, -5.2, 2.6), ease(u)), (0.2, lerp(0.0, 0.3, ease(u)), 0))
+            aim(cam, lerp((0.0, -20.0, 11.0), (0.5, -15.5, 8.0), ease(u)), (lerp(0.2, 0.8, ease(u)), 0.3, 0))
+            cam.data.dof.focus_distance = (Vector(cam.location) - Vector((0.6, 0.3, 0))).length
             route.data.bevel_factor_end = 0.0
         else:  # route: the camera comes down close over Gorkha and follows the thread to Kathmandu
             pin_m.node_tree.nodes["Emission"].inputs[1].default_value = 40 * (0.75 + 0.25 * math.sin(t * 6))
@@ -487,11 +485,11 @@ def set_bus(sc, A):
     tx = bpy.data.textures.new("h", "CLOUDS"); tx.noise_scale = 2.0
     dm = hill.modifiers.new("d", "DISPLACE"); dm.texture = tx; dm.strength = 3.0
     hill.data.materials.append(mat("hillb", (0.02, 0.025, 0.02), rough=0.95))
-    slope = prim("cone", "mountain", mat("mt", (0.015, 0.016, 0.018), rough=0.9), radius1=60, radius2=3, depth=30, vertices=64, location=(0, 70, 0))
+    slope = prim("cone", "mountain", mat("mt", (0.015, 0.016, 0.018), rough=0.9), radius1=60, radius2=3, depth=30, vertices=64, location=(0, 70, 15))
     # a zig-zag road up the mountain face
     road = []
     for i in range(9):
-        z = 1 + i * 3.0; r = 60 * (1 - z / 30) - 3; side = 1 if i % 2 == 0 else -1
+        z = 1 + i * 3.0; r = 60 - 57 * z / 30 + 0.8; side = 1 if i % 2 == 0 else -1
         for s in np.linspace(-1, 1, 12) * side:
             a = math.pi * 1.5 + s * 0.45
             road.append(Vector((r * math.cos(a) * 0.95, 70 + r * math.sin(a) * 0.95, z + (s * side + 1) * 1.5)))

@@ -64,7 +64,7 @@ def set_manuscript(sc, A):
         lf.scale = (0.56, 0.062, 0.0012); bevel(lf, 0.001, 2)
         lf.rotation_euler = (0, 0, (i % 3 - 1) * 0.006)
         leaves.append(lf)
-    top = text_plane("verse", A["tex"]["verse"], 0.54, (0, -0.0005, 0.0315), (0, 0, 0))
+    top = text_plane("verse", A["tex"]["verse"], 0.54, (0, -0.0005, 0.0273), (0, 0, 0))
     top.scale = (0.54, 0.056, 1)
     for nm, x in (("coverL", 0), ):
         cv = prim("cube", "cover", noisy(mat("cover", (0.2, 0.07, 0.02), rough=0.5), 30, 0.4, 0.1, 0.4), size=1, location=(0.0, 0.11, 0.008))
@@ -110,7 +110,7 @@ def set_demon(sc, A, variant="rise"):
     horn_m = noisy(mat("horn", (0.05, 0.04, 0.035), rough=0.35, coat=0.4), 40, 0.4, 0.15, 0.4)
     horns = [_horn("hornR", 1, horn_m)[0], _horn("hornL", -1, horn_m)[0]]
     eye_m = emission("ember", (1.0, 0.22, 0.03), 0.0)
-    eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.035, location=(s * 0.17, -0.33, 0.02)) for i, s in enumerate((1, -1))]
+    eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.04, location=(s * 0.16, -0.37, 0.03)) for i, s in enumerate((1, -1))]
     for e in eyes: e.scale = (1.3, 0.6, 0.7)
     # cracked ground glowing from below
     g = prim("plane", "ground", None, size=14, location=(0, 0, -1.05))

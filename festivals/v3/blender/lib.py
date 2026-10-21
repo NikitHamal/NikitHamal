@@ -374,7 +374,7 @@ def diyo(name="diyo", loc=(0, 0, 0), scale=1.0, flame_strength=60.0, light_w=6.0
     fm, em = flame_mat(name + "_fm", flame_strength); fl.data.materials.append(fm); fl.visible_shadow = False
     for p in fl.data.polygons: p.use_smooth = True
     li = light("POINT", (0, 0, 0), light_w * scale * scale, (1.0, 0.55, 0.2), size=0.006 * scale)
-    li.parent = fl; li.location = (0, 0, 0.2)
+    li.parent = fl; li.location = (0, 0, 0.0)
     return body, fl, li
 
 
@@ -413,7 +413,7 @@ def marigold(name, loc, r=0.03, m=None):
     """A ball of petals: an icosphere with displaced spikes (cheap, reads well at distance)."""
     m = m or noisy(mat("marigold", MARIGOLD, rough=0.55, sss=0.25), 300, 0.35, 0.1, 0.6)
     o = prim("ico_sphere", name, m, subdivisions=3, radius=r, location=loc)
-    tx = bpy.data.textures.new(name + "_tx", "VORONOI"); tx.noise_scale = 0.12
+    tx = bpy.data.textures.new(name + "_tx", "VORONOI"); tx.noise_scale = r * 0.3
     d = o.modifiers.new("d", "DISPLACE"); d.texture = tx; d.strength = r * 0.35
     for p in o.data.polygons: p.use_smooth = True
     return o
