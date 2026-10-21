@@ -276,7 +276,7 @@ def set_moon(sc, A):
         u = t / dur
         night = min(9.0, u / shatter * 9.0)  # waxing crescent (tithi 1) -> gibbous (tithi 10)
         phase = 0.07 + (night / 9.0) * 0.68  # illuminated fraction-ish via sun angle
-        ang = math.acos(1 - 2 * phase)   # 0 = full, pi = new (sun behind)
+        ang = math.acos(2 * phase - 1)   # pi*0 = new (sun behind the moon) ... pi = full (sun behind the camera)
         sdir = Vector((math.sin(ang), -math.cos(ang), 0.15)).normalized()
         sun.rotation_euler = (-sdir).to_track_quat("-Z", "Y").to_euler()
         k = ease((u - shatter) / (1 - shatter)) if u > shatter else 0
