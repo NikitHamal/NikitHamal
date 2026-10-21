@@ -33,18 +33,26 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - `sets_b.py`: real-elevation relief of Nepal from AWS Terrain Tiles, inside the 2020 boundary (Limpiyadhura, Lipulekh, Kalapani labelled) with the Gorkha → Kathmandu Fulpati thread; Taleju on its stepped plinth; jamara growing in the dark; Fulpati doli + salute; 252 Ashtami lamps; khukuri/hasiya with tika; thali with 4,500 rice grains; valley at Kojagrat; linge ping + kites; night bus + switchback lights; lane of doorways.
 - [x] Type: `tools/type_render.py` uses Chromium, because Pillow here has no raqm and so cannot shape Devanagari. It produces per-word PNGs. `tools/composite.py` handles word-synced reveals, kickers, map labels, the Navadurga names, the pixel-art moon calendar (the only pixel element), transitions, grain and vignette.
 - [x] API check without rendering: `blender/render.py --shot N --dry` builds each set in bpy 4.2 and steps its animation. All 21 film shots and the 4 Tihar sets pass. Map framing was checked numerically: Nepal fills the frame width, and the Limpiyadhura/Lipulekh/Kalapani, Gorkha and Kathmandu marks are on screen.
-- [ ] molab, 2026-10-21: two boxes both went HTTP 410 within about 2–5 min, each time during `build.sh setup` (bpy + Chromium into /tmp/reels). Suspected cause: /tmp counts against the box's memory. Next box:
-  1. Check `free -m`, the cgroup `memory.max` and `df` first.
-  2. Install with `--no-cache` in small steps.
-  3. Watch memory.
-  4. Then run `pipeline.sh` detached (tests first; each shot clip pulled off at once by `/workspace/tools/pull.py`).
-  The local helpers are `/workspace/tools/mx`, `pull.py` and `molab.env`. The token lives only in molab.env, never in the repo.
-- [ ] On molab:
-  1. `bash festivals/v3/build.sh setup dem type audio`.
-  2. Test stills: `python blender/render.py --shot N --t 2 --samples 32 --still /tmp/sN.png` for every shot. Fix, then iterate.
-  3. Run `plates composite mux`.
-  4. Pull `out/dashain_v3.mp4` back to the repo: base64 chunks via the marimo execute API.
-- [ ] Stills: 5 Dashain + 5 Tihar designs × 3 sizes, as 3D scenes that reuse these sets. The Kukur Tihar dog stays pixel art; it is the one place pixel art is genuinely good.
+- [x] **Render route that works (2026-10-21):** GPU molab boxes died within 2–10 min, 4 times. The owner then allowed CPU and gave a 20-core / 160 GB CPU molab box (`/tmp/reels`; it rebooted once and lost /tmp).
+  - The CPU build is `cpu_build.sh`.
+  - Per shot, `blender/keys.py` renders 1–13 Cycles **keyframe stills** with the camera locked; only light and action change between them.
+  - `tools/composite.py` dissolves between the keys and adds a slow 2D push. Then come the type layer, the pixel calendar and grain.
+  - A full pass takes about 35–45 min on 20 cores.
+  - `/workspace/tools/sync.py` copies every key and output off the box as it lands. `sync.py up` restores the keys after a reboot.
+- [x] **First full cut delivered** (`out/dashain_v3_small.mp4`, 720p review copy, 2:23). Owner: "great", but:
+  - (a) the TTS is poor, so the owner will record a better voice. The **narration pack** is in `narration/` (SCRIPT.md, NN.txt, batch txt). `tools/import_vo.py` re-times the film and captions to their takes.
+  - (b) some visuals are not realistic.
+- [x] **Realism pass (pass 2, rendering now):**
+  - Poly Haven CC0 assets via `tools/assets.py`.
+  - **Mahishasura** is the scanned `bull_head` sculpture, re-toned as a dark bronze idol, with ember eyes, smoke and glowing cracks.
+  - HDRI light and reflections everywhere; the camera still sees each set's own background.
+  - Real sunset sky over the sea (rotation 4.2) and over the ping.
+  - Scanned PBR textures: brick (Taleju, houses, lane), plaster, earth, sand, roof tiles, bamboo, cobbles, grass-rock.
+  - Smooth terrain; moon phases fixed (waxing); Navadurga names moved above the moon.
+- [ ] Next:
+  - Pull the pass-2 film and cards, deliver them, push the ≤8 MB copies.
+  - When the owner pushes `narration/takes/*`: run `tools/import_vo.py`, then `cpu_build.sh` (the keys are reusable if timings move; only the composite and score re-run).
+  - Further polish: shot 13 (Fulpati doli), shot 18 (bus), the hills (could use the real DEM around Kathmandu), the kalash leaves.
 
 ## Delivery limits (measured)
 - Connector pushes carry blobs up to about 8 MB; 30 MB fails with HTTP 413. So the repo copy of the film has to be at most about 8 MB (or split per section), and the full-quality master goes to the owner as a chat attachment (`actl asset put`).
