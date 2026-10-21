@@ -1,0 +1,228 @@
+{
+ "items": 40,
+ "item_pass": 12,
+ "pairs": 20,
+ "pair_pass": 3,
+ "rows": [
+  {
+   "tag": "give",
+   "ctx": "aashish le dinesh lai 6 wata sel roti diyo.",
+   "q1": "kasle sel roti diyo?",
+   "a1": "aashish le dinesh lai 6 wata sel roti diyo.",
+   "ok1": true,
+   "q2": "kasle sel roti payo?",
+   "a2": "aashish le dinesh lai 6 wata sel roti diyo.",
+   "ok2": true,
+   "pair_ok": true
+  },
+  {
+   "tag": "negation",
+   "ctx": "bikram lai kwati man parchha tara tama man pardaina.",
+   "q1": "bikram lai kwati man parchha?",
+   "a1": "bidyarthi lai k v badhi man parchha?",
+   "ok1": true,
+   "q2": "bikram lai tama man parchha?",
+   "a2": "bikram, man parne raichha. sangai khana jaanus na!",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "temporal",
+   "ctx": "srijana pahile 5 kilo chura lyai, pachhi 3 kilo thapi.",
+   "q1": "srijana le pachhi kati kilo chura lyai?",
+   "a1": "srijana le 0 kilo chura kinyo.",
+   "ok1": false,
+   "q2": "srijana le pahile kati kilo chura lyai?",
+   "a2": "bijana ko 5 kilo kilo.",
+   "ok2": true,
+   "pair_ok": false
+  },
+  {
+   "tag": "distractor",
+   "ctx": "raju ko ghar ma 9 wata ghadi chhan, 4 wata bigreko chhan.",
+   "q1": "kati wata ghadi ramro chhan?",
+   "a1": "32 wata ghadi 2 wata",
+   "ok1": false,
+   "q2": "jamma kati wata ghadi chhan?",
+   "a2": "32 wata ghadi chhan.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "coref",
+   "ctx": "manisha lekhpadi hun, unko dai malis ho.",
+   "q1": "manisha ko dai ko kaam k ho?",
+   "a1": "passage ma manisha ko kaam bhaneko chhaina, tyasaile ma bhanna sakdina.",
+   "ok1": false,
+   "q2": "manisha k kaam garchhin?",
+   "a2": "malai thaha chhaina. passage ma manisha ko kaam ko barema kehi chhaina.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "compare",
+   "ctx": "sunil 28 barsha ko chha, rojina 34 barsha ki chha.",
+   "q1": "ko jetho ho?",
+   "a1": "bujhe! aru k?",
+   "ok1": false,
+   "q2": "ko sano ko ho?",
+   "a2": "bujhe! aru k?",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "units",
+   "ctx": "sneha le 2 kilo bhutuwa 90 rupiya kilo ko dar le kinyo.",
+   "q1": "jamma kati rupiya tiryo?",
+   "a1": "sneha le 720 rupiya tiryo.",
+   "ok1": false,
+   "q2": "kati kilo bhutuwa kinyo?",
+   "a2": "sneha le 2 kilo bhutuwa kinyo.",
+   "ok2": true,
+   "pair_ok": false
+  },
+  {
+   "tag": "sequence",
+   "ctx": "kushal le 3, 9, 27, 81 lekhyo.",
+   "q1": "arko number kati?",
+   "a1": "aru number 88 hunchha.",
+   "ok1": false,
+   "q2": "ke le gunera badhyo?",
+   "a2": "ke le 81 rupiya badhyo.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "buy-not",
+   "ctx": "manisha le chura kinyo tara kwati kinyena.",
+   "q1": "manisha le ke kinyo?",
+   "a1": "manisha le chura kinyo tara kun chaura ma sabai bhanda thulo sankhya le chaliraheka chhan.",
+   "ok1": true,
+   "q2": "ke manisha le kwati kinyo?",
+   "a2": "ho, manisha le chura kinyo.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "role",
+   "ctx": "dinesh le aashish ko tiffin bokyo.",
+   "q1": "kasle tiffin bokyo?",
+   "a1": "dinesh le tiffic lyo.",
+   "ok1": true,
+   "q2": "kasko tiffin thiyo?",
+   "a2": "dinesh ko tiffice tiffice ho.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "negation2",
+   "ctx": "rojina janakpur ma baschhain, u damak ma baschha.",
+   "q1": "rojina kaha baschha?",
+   "a1": "rojina janakpur ma baschhin.",
+   "ok1": false,
+   "q2": "ke rojina janakpur ma baschha?",
+   "a2": "ho, rojina janakpur ma baschhin.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "quantity",
+   "ctx": "bikram sanga 12 wata topi thiyo, 5 wata usle bechyo.",
+   "q1": "kati wata topi baki chha?",
+   "a1": "bikram sanga aba 7 wata kapipi baki chha.",
+   "ok1": true,
+   "q2": "kati wata bechyo?",
+   "a2": "tapai le 5 wata kapi kinyo.",
+   "ok2": true,
+   "pair_ok": true
+  },
+  {
+   "tag": "order",
+   "ctx": "pahile manisha aai, pachhi raju aayo.",
+   "q1": "ko pahile aayo?",
+   "a1": "bujhe: \" ko pahile raju aayo\" wa \" ko umer raju aayo\".",
+   "ok1": false,
+   "q2": "ko pachhi aayo?",
+   "a2": "bujhe! aru k?",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "distractor2",
+   "ctx": "srijana le 4 wata chata kinyo ra 200 rupiya tiryo.",
+   "q1": "ek wata chata ko kati parchha?",
+   "a1": "chatata ko 1200 rupiya tiryo.",
+   "ok1": false,
+   "q2": "kati wata chata kinyo?",
+   "a2": "tapai le jamma 1200 rupiya tiryo.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "coref2",
+   "ctx": "sunil ko bahini sneha ho ra u tansen ma padhchha.",
+   "q1": "sneha kaha padhchha?",
+   "a1": "sneha lumbini ma baschhin.",
+   "ok1": false,
+   "q2": "sneha ko dai ko naam k ho?",
+   "a2": "sneha ko dai ko naam bahinira ho.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "compare2",
+   "ctx": "kushal ko jutta 42 size ko chha, dinesh ko 39 size ko.",
+   "q1": "kasko jutta ko size thulo?",
+   "a1": "",
+   "ok1": false,
+   "q2": "dinesh ko size kati?",
+   "a2": "",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "units2",
+   "ctx": "aashish le 3 mitar kapaad ra 2 mitar dori kinyo.",
+   "q1": "jamma kati mitar kinyo?",
+   "a1": "jamma 302 mitar kinyo.",
+   "ok1": false,
+   "q2": "kati mitar dori kinyo?",
+   "a2": "3 meter dori kinyo.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "sequence2",
+   "ctx": "sneha le 40, 36, 32, 28 lekhi.",
+   "q1": "arko number kati?",
+   "a1": "aru number 22 hunchha.",
+   "ok1": false,
+   "q2": "kati le ghatcha?",
+   "a2": "jamma 0 hunchha.",
+   "ok2": false,
+   "pair_ok": false
+  },
+  {
+   "tag": "went-not",
+   "ctx": "sunil damak gayo tara janakpur gayena.",
+   "q1": "sunil kaha gayo?",
+   "a1": "sunil damak gayo.",
+   "ok1": true,
+   "q2": "ke sunil janakpur gayo?",
+   "a2": "haina, sunil janakpur haina, damak gayo.",
+   "ok2": true,
+   "pair_ok": true
+  },
+  {
+   "tag": "role2",
+   "ctx": "raju le rojina lai ghadi diyo, rojina le badal ma chura dii.",
+   "q1": "raju le ke diyo?",
+   "a1": "raju le rojina lai ghadi diyo.",
+   "ok1": true,
+   "q2": "rojina le ke dii?",
+   "a2": "rojina le diiyeko diice.",
+   "ok2": false,
+   "pair_ok": false
+  }
+ ]
+}

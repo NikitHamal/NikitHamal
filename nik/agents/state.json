@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T15:09:02Z",
+ "updated": "2026-10-21T15:55:43Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -7,19 +7,19 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU 99% \u00b7 29 GB / 96 GB",
-   "job": "Claude: Decide v8 training; v4r2m (v4r2 recipe + multiturn 5%) training; m50 long-chat checks. Local-A: P1-clean (la3c)",
+   "gpu": "offline (HTTP 410, recycled ~15:58 UTC)",
+   "job": "waiting for a new URL + token from the owner",
    "progress": null,
-   "detail": "running: decide/train.py, train.py x2 (Claude v4r2m, Local-A la3c), memory_long/longchat (node)",
-   "eta": "Decide v8 ~15:45 UTC; v4r2m gate ~16:15 UTC"
+   "detail": "lost: v4r2/v4r2m bins, Decide v8, m50m gate. m50 + v4r3 saved by Claude",
+   "eta": "-"
   },
   {
    "name": "box 2",
-   "gpu": "GPU 99% \u00b7 8 GB / 96 GB",
-   "job": "Local-C: P6 (named-family polish) + P7 synthesis (reduce 18% + roles 12% + iter); Local-A: replay arms + bench_surface",
+   "gpu": "GPU 95% \u00b7 shared",
+   "job": "Local-C: P9; Claude: v4r6 (v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%); Local-A: replay arms",
    "progress": null,
-   "detail": "running: train.py, chain_mix.py, stress.py (Local-C, Local-A)",
-   "eta": "see #11"
+   "detail": "running: make_sft2.py, train.py",
+   "eta": "v4r6 gate ~17:00 UTC"
   }
  ],
  "scoreboard": {
@@ -131,11 +131,19 @@
  },
  "runs": [
   {
+   "tag": "v4r6",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "training",
+   "what": "v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%: m50's balance in one run"
+  },
+  {
    "tag": "v4r2m",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "v4r2 recipe + NIK_MULTITURN_SHARE=0.05 (one variable vs v4r2); + longchat/memory_long"
+   "status": "done",
+   "what": "v4r2 recipe + NIK_MULTITURN_SHARE=0.05 (one variable vs v4r2); + longchat/memory_long",
+   "result": "NikBench 72.6%, reason 35, word 10, L2 12/12, und 19, traps 8, math 95%; raw long-chat 7->17/60, recall 16->32/80 (box 1, bin lost)"
   },
   {
    "tag": "mix23",
@@ -149,8 +157,9 @@
    "tag": "decide-v8",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "Decide + Nik's own sampled answers (policy_data); then bench_reading + rerank_eval"
+   "status": "lost",
+   "what": "Decide + Nik's own sampled answers (policy_data); then bench_reading + rerank_eval",
+   "result": "bench_reading 11/20 pairs (= v7); box 1 recycled before rerank_eval"
   },
   {
    "tag": "v4r2",
@@ -194,7 +203,7 @@
  ],
  "next": [
   "owner call on shipping m50 (#11)",
-  "v4r2m gate (~16:15 UTC): replaces m50 as the candidate if better",
-  "Local-C P7 synthesis result (box 2)"
+  "new box 1 URL from the owner",
+  "v4r6 gate (~17:00 UTC)"
  ]
 }
