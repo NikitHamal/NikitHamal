@@ -1,37 +1,42 @@
 {
   "name": "nik 0.1",
   "file": "nik-0.1.bin",
-  "bytes": 20689696,
-  "version": "2026-10-20T20:45Z",
-  "trained": "molab RTX PRO 6000 \u00b7 v4c = v4b + 15 min SFT on sft7 (sft6 recipe + Grounded Ledger word problems 4% (Local-A), grounding-fixed read.py (Codex), weekday ordinal; chat 300k, write 60k, gold x40)",
+  "bytes": 20689712,
+  "version": "2026-10-21T09:55Z",
+  "trained": "v4f3 = the live v4c + 20 min SFT (lr 2e-4, bs 16, accum 2, muon, ema 0.998) on sft14: v4f's recipe rebuilt on main (vocab fix, correct.py 4%, the frame leak fix, chat_check held out) + the new money-minus-one-expense scene. molab box 2, RTX PRO 6000.",
   "eval": {
-    "nikbench_n16": 0.625,
-    "nikbench_groups_n16": {
-      "arith": "153/192",
+    "nikbench_n16_nested": 0.684,
+    "nikbench_groups_n16_nested": {
+      "arith": "161/192",
+      "word": "2/48",
+      "reason": "34/48"
+    },
+    "math_acc": 0.95,
+    "persona_acc": 1.0,
+    "understanding_probes": "20/26",
+    "chat_check": "15/15",
+    "stress": "63/103",
+    "trap_check": "8/12",
+    "ladder_L1_L2_L3_L4": "12/12, 1/12, 12/12, 2/12",
+    "seq2step_money": "10/11",
+    "browser_engine_smoke": "4/4"
+  },
+  "note": "Paired against the live v4c on the SAME 288 nested items (bench.py --nested-items): 65.6% -> 68.4% (+2.8pp), reason 30->34/48, arith 159->161/192. Understanding 19/26 -> 20/26 (first candidate above the live baseline; the leak gate on the exact sft14 mix found 0 eval_understand leaks). Trap check 5/12 -> 8/12. The procedure ladder moved for the first time: L2 (two steps) 0/12 -> 1/12, and the sequential two-step money probe 2/11 -> 10/11 (the model can subtract 11/11 in bare form but could not bind two amounts in a sentence). Gate caveats: stress 63 vs 64 (one item; the same 8 writing/chat strings contaminate both the live model and the candidate, so this is noise, not a regression) and the held-out word family is still 0/48 (the live model is also 0 - the word family needs the two-step composition, which is still missing).",
+  "previous": {
+    "file": "nik-0.1.v4c.bin",
+    "nikbench_n16_nested": 0.656,
+    "nikbench_groups_n16_nested": {
+      "arith": "159/192",
       "word": "0/48",
-      "reason": "27/48"
+      "reason": "30/48"
     },
     "math_acc": 0.945,
     "persona_acc": 1.0,
     "understanding_probes": "19/26",
     "chat_check": "15/15",
     "stress": "64/103",
-    "browser_engine_greedy_36": "20/36"
-  },
-  "note": "Paired McNemar vs v4b (288 items): reasoning +12.5 pp (6 fixed / 0 broken, p=0.031), arith -0.5 pp, word -1 item, overall +1.4 pp (n.s.). Understanding +3, stress +5 (10 fixed / 5 regressed incl. persona project list and one reading item). Browser-engine 36-item set 22 -> 20 (within noise). Shipped under the pre-registered gate (issue #9).",
-  "previous": {
-    "file": "nik-0.1.v4b.bin",
-    "nikbench_n16": 0.611,
-    "nikbench_groups_n16": {
-      "arith": "154/192",
-      "word": "1/48",
-      "reason": "21/48"
-    },
-    "math_acc": 0.955,
-    "persona_acc": 1.0,
-    "understanding_probes": "16/26",
-    "chat_check": "15/15",
-    "stress": "59/103",
-    "browser_engine_greedy_36": "22/36"
+    "trap_check": "5/12",
+    "ladder_L1_L2_L3_L4": "12/12, 0/12, 11/12, 2/12",
+    "seq2step_money": "2/11"
   }
 }

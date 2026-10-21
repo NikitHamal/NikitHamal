@@ -79,6 +79,13 @@ PRESETS = {
     'nik-0.1r3': NikConfig(d=384, n_unique=12, n_repeat=3, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     # Local-C (issue #9): fill the 25 MB cap with int8: 14 unique blocks -> 23.6M params, 23.8 MB, +16% FLOPs, no new kernels
     'nik-0.1w': NikConfig(d=384, n_unique=14, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
+    # Local-C (issue #9): the owner raised the cap to 30 MB.  'nik-0.1x' fills it with
+    # DEPTH (17 unique blocks -> 34 effective layers, 28.5M params, ~28.9 MB): the model
+    # fails at *composing* two steps (ladder L2 = 0/12 everywhere) and depth is the cheapest
+    # way to add that.  'nik-0.1v' buys WIDTH instead (d=448, 24 layers, ~26 MB) for the
+    # reading side.  Both are int8 -> no new kernels in the browser.
+    'nik-0.1x': NikConfig(d=384, n_unique=17, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
+    'nik-0.1v': NikConfig(d=448, n_unique=12, n_repeat=2, heads=14, kv_heads=4, ffn=1216, ctx=512, abacus=20),
     'nik-0.1': NikConfig(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     # ~8.3M params -> ~8.4 MB int8 (the original <10 MB design).
     'nik-small': NikConfig(abacus=20),
