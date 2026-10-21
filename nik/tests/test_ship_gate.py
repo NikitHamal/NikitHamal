@@ -95,5 +95,33 @@ class TestShipGate(unittest.TestCase):
         self.assertEqual(code, 1)
 
 
+    def test_a_candidate_with_no_logs_cannot_be_shipped(self):
+        """a false SHIP is the worst failure of a gate: no data is not a pass"""
+        old = {'bench-v4b.json': bench_json([('word', 'q-a', True)], 0.66),
+               'understand-v4b.json': {'score': 16, 'of': 26, 'rows': []}}
+        out, code = self._run(old, {})
+        self.assertIn('CANNOT DECIDE', out)
+        self.assertNotIn('VERDICT: SHIP', out)
+        self.assertEqual(code, 2)
+
+    def test_the_ladder_is_a_gate(self):
+        """the procedure ladder: a candidate must move L2/L4 off zero"""
+        items = [('word', 'kaksha ma 14 keta', True)]
+        ladder = {'rows': [], 'groups': {
+            'L1-1step': {'ok': 12, 'n': 12, 'coverage': 1.0},
+            'L2-2step': {'ok': 0, 'n': 12, 'coverage': 0.75},
+            'L4-chain-2line': {'ok': 2, 'n': 12, 'coverage': 0.6}}}
+        old = {'bench-v4b.json': bench_json(items, 0.6),
+               'understand-v4b.json': {'score': 16, 'of': 26, 'rows': []},
+               'ladder-v4b.json': ladder}
+        new = {'bench-v4d.json': bench_json(items, 0.6),
+               'understand-v4d.json': {'score': 19, 'of': 26, 'rows': []},
+               'ladder-v4d.json': ladder}
+        out, code = self._run(old, new)
+        self.assertIn('ladder L2 (two steps)', out)
+        self.assertIn('[FAIL] ladder multi-step off zero', out)
+        self.assertEqual(code, 1)
+
+
 if __name__ == '__main__':
     unittest.main()
