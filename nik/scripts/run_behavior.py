@@ -30,6 +30,8 @@ def main():
     ap.add_argument('--tag', default='v4e')
     ap.add_argument('--n', type=int, default=12000)
     ap.add_argument('--mix', type=float, default=0.2)
+    ap.add_argument('--lr', type=float, default=8.5e-4)
+    ap.add_argument('--skip-eval', action='store_true', help='train+export only; run the gate separately')
     ap.add_argument('--dry-run', action='store_true')
     a = ap.parse_args()
     logs = os.path.join('nik/web/model/logs', a.tag)
@@ -61,15 +63,18 @@ def main():
         print(f'$ (in-process) load {a.bin} -> init_behavior.pt')
         print(f'$ {PY} nik/train.py --stage sft --init init_behavior.pt --data data --sft-name behavior '
               f'--out nik/runs/{a.tag} --steps 100000000 --minutes {a.minutes} --bs 64 --accum 2 '
-              f'--lr 8.5e-4 --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
+              f'--lr {a.lr} --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
               f'--opt muon --ema 0.998 --compile')
         return
     bin_to_init(a.bin, 'init_behavior.pt')
     run(f'{PY} nik/train.py --stage sft --init init_behavior.pt --data data --sft-name behavior '
         f'--out nik/runs/{a.tag} --steps 100000000 --minutes {a.minutes} --bs 64 --accum 2 '
-        f'--lr 8.5e-4 --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
+        f'--lr {a.lr} --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
         f'--opt muon --ema 0.998 --compile')
     run(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}/ckpt.pt --out {newbin}')
+    if a.skip_eval:
+        print(f'TRAINED+EXPORTED {newbin}; gate not run (--skip-eval)')
+        return
 
     def evaluate(tag, model):
         d = os.path.join('nik/web/model/logs', tag)
