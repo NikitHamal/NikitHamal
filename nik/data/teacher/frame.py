@@ -695,7 +695,7 @@ def scene_percent_each_item(R):
     dis = _distract(R)
     shape = R.randrange(4)
     if shape == 0:
-        user = (f'ek {R.choice(ITEMS)[0]} ko mol {price} rupiya. {pct}% chhut pachhi '
+        user = (f'ek {R.choice(ITEMS)[0]} ko mol {price} rupiya. {pct}% bhat pachhi '
                 f'{count} wata kinaid. {dis} jamma kati rupiya tirne?')
     elif shape == 1:
         user = (f'{count} wata {R.choice(ITEMS)[0]} {price} rupiya per wata. {pct}% discount. {dis} '

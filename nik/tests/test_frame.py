@@ -61,7 +61,7 @@ class TestFrame(unittest.TestCase):
             seen.add(frame.sample(R)['messages'][0]['content'][:20])
         # every scene family must show up in a few thousand rows
         self.assertGreaterEqual(len(seen), 10)
-        self.assertEqual(len(frame.SCENES), 24)   # 14 + the 10 extra surfaces
+        self.assertEqual(len(frame.SCENES), 28)   # 14 + 10 surfaces + 4 diagnostic shapes
 
     def test_every_row_has_a_distractor(self):
         """a number in the text that must not be used: the model's measured failure is
