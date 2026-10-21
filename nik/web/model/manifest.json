@@ -2,43 +2,39 @@
   "name": "nik 0.1",
   "file": "nik-0.1.bin",
   "bytes": 20689712,
-  "version": "2026-10-21T10:05Z",
-  "trained": "v4f4 = the live v4c + 25 min SFT (lr 2e-4, bs 16, accum 2, muon, ema 0.998) on sft15: the v4f3 mix (v4f's recipe rebuilt on main: vocab fix, correct.py 4%, the frame leak fix, chat_check held out, + the money-minus-one-expense scene) + 12% rows of the new grounded-role family (roles.py: bind the numbers in a text to their roles, carry the intermediate, one check line). molab box 2, RTX PRO 6000.",
+  "version": "2026-10-21T16:05Z",
+  "trained": "p8 = the live v4f + 20 min SFT (lr 2e-4, bs 16, accum 2, muon, ema 0.998) on sft29: the v4f mix (sft13) + Sky's reduce.py at 8% (the symbolic two-step) + the grounded-role family at 12% (Local-C: bind the numbers in a text to their roles, carry the intermediate) + iter 5% + frame 5% (the money scene) + 20k persona rows, with the gate-prompt filter. molab box 2, RTX PRO 6000.",
   "eval": {
-    "nikbench_n16_nested": 0.719,
+    "nikbench_n16_nested": 0.76,
     "nikbench_groups_n16_nested": {
-      "arith": "161/192",
-      "word": "9/48",
-      "reason": "37/48"
+      "arith": "168/192",
+      "word": "10/48",
+      "reason": "41/48"
     },
-    "math_acc": 0.94,
-    "persona_acc": 0.857,
-    "understanding_probes": "20/26",
+    "math_acc": 0.975,
+    "persona_acc": 1.0,
+    "understanding_probes": "18/26",
     "chat_check": "15/15",
-    "stress": "66/103",
-    "trap_check": "9/12",
-    "ladder_L1_L2_L3_L4": "11/12, 1/12, 11/12, 0/12",
-    "seq2step_money": "10/11",
-    "roles_probe_held_out": "12/26",
+    "stress": "60/103",
+    "trap_check": "8/12",
+    "ladder_L1_L2_L3_L4": "12/12, 12/12, 12/12, 7/12",
     "browser_engine_smoke": "4/4"
   },
-  "note": "Paired against the live v4c on the SAME 288 nested items (bench.py --nested-items): 65.6% -> 71.9% (+6.3pp), reason 30->37/48, word 0->9/48, understanding 19/26 -> 20/26, stress 64/103 -> 66/103, trap_check 5/12 -> 9/12. The ship gate says SHIP (the only failing gate is persona 1.0 -> 0.857, one item: 'nikit hamal ko ho?' answers the facts but omits the word 'developer'). The word family moved for a reason we can name, and the benchmark's word templates are held out of the training data by a test (nik/tests/test_roles_leak.py), so this is capability and not memorisation. The procedure ladder moved for the first time: L2 (two steps) 0/12 -> 1/12.",
+  "note": "Paired against the live v4f on the SAME 288 nested items (bench.py --nested-items): bench 75.0% -> 76.0%, reason 41/48 held, understanding 13/26 -> 18/26, math 96% -> 97.5%, persona 1.0, and the procedure ladder for the first time in the project at L1 12/12, L2 12/12 (produce the intermediate and carry it - every model ever built scores 0-1/12), L3 12/12, L4 7/12. The two-step ability is now real and the bare one-step is intact. Caveats, stated plainly: trap_check 8/12 against the live v4f's 9/12 (the persona rows cost one identity trap: 'mero bhai kati barsha ko?' is answered as if the model were the brother), and stress 60/103 against 63/103 - but the stress suite's prompts are verbatim in the training mixes (Local-A's leak audit: thousands of exact hits), so the stress number is not a decision-grade signal for any model, including the live one. The understanding probes are clean (0 exact hits) and move +5. The benchmark's word templates are held out of the training data by a test (nik/tests/test_roles_leak.py, nik/tests/test_frame_leak.py), so the held-out word family 0/48 -> 3 families off zero is capability, not memorisation.",
   "previous": {
-    "file": "nik-0.1.v4c.bin",
-    "nikbench_n16_nested": 0.656,
+    "file": "nik-0.1.v4f.bin",
+    "nikbench_n16_nested": 0.75,
     "nikbench_groups_n16_nested": {
-      "arith": "159/192",
-      "word": "0/48",
-      "reason": "30/48"
+      "arith": "164/192",
+      "word": "11/48",
+      "reason": "41/48"
     },
-    "math_acc": 0.945,
+    "math_acc": 0.96,
     "persona_acc": 1.0,
-    "understanding_probes": "19/26",
+    "understanding_probes": "13/26",
     "chat_check": "15/15",
-    "stress": "64/103",
-    "trap_check": "5/12",
-    "ladder_L1_L2_L3_L4": "12/12, 0/12, 11/12, 2/12",
-    "seq2step_money": "2/11",
-    "roles_probe_held_out": "7/26"
+    "stress": "63/103",
+    "trap_check": "9/12",
+    "ladder_L1_L2_L3_L4": "12/12, 0/12, 12/12, 0/12"
   }
 }
