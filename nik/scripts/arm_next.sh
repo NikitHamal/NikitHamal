@@ -29,7 +29,10 @@ say() { echo "[$TAG $(date +%H:%M:%S)] $*"; }
 
 # ---- 1. the mix ------------------------------------------------------------------
 if [ -z "$MIX" ]; then
-  FAM="roles:90000,frame:90000,iter:25000,math:110000,colmath:50000,understand:50000,read:40000,skills:40000,vocab:12000,correct:20000,reduce:110000"
+  # The share of *shape* rows (the frames + the role family) is what moves the held-out
+  # word family, and it was measured three times: 17% -> 14/48, 22% -> 17/48, 30% -> 19/48
+  # (p8, p9, P3).  So: the frames 150k + the roles 100k = 250k of ~830k rows = 30%.
+  FAM="roles:100000,frame:150000,iter:25000,math:110000,colmath:50000,understand:50000,read:40000,skills:40000,vocab:12000,correct:20000,reduce:110000"
   MIX=${TAG}_mix
   if [ ! -f "data/${MIX}_tok.bin" ]; then
     say "build the mix $MIX"
