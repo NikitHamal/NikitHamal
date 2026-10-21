@@ -12,7 +12,7 @@ class Decider(nn.Module):
         self.ctx = ctx
         self.emb = nn.Embedding(vocab, d)
         self.pos = nn.Embedding(ctx, d)
-        self.seg = nn.Embedding(9, d)          # 0 = question, 1..8 = option index
+        self.seg = nn.Embedding(10, d)         # 0 = question/claim, 1..8 = option index, 9 = context passage
         layer = nn.TransformerEncoderLayer(d, heads, ffn, dropout=0.0, activation='gelu', batch_first=True, norm_first=True)
         self.enc = nn.TransformerEncoder(layer, layers, enable_nested_tensor=False)
         self.norm = nn.LayerNorm(d)
@@ -44,10 +44,13 @@ class Decider(nn.Module):
 def encode(tok, row, ctx=384):
     """row -> (ids, seg). The question is truncated from the left so options always fit."""
     opts = [tok.encode(' ' + o, allow_special=False)[:24] + [2] for o in row['options']]
-    q = tok.encode((row.get('context', '') + ' ' + row['question']).strip(), allow_special=False)
-    room = ctx - 2 - sum(len(o) for o in opts)
-    q = q[-room:] if room > 0 else q[-16:]
-    ids, seg = [1] + q + [2], [0] * (len(q) + 2)
+    q = tok.encode(row['question'], allow_special=False)[-96:]
+    c = tok.encode(row.get('context', ''), allow_special=False) if row.get('context') else []
+    room = ctx - 3 - len(q) - sum(len(o) for o in opts)
+    c = c[-room:] if room > 0 else []
+    ids, seg = [1] + q + [2], [0] * (len(q) + 2)          # question/claim first: [bos] summarises it
+    if c:
+        ids += c + [2]; seg += [9] * (len(c) + 1)
     for k, o in enumerate(opts, 1):
         ids += o; seg += [k] * len(o)
     return ids[:ctx], seg[:ctx]

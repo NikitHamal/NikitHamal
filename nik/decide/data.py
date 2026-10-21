@@ -15,25 +15,37 @@ def _user(e):
     return ' '.join(m['content'] for m in e['messages'] if m['role'] == 'user')
 
 
+def _split(text):
+    """passage -> context, final question -> question (NLI-style: the claim gets its own segment)."""
+    import re as _re
+    m = _re.search(r'([^.\n"]*\?)\s*$', text)
+    if not m:
+        return '', text
+    return text[:m.start()].strip(), m.group(1).strip()
+
+
 def yes_no(R):
     e = read.yes_no(R)
-    return dict(task='read-yesno', context='', question=_user(e), options=YNU, label=0 if e['gold'] == 'ho' else 1)
+    c, q = _split(_user(e))
+    return dict(task='read-yesno', context=c, question=q, options=YNU, label=0 if e['gold'] == 'ho' else 1)
 
 
 def unknown(R):
     e = read.not_mentioned(R)
-    return dict(task='read-unknown', context='', question=_user(e), options=YNU, label=2)
+    c, q = _split(_user(e))
+    return dict(task='read-unknown', context=c, question=q, options=YNU, label=2)
 
 
 def lookup(R):
     e = read.lookup(R)
     gold = e['gold']
     pool = [x for x in (L.JOBS + L.PLACES + L.FOODS + L.HOBBIES + L.VENUES + L.PET_NAMES + [str(i) for i in range(2, 40)]) if x != gold]
-    q = _user(e)
-    near = [x for x in pool if x in q and x != gold]          # distractors that also appear in the passage (hard negatives)
+    full = _user(e)
+    near = [x for x in pool if x in full and x != gold]          # distractors that also appear in the passage (hard negatives)
     opts = list(dict.fromkeys(near[:3] + R.sample(pool, 6)))[:R.randint(3, 6)] + [gold]
     R.shuffle(opts)
-    return dict(task='read-lookup', context='', question=q, options=opts, label=opts.index(gold))
+    c, q = _split(full)
+    return dict(task='read-lookup', context=c, question=q, options=opts, label=opts.index(gold))
 
 
 def arith(R):
