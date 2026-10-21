@@ -52,9 +52,10 @@ ITER_FAMILIES = ('arithmetic sequence', 'geometric pattern')
 
 
 def load_dir(d):
-    out = {'bench': None, 'understand': None, 'stress': None, 'eval': None, 'chat': None}
+    out = {'bench': None, 'understand': None, 'stress': None, 'eval': None, 'chat': None,
+           'ladder': None}
     for pat, key in (('bench*.json', 'bench'), ('understand*.json', 'understand'),
-                     ('stress*.json', 'stress'), ('eval-*.json', 'eval')):
+                     ('stress*.json', 'stress'), ('eval-*.json', 'eval'), ('ladder*.json', 'ladder')):
         files = sorted(glob.glob(os.path.join(d, pat)))
         if files:
             try:
@@ -65,6 +66,25 @@ def load_dir(d):
     if chats:
         out['chat'] = open(chats[-1], encoding='utf8', errors='replace').read()
     return out
+
+
+def ladder_of(d):
+    """-> {'L1-1step': (ok, n), ...} and the operand coverage per level.
+
+    The ladder (nik/scripts/word_procedure_probe.py --ladder) is the procedure probe:
+    one step, two steps composed, two steps with the intermediate given, two steps as
+    a chain.  The live model is 12/12, 0/12, 11/12, 2/12 - it cannot compose two
+    steps, and every word problem in NikBench is at least two steps.
+    """
+    if not d.get('ladder'):
+        return {}, {}
+    groups = d['ladder'].get('groups') or {}
+    scores, cover = {}, {}
+    for k, v in groups.items():
+        n = v.get('n') or 0
+        scores[k] = (v.get('ok', 0), n)
+        cover[k] = round((v.get('coverage') or 0) / n, 3) if n else 0.0
+    return scores, cover
 
 
 def score_of(d):
@@ -119,6 +139,8 @@ def main():
     ap.add_argument('--min-heldout', type=int, default=1, help='held-out word families that must be off zero')
     ap.add_argument('--min-understand', type=int, default=0)
     ap.add_argument('--min-stress', type=int, default=0)
+    ap.add_argument('--ladder-may-stay-zero', action='store_true',
+                    help='do not require the multi-step ladder to move off zero')
     ap.add_argument('--json', action='store_true')
     a = ap.parse_args()
 
@@ -156,16 +178,28 @@ def main():
     # ---- the bench rows: comparable only if the two logs share their item set ----
     comparable, shared, smaller = item_sets_comparable(old, new)
     rows_note = ''
-    if old['bench'] is not None and new['bench'] is not None:
-        if comparable:
-            gate('bench overall', new['bench'] >= old['bench'] - a.max_regress,
-                 f"{old['bench']:.3f} -> {new['bench']:.3f} (max regress {a.max_regress})")
-        else:
-            rows_note = (f"the two logs share only {shared}/{smaller} items (different --n item sets). "
-                         f"Use compare.py (paired) on one dumped item set, or bench.py --nested-items.")
-            skip('bench overall', f"NOT COMPARABLE: {rows_note}", blocking=True)
+    if new['bench'] is None:
+        skip('bench overall', 'no bench rows in the candidate logs - nothing to compare',
+             blocking=True)
+    elif old['bench'] is None:
+        skip('bench overall', 'no bench rows in the live model logs - nothing to compare',
+             blocking=True)
+    elif comparable:
+        gate('bench overall', new['bench'] >= old['bench'] - a.max_regress,
+             f"{old['bench']:.3f} -> {new['bench']:.3f} (max regress {a.max_regress})")
+    else:
+        rows_note = (f"the two logs share only {shared}/{smaller} items (different --n item sets). "
+                     f"Use compare.py (paired) on one dumped item set, or bench.py --nested-items.")
+        skip('bench overall', f"NOT COMPARABLE: {rows_note}", blocking=True)
     if new['families']:
-        if comparable:
+        if not new['bench']:
+            skip('held-out word families off zero', 'no bench rows in the candidate logs',
+                 blocking=True)
+            skip('reason iteration families off zero', 'no bench rows in the candidate logs',
+                 blocking=True)
+            skip('no family fell back to zero', 'no bench rows in the candidate logs',
+                 blocking=True)
+        elif comparable:
             gate('held-out word families off zero', new['heldout_off_zero'] >= a.min_heldout,
                  f"{old['heldout_off_zero']} -> {new['heldout_off_zero']} (need >= {a.min_heldout})")
             gate('reason iteration families off zero', new['reason_off_zero'] >= 0,
@@ -192,6 +226,30 @@ def main():
              f"{new['understand']} >= {a.min_understand}")
     if a.min_stress and new['stress'] is not None:
         gate('stress floor', new['stress'] >= a.min_stress, f"{new['stress']} >= {a.min_stress}")
+
+    # ---- the procedure ladder -------------------------------------------------
+    ls_old, lc_old = ladder_of(load_dir(a.old))
+    ls_new, lc_new = ladder_of(load_dir(a.new))
+    if ls_new:
+        for lvl, label in (('L1-1step', 'ladder L1 (one step)'),
+                           ('L2-2step', 'ladder L2 (two steps)'),
+                           ('L3-intermediate-given', 'ladder L3 (intermediate given)'),
+                           ('L4-chain-2line', 'ladder L4 (chain)')):
+            if lvl not in ls_new:
+                continue
+            ok, n = ls_new[lvl]
+            o = ls_old.get(lvl, (0, 0))[0]
+            cov = lc_new.get(lvl, 0.0)
+            gate(label, ok >= o, f"{o} -> {ok}/{n}  operand-coverage {cov}")
+        # the ladder is the mechanism probe: a candidate that does not move L2/L4 cannot
+        # move the word benchmark either, whatever the aggregate says.
+        moved = []
+        for lvl in ('L2-2step', 'L4-chain-2line'):
+            if lvl in ls_new and ls_old.get(lvl, (0, 0))[0] == 0 and ls_new[lvl][0] > 0:
+                moved.append(lvl.split('-')[0])
+        if ls_old and ls_new:
+            gate('ladder multi-step off zero', bool(moved) or a.ladder_may_stay_zero,
+                 f"moved: {', '.join(moved) if moved else 'nothing'} (need L2 or L4 off zero)")
 
     if blocked:
         verdict, code = 'CANNOT DECIDE', 2
