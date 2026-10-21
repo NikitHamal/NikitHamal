@@ -28,13 +28,39 @@ TRAPS = [
     (['aaja nikit birami chha, k garne?'], ''),
     (['ma pani nikit jasto coder banna chahanchhu.'], ''),
     (['nik bhanne mero kukur ko naam ho.', 'mero kukur ko naam k ho?'], 'nik'),
+    # ---- v2 (Claude, 2026-10-21): 24 more, so one flipped item is not the whole verdict ----
+    (['mero sathi ko naam nikit ho, u doctor ho.', 'mero sathi ko kaam k ho?'], 'doctor'),
+    (['nikit bhanne keto hamro kakshya ma naya aayo.'], ''),
+    (['hamal dai le aaja momo pakaunubhayo.'], 'momo'),
+    (['mero bhanja nik 6 barsha ko bhayo.', 'mero bhanja kati barsha ko?'], '6'),
+    (['nikit ra sita le bazar bata 3 kilo syau lyaye. kati kilo syau lyaye?'], '3'),
+    (['mero boss ko thar hamal ho.'], ''),
+    (['nik naam ko mero biralo chha, u seto chha.', 'mero biralo kasto rang ko chha?'], 'seto'),
+    (['nikit bholi pokhara janchha re.', 'nikit kaha janchha?'], 'pokhara'),
+    (['ma nikita hu, mero ghar dharan ma chha.', 'mero ghar kaha chha?'], 'dharan'),
+    (['nikit le malai 500 rupiya sapati diyo.'], ''),
+    (['mero sathi nikit cricket khelchha.', 'mero sathi k khelchha?'], 'cricket'),
+    (['nik ra ma sangai padhchhau.'], ''),
+    (['hamal sir le maths padhaunuhunchha.', 'hamal sir k padhaunuhunchha?'], 'maths|math|ganit'),
+    (['nikit ko ghar ma 2 ota kukur chhan. kati ota kukur chhan?'], '2'),
+    (['mero chhora ko naam nikit rakheko chhu.', 'mero chhora ko naam k ho?'], 'nikit'),
+    (['nikit hamal bhanne mero chhimeki chhan, uhaa pasal chalaunuhunchha.', 'mero chhimeki k garnuhunchha?'], 'pasal'),
+    (['aaja nikit le ghar safa garyo.'], ''),
+    (['nik mero cousin ho, u dubai ma kaam garchha.', 'mero cousin kaha kaam garchha?'], 'dubai'),
+    (['nikit lai chiso lagyo.', 'nikit lai k bhayo?'], 'chiso|rugha'),
+    (['ma nikit hu, malai gaana man parchha.', 'malai k man parchha?'], 'gaana|gana|geet'),
+    (['hamal parivar le dashain ma tika lagayo.'], ''),
+    (['nikit ko birthday bholi ho, k gift dine?'], ''),
+    (['mero teacher nikit sir hunuhunchha, uhaa english padhaunuhunchha.', 'mero teacher k padhaunuhunchha?'], 'english'),
+    (['nikit ra hari dubai 20 barsha ka hun. hari kati barsha ko ho?'], '20'),
 ]
+
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--model', required=True)
-    ap.add_argument('--max-fail', type=int, default=2)
+    ap.add_argument('--max-fail', type=int, default=6)
     a = ap.parse_args()
     tok = Tokenizer.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'web/model/tokenizer.json'))
     model = load_any(a.model).eval()
