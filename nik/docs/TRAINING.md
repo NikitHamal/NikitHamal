@@ -69,7 +69,58 @@ run on the clean 473M-token corpus (v5) scored **61.5% nested, the understanding
 missing, it is the mix.  A from-scratch run should carry stage B (the shapes + the
 role family + `reduce` + the named understanding families) with the shares above.
 
-## 4. The gates (and what each one is worth)
+## 4. The instrument that measures the mechanism (and the gap the owner's paste exposed)
+
+`nik/scripts/shape_probe.py` (44 items) measures the *shapes* the failing bench items
+named, on surfaces that are not in the training data, and it has **two blocks**: the
+first asks the shapes plainly, the second asks **the same shapes the way a person
+would** (no "kram" hints, no order given, the question as a condition).
+
+**The live m50 on it (measured on the owner's CPU box, 20 cores):**
+
+| | score |
+|---|---|
+| the whole probe | 4/44 |
+| the five named shapes | **2/27** (the additive rule inference 2/2, the geometric one 0/4) |
+| the weekday, **the benchmark's wording** | **1/1** |
+| the weekday, **paraphrased** | **0/3** |
+| the ladder's word items: **orig / para** | **2/10 vs 0/10** |
+
+**So the model's "skill" is a template.** The owner's paste - *"aaja sombar ho bhane
+parsi kun bar hunchha?"* answered with noise - is the same gap: the benchmark's own
+wording of that question ("aaja sombar ho. 8 din pachhi kun bar? (bar ko kram
+number: ...)") is answered correctly by the same model, because the benchmark *gives
+the day order* and asks for a number, while the paraphrase gives nothing. **The fix is
+not more templates: it is the same skill asked in many ways** - which is what
+`iter.py`'s weekday family does (five ways of asking, the order stated four ways) and
+what the story frames do (28 surfaces, the same five shapes).
+
+**And the data has to be *paraphrased*, not just re-surfaced** - which is why the
+frames and the weekday family carry several question forms each, and why the probe has
+a paraphrase block: a candidate that learns the templates and not the skills shows up
+in the paraphrase block, not in the aggregate.
+
+**The paired baseline of the live model (m50), measured on the same item set:**
+
+| metric | m50 (live) |
+|---|---|
+| NikBench (nested, 288 items) | 72.57% |
+| the understanding probes | 19/26 |
+| the math / the persona | 94% / 1.0 |
+| the stress (contaminated - not decision-grade) | 66/103 |
+| the traps | 9/12 |
+| the ladder L1/L2/L3/L4 | 12/12, 12/12, 12/12, 6/12 |
+| the shape probe | 2/27 |
+
+**The leak guard on the mix (Local-A's `leak_audit.py`):** the named families are built
+by `polish_mix.py`, not through `data/teacher/build.py`, so they do not pass its probe
+guard - the p11 mix had **132 exact `eval_understand` hits** (the shipped mixes have
+0) until `polish_mix.py` started running the same `_probe_guard()` on every family
+row.  The `stress` and `bench_hard` hits that remain are the identity and everyday-chat
+rows - they are in every mix we have shipped, which is why the stress and the chat
+deltas are not decision-grade.
+
+## 5. The gates (and what each one is worth)
 
 ```bash
 python nik/bench.py --model <bin> --n 16 --nested-items --out <dir>/bench-<tag>.json
@@ -101,7 +152,7 @@ held out by `nik/data/teacher/build.py`) and the bench items are held out by
 `nik/tests/test_frame_leak.py` and `nik/tests/test_roles_leak.py` - **those are the
 numbers to rank models on.**
 
-## 5. What the failing items said (read the scratchpads, do not guess)
+## 6. What the failing items said (read the scratchpads, do not guess)
 
 p8 was 76.0% on the nested bench and still lost 34 of the 288 items.  Every one of those
 items says in its scratchpad *which shape is missing* - the shapes are not "the model is
@@ -126,7 +177,7 @@ came out of this:
   `a / b = c` for exactness, so the box scene divides exactly (`62 = 12 x 5 + 2` is
   checked, `62 / 12 = 5` is rejected).
 
-## 6. The leak guards (do not remove them)
+## 7. The leak guards (do not remove them)
 
 * `nik/tests/test_frame_leak.py` - no generated row may contain the distinctive wording
   of a benchmark word template.
