@@ -33,22 +33,60 @@ sys.path.insert(0, os.path.join(ROOT, 'nik', 'scripts'))
 from chain_mix import eval_prompts, norm, persona_rows, row_prompt  # noqa: E402
 
 
+def shape_rows(n, seed):
+    """The *shapes* - the rows that pay the forgetting tax back.
+
+    Why (issue #9): the control arm shows that a plain second stage on a full mix
+    costs understanding (19/26 -> 16/26) and the bench (v4f -> v4m: 72.2 -> 68.8),
+    while the *named data shapes* (the money scene, the grounded-role family) pay it
+    back.  So a polish stage must be shape-heavy, not mix-heavy: these rows are the
+    money scene (frame.py), the grounded-role family (roles.py) and the iteration
+    chains (iter.py).
+    """
+    import frame
+    import roles
+    import iter as itgen
+    R = random.Random(seed)
+    rows = []
+    for _ in range(n):
+        pick = R.random()
+        if pick < 0.5:
+            d = roles.sample(R)
+        elif pick < 0.85:
+            d = frame.sample(R)
+        else:
+            d = itgen.make(R)
+        rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
+    return rows
+
+
 def chat_rows(n, seed):
-    """everyday-conversation rows (data/teacher/chat.py), leak-filtered."""
+    """everyday-conversation rows (data/teacher/chat.py), leak-filtered.
+
+    The generators have a *fixed* set of facts, so the variety has to come from the
+    augmentation (data/teacher/augment.py) - exactly what make_sft2.py does.  Without
+    the augmentation the distinct-prompt count is in the hundreds and asking for 50k
+    rows never terminates.
+    """
     import importlib.util
     spec = importlib.util.spec_from_file_location('chat_mod',
                                                   os.path.join(ROOT, 'nik', 'data', 'teacher', 'chat.py'))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
+    sys.path.insert(0, os.path.join(ROOT, 'nik', 'data', 'teacher'))
+    from augment import augment_example
     R = random.Random(seed)
     rows, seen = [], set()
-    while len(rows) < n:
-        d = mod.sample(R)
-        key = d['messages'][0]['content']
+    tries = 0
+    while len(rows) < n and tries < n * 10:
+        tries += 1
+        e = augment_example(mod.sample(R), R, 0.5)
+        key = e['messages'][0]['content']
         if key in seen:
             continue
         seen.add(key)
-        rows.append({'cat': d.get('kind', 'chat'), 'gold': None, 'messages': d['messages']})
+        rows.append({'cat': e.get('kind', 'chat'), 'gold': e.get('gold'),
+                     'messages': e['messages']})
     return rows
 
 
@@ -59,6 +97,10 @@ def main():
     ap.add_argument('--name', required=True)
     ap.add_argument('--persona', type=int, default=20000)
     ap.add_argument('--chat', type=int, default=30000)
+    ap.add_argument('--shapes', type=int, default=0,
+                    help='rows of the named data shapes (the money scene, the role '
+                         'family, the iteration chains) - a polish stage must be '
+                         'shape-heavy, or it pays the forgetting tax again')
     ap.add_argument('--share', type=float, default=0.25, help='the share of the base mix to keep')
     ap.add_argument('--seed', type=int, default=77)
     a = ap.parse_args()
@@ -80,8 +122,17 @@ def main():
     keep = [x for x in base if R.random() < a.share]
     extra = persona_rows(a.persona, a.seed + 5)
     extra = [r for r in extra if norm(row_prompt(r)) not in banned]
+    print(f'  persona rows: {len(extra)} of {a.persona} requested '
+          f'(the identity facts are a fixed set - the surface variety comes from the '
+          f'other generators)', flush=True)
     for r in extra:
         keep.append(json.dumps(r, ensure_ascii=False))
+    if a.shapes:
+        sh = shape_rows(a.shapes, a.seed + 13)
+        sh = [r for r in sh if norm(row_prompt(r)) not in banned]
+        for r in sh:
+            keep.append(json.dumps(r, ensure_ascii=False))
+        print(f'+ {len(sh)} shape rows', flush=True)
     cr = chat_rows(a.chat, a.seed + 9)
     cr = [r for r in cr if norm(row_prompt(r)) not in banned]
     for r in cr:

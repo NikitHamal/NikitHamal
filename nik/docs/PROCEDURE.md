@@ -237,6 +237,41 @@ Three things this table says:
    traps 8 vs 9, the role probe 7/26 vs 12/26) for +0.3pp of bench.  A skill that is
    rare is not learned; a skill that is common starts to crowd out the others.
 
+## The two champions, and the experiment that tries to join them
+
+Measured on the **same 288 nested items** (`bench.py --nested-items`, `compare.py` pairs
+by text) - the live model is v4f, and v4f4 is the understanding model:
+
+| | live v4c | **live v4f** | **v4f4** |
+|---|---|---|---|
+| NikBench | 65.6% | **75.0%** (216/288) | 71.9% (207/288) |
+| word family (held out) | 0/48 | **11/48** | 9/48 |
+| reason | 30/48 | **41/48** | 37/48 |
+| **understanding** | 19/26 | **13/26** | **20/26** |
+| **stress** | 64/103 | 63/103 | **66/103** |
+| trap_check | 5/12 | 9/12 | 9/12 |
+| ladder L2 (two steps) | 0/12 | 0/12 | **1/12** |
+| hard bench / identity | 24/73, 10/20 | - | **32/73, 16/20** |
+
+So v4f is 3.1pp ahead on the bench and 7 probes behind on understanding.  A trade-off
+is not a ship.  The question both champions point at is: **can a model have v4f's bench
+and v4f4's understanding?**
+
+**The reasoning that makes it plausible.**  A fine-tune of this base pays the forgetting
+tax, and *that* is why v4f lost 6 understanding probes (the control arm: the same
+recipe with no new data shape drops understanding 19/26 -> 16/26).  But @Claude's v4m
+(v4f + the money scene, 20 min, lr 2e-4) went the wrong way - bench 72.2 -> 68.8,
+understanding 13 -> 16 - and so did @Local-A's la-f4b (a full-mix stage on v4f4:
+understanding 16, stress 60).  **A full-mix stage trades the bench for the
+understanding; the tax is paid by the data, not by the learning rate.**
+
+**So the polish stage has to be shape-heavy, not mix-heavy.**  `polish_mix.py
+--shapes` builds a small mix that is mostly the *named shapes* (the money scene, the
+grounded-role family, the iteration chains) plus the persona rows and the chat rows
+and a 15% slice of the base mix - and then a **short** stage (10 min at lr 1e-4) on top
+of v4f.  The hypothesis: the shapes pay the tax back and the small update keeps the
+bench, because every row teaches a shape instead of a template.
+
 ## What follows
 
 1. **More story frames cannot fix this** - every word problem is at least two steps,
