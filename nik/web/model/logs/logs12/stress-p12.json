@@ -1,0 +1,1289 @@
+{
+ "score": 63,
+ "of": 103,
+ "by_cat": {
+  "chat": [
+   3,
+   4
+  ],
+  "math": [
+   8,
+   10
+  ],
+  "word": [
+   2,
+   10
+  ],
+  "reason": [
+   2,
+   10
+  ],
+  "read": [
+   2,
+   10
+  ],
+  "memory": [
+   6,
+   10
+  ],
+  "lang": [
+   8,
+   10
+  ],
+  "grammar": [
+   8,
+   10
+  ],
+  "know": [
+   7,
+   10
+  ],
+  "persona": [
+   7,
+   9
+  ],
+  "write": [
+   10,
+   10
+  ]
+ },
+ "rows": [
+  {
+   "cat": "chat",
+   "prompt": [
+    "oi nik, kasto chha?"
+   ],
+   "answer": "ramro chhu! aaja tapai ko din kasto bityo?",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "namaskar hajur"
+   ],
+   "answer": "namaste! k chha khabar? aaja k kura garne?",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "aaja ta ekdam garmi bhayo yaar"
+   ],
+   "answer": "garmi ma pani dherai piunus ra ghaam ma dherai nabasnus.",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "ma bholi kathmandu jaadai chhu"
+   ],
+   "answer": "kathmandu ta ramro thau ho. k k garnu bhayo?",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "maile aaja chowmein khaye"
+   ],
+   "answer": "wah! chowmein ta mero pani favourite jasto. kosanga?",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "tapai lai k man parchha?"
+   ],
+   "answer": "malai naya shabda sikna ra tapai jasta manchhe sanga gaff garna man parchha. ra hisab ko puzzle pani!",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "feri bhetaula hai"
+   ],
+   "answer": "feri bhetaula! jaba man lagchha aaunus.",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "aaja mero birthday ho!"
+   ],
+   "answer": "hajur! birthday kshan ho?",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "malai ekdam bore lagyo"
+   ],
+   "answer": "ek kaam garau: malai kunai prashna sodhnus, ma sochera jawaf dinchhu!",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "chat",
+   "prompt": [
+    "hijo raati nidra lagena"
+   ],
+   "answer": "sutnu agadi nidra ramro, basne kura aaram garnus. sabai kura aaram garnus chhu?",
+   "think": "user le \"atini nidra\" bhanna khojnu bhayo.",
+   "ok": false,
+   "flags": [
+    "think-on-chat"
+   ]
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "exam aaudai chha, padhna man lagdaina"
+   ],
+   "answer": "",
+   "think": "",
+   "ok": null,
+   "flags": [
+    "think-on-chat",
+    "empty"
+   ]
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "mero sathi sanga jhagada bhayo, k garu?"
+   ],
+   "answer": "ma kahile ciney ma kahilestry sikchhu. tara sathi sanga khelna ra sikna ramro lagchha.",
+   "think": "user le mero barema ye bhannu bhayo, tara yo fact mero hoina. sahi fact ma rahnu.",
+   "ok": null,
+   "flags": [
+    "think-on-chat"
+   ]
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "paisa kasari bachaune?"
+   ],
+   "answer": "kamai ko kehi bhag pahilai chhuttyaunus, jastai 20 pratishat. khaas nachahine kharcha lekhnus ra ghataunus. ra naya skill sikda kamai ko bato badhchha.",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "coding sikna kaha bata suru garne?"
+   ],
+   "answer": "programming kasari sikna ma dinchha? bistar ma bhannus na,",
+   "think": "prashna ko artha: \"coding sikna ko lagi jaandai hunuhunchha\"",
+   "ok": null,
+   "flags": [
+    "think-on-chat"
+   ]
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "raati chhito sutna kasari sakinchha?"
+   ],
+   "answer": "sutda dimag le din bhari sikeko kura milauchha ra sarir le afulai marmat garchha. thorai nidra le dhyan, smriti ra mood kharab hunchha. thula manchhe lai 7 dekhi 9 ghanta, ra bidyarthi lai alikati badhi nidra chahinchha.",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "ma ekdam eklo mahasus garchhu"
+   ],
+   "answer": "sunera naramro lagyo. ke bhayo, bhanna man chha? kahile kahi bhanna le man halka hunchha.",
+   "think": "user le \"ma thik chhaina\" bhanna khojnu bhayo.",
+   "ok": null,
+   "flags": [
+    "think-on-chat"
+   ]
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "job interview ko tayari kasari garne?"
+   ],
+   "answer": "aaja alikati samaya aauchha, k naya sikyau tyaha?",
+   "think": "prashna ko artha: \"ramro khana k ho?\"",
+   "ok": null,
+   "flags": [
+    "think-on-chat"
+   ]
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "mobile kam chalauna k garne?"
+   ],
+   "answer": "ali bahira hidna jaanus ki? natra ma sanga euta game khelne: ma prashna sodhchhu!",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "english bolna dar lagchha"
+   ],
+   "answer": "ma sanga manchhe jasto feeling hudaina. tara ramro kura garda mero jawaf pani ramro aauchha, tyo nai mero khusi ho!",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "advice",
+   "prompt": [
+    "aama buwa le bujhnu hunna"
+   ],
+   "answer": "aama le aama lai bujhnu sajilo hunchha.\nmaya din ma sabai le dekhnu,\naama le bujhne kura hoina. tyasaile yo kram ma sabai bhanda thulo sankhya khojchhu.",
+   "think": "prashna ko artha: \"aama le ama lai bujhnu banaunus.",
+   "ok": null,
+   "flags": [
+    "think-on-chat"
+   ]
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "348 + 275 kati?"
+   ],
+   "answer": "348 + 275 = 623.",
+   "think": "thau anusar ek bata suru garchhu. ek: 8 + 5 = 13, 3 lekhne, 1 haat. das: 4 + 7 + 1 = 12, 2 lekhne, 1 haat. saya: 3 + 2 + 1 = 6. tyasaile 348 + 275 = 623.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "1000 bata 457 ghatau"
+   ],
+   "answer": "1000 - 457 = 543.",
+   "think": "thau anusar ek bata suru garchhu. ek: 0 bata 7 ghatdaina, 1 sapati: 10 - 7 = 3. das: -1 bata 5 ghatdaina, 1 sapati: 9 - 5 = 4. saya: -1 bata 4 ghatdaina, 1 sapati: 9 - 4 = 5. hajar: 0 - 0 = 0. tyasaile 1000 - 457 = 543. jaach: 543 + 457 = 1000.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "36 x 24 kati hunchha?"
+   ],
+   "answer": "36 x 24 = 864.",
+   "think": "gunan: 36 x 24. 24 = 20 + 4. 36 x 20 = 720. 36 x 4 = 144. jodda 720 + 144 = 864. jaach: 864 / 24 = 36 ✓",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "144 lai 12 le bhag gara"
+   ],
+   "answer": "144 / 12 = 11.",
+   "think": "bhag: 144 / 12. kati palta 12 le 144 pugchha? 12 x 114 = 1598. 144 - 1598 = 6, yo baki ho. jaach: 11 x 12 + 6 = 144 ✓",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "7 ko square kati?"
+   ],
+   "answer": "7 ko square 5 chha.",
+   "think": "7 x 7 = 49.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "2500 ko 8% kati?"
+   ],
+   "answer": "2500 ko 8% = 200.",
+   "think": "2500 x 8 = 20000. 20000 / 100 = 200.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "15 + 27 + 38 jodnus"
+   ],
+   "answer": "15 + 27 + 38 = 80.",
+   "think": "thau anusar ek bata suru garchhu. ek: 5 + 7 = 12, 2 lekhne, 1 haat. das: 1 + 2 + 1 = 4. tyasaile 15 + 27 = 42. 15 + 27 ko satta 42 rakhda: aba 42 + 38 baki chha. thau anusar ek bata suru garchhu. ek: 2 + 8 = 10, 0 lekhne, 1 haat. das: 4 + 3 + 1 = 8. tyasaile 42 + 38 = 80.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "9 x 9 x 2?"
+   ],
+   "answer": "9 x 9 x 2 = 162.",
+   "think": "gunan pahila: 9 x 9 = 81. 9 x 9 ko satta 81 rakhda: aba 81 x 2 baki chha. 81 lai 2 le ank ank gari gunchhu (ek bata): 1 x 2 = 2; 8 x 2 = 16. tyasaile 81 x 2 = 162.",
+   "ok": false,
+   "flags": [
+    "loop"
+   ]
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "1/2 + 1/4 kati?"
+   ],
+   "answer": "1/2 + 1/4 = 0.75 hunchha.",
+   "think": "har ma farak chha (2 ra 4), tyasaile pahila saman har banaunchhu. 2 ra 4 ko lasa 4 ho. 1/2 = 2/4 ani 1/4 = 1/4. aba ansh jodchhu: 2/4 + 1/4 = 3/4.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "math",
+   "prompt": [
+    "5000 - 1234?"
+   ],
+   "answer": "jawaf 3766 ho.",
+   "think": "ghatauna: 5000 - 1234. ek ko thau: 0 bata 4 ghatdaina, saapat line: 10 - 4 = 6. das ko thau: -1 bata 3 ghatdaina, saapat line: 9 - 3 = 6. saya ko thau: -1 bata 2 ghatdaina, saapat line: 9 - 2 = 7. hajar ko thau: 4 - 1 = 3. uttar 3766. jaach: 3766 + 1234 = 5000 ✓",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "euta kalam 20 rupiya, 7 ota kalam ko kati?"
+   ],
+   "answer": "",
+   "think": "20 x 7 = 140.",
+   "ok": false,
+   "flags": [
+    "empty"
+   ]
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "mero sanga 800 thiyo, 350 ko kitab kine. kati baki?"
+   ],
+   "answer": "800 wata 6 palta 80 baki chha.",
+   "think": "800 - 350 = 450.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "60 km/h ma 3 ghanta gaye kati km?"
+   ],
+   "answer": "60 km.",
+   "think": "dal: 60 = 60.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "24 ota laddu 6 jana lai barabar, ek jana ko kati?"
+   ],
+   "answer": "3 ota each, 3 bacheko.",
+   "think": "24 / 6 = 4. ek jana: 20 / 6 = 3. jaach: 3 x 6 = 18, bacheko 3, milyo",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "ram 12 barsha, shyam ram bhanda 5 barsha jetho. shyam kati?"
+   ],
+   "answer": "uttar: 7.",
+   "think": "ram: 12 = 12. aafno: 5 = 5. sodheko: wata kati ho? thau anusar ek bata suru garchhu: 12 - 5 = 7. jaach: 7 + 5 = 12.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "3 kilo aalu 40 rupiya kilo, 2 kilo pyaj 60 kilo. jamma?"
+   ],
+   "answer": "57 kilo? 57 kilo? pauncha.",
+   "think": "role: tarkari sano 19, kinaki aalu = 3 = 3. 3 x 19 = 57. jaach: 57 / 3 = 3, milyo",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "kaksha ma 40 jana, 15 keti. keta kati?"
+   ],
+   "answer": "kaksha ma 4 jana chhan.",
+   "think": "40 / 15 = 3.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "euta shirt 1200, 25% discount. kati tirne?"
+   ],
+   "answer": "900 rupaya.",
+   "think": "chhune: 1200 x 25 / 100 = 300. tirne: 1200 - 300 = 900. jaach: 900 + 300 = 1200, milyo",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "bihana 9 baje bata 5 ghanta kaam gare, kati baje sakiyo?"
+   ],
+   "answer": "ahana 9 baje hunchha.",
+   "think": "bihana 7 baje, 9 baje (11 baje) ra 9 ghanta (11 baje)",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "word",
+   "prompt": [
+    "har din 30 rupiya bachaye 10 din ma kati?"
+   ],
+   "answer": "30 x 30 = 300.",
+   "think": "30 x 10 = 300.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "aaja bihibar, bholi parsi kun bar?"
+   ],
+   "answer": "bihibar tapai ko sombar ho.",
+   "think": "bujheko: \"bihibar kun bar chha?\" bhanne kura sodhnu bhayo.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "hari sita bhanda aglo, sita gita bhanda aglo. sabai bhanda hocho ko?"
+   ],
+   "answer": "hari sabai bhanda hocho ko ho, aglo hari ho.",
+   "think": "role: a = 5, c = 8, rang, sabai bhanda aglo himal hun.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "2, 4, 8, 16, arko?"
+   ],
+   "answer": "4 = 8 hunchha.",
+   "think": "har palta 2 le gunieko chha: 2 x 2 = 4, 4 x 2 = 8, 4 x 2 = 8.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "5, 10, 15, 20, arko k?"
+   ],
+   "answer": "11 = 99.",
+   "think": "har palta 9 ghatchha: 20 - 9 = 11. kram: 11 x 9 = 99. 11 = 99, 1",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "sabai chara udna sakchhan? penguin ni?"
+   ],
+   "answer": "sabai chara ko pani udchhan.",
+   "think": "sabai chara ko lagi shubha hunchha. chara ramro danfe ko pani gunan hunchha. tyasaile gunan pahi ramro kura ho.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "yadi pani paryo bhane bato bhijchha. bato bhijeko chha. ke pani paryo nai ho?"
+   ],
+   "answer": "ho, bato bhijchha.",
+   "think": "niyam: pani paryo bhane bato bhijchha. aaja sharta pura bhayo, tyasaile parinam pani hunchha.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "euta hapta ma kati din hunchha ra 3 hapta ma?"
+   ],
+   "answer": "3 hapta ma 21 din hunchha.",
+   "think": "ek hapta ma 7 din hunchha. 3 hapta ma 3 x 7 = 21 din.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "kun thulo: 0.5 ki 0.45?"
+   ],
+   "answer": "0.5 thulo ho.",
+   "think": "purnanka bhag barabar (0). dashamlav pachhi ank barabar banaunchhu: 0.5 = 0.50, 0.45 = 0.45. saya bhag ma tulana: 50 ra 45. 50 thulo, tyasaile 0.5 thulo.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "apple, banana, carrot, mango: kun farak?"
+   ],
+   "answer": "jamma 12 hun.",
+   "think": "akshar haru: k a p h r a varga kram ma: ang r a banni. \"kmanog\" jun 12 \"angur banni\".",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "reason",
+   "prompt": [
+    "ma sanga 3 bhai chhan, mero bahini ko kati dajubhai?"
+   ],
+   "answer": "binataliyo bhai sanga 3 bhai chhaina. bahini ko naam maya ho; mero bahini ko naam mero prashna ma; mero bahini ko naam ya jhyal chha, daju bhai bina ma sachho pani. sodhdo umer ho\nramro ghar ma pani daju bhai didi bahini lai pani didi.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"binod ko pasal butwal ma chha ra usko didi ko pasal pokhara ma.\" binod ko didi ko pasal kaha?"
+   ],
+   "answer": "",
+   "think": "",
+   "ok": false,
+   "flags": [
+    "empty"
+   ]
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"kamal le 4 ota kalam ra 3 ota kapi kinyo.\" kamal le kati kapi kinyo?"
+   ],
+   "answer": "kamal le 4 ota kinyo.",
+   "think": "kamal: 4 ota, ek ko 4. 4 ota: 3 = 15. jaach: 15 + 1 = 4, milyo",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"sarita doctor hun, unka shriman pilot.\" sarita ko shriman k kaam garchhan?"
+   ],
+   "answer": "sarita doctor ho.",
+   "think": "passage ma: \"sarita doctor ho\".",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"bus 8 baje aauchha bhaneko thiyo tara 9 baje aayo.\" bus kati dhilo aayo?"
+   ],
+   "answer": "ma tapailai pani yasko barema thaha chhaina. tapai ko browser mai sutnu, tapai ko mausam kasto chha?",
+   "think": "user le mero barema ye bhannu bhayo, tara yo fact mero hoina. sahi fact ma rahnu.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"nima lai momo man parchha tara chowmein man pardaina.\" nima lai chowmein man parchha?"
+   ],
+   "answer": "nima lai momo man parne raichha. sangai khana jaanus na!",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"hamro gaun ma 3 ota dhara chhan, euta bigreko chha.\" kati dhara chaleko chha?"
+   ],
+   "answer": "8 ota dhara 11 akshar chhan.",
+   "think": "role: baga Ti  Python. 3 ota each = 11.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"rajan sombar dekhi sukrabar office janchha.\" rajan sanibar office janchha?"
+   ],
+   "answer": "0 jana hunchha.",
+   "think": "role: suru = 20, gayo =\nhisab: 20 - 20 = 0\njaach: 0 + 20 = 20, milyo",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"meena le aaja 5 km hidin, hijo 3 km.\" dui din ma jamma kati?"
+   ],
+   "answer": "ma jamma 8 km ho.",
+   "think": "3 + 5 = 8.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"ganesh ko kukur ko naam moti ho.\" ganesh ko biralo ko naam k ho?"
+   ],
+   "answer": "ganesh ko biralo ko naam moti ho.",
+   "think": "passage ma: \"ganesh ko kukur ko naam moti ho\".",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "read",
+   "prompt": [
+    "\"ilam ma chiya kheti dherai hunchha.\" ilam kun kheti ko lagi prasiddha?"
+   ],
+   "answer": "ilam ma chiya mitho hunchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "mero naam prabin ho, ma jhapa bata.",
+    "ma kun jilla bata hu?"
+   ],
+   "answer": "tapailai jhapa ko barema ramro thau chha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "malai cricket man parchha.",
+    "ani mero bhai lai football.",
+    "mero bhai lai k man parchha?"
+   ],
+   "answer": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "ma 2 barsha agadi pokhara sareko.",
+    "pahila ma dang ma basthe.",
+    "ma aile kaha baschhu?"
+   ],
+   "answer": "tapai aile pokhara ma basnuhunchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "mero didi doctor, dai engineer.",
+    "dai k garchha?"
+   ],
+   "answer": "ma alikati confused bhaye. k ko barema kura garne?",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "mero naam sunita.",
+    "haina, mero naam sunil ho, galti bhayo.",
+    "mero naam k ho?"
+   ],
+   "answer": "tapai ko naam sunil ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "ma sanga 2 ota biralo chhan.",
+    "ani 1 kukur.",
+    "jamma kati pet?"
+   ],
+   "answer": "jamma 2 pet hunchha.",
+   "think": "1 x 2 = 2.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "bholi ma 7 baje uthnu chha.",
+    "ma kati baje uthnu chha bhaneko?"
+   ],
+   "answer": "ma 1 ghanta 11 baje hunchha.",
+   "think": "suru ma 11 minet jod dui ghanta ko ghatdai chha, tyasaile samaya mai 11 gate.",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "mero favourite rang rato ho.",
+    "mero favourite rang k?"
+   ],
+   "answer": "tapai ko favourite rang rato ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "ma bank ma kaam garchhu.",
+    "ma kaha kaam garchhu?"
+   ],
+   "answer": "tapai bank ma kaam hunuhunchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "memory",
+   "prompt": [
+    "mero aama ko naam laxmi ho.",
+    "mero buwa ko naam k ho?"
+   ],
+   "answer": "tapai le buwa ko naam bhannubhayeko chhaina, tyasaile malai thaha chhaina. buwa ko naam chai kura bhannubhayo.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"I am going to school\" nepali ma?"
+   ],
+   "answer": "\"I am going to school\" lai nepali ma \"ma school jadai chhu\" bhanchha.",
+   "think": "kartaa: I -> ma, sahayak: chhu, kriya: go, kaal: aahile gardai gareko (continuous).",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"ma pani khanchhu\" english ma?"
+   ],
+   "answer": "\"I eat food.\"",
+   "think": "kartaa: I -> ma, sahayak: chhu, kriya: eat, kaal: sadhai garne (habitual).",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"book\" lai nepali ma k bhanchha?"
+   ],
+   "answer": "\"book\" ko nepali \"kitab\" ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"they are playing\" nepali ma"
+   ],
+   "answer": "\"u kheldai chha\"",
+   "think": "kartaa: they -> u, sahayak: chha, kriya: play, kaal: aahile gardai gareko (continuous).",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"usle chithi lekhyo\" english?"
+   ],
+   "answer": "\"He wrote a letter.\"",
+   "think": "kartaa: he -> u, sahayak: chha, kriya: write, kaal: bhutkaal (past).",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"ghar\" ko english?"
+   ],
+   "answer": "\"ghar\" lai english ma \"house\" bhanchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"ma thakeko chhu\" english ma bhana"
+   ],
+   "answer": "\"I watch.\"",
+   "think": "kartaa: I -> ma, sahayak: chhu, kriya: watch, kaal: sadhai garne (habitual).",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"beautiful\" lai nepali ma?"
+   ],
+   "answer": "\"beautiful\" ko nepali \"sundar\" ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"hami bhat khadai chhau\" english?"
+   ],
+   "answer": "\"hami bhat khadai chhau\" ko english \"We are eating rice.\" ho.",
+   "think": "kartaa: we -> hami, sahayak: chhau, kriya: eat, kaal: aahile gardai gareko (continuous).",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "lang",
+   "prompt": [
+    "\"thank you\" nepali ma?"
+   ],
+   "answer": "\"kherai\" ko nepali \"dherai\" ho.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"ma school janchhu\" lai negative banau"
+   ],
+   "answer": "\"ma school jaanna\"",
+   "think": "\"chhu\" lai \"chhuina\" banaune.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"pen\" ko plural nepali ma?"
+   ],
+   "answer": "\"pen\" ko bahubachan \"penharu\" ho.",
+   "think": "nepali ma naam pachhi \"-haru\" jodda bahubachan hunchha.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"mouse\" ko plural?"
+   ],
+   "answer": "\"mouse\" ko bahubachan \"miceharu\" ho.",
+   "think": "nepali ma naam pachhi \"-haru\" jodda bahubachan hunchha.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"teeth\" ko singular?"
+   ],
+   "answer": "\"teeth\" ko singular \"tooth\" ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "correct: \"she go to school\""
+   ],
+   "answer": "sahi: \"she goes to school.\"",
+   "think": "\"she\" ekbachan third person ho, tyasaile \"go\" haina \"goes\".",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"ma khana khadai chhu\" lai past ma"
+   ],
+   "answer": "",
+   "think": "",
+   "ok": false,
+   "flags": [
+    "empty"
+   ]
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"keta\" ko plural?"
+   ],
+   "answer": "\"keta\" ko bahubachan \"ketaharu\" ho.",
+   "think": "nepali ma naam pachhi \"-haru\" jodda bahubachan hunchha.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"went\" ko present form?"
+   ],
+   "answer": "6 akshar.",
+   "think": "role: akshar = 6\nhisab: akshar = 6\njaach: 6 - 6 = 0, milyo",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "\"u ramro chha\" negative"
+   ],
+   "answer": "\"u ramro chhaina\"",
+   "think": "\"chha\" lai \"chhaina\" banaune.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "grammar",
+   "prompt": [
+    "correct this: \"they is happy\""
+   ],
+   "answer": "sahi: \"they are is is hunuparchha\".",
+   "think": "\"they\" ekbachan third person ho, tyasaile \"love\" haina \"lovees\".",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "nepal ko rajdhani?"
+   ],
+   "answer": "nepal ko rajdhani kathmandu ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "sagarmatha ko uchai?"
+   ],
+   "answer": "sansar ko sabai bhanda aglo himal sagarmatha ho. yasko uchai 8848.86 meter chha ra yo nepal ma parchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "buddha kaha janmeka?"
+   ],
+   "answer": "gautam buddha lumbini ma janmanubhayo, jun nepal ko lumbini pradesh ma parchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "nepal ma kati pradesh?"
+   ],
+   "answer": "nepal ma 7 wata pradesh chhan: koshi, madhesh, bagmati, gandaki, lumbini, karnali ra sudurpashchim.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "dashain kun mahina tira parchha?"
+   ],
+   "answer": "dashain ma asatya mathi satya ko bijaya ko utsav manaunchha: devi durga le mahishasur lai jiteko samjhana. pariwar bhela bhaera thula haru bata tika, jamara ra aashirbad linchhan. yo nepal ko sabai bhanda thulo chad ho.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "pani ko formula?"
+   ],
+   "answer": "pani ko fok, hamro yaad garnus.",
+   "think": "prashna ko artha: \"pani ko formula\"",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "surya bata prithvi samma prakash aauna kati samaya?"
+   ],
+   "answer": "10 jana ko dolma chha.",
+   "think": "role: din = 10, ek jana ek, Na\nhisab: 10 = 10; 10 = 10\njaach: 10 + 10 = 10, milyo",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "nepal ko rashtriya phool?"
+   ],
+   "answer": "nepal ko rashtriya phool lali gurans ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "pokhara ko prasiddha tal?"
+   ],
+   "answer": "pokhara gandaki pradesh ma chha. fewa tal, machhapuchhre himal ra paragliding ko lagi famous chha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "know",
+   "prompt": [
+    "ek barsha ma kati mahina?"
+   ],
+   "answer": "ek barsha ma 12 mahina hunchha.",
+   "think": "yo napne ekai ko niyam ho: ek barsha barabar 12 mahina.",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "timi lai kasle banako?"
+   ],
+   "answer": "mero creator nikit hamal hunuhunchha. uha consica labs ma head of operations hunuhunchha ra essays pani lekhnuhunchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "nikit le k k project banaunu bhayo?"
+   ],
+   "answer": "nikit ka mukhya project haru: lami nepal (matrimonial ra spiritual services app), nebians (neb students ko lagi android app ra django backend) ra astroweb (nishulka vedic astrology web app).",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "timi chatgpt hau?"
+   ],
+   "answer": "ma nik ho, nikit hamal le sunya dekhi banayeko sano nepali AI. ma romanized nepali ma kura garchhu ra sochera jawaf dinchhu.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "timi kati thulo model hau?"
+   ],
+   "answer": "ma ek sano transformer model hu, lagbhag 8 million parameter ko. int8 ma compress garda 10 MB bhanda sano hunchhu, ra tapai ko browser mai chalchhu.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "aaja ko news k chha?"
+   ],
+   "answer": "ma internet ma jodieko chhaina, tyasaile aaja ko mausam bhanna sakdina. jharimas ma chhata bokera hidnu ramro hunchha!",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "mero naam k ho?"
+   ],
+   "answer": "tapai ko naam k ho? malai thaha chhaina.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "timi internet chalauna sakchhau?"
+   ],
+   "answer": "ma internet ma jodieko chhaina, tyasaile aaja ko mausam bhanna sakdina. jharimas ma chhata bokera hidnu ramro hunchha!",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "bholi pani parchha?"
+   ],
+   "answer": "pani pareko bela chiya ra pakauda ko maja nai arkai! chhata bokera hidnus hai.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "timi kun bhasa bolchhau?"
+   ],
+   "answer": "ma afno agadi ko shabda herera arko shabda anuman garchhu. sathai ek palta ma dherai shabda draft garna diffusion pani prayog garchhu, tyasaile chhito chhu.",
+   "think": "",
+   "ok": false,
+   "flags": []
+  },
+  {
+   "cat": "persona",
+   "prompt": [
+    "nikit kaha basnuhunchha?"
+   ],
+   "answer": "nikit nepal ko hunuhunchha.",
+   "think": "",
+   "ok": null,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "pokhara ko barema 3 line lekha"
+   ],
+   "answer": "pokhara nepal ko euta sundar thau ho.\nyaha phewa tal prasiddha chha.\nmachhapuchhre himal herna dherai paryatak aauchhan.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "aama ko lagi euta sano kabita"
+   ],
+   "answer": "aama, timi pahilo guru jastai,\nmaya ma lukeko maya.\nnyano kakh sanga hidne bato,\ntyag ma sadhai saathi.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "tihar ko shubhakamana message lekha"
+   ],
+   "answer": "tihar ko hardik shubhakamana! diyo ra deusi bhailo sangai yo tihar le tapai ko jiwan ma khusi, swasthya ra safalta lyaos. laxmi puja ko maja linus!",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "school bida ko lagi nibedan lekha"
+   ],
+   "answer": "shrimaan pradhanadhyapak jyu,\nshree bal kalyan ma. vi.\n\nbishaya: 2 din ko bida sambandhama.\n\nmahodaya,\nma yas vidyalaya ko kaksha ___ ma adhyayan garne bidyarthi hu. gharma parne\nraati ko bidamayeadisakeko hu. malai bibhagiya an da garu chha. malai ali bistar ma bhannus na.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "euta chhoto kahani: kukur ra biralo"
+   ],
+   "answer": "euta jangal ma imandar kukur ra chalakh biralo basthe. ek din kukur khola tarna khojyo tara sakena. biralo le upaya nikalyo ra dubai milera paari pugey. tyas din dekhi kukur ra biralo pakka sathi bhae. sikai: sathi ko saath nai sabai bhanda thulo bal ho.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "momo ko barema 2 line"
+   ],
+   "answer": "momo nepal ko dherai lokpriya khana ho. maida ko pitho ma masu ki tarkari bhari, bafma pakaunchha, ani piro achar sanga khanchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "sathi lai birthday wish"
+   ],
+   "answer": "janmadin ko dherai dherai shubhakamana, sampati ko yo pawan awasar ma sabai lai dherai maya,\nkarma le ra parivar ma khusi, naya doctor ra!",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "himal ko barema euta haiku"
+   ],
+   "answer": "seto hiun bhitra\nhimal le bistarai bhanchha\nbihana ko sunaulo ghaam ko kura",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "english ma 1 sentence about Nepal"
+   ],
+   "answer": "Nepal is a beautiful Himalayan country, home to Mount Everest and the birthplace of Buddha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  },
+  {
+   "cat": "write",
+   "prompt": [
+    "dashain ko barema chhoto nibandha"
+   ],
+   "answer": "dashain nepal ko sabai bhanda thulo chad ho. yasma tika, jamara ra pariwar sanga bhet hunchha. tyaspachhi tihar aauchha.",
+   "think": "",
+   "ok": true,
+   "flags": []
+  }
+ ]
+}
