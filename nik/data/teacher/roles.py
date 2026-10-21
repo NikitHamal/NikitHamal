@@ -509,9 +509,64 @@ def scene_yesno(R):
                          {'role': 'nik', 'content': ans, 'think': think}]}
 
 
+
+def scene_nested_expr(R):
+    """'a - (b x c) = ?' - the shape the model cannot expand (ladder L2).
+
+    The ladder's own surface is HELD OUT: this scene uses different surfaces (the
+    asterisk form, the Nepali form, the 'bata ... ghatao' form) so the ladder keeps
+    measuring the skill instead of a template.  The trace does what L3 does well
+    (use a given intermediate) but makes the model *produce* it first:
+
+        role: a = 39, b = 8, c = 2
+        hisab: 8 x 2 = 16; 39 - 16 = 23
+        jaach: 23 + 16 = 39, milyo
+    """
+    a = _q(R, 20, 99)
+    b = _q(R, 2, 9)
+    c = _q(R, 2, 9)
+    inter = b * c
+    total = a - inter
+    shape = R.randrange(4)
+    if shape == 0:
+        user = f'{a} - {b}*{c} = ?'
+    elif shape == 1:
+        user = f'{a} - ({b}*{c}) = ?'
+    elif shape == 2:
+        user = f'{a} bata {b} x {c} ghatau = ?'
+    else:
+        user = f'{a} - ({b} guneko {c}) = ?'
+    roles = [('a', a), ('b', b), ('c', c)]
+    steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
+    ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
+    return _row('roles-nested', str(total), user, roles, steps, ans, f'{total} + {inter} = {a}')
+
+
+def scene_chain_expr(R):
+    """'b x c = ? ani a - inter = ?' - the chain form (ladder L4), different surfaces."""
+    a = _q(R, 20, 99)
+    b = _q(R, 2, 9)
+    c = _q(R, 2, 9)
+    inter = b * c
+    total = a - inter
+    shape = R.randrange(4)
+    if shape == 0:
+        user = f'{b} x {c} garchu, ani {a} - {inter} = ?'
+    elif shape == 1:
+        user = f'pehla {b} x {c}, ani {a} - tyo = ?'
+    elif shape == 2:
+        user = f'{b} x {c} kati ho? ani {a} - {inter} = ?'
+    else:
+        user = f'{b} x {c} garna, paachi {a} - {inter} = ?'
+    roles = [('a', a), ('b', b), ('c', c)]
+    steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
+    ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
+    return _row('roles-chain', str(total), user, roles, steps, ans, f'{total} + {inter} = {a}')
+
+
 SCENES = [scene_buy_then_left, scene_two_prices, scene_give_away, scene_average, scene_percent,
           scene_speed, scene_monthly, scene_away, scene_english, scene_divide, scene_which_number,
-          scene_quoted_read, scene_yesno]
+          scene_quoted_read, scene_yesno, scene_nested_expr, scene_chain_expr]
 
 
 def _eval_expr(expr: str) -> int:
