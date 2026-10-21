@@ -218,12 +218,12 @@ def render(spec, R):
     if ask == 'items_final':
         q = [f'antya ma {name} sanga kati wata {item} chha?',
              f'aba jamma kati {item} bhayo?', f'kati wata {item} baki chha?'][qv]
-        answer = f'antya ma {gold} wata {item} hunchha.'
+        answer = [f'antya ma {name} sanga {gold} wata {item} chha.', f'aba jamma {gold} wata {item} bhayo.', f'{gold} wata {item} baki chha.'][qv]
         unit_text = f'wata {item}'
     else:
         q = [f'antya ma {name} sanga kati rupiya chha?', f'aba kati rupiya baki chha?',
              f'usko sanga kati paisa baki bhayo?'][qv]
-        answer = f'antya ma {gold} rupiya hunchha.'
+        answer = [f'antya ma {name} sanga {gold} rupiya chha.', f'aba {gold} rupiya baki chha.', f'usko sanga {gold} rupiya baki bhayo.'][qv]
         unit_text = 'rupiya'
     ledger = (f'dieko: ' + ' '.join(f'[{k}={v}]' for k, v in bindings.items()) + '\n'
               f'sodheko: {ask}\n'

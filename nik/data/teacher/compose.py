@@ -116,7 +116,17 @@ def problem(R, n_events=None):
         gold, unit = st['items'], f'wata {I[0]}'
     question = ' '.join(sents) + ' ' + q
     think = 'ek ek wakya padhchhu. ' + '. '.join(f'({i + 1}) {s}' for i, s in enumerate(steps)) + f'. sodheko: {unit}. uttar {gold}.'
-    a = (f'antya ma {gold} {unit} hunchha.' if not en else f'At the end there are {gold} ' + ('rupees.' if ask_money else f'{I[1]}.'))
+    # the answer sentence follows the question's own words (one fixed template = a recited reply; v4f leaked
+    # "antya ma ... hunchha" into plain questions)
+    if en:
+        a = f'At the end there are {gold} ' + ('rupees.' if ask_money else f'{I[1]}.')
+    elif 'baki' in q:
+        a = pick(R, [f'{gold} {unit} baki chha.', f'aba {gold} {unit} baki chha.', f'baki {gold} {unit}.'])
+    elif 'jamma' in q:
+        a = pick(R, [f'jamma {gold} {unit} bhayo.', f'aba jamma {gold} {unit} chha.', f'jamma: {gold} {unit}.'])
+    else:
+        who = 'usko' if 'usko' in q else n
+        a = pick(R, [f'antya ma {who} sanga {gold} {unit} chha.', f'{who} sanga aba {gold} {unit} chha.', f'jawaf {gold} {unit} ho.'])
     return ex(question, think, a, gold, 'compose')
 
 
