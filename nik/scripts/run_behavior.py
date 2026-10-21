@@ -38,18 +38,19 @@ def main():
     if not os.path.exists(os.path.join(ROOT, 'data', 'pre_train.bin')):
         print('WARNING: data/pre_train.bin missing; --mix must be 0 or the run will fail', flush=True)
 
+    def bin_to_init(src, dst):
+        sys.path.insert(0, os.path.join(ROOT, 'nik'))
+        from export import load_exported
+        import torch
+        raw = open(os.path.join(ROOT, src), 'rb').read()
+        hl = struct.unpack('<I', raw[4:8])[0]
+        cfg = json.loads(raw[8:8 + hl])['config']
+        torch.save({'model': load_exported(os.path.join(ROOT, src)).state_dict(), 'cfg': cfg},
+                   os.path.join(ROOT, dst))
+
     cmds = [
         f'{PY} nik/data/behavior_mix.py --n {a.n} --seed 1 --out data/behavior.jsonl',
         f'{PY} nik/prepare.py --data data --tok nik/web/model/tokenizer.json --sft-only --sft-name behavior',
-        'python -c "import sys,json,struct,torch; sys.path.insert(0,'nik'); from export import load_exported; ' 
-        f"src=r'{a.bin}'; raw=open(src,'rb').read(); hl=struct.unpack('<I',raw[4:8])[0]; "
-        'cfg=json.loads(raw[8:8+hl])[\'config\']; '
-        'torch.save({\'model\':load_exported(src).state_dict(),\'cfg\':cfg}, \'init_behavior.pt\')"',
-        f'{PY} nik/train.py --stage sft --init init_behavior.pt --data data --sft-name behavior '
-        f'--out nik/runs/{a.tag} --steps 100000000 --minutes {a.minutes} --bs 64 --accum 2 '
-        f'--lr 8.5e-4 --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
-        f'--opt muon --ema 0.998 --compile',
-        f'{PY} nik/export.py --ckpt nik/runs/{a.tag}/ckpt.pt --out {newbin}',
     ]
     for cmd in cmds:
         if a.dry_run:
@@ -57,7 +58,18 @@ def main():
         else:
             run(cmd)
     if a.dry_run:
+        print(f'$ (in-process) load {a.bin} -> init_behavior.pt')
+        print(f'$ {PY} nik/train.py --stage sft --init init_behavior.pt --data data --sft-name behavior '
+              f'--out nik/runs/{a.tag} --steps 100000000 --minutes {a.minutes} --bs 64 --accum 2 '
+              f'--lr 8.5e-4 --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
+              f'--opt muon --ema 0.998 --compile')
         return
+    bin_to_init(a.bin, 'init_behavior.pt')
+    run(f'{PY} nik/train.py --stage sft --init init_behavior.pt --data data --sft-name behavior '
+        f'--out nik/runs/{a.tag} --steps 100000000 --minutes {a.minutes} --bs 64 --accum 2 '
+        f'--lr 8.5e-4 --warmup 50 --eval-every 500 --mix {a.mix} --diff-weight 0.3 --diff-frac 0.25 '
+        f'--opt muon --ema 0.998 --compile')
+    run(f'{PY} nik/export.py --ckpt nik/runs/{a.tag}/ckpt.pt --out {newbin}')
 
     def evaluate(tag, model):
         d = os.path.join('nik/web/model/logs', tag)
