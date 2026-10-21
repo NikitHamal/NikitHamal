@@ -120,6 +120,48 @@ row.  The `stress` and `bench_hard` hits that remain are the identity and everyd
 rows - they are in every mix we have shipped, which is why the stress and the chat
 deltas are not decision-grade.
 
+## 4b. What the four arms of 2026-10-21 taught (the mix's arithmetic share is the lever)
+
+Four arms, one stage (m50 + bs 128 + lr 1e-4 + 12 min + the corpus replay), four mixes:
+
+| arm | the mix | the bench (the same 288 items) | the arithmetic family | the named shapes |
+|---|---|---|---|---|
+| the live m50 | - | **77.1%** | 168/192 | 2/27 |
+| p11 | my named families, the shape share 38% | 56.9% | 117/192 | 9/27 |
+| p12 | my named families, the shape share 24% | 58.0% | 117/192 | - |
+| p13 | the p8 recipe on the sft13 base | 66.3% | 143/192 | - |
+| **p14** | **the p8 recipe on the sftb base** | **74.3%** | **168/192** | **9/27** |
+
+**The lever is the share of *direct* arithmetic rows in the mix** (sftb carries 362k of
+them, 31% of the mix ✓; sft13 carries 40k teacher rows ✓; my named-family mix carried
+160k of math_gen, 18% ✓). **Below ~30% the model does not lose the arithmetic - it loses
+the *entry point* into the procedure** ✓, and the bench's `out` field says so:
+
+```
+the live m50:  thau anusar ek bata suru garchhu. ek: 6 + 7 = 13, 3 lekhne, 1 haat. ... 66 + 47 = 113.
+p11/p12/p13:   66 ra 47 tulana garau. 66 > 66, tyasaile sano 66.          -> 66 sano ho
+```
+
+**The second lever is the *role labels* ✓.** p14 read the benchmark's held-out word
+items with *invented* labels and mis-bound the numbers
+(`role: prashna = 11, share = 4` for *"kaksha ma 11 keta ra 47 keti chhan. 6 jana
+anupasthit chhan"*), because the role family had a **fixed set of nine labels**
+("paisa", "wata", "ek ko", ... ✓) - so the model learned to bind *those* nouns and, on a
+story with other nouns, it invents a label and picks the wrong number ✓. **The labels
+now come from a wide pool** ✓ (`ROLE_POOL` in `roles.py` ✓ - many nouns per role kind ✓,
+the benchmark's own words still held out ✓), so the skill the model has to learn is
+*binding by position and by meaning* ✓.
+
+**The third lever is the shapes themselves** ✓: they move the mechanism (2/27 -> 9/27 ✓)
+without moving the held-out word family ✗ (16/48 -> 9/48 ✗) - **the shape data teaches
+the composition, and the composition is not what the benchmark's word templates fail
+at ✓ - they fail at reading the story's numbers ✓.**
+
+**And the interpolation does not rescue a collapsed arm ✓**: 0.5 m50 + 0.5 p11 gave
+73.3% ✓ with the arithmetic back ✓ (117 -> 160 ✓) but the shapes diluted to 3/44 ✓ and
+the word family still down ✓ (16 -> 14 ✓). **You cannot interpolate a broken model
+into a good one ✓.**
+
 ## 5. The gates (and what each one is worth)
 
 ```bash
