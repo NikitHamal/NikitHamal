@@ -33,9 +33,12 @@ def set_valley_lit(sc, A):
     lan_m = emission("lantern", (1.0, 0.5, 0.15), 18)
     for i in range(14):
         l = prim("cylinder", "lan%d" % i, lan_m, radius=0.25, depth=0.4, location=(rnd.uniform(-10, 10), rnd.uniform(12, 40), rnd.uniform(5, 16)))
-    volume_world(0.006, (1.0, 0.8, 0.6), 0.6)
-    glare(sc, 0.9, 9, -0.45)
-    cam = camera((0.0, -3.0, 2.4), (0, 30, 2.0), 38, dof=12, fstop=4)
+    hdri_light("dikhololo_night", 1.2)
+    moon = light("SUN", (0, 0, 0), 1.6, (0.65, 0.75, 1.0), size=0.02); moon.rotation_euler = (math.radians(62), 0, math.radians(160))
+    light("AREA", (0, 8, 6), 600, (1.0, 0.6, 0.3), size=20, look=(0, 20, 0))
+    volume_world(0.004, (1.0, 0.8, 0.6), 0.6)
+    glare(sc, 1.0, 8, -0.5)
+    cam = camera((0.0, -3.0, 3.2), (0, 26, 0.8), 38, dof=12, fstop=4)
     return lambda t, d: None
 
 
@@ -84,12 +87,14 @@ def set_rangoli(sc, A):
         a = 2 * math.pi * i / 16
         lamps.append(diyo("ld%d" % i, (0.95 * math.cos(a), 0.95 * math.sin(a), 0), 1.6, 80, 3.0))
     door = prim("cube", "doorframe", noisy(mat("frame", (0.07, 0.03, 0.015), rough=0.6), 60, 0.3, 0.1, 0.4), size=1, location=(0, 2.6, 1.1)); door.scale = (1.4, 0.15, 2.2)
-    glow = prim("plane", "doorglow", emission("dg", (1.0, 0.55, 0.2), 8), size=1, location=(0, 2.52, 1.0), rotation=(math.pi / 2, 0, 0)); glow.scale = (1.1, 2.0, 1)
+    glow = prim("plane", "doorglow", emission("dg", (1.0, 0.55, 0.2), 2.2), size=1, location=(0, 2.52, 1.0), rotation=(math.pi / 2, 0, 0)); glow.scale = (1.1, 2.0, 1)
     for i in range(22):
         marigold("toran%d" % i, (-0.7 + 1.4 * i / 21, 2.45, 2.15 - 0.25 * math.sin(math.pi * i / 21)), 0.045)
-    volume_world(0.03, (1, 0.85, 0.7), 0.5)
-    glare(sc, 0.9, 8, -0.5)
-    camera((0.0, -2.2, 1.9), (0, 0.4, 0.0), 32, dof=2.6, fstop=3.5)
+    hdri_light("brown_photostudio_02", 0.25)
+    light("AREA", (0.0, -1.2, 2.4), 45, (1.0, 0.75, 0.5), size=1.5, look=(0, 0.2, 0))
+    volume_world(0.015, (1, 0.85, 0.7), 0.5)
+    glare(sc, 1.4, 7, -0.65)
+    camera((0.0, -2.0, 2.3), (0, 0.55, 0.0), 30, dof=2.9, fstop=4)
     return lambda t, d: None
 
 

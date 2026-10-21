@@ -449,8 +449,12 @@ def kite(name, color, size=0.5):
 
 
 def set_ping(sc, A):
-    world(sky=[(0.0, (0.95, 0.62, 0.32)), (0.25, (0.55, 0.55, 0.65)), (1.0, (0.18, 0.3, 0.55))], strength=1.2)
-    hdri_sky("belfast_sunset_puresky", 0.9, 1.2) or True
+    if A.get("golden"):  # the card: a clear warm golden hour instead of the overcast sunset sky
+        world(sky=[(0.0, (1.0, 0.6, 0.3)), (0.18, (0.75, 0.55, 0.45)), (0.6, (0.3, 0.42, 0.7)), (1.0, (0.12, 0.22, 0.5))], strength=1.4)
+        hdri_light("kiara_8_sunset", 0.8, 1.0)
+    else:
+        world(sky=[(0.0, (0.95, 0.62, 0.32)), (0.25, (0.55, 0.55, 0.65)), (1.0, (0.18, 0.3, 0.55))], strength=1.2)
+        hdri_sky("belfast_sunset_puresky", 0.9, 1.2)
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=400, y_subdivisions=400, size=300); hills = bpy.context.object
     for p_ in hills.data.polygons: p_.use_smooth = True
     tx = bpy.data.textures.new("terr", "CLOUDS"); tx.noise_scale = 1.8

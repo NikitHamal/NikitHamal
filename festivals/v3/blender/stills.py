@@ -15,7 +15,7 @@ DESIGNS = {
     "dashain-thali": (B_.set_thali, dict(variant="dashami"), 5.0, 7.0),
     "dashain-vijaya": (A_.set_tejas, dict(converge=0.4), 6.3, 7.0),
     "dashain-ghar": (B_.set_map, dict(variant="rise"), 6.2, 6.7),
-    "dashain-changa": (B_.set_ping, {}, 3.0, 8.0),
+    "dashain-changa": (B_.set_ping, dict(golden=True), 3.0, 8.0),
     "dashain-jamara": (B_.set_jamara, dict(variant="still"), 4.0, 6.6),
     "tihar-deepawali": (C_.set_valley_lit, {}, 0, 1),
     "tihar-laxmi": (C_.set_rangoli, {}, 0, 1),
