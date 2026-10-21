@@ -580,8 +580,16 @@ def _eval_expr(expr: str) -> int:
 
 def sample(R, scene=None):
     """one row in the shape the SFT mix expects: {'cat', 'gold', 'messages'}."""
-    sc = scene or R.choice(SCENES)
-    return sc(R)
+    if scene is None:
+        # The symbolic two-step (ladder L2/L4) is the ability we still cannot do, so
+        # it gets a real share of the role rows instead of the 1/14 it would get from
+        # the uniform draw - a skill that is rare is not learned (the money scene
+        # needed 35% of the frame rows for the same reason).
+        if R.random() < 0.25:
+            scene = scene_nested_expr if R.random() < 0.5 else scene_chain_expr
+        else:
+            scene = R.choice(SCENES)
+    return scene(R)
 
 
 def check(row):
