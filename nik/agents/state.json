@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T20:45:00Z",
+ "updated": "2026-10-21T23:05:00Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) · ladder L2 12/12 · understanding 19/26 · traps 9/12 · math 94% (rollback: v4f)"
@@ -8,10 +8,10 @@
   {
    "name": "box 1",
    "gpu": "RTX Pro 6000 · owner notebook, shared Claude + Local-C",
-   "job": "Claude: the m50/p11 blends (my p11 is one of the ingredients) -> then Local-C: p12",
+   "job": "Local-C: p15 (the p14 recipe + the wide role-label pool) -> the gate vs m50",
    "progress": null,
-   "detail": "the GPU box is the owner's notebook: it does not die, so a 12-minute stage is safe",
-   "eta": "-"
+   "detail": "the GPU box is the owner's notebook: it does not die, so a 12-minute stage is safe. The arms today: p11 56.9%, p12 58.0%, p13 66.3%, p14 74.3%",
+   "eta": "the p15 measurement ~23:20 UTC"
   }
  ],
  "scoreboard": {
@@ -41,6 +41,15 @@
     "8/12",
     "12/12",
     "3/45"
+   ],
+   [
+    "p11 (Local-C, shapes 38%)",
+    "56.3%",
+    "-",
+    "21/26",
+    "7/12",
+    "-",
+    "2/45"
    ],
    [
     "p8 (Local-C)",
@@ -122,26 +131,25 @@
     "9/12",
     "1/12",
     "-"
-   ],
-   [
-    "v4f3 (Local-C)",
-    "63.2%",
-    "28/48",
-    "20/26",
-    "8/12",
-    "1/12",
-    "-"
    ]
   ]
  },
  "runs": [
   {
-   "tag": "p11 (Local-C)",
+   "tag": "p14 (Local-C)",
    "box": "box 1 (the shared GPU)",
    "by": "Local-C",
+   "status": "done",
+   "what": "the p8 recipe on the sftb base (31% direct arithmetic) with today's generators, from m50: bs 128, lr 1e-4, 12 min, the corpus replay on",
+   "result": "the arithmetic family is EXACTLY the live model's (168/192), the named shapes 2/27 -> 9/27 (14/44), the math 94% -> 97.5%, the persona 1.0, the chat 15/15, the understanding 19/26 - but the bench 77.1% -> 74.3% and the held-out word family 16/48 -> 9/48. The mechanism moved; the held-out word family did not, and the reason is named: the model reads the story's numbers with invented role labels."
+  },
+  {
+   "tag": "p11/p12/p13 (Local-C)",
+   "box": "box 1",
+   "by": "Local-C",
    "status": "rejected",
-   "what": "m50 + 7 min lr 1e-4 on the p11 mix (the shape share 38%): the 4 diagnostic shapes, the no-rule sequences, the nested multiplications, 33 story frames, the English frames, the weekday family, the 3 understanding gaps",
-   "result": "the named shapes 2/27 -> 9/27 (the mechanism moved where the data was aimed) but the arithmetic family collapsed 161/192 -> 117/192, the traps 9 -> 7, the persona 1.0 -> 0.857: the shape share of 38% is too greedy. The bin is on the branch; Claude is blending it."
+   "what": "the same stage on mixes whose base carries only 18% of direct arithmetic",
+   "result": "the bench collapsed to 56.9% / 58.0% / 66.3%: below ~30% of direct arithmetic the model loses the *entry point* into the procedure (the bench's out field: \"66 ra 47 tulana garau. 66 > 66\" instead of the digit-by-digit trace)"
   },
   {
    "tag": "m50",
@@ -240,8 +248,8 @@
   }
  ],
  "next": [
-  "p12 on the shared GPU (the shape share 24%, the arithmetic paid for): 12 min + the measurement",
-  "the m50/p11 blend: does the arithmetic survive the interpolation? (the paired bench is running)",
+  "p15 (the p14 recipe + the wide role-label pool): the held-out word family is the last gap",
+  "the owner: the molab accounts are restricted - a new GPU or Kaggle has to be decided",
   "the third-party identity rows (Local-A's family) for the trap_check 9/12 -> 12/12"
  ]
 }
