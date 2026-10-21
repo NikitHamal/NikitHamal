@@ -204,7 +204,7 @@ def main():
     ap.add_argument('--device', default='auto')
     ap.add_argument('--threads', type=int, default=0)
     ap.add_argument('--diff-frac', type=float, default=1.0, help='diffusion stream covers this fraction of each window (speed)')
-    ap.add_argument('--grad-ckpt', action='store_true', help='activation checkpointing per block (less memory, ~30% more compute)')
+    ap.add_argument('--grad-ckpt', action='store_true', help='activation checkpointing per block (less memory, ~30%% more compute)')
     ap.add_argument('--opt', choices=['adamw', 'muon'], default='adamw', help='muon: Muon for hidden matrices + AdamW for the rest')
     ap.add_argument('--ema', type=float, default=0.0, help='keep an EMA of weights (e.g. 0.999) and save it as the checkpoint')
     ap.add_argument('--sft-name', default='sft', help='SFT token files <name>_tok.bin / <name>_mask.bin')
@@ -267,8 +267,15 @@ def main():
         train_b = Batches(os.path.join(D, 'pre_train.bin'), seed=100 + rank)
         val_b = Batches(os.path.join(D, 'pre_val.bin'), seed=1)
     else:
+        # the corpus replay is optional: a box that cannot reach the replay corpus
+        # (it lives in a Kaggle dataset) trains on the SFT mix alone.
+        corpus = os.path.join(D, 'pre_train.bin')
+        if not os.path.exists(corpus):
+            if a.mix:
+                print(f'no {corpus} on this box: the stage runs on the SFT mix alone (--mix ignored)')
+            corpus, a.mix = None, 0.0
         train_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'),
-                          os.path.join(D, 'pre_train.bin'), a.mix, seed=100 + rank, split='train')
+                          corpus, a.mix, seed=100 + rank, split='train')
         val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1, split='val')
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
