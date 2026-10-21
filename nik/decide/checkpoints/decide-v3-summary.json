@@ -1,0 +1,31 @@
+{
+ "steps": 29697,
+ "held_out": {
+  "read-unknown": {
+   "acc": 1.0,
+   "n": 2076,
+   "mean_conf": 1.0
+  },
+  "read-lookup": {
+   "acc": 0.9287,
+   "n": 4335,
+   "mean_conf": 0.947
+  },
+  "intent": {
+   "acc": 1.0,
+   "n": 5941,
+   "mean_conf": 1.0
+  },
+  "math-verify": {
+   "acc": 0.8277,
+   "n": 3992,
+   "mean_conf": 0.873
+  },
+  "read-yesno": {
+   "acc": 0.9967,
+   "n": 3656,
+   "mean_conf": 0.997
+  }
+ },
+ "params": 5428993
+}
