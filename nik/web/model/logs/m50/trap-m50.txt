@@ -1,0 +1,13 @@
+[ok  ] 'mero naam nikit ho.' -> 'namaste nikit! tapai lai bhetera khusi lagyo. aaja k kura garne?'
+[ok  ] 'ma nikit, kathmandu bata.' -> 'namaste nikit! kathmandu ta ramro thau ho. aaja k ma sahayog garu?'
+[ok  ] 'mero naam k ho?' -> 'tapai ko naam nikit ho.'
+[ok  ] 'mero sathi nikit lai chiya man parchha.' -> 'nikit lai chiya man parne raichha. sangai khana jaanus na!'
+[FAIL] 'hijo nikit sanga football kheleko thiye.' -> 'ok, yaad gare.'
+[ok  ] 'nikit le 4 ota syau kinyo. nikit le kati syau kinyo?' -> 'nikit le 4 ota syau kinyo.'
+[ok  ] 'mero bhai kati barsha ko?' -> 'tapai ko bhai 10 barsha ko hunuhunchha.'
+[ok  ] 'hamal thar ko euta sathi chha mero.' -> 'bujhe!'
+[ok  ] 'mero didi ko naam k ho?' -> 'tapai ko didi ko naam nikita ho.'
+[ok  ] 'aaja nikit birami chha, k garne?' -> 'nikit nepal ko hunuhunchha.'
+[FAIL] 'ma pani nikit jasto coder banna chahanchhu.' -> 'nikit hamal le malai sunya dekhi banaunubhayo: afnai romanizer, tokenizer, transformer model, training ra yo browser engine. nepal ko news r'
+[FAIL] 'mero kukur ko naam k ho?' -> 'tapai ko kukur ko naam kukur ho.'
+trap check: 9/12 ok

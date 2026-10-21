@@ -1,0 +1,41 @@
+[ok  ] give           kasle sel roti diyo? -> aashish le dinesh lai 6 wata sel roti diyo.
+                 kasle sel roti payo? -> aashish le dinesh lai 6 wata sel roti diyo.
+[FAIL] negation       bikram lai kwati man parchha? -> bidyarthi lai k v badhi man parchha?
+                 bikram lai tama man parchha? -> bikram, man parne raichha. sangai khana jaanus na!
+[FAIL] temporal       srijana le pachhi kati kilo chura lyai? -> srijana le 0 kilo chura kinyo.
+                 srijana le pahile kati kilo chura lyai? -> bijana ko 5 kilo kilo.
+[FAIL] distractor     kati wata ghadi ramro chhan? -> 32 wata ghadi 2 wata
+                 jamma kati wata ghadi chhan? -> 32 wata ghadi chhan.
+[FAIL] coref          manisha ko dai ko kaam k ho? -> passage ma manisha ko kaam bhaneko chhaina, tyasaile ma bhan
+                 manisha k kaam garchhin? -> malai thaha chhaina. passage ma manisha ko kaam ko barema ke
+[FAIL] compare        ko jetho ho? -> bujhe! aru k?
+                 ko sano ko ho? -> bujhe! aru k?
+[FAIL] units          jamma kati rupiya tiryo? -> sneha le 720 rupiya tiryo.
+                 kati kilo bhutuwa kinyo? -> sneha le 2 kilo bhutuwa kinyo.
+[FAIL] sequence       arko number kati? -> aru number 88 hunchha.
+                 ke le gunera badhyo? -> ke le 81 rupiya badhyo.
+[FAIL] buy-not        manisha le ke kinyo? -> manisha le chura kinyo tara kun chaura ma sabai bhanda thulo
+                 ke manisha le kwati kinyo? -> ho, manisha le chura kinyo.
+[FAIL] role           kasle tiffin bokyo? -> dinesh le tiffic lyo.
+                 kasko tiffin thiyo? -> dinesh ko tiffice tiffice ho.
+[FAIL] negation2      rojina kaha baschha? -> rojina janakpur ma baschhin.
+                 ke rojina janakpur ma baschha? -> ho, rojina janakpur ma baschhin.
+[ok  ] quantity       kati wata topi baki chha? -> bikram sanga aba 7 wata kapipi baki chha.
+                 kati wata bechyo? -> tapai le 5 wata kapi kinyo.
+[FAIL] order          ko pahile aayo? -> bujhe: " ko pahile raju aayo" wa " ko umer raju aayo".
+                 ko pachhi aayo? -> bujhe! aru k?
+[FAIL] distractor2    ek wata chata ko kati parchha? -> chatata ko 1200 rupiya tiryo.
+                 kati wata chata kinyo? -> tapai le jamma 1200 rupiya tiryo.
+[FAIL] coref2         sneha kaha padhchha? -> sneha lumbini ma baschhin.
+                 sneha ko dai ko naam k ho? -> sneha ko dai ko naam bahinira ho.
+[FAIL] compare2       kasko jutta ko size thulo? -> 
+                 dinesh ko size kati? -> 
+[FAIL] units2         jamma kati mitar kinyo? -> jamma 302 mitar kinyo.
+                 kati mitar dori kinyo? -> 3 meter dori kinyo.
+[FAIL] sequence2      arko number kati? -> aru number 22 hunchha.
+                 kati le ghatcha? -> jamma 0 hunchha.
+[ok  ] went-not       sunil kaha gayo? -> sunil damak gayo.
+                 ke sunil janakpur gayo? -> haina, sunil janakpur haina, damak gayo.
+[FAIL] role2          raju le ke diyo? -> raju le rojina lai ghadi diyo.
+                 rojina le ke dii? -> rojina le diiyeko diice.
+reading bench: items 12/40  pairs 3/20
