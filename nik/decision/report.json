@@ -1,0 +1,38 @@
+{
+ "rows": 2064,
+ "train": 1758,
+ "val": 306,
+ "val_acc": 0.9706,
+ "hard_cases": 30,
+ "hard_acc": 0.5333,
+ "pair_consistency": 1.0,
+ "latency_ms_per_text": 0.1692,
+ "params": 525835,
+ "int8_file_bytes": 494140,
+ "per_class_val": {
+  "user_name": 36,
+  "creator": 52,
+  "third_person": 12,
+  "assistant": 65,
+  "ambiguous": 10,
+  "math": 1,
+  "reading": 90,
+  "memory": 11,
+  "smalltalk": 18,
+  "writing": 1,
+  "translation": 1
+ },
+ "labels": [
+  "user_name",
+  "creator",
+  "third_person",
+  "assistant",
+  "ambiguous",
+  "math",
+  "reading",
+  "memory",
+  "smalltalk",
+  "writing",
+  "translation"
+ ]
+}
