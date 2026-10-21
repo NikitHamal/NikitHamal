@@ -1,24 +1,16 @@
 {
- "updated": "2026-10-21T16:40:17Z",
+ "updated": "2026-10-21T17:01:23Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "box 1",
-   "gpu": "no GPU (CPU-only box, 20 cores)",
-   "job": "idle: new box (16:30 UTC) has no GPU; usable for CPU evals",
+   "name": "molab",
+   "gpu": "offline - no box alive (3 boxes returned 410 between 16:35 and 17:05 UTC)",
+   "job": "waiting for the owner",
    "progress": null,
-   "detail": "",
-   "eta": "-"
-  },
-  {
-   "name": "box 2",
-   "gpu": "offline (HTTP 410 at ~16:35 UTC)",
-   "job": "lost: pm50 bench, v4r6 bin, Local-C P9, Local-A replay arms",
-   "progress": null,
-   "detail": "m50, p8, v4r3 saved to Kaggle (private)",
+   "detail": "box access for agents: nik/agents/vault (PROTOCOL.md)",
    "eta": "-"
   }
  ],
@@ -227,8 +219,8 @@
   }
  ],
  "next": [
-  "a GPU box from the owner (box 1 has no GPU, box 2 died)",
-  "reading comprehension (bench_reading 2-3/20 for every model)",
-  "p8 x m50 recipe merge on a GPU"
+  "a box that stays up (owner)",
+  "corpus rebuild + Decide v8 re-run, then p8 recipe from m50",
+  "agents post vault keys in #8"
  ]
 }
