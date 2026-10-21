@@ -49,10 +49,21 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - Real sunset sky over the sea (rotation 4.2) and over the ping.
   - Scanned PBR textures: brick (Taleju, houses, lane), plaster, earth, sand, roof tiles, bamboo, cobbles, grass-rock.
   - Smooth terrain; moon phases fixed (waxing); Navadurga names moved above the moon.
+- [x] **Pass 3 (delivered):** Ramayana and Fulpati rebuilt from scratch (`blender/sets_d.py`).
+  - Ramayana: a lacquered recurve bow with a fletched arrow (side close-up), then over the shoulder as the arrow hits golden Lanka on a CC0 cliff.
+  - Fulpati: a gilded three-tier doli carrying the navapatrika, with CC0 pomegranate and rifle scans and the salute line with smoke.
+  - The 30 wish cards are in `out/cards_v3/` (JPEG q95).
+- [x] **Voice (ElevenLabs, owner's free key, kept only in `/workspace/tools/el.env`):**
+  - The free API refuses library voices, including the owner's pick Kaanchi `BTUIboFmihb87sfmikzP` ("paid plan required"). Kaanchi is saved in the account; the owner can generate on the website.
+  - Current voice: premade **George** on `eleven_v3` speaking Nepali, with the **expressive v3 script** (`narration/script_v3_expressive.txt`; tags stripped from the captions).
+  - Every line is verified with Scribe STT: lines 7 and 11 were regenerated after mishearings; line 21 only differs because of numerals.
+  - Word timings come from the v3 alignment. `tools/import_vo.py` uses **forced alignment** (free) for owner takes.
+  - Credit: "Voice: ElevenLabs".
+- [ ] Pass 4 (running): expressive voice; composite and score only (keys unchanged); re-render the kites, Deepawali and Laxmi Puja cards.
 - [ ] Next:
-  - Pull the pass-2 film and cards, deliver them, push the ≤8 MB copies.
-  - When the owner pushes `narration/takes/*`: run `tools/import_vo.py`, then `cpu_build.sh` (the keys are reusable if timings move; only the composite and score re-run).
-  - Further polish: shot 13 (Fulpati doli), shot 18 (bus), the hills (could use the real DEM around Kathmandu), the kalash leaves.
+  - Pull the pass-4 film and master, deliver.
+  - If the owner pushes Kaanchi takes: run `ELEVEN_KEY=… python tools/import_vo.py`, then `cpu_build.sh` (composite + score only).
+  - Possible polish: shot 5 (early beam keys are dark), shot 18 (bus), kalash leaves.
 
 ## Delivery limits (measured)
 - Connector pushes carry blobs up to about 8 MB; 30 MB fails with HTTP 413. So the repo copy of the film has to be at most about 8 MB (or split per section), and the full-quality master goes to the owner as a chat attachment (`actl asset put`).
