@@ -18,10 +18,12 @@ YN = ('ho', 'haina', 'chhaina', 'chaina', 'parchha', 'pardaina', 'kinyena', 'gay
 
 def options(p, which):
     q, e = p['q' + which], p['e' + which]
-    if q.startswith('ke ') and any(x in YN for x in e):
-        v = q.split()[-2] if len(q.split()) > 2 else ''
+    if (q.startswith('ke ') or 'man parchha' in q) and any(x in YN for x in e):
+        import re
+        m = re.search(r'ke \w+ (?:le |lai )?(.+?) (?:man parchha|kinyo|gayo|ma baschha)\?', q)
         yes = not any(x in ('haina', 'chhaina', 'chaina', 'pardaina', 'kinyena', 'gayena', 'baschhain') for x in e)
-        return q, ['ho', 'haina', 'thaha chhaina'], 0 if yes else 1
+        opts = [f'ho, {m.group(1)}', f'haina, {m.group(1)} haina', 'thaha chhaina'] if m else ['ho', 'haina', 'thaha chhaina']
+        return q, opts, 0 if yes else 1
     a, b = p['e1'][0], p['e2'][0]
     gold = a if which == '1' else b
     return q, [a, b] if a != b else [a, b + '?'], [a, b].index(gold)
