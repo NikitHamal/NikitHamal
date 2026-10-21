@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T12:17:17Z",
+ "updated": "2026-10-21T13:08:14Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -7,18 +7,18 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU 100% \u00b7 91722 MiB",
+   "gpu": "GPU 100% \u00b7 89965 MiB",
    "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
-   "progress": 0.455,
-   "detail": "step 7350 \u00b7 176,770 tok/s \u00b7 91.0 min of stage \u00b7  \u00b7 running: train.py",
+   "progress": 0.7105,
+   "detail": "step 10275 \u00b7 158,225 tok/s \u00b7 142.1 min of stage \u00b7  \u00b7 running: train.py",
    "eta": "v5w results ~14:00 UTC"
   },
   {
    "name": "box 2",
-   "gpu": "GPU 100% \u00b7 1590 MiB",
-   "job": "v4r: v4f + Sky reduce 40%, 20 min, then gates",
+   "gpu": "GPU 100% \u00b7 8496 MiB",
+   "job": "blends b5/b7 of v4f and v4r: gates",
    "progress": null,
-   "detail": "GPU shared with Local-C runs \u00b7 running: bench.py, make_sft2.py, prepare.py",
+   "detail": "GPU shared with Local-C runs \u00b7 running: bench.py, train.py",
    "eta": "~12:30 UTC"
   }
  ],
@@ -38,6 +38,14 @@
     "13/26",
     "9/12",
     "0/12"
+   ],
+   [
+    "v4r (v4f+reduce)",
+    "70.1%",
+    "32/48",
+    "16/26",
+    "-",
+    "12/12"
    ],
    [
     "v4m",
@@ -83,11 +91,19 @@
  },
  "runs": [
   {
+   "tag": "b5 / b7",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "evaluating",
+   "what": "v4f + {0.5,0.7}(v4r - v4f): keep L2, recover reason"
+  },
+  {
    "tag": "v4r",
    "box": "box 2",
    "by": "Claude + Sky",
-   "status": "training",
-   "what": "live v4f + 20 min lr 2e-4, Sky reduce.py at 40% of rows; target L2 >= 6/12, NikBench within 2 pp"
+   "status": "done",
+   "what": "live v4f + 20 min lr 2e-4, Sky reduce.py at 40% of rows; target L2 >= 6/12, NikBench within 2 pp",
+   "result": "L2 0->12/12, L4 0->6/12, und 16, NikBench -2.1 (reason -7, p=0.016)"
   },
   {
    "tag": "v5w",
@@ -100,15 +116,16 @@
    "tag": "decide-v7",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "+ reading_wide, math-word, memory-latest; target bench_reading pairs >= 8/20 (v5: 3/20)"
+   "status": "shipped",
+   "what": "+ reading_wide, math-word, memory-latest; target bench_reading pairs >= 8/20 (v5: 3/20)",
+   "result": "bench_reading 3/20 -> 11/20 pairs; math-verify 81.9% (v5 93.6)"
   },
   {
    "tag": "decide-v8",
    "box": "box 1",
    "by": "Claude",
-   "status": "queued",
-   "what": "+ Nik's own sampled answers; target rerank > greedy 72.2% (v5: 67.7%)"
+   "status": "generating",
+   "what": "Nik's own answers (policy_data, ~60 rows/min, 80 min) then 75-min train"
   },
   {
    "tag": "v5",
