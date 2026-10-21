@@ -8,6 +8,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **v5 from scratch (clean corpus_v2 473M tokens + sft12, 150 min, ~1.25B tokens) loses to the v4 lineage:** v5pre
+  61.8%, v5 (after a 25-min SFT at lr 1.2e-3) 59.0% vs v4f 72.2% on the same 288 items; reason 28 vs 39; understanding
+  15/17 vs 13. The live model's strength is its accumulated SFT stages, not its base data. The post-SFT hurt this base.
+- **Sky reduce.py (merged):** CPU micro-SFT on v4f, 40% reduce rows: ladder L2 0 -> 11/12, held-out a-(bxc) 0 -> 21/24;
+  control stays 0. Story word problems do not move (parsing is a separate skill). Molab check queued (v4r).
+
 - **Nik-Decide as a reranker of Nik hurts (rerank_eval.py, v4f k=8, 288 items):** greedy 72.2%, majority 71.9%, Decide
   pick 67.7%, vote x Decide 68.1%, oracle 75.0%. Two lessons: (1) sample diversity is low, so even a perfect picker adds
   only +2.8 pp; (2) a verifier trained on synthetic near-misses does not know the policy's real mistakes. Next: Decide v8
@@ -125,6 +131,9 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   is wrong in all 5 phrasings; English inputs are mostly garbled. This is the honest picture of how template-bound Nik is.
 
 ### Mistakes (do not repeat)
+
+- **Relaunching on a lost marimo response.** The box kernel is shared, and launch output is often dropped. Relaunching
+  started two copies of the same queue. Always check `ps` for the process before relaunching.
 
 - **Audit pass 2 audited the wrong file.** It ran on `corpus_work/roman` (the raw input) again, not the kept
   `corpus_v2.jsonl`, so it re-reported the input's 28% dups and wasted ~60 min. The kept-output audit now runs beside v5.
