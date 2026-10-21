@@ -50,12 +50,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--n', type=int, default=12000)
     ap.add_argument('--seed', type=int, default=1)
+    ap.add_argument('--read-share', type=float, default=0.55)
+    ap.add_argument('--id-share', type=float, default=0.15)
+    ap.add_argument('--chat-share', type=float, default=0.20)
     ap.add_argument('--out', default='data/behavior.jsonl')
     a = ap.parse_args()
+    if a.read_share + a.id_share + a.chat_share > 1.0:
+        raise SystemExit('shares must sum to <= 1')
     R = random.Random(a.seed)
 
     reading, seen = [], set()
-    while len(reading) < int(a.n * 0.55):
+    while len(reading) < int(a.n * a.read_share):
         for row in reading_contrast.sample_pair(R):
             if not row['cat'].startswith('reading'):
                 continue
@@ -85,10 +90,12 @@ def main():
     if not chat or not math:
         raise SystemExit('gold chat/math rows missing')
 
-    rows = reading[:int(a.n * 0.55)]
-    while len(rows) < int(a.n * 0.70):
+    id_end = int(a.n * (a.read_share + a.id_share))
+    chat_end = int(a.n * (a.read_share + a.id_share + a.chat_share))
+    rows = reading[:int(a.n * a.read_share)]
+    while len(rows) < id_end:
         rows.append(R.choice(identity))
-    while len(rows) < int(a.n * 0.90):
+    while len(rows) < chat_end:
         rows.append(R.choice(chat))
     while len(rows) < a.n:
         rows.append(R.choice(math))

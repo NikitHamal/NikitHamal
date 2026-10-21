@@ -29,6 +29,9 @@ def main():
     ap.add_argument('--minutes', type=float, default=12)
     ap.add_argument('--tag', default='v4e')
     ap.add_argument('--n', type=int, default=12000)
+    ap.add_argument('--read-share', type=float, default=0.55)
+    ap.add_argument('--id-share', type=float, default=0.15)
+    ap.add_argument('--chat-share', type=float, default=0.20)
     ap.add_argument('--mix', type=float, default=0.2)
     ap.add_argument('--lr', type=float, default=8.5e-4)
     ap.add_argument('--skip-eval', action='store_true', help='train+export only; run the gate separately')
@@ -51,7 +54,8 @@ def main():
                    os.path.join(ROOT, dst))
 
     cmds = [
-        f'{PY} nik/data/behavior_mix.py --n {a.n} --seed 1 --out data/behavior.jsonl',
+        f'{PY} nik/data/behavior_mix.py --n {a.n} --seed 1 --read-share {a.read_share} '
+        f'--id-share {a.id_share} --chat-share {a.chat_share} --out data/behavior.jsonl',
         f'{PY} nik/prepare.py --data data --tok nik/web/model/tokenizer.json --sft-only --sft-name behavior',
     ]
     for cmd in cmds:
