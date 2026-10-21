@@ -92,8 +92,11 @@ def main():
           f'+ {n_frame} frame + {n_iter} iter = {len(rows)} -> {out_path}', flush=True)
     print(f'chain share: {100 * (n_frame + n_iter) / max(1, len(rows)):.1f}% of rows', flush=True)
     if not a.no_tokenize:
-        subprocess.run([sys.executable, os.path.join(ROOT, 'prepare.py'), '--data', a.data,
-                        '--tok', os.path.join(ROOT, 'web/model/tokenizer.json'),
+        pkg = os.path.join(ROOT, 'nik')
+        if not os.path.isdir(pkg):
+            pkg = ROOT
+        subprocess.run([sys.executable, os.path.join(pkg, 'prepare.py'), '--data', a.data,
+                        '--tok', os.path.join(pkg, 'web/model/tokenizer.json'),
                         '--sft-only', '--sft-name', a.name], check=True)
 
 
