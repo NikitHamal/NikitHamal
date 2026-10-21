@@ -77,7 +77,8 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
 - **Boxes (molab only, never Kaggle):** box 1 runs LLM jobs via `nik/scripts/molab_run.sh`-style scripts, dashboard auto-detects runs
   + scoreboard vs live; box 2 runs Nik-Decide (`nik/decide/`) and corpus_v2 (`/tmp/corpus_v2`, audit running). Boxes expire;
   the owner provides new URL+token; local agents are watch-only.
-- **In flight:** v4h (v4f + sft11 with correct.py + composed chat), Nik-Decide v3, corpus_v2 audit.
+- **Shipped 2026-10-21:** `/decide` (https://nikit.is-a.dev/decide): Nik-Decide v3 in the browser (nik/web/decide.js, decide-v3.bin).
+- **In flight:** GRPO v2 runs v4j (box 2, lr 3e-6) and v4k (box 1, lr 1e-5) from live v4c; corpus_v2 audit pass 2 on the kept corpus (box 2).
 - **Next:** if corpus_v2 audit passes -> tokenise as the replay/pretrain base on the box, re-run the best recipe on it
   (fixes the understanding drop); then Nik-Hard (Local-A) as the main gate; Nik-Decide yes/no fix; GRPO on verifiable tasks.
 - **Read `nik/docs/LEARNINGS.md`** before planning: findings, mistakes, numbers.
