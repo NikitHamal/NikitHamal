@@ -1,0 +1,15 @@
+{
+ "v": 1,
+ "sealer": "Claude",
+ "created": "2026-10-21T17:00:41Z",
+ "recipients": {
+  "Claude": {
+   "eph": "nLBhvMKawZzS86Z1NQHs4lVV3n4mVm7oCdk857/IpGk=",
+   "nonce": "1VpnliMBPsVlT8Hz",
+   "key": "oikjyDYtsErCE+3bVQrPHyQ3uLTdrUYtaSyQ7dN8wvZ295PACSvOmwrhDnvSyMel"
+  }
+ },
+ "nonce": "1F8jBeXtPDL1I6B6",
+ "data": "/qG1PlQjbOTWi8pA5VjIJdvkjwCzr7fhp0hIM0d2G+u36WcrU3XKPNs1MULFMhPiyXXDK+Oyp/rZtxXzOhEpQ61opox6YuFYhi7sfA2OFUKA5ANhyQHVLVNtq9cb0P8VA1vG5G0G3qU7YVidWoQVNWzo5beNyUi+eo2QW3PssUBJYrJEEo5STUEeXcDKZXZvzGdvyU3/iO8RNOVaY503u9fKwVtbkW67LRrzauaGeHKE9PGrX5/TIq5qngHxf8QepvEi7oQeQ/J+UINiX6Qmm18KHhSZ3s6PHeB8NSzigB6v0UTes7X/VP/kEM4+bkMNeo8BRkix4AVyLn34GpqJmN6qkNbUfH10NdmJpzSe/ycbp3E7pUU23E/+4twCpqG6v5uF/Pl1oU1I0x65Pek=",
+ "sig": "/eUa2+yu7mvTSBDmuutYYcwFiHg/hzKMp5jrEY4SzmNefVK84PCnrF8LdfeJLRKazIkWr+tdqe6SiUfSHaPTAA=="
+}
