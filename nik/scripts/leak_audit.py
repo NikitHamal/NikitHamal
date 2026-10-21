@@ -85,9 +85,11 @@ def grams(s, n=8):
     return {' '.join(w[i:i + n]) for i in range(max(0, len(w) - n + 1))}
 
 
-def audit_rows(rows, prompts, near_n=8):
+def audit_rows(rows, prompts, near_n=8, near=True):
+    pnorms = {source: {norm(p): p for p in ps} for source, ps in prompts.items()}
+    pgrams = {source: [grams(p, near_n) for p in ps] for source, ps in prompts.items()} if near else {}
     exact = []
-    near = []
+    near_hits = []
     by_source = {}
     for row in rows:
         cat = row.get('cat', '?')
@@ -98,20 +100,22 @@ def audit_rows(rows, prompts, near_n=8):
             nt = norm(text)
             if not nt:
                 continue
-            for source, ps in prompts.items():
-                hit = next((p for p in ps if norm(p) == nt), None)
+            for source, table in pnorms.items():
+                hit = table.get(nt)
                 if hit:
                     exact.append({'cat': cat, 'source': source, 'prompt': hit, 'text': text})
                     by_source[source] = by_source.get(source, 0) + 1
                     break
             else:
+                if not near:
+                    continue
                 gs = grams(text, near_n)
                 if gs:
-                    for source, ps in prompts.items():
-                        if any(gs & grams(p, near_n) for p in ps):
-                            near.append({'cat': cat, 'source': source, 'text': text})
+                    for source in pgrams:
+                        if any(gs & pg for pg in pgrams[source]):
+                            near_hits.append({'cat': cat, 'source': source, 'text': text})
                             break
-    return {'exact': exact, 'near': near, 'by_source': by_source}
+    return {'exact': exact, 'near': near_hits, 'by_source': by_source}
 
 
 def load_rows(paths):
@@ -130,12 +134,13 @@ def main():
     ap.add_argument('--max-exact', type=int, default=0, help='allowed exact hits in fatal sources')
     ap.add_argument('--max-near', type=float, default=0.02, help='allowed near-hit share in fatal sources')
     ap.add_argument('--show', type=int, default=5)
+    ap.add_argument('--exact-only', action='store_true', help='skip the 8-gram near pass on very large mixes')
     ap.add_argument('--root', default=ROOT)
     a = ap.parse_args()
     paths = [p for pat in a.jsonl for p in (glob.glob(pat) or [pat])]
     rows = load_rows(paths)
     prompts = collect_prompts(a.root)
-    report = audit_rows(rows, prompts)
+    report = audit_rows(rows, prompts, near=not a.exact_only)
     fatal_hits = sum(n for s, n in report['by_source'].items() if s in FATAL)
     fatal_near = sum(1 for r in report['near'] if r['source'] in FATAL)
     users = sum(1 for row in rows for m in row.get('messages', []) if m.get('role') == 'user')
