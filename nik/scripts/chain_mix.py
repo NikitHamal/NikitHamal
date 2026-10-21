@@ -36,7 +36,7 @@ sys.path.insert(0, TEACHER)
 CHAIN_CATS = ('math-word-frame', 'reason-iter')
 
 
-def chain_rows(n_frame, n_iter, seed):
+def chain_rows(n_frame, n_iter, n_roles, seed):
     import frame
     import iter as itgen
     R = random.Random(seed)
@@ -46,6 +46,10 @@ def chain_rows(n_frame, n_iter, seed):
         rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
     for _ in range(n_iter):
         d = itgen.make(R)
+        rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
+    for _ in range(n_roles):
+        import roles
+        d = roles.sample(R)
         rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
     return rows
 
@@ -57,6 +61,9 @@ def main():
     ap.add_argument('--name', required=True, help='output mix name')
     ap.add_argument('--frame', type=float, default=0.20, help='share of rows that are frame chains')
     ap.add_argument('--iter', type=float, default=0.10, help='share of rows that are iteration chains')
+    ap.add_argument('--roles', type=float, default=0.0,
+                    help='share of rows that are grounded-role rows (roles.py): bind the '
+                         'numbers in a text to their roles, then compute (issue #9)')
     ap.add_argument('--seed', type=int, default=77)
     ap.add_argument('--no-tokenize', action='store_true')
     a = ap.parse_args()
@@ -78,10 +85,12 @@ def main():
             continue
         rows.append(line)
     n_base = len(rows)
-    total = n_base + int(round((a.frame + a.iter) / max(1e-9, 1 - a.frame - a.iter) * n_base))
+    share = a.frame + a.iter + a.roles
+    total = n_base + int(round(share / max(1e-9, 1 - share) * n_base))
     n_frame = int(round(a.frame * total))
     n_iter = int(round(a.iter * total))
-    extra = chain_rows(n_frame, n_iter, a.seed)
+    n_roles = int(round(a.roles * total))
+    extra = chain_rows(n_frame, n_iter, n_roles, a.seed)
     for e in extra:
         rows.append(json.dumps(e, ensure_ascii=False))
     random.Random(a.seed + 1).shuffle(rows)
@@ -89,8 +98,10 @@ def main():
     with open(out_path, 'w', encoding='utf8') as f:
         f.write('\n'.join(rows) + '\n')
     print(f'base {a.base}: {n_base} rows ({dropped} chain rows removed) '
-          f'+ {n_frame} frame + {n_iter} iter = {len(rows)} -> {out_path}', flush=True)
-    print(f'chain share: {100 * (n_frame + n_iter) / max(1, len(rows)):.1f}% of rows', flush=True)
+          f'+ {n_frame} frame + {n_iter} iter + {n_roles} roles = {len(rows)} -> {out_path}',
+          flush=True)
+    print(f'chain share: {100 * (n_frame + n_iter) / max(1, len(rows)):.1f}% of rows, '
+          f'roles share: {100 * n_roles / max(1, len(rows)):.1f}%', flush=True)
     if not a.no_tokenize:
         pkg = os.path.join(ROOT, 'nik')
         if not os.path.isdir(pkg):
