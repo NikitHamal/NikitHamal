@@ -59,7 +59,12 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - Every line is verified with Scribe STT: lines 7 and 11 were regenerated after mishearings; line 21 only differs because of numerals.
   - Word timings come from the v3 alignment. `tools/import_vo.py` uses **forced alignment** (free) for owner takes.
   - Credit: "Voice: ElevenLabs".
-- [ ] Pass 4 (running): expressive voice; composite and score only (keys unchanged); re-render the kites, Deepawali and Laxmi Puja cards.
+- [x] **Pass 4 delivered** (2:40):
+  - Expressive ElevenLabs narration. Review copy: `out/dashain_v3_small.mp4`.
+  - 1080×1920 share copy (about 20 MB) delivered in chat; the chat attachment cap is about 20–24 MB.
+  - The 6 Mbps master (125 MB) is on the box at `out/dashain_v3_master.mp4` and in the sandbox at `/workspace/pulled/v3/out/`.
+  - Laxmi Puja card fixed. Deepawali (houses still dark) and kites (hazy) are improved but still weak.
+- Transfer speed: `/workspace/tools/mxpy.py` is a direct Python client for the marimo execute API, at 0.7 s per 700 KB chunk. `execute-code.sh` takes about 35 s per chunk because of jq. `bigpull.py` does resumable pulls with an md5 check.
 - [ ] Next:
   - Pull the pass-4 film and master, deliver.
   - If the owner pushes Kaanchi takes: run `ELEVEN_KEY=… python tools/import_vo.py`, then `cpu_build.sh` (composite + score only).
