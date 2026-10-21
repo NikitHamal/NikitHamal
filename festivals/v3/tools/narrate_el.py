@@ -29,7 +29,12 @@ def words_from(al, text):
         if not cur: s0 = a
         cur += c; prev = b
     if cur: out.append([cur, round(s0, 3), round(prev, 3)])
-    return [w for w in out if w[0] not in ("—",)]
+    import re
+    clean = []
+    for w, a, b in out:
+        w2 = re.sub(r"\[[^\]]*\]", "", w).strip(".…'\"")
+        if w2 and w2 not in ("—",) and not re.fullmatch(r"[\W_]+", w2): clean.append([w2, a, b])
+    return clean
 
 
 def main():
@@ -37,7 +42,7 @@ def main():
     L = json.load(open(f"{HERE}/lines.json"))
     for r in L:
         if not r.get("speak") or (only and r["id"] not in only): continue
-        d = tts(r["speak"]); out = f"{HERE}/audio/vo/{r['id']:02d}.mp3"
+        d = tts(r.get("speak_v3") or r["speak"]); out = f"{HERE}/audio/vo/{r['id']:02d}.mp3"
         open(out, "wb").write(base64.b64decode(d["audio_base64"]))
         al = d.get("normalized_alignment") or d["alignment"]
         r["words"] = words_from(d["alignment"], r["speak"]); r["vo_dur"] = round(d["alignment"]["character_end_times_seconds"][-1] + 0.25, 3)

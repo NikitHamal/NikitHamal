@@ -28,3 +28,6 @@ Kaanchi (`BTUIboFmihb87sfmikzP`) is a library voice. ElevenLabs does not allow l
 1. Choose the voice **Kaanchi** and the model **Eleven v3**.
 2. Paste each `NN.txt` and download the clip as `takes/NN.mp3`. The script is about 1,400 characters, so it fits the free quota.
 3. Push. Then run `ELEVEN_KEY=… python tools/import_vo.py`. ElevenLabs **forced alignment** works on the free key and gives each take exact word timings.
+
+## Expressive v3 script
+`script_v3_expressive.txt` and the `NN_v3.txt` files hold the same lines with ElevenLabs v3 audio tags, for example `[softly]`, `[whispers]`, `[in awe]`, `[reverently][slowly]`, `[proudly]` and `[warmly][smiling]`, plus `...` for breaths and pauses. Paste them with the model **Eleven v3** selected; the tags are not spoken. The on-screen captions always come from the plain text.
