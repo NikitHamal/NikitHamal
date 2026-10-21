@@ -1,0 +1,198 @@
+[
+ {
+  "id": 1,
+  "section": "open",
+  "picture": "Darkness. A clay diyo lights, and its glow finds a brass kalash. Dust in the light.",
+  "text": "हरेक वर्ष असोजको उज्यालो पक्षमा नेपालभरि एउटै कथा फेरि सुनाइन्छ।",
+  "speak": "हरेक वर्ष असोजको उज्यालो पक्षमा नेपालभरि एउटै कथा फेरि सुनाइन्छ।",
+  "rate": "-6%",
+  "vo_dur": 5.52
+ },
+ {
+  "id": 2,
+  "section": "title",
+  "picture": "The flame grows into the title दशैँ.",
+  "text": "दशैँ",
+  "speak": null,
+  "rate": "-6%"
+ },
+ {
+  "id": 3,
+  "section": "myth",
+  "picture": "A palm-leaf manuscript opens in a slow dolly; Sanskrit verses in gold.",
+  "text": "यो कथा देवी माहात्म्यमा छ — मार्कण्डेय पुराणभित्रको, करिब पन्ध्र सय वर्ष पुरानो संस्कृत ग्रन्थ।",
+  "speak": "यो कथा देवी माहात्म्यमा छ — मार्कण्डेय पुराणभित्रको, करिब पन्ध्र सय वर्ष पुरानो संस्कृत ग्रन्थ।",
+  "rate": "-6%",
+  "vo_dur": 7.56
+ },
+ {
+  "id": 4,
+  "section": "myth",
+  "picture": "Smoke; the horns and ember eyes of a vast buffalo-demon rise out of the dark.",
+  "text": "महिषासुरले वरदान पाएको थियो — कुनै देवता वा पुरुषले उसलाई मार्न सक्ने छैनन्।",
+  "speak": "महिषासुरले वरदान पाएको थियो — कुनै देवता वा पुरुषले उसलाई मार्न सक्ने छैनन्।",
+  "rate": "-6%",
+  "vo_dur": 6.24
+ },
+ {
+  "id": 5,
+  "section": "myth",
+  "picture": "Beams of light from every direction meet in one point; a gilt trishul forms.",
+  "text": "त्यसैले सबै देवताको तेज एकै ठाउँ मिल्यो, र जन्मिइन् — शक्ति, दुर्गा।",
+  "speak": "त्यसैले सबै देवताको तेज एकै ठाउँ मिल्यो, र जन्मिइन् — शक्ति, दुर्गा।",
+  "rate": "-6%",
+  "vo_dur": 5.52
+ },
+ {
+  "id": 6,
+  "section": "myth",
+  "picture": "Nine moons wax across the sky; on the tenth the horns shatter.",
+  "text": "परम्पराअनुसार नौ रात युद्ध चल्यो। दशौँ दिन असत्यमाथि सत्यको जित भयो — विजया दशमी।",
+  "speak": "परम्पराअनुसार नौ रात युद्ध चल्यो। दशौँ दिन असत्यमाथि सत्यको जित भयो — विजया दशमी।",
+  "rate": "-6%",
+  "vo_dur": 7.752
+ },
+ {
+  "id": 7,
+  "section": "myth",
+  "picture": "A bow and an arrow of light across a sea of dusk.",
+  "text": "रामले रावणमाथि पाएको विजय पनि यही दिनसँग जोडिन्छ।",
+  "speak": "रामले रावणमाथि पाएको विजय पनि यही दिनसँग जोडिन्छ।",
+  "rate": "-6%",
+  "vo_dur": 4.632
+ },
+ {
+  "id": 8,
+  "section": "Nepal",
+  "picture": "The 2020 official map of Nepal rises from the dark as a relief slab, with Limpiyadhura, Lipulekh and Kalapani. Kathmandu glows.",
+  "text": "नेपालमा यो चाडको इतिहास दरबारसँग गाँसिएको छ।",
+  "speak": "नेपालमा यो चाडको इतिहास दरबारसँग गाँसिएको छ।",
+  "rate": "-6%",
+  "vo_dur": 4.296
+ },
+ {
+  "id": 9,
+  "section": "Nepal",
+  "picture": "Hanuman Dhoka at night; the tiered roof of Taleju. One door glows.",
+  "text": "मल्ल राजाहरूकी कुलदेवी तलेजु भवानी — जसको मन्दिर वर्षमा एक पटक, नवमीमा, आम मानिसका लागि खुल्छ।",
+  "speak": "मल्ल राजाहरूकी कुलदेवी तलेजु भवानी — जसको मन्दिर वर्षमा एक पटक, नवमीमा, आम मानिसका लागि खुल्छ।",
+  "rate": "-6%",
+  "vo_dur": 8.136
+ },
+ {
+  "id": 10,
+  "section": "Nepal",
+  "picture": "Back on the map: a line of light runs Gorkha → Kathmandu.",
+  "text": "वि.सं. १८२५ मा उपत्यका जितेपछि पृथ्वीनारायण शाहले गोरखाबाट फूलपाती हनुमानढोका ल्याउने चलन बसालेको मानिन्छ।",
+  "speak": "विक्रम संवत् अठार सय पच्चीसमा उपत्यका जितेपछि, पृथ्वीनारायण शाहले गोरखाबाट फूलपाती हनुमानढोका ल्याउने चलन बसालेको मानिन्छ।",
+  "rate": "-6%",
+  "vo_dur": 9.96
+ },
+ {
+  "id": 11,
+  "section": "days",
+  "picture": "Pixel-art strip of fifteen waxing moons (the one pixel interlude). Day 1 lights.",
+  "text": "पहिलो दिन, घटस्थापना।",
+  "speak": "पहिलो दिन, घटस्थापना।",
+  "rate": "-6%",
+  "vo_dur": 2.616
+ },
+ {
+  "id": 12,
+  "section": "days",
+  "picture": "Kalash in a dark room; barley sprouts, grows pale yellow (time-lapse).",
+  "text": "अँध्यारो कोठामा छरिएको जौ घाम नदेखी पहेँलो जमरा बनेर उम्रन्छ।",
+  "speak": "अँध्यारो कोठामा छरिएको जौ घाम नदेखी पहेँलो जमरा बनेर उम्रन्छ।",
+  "rate": "-6%",
+  "vo_dur": 5.328
+ },
+ {
+  "id": 13,
+  "section": "days",
+  "picture": "Day 7. A palanquin of nine plants; muzzle flashes on the parade ground.",
+  "text": "सातौँ दिन फूलपाती — केरा, बेल, बेसार, अनार, धानसहित नौ थरी बिरुवा, र टुँडिखेलमा सलामी।",
+  "speak": "सातौँ दिन फूलपाती — केरा, बेल, बेसार, अनार, धानसहित नौ थरी बिरुवा, र टुँडिखेलमा सलामी।",
+  "rate": "-6%",
+  "vo_dur": 7.2
+ },
+ {
+  "id": 14,
+  "section": "days",
+  "picture": "Day 8 and 9. Rows of butter lamps; then tools and a bicycle with red tika and marigolds.",
+  "text": "अष्टमीमा कालरात्रिको पूजा; नवमीमा हतियार, औजार र सवारीसाधनको।",
+  "speak": "अष्टमीमा कालरात्रिको पूजा; नवमीमा हतियार, औजार र सवारीसाधनको।",
+  "rate": "-6%",
+  "vo_dur": 5.616
+ },
+ {
+  "id": 15,
+  "section": "days",
+  "picture": "Day 10. The brass thali: red rice, curd, jamara.",
+  "text": "दशमीमा साइत हेरेर ठूलाबडाको हातबाट रातो टीका र जमरा।",
+  "speak": "दशमीमा साइत हेरेर ठूलाबडाको हातबाट रातो टीका र जमरा।",
+  "rate": "-6%",
+  "vo_dur": 4.992
+ },
+ {
+  "id": 16,
+  "section": "days",
+  "picture": "Day 15. Full moon over the valley; one lamp in a window.",
+  "text": "अनि पूर्णिमासम्म — कोजाग्रत, 'को जाग्दैछ?' भन्दै लक्ष्मी आउने विश्वास।",
+  "speak": "अनि पूर्णिमासम्म — कोजाग्रत, 'को जाग्दैछ?' भन्दै लक्ष्मी आउने विश्वास।",
+  "rate": "-6%",
+  "vo_dur": 5.4
+ },
+ {
+  "id": 17,
+  "section": "people",
+  "picture": "A bamboo linge ping against the hills; kites over the rooftops.",
+  "text": "दशैँ आकाशमा पनि देखिन्छ — गाउँगाउँमा लिङ्गे पिङ, छतछतमा चङ्गा।",
+  "speak": "दशैँ आकाशमा पनि देखिन्छ — गाउँगाउँमा लिङ्गे पिङ, छतछतमा चङ्गा।",
+  "rate": "-6%",
+  "vo_dur": 5.496
+ },
+ {
+  "id": 18,
+  "section": "people",
+  "picture": "A night bus with a loaded roof winds up a hill road; headlights.",
+  "text": "अनि बाटोभरि घर फर्किनेहरूको लाम।",
+  "speak": "अनि बाटोभरि घर फर्किनेहरूको लाम।",
+  "rate": "-6%",
+  "vo_dur": 3.336
+ },
+ {
+  "id": 19,
+  "section": "people",
+  "picture": "Many doorways, many lamps; different hands.",
+  "text": "सबै समुदायले यसलाई एउटै तरिकाले मनाउँदैनन्; तर भेटघाट, आशीर्वाद र मिलन धेरैको साझा हो।",
+  "speak": "सबै समुदायले यसलाई एउटै तरिकाले मनाउँदैनन्; तर भेटघाट, आशीर्वाद र मिलन धेरैको साझा हो।",
+  "rate": "-6%",
+  "vo_dur": 7.248
+ },
+ {
+  "id": 20,
+  "section": "blessing",
+  "picture": "Close on the thali; a thumb of red rice comes toward the lens.",
+  "text": "आयु द्रोणसुते, श्रियो दशरथे, शत्रुक्षयं राघवे…",
+  "speak": "आयुर्द्रोणसुते, श्रियो दशरथे, शत्रुक्षयं राघवे।",
+  "rate": "-14%",
+  "vo_dur": 4.824
+ },
+ {
+  "id": 21,
+  "section": "wish",
+  "picture": "The red frame clears to jamara and a lamp.",
+  "text": "विजया दशमी २०८३ को हार्दिक मंगलमय शुभकामना।",
+  "speak": "विजया दशमी दुई हजार त्रियासीको हार्दिक मंगलमय शुभकामना।",
+  "rate": "-6%",
+  "vo_dur": 5.016
+ },
+ {
+  "id": 22,
+  "section": "sign",
+  "picture": "",
+  "text": "— निकित हमाल",
+  "speak": null,
+  "rate": "-6%"
+ }
+]
