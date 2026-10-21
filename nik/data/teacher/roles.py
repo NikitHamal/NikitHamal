@@ -720,6 +720,17 @@ def sample(R, scene=None):
         # the uniform draw - a skill that is rare is not learned (the money scene
         # needed 35% of the frame rows for the same reason).
         # ROLES_SYMBOLIC=0 switches them off, for the A/B against a mix without them.
+        # The "read the story first" family (readfirst.py): the first line of the trace
+        # is the numbers of the story in the order they appear, with no invented labels.
+        # The p14/p15 arms read the benchmark's held-out word templates by grabbing one
+        # of the labelled trace styles they had learned and then binding the numbers
+        # wrongly, so the missing move is the *derivation*, not the arithmetic.
+        if os.environ.get('ROLES_READFIRST', '1') == '1' and R.random() < 0.2:
+            try:
+                import readfirst
+                return readfirst.sample(R)
+            except Exception:
+                pass
         if os.environ.get('ROLES_SYMBOLIC', '1') == '1':
             if R.random() < 0.25:
                 scene = scene_nested_expr if R.random() < 0.5 else scene_chain_expr
