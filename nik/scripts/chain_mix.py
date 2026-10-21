@@ -28,7 +28,10 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
-sys.path.insert(0, os.path.join(ROOT, 'data', 'teacher'))
+TEACHER = os.path.join(ROOT, 'data', 'teacher')
+if not os.path.isdir(TEACHER):
+    TEACHER = os.path.join(ROOT, 'nik', 'data', 'teacher')
+sys.path.insert(0, TEACHER)
 
 CHAIN_CATS = ('math-word-frame', 'reason-iter')
 
