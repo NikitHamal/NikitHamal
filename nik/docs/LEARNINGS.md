@@ -8,6 +8,18 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **The corpus audit wrote the raw input back as "clean" (Local-A found it).** `corpus_audit.py main()` rewrote every
+  input doc to `--out-corpus`, so corpus_v2.jsonl had all 6,618,729 docs (28% dups, 47 eval-contaminated). v5 trained
+  50 min on it before the fix; restarted on the fixed output (4,765,217 docs, PASS). Check output line counts, not reports.
+- **write.py carried 5 stress prompts verbatim** (tihar message, haiku, pokhara 3 lines, kahani, english sentence; ~180
+  rows per 2.4M). Stress `write` 10/10 was a trained-on number for v4b-v4f3. `make_sft2.py` now drops exact
+  understand/stress prompts. chat_check greetings are unavoidable in chat data: treat it as a sanity gate only.
+- **v4f3 (Local-C, v4c + money-binding scene, lr 2e-4)**, re-checked on the same plain n16 set: NikBench 63.2% (v4f 72.2),
+  reason 28/48 (v4f 39), understanding **20/26** (v4f 13, clean: 0 understand leaks), traps 8/12, ladder L2 1/12 (first
+  non-zero). Nested-set 68.4% did not reproduce on the plain set: always compare on one item set.
+- **Nik-Decide v4** adds `math-step` (which line is a valid step for this question): 92.5% held-out after 25 min;
+  yes/no 99.6%, lookup 92.7%, math-verify 82%. Candidate per-step reward for RL.
+
 - **v4f shipped on the owner's call (07:45 UTC).** NikBench 72.2% vs v4c 62.5%, reason 39/48, word 6/48, traps 9/12,
   chat 15/15, but understanding 13/26 (v4c 19). The gate said no; the owner weighed reasoning + traps over the probes.
   Rollback file: `nik/web/model/nik-0.1.v4c.bin`.
