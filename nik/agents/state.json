@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T09:57:13Z",
+ "updated": "2026-10-21T10:18:47Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -15,10 +15,10 @@
   },
   {
    "name": "box 2",
-   "gpu": "GPU 100% \u00b7 55074 MiB",
+   "gpu": "GPU 100% \u00b7 61982 MiB",
    "job": "v5 from scratch on clean corpus_v2 + sft12 (stage A 150 min -> SFT 25 -> gates vs v4f)",
-   "progress": 0.335,
-   "detail": "step 3775 \u00b7 123,266 tok/s \u00b7 67.0 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: bench.py, train.py",
+   "progress": 0.4415,
+   "detail": "step 5300 \u00b7 131,344 tok/s \u00b7 88.3 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
    "eta": "~12:30 UTC"
   }
  ],
@@ -64,5 +64,48 @@
     "0/12"
    ]
   ]
- }
+ },
+ "runs": [
+  {
+   "tag": "v5",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "training",
+   "what": "from scratch on clean corpus_v2 (4.77M docs) + sft12; stage A 150 min -> SFT 25 -> gates vs v4f"
+  },
+  {
+   "tag": "v5w",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "waiting",
+   "what": "14 unique blocks (nik-0.1w), same recipe; waits for the fixed corpus audit"
+  },
+  {
+   "tag": "decide-v5",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "training",
+   "what": "Nik-Decide 55 min, adds math-step verifier"
+  },
+  {
+   "tag": "v4f4 arms E-H",
+   "box": "box 2",
+   "by": "Local-C",
+   "status": "running",
+   "what": "roles dose 20%, gate-prompt filter, persona rows"
+  },
+  {
+   "tag": "tv25",
+   "box": "box 2",
+   "by": "Local-A",
+   "status": "claimed",
+   "what": "weight-space persona fix v4f4 + 0.25(v4f3-v4c); needs a paired check vs live v4f"
+  }
+ ],
+ "next": [
+  "Verify Local-A's tv25 against live v4f on the same items",
+  "Sky's reduce.py rewrite traces for L2 -> molab 20-min run",
+  "v5 gates vs v4f (~12:30 UTC)",
+  "Owner decision: v4f vs v4f3/v4f4 family"
+ ]
 }
