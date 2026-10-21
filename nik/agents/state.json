@@ -1,0 +1,17 @@
+{
+  "updated": "2026-10-21T09:45:00Z",
+  "live": {"model": "v4f", "note": "NikBench 72.2% · reason 39/48 · understanding 13/26 · traps 9/12 (rollback: v4c)"},
+  "boxes": [
+    {"name": "box 1", "gpu": "RTX PRO 6000", "job": "corpus audit (fixed code) -> v5w (14 unique blocks) from scratch", "progress": 0.1, "detail": "Nik-Decide v5 training beside it (55 min)", "eta": "v5w results ~13:30 UTC"},
+    {"name": "box 2", "gpu": "RTX PRO 6000", "job": "v5 from scratch on clean corpus_v2 (4.77M docs) + sft12", "progress": 0.25, "detail": "stage A 150 min, then SFT 25 min, then gates vs v4f; GPU shared with Local-C soups", "eta": "~12:30 UTC"}
+  ],
+  "scoreboard": {
+    "cols": ["bench", "reason", "und", "traps", "L2"],
+    "rows": [
+      ["v4f (live)", "72.2%", "39/48", "13/26", "9/12", "0/12"],
+      ["v4m", "68.8%", "35/48", "16/26", "9/12", "0/12"],
+      ["v4f3 (Local-C)", "63.2%", "28/48", "20/26", "8/12", "1/12"],
+      ["v4c", "62.5%", "27/48", "19/26", "5/12", "0/12"]
+    ]
+  }
+}
