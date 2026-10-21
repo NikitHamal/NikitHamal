@@ -32,7 +32,8 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - `sets_a.py`: lamp room, palm-leaf manuscript, Mahishasura (metaballs, horns, volumetric smoke, glowing cracks), the gods' beams converging into a gilt trishul, physically lit waxing moon with the horns shattering, Rama's arrow over an ocean-modifier sea.
   - `sets_b.py`: real-elevation relief of Nepal from AWS Terrain Tiles, inside the 2020 boundary (Limpiyadhura, Lipulekh, Kalapani labelled) with the Gorkha → Kathmandu Fulpati thread; Taleju on its stepped plinth; jamara growing in the dark; Fulpati doli + salute; 252 Ashtami lamps; khukuri/hasiya with tika; thali with 4,500 rice grains; valley at Kojagrat; linge ping + kites; night bus + switchback lights; lane of doorways.
 - [x] Type: `tools/type_render.py` uses Chromium, because Pillow here has no raqm and so cannot shape Devanagari. It produces per-word PNGs. `tools/composite.py` handles word-synced reveals, kickers, map labels, the Navadurga names, the pixel-art moon calendar (the only pixel element), transitions, grain and vignette.
-- [ ] **BLOCKED on molab URL/token (owner to paste).** Nothing has been rendered yet. Every script has only been compiled, never run.
+- [x] API check without rendering: `blender/render.py --shot N --dry` builds each set in bpy 4.2 and steps its animation. All 21 film shots and the 4 Tihar sets pass. Map framing was checked numerically: Nepal fills the frame width, and the Limpiyadhura/Lipulekh/Kalapani, Gorkha and Kathmandu marks are on screen.
+- [ ] **BLOCKED on molab URL/token (owner to paste).** Not one pixel has been rendered yet.
 - [ ] On molab:
   1. `bash festivals/v3/build.sh setup dem type audio`.
   2. Test stills: `python blender/render.py --shot N --t 2 --samples 32 --still /tmp/sN.png` for every shot. Fix, then iterate.

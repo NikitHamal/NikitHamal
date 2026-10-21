@@ -55,7 +55,7 @@ def set_map(sc, A, variant="rise"):
     pb.inputs["Roughness"].default_value = 0.85
     relief.data.materials.append(rm)
     # side walls: the outline extruded down (a slab), deep red
-    P = np.array([ll(x, y) for x, y in poly])
+    P = [ll(x, y) for x, y in poly]
     n = len(P); WV = []; WF = []
     for i, p in enumerate(P):
         WV += [(p.x, p.y, 0.06), (p.x, p.y, -0.12)]
@@ -93,17 +93,18 @@ def set_map(sc, A, variant="rise"):
             k = ease(u / 0.55)
             root.location = (0, 0, lerp(-1.2, 0, k)); root.rotation_euler = (lerp(-0.5, 0, k), 0, lerp(0.25, 0, k))
             pin_m.node_tree.nodes["Emission"].inputs[1].default_value = 40 * ease((u - 0.55) / 0.15) * (0.75 + 0.25 * math.sin(t * 6))
-            aim(cam, lerp((0.0, -20.0, 11.0), (0.5, -15.5, 8.0), ease(u)), (lerp(0.2, 0.8, ease(u)), 0.3, 0))
+            aim(cam, lerp((0.0, -15.5, 15.5), (0.25, -12.0, 12.5), ease(u)), (lerp(0.15, 0.3, ease(u)), 0.25, 0))
             cam.data.dof.focus_distance = (Vector(cam.location) - Vector((0.6, 0.3, 0))).length
             route.data.bevel_factor_end = 0.0
         else:  # route: the camera comes down close over Gorkha and follows the thread to Kathmandu
             pin_m.node_tree.nodes["Emission"].inputs[1].default_value = 40 * (0.75 + 0.25 * math.sin(t * 6))
             pin_g.data.materials[0].node_tree.nodes["Emission"].inputs[1].default_value = 30
             route.data.bevel_factor_end = ease((u - 0.15) / 0.65)
-            mid = lerp(gorkha, ktm, ease((u - 0.1) / 0.8))
-            aim(cam, Vector(mid) + Vector((0.15, -1.6, 1.1)), Vector(mid) + Vector((0, 0.15, 0)))
-            cam.data.dof.focus_distance = 1.95
+            mid = lerp(gorkha, ktm, lerp(0.35, 0.65, ease(u)))
+            aim(cam, Vector(mid) + Vector((0.05, lerp(-2.3, -1.9, ease(u)), lerp(1.8, 1.45, ease(u)))), Vector(mid) + Vector((0, 0.1, 0)))
+            cam.data.dof.focus_distance = (Vector(cam.location) - Vector(mid)).length
         mk = {}
+        bpy.context.view_layer.update()
         from bpy_extras.object_utils import world_to_camera_view
         for k_, v in marks.items():
             w = root.matrix_world @ v

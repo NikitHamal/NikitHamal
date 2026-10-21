@@ -195,7 +195,7 @@ def frame(f):
                     if name == "west": a *= ease((u - 0.7) / 0.15)
                     px, py = x * W, y * H
                     fr[int(py) - 1:int(py) + 2, int(px) - 1:int(px) + 2] = fr[int(py) - 1:int(py) + 2, int(px) - 1:int(px) + 2] * (1 - a) + 255 * a
-                    over(fr, lb, px - lb.shape[1] / 2, py - lb.shape[0] - 18, a)
+                    over(fr, lb, min(max(24, px - lb.shape[1] / 2), W - lb.shape[1] - 24), py - lb.shape[0] - 18, a)
     if sid in DAY_OF_SHOT:  # pixel calendar: centre-stage in shot 11, docked at the top for the days
         day = DAY_OF_SHOT[sid]
         if sid == 14 and u > 0.47: day = 9

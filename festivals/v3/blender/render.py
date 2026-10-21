@@ -50,6 +50,7 @@ def main():
     ap.add_argument("--w", type=int, default=1080); ap.add_argument("--h", type=int, default=1920)
     ap.add_argument("--t", type=float, default=None, help="render a single still at this shot time (seconds)")
     ap.add_argument("--still", default=None, help="output path for --t")
+    ap.add_argument("--dry", action="store_true", help="build the set and step the animation, render nothing (API check)")
     a = ap.parse_args([x for x in sys.argv[1:] if x != "--"])
     tl = json.load(open(f"{ROOT}/timeline.json")); fps = tl["fps"]
     shot = next(s for s in tl["shots"] if s["id"] == a.shot)
@@ -58,6 +59,10 @@ def main():
     A = assets(); A.update(kw)
     variant = A.pop("variant", None)
     upd = build(sc, A, variant) if variant else build(sc, A)
+    if a.dry:
+        for t in (0.0, shot["dur"] * 0.33, shot["dur"] * 0.66, shot["dur"] * 0.99):
+            upd(t, shot["dur"])
+        print("DRY OK shot", a.shot, "objects", len(bpy.data.objects)); return
     os.makedirs(a.out, exist_ok=True)
     if a.t is not None:
         upd(a.t, shot["dur"]); sc.render.filepath = a.still or f"{a.out}/still_{a.shot}.png"
