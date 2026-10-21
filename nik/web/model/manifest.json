@@ -1,37 +1,41 @@
 {
   "name": "nik 0.1",
   "file": "nik-0.1.bin",
-  "bytes": 20689696,
-  "version": "2026-10-20T20:45Z",
-  "trained": "molab RTX PRO 6000 \u00b7 v4c = v4b + 15 min SFT on sft7 (sft6 recipe + Grounded Ledger word problems 4% (Local-A), grounding-fixed read.py (Codex), weekday ordinal; chat 300k, write 60k, gold x40)",
+  "bytes": 20689712,
+  "version": "2026-10-21T07:45Z",
+  "trained": "molab RTX PRO 6000 · v4f = v4c + SFT on sft8+ (frame.py/iter.py chains (Local-C), names.py, gold x20, reply cap 100)",
   "eval": {
-    "nikbench_n16": 0.625,
+    "nikbench_n16": 0.722,
     "nikbench_groups_n16": {
-      "arith": "153/192",
-      "word": "0/48",
-      "reason": "27/48"
+      "arith": "163/192",
+      "word": "6/48",
+      "reason": "39/48"
     },
-    "math_acc": 0.945,
+    "math_acc": 0.96,
     "persona_acc": 1.0,
-    "understanding_probes": "19/26",
+    "understanding_probes": "13/26",
     "chat_check": "15/15",
-    "stress": "64/103",
-    "browser_engine_greedy_36": "20/36"
+    "stress": "63/103",
+    "trap_check": "9/12"
   },
-  "note": "Paired McNemar vs v4b (288 items): reasoning +12.5 pp (6 fixed / 0 broken, p=0.031), arith -0.5 pp, word -1 item, overall +1.4 pp (n.s.). Understanding +3, stress +5 (10 fixed / 5 regressed incl. persona project list and one reading item). Browser-engine 36-item set 22 -> 20 (within noise). Shipped under the pre-registered gate (issue #9).",
+  "note": "Shipped on the owner's call (2026-10-21) over the understanding gate: NikBench +9.7 pp vs v4c (reason 27->39/48, word 0->6/48), traps 5->9/12 (\"mero naam nikit ho\" no longer returns the biography); understanding probes 19->13/26 and stress 64->63. Rollback: nik-0.1.v4c.bin.",
   "previous": {
-    "file": "nik-0.1.v4b.bin",
-    "nikbench_n16": 0.611,
-    "nikbench_groups_n16": {
-      "arith": "154/192",
-      "word": "1/48",
-      "reason": "21/48"
+    "eval": {
+      "nikbench_n16": 0.625,
+      "nikbench_groups_n16": {
+        "arith": "153/192",
+        "word": "0/48",
+        "reason": "27/48"
+      },
+      "math_acc": 0.945,
+      "persona_acc": 1.0,
+      "understanding_probes": "19/26",
+      "chat_check": "15/15",
+      "stress": "64/103",
+      "browser_engine_greedy_36": "20/36"
     },
-    "math_acc": 0.955,
-    "persona_acc": 1.0,
-    "understanding_probes": "16/26",
-    "chat_check": "15/15",
-    "stress": "59/103",
-    "browser_engine_greedy_36": "22/36"
+    "note": "Paired McNemar vs v4b (288 items): reasoning +12.5 pp (6 fixed / 0 broken, p=0.031), arith -0.5 pp, word -1 item, overall +1.4 pp (n.s.). Understanding +3, stress +5 (10 fixed / 5 regressed incl. persona project list and one reading item). Browser-engine 36-item set 22 -> 20 (within noise). Shipped under the pre-registered gate (issue #9).",
+    "trained": "molab RTX PRO 6000 · v4c = v4b + 15 min SFT on sft7 (sft6 recipe + Grounded Ledger word problems 4% (Local-A), grounding-fixed read.py (Codex), weekday ordinal; chat 300k, write 60k, gold x40)",
+    "file": "nik-0.1.v4c.bin"
   }
 }
