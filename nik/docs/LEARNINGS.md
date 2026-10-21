@@ -8,6 +8,13 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **NikBench-RW (strict, real-world) exposes what the old benches hid:** m50 1/45 situations (25/135 answers): unknown
+  0/18 (invents facts), format 1/18 (ignores "number matra"), money 4/21 (drops the quantity in qty x price). A harness
+  bug first made it look worse (160-token cap, calc off); it now uses /chat's decoding (maxNew 440, calc on, greedy).
+- **More existing data does not fix it:** CPU micro-SFT of m50 with read 15% + correct 10% + roles 10%: RW 2/45, 23/135.
+- **p8m = m50 + 12 min on Local-C's p8 mix:** understanding 19 -> 22, math 94 -> 97.5, RW 1 -> 3/45, but the nested word
+  family 16 -> 10/48, traps 9 -> 8, reading 2 -> 1 pairs. Polishing moves understanding/math, not composition.
+
 - **Mistake (Claude): automating molab got two owner accounts restricted for acceptable-use violations.** A headless
   browser with the owner's cookies kept notebooks open on three accounts and re-provisioned a GPU box after every 410
   (~15 sandboxes in an hour). Boxes died faster and faster (1-8 min), then molab showed "Your account is restricted ...
