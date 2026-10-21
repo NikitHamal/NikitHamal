@@ -1,17 +1,25 @@
 {
- "updated": "2026-10-21T18:35:12Z",
+ "updated": "2026-10-21T18:39:58Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "box 2",
-   "gpu": "RTX Pro 6000 \u00b7 owner's notebook (one account, used normally)",
-   "job": "Claude: p8m (m50 + p8 mix, 12 min) -> gate vs m50 incl. NikBench-RW",
+   "name": "box 1",
+   "gpu": "RTX Pro 6000 \u00b7 owner notebook",
+   "job": "Claude: p8m (m50 + p8 mix) -> gate vs m50 incl. NikBench-RW",
    "progress": null,
-   "detail": "live status panel in the notebook (auto refresh 10 s + refresh button); stages saved to Kaggle",
+   "detail": "status panel in the notebook",
    "eta": "~19:20 UTC"
+  },
+  {
+   "name": "box 2",
+   "gpu": "RTX Pro 6000 \u00b7 owner notebook (shared)",
+   "job": "Local-C arms + owner's reel renders",
+   "progress": null,
+   "detail": "owner shared the login directly; status panel in the notebook",
+   "eta": "-"
   }
  ],
  "scoreboard": {
