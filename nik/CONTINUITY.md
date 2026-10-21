@@ -83,7 +83,8 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
   1/20 -> not shipped. Bin: sandbox + Kaggle `nik-p8m-bin` (may not exist; md5 52d2e0e4).
 - **GPU: the owner opens molab notebooks by hand and pastes the pair URL+token in chat.** Box 1 is shared Claude + Local-C
   via the vault; protocol: one GPU job at a time via `/tmp/gpu.lock`, chunks <= 9 min, artefacts off the box at once,
-  work dirs `/tmp/claude` `/tmp/localc`. A status panel (marimo `mo.ui.refresh` cards + refresh button) sits at the top
+  work dirs `/tmp/claude` `/tmp/localc`. **Launch jobs detached (setsid nohup ... &)**: an execute call from another
+  agent interrupts a blocking scratchpad call (Claude's status check killed Local-C's p11 at 19:29). Do not call the box while the lock names someone else. A status panel (marimo `mo.ui.refresh` cards + refresh button) sits at the top
   of each notebook. **Never automate molab accounts** (two owner accounts were restricted for that; see molab/README.md).
 - Kaggle is storage only: `nik-replay-corpus-2026-10-21` (173M-token replay corpus), `nik-candidates-2026-10-21`, `nik-p8m-mix`.
 - Owner wants: continuous loop, status messages mid-work, /agents (#8, state.json) current, docs current.
