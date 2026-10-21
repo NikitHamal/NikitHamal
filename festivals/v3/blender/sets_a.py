@@ -310,7 +310,7 @@ def set_moon(sc, A):
 # ------------------------------------------------------------------ 7 Rama: an arrow of light over a dusk sea
 def set_sea(sc, A):
     world(sky=[(0.0, (0.55, 0.18, 0.06)), (0.18, (0.35, 0.09, 0.08)), (0.5, (0.06, 0.03, 0.07)), (1.0, (0.01, 0.01, 0.03))], strength=1.0)
-    hdri_sky("belfast_sunset_puresky", 0.6, A.get("sky_rot", 3.4))
+    hdri_sky("belfast_sunset_puresky", 0.6, A.get("sky_rot", float(os.environ.get("SKY_ROT", "3.4"))))
     bpy.ops.mesh.primitive_plane_add(size=2); sea = bpy.context.object
     oc = sea.modifiers.new("ocean", "OCEAN"); oc.size = 1.0; oc.spatial_size = 60; oc.resolution = 14; oc.wave_scale = 0.9; oc.choppiness = 1.2
     oc.geometry_mode = "GENERATE"; oc.repeat_x = oc.repeat_y = 4

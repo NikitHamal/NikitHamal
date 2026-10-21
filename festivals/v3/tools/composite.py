@@ -241,7 +241,7 @@ def frame(f):
         if n:
             ln = img(f"{B}/type/night_{n}.png"); tn = (u * s["dur"]) - (n - 1) * sh * s["dur"] / 9
             a = ease(tn / 0.25) * (1 - ease((tn - sh * s["dur"] / 9 + 0.15) / 0.15))
-            over(fr, ln, (W - ln.shape[1]) / 2, 860, a)
+            over(fr, ln, (W - ln.shape[1]) / 2, 250, a)
     if sid in (8, 10):
         mp = f"{B}/plates/marks_{sid}.json"
         if KEYS is not None or os.path.exists(mp):

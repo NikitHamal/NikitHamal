@@ -410,7 +410,8 @@ def houses(name, n, area, seed=1, lit_frac=0.15):
 def set_valley(sc, A):
     world(sky=[(0.0, (0.02, 0.03, 0.07)), (0.35, (0.01, 0.014, 0.04)), (1.0, (0.002, 0.003, 0.012))], strength=1.0)
     hdri_light("dikhololo_night", 0.6)
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=200, y_subdivisions=200, size=400); hills = bpy.context.object
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=300, y_subdivisions=300, size=400); hills = bpy.context.object
+    for p_ in hills.data.polygons: p_.use_smooth = True
     tx = bpy.data.textures.new("hills", "CLOUDS"); tx.noise_scale = 1.4
     dm = hills.modifiers.new("d", "DISPLACE"); dm.texture = tx; dm.strength = 1.0; dm.texture_coords = "GLOBAL"
     hills.data.materials.append(noisy(mat("hillm", (0.03, 0.05, 0.03), rough=0.9), 0.5, 0.4, 0.05, 0.2))
@@ -450,7 +451,8 @@ def kite(name, color, size=0.5):
 def set_ping(sc, A):
     world(sky=[(0.0, (0.95, 0.62, 0.32)), (0.25, (0.55, 0.55, 0.65)), (1.0, (0.18, 0.3, 0.55))], strength=1.2)
     hdri_sky("belfast_sunset_puresky", 0.9, 1.2) or True
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=220, y_subdivisions=220, size=300); hills = bpy.context.object
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=400, y_subdivisions=400, size=300); hills = bpy.context.object
+    for p_ in hills.data.polygons: p_.use_smooth = True
     tx = bpy.data.textures.new("terr", "CLOUDS"); tx.noise_scale = 1.8
     dm = hills.modifiers.new("d", "DISPLACE"); dm.texture = tx; dm.strength = 4.0; dm.texture_coords = "GLOBAL"
     hills.data.materials.append(pbr("aerial_grass_rock", noisy(mat("terraces", (0.18, 0.2, 0.05), rough=0.9), 0.6, 0.45, 0.05, 0.3), 0.05))
