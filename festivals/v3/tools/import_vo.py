@@ -54,6 +54,17 @@ def split_long(y, n):
     return [y[edges[k]:edges[k + 1]] for k in range(n)]
 
 
+def align_el(mp3, text):
+    """Exact word timings from ElevenLabs forced alignment (free with any key in $ELEVEN_KEY)."""
+    key = os.environ.get("ELEVEN_KEY")
+    if not key: return None
+    r = subprocess.run(["curl", "-s", "-X", "POST", "https://api.elevenlabs.io/v1/forced-alignment", "-H", f"xi-api-key: {key}",
+                        "-F", f"file=@{mp3}", "-F", f"text={text}"], capture_output=True, text=True)
+    try: ws = json.loads(r.stdout)["words"]
+    except Exception: return None
+    return [[w["text"], round(w["start"], 3), round(w["end"], 3)] for w in ws if w["text"].strip() and w["text"].strip() != "—"]
+
+
 def main():
     L = json.load(open(f"{HERE}/lines.json")); voiced = [r for r in L if r.get("speak")]
     files = {int(os.path.basename(p)[:2]): p for p in glob.glob(f"{TAKES}/[0-9][0-9].*")}
@@ -70,7 +81,8 @@ def main():
         y = trim(clips[r["id"]]); y = y / (np.abs(y).max() + 1e-9) * 0.9
         wav = f"/tmp/vo_{r['id']:02d}.wav"; sf.write(wav, y, SR)
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-c:a", "libmp3lame", "-b:a", "192k", f"{HERE}/audio/vo/{r['id']:02d}.mp3"], check=True)
-        r["vo_dur"] = round(len(y) / SR, 3); r["words"] = words_timing(y, r["speak"].split()); r["voice"] = "owner take"
+        r["vo_dur"] = round(len(y) / SR, 3)
+        r["words"] = align_el(f"{HERE}/audio/vo/{r['id']:02d}.mp3", r["speak"]) or words_timing(y, r["speak"].split()); r["voice"] = "owner take"
         print(f"line {r['id']:2d}: {r['vo_dur']:.2f} s, {len(r['words'])} words")
     json.dump(L, open(f"{HERE}/lines.json", "w"), ensure_ascii=False, indent=1)
     subprocess.run([sys.executable, f"{HERE}/timeline.py"], check=True)
