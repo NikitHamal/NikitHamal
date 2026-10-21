@@ -24,7 +24,9 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   banks). Cap 100 + composed replies instead.
 - **Nik-Decide (non-autoregressive decision model, 5.3M):** v1 intent 100%, read-unknown 100%, lookup 90%, math-verify
   81.7%, **yes/no 49% (chance)**. v2 (claim/passage segments) identical, yes/no still 49%. A lexical heuristic gets 99.4%
-  on the same rows, so the labels are fine; the option format is the suspect (v3: value inside the options).
+  on the same rows, so the labels are fine. **v3 fixed it: yes/no 99.5%** (lookup 91.9%) by putting the claimed value into
+  the options (`ho, <v>` / `haina, <v> haina`): with value-free options the deciding bit had to flow through the pooled
+  question vector and never did; with the value in the option span, the option can attend to the passage (as in lookup).
 - **Speculative decoding (DeepInfer DSpark, EAGLE-4) does not help Nik:** our WASM engine is compute-bound on CPU, so
   verifying k drafted tokens costs ~k passes. Nik already runs ~110-180 tok/s. Quality, not speed, is the bottleneck.
 
