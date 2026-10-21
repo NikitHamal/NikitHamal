@@ -14,7 +14,7 @@ setup)
   # shared box: no apt, everything inside /tmp/reels (bpy 4.5 = Blackwell-capable Cycles)
   export UV_CACHE_DIR=/tmp/reels/uvcache PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw
   [ -x "$PY" ] || uv venv -q -p 3.11 /tmp/reels/venv
-  free -m | head -2; cat /sys/fs/cgroup/memory.max 2>/dev/null; df -h /tmp | tail -1
+  free -m | head -2; cat /sys/fs/cgroup/memory.max 2>/dev/null || true; df -h /tmp | tail -1
   # no download cache (on molab /tmp may count against the box's memory): install the big wheel alone, then the rest
   uv pip install -q --no-cache -p "$PY" "bpy==4.5.*"
   uv pip install -q --no-cache -p "$PY" numpy scipy soundfile librosa pyloudnorm pillow playwright edge-tts mutagen
