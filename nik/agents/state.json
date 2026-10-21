@@ -1,17 +1,68 @@
 {
-  "updated": "2026-10-21T09:45:00Z",
-  "live": {"model": "v4f", "note": "NikBench 72.2% · reason 39/48 · understanding 13/26 · traps 9/12 (rollback: v4c)"},
-  "boxes": [
-    {"name": "box 1", "gpu": "RTX PRO 6000", "job": "corpus audit (fixed code) -> v5w (14 unique blocks) from scratch", "progress": 0.1, "detail": "Nik-Decide v5 training beside it (55 min)", "eta": "v5w results ~13:30 UTC"},
-    {"name": "box 2", "gpu": "RTX PRO 6000", "job": "v5 from scratch on clean corpus_v2 (4.77M docs) + sft12", "progress": 0.25, "detail": "stage A 150 min, then SFT 25 min, then gates vs v4f; GPU shared with Local-C soups", "eta": "~12:30 UTC"}
-  ],
-  "scoreboard": {
-    "cols": ["bench", "reason", "und", "traps", "L2"],
-    "rows": [
-      ["v4f (live)", "72.2%", "39/48", "13/26", "9/12", "0/12"],
-      ["v4m", "68.8%", "35/48", "16/26", "9/12", "0/12"],
-      ["v4f3 (Local-C)", "63.2%", "28/48", "20/26", "8/12", "1/12"],
-      ["v4c", "62.5%", "27/48", "19/26", "5/12", "0/12"]
-    ]
+ "updated": "2026-10-21T09:57:13Z",
+ "live": {
+  "model": "v4f",
+  "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
+ },
+ "boxes": [
+  {
+   "name": "box 1",
+   "gpu": "GPU 100% \u00b7 23513 MiB",
+   "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
+   "progress": null,
+   "detail": " \u00b7 running: corpus_audit.py, train.py",
+   "eta": "v5w results ~14:00 UTC"
+  },
+  {
+   "name": "box 2",
+   "gpu": "GPU 100% \u00b7 55074 MiB",
+   "job": "v5 from scratch on clean corpus_v2 + sft12 (stage A 150 min -> SFT 25 -> gates vs v4f)",
+   "progress": 0.335,
+   "detail": "step 3775 \u00b7 123,266 tok/s \u00b7 67.0 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: bench.py, train.py",
+   "eta": "~12:30 UTC"
   }
+ ],
+ "scoreboard": {
+  "cols": [
+   "bench",
+   "reason",
+   "und",
+   "traps",
+   "L2"
+  ],
+  "rows": [
+   [
+    "v4f (live)",
+    "72.2%",
+    "39/48",
+    "13/26",
+    "9/12",
+    "0/12"
+   ],
+   [
+    "v4m",
+    "68.8%",
+    "35/48",
+    "16/26",
+    "9/12",
+    "0/12"
+   ],
+   [
+    "v4f3 (Local-C)",
+    "63.2%",
+    "28/48",
+    "20/26",
+    "8/12",
+    "1/12"
+   ],
+   [
+    "v4c",
+    "62.5%",
+    "27/48",
+    "19/26",
+    "5/12",
+    "0/12"
+   ]
+  ]
+ }
 }
