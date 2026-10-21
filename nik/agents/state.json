@@ -1,25 +1,17 @@
 {
- "updated": "2026-10-21T14:47:23Z",
+ "updated": "2026-10-21T17:01:23Z",
  "live": {
-  "model": "v4f",
-  "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
+  "model": "m50",
+  "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "box 1",
-   "gpu": "GPU 99% \u00b7 29 GB / 96 GB",
-   "job": "Claude: Nik-Decide v8 (Nik's own answers) training 75 min; v4r2 x v4r3 blends m50/m30: full gate",
+   "name": "molab",
+   "gpu": "offline - no box alive (3 boxes returned 410 between 16:35 and 17:05 UTC)",
+   "job": "waiting for the owner",
    "progress": null,
-   "detail": "running: decide/train.py, bench.py, eval_understand.py, trap_check.py",
-   "eta": "Decide v8 ~15:25 UTC; blend gates ~15:30 UTC"
-  },
-  {
-   "name": "box 2",
-   "gpu": "GPU 99% \u00b7 8 GB / 96 GB",
-   "job": "Local-C: P6 (named-family polish) + P7 synthesis (reduce 18% + roles 12% + iter); Local-A: replay arms + bench_surface",
-   "progress": null,
-   "detail": "running: train.py, chain_mix.py, stress.py (Local-C, Local-A)",
-   "eta": "see #11"
+   "detail": "box access for agents: nik/agents/vault (PROTOCOL.md)",
+   "eta": "-"
   }
  ],
  "scoreboard": {
@@ -32,7 +24,23 @@
   ],
   "rows": [
    [
-    "v4f (live)",
+    "m50 (live)",
+    "72.6%",
+    "38/48",
+    "19/26",
+    "9/12",
+    "12/12"
+   ],
+   [
+    "p8 (Local-C)",
+    "72.2%",
+    "38/48",
+    "18/26",
+    "8/12",
+    "12/12"
+   ],
+   [
+    "v4f (previous)",
     "72.2%",
     "39/48",
     "13/26",
@@ -110,31 +118,65 @@
     "15/26",
     "-",
     "0/12"
-   ],
-   [
-    "v5 (scratch+SFT)",
-    "59.0%",
-    "-",
-    "17/26",
-    "-",
-    "-"
    ]
   ]
  },
  "runs": [
   {
+   "tag": "m50",
+   "box": "-",
+   "by": "Claude",
+   "status": "shipped",
+   "what": "0.5 v4r2 + 0.5 v4r3",
+   "result": "live 16:45 UTC"
+  },
+  {
+   "tag": "pm50",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "0.5 p8 + 0.5 m50",
+   "result": "und 18, traps 7, math 97.5%, reading 3/20 (box 2 died before bench)"
+  },
+  {
+   "tag": "h2h",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "done",
+   "what": "ship gate: live v4f vs m50 vs p8, same box, plain + nested n16",
+   "result": "v4f/m50/p8 plain 208/209/208, nested 216/222/219, und 13/19/18, traps 9/9/8, math 96/94/97.5 -> m50 ships"
+  },
+  {
+   "tag": "v4r6",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%: m50's balance in one run",
+   "result": "NikBench 69.1%, reason 30/48 (p=0.004), traps 7, math 92.5%, L2 12/12"
+  },
+  {
+   "tag": "v4r2m",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "done",
+   "what": "v4r2 recipe + NIK_MULTITURN_SHARE=0.05 (one variable vs v4r2); + longchat/memory_long",
+   "result": "NikBench 72.6%, reason 35, word 10, L2 12/12, und 19, traps 8, math 95%; raw long-chat 7->17/60, recall 16->32/80 (box 1, bin lost)"
+  },
+  {
    "tag": "mix23",
    "box": "box 1",
    "by": "Claude",
-   "status": "evaluating",
-   "what": "same-parent blends of v4r2 and v4r3 (m50 = 0.5/0.5, m30 = 0.7 v4r2 + 0.3 v4r3): keep L2 12/12 + v4r2's math with v4r3's understanding"
+   "status": "done",
+   "what": "same-parent blends of v4r2 and v4r3 (m50 = 0.5/0.5, m30 = 0.7 v4r2 + 0.3 v4r3): keep L2 12/12 + v4r2's math with v4r3's understanding",
+   "result": "m50: NikBench 72.6% (+0.3), word 10, reason 38, ladder 12/12/12/6, und 19, traps 9, math 94%, reading 2/20; m30 worse (und 16, traps 8). m50 proposed for ship (#11)"
   },
   {
    "tag": "decide-v8",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "Decide + Nik's own sampled answers (policy_data); then bench_reading + rerank_eval"
+   "status": "lost",
+   "what": "Decide + Nik's own sampled answers (policy_data); then bench_reading + rerank_eval",
+   "result": "bench_reading 11/20 pairs (= v7); box 1 recycled before rerank_eval"
   },
   {
    "tag": "v4r2",
@@ -177,8 +219,8 @@
   }
  ],
  "next": [
-  "blend m50/m30 gates (~15:30 UTC) -> ship call in #11 if one beats v4f on every gate",
-  "box run MULTITURN_SHARE=0.05 (Sky's pending ask) when a GPU slot frees",
-  "Local-C P7 synthesis result (box 2)"
+  "a box that stays up (owner)",
+  "corpus rebuild + Decide v8 re-run, then p8 recipe from m50",
+  "agents post vault keys in #8"
  ]
 }

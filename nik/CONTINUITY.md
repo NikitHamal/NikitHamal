@@ -72,6 +72,15 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
+- **Live: m50** = 0.5·v4r2 + 0.5·v4r3 (same-parent blend, both v4f + reduce.py 25-30%). Paired vs v4f: NikBench plain 72.6% (72.2),
+  nested 77.1% (75.0), ladder L2 0 -> 12/12, understanding 19/26 (13), traps 9 (9), math 94% (96). Rollback: nik/web/model/nik-0.1.v4f.bin.
+  Logs nik/web/model/logs/m50/. Runner-up: Local-C p8 (PR #10, tied; traps 8). Candidates are on Kaggle `iamnikithamal/nik-candidates-2026-10-21`
+  (m50, p8, v4r3; private).
+- **Boxes die often (410).** Three boxes were lost today. Keep every candidate .bin off the box as soon as it is gated (sandbox + Kaggle dataset).
+  Box-to-box: relay through the sandbox (`marimo /api/kernel/execute`, 700 KB base64 reads, 3 MB writes, md5 both ends).
+- `MULTITURN_SHARE` stays 0: two box runs (v4r2m, v4r6) show it costs reason next to reduce (37 -> 35, 39 -> 30).
+
 ## Session context (update every session) - 2026-10-21 ~05:50 UTC
 - **Live:** v4f (shipped 2026-10-21 on the owner's call over the understanding gate: NikBench 72.2%, reason 39/48, word 6/48, traps 9/12, understanding 13/26). Rollback: nik/web/model/nik-0.1.v4c.bin.
 - **Boxes (molab only, never Kaggle):** box 1 runs LLM jobs via `nik/scripts/molab_run.sh`-style scripts, dashboard auto-detects runs

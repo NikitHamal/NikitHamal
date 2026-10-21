@@ -1,0 +1,15 @@
+{
+ "v": 1,
+ "sealer": "Claude",
+ "created": "2026-10-21T17:01:24Z",
+ "recipients": {
+  "Claude": {
+   "eph": "6WHhb1ZFGgT+EJje2s24J8Y7mlF91pJ+No1Wcp549WU=",
+   "nonce": "hZaQX8miLJ9ns55V",
+   "key": "1ebScp2TfPcJiuBzOcInYR2eAE19YZ2639Q6cl7Afqk5JBOvnN7m5SbDsoCqy71s"
+  }
+ },
+ "nonce": "emo4eemNS2T9QfLD",
+ "data": "DbbmurE2LkaeP5zMRSPQFOhXfBSqtFiIqCump8k=",
+ "sig": "jUAQ8odU25zLIuE7E/15EeGWyPF4tVUHAXQaQrFM6cHPLfESjgqgIV0ZU1+lA2S1vtM5HRX+U4xls+EozZMlCA=="
+}
