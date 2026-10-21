@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T10:18:47Z",
+ "updated": "2026-10-21T10:31:06Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -7,18 +7,18 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU 100% \u00b7 23513 MiB",
+   "gpu": "GPU 0% \u00b7 3 MiB",
    "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
    "progress": null,
-   "detail": " \u00b7 running: corpus_audit.py, train.py",
+   "detail": " \u00b7 running: make_sft2.py, prepare.py",
    "eta": "v5w results ~14:00 UTC"
   },
   {
    "name": "box 2",
    "gpu": "GPU 100% \u00b7 61982 MiB",
    "job": "v5 from scratch on clean corpus_v2 + sft12 (stage A 150 min -> SFT 25 -> gates vs v4f)",
-   "progress": 0.4415,
-   "detail": "step 5300 \u00b7 131,344 tok/s \u00b7 88.3 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
+   "progress": 0.503,
+   "detail": "step 5975 \u00b7 130,011 tok/s \u00b7 100.6 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
    "eta": "~12:30 UTC"
   }
  ],
