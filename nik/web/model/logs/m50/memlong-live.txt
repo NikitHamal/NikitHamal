@@ -1,0 +1,6 @@
+both k=0   recall 11/16  fact-in-prompt 16/16  prompt 34 tok
+both k=2   recall 11/16  fact-in-prompt 16/16  prompt 119 tok
+both k=4   recall 11/16  fact-in-prompt 16/16  prompt 207 tok
+both k=6   recall 12/16  fact-in-prompt 16/16  prompt 207 tok
+both k=8   recall 10/16  fact-in-prompt 16/16  prompt 241 tok
+both ALL 55/80
