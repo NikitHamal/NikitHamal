@@ -354,9 +354,268 @@ def scene_money_minus(R):
     return user, steps, ans, str(left)
 
 
+
+
+# ---------------------------------------------------------------- more surfaces
+# The composition is solved (the ladder's L2 is 12/12) but the benchmark's word
+# family is still only 16/48: the transfer is limited by the number of *distinct story
+# surfaces* the model has seen, not by the ability.  Every new frame is a new surface
+# for the same skill, and the bench's 48 word items are 9/10 two-step templates, so
+# this is the lever for the bench and for the held-out word family at once.
+# Every frame: a distractor number that must not be used, a role-binding trace, and
+# an answer that states the quantity that was asked for.
+
+def scene_rent_bills(R):
+    """an income, two bills, what is left"""
+    income = R.choice([20000, 24000, 28000, 30000, 32000, 35000, 40000, 45000])
+    rent = int(income * R.choice([0.5, 0.55, 0.6]))
+    bill = R.choice([1200, 1500, 2000, 2500, 3000, 3500, 4200])
+    left = income - rent - bill
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'mahina ko {income} rupaya paayo. kiraye ko {rent} ra bijuli ko bill {bill} '
+                f'janyo. {dis} aba bachi kati rupaya ho?')
+    elif shape == 1:
+        user = (f'{n if False else "ghar"} ko kiraye {rent} rupaya, bijuli {bill} rupaya, '
+                f'ra mahina ko income {income} rupaya. {dis} kati rupaya bachcha?')
+    else:
+        user = (f'mahina ko income {income} rupaya. tyo bata {rent} kiraya ra {bill} bijuli '
+                f'kharcha garyo. {dis} aba kati rupaya bacheko?')
+    steps = _steps([('income', f'{income}', income), ('kharcha', f'{rent} + {bill}', rent + bill),
+                    ('baki', f'{income} - {rent + bill}', left)],
+                   f'{left} + {rent + bill} = {income}, milyo')
+    ans = R.choice([f'aba {left} rupaya bacheko.', f'{left} rupaya bachcha.',
+                    f'jamma {left} rupaya bacha.'])
+    return user, steps, ans, str(left)
+
+
+def scene_fare_each(R):
+    """N people x a fare each"""
+    people = _q(R, 2, 9)
+    fare = R.choice([15, 20, 25, 30, 35, 40, 50, 60, 75])
+    total = people * fare
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'{people} jana lai bus ko ticket {fare} rupiya ko kinyo. {dis} '
+                f'jamma kati rupiya tiru paryo?')
+    elif shape == 1:
+        user = (f'ticket ko price {fare} rupiya. {people} jana ko ticket kinaid. {dis} '
+                f'jamma kati?')
+    else:
+        user = (f'{people} jana sabai le {fare} rupiya ko ticket kine. {dis} '
+                f'kati rupaya jamma?')
+    steps = _steps([('ticket', f'{fare}', fare), ('jamma', f'{people} x {fare}', total)],
+                   f'{total} / {people} = {fare}, milyo')
+    ans = R.choice([f'jamma {total} rupaya.', f'{total} rupaya tiru paryo.',
+                    f'jama {total} rupaya lagyo.'])
+    return user, steps, ans, str(total)
+
+
+def scene_tank_fill(R):
+    """a rate per hour x the hours"""
+    rate = R.choice([10, 15, 20, 25, 30, 40, 50, 60])
+    hours = _q(R, 2, 8)
+    total = rate * hours
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'paani ko tank 1 ghanta ma {rate} litre bharta. {dis} '
+                f'{hours} ghanta ma kati litre bharidyo?')
+    elif shape == 1:
+        user = (f'ek ghanta ma {rate} litre paani aauncha. {hours} ghanta ko kati litre huncha? {dis}')
+    else:
+        user = (f'tank ma {rate} litre per ghanta ko rate le {hours} ghanta ma kati litre '
+                f'bharidyo? {dis}')
+    steps = _steps([('rate', f'{rate}', rate), ('jamma', f'{rate} x {hours}', total)],
+                   f'{total} / {hours} = {rate}, milyo')
+    ans = R.choice([f'{total} litre bharidyo.', f'jamma {total} litre.',
+                    f'{total} litre bharincha.'])
+    return user, steps, ans, str(total)
+
+
+def scene_split_sweets(R):
+    """N sweets between M children (with a remainder)"""
+    sweets = R.choice([9, 12, 15, 18, 20, 21, 24, 30, 36])
+    kids = R.choice([3, 4, 5, 6])
+    each = sweets // kids
+    left = sweets % kids
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'{sweets} ota mithai {kids} jana bachalata bata kinaid bhayo. {dis} '
+                f'jana jana kati pauncha?')
+    elif shape == 1:
+        user = (f'{kids} jana lai {sweets} ota mithai diyo. {dis} '
+                f'ek jana le kati ota pauncha?')
+    else:
+        user = (f'{sweets} ota mithai bantunu paryo {kids} jana lai. {dis} '
+                f'ek jana ko koto? baki kati?')
+    steps = _steps([('jamma', f'{sweets}', sweets), ('ek jana', f'{sweets} / {kids}', each)],
+                   f'{each} x {kids} = {each * kids}, bacheko {left}, milyo')
+    ans = R.choice([f'jana jana {each} ota, bacheko {left}.', f'{each} ota each, {left} bacheko.',
+                    f'ek jana ko {each} ota pauncha.'])
+    return user, steps, ans, str(each)
+
+
+def scene_recipe_scale(R):
+    """a recipe for 2, for 6"""
+    base = R.choice([2, 3, 4])
+    for_n = base * R.choice([2, 3])
+    amount = R.choice([100, 150, 200, 250, 300, 400, 500])
+    total = amount * for_n // base
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'{base} jana lai {amount} gram flour chahincha. {dis} '
+                f'{for_n} jana lai kati gram chahincha?')
+    elif shape == 1:
+        user = (f'recipe: {base} jana ko {amount} gram. {dis} '
+                f'{for_n} jana ko recipe kati gram ho?')
+    else:
+        user = (f'{base} jana lai {amount} ml doodh chahincha. {for_n} jana lai kati ml? {dis}')
+    steps = _steps([('ek jana', f'{amount}', amount), ('jamma', f'{for_n} / {base}', for_n // base),
+                    ('total', f'{amount} x {for_n // base}', total)],
+                   f'{total} / {for_n // base} = {amount}, milyo')
+    ans = R.choice([f'{total} chahincha.', f'jamma {total} chahincha.',
+                    f'kati? {total} chahincha.'])
+    return user, steps, ans, str(total)
+
+
+def scene_wage_minus(R):
+    """a wage per hour x the hours, minus a cost"""
+    wage = R.choice([100, 120, 150, 180, 200, 250])
+    hours = _q(R, 3, 8)
+    cost = R.choice([200, 300, 500, 800, 1000, 1500])
+    earned = wage * hours
+    left = earned - cost
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'niyantra {wage} rupiya per ghanta. {hours} ghanta kaam gare. {dis} '
+                f'kinne 200 rupaya kharcha gare. aba kati rupaya bacheko?')
+    elif shape == 1:
+        user = (f'ghanta bata {wage} rupaya kamauchu, {hours} ghanta kaam gare. {dis} '
+                f'ani {cost} rupaya kharcha. kati bacha?')
+    else:
+        user = (f'{hours} ghanta x {wage} rupiya = kati? ani {cost} rupaya kharcha. {dis} '
+                f'baki kati rupaya?')
+    steps = _steps([('kamai', f'{wage} x {hours}', earned), ('kharcha', f'{cost}', cost),
+                    ('baki', f'{earned} - {cost}', left)],
+                   f'{left} + {cost} = {earned}, milyo')
+    ans = R.choice([f'aba {left} rupaya bacheko.', f'{left} rupaya bacha.',
+                    f'kati? {left} rupaya.'])
+    return user, steps, ans, str(left)
+
+
+def scene_distance_per_day(R):
+    """a total distance over the days"""
+    total_km = R.choice([60, 80, 90, 120, 150, 180, 240, 300, 360])
+    days = R.choice([2, 3, 4, 5, 6])
+    per = total_km // days
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'bato {total_km} km {days} din ma gayo. {dis} din ko avg kati km?')
+    elif shape == 1:
+        user = (f'{days} din ma {total_km} km bato. {dis} ek din ma kati km?')
+    else:
+        user = (f'bato ko total {total_km} km, {days} din ma. {dis} '
+                f'ek din ko average kati km huncha?')
+    steps = _steps([('jamma', f'{total_km}', total_km), ('ek din', f'{total_km} / {days}', per)],
+                   f'{per} x {days} = {per * days}, milyo')
+    ans = R.choice([f'ek din ma {per} km.', f'avg {per} km.',
+                    f'din ko avg {per} km ho.'])
+    return user, steps, ans, str(per)
+
+
+def scene_second_discounted(R):
+    """two items, one of them discounted"""
+    p1 = R.choice([40, 50, 60, 80, 100, 120])
+    p2 = R.choice([150, 200, 240, 300, 360])
+    pct = R.choice([10, 20, 25, 50])
+    off = p2 * pct // 100
+    total = p1 + p2 - off
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'ek kalam {p1} rupiya ra ek katha {p2} rupiya ko. katha ma {pct}% discount. '
+                f'{dis} jamma kati rupiya?')
+    elif shape == 1:
+        user = (f'{p1} rupiya ko kalam ek ra {p2} rupiya ko katha ek kine. {dis} '
+                f'katha ma {pct}% off paye. aba kati tirne?')
+    else:
+        user = (f'duita kine: {p1} ra {p2} rupiya ko. dusro ma {pct}% bhat. {dis} '
+                f'jamma kati rupiya paryo?')
+    steps = _steps([('kalam', f'{p1}', p1), ('katha', f'{p2}', p2),
+                    ('bhat', f'{p2} x {pct} / 100', off),
+                    ('jamma', f'{p1} + {p2} - {off}', total)],
+                   f'{total} + {off} = {p1 + p2}, milyo')
+    ans = R.choice([f'jamma {total} rupaya.', f'{total} rupaya tiru paryo.',
+                    f'kati? {total} rupaya.'])
+    return user, steps, ans, str(total)
+
+
+def scene_change_from_note(R):
+    """the cost and the note, the change"""
+    cost = R.choice([450, 750, 850, 1250, 1650, 1850, 2400, 3200])
+    note = R.choice([500, 1000, 2000, 5000])
+    if note <= cost:
+        note = ((cost // 500) + 1) * 500
+    change = note - cost
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'kina ko jamma {cost} rupaya. {dis} {note} rupaya diye. '
+                f'kati rupaya bachyo?')
+    elif shape == 1:
+        user = (f'bhandainu {note} rupaya cha, kina ko price {cost} rupaya. {dis} '
+                f'kati baki huncha?')
+    else:
+        user = (f'{note} rupaya lekinu ra {cost} rupaya ko kina. {dis} '
+                f'aba kati rupaya fark huncha?')
+    steps = _steps([('cost', f'{cost}', cost), ('note', f'{note}', note),
+                    ('change', f'{note} - {cost}', change)],
+                   f'{change} + {cost} = {note}, milyo')
+    ans = R.choice([f'aba {change} rupaya bachyo.', f'{change} rupaya fark.',
+                    f'kati? {change} rupaya.'])
+    return user, steps, ans, str(change)
+
+
+def scene_price_per_kilo(R):
+    """the price per kilo x the kilos, plus a delivery"""
+    price = R.choice([30, 40, 50, 60, 80, 120])
+    kilos = R.choice([2, 3, 4, 5])
+    delivery = R.choice([20, 30, 50, 100])
+    total = price * kilos + delivery
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'ek kilo {R.choice(FOODS)[0]} ko price {price} rupiya. {kilos} kilo kine. {dis} '
+                f'delivery {delivery} rupaya. jamma kati?')
+    elif shape == 1:
+        user = (f'{kilos} kilo {price} rupiya per kilo. {dis} '
+                f'ani {delivery} rupaya delivery. kati rupaya jamma?')
+    else:
+        user = (f'kilo ko rate {price} rupiya cha, {kilos} kilo linchhu. {dis} '
+                f'charge {delivery} rupaya. jamma kati rupaya?')
+    steps = _steps([('rate', f'{price}', price), ('jamma', f'{price} x {kilos}', price * kilos),
+                    ('delivery', f'{delivery}', delivery),
+                    ('total', f'{price * kilos} + {delivery}', total)],
+                   f'{total} - {delivery} = {price * kilos}, milyo')
+    ans = R.choice([f'jamma {total} rupaya.', f'{total} rupaya tiru paryo.',
+                    f'kati? {total} rupaya.'])
+    return user, steps, ans, str(total)
+
 SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, scene_time,
           scene_bus, scene_basket, scene_discount, scene_saving, scene_recharge, scene_cricket,
-          scene_boxes, scene_pct_more]
+          scene_boxes, scene_pct_more,
+          # the extra surfaces (the bench's word family is limited by how many
+          # distinct story frames the model has seen, not by the ability)
+          scene_rent_bills, scene_fare_each, scene_tank_fill, scene_split_sweets,
+          scene_recipe_scale, scene_wage_minus, scene_distance_per_day,
+          scene_second_discounted, scene_change_from_note, scene_price_per_kilo]
 
 
 def sample(R):
