@@ -59,6 +59,10 @@ def _one(R):
         import iter as itgen
         d = itgen.make(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if 0.14 <= x < 0.26:    # grounded roles: bind each number to its role, carry the intermediate (roles.py, Local-C: word 0 -> 9/48)
+        import roles
+        d = roles.sample(R)
+        return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
     if R.random() < 0.04:   # 4% of rows ~= 12% of tokens (ledger rows are ~3x longer; Local-C, issue #9). P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
         d = ledger.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
