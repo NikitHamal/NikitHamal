@@ -30,6 +30,10 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 - **Speculative decoding (DeepInfer DSpark, EAGLE-4) does not help Nik:** our WASM engine is compute-bound on CPU, so
   verifying k drafted tokens costs ~k passes. Nik already runs ~110-180 tok/s. Quality, not speed, is the bottleneck.
 
+- **v4h** (v4f + sft11: correct.py, composed chat, varied answer sentences): NikBench 68.4% (+5.9 vs v4c, 19/2, p<0.001),
+  word 6/48 (6/0, p=0.031), traps 9/12, math 95.5%, but understanding 15/26 and stress 59 -> not shipped. Same base-data
+  pattern as v4g. Next: v5 from scratch on corpus_v2 (box 2) and GRPO from live v4c anchored by KL (v4i, box 1).
+
 ### Mistakes (do not repeat)
 - `pkill -f <pattern>` matched the shell running the pkill itself -> suspended shell -> frozen notebook kernel -> box lost.
   Use exact PIDs (`pgrep` then `kill`), never a pattern that also occurs in your own command line.
