@@ -8,6 +8,10 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **v4m = v4f + money scene (lr 2e-4, 20 min): NikBench 68.8%, understanding 16, traps 9, stress 61, L2 0.** v4f, v4m
+  and v4f3 lie on one trade-off line (reason 39/35/28 vs understanding 13/16/20). Fine-tuning the v4 base cannot move
+  the line; only the base can (v5).
+
 - **The corpus audit wrote the raw input back as "clean" (Local-A found it).** `corpus_audit.py main()` rewrote every
   input doc to `--out-corpus`, so corpus_v2.jsonl had all 6,618,729 docs (28% dups, 47 eval-contaminated). v5 trained
   50 min on it before the fix; restarted on the fixed output (4,765,217 docs, PASS). Check output line counts, not reports.
