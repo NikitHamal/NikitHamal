@@ -41,6 +41,23 @@ def gold_rows(gold_dir, rep, R):
     return out, n
 
 
+# questions whose answer depends on the conversation (the probe's name/value differs from any training row)
+CONTEXT_Q = {'mero naam k ho', 'mero naam k ho?'}
+
+
+def _drop_eval_prompts(rows, root):
+    """Held-out gates stay held out: drop any row whose user turn is an exact eval_understand or stress prompt
+    (write.py had 5 stress prompts verbatim). chat_check is a sanity gate of generic greetings and is not filtered."""
+    sys.path.insert(0, os.path.join(root, 'scripts'))
+    import leak_audit as la
+    norm = lambda t: ' '.join(t.lower().split()).strip(' ?!.')
+    held = {norm(q) for q in la._prompts_understand(os.path.join(root, 'eval_understand.py')) + la._prompts_stress(os.path.join(root, 'stress.py'))}
+    held -= {norm(q) for q in CONTEXT_Q}
+    out = [r for r in rows if not any(m['role'] == 'user' and norm(m['content']) in held for m in json.loads(r)['messages'])]
+    print(f'eval-prompt guard: dropped {len(rows) - len(out)} rows with an exact understand/stress prompt', flush=True)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--data', default='data')
@@ -135,6 +152,7 @@ def main():
             kept_rows.append(line)
         rows = kept_rows
         print(f'max-same-reply {a.max_same_reply}: dropped {dropped} rows whose reply was already used {a.max_same_reply}x', flush=True)
+    rows = _drop_eval_prompts(rows, root)
     R.shuffle(rows)
     with open(os.path.join(a.data, f'{a.name}.jsonl'), 'w') as f:
         f.writelines(rows)
