@@ -34,6 +34,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   word 6/48 (6/0, p=0.031), traps 9/12, math 95.5%, but understanding 15/26 and stress 59 -> not shipped. Same base-data
   pattern as v4g. Next: v5 from scratch on corpus_v2 (box 2) and GRPO from live v4c anchored by KL (v4i, box 1).
 
+- **Nik-Decide in the browser**: `nik/web/decide.js` reproduces PyTorch logits exactly (0.0000 on the parity set); plain JS
+  takes 0.2-0.5 s per decision (WASM-SIMD int8 port would bring it under ~50 ms). Router: `mero naam nikit ho` -> chat,
+  `nikit ko ho?` -> persona, both at confidence 1.000.
+- **GRPO needs mixed groups.** v4i (fixed difficulty, G=8): only 2-3 of 16 problem groups per step had any reward variance
+  (all-correct or all-wrong groups give zero advantage). Adaptive per-skill difficulty (target 20-80% correct) + G=12 added.
+
 ### Mistakes (do not repeat)
 - `pkill -f <pattern>` matched the shell running the pkill itself -> suspended shell -> frozen notebook kernel -> box lost.
   Use exact PIDs (`pgrep` then `kill`), never a pattern that also occurs in your own command line.
