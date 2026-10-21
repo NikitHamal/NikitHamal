@@ -8,6 +8,15 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **Nik-Decide as a reranker of Nik hurts (rerank_eval.py, v4f k=8, 288 items):** greedy 72.2%, majority 71.9%, Decide
+  pick 67.7%, vote x Decide 68.1%, oracle 75.0%. Two lessons: (1) sample diversity is low, so even a perfect picker adds
+  only +2.8 pp; (2) a verifier trained on synthetic near-misses does not know the policy's real mistakes. Next: Decide v8
+  trained on Nik's own sampled answers (policy_data.py).
+- **Decide on held-out reading (bench_reading, strict: both option orders):** v5 17/40 items, 3/20 pairs, vs 92-99% on
+  its own generators. In-distribution accuracy says nothing about new surfaces (Local-A). v7 adds reading_wide.py
+  (10 relations, many surfaces, bench vocabulary held out by a test).
+- **v5 base (from scratch, clean corpus, before SFT):** quick n8 NikBench 66.7%, word 5/24, understanding 15/26, math 95%.
+
 - **Task vectors do not cross lineages.** tvF5 = v4f + 0.5(v4f4 - v4c): NikBench -3.8 pp vs v4f (p=0.043), arith
   -4.2, understanding 12/26. Same-parent edits (Local-A tv20 = v4f4 + 0.2(v4f3 - v4c)) are the safe kind.
 - **v4f4 (Local-C roles family) vs live v4f, plain n16 paired:** 67.4% (-4.9, p=0.016), reason 29/48 (-10, p=0.002),
