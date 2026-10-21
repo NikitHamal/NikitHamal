@@ -93,6 +93,83 @@ def shape_rows(n, seed):
     return rows
 
 
+
+def family_rows(spec, seed):
+    """Rows from the named teacher families, by name.
+
+    Why (issue #9): a polish mix built from a *uniform slice* of the base mix trades
+    the bench against the understanding, because the base mix is 36% arithmetic and the
+    understanding probes are reading, memory, translation and grammar (the
+    understand/read/skills/vocab/correct families).  P3 (an 8% slice) held the bench
+    (75.3%) with understanding 16/26; P4 (a 25% slice) reached understanding 20/26
+    with the bench at 73.3%.  So the mix has to be composed from *named families*:
+    the shapes (the bench and the composition), the understanding families, the
+    arithmetic (the one-step, which the stress suite checks), and the everyday rows.
+
+    spec: {'roles': 80000, 'frame': 40000, 'iter': 20000, 'math': 60000, ...}
+    """
+    import importlib.util
+    teacher = os.path.join(ROOT, 'nik', 'data', 'teacher')
+    sys.path.insert(0, teacher)
+    R = random.Random(seed)
+    rows = []
+
+    def load(name):
+        spec_ = importlib.util.spec_from_file_location('fam_' + name, os.path.join(teacher, name + '.py'))
+        mod = importlib.util.module_from_spec(spec_)
+        spec_.loader.exec_module(mod)
+        return mod
+
+    def take(n, fn):
+        for _ in range(n):
+            d = fn(R)
+            if d and d.get('messages'):
+                rows.append({'cat': d.get('cat', 'family'), 'gold': d.get('gold'),
+                             'messages': d['messages']})
+
+    for name, n in spec.items():
+        if not n:
+            continue
+        if name == 'roles':
+            import roles
+            take(n, roles.sample)
+        elif name == 'frame':
+            import frame
+            take(n, frame.sample)
+        elif name == 'iter':
+            import iter as itgen
+            take(n, itgen.make)
+        elif name == 'math':
+            mod = load('math_gen')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'colmath':
+            mod = load('colmath')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'understand':
+            m1 = load('understand')
+            m2 = load('understand2')
+            for i in range(n):
+                m = m1 if i % 2 == 0 else m2
+                d = m.sample(R)
+                rows.append({'cat': d.get('cat', 'understand'), 'gold': d.get('gold'),
+                             'messages': d['messages']})
+        elif name == 'read':
+            mod = load('read')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'skills':
+            mod = load('skills')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'vocab':
+            mod = load('vocab')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'correct':
+            mod = load('correct')
+            take(n, lambda r: mod.sample(r))
+        else:
+            raise SystemExit(f'unknown family: {name}')
+    return rows
+
+
 def chat_rows(n, seed):
     """everyday-conversation rows (data/teacher/chat.py), leak-filtered.
 
@@ -130,6 +207,9 @@ def main():
     ap.add_argument('--name', required=True)
     ap.add_argument('--persona', type=int, default=20000)
     ap.add_argument('--chat', type=int, default=30000)
+    ap.add_argument('--families', default='',
+                    help='comma-separated name:count list of named teacher families, '
+                         'e.g. roles:80000,frame:40000,understand:40000,math:60000')
     ap.add_argument('--shapes', type=int, default=0,
                     help='rows of the named data shapes (the money scene, the role '
                          'family, the iteration chains) - a polish stage must be '
@@ -160,6 +240,16 @@ def main():
           f'other generators)', flush=True)
     for r in extra:
         keep.append(json.dumps(r, ensure_ascii=False))
+    if a.families:
+        spec = {}
+        for part in a.families.split(','):
+            k, v = part.split(':')
+            spec[k.strip()] = int(v)
+        fam = family_rows(spec, a.seed + 17)
+        fam = [r for r in fam if norm(row_prompt(r)) not in banned]
+        for r in fam:
+            keep.append(json.dumps(r, ensure_ascii=False))
+        print(f'+ {len(fam)} rows from the named families: {spec}', flush=True)
     if a.shapes:
         sh = shape_rows(a.shapes, a.seed + 13)
         sh = [r for r in sh if norm(row_prompt(r)) not in banned]
