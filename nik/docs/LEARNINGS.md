@@ -8,6 +8,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **molab GPU boxes are preempted, not idle-killed.** Docs: 12 h max, shut down after 90 min idle. Reality (marimo issue #11058,
+  open, no maintainer reply): GPU sandboxes are reclaimed with HTTP 410 after 15-45 min even while busy, all /tmp lost. We
+  lost 5 boxes in 2 h. So: jobs <= ~30 min, copy every .bin and log off the box the moment it exists (Kaggle private
+  datasets `nik-candidates-*`, `nik-replay-corpus-2026-10-21` = rebuilt replay corpus, 173M tokens, md5 dfbe0bb4), and a
+  keep-alive pings the kernel every 4 min (against the 90-min idle rule only; it cannot stop preemption).
+
 - **m50 shipped (16:45 UTC).** Head-to-head on one box: v4f / m50 / p8 = plain 208 / 209 / 208, nested 216 / 222 / 219,
   ladder ALL 26 / 44 / 46, understanding 13 / 19 / 18, traps 9 / 9 / 8, math 96 / 94 / 97.5%, bench_reading 3 / 2 / 2 pairs. m50 vs p8
   is a tie (p >= 0.13 everywhere); m50 was the only one inside every gate. Their blend pm50: understanding 18, traps 7, math 97.5% -> no.
