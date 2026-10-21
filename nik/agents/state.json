@@ -1,17 +1,17 @@
 {
- "updated": "2026-10-21T19:15:00Z",
+ "updated": "2026-10-21T19:17:00Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) · ladder L2 12/12 · understanding 19/26 · traps 9/12 · math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "box 1",
-   "gpu": "RTX Pro 6000 · owner notebook",
-   "job": "Claude: p8m (m50 + p8 mix) -> gate vs m50 incl. NikBench-RW",
+   "name": "box 1 (GPU, shared)",
+   "gpu": "RTX Pro 6000 · shared Claude + Local-C · one GPU job at a time (/tmp/gpu.lock)",
+   "job": "Claude: gate-live (the m50 baseline) → then Local-C: p11 (the family mix, 12 min lr 1e-4)",
    "progress": null,
-   "detail": "status panel in the notebook",
-   "eta": "~19:20 UTC"
+   "detail": "the GPU box lives 8-12 min: the stage + the export have to fit in one lifetime",
+   "eta": "the lock is free between the jobs"
   },
   {
    "name": "box 2",
@@ -20,22 +20,6 @@
    "progress": null,
    "detail": "owner shared the login directly; status panel in the notebook",
    "eta": "-"
-  },
-  {
-   "name": "box 1 (GPU, shared)",
-   "gpu": "RTX Pro 6000 · shared Claude + Local-C · one job at a time (/tmp/gpu.lock)",
-   "job": "Claude: gate-live (the m50 baseline) → then Local-C: p11 (the family mix, 12 min lr 1e-4)",
-   "progress": null,
-   "detail": "the GPU box lives 8-12 min: the stage + the export have to fit in one lifetime",
-   "eta": "the lock is free between the jobs"
-  },
-  {
-   "name": "CPU box (the owner's)",
-   "gpu": "no GPU · 20 cores · it does not die",
-   "job": "Local-C: the measurements (the bench, the understanding, the ladder, the shape probe) + the mix build",
-   "progress": null,
-   "detail": "the paired baseline of the live model on the same nested item set is running there",
-   "eta": "the baseline ~19:25 UTC"
   }
  ],
  "scoreboard": {
@@ -160,30 +144,6 @@
  },
  "runs": [
   {
-   "tag": "p11 (Local-C)",
-   "box": "box 1 / CPU box",
-   "by": "Local-C",
-   "status": "running",
-   "what": "m50 + 12 min lr 1e-4 on the p11 mix (the shape share 38%, 658,365 rows): the 4 diagnostic shapes, the no-rule sequences, the nested multiplications, 33 story frames, the English frames, the weekday family, the 3 understanding gaps",
-   "result": "pending - the gate is ship_gate.py --target 5 vs m50 on the same item set"
-  },
-  {
-   "tag": "shape probe (Local-C)",
-   "box": "CPU",
-   "by": "Local-C",
-   "status": "done",
-   "what": "the mechanism instrument: the 5 shapes the failing bench items named + a paraphrase block (the same shapes asked the way a person would)",
-   "result": "the live m50 is 2/27 (4/44 with the paraphrases): the weekday in the benchmark wording 1/1, the same question paraphrased 0/3 - the model has the template, not the skill"
-  },
-  {
-   "tag": "p8 (Local-C)",
-   "box": "box 2",
-   "by": "Local-C",
-   "status": "done",
-   "what": "the synthesis: reduce 8% + the role family 12% + iter 5% + frame 5% + a persona slice",
-   "result": "bench 76.0% nested, the ladder 12/12/12/7, the understanding 18/26, the math 97.5%"
-  },
-  {
    "tag": "m50",
    "box": "-",
    "by": "Claude",
@@ -280,8 +240,8 @@
   }
  ],
  "next": [
-  "p11 on box 1 (the lock is Claude's now): the stage + the export",
-  "the measurements on the CPU box, then ship_gate.py --target 5 vs m50",
-  "the third-party identity rows (Local-A's family) for the trap_check 9/12 -> 12/12"
+  "p8m gate vs m50 (+ NikBench-RW)",
+  "real-world data for the RW failures (CPU)",
+  "one box only; no automation of molab accounts"
  ]
 }
