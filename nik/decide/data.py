@@ -94,7 +94,43 @@ def intent(R):
     return dict(task='intent', context='', question=q, options=INTENTS, label=lab)
 
 
-TASKS = [(yes_no, .18), (unknown, .1), (lookup, .22), (arith, .2), (intent, .3)]
+EQ = re.compile(r'(\d+) ([-+x/]) (\d+) = (\d+)')
+OPS = {'+': lambda a, b: a + b, '-': lambda a, b: a - b, 'x': lambda a, b: a * b, '/': lambda a, b: a // b if b else 0}
+
+
+def step(R):
+    """Which line is a valid step for THIS question? The live model writes chain-shaped lines with invented operands
+    (ladder L2 0/12); this is the per-step check a verifier / step reward needs. Distractors: an operand that is not
+    in the question, the wrong operator, or the wrong result."""
+    e = compose.sample(R)
+    eqs = EQ.findall(e['think'])
+    if not eqs:
+        return step(R)
+    a, op, b, c = R.choice(eqs)
+    qnums = set(re.findall(r'\d+', e['q'])) | {x for t in eqs for x in (t[0], t[2], t[3])}
+    good = f'{a} {op} {b} = {c}'
+    bad = set()
+    for _ in range(60):
+        if len(bad) >= R.randint(3, 5):
+            break
+        k = R.random()
+        if k < 0.4:                                           # invented operand, computed correctly
+            x = str(int(a) + R.choice([-11, -2, -1, 1, 2, 10, 20]) * R.randint(1, 3))
+            if x in qnums or int(x) < 0:
+                continue
+            cand = f'{x} {op} {b} = {OPS[op](int(x), int(b))}'
+        elif k < 0.65:                                        # wrong operator, computed correctly
+            o2 = R.choice([o for o in OPS if o != op])
+            cand = f'{a} {o2} {b} = {OPS[o2](int(a), int(b))}'
+        else:                                                 # right operands, wrong result
+            cand = f'{a} {op} {b} = {int(c) + R.choice([-10, -2, -1, 1, 2, 10, 100])}'
+        if cand != good:
+            bad.add(cand)
+    opts = list(bad) + [good]; R.shuffle(opts)
+    return dict(task='math-step', context=e['q'], question='yo prashna ko sahi hisab ko line kun ho?', options=opts, label=opts.index(good))
+
+
+TASKS = [(yes_no, .16), (unknown, .09), (lookup, .2), (arith, .17), (step, .12), (intent, .26)]
 
 
 def sample(R):
