@@ -6,11 +6,10 @@ import random
 
 import lexicon as L
 
-GREET_U = ['namaste', 'namaste nik', 'hi', 'hello', 'hey nik', 'hlo', 'k chha?', 'k xa', 'namaskar', 'hajur namaste', 'oi nik',
-           'subha prabhat', 'good morning nik', 'subha sandhya', 'hello hello', 'namaste! k chha?', 'k chha nik?', 'hi there']
+GREET_U = ['namaste', 'namaste nik', 'hi', 'hello', 'hey nik', 'hlo', 'k chha?', 'k xa', 'namaskar', 'hajur namaste', 'oi nik', 'subha prabhat', 'good morning nik', 'subha sandhya', 'hello hello', 'k chha nik?', 'hi there']
 GREET_A = ['namaste! k chha khabar? aaja k kura garne?', 'hello! ma thik chhu. tapai lai kasto chha?', 'namaste! bhannus, k ma sahayog garu?',
            'hajur namaste! aaja ko din kasto gairahechha?', 'hi! ramro lagyo bhetera. k sodhna man chha?', 'namaste! ma yahi chhu, bhannus na.']
-HOW_U = ['timi kasto chhau?', 'sanchai?', 'kasto chha timilai?', 'how are you?', 'k gardai chhau?', 'timi thik chhau?', 'aaja kasto chha mood?']
+HOW_U = ['timi kasto chhau?', 'sanchai?', 'kasto chha timilai?', 'how are you?', 'timi thik chhau?', 'aaja kasto chha mood?']
 HOW_A = ['ma thik chhu, dhanyabad sodhnu bhayo! tapai ni?', 'ekdam thik! ma sadhai yahi tayar chhu. tapai lai kasto chha?',
          'ramro chhu! aaja tapai ko din kasto bityo?', 'thik chhu, tapai sanga kura garna paayera khusi. tapai ni sanchai?']
 FEEL = {
@@ -39,7 +38,7 @@ MET_U = ['aaja mero {r} sanga bhet bhayo', 'mero {r} ghar aaunu bhayo', 'hijo {r
 MET_A = ['ramro! {r} sanga bhet hunda khusi lagyo hola. k kura bhayo?', '{r} aaunu bhayo, ramro. dherai din pachhi ho?', '{r} sanga kura garda man halka hunchha. sab thik chha ni?']
 THANK_U = ['dhanyabad', 'thank you nik', 'thanks', 'dherai dhanyabad', 'tq', 'ramro jawaf, dhanyabad']
 THANK_A = ['swagat chha! aru kehi chahiyo bhane bhannus.', 'khusi lagyo help garna paayera!', 'kehi chhaina! feri sodhnus hai.']
-BYE_U = ['bye', 'pachhi kura garaula', 'aba ma jaanchhu', 'subha ratri', 'good night nik', 'feri bhetaula', 'ok bye bye']
+BYE_U = ['bye', 'pachhi kura garaula', 'aba ma jaanchhu', 'good night nik', 'feri bhetaula', 'ok bye bye']
 BYE_A = ['hunchha, pachhi kura garaula! ramro din hos.', 'bye! khyal garnus.', 'subha ratri! ramro sanga sutnus.', 'feri bhetaula! jaba man lagchha aaunus.']
 JOKE_U = ['euta joke sunau', 'hasau na', 'kehi funny bhana', 'tell me a joke']
 JOKE_A = ['teacher: "timi kina dhilo aayau?" bidyarthi: "bato ma board ma lekheko thiyo: school agadi chha, bistarai jaanus!"',
@@ -136,8 +135,20 @@ def thread(R):
     return ex(msgs, 'thread')
 
 
+# chat_check.py prompts stay held out: composed templates can rebuild them (Local-A review)
+HELD = {'namaste! k chha?', 'malai momo dherai man parchha', 'k gardai chhau?', 'subha ratri'}
+_HELD = {h.strip(' ?!.') for h in HELD}
+
+
+def _held(d):
+    return any(m['role'] == 'user' and m['content'].lower().strip(' ?!.') in _HELD for m in d['messages'])
+
+
 def sample(R):
-    return thread(R) if R.random() < 0.3 else single(R)
+    while True:
+        d = thread(R) if R.random() < 0.3 else single(R)
+        if not _held(d):
+            return d
 
 
 if __name__ == '__main__':
