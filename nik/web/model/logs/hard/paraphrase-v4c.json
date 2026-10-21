@@ -1,0 +1,404 @@
+{
+ "items_ok": 1,
+ "items": 12,
+ "phrasings_ok": 17,
+ "phrasings": 60,
+ "rows": [
+  {
+   "family": "math-sub",
+   "gold": 365,
+   "all5": false,
+   "n_ok": 1,
+   "answers": [
+    {
+     "q": "mero sanga 640 rupiya thiyo, 275 kharcha gare. kati bachyo?",
+     "a": "bachyo 265 rupiya bachyo.",
+     "ok": false
+    },
+    {
+     "q": "malai 640 rupiya thiyo. 275 kharcha bhayo, aba kati chha?",
+     "a": "640 rupiya bhayo.",
+     "ok": false
+    },
+    {
+     "q": "640 bata 275 ghataunda kati?",
+     "a": "640 - 275 = 365.",
+     "ok": true
+    },
+    {
+     "q": "pocket ma 640 thiyo, 275 ko saman kine. baki kati?",
+     "a": "jamma 50 rupiya lagchha.",
+     "ok": false
+    },
+    {
+     "q": "How much is left if I had 640 rupees and spent 275?",
+     "a": "sne had 195 rupees.",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "math-mul",
+   "gold": 210,
+   "all5": false,
+   "n_ok": 2,
+   "answers": [
+    {
+     "q": "euta kopi 35 rupiya ko. 6 ota kopi ko kati?",
+     "a": "6 ota kopi ko umer 210 rupiya parchha.",
+     "ok": true
+    },
+    {
+     "q": "6 wata kopi kinda, ek ko 35, jamma kati?",
+     "a": "jamma 105 rupiya hunchha.",
+     "ok": false
+    },
+    {
+     "q": "35 lai 6 le gunda kati?",
+     "a": "35 x 6 = 210.",
+     "ok": true
+    },
+    {
+     "q": "kopi ko mol 35 chha. 6 ota chahiyo bhane kati tirnu parchha?",
+     "a": "6 ota mahango tirnu parchha.",
+     "ok": false
+    },
+    {
+     "q": "One notebook costs 35. What do 6 cost?",
+     "a": "Lo costs costs not is greeners.",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "math-2step",
+   "gold": 380,
+   "all5": false,
+   "n_ok": 0,
+   "answers": [
+    {
+     "q": "ma sanga 500 chha. 3 ota kalam kine, ek ko 40. kati baki?",
+     "a": "antya ma 0 rupiya baki chha.",
+     "ok": false
+    },
+    {
+     "q": "3 kalam (40 ko dar ma) kinepachhi 500 bata kati bachchha?",
+     "a": "500 bata 100 ma bachchha.",
+     "ok": false
+    },
+    {
+     "q": "500 rupiya lagera 40 ko 3 ota kalam kine, baki paisa kati?",
+     "a": "500 ko 3% = 15.",
+     "ok": false
+    },
+    {
+     "q": "kalam 40 rupiya ko, 3 ota liye. 500 tire. kati firta aaucha?",
+     "a": "500 rupiya firta aauchha.",
+     "ok": false
+    },
+    {
+     "q": "I had 500 and bought 3 pens at 40 each. How much is left?",
+     "a": "1500 each is 1500.",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "math-div",
+   "gold": 9,
+   "all5": false,
+   "n_ok": 0,
+   "answers": [
+    {
+     "q": "72 ota syau 8 jana bich barabar bandda ek jana le kati paunchha?",
+     "a": "72 ota syau ko packetsat raheko chhaina.",
+     "ok": false
+    },
+    {
+     "q": "8 jana lai 72 syau barabar bhag lagaunda kati kati?",
+     "a": "8 jana lai 10 jana le bhag garda 10 aauchha ra 2 baki rahanchha.",
+     "ok": false
+    },
+    {
+     "q": "72 lai 8 le bhag gara",
+     "a": "72 lai 8 le bhag garda 90 aauchha, sesh 1.",
+     "ok": false
+    },
+    {
+     "q": "ek tokari ma 72 syau chha, 8 jana sathi. sabai le barabar line bhaye kati?",
+     "a": "sabai bhanda jana kaam ho.",
+     "ok": false
+    },
+    {
+     "q": "Share 72 apples equally among 8 people. How many each?",
+     "a": "among 8 peach equallyly 2 people, so Ceople ma",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "math-time",
+   "gold": 1,
+   "all5": false,
+   "n_ok": 0,
+   "answers": [
+    {
+     "q": "bus 9 baje chhutyo ra 4 ghanta lagyo. kati baje pugyo?",
+     "a": "bus 9 baje pugyo.",
+     "ok": false
+    },
+    {
+     "q": "9 baje hidera 4 ghanta yatra gare, pugda kati baje?",
+     "a": "9 baje pachhi pug: 4 ghanta lagchha.",
+     "ok": false
+    },
+    {
+     "q": "yatra 4 ghanta ko, suru 9 baje. antya kati baje?",
+     "a": "tapaiu 1160 baje hunchha.",
+     "ok": false
+    },
+    {
+     "q": "bihana 9 baje bata 4 ghanta pachhi kati baje hunchha?",
+     "a": "bihana 960 baje parchha.",
+     "ok": false
+    },
+    {
+     "q": "A bus leaves at 9 and takes 4 hours. When does it arrive?",
+     "a": "It arrive is Rashi.",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "math-percent",
+   "gold": 60,
+   "all5": true,
+   "n_ok": 5,
+   "answers": [
+    {
+     "q": "400 ko 15 percent kati?",
+     "a": "400 ko 15% = 60.",
+     "ok": true
+    },
+    {
+     "q": "400 rupiya ko 15% kati hunchha?",
+     "a": "400 ko 15% = 60.",
+     "ok": true
+    },
+    {
+     "q": "15% of 400?",
+     "a": "400 ko 15% = 60.",
+     "ok": true
+    },
+    {
+     "q": "400 ma 15 pratishat bhaneko kati?",
+     "a": "400 ko 15% 60 hunchha.",
+     "ok": true
+    },
+    {
+     "q": "What is 15 percent of 400?",
+     "a": "15% of 150 is 60.",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "family": "read-who",
+   "gold": "sunil",
+   "all5": false,
+   "n_ok": 0,
+   "answers": [
+    {
+     "q": "\"anil le mobile kinyo ra sunil le cycle.\" cycle kasle kinyo?",
+     "a": "sipil cycle.",
+     "ok": false
+    },
+    {
+     "q": "yo padha: \"anil le mobile kinyo ra sunil le cycle.\" cycle kinne ko ho?",
+     "a": "cycle kinne ho.",
+     "ok": false
+    },
+    {
+     "q": "\"anil le mobile kinyo ra sunil le cycle.\" cycle kinne manchhe ko naam?",
+     "a": "\"cycle kinnu parchha\"",
+     "ok": false
+    },
+    {
+     "q": "anil le mobile kinyo ra sunil le cycle. ani cycle chai kasle?",
+     "a": "110 rupiya lagchha.",
+     "ok": false
+    },
+    {
+     "q": "\"Anil bought a phone and Sunil bought a cycle.\" Who bought the cycle?",
+     "a": "To, dahal boight and a cycle.",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "read-where",
+   "gold": "ilam",
+   "all5": false,
+   "n_ok": 3,
+   "answers": [
+    {
+     "q": "\"maya butwal ma padhchhe tara usko ghar ilam ma chha.\" maya ko ghar kaha?",
+     "a": "maya butwal ma baschhin.",
+     "ok": false
+    },
+    {
+     "q": "maya butwal ma padhchhe, ghar chai ilam. maya ko ghar kun thau?",
+     "a": "maya butwal ko ho.",
+     "ok": false
+    },
+    {
+     "q": "\"maya butwal ma padhchhe tara usko ghar ilam ma chha.\" ghar kata?",
+     "a": "ghar ilam ma baschha.",
+     "ok": true
+    },
+    {
+     "q": "yo kura: maya ko padhai butwal, ghar ilam. ghar kaha chha?",
+     "a": "maya ilam ma basnuhunchha.",
+     "ok": true
+    },
+    {
+     "q": "\"Maya studies in Butwal but her home is in Ilam.\" Where is her home?",
+     "a": "We have a temple. Ilam is revenue to Boul. Bilam is an each but for imortal, and I am a tem.",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "family": "read-count",
+   "gold": 7,
+   "all5": false,
+   "n_ok": 0,
+   "answers": [
+    {
+     "q": "\"kitab 4, kapi 7 ra kalam 2 ota chha.\" kapi kati ota?",
+     "a": "kalam 4 ota chhan.",
+     "ok": false
+    },
+    {
+     "q": "mero jhola ma kitab 4, kapi 7, kalam 2. kapi kati?",
+     "a": "kalam 8, 1.",
+     "ok": false
+    },
+    {
+     "q": "\"kitab 4, kapi 7 ra kalam 2 ota chha.\" kapi ko sankhya?",
+     "a": "chara: 5, 1.",
+     "ok": false
+    },
+    {
+     "q": "kitab 4 ota, kapi 7 ota, kalam 2 ota. kati ota kapi?",
+     "a": "tapai 2 ota kapi hunuhunchha.",
+     "ok": false
+    },
+    {
+     "q": "\"4 books, 7 notebooks and 2 pens.\" How many notebooks?",
+     "a": "4 books 8 notebooks.",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "memory-correct",
+   "gold": "dharan",
+   "all5": false,
+   "n_ok": 2,
+   "answers": [
+    {
+     "q": "ma kaha baschhu?",
+     "a": "tapai pokhara ma basnuhunchha.",
+     "ok": false
+    },
+    {
+     "q": "mero ghar kaha?",
+     "a": "tapai aile dharan ma basnuhunchha.",
+     "ok": true
+    },
+    {
+     "q": "ma kun thau ko hu?",
+     "a": "tapai aile pokhara ma basnuhunchha.",
+     "ok": false
+    },
+    {
+     "q": "aba bhana, ma kaha baschhu?",
+     "a": "tapai ko dharan ma basnuhunchha.",
+     "ok": true
+    },
+    {
+     "q": "Where do I live?",
+     "a": "You can lot of y hochoteme?",
+     "ok": false
+    }
+   ]
+  },
+  {
+   "family": "logic-order",
+   "gold": "shyam",
+   "all5": false,
+   "n_ok": 4,
+   "answers": [
+    {
+     "q": "hari ram bhanda aglo, ram shyam bhanda aglo. sabai bhanda hocho ko?",
+     "a": "sabai bhanda pachhadi shyam ho.",
+     "ok": true
+    },
+    {
+     "q": "ram shyam bhanda aglo ra hari ram bhanda aglo. sabai bhanda chhoto ko?",
+     "a": "jawaf ram ho.",
+     "ok": false
+    },
+    {
+     "q": "hari > ram > shyam (uchai ma). hocho ko?",
+     "a": "hari sanga 5 shyam chha.",
+     "ok": true
+    },
+    {
+     "q": "uchai: hari ram bhanda badhi, ram shyam bhanda badhi. sabai bhanda kam ko?",
+     "a": "sabai bhanda kam shyam ho.",
+     "ok": true
+    },
+    {
+     "q": "Hari is taller than Ram, Ram is taller than Shyam. Who is shortest?",
+     "a": "Shyam is shorter, because Ram is taller than Shyam.",
+     "ok": true
+    }
+   ]
+  },
+  {
+   "family": "seq",
+   "gold": 48,
+   "all5": false,
+   "n_ok": 0,
+   "answers": [
+    {
+     "q": "3, 6, 12, 24, arko?",
+     "a": "arko sankhya 162 ho.",
+     "ok": false
+    },
+    {
+     "q": "3, 6, 12, 24 pachhi kun sankhya?",
+     "a": "arko sankhya 30 ho.",
+     "ok": false
+    },
+    {
+     "q": "kram: 3, 6, 12, 24, ...",
+     "a": "3 sankhya 30 ho.",
+     "ok": false
+    },
+    {
+     "q": "3 6 12 24 ko arko number",
+     "a": "36 x 6 = 128.",
+     "ok": false
+    },
+    {
+     "q": "Next number: 3, 6, 12, 24?",
+     "a": "12, 24, 12, 24",
+     "ok": false
+    }
+   ]
+  }
+ ]
+}
