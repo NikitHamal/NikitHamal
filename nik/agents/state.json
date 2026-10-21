@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T10:31:06Z",
+ "updated": "2026-10-21T10:41:44Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -10,15 +10,15 @@
    "gpu": "GPU 0% \u00b7 3 MiB",
    "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
    "progress": null,
-   "detail": " \u00b7 running: make_sft2.py, prepare.py",
+   "detail": " \u00b7 running: leak_audit.py",
    "eta": "v5w results ~14:00 UTC"
   },
   {
    "name": "box 2",
-   "gpu": "GPU 100% \u00b7 61982 MiB",
+   "gpu": "GPU 100% \u00b7 55072 MiB",
    "job": "v5 from scratch on clean corpus_v2 + sft12 (stage A 150 min -> SFT 25 -> gates vs v4f)",
-   "progress": 0.503,
-   "detail": "step 5975 \u00b7 130,011 tok/s \u00b7 100.6 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
+   "progress": 0.5579999999999999,
+   "detail": "step 7050 \u00b7 138,309 tok/s \u00b7 111.6 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
    "eta": "~12:30 UTC"
   }
  ],
@@ -77,15 +77,15 @@
    "tag": "v5w",
    "box": "box 1",
    "by": "Claude",
-   "status": "waiting",
-   "what": "14 unique blocks (nik-0.1w), same recipe; waits for the fixed corpus audit"
+   "status": "building data",
+   "what": "14 unique blocks; fixed audit PASS, building sft12 (with the eval-prompt guard), then 150+25 min"
   },
   {
    "tag": "decide-v5",
    "box": "box 1",
    "by": "Claude",
-   "status": "training",
-   "what": "Nik-Decide 55 min, adds math-step verifier"
+   "status": "shipped",
+   "what": "Nik-Decide v5 live at /decide: math-verify 93.6%, step-check 96.8%, yes/no 99.6%"
   },
   {
    "tag": "v4f4 arms E-H",
@@ -100,12 +100,20 @@
    "by": "Local-A",
    "status": "claimed",
    "what": "weight-space persona fix v4f4 + 0.25(v4f3-v4c); needs a paired check vs live v4f"
+  },
+  {
+   "tag": "tvF5",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "v4f + 0.5(v4f4-v4c)",
+   "result": "-3.8 pp vs v4f, understanding 12: task vectors do not cross lineages"
   }
  ],
  "next": [
-  "Verify Local-A's tv25 against live v4f on the same items",
-  "Sky's reduce.py rewrite traces for L2 -> molab 20-min run",
   "v5 gates vs v4f (~12:30 UTC)",
-  "Owner decision: v4f vs v4f3/v4f4 family"
+  "v5w from scratch (14 blocks) ~15:00 UTC",
+  "Local-A tv20 vs live v4f (same items)",
+  "Sky reduce.py rewrite traces -> molab 20-min run"
  ]
 }
