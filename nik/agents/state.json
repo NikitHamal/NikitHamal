@@ -1,33 +1,41 @@
 {
- "updated": "2026-10-21T18:01:48Z",
+ "updated": "2026-10-21T19:15:00Z",
  "live": {
   "model": "m50",
-  "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
+  "note": "NikBench 72.6% (nested 77.1%) · ladder L2 12/12 · understanding 19/26 · traps 9/12 · math 94% (rollback: v4f)"
  },
  "boxes": [
   {
+   "name": "box 1",
+   "gpu": "RTX Pro 6000 · owner notebook",
+   "job": "Claude: p8m (m50 + p8 mix) -> gate vs m50 incl. NikBench-RW",
+   "progress": null,
+   "detail": "status panel in the notebook",
+   "eta": "~19:20 UTC"
+  },
+  {
    "name": "box 2",
-   "gpu": "RTX Pro 6000 \u00b7 auto-managed",
-   "job": "Claude: p8m (m50 + p8 mix, 12 min) -> gate vs m50",
+   "gpu": "RTX Pro 6000 · owner notebook (shared)",
+   "job": "Local-C arms + owner's reel renders",
    "progress": null,
-   "detail": "resumable stages on Kaggle (nik-p8m-*)",
-   "eta": "~18:35 UTC"
-  },
-  {
-   "name": "box 3",
-   "gpu": "RTX Pro 6000 \u00b7 auto-managed",
-   "job": "Claude: Decide v8 (Nik's own answers) + owner's reel renders",
-   "progress": null,
-   "detail": "resumable (nik-decide8-*)",
-   "eta": "~19:10 UTC"
-  },
-  {
-   "name": "box 4",
-   "gpu": "RTX Pro 6000 \u00b7 auto-managed",
-   "job": "Local-C (vault)",
-   "progress": null,
-   "detail": "",
+   "detail": "owner shared the login directly; status panel in the notebook",
    "eta": "-"
+  },
+  {
+   "name": "box 1 (GPU, shared)",
+   "gpu": "RTX Pro 6000 · shared Claude + Local-C · one job at a time (/tmp/gpu.lock)",
+   "job": "Claude: gate-live (the m50 baseline) → then Local-C: p11 (the family mix, 12 min lr 1e-4)",
+   "progress": null,
+   "detail": "the GPU box lives 8-12 min: the stage + the export have to fit in one lifetime",
+   "eta": "the lock is free between the jobs"
+  },
+  {
+   "name": "CPU box (the owner's)",
+   "gpu": "no GPU · 20 cores · it does not die",
+   "job": "Local-C: the measurements (the bench, the understanding, the ladder, the shape probe) + the mix build",
+   "progress": null,
+   "detail": "the paired baseline of the live model on the same nested item set is running there",
+   "eta": "the baseline ~19:25 UTC"
   }
  ],
  "scoreboard": {
@@ -36,7 +44,8 @@
    "reason",
    "und",
    "traps",
-   "L2"
+   "L2",
+   "RW"
   ],
   "rows": [
    [
@@ -45,7 +54,8 @@
     "38/48",
     "19/26",
     "9/12",
-    "12/12"
+    "12/12",
+    "1/45"
    ],
    [
     "p8 (Local-C)",
@@ -53,7 +63,8 @@
     "38/48",
     "18/26",
     "8/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "v4f (previous)",
@@ -61,7 +72,8 @@
     "39/48",
     "13/26",
     "9/12",
-    "0/12"
+    "0/12",
+    "-"
    ],
    [
     "v4r2 (v4f+reduce 25%, lr 2e-4)",
@@ -69,7 +81,8 @@
     "37/48",
     "15/26",
     "8/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "v4r3 (v4f+reduce 30%, lr 1.5e-4)",
@@ -77,7 +90,8 @@
     "39/48",
     "19/26",
     "9/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "b7 = v4f+0.7(v4r-v4f)",
@@ -85,7 +99,8 @@
     "37/48",
     "18/26",
     "8/12",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "b60",
@@ -93,7 +108,8 @@
     "39/48",
     "17/26",
     "8/12",
-    "7/12"
+    "7/12",
+    "-"
    ],
    [
     "v4r (v4f+reduce)",
@@ -101,7 +117,8 @@
     "32/48",
     "16/26",
     "-",
-    "12/12"
+    "12/12",
+    "-"
    ],
    [
     "v4m",
@@ -109,7 +126,8 @@
     "35/48",
     "16/26",
     "9/12",
-    "0/12"
+    "0/12",
+    "-"
    ],
    [
     "v4f4 (Local-C)",
@@ -117,7 +135,8 @@
     "29/48",
     "20/26",
     "9/12",
-    "1/12"
+    "1/12",
+    "-"
    ],
    [
     "v4f3 (Local-C)",
@@ -125,7 +144,8 @@
     "28/48",
     "20/26",
     "8/12",
-    "1/12"
+    "1/12",
+    "-"
    ],
    [
     "v5pre (scratch)",
@@ -133,11 +153,36 @@
     "28/48",
     "15/26",
     "-",
-    "0/12"
+    "0/12",
+    "-"
    ]
   ]
  },
  "runs": [
+  {
+   "tag": "p11 (Local-C)",
+   "box": "box 1 / CPU box",
+   "by": "Local-C",
+   "status": "running",
+   "what": "m50 + 12 min lr 1e-4 on the p11 mix (the shape share 38%, 658,365 rows): the 4 diagnostic shapes, the no-rule sequences, the nested multiplications, 33 story frames, the English frames, the weekday family, the 3 understanding gaps",
+   "result": "pending - the gate is ship_gate.py --target 5 vs m50 on the same item set"
+  },
+  {
+   "tag": "shape probe (Local-C)",
+   "box": "CPU",
+   "by": "Local-C",
+   "status": "done",
+   "what": "the mechanism instrument: the 5 shapes the failing bench items named + a paraphrase block (the same shapes asked the way a person would)",
+   "result": "the live m50 is 2/27 (4/44 with the paraphrases): the weekday in the benchmark wording 1/1, the same question paraphrased 0/3 - the model has the template, not the skill"
+  },
+  {
+   "tag": "p8 (Local-C)",
+   "box": "box 2",
+   "by": "Local-C",
+   "status": "done",
+   "what": "the synthesis: reduce 8% + the role family 12% + iter 5% + frame 5% + a persona slice",
+   "result": "bench 76.0% nested, the ladder 12/12/12/7, the understanding 18/26, the math 97.5%"
+  },
   {
    "tag": "m50",
    "box": "-",
@@ -235,8 +280,8 @@
   }
  ],
  "next": [
-  "p8m gate vs m50 -> ship call",
-  "Local-C arms on box 4",
-  "Decide v8 rerank"
+  "p11 on box 1 (the lock is Claude's now): the stage + the export",
+  "the measurements on the CPU box, then ship_gate.py --target 5 vs m50",
+  "the third-party identity rows (Local-A's family) for the trap_check 9/12 -> 12/12"
  ]
 }
