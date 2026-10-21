@@ -16,6 +16,7 @@ Strictness:
   * unknown: must contain a don't-know cue and no digit at all;
   * format: the exact constraint is checked (only the number, <= N words, >= 3 comma items, ...);
   * memory: the full chat history is rendered like /chat does (no context.js trimming), reply to the last turn scored.
+  * decoding = /chat defaults (maxNew 440, exact-arithmetic calc on), but greedy instead of sampling+vote, for reproducibility.
 
 Held out: vocabulary and situations are written fresh; make_sft2's eval-prompt guard drops any exact prompt,
 and tests/test_bench_rw.py checks no prompt appears in the teacher generators' output.
@@ -205,10 +206,12 @@ def turns(variant):
     return variant if isinstance(variant, list) else [variant]
 
 
-def run(model, tok, gen, max_new=160):
+def run(model, tok, gen, max_new=440, only=None):
     from prepare import render_chat
     rows = []
     for gi, (cat, kind, spec, variants) in enumerate(G):
+        if only is not None and gi not in only:
+            continue
         for vi, v in enumerate(variants):
             msgs = []
             for t in turns(v):
@@ -239,7 +242,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--model', required=True)
     ap.add_argument('--out', default=None)
+    ap.add_argument('--shard', default='0/1', help='i/n: run groups i, i+n, ... (merge the JSONs with --merge)')
+    ap.add_argument('--merge', nargs='*', default=None)
     a = ap.parse_args()
+    if a.merge:
+        rows = [r for f in a.merge for r in json.load(open(f))['rows']]
+        s = summarize(rows); print(json.dumps(s, indent=1)); print(f"NikBench-RW: {s['groups']} groups ({s['group_pct']}%), {s['items']} items")
+        if a.out:
+            json.dump({'summary': s, 'rows': rows}, open(a.out, 'w'), indent=1, ensure_ascii=False)
+        return
     import torch
     from eval_understand import load_any
     from model import generate_ar
@@ -247,10 +258,14 @@ def main():
     tok = Tokenizer.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'web/model/tokenizer.json'))
     model = load_any(a.model).eval()
 
+    from calc import Calc
+    calc = Calc(tok)   # /chat default: "exact arithmetic" on, maxNew 440 (greedy here for reproducibility)
+
     def gen(m, ids, n):
         with torch.no_grad():
-            return tok.decode(generate_ar(m, ids, n, temperature=0.0))
-    rows = run(model, tok, gen)
+            return tok.decode(generate_ar(m, ids, n, temperature=0.0, calc=calc))
+    i, n = map(int, a.shard.split('/'))
+    rows = run(model, tok, gen, only={g for g in range(len(G)) if g % n == i})
     s = summarize(rows)
     for r in rows:
         if not r['ok']:
