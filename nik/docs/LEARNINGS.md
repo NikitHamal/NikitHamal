@@ -8,6 +8,14 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **v4r = v4f + 20 min, Sky reduce.py 40% (box): ladder L2 0 -> 12/12, L4 0 -> 6/12**, understanding 16, stress 64, NikBench
+  -2.1 (reason -7, p=0.016: the dose crowds out iter rows). Same-lineage blends v4f + a(v4r - v4f): a=0.7 keeps L2 12/12,
+  NikBench -1.4, understanding 18, stress 61, traps 8; a=0.5 keeps reason and stress but L2 falls to 1/12. The skill is
+  non-linear in a (switches between 0.5 and 0.7).
+- **Decide v7 on held-out reading: 3/20 -> 11/20 pairs** (29/40 items) from reading_wide.py; math-verify fell 93.6 -> 81.9
+  (smaller share). Shipped to /decide with both numbers shown.
+- **v5w (14 unique blocks, from scratch): base 64.6% (n8)**, no better than 12 blocks (v5pre 66.7%). Width is not the lever.
+
 - **v5 from scratch (clean corpus_v2 473M tokens + sft12, 150 min, ~1.25B tokens) loses to the v4 lineage:** v5pre
   61.8%, v5 (after a 25-min SFT at lr 1.2e-3) 59.0% vs v4f 72.2% on the same 288 items; reason 28 vs 39; understanding
   15/17 vs 13. The live model's strength is its accumulated SFT stages, not its base data. The post-SFT hurt this base.
@@ -131,6 +139,9 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   is wrong in all 5 phrasings; English inputs are mostly garbled. This is the honest picture of how template-bound Nik is.
 
 ### Mistakes (do not repeat)
+
+- **Killing a duplicate job mid-`git clone` breaks the other copy's clone of the same folder** (v4r and Decide v8 both
+  failed that way). Use a unique folder per job, and kill orphan children (one Decide trainer ran 40 min unseen).
 
 - **Relaunching on a lost marimo response.** The box kernel is shared, and launch output is often dropped. Relaunching
   started two copies of the same queue. Always check `ps` for the process before relaunching.
