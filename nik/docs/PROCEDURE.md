@@ -306,6 +306,52 @@ the money scene teaches "bind two amounts in a sentence" (the one-step reading) 
 the role family teaches "carry the intermediate" (the two-step composition) - and
 those are exactly the two things the two champions each miss.
 
+## The recipe map: every share was measured, not guessed
+
+The final picture after ~40 arms (all paired on the same 288 nested items, the ladder as
+the mechanism instrument, the leak audit as the honesty instrument):
+
+| what | the share that works | why |
+|---|---|---|
+| the **grounded-role family** (`roles.py`: bind the numbers in a text to their roles, carry the intermediate) | **12% of the rows** | the peak: at 20% it is *worse on every axis* (understanding 19 vs 20, the role probe 7/26 vs 12/26, the ladder L2 0 vs 1) |
+| **Sky's `reduce.py`** (the symbolic two-step) | **8% flat / 110k rows in the family mix** | at 40% it takes L2 to 12/12 but crowds out `iter.py` and costs 7 reason items; at 8-18% L2 is 12/12 *and* the reason family holds |
+| the **iteration chains** (`iter.py`) | 25k | the reason family (the 40% reduce dose and the blends lose it) |
+| the **money scene** (`frame.py`) | 45k | the one-step reading: the held-out money probe 2/11 -> 10/11 |
+| the **arithmetic** (math + colmath) | ~25% of the family mix | the bench's arith family (153/192 at 11% -> 168/192 at 25%) and the stress items |
+| the **understanding families** (understand / read / skills / vocab / correct) | ~25% | the 26 understanding probes are **not** taught by the arithmetic half of the base mix - P3 (8% slice) held the bench with understanding 16/26, P4 (25% slice) reached 20/26 with the bench 2pp down, and the named families give both |
+| the **persona rows** (augmented) | 20-25k | the persona gate (1.0) and the identity probes; the identity facts are a fixed set of ~100 hand-written answers, so the variety has to come from the augmentation |
+| the **everyday chat rows** | 75-80k | the chat style |
+| the **base mix** | a **10% slice** | the general capability - with 0% the model collapses (p5: 58.3%, the traps 5/12, ladder L1 1/12) |
+
+**The two-step ladder, and the three independent ways it was solved** (each by a
+different agent, each with the ladder's own surface held out of the training data):
+
+| model | L1 | L2 (produce and carry) | L3 (use a given one) | L4 (the chain) |
+|---|---|---|---|---|
+| every model built before 2026-10-21 | 12/12 | **0-1/12** | 11-12/12 | 0-2/12 |
+| Sky's reduce.py at 40% | 12/12 | **12/12** | 12/12 | 6/12 |
+| my nested-expression rows (25% of the role rows) | 12/12 | **14/20** | - | - |
+| p8 (the synthesis) | 12/12 | **12/12** | 12/12 | 7/12 |
+| p9 (the synthesis + the named families) | 12/12 | **12/12** | 12/12 | 6/12 |
+
+**So the two-step composition is a *data* property, not a model property, and not a
+scale property** (v5, from scratch with 675M tokens, scored L2 1/12).
+
+## The three models at the end, and what each one is
+
+| paired, same 288 nested items | live v4f | **m50 (live)** | **p8** | **p9** |
+|---|---|---|---|---|
+| nested bench | 75.0% | **77.1%** | 76.0% | 73.3% |
+| arith / word / reason | 164/11/41 | 168/16/38 | 168/14/42 | 153/**17**/**41** |
+| **understanding** (0 leaks) | 13/26 | 19/26 | 18/26 | **20/26** |
+| math / persona | 96 / 1.0 | 94 / 1.0 | **97.5** / 1.0 | 96 / 1.0 |
+| ladder L1/L2/L3/L4 | 12/0/12/0 | 12/12/12/6 | 12/12/12/**7** | 12/12/12/6 |
+| trap_check | 9/12 | 9/12 | 8/12 | **9/12** |
+
+p9's only loss is the arithmetic (153/192 where p8 has 168) because the family mix
+carries ~11% arithmetic rows where the base mix carries 36% - the fix is one number in
+one command (the "arithmetic share" row of the table above).
+
 ## What follows
 
 1. **More story frames cannot fix this** - every word problem is at least two steps,
