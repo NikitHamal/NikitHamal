@@ -5,7 +5,7 @@ Each line is one voice clip; the picture is cut to the clip lengths (`timeline.j
 
 | # | section | picture (3D unless noted) | narration = caption |
 |---|---|---|---|
-| 1 | open | Darkness. A clay diyo lights, and its glow finds a brass kalash. Dust in the light. | हरेक वर्ष असोजको उज्यालो पक्षमा नेपालभरि एउटै कथा फेरि सुनाइन्छ। |
+| 1 | open | Darkness. A clay diyo lights, and its glow finds a brass kalash. Dust in the light. | एउटा दियो बल्छ — र सयौँ वर्ष पुरानो कथा फेरि ब्युँझिन्छ। |
 | 2 | title | The flame grows into the title दशैँ. | *(title, no voice)* |
 | 3 | myth | A palm-leaf manuscript opens in a slow dolly; Sanskrit verses in gold. | यो कथा देवी माहात्म्यमा छ — मार्कण्डेय पुराणभित्रको, करिब पन्ध्र सय वर्ष पुरानो संस्कृत ग्रन्थ। |
 | 4 | myth | Smoke; the horns and ember eyes of a vast buffalo-demon rise out of the dark. | महिषासुरले वरदान पाएको थियो — कुनै देवता वा पुरुषले उसलाई मार्न सक्ने छैनन्। |
