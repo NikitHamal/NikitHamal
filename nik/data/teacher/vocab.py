@@ -2,7 +2,7 @@
 Word meaning both ways, in-sentence use, and plurals; 150 pairs, so the skill is lookup + format, not 30 memorised rows."""
 import random
 
-PAIRS = [('river', 'nadi'), ('mountain', 'pahad'), ('snow mountain', 'himal'), ('lake', 'tal'), ('forest', 'jangal'), ('tree', 'rukh'),
+PAIRS = [('mountain', 'pahad'), ('snow mountain', 'himal'), ('lake', 'tal'), ('forest', 'jangal'), ('tree', 'rukh'),
  ('flower', 'phool'), ('leaf', 'paat'), ('fruit', 'phal'), ('seed', 'biu'), ('rain', 'pani paryo'), ('cloud', 'badal'), ('sky', 'aakash'),
  ('sun', 'ghaam'), ('moon', 'jun'), ('star', 'tara'), ('wind', 'hawa'), ('fire', 'aago'), ('water', 'pani'), ('earth', 'prithvi'),
  ('stone', 'dhunga'), ('road', 'bato'), ('bridge', 'pul'), ('village', 'gaun'), ('city', 'sahar'), ('country', 'desh'), ('house', 'ghar'),
@@ -30,12 +30,16 @@ EN_Q = ['"{e}" lai nepali ma k bhanchha?', '"{e}" ko nepali k ho?', '"{e}" nepal
 NE_Q = ['"{n}" ko english k ho?', '"{n}" lai english ma k bhanchha?', 'what does "{n}" mean in english?', '"{n}" english ma bhana.']
 
 
+NE_UNIQUE = [p for p in PAIRS if sum(1 for _, n in PAIRS if n == p[1]) == 1]   # NE->EN only for one-meaning words
+
+
 def sample(R):
     e, n = R.choice(PAIRS)
     if R.random() < 0.55:
         q = R.choice(EN_Q).format(e=e)
         a = (f'"{e}" in nepali is "{n}".' if q.startswith('what') else R.choice([f'"{e}" lai nepali ma "{n}" bhanchha.', f'nepali ma: "{n}".', f'"{e}" ko nepali "{n}" ho.']))
         return {'cat': 'understand-vocab', 'gold': n, 'messages': [{'role': 'user', 'content': q}, {'role': 'nik', 'content': a}]}
+    e, n = R.choice(NE_UNIQUE)
     q = R.choice(NE_Q).format(n=n)
     a = (f'"{n}" means "{e}".' if q.startswith('what') else R.choice([f'"{n}" lai english ma "{e}" bhanchha.', f'english ma: "{e}".', f'"{n}" ko english "{e}" ho.']))
     return {'cat': 'understand-vocab', 'gold': e, 'messages': [{'role': 'user', 'content': q}, {'role': 'nik', 'content': a}]}
