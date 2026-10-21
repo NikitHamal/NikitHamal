@@ -10,8 +10,10 @@ const bin = argv[0];
 const itemsPath = argv[1];
 let outPath = '';
 let cfgName = 'greedy';
+let VOTE = 1;
 for (let i = 2; i < argv.length; i++) {
   if (argv[i] === '--out') outPath = argv[++i];
+  else if (argv[i] === '--vote') VOTE = parseInt(argv[++i], 10) || 1;
   else cfgName = argv[i];
 }
 
@@ -71,8 +73,31 @@ for (const [cat, q, gold] of items) {
   const a = once(prompt, CFG);
   const num = finalNumber(a.answer);
   const g = grounding(q, a.think);
-  rows.push({ cat, q, gold, out: a.answer.slice(-300), think: a.think.slice(-300), num,
-              ok: num === String(gold), grounding: g });
+  const row = { cat, q, gold, out: a.answer.slice(-300), think: a.think.slice(-300), num,
+                ok: num === String(gold), grounding: g };
+  if (VOTE > 1) {
+    // The oracle ceiling: sample VOTE paths and record whether ANY of them is
+    // correct.  This is what a perfect verifier could pick; if the oracle is also
+    // zero, no verifier/router/self-consistency scheme can rescue the item - the
+    // ability is missing, not the selection.
+    const paths = [a];
+    for (let i = 1; i < VOTE; i++) {
+      paths.push(once(prompt, { ...CFG, temperature: 0.7 }));
+    }
+    const nums = paths.map((p) => finalNumber(p.answer));
+    const correct = nums.filter((n) => n === String(gold)).length;
+    const counts = new Map();
+    for (const n of nums) if (n !== null) counts.set(n, (counts.get(n) || 0) + 1);
+    const best = [...counts.entries()].sort((a2, b2) => b2[1] - a2[1])[0];
+    const voted = best ? best[0] : null;
+    row.vote_nums = nums;
+    row.vote_answer = voted;
+    row.n_correct = correct;
+    row.any_correct = correct > 0;
+    row.vote_ok = voted === String(gold);
+    row.vote_distinct = counts.size;
+  }
+  rows.push(row);
 }
 
 const groups = {};
@@ -85,6 +110,17 @@ for (const r of rows) {
 for (const [k, v] of Object.entries(groups).sort()) {
   const n = v.n || 1;
   console.log(`${k.padEnd(16)} ${v.ok}/${v.n}  operand-coverage ${(v.coverage / n).toFixed(2)}  invented ${(v.invented / n).toFixed(1)}`);
+}
+if (VOTE > 1) {
+  const byCat = {};
+  for (const r of rows) {
+    const g = byCat[r.cat] || (byCat[r.cat] = { vote: 0, any: 0, n: 0, distinct: 0 });
+    g.vote += r.vote_ok ? 1 : 0; g.any += r.any_correct ? 1 : 0; g.n += 1; g.distinct += r.vote_distinct;
+  }
+  console.log('\nverifier ceiling (5 sampled paths):');
+  for (const [k, g] of Object.entries(byCat).sort()) {
+    console.log(`  ${k.padEnd(16)} vote ${g.vote}/${g.n}   oracle(any-of-5) ${g.any}/${g.n}   distinct answers/item ${(g.distinct / g.n).toFixed(1)}`);
+  }
 }
 const ok = rows.filter((r) => r.ok).length;
 console.log(`ALL ${ok}/${rows.length}  (${bin}, ${cfgName})`);
