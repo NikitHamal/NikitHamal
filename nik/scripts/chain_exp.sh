@@ -25,20 +25,21 @@ mkdir -p "$OUT" "$ROOT/data" "$ROOT/nik/web/model/logs/$TAG"
 cd "$ROOT"
 
 export PYTHONUNBUFFERED=1
+export CHAIN_INIT="$OUT/init.pt"
 say() { echo "[chain_exp $TAG $(date +%H:%M:%S)] $*"; }
 
 # --- 1. init from the live exported model (v4c) -------------------------------
 if [ ! -f "$OUT/init.pt" ]; then
   say "init from nik/web/model/nik-0.1.bin (the live v4c)"
   python - <<'PY'
-import json, struct, sys, torch
+import json, os, struct, sys, torch
 sys.path.insert(0, 'nik')
 from export import load_exported
 src = 'nik/web/model/nik-0.1.bin'
 raw = open(src, 'rb').read()
 hl = struct.unpack('<I', raw[4:8])[0]
 torch.save({'model': load_exported(src).state_dict(),
-            'cfg': json.loads(raw[8:8 + hl])['config']}, '/tmp/chain_exp/init.pt')
+            'cfg': json.loads(raw[8:8 + hl])['config']}, os.environ.get('CHAIN_INIT', '/tmp/chain_exp/init.pt'))
 print('init.pt written')
 PY
 fi
