@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T10:41:44Z",
+ "updated": "2026-10-21T11:30:18Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -7,18 +7,18 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU 0% \u00b7 3 MiB",
+   "gpu": "GPU 100% \u00b7 64620 MiB",
    "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
-   "progress": null,
-   "detail": " \u00b7 running: leak_audit.py",
+   "progress": 0.22149999999999997,
+   "detail": "step 4675 \u00b7 231,089 tok/s \u00b7 44.3 min of stage \u00b7  \u00b7 running: train.py",
    "eta": "v5w results ~14:00 UTC"
   },
   {
    "name": "box 2",
-   "gpu": "GPU 100% \u00b7 55072 MiB",
+   "gpu": "GPU 93% \u00b7 34015 MiB",
    "job": "v5 from scratch on clean corpus_v2 + sft12 (stage A 150 min -> SFT 25 -> gates vs v4f)",
-   "progress": 0.5579999999999999,
-   "detail": "step 7050 \u00b7 138,309 tok/s \u00b7 111.6 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
+   "progress": 0.75,
+   "detail": "step 10075 \u00b7 147,043 tok/s \u00b7 150.0 min of stage \u00b7 GPU shared with Local-C runs \u00b7 running: train.py",
    "eta": "~12:30 UTC"
   }
  ],
@@ -70,22 +70,15 @@
    "tag": "v5",
    "box": "box 2",
    "by": "Claude",
-   "status": "training",
-   "what": "from scratch on clean corpus_v2 (4.77M docs) + sft12; stage A 150 min -> SFT 25 -> gates vs v4f"
+   "status": "SFT",
+   "what": "from scratch on clean corpus_v2; base (pre-SFT) quick check: NikBench 66.7% (n8), word 5/24, und 15/26, math 95%; 25-min SFT running"
   },
   {
    "tag": "v5w",
    "box": "box 1",
    "by": "Claude",
-   "status": "building data",
-   "what": "14 unique blocks; fixed audit PASS, building sft12 (with the eval-prompt guard), then 150+25 min"
-  },
-  {
-   "tag": "decide-v5",
-   "box": "box 1",
-   "by": "Claude",
-   "status": "shipped",
-   "what": "Nik-Decide v5 live at /decide: math-verify 93.6%, step-check 96.8%, yes/no 99.6%"
+   "status": "training",
+   "what": "14 unique blocks, stage A 150 min"
   },
   {
    "tag": "v4f4 arms E-H",
@@ -108,6 +101,20 @@
    "status": "rejected",
    "what": "v4f + 0.5(v4f4-v4c)",
    "result": "-3.8 pp vs v4f, understanding 12: task vectors do not cross lineages"
+  },
+  {
+   "tag": "decide-v7",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "training",
+   "what": "+ reading_wide (10 relations, bench_reading vocab held out), math-word, memory-latest; 75 min. Baseline v5 on bench_reading (strict, both orders): 17/40 items, 3/20 pairs"
+  },
+  {
+   "tag": "rerank",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "running",
+   "what": "Nik v4f samples 8 answers per NikBench item, Decide v5 picks"
   }
  ],
  "next": [
