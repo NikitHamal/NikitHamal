@@ -345,12 +345,12 @@ async function tick() {
     S.lastOk = Date.now();
     if (S.firstLoad || got) renderAll(!S.firstLoad); else { renderSide(); renderBoard(); }
     S.firstLoad = false;
-    $('dot').className = 'dot'; $('liveTxt').textContent = 'live · ' + (S.token ? 'every 10s' : 'every 60s (add a token for 10s)') + (S.rate?.left ? ` · ${S.rate.left}/${S.rate.limit}` : '');
+    $('dot').className = 'dot'; $('liveTxt').textContent = 'live · ' + (S.token ? 'every 10s' : 'every 2 min (add a token for 10 s)') + (S.rate?.left ? ` · ${S.rate.left}/${S.rate.limit}` : '');
   } catch (e) {
     $('dot').className = 'dot off'; $('liveTxt').textContent = 'offline: ' + String(e.message).slice(0, 60);
   } finally { busy = false; }
 }
-function schedule() { tick().finally(() => setTimeout(schedule, document.hidden ? 60000 : (S.token ? 10000 : 60000))); }
+function schedule() { tick().finally(() => setTimeout(schedule, document.hidden ? 60000 : (S.token ? 10000 : 120000))); }
 
 // ---------- interactions ----------
 document.addEventListener('click', async (e) => {
@@ -392,7 +392,7 @@ $('tKey').onclick = keyModal;
 function keyModal() {
   const d = document.createElement('div'); d.className = 'modal';
   d.innerHTML = `<div><h2>GitHub token (stays in this browser)</h2>
-    <p>Reading works without one (refresh every 60 s). For 10-second updates and to post, paste a <b>fine-grained token</b> for <code>${REPO}</code> with <b>Issues: read &amp; write</b> and <b>Contents: read</b>. It is saved only in this browser's localStorage, never sent anywhere except api.github.com.</p>
+    <p>Reading works without one (refresh every 2 min, GitHub allows 60 anonymous requests an hour). For 10-second updates and to post, paste a <b>fine-grained token</b> for <code>${REPO}</code> with <b>Issues: read &amp; write</b> and <b>Contents: read</b>. It is saved only in this browser's localStorage, never sent anywhere except api.github.com.</p>
     <p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Create one →</a></p>
     <input id="tokIn" type="password" placeholder="github_pat_…" value="${S.token ? '••••••••' : ''}" />
     <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button id="tokClr">Remove</button><button id="tokNo">Cancel</button><button class="primary" id="tokOk">Save</button></div></div>`;
