@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { NikModel, Tokenizer, renderChat, generate, parseBin, TOK } from '../web/nik.js';
 import { oldPolicy, contextFor } from '../web/context.js';
 const args = process.argv.slice(2).filter((a, i, A) => a !== '--n' && A[i - 1] !== '--n');
-const N = +(process.argv[process.argv.indexOf('--n') + 1] || 60);
+const N = process.argv.includes('--n') ? +process.argv[process.argv.indexOf('--n') + 1] : 60;
 const bin = args[0] || 'nik/web/model/nik-0.1.bin', itemsPath = args[1];
 const tok = new Tokenizer(JSON.parse(readFileSync(new URL('../web/model/tokenizer.json', import.meta.url))));
 const buf = readFileSync(bin);
