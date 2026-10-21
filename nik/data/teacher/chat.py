@@ -135,13 +135,43 @@ def thread(R):
     return ex(msgs, 'thread')
 
 
-# chat_check.py prompts stay held out: composed templates can rebuild them (Local-A review)
+# chat_check.py prompts stay held out: composed templates can rebuild them (Local-A review).
+# The hand list is only a fallback - the real set is read from the evals, because chat_check
+# has 15 surfaces and this file listed 4 (sft8 shipped with 9,144 fatal rows, mostly chat-*).
 HELD = {'namaste! k chha?', 'malai momo dherai man parchha', 'k gardai chhau?', 'subha ratri'}
 _HELD = {h.strip(' ?!.') for h in HELD}
+_FATAL = None
+
+
+def _fatal_surfaces():
+    import os
+    import sys
+    here = os.path.dirname(os.path.abspath(__file__))
+    root = os.path.abspath(os.path.join(here, '..', '..', '..'))
+    sys.path.insert(0, os.path.join(root, 'nik', 'scripts'))
+    import leak_audit
+    return {leak_audit.norm(p) for source in leak_audit.FATAL
+            for p in leak_audit.collect_prompts(root).get(source, [])}
+
+
+def _fatal():
+    global _FATAL
+    if _FATAL is None:
+        try:
+            _FATAL = _fatal_surfaces()
+        except Exception:
+            _FATAL = set()
+    return _FATAL
 
 
 def _held(d):
-    return any(m['role'] == 'user' and m['content'].lower().strip(' ?!.') in _HELD for m in d['messages'])
+    for m in d['messages']:
+        if m['role'] != 'user':
+            continue
+        c = m['content']
+        if c.lower().strip(' ?!.') in _HELD or c.lower().rstrip(' .!?') in _fatal():
+            return True
+    return False
 
 
 def sample(R):
