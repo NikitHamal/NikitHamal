@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ne" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nik-Decide — a tiny decision model in your browser · Nikit Hamal</title>
+  <meta name="description" content="Nik-Decide: a 5.4M-parameter non-autoregressive decision model built from scratch. One pass, typed answer + confidence, fully in your browser." />
+  <link rel="canonical" href="https://nikit.is-a.dev/decide" />
+  <link rel="icon" type="image/svg+xml" href="/assets/avatar-upright.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;500;600&family=Silkscreen&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css?v=18" />
+  <script>(function(){var t=localStorage.getItem('theme');if(!t){t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})();</script>
+  <style>
+    body.dc { font-family: 'Poppins', var(--font-sans); max-width: 860px; margin: 0 auto; padding: 28px 18px 60px; color: var(--text-primary); background: var(--bg-primary, #faf9f6); }
+    .dc h1 { font-family: 'Silkscreen', var(--font-mono); font-size: 28px; margin: 0 0 4px; letter-spacing: .5px; }
+    .dc .sub { opacity: .75; margin: 0 0 22px; font-size: 14px; }
+    .dc label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; opacity: .7; margin: 14px 0 6px; }
+    .dc textarea, .dc input { width: 100%; box-sizing: border-box; font: 15px 'Poppins', sans-serif; padding: 10px 12px; border-radius: 10px;
+      border: 1.5px solid rgba(127,127,127,.35); background: transparent; color: inherit; resize: vertical; }
+    .dc .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 4px; }
+    .dc button { font: 500 13px 'Poppins', sans-serif; padding: 8px 14px; border-radius: 999px; border: 1.5px solid rgba(127,127,127,.4); background: transparent; color: inherit; cursor: pointer; }
+    .dc button.go { background: var(--text-primary); color: var(--bg-primary, #faf9f6); border-color: transparent; padding: 10px 22px; font-size: 15px; }
+    .dc button:disabled { opacity: .4; cursor: wait; }
+    .dc .res { margin-top: 22px; padding: 16px; border-radius: 14px; border: 1.5px solid rgba(127,127,127,.25); }
+    .dc .pick { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .dc .bar { display: grid; grid-template-columns: minmax(120px, 34%) 1fr 56px; gap: 10px; align-items: center; margin: 6px 0; font-size: 14px; }
+    .dc .bar i { display: block; height: 10px; border-radius: 6px; background: currentColor; opacity: .75; }
+    .dc .meta { font: 12px 'JetBrains Mono', monospace; opacity: .65; margin-top: 10px; }
+    .dc .note { font-size: 13px; opacity: .72; margin-top: 26px; line-height: 1.55; }
+    .dc a { color: inherit; }
+  </style>
+</head>
+<body class="dc">
+  <h1>Nik-Decide</h1>
+  <p class="sub">A 5.4M-parameter <b>decision model</b>, built from scratch. It doesn't write text: it reads everything at once and picks an option in <b>one pass</b>, with a confidence for each. Runs fully in your browser. <a href="/chat">Talk to Nik →</a></p>
+
+  <div class="row" id="ex"></div>
+  <label for="q">Question or message</label>
+  <textarea id="q" rows="2"></textarea>
+  <label for="c">Passage (optional: what the question is about)</label>
+  <textarea id="c" rows="3"></textarea>
+  <label for="o">Options (one per line, 2 to 8)</label>
+  <textarea id="o" rows="4"></textarea>
+  <div class="row"><button class="go" id="go" disabled>loading model…</button></div>
+  <div class="res" id="res" hidden></div>
+
+  <p class="note"><b>What it was trained on</b> (all from Nik's own audited generators, held-out accuracy): reading yes/no 99.7%, "not mentioned" 100%,
+    picking the answer from a passage 92.9%, checking arithmetic answers 82.8%, and telling what kind of message something is (chat / math / reading /
+    about Nik or Nikit / language / writing) 100%. It is small and narrow: outside these task types its choices are guesses.
+    For yes/no, write the options like <code>ho, pokhara</code> / <code>haina, pokhara haina</code> / <code>thaha chhaina</code> (the format it learned).</p>
+
+  <script type="module">
+    import { Tokenizer } from '/nik/web/nik.js';
+    import { parseDecide, NikDecide } from '/nik/web/decide.js';
+    const $ = (id) => document.getElementById(id);
+    const INTENTS = ['kura (chat)', 'hisab (math)', 'padhera jawaf (reading)', 'nik/nikit barema (persona)', 'anuvad/grammar (language)', 'lekhai (writing)'];
+    const EX = [
+      ['reading yes/no', 'ke sita pokhara ma baschhin?', 'sita pokhara ma baschhin. ram doctor ho ra uska bhai kathmandu ma padhchha.', ['ho, pokhara', 'haina, pokhara haina', 'thaha chhaina']],
+      ['not mentioned', 'ram ko umer kati ho?', 'sita pokhara ma baschhin. ram doctor ho.', ['ho', 'haina', 'thaha chhaina']],
+      ['answer from passage', 'gopal le kati kilo pyaj kinyo?', 'gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.', ['3', '2', '5', 'aalu']],
+      ['check the math', '348 + 275 kati hunchha?', '', ['613', '623', '633', '326']],
+      ['route: "mero naam nikit ho"', 'mero naam nikit ho', '', INTENTS],
+      ['route: "nikit ko ho?"', 'nikit ko ho?', '', INTENTS],
+      ['route: a word problem', 'mero sanga 800 rupiya thiyo, 350 ko kitab kine. kati baki?', '', INTENTS],
+      ['route: translation', '"I am going to school" nepali ma bhana', '', INTENTS],
+    ];
+    EX.forEach(([name, q, c, o]) => { const b = document.createElement('button'); b.textContent = name;
+      b.onclick = () => { $('q').value = q; $('c').value = c; $('o').value = o.join('\n'); run(); }; $('ex').append(b); });
+    let nd = null;
+    (async () => {
+      const [tj, bin] = await Promise.all([fetch('/nik/web/model/tokenizer.json').then((r) => r.json()), fetch('/nik/web/decide/decide-v3.bin').then((r) => r.arrayBuffer())]);
+      nd = new NikDecide(parseDecide(bin), new Tokenizer(tj));
+      $('go').disabled = false; $('go').textContent = 'decide';
+      const [_, q, c, o] = EX[4]; $('q').value = q; $('c').value = c; $('o').value = o.join('\n');
+    })().catch((e) => { $('go').textContent = 'could not load: ' + e.message; });
+    function run() {
+      if (!nd) return;
+      const opts = $('o').value.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 8);
+      if (opts.length < 2) { $('res').hidden = false; $('res').textContent = 'give at least 2 options'; return; }
+      $('go').disabled = true;
+      setTimeout(() => {
+        const t0 = performance.now(), r = nd.decide($('q').value.trim(), opts, $('c').value.trim()), ms = performance.now() - t0;
+        const order = opts.map((o, i) => [o, r.probs[i]]);
+        $('res').hidden = false;
+        $('res').innerHTML = `<div class="pick">→ ${r.choice}</div><div>confidence ${(100 * r.confidence).toFixed(1)}%</div>` +
+          order.map(([o, p]) => `<div class="bar"><span>${o.replace(/</g, '&lt;')}</span><i style="width:${Math.max(1, 100 * p)}%"></i><span>${(100 * p).toFixed(1)}%</span></div>`).join('') +
+          `<div class="meta">one forward pass · ${ms.toFixed(0)} ms · 5.4M params · runs on your device</div>`;
+        $('go').disabled = false;
+      }, 10);
+    }
+    $('go').onclick = run;
+  </script>
+</body>
+</html>

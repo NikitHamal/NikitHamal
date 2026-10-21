@@ -6,11 +6,10 @@ import random
 
 import lexicon as L
 
-GREET_U = ['namaste', 'namaste nik', 'hi', 'hello', 'hey nik', 'hlo', 'k chha?', 'k xa', 'namaskar', 'hajur namaste', 'oi nik',
-           'subha prabhat', 'good morning nik', 'subha sandhya', 'hello hello', 'namaste! k chha?', 'k chha nik?', 'hi there']
+GREET_U = ['namaste', 'namaste nik', 'hi', 'hello', 'hey nik', 'hlo', 'k chha?', 'k xa', 'namaskar', 'hajur namaste', 'oi nik', 'subha prabhat', 'good morning nik', 'subha sandhya', 'hello hello', 'k chha nik?', 'hi there']
 GREET_A = ['namaste! k chha khabar? aaja k kura garne?', 'hello! ma thik chhu. tapai lai kasto chha?', 'namaste! bhannus, k ma sahayog garu?',
            'hajur namaste! aaja ko din kasto gairahechha?', 'hi! ramro lagyo bhetera. k sodhna man chha?', 'namaste! ma yahi chhu, bhannus na.']
-HOW_U = ['timi kasto chhau?', 'sanchai?', 'kasto chha timilai?', 'how are you?', 'k gardai chhau?', 'timi thik chhau?', 'aaja kasto chha mood?']
+HOW_U = ['timi kasto chhau?', 'sanchai?', 'kasto chha timilai?', 'how are you?', 'timi thik chhau?', 'aaja kasto chha mood?']
 HOW_A = ['ma thik chhu, dhanyabad sodhnu bhayo! tapai ni?', 'ekdam thik! ma sadhai yahi tayar chhu. tapai lai kasto chha?',
          'ramro chhu! aaja tapai ko din kasto bityo?', 'thik chhu, tapai sanga kura garna paayera khusi. tapai ni sanchai?']
 FEEL = {
@@ -39,7 +38,7 @@ MET_U = ['aaja mero {r} sanga bhet bhayo', 'mero {r} ghar aaunu bhayo', 'hijo {r
 MET_A = ['ramro! {r} sanga bhet hunda khusi lagyo hola. k kura bhayo?', '{r} aaunu bhayo, ramro. dherai din pachhi ho?', '{r} sanga kura garda man halka hunchha. sab thik chha ni?']
 THANK_U = ['dhanyabad', 'thank you nik', 'thanks', 'dherai dhanyabad', 'tq', 'ramro jawaf, dhanyabad']
 THANK_A = ['swagat chha! aru kehi chahiyo bhane bhannus.', 'khusi lagyo help garna paayera!', 'kehi chhaina! feri sodhnus hai.']
-BYE_U = ['bye', 'pachhi kura garaula', 'aba ma jaanchhu', 'subha ratri', 'good night nik', 'feri bhetaula', 'ok bye bye']
+BYE_U = ['bye', 'pachhi kura garaula', 'aba ma jaanchhu', 'good night nik', 'feri bhetaula', 'ok bye bye']
 BYE_A = ['hunchha, pachhi kura garaula! ramro din hos.', 'bye! khyal garnus.', 'subha ratri! ramro sanga sutnus.', 'feri bhetaula! jaba man lagchha aaunus.']
 JOKE_U = ['euta joke sunau', 'hasau na', 'kehi funny bhana', 'tell me a joke']
 JOKE_A = ['teacher: "timi kina dhilo aayau?" bidyarthi: "bato ma board ma lekheko thiyo: school agadi chha, bistarai jaanus!"',
@@ -49,6 +48,24 @@ WEATHER_U = ['aaja ekdam garmi chha', 'baahira pani pardaichha', 'aaja dherai ja
 WEATHER_A = {'garmi': 'garmi ma pani dherai piunus ra ghaam ma dherai nabasnus.', 'pani': 'pani pareko bela chiya ra pakauda ko maja nai arkai! chhata bokera hidnus hai.',
              'jado': 'jado ma nyano luga lagaunus ra tato pani piunus. bihana ali dhilo uthna man lagchha hola!',
              'ghaam': 'ghaam laageko din bahira hidna ramro! kahin ghumna jaane plan chha?', 'hawa': 'hawa chalda jhyal dhoka ramro sanga band garnus. kati chiso chha bahira?'}
+
+
+# composed replies: reaction + echo of the user's content + follow-up (hundreds of distinct replies per intent, so a
+# reply cap does not wipe out chat and the model cannot win by reciting one stored answer)
+REACT = ['wah', 'ramro', 'ohho', 'kya baat', 'sunera khusi lagyo', 'majja ko kura', 'ekdam ramro', 'hajur']
+FOLLOW = ['kasto lagyo?', 'feri kahile?', 'kosanga?', 'sabai bhanda ramro k thiyo?', 'arko palta k plan chha?', 'malai ali bistar ma bhannus na.',
+          'tapai lai feri garna man chha?', 'k naya sikyau tyaha?']
+ECHO = {'went': ['{p} gaeko ramro', '{p} ko yatra', '{p} ta sundar thau ho', '{p} pugnu bhayo'],
+        'ate': ['{f} mitho hunchha', '{f} khanu bhayo', '{f} ko swad nai arkai', '{f} ta mero pani favourite jasto'],
+        'did': ['{h} garna ramro', '{h} ramro shokh ho', '{h} le man fresh banauchha', '{h} ma lagan ramro']}
+
+
+def composed(R, kind, **kw):
+    if R.random() < 0.4:
+        bank = {'went': WENT_A, 'ate': ATE_A, 'did': DID_A}[kind]
+        return R.choice(bank).format(**kw)
+    e = R.choice(ECHO[kind]).format(**kw)
+    return f'{R.choice(REACT)}! {e}. {R.choice(FOLLOW)}'
 
 
 def ex(msgs, kind):
@@ -74,13 +91,13 @@ def single(R):
         return ex([U(R.choice(us)), N(R.choice(a_s))], 'feel')
     if k < 0.52:
         p = R.choice(L.PLACES)
-        return ex([U(R.choice(WENT_U).format(p=p)), N(R.choice(WENT_A).format(p=p))], 'went')
+        return ex([U(R.choice(WENT_U).format(p=p)), N(composed(R, 'went', p=p))], 'went')
     if k < 0.64:
         f = R.choice(L.FOODS)
-        return ex([U(R.choice(ATE_U).format(f=f)), N(R.choice(ATE_A).format(f=f))], 'ate')
+        return ex([U(R.choice(ATE_U).format(f=f)), N(composed(R, 'ate', f=f))], 'ate')
     if k < 0.74:
         h = R.choice(L.HOBBIES)
-        return ex([U(R.choice(DID_U).format(h=h)), N(R.choice(DID_A).format(h=h))], 'did')
+        return ex([U(R.choice(DID_U).format(h=h)), N(composed(R, 'did', h=h))], 'did')
     if k < 0.8:
         r = R.choice(L.RELATIONS_M + L.RELATIONS_F)
         return ex([U(R.choice(MET_U).format(r=r)), N(R.choice(MET_A).format(r=r))], 'met')
@@ -118,8 +135,20 @@ def thread(R):
     return ex(msgs, 'thread')
 
 
+# chat_check.py prompts stay held out: composed templates can rebuild them (Local-A review)
+HELD = {'namaste! k chha?', 'malai momo dherai man parchha', 'k gardai chhau?', 'subha ratri'}
+_HELD = {h.strip(' ?!.') for h in HELD}
+
+
+def _held(d):
+    return any(m['role'] == 'user' and m['content'].lower().strip(' ?!.') in _HELD for m in d['messages'])
+
+
 def sample(R):
-    return thread(R) if R.random() < 0.3 else single(R)
+    while True:
+        d = thread(R) if R.random() < 0.3 else single(R)
+        if not _held(d):
+            return d
 
 
 if __name__ == '__main__':
