@@ -37,7 +37,7 @@ class ReadingBenchTest(unittest.TestCase):
         self.assertEqual(answer_after_think('<|think|>3 x 2 = 6<|/think|>6 wata ho.<|end|>'), '6 wata ho.')
 
     def test_held_out_against_the_behavior_mix(self):
-        mix = os.path.join(NIK, 'data', 'behavior.jsonl')
+        mix = os.path.join(os.path.dirname(NIK), 'data', 'behavior.jsonl')
         if not os.path.exists(mix):
             self.skipTest('data/behavior.jsonl not built')
         import leak_audit
