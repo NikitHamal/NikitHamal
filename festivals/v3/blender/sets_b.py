@@ -117,7 +117,7 @@ def set_map(sc, A, variant="rise"):
 # ------------------------------------------------------------------ 9 Taleju at Hanuman Dhoka, night
 def pagoda(name, tiers=3, base=2.2, plinth_steps=12, roof_m=None, wall_m=None):
     root = bpy.data.objects.new(name, None); link(root)
-    brick = wall_m or noisy(mat("brick", (0.28, 0.06, 0.035), rough=0.8), 60, 0.4, 0.1, 0.4)
+    brick = wall_m or pbr("castle_brick_02_red", noisy(mat("brick", (0.28, 0.06, 0.035), rough=0.8), 60, 0.4, 0.1, 0.4), 1.6)
     stone = noisy(mat("stone", (0.25, 0.23, 0.2), rough=0.85), 20, 0.4, 0.1, 0.4)
     roof_m = roof_m or noisy(mat("gilt", (0.9, 0.6, 0.25), rough=0.3, metal=1.0), 35, 0.4, 0.12, 0.1)
     wood = noisy(mat("wood", (0.06, 0.025, 0.012), rough=0.6), 50, 0.4, 0.1, 0.3)
@@ -152,7 +152,8 @@ def pagoda(name, tiers=3, base=2.2, plinth_steps=12, roof_m=None, wall_m=None):
 
 def set_taleju(sc, A):
     world(sky=[(0.0, (0.03, 0.03, 0.06)), (0.3, (0.012, 0.014, 0.04)), (1.0, (0.002, 0.003, 0.01))], strength=1.0)
-    ground = prim("plane", "square", noisy(mat("paving", (0.12, 0.1, 0.09), rough=0.6), 8, 0.4, 0.2, 0.3), size=80)
+    hdri_light("dikhololo_night", 0.6)
+    ground = prim("plane", "square", pbr("cobblestone_floor_04", noisy(mat("paving", (0.12, 0.1, 0.09), rough=0.6), 8, 0.4, 0.2, 0.3), 0.8, (0.6, 0.55, 0.5)), size=80)
     tem, door, zb = pagoda("taleju")
     moon = light("SUN", (0, 0, 0), 0.35, (0.6, 0.7, 1.0), size=0.02); moon.rotation_euler = (math.radians(55), 0, math.radians(30))
     rnd = np.random.default_rng(4)
@@ -183,8 +184,9 @@ def set_taleju(sc, A):
 # ------------------------------------------------------------------ 12 Ghatasthapana: jamara grows in the dark
 def set_jamara(sc, A, variant="grow"):
     world(INK, 0)
-    floor = prim("plane", "floor", noisy(mat("mud", (0.1, 0.06, 0.04), rough=0.9), 4, 0.5, 0.05, 0.5), size=6)
-    bed = prim("cylinder", "bed", noisy(mat("sand", (0.32, 0.25, 0.16), rough=0.95), 300, 0.4, 0.05, 0.9), radius=0.35, depth=0.06, location=(0, 0, 0.03), vertices=96)
+    hdri_light("brown_photostudio_02", 0.12)
+    floor = prim("plane", "floor", pbr("brown_mud_dry", noisy(mat("mud", (0.1, 0.06, 0.04), rough=0.9), 4, 0.5, 0.05, 0.5), 2.0, (0.45, 0.32, 0.26)), size=6)
+    bed = prim("cylinder", "bed", pbr("coast_sand_01", noisy(mat("sand", (0.32, 0.25, 0.16), rough=0.95), 300, 0.4, 0.05, 0.9), 6.0), radius=0.35, depth=0.06, location=(0, 0, 0.03), vertices=96)
     k = kalash("kalash", (0, 0, 0.06), 1.1)
     jam, blade = jamara("jam", (0, 0, 0.06), 0.33, 2600, 0.3)
     light("AREA", (0.6, -0.7, 0.7), 18, (1.0, 0.7, 0.4), size=0.5, look=(0, 0, 0.12))
@@ -208,6 +210,7 @@ def set_jamara(sc, A, variant="grow"):
 # ------------------------------------------------------------------ 13 Fulpati: the nine plants, the salute
 def set_fulpati(sc, A):
     world(sky=[(0.0, (0.5, 0.22, 0.1)), (0.25, (0.2, 0.08, 0.07)), (1.0, (0.02, 0.015, 0.03))], strength=0.8)
+    hdri_light("kiara_9_dusk", 0.5)
     ground = prim("plane", "tundikhel", noisy(mat("grass", (0.05, 0.08, 0.02), rough=0.9), 2, 0.5, 0.05, 0.3), size=300)
     # palanquin (doli) with the bundle
     red = noisy(mat("doli", (0.45, 0.02, 0.02), rough=0.55, sss=0.05), 80, 0.3, 0.1, 0.3)
@@ -282,6 +285,7 @@ def khukuri(name, m_blade, m_handle):
 
 def set_lamps_tools(sc, A):
     world(INK, 0)
+    hdri_light("brown_photostudio_02", 0.12)
     floor = prim("plane", "floor", noisy(mat("stonefl", (0.08, 0.06, 0.05), rough=0.5), 5, 0.4, 0.2, 0.2), size=20)
     rnd = np.random.default_rng(2)
     src_body = lathe("lampsrc", smooth_profile([(0.0, 0.0), (0.03, 0.0), (0.045, 0.006), (0.06, 0.022), (0.064, 0.03), (0.058, 0.031), (0.045, 0.018), (0.0, 0.016)], 4), 32, clay("lampclay"))
@@ -337,6 +341,7 @@ def set_lamps_tools(sc, A):
 # ------------------------------------------------------------------ 15/20/21/22 the thali (Vijaya Dashami)
 def set_thali(sc, A, variant="dashami"):
     world(INK, 0)
+    hdri_light("brown_photostudio_02", 0.12)
     base_m = noisy(mat("velvet", (0.3, 0.004, 0.01), rough=0.95, sss=0.05), 200, 0.35, 0.05, 0.6)
     table = prim("plane", "table", base_m, size=6)
     prof = smooth_profile([(0.0, 0.0), (0.2, 0.0), (0.235, 0.008), (0.25, 0.022), (0.262, 0.028), (0.258, 0.03), (0.24, 0.022), (0.2, 0.008), (0.0, 0.008)], 6)
@@ -385,8 +390,8 @@ def set_thali(sc, A, variant="dashami"):
 # ------------------------------------------------------------------ 16 Kojagrat: valley under the full moon
 def houses(name, n, area, seed=1, lit_frac=0.15):
     rnd = np.random.default_rng(seed)
-    brick = noisy(mat("hbrick", (0.25, 0.08, 0.05), rough=0.85), 30, 0.4, 0.1, 0.3)
-    tile = noisy(mat("tile", (0.12, 0.05, 0.035), rough=0.7), 40, 0.4, 0.1, 0.3)
+    brick = pbr("castle_brick_02_red", noisy(mat("hbrick", (0.25, 0.08, 0.05), rough=0.85), 30, 0.4, 0.1, 0.3), 1.2)
+    tile = pbr("clay_roof_tiles", noisy(mat("tile", (0.12, 0.05, 0.035), rough=0.7), 40, 0.4, 0.1, 0.3), 1.0, (0.6, 0.4, 0.35))
     win = emission("win", (1.0, 0.6, 0.25), 6)
     hb = prim("cube", name + "_b", brick, size=1); hb.scale = (1, 0.8, 1.6); bpy.ops.object.transform_apply(scale=True)
     hr = prim("cone", name + "_r", tile, radius1=0.9, radius2=0.05, depth=0.5, vertices=4, location=(0, 0, 1.05)); hr.rotation_euler = (0, 0, math.pi / 4); hr.scale = (1, 0.85, 1)
@@ -404,6 +409,7 @@ def houses(name, n, area, seed=1, lit_frac=0.15):
 
 def set_valley(sc, A):
     world(sky=[(0.0, (0.02, 0.03, 0.07)), (0.35, (0.01, 0.014, 0.04)), (1.0, (0.002, 0.003, 0.012))], strength=1.0)
+    hdri_light("dikhololo_night", 0.6)
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=200, y_subdivisions=200, size=400); hills = bpy.context.object
     tx = bpy.data.textures.new("hills", "CLOUDS"); tx.noise_scale = 1.4
     dm = hills.modifiers.new("d", "DISPLACE"); dm.texture = tx; dm.strength = 1.0; dm.texture_coords = "GLOBAL"
@@ -443,13 +449,14 @@ def kite(name, color, size=0.5):
 
 def set_ping(sc, A):
     world(sky=[(0.0, (0.95, 0.62, 0.32)), (0.25, (0.55, 0.55, 0.65)), (1.0, (0.18, 0.3, 0.55))], strength=1.2)
+    hdri_sky("belfast_sunset_puresky", 0.9, 1.2) or True
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=220, y_subdivisions=220, size=300); hills = bpy.context.object
     tx = bpy.data.textures.new("terr", "CLOUDS"); tx.noise_scale = 1.8
     dm = hills.modifiers.new("d", "DISPLACE"); dm.texture = tx; dm.strength = 4.0; dm.texture_coords = "GLOBAL"
-    hills.data.materials.append(noisy(mat("terraces", (0.18, 0.2, 0.05), rough=0.9), 0.6, 0.45, 0.05, 0.3))
+    hills.data.materials.append(pbr("aerial_grass_rock", noisy(mat("terraces", (0.18, 0.2, 0.05), rough=0.9), 0.6, 0.45, 0.05, 0.3), 0.05))
     snow = prim("cone", "himal", noisy(mat("snow", SNOW, rough=0.5, sss=0.1), 4, 0.3, 0.1, 0.8), radius1=60, radius2=2, depth=45, vertices=9, location=(-30, 220, 0))
     snow.scale = (1.6, 0.6, 1)
-    bam = noisy(mat("bamboo", (0.55, 0.45, 0.22), rough=0.45, coat=0.3), 40, 0.3, 0.1, 0.2)
+    bam = pbr("bamboo_veneer", noisy(mat("bamboo", (0.55, 0.45, 0.22), rough=0.45, coat=0.3), 40, 0.3, 0.1, 0.2), 3.0)
     top = Vector((0, 4, 9.5))
     for (x, y) in [(-2.6, 2.4), (2.6, 2.4), (-2.4, 5.6), (2.4, 5.6)]:
         b = Vector((x, y, 0)); mid = (b + top) / 2
@@ -483,6 +490,7 @@ def set_ping(sc, A):
 # ------------------------------------------------------------------ 18 the bus home: a stream of lights up a switchback
 def set_bus(sc, A):
     world(sky=[(0.0, (0.05, 0.05, 0.1)), (0.3, (0.012, 0.015, 0.04)), (1.0, (0.002, 0.003, 0.01))], strength=1.0)
+    hdri_light("dikhololo_night", 0.6)
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=160, y_subdivisions=160, size=200); hill = bpy.context.object
     tx = bpy.data.textures.new("h", "CLOUDS"); tx.noise_scale = 2.0
     dm = hill.modifiers.new("d", "DISPLACE"); dm.texture = tx; dm.strength = 3.0
@@ -532,15 +540,16 @@ def set_bus(sc, A):
 # ------------------------------------------------------------------ 19 a lane of doorways at dusk, a lamp at each
 def set_lane(sc, A):
     world(sky=[(0.0, (0.25, 0.12, 0.1)), (0.3, (0.06, 0.04, 0.08)), (1.0, (0.01, 0.01, 0.03))], strength=3.0)
+    hdri_light("dikhololo_night", 0.6)
     light("AREA", (0, 26, 3), 400, (1.0, 0.6, 0.3), size=4, look=(0, 0, 1))
-    ground = prim("plane", "lane", noisy(mat("bricks", (0.2, 0.08, 0.05), rough=0.75), 25, 0.5, 0.2, 0.5), size=60)
+    ground = prim("plane", "lane", pbr("brick_pavement_02", noisy(mat("bricks", (0.2, 0.08, 0.05), rough=0.75), 25, 0.5, 0.2, 0.5), 0.7), size=60)
     rnd = np.random.default_rng(12)
     cols = [(0.5, 0.05, 0.05), (0.08, 0.18, 0.45), (0.55, 0.38, 0.08), (0.1, 0.35, 0.18), (0.4, 0.12, 0.35), (0.9, 0.85, 0.75), (0.08, 0.06, 0.05)]
     lights_ = []
     for side in (-1, 1):
         for i in range(10):
             y = i * 2.4 + (1.2 if side > 0 else 0)
-            wall = prim("cube", "wall", noisy(mat("w%d%d" % (side, i), (0.28, 0.1, 0.06), rough=0.85), 30, 0.4, 0.1, 0.3), size=1, location=(side * 2.2, y, 2.5)); wall.scale = (0.4, 2.3, 5)
+            wall = prim("cube", "wall", pbr("castle_brick_02_red" if i % 2 else "clay_plaster", noisy(mat("w%d%d" % (side, i), (0.28, 0.1, 0.06), rough=0.85), 30, 0.4, 0.1, 0.3), 0.8, None if i % 2 else (0.75, 0.5, 0.4)), size=1, location=(side * 2.2, y, 2.5)); wall.scale = (0.4, 2.3, 5)
             door = prim("cube", "door", noisy(mat("d%d%d" % (side, i), cols[(i + (side > 0) * 3) % len(cols)], rough=0.6), 40, 0.3, 0.1, 0.3), size=1, location=(side * 1.99, y, 0.95)); door.scale = (0.05, 0.9, 1.9)
             frame = prim("cube", "frame", noisy(mat("fr", (0.06, 0.03, 0.015), rough=0.6), 60, 0.3, 0.1, 0.4), size=1, location=(side * 1.98, y, 1.0)); frame.scale = (0.06, 1.15, 2.15)
             win = prim("cube", "win", emission("lw%d%d" % (side, i), (1, 0.6, 0.25), 3 + 4 * rnd.random()), size=1, location=(side * 1.99, y, 3.3)); win.scale = (0.03, 0.6, 0.7)

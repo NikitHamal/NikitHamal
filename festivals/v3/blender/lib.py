@@ -481,3 +481,65 @@ def glare(scene, threshold=1.2, size=8, mix=-0.6, streaks=False):
             except Exception: pass
     nt.links.new(rl.outputs["Image"], g.inputs["Image"]); nt.links.new(g.outputs["Image"], co.inputs["Image"])
     return g
+
+
+# ---------------------------------------------------------------- Poly Haven (CC0) lighting + textures, optional
+import os as _os
+PH = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), "build", "ph")
+
+
+def hdri_light(name, strength=0.4, rot=0.0):
+    """Light and reflections from a real HDRI while the camera keeps seeing the set's own background
+    (Light Path 'Is Camera Ray' switches between them). No-op if the HDRI is not downloaded."""
+    path = f"{PH}/hdri/{name}.hdr"
+    if not _os.path.exists(path): return False
+    w = bpy.context.scene.world; nt = w.node_tree
+    out = next(n for n in nt.nodes if n.type == "OUTPUT_WORLD"); cam_side = out.inputs[0].links[0].from_socket
+    env = nt.nodes.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(path)
+    tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Rotation"].default_value[2] = rot
+    nt.links.new(tc.outputs["Generated"], mp.inputs["Vector"]); nt.links.new(mp.outputs[0], env.inputs["Vector"])
+    bg = nt.nodes.new("ShaderNodeBackground"); bg.inputs["Strength"].default_value = strength
+    nt.links.new(env.outputs["Color"], bg.inputs["Color"])
+    lp = nt.nodes.new("ShaderNodeLightPath"); mix = nt.nodes.new("ShaderNodeMixShader")
+    nt.links.new(lp.outputs["Is Camera Ray"], mix.inputs[0]); nt.links.new(bg.outputs[0], mix.inputs[1]); nt.links.new(cam_side, mix.inputs[2])
+    nt.links.new(mix.outputs[0], out.inputs[0])
+    return True
+
+
+def hdri_sky(name, strength=1.0, rot=0.0):
+    """The HDRI as the whole world, seen by the camera too (use pure-sky HDRIs)."""
+    path = f"{PH}/hdri/{name}.hdr"
+    if not _os.path.exists(path): return False
+    w = bpy.context.scene.world; nt = w.node_tree; nt.nodes.clear()
+    out = nt.nodes.new("ShaderNodeOutputWorld"); env = nt.nodes.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(path)
+    tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Rotation"].default_value[2] = rot
+    bg = nt.nodes.new("ShaderNodeBackground"); bg.inputs["Strength"].default_value = strength
+    nt.links.new(tc.outputs["Generated"], mp.inputs["Vector"]); nt.links.new(mp.outputs[0], env.inputs["Vector"])
+    nt.links.new(env.outputs["Color"], bg.inputs["Color"]); nt.links.new(bg.outputs[0], out.inputs[0])
+    return True
+
+
+def pbr(tex, fallback, scale=1.0, tint=None, bump=1.0):
+    """A scanned PBR material (diffuse/roughness/normal, box-projected on object coordinates) or the fallback."""
+    d = f"{PH}/tex/{tex}"
+    if not _os.path.exists(f"{d}/diff.jpg"): return fallback
+    m = bpy.data.materials.new("pbr_" + tex); m.use_nodes = True; nt = m.node_tree; p = nt.nodes["Principled BSDF"]
+    tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (scale,) * 3
+    nt.links.new(tc.outputs["Object"], mp.inputs["Vector"])
+    def img(kind, non_color):
+        f = next((f"{d}/{kind}.{e}" for e in ("jpg", "png", "exr") if _os.path.exists(f"{d}/{kind}.{e}")), None)
+        if not f: return None
+        t = nt.nodes.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(f); t.projection = "BOX"; t.projection_blend = 0.25
+        if non_color: t.image.colorspace_settings.name = "Non-Color"
+        nt.links.new(mp.outputs[0], t.inputs["Vector"]); return t
+    dt = img("diff", False); rt = img("rough", True); nm = img("nor", True)
+    if tint is not None:
+        mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs[0].default_value = 1.0
+        mx.inputs[7].default_value = (*tint, 1); nt.links.new(dt.outputs["Color"], mx.inputs[6]); nt.links.new(mx.outputs[2], p.inputs["Base Color"])
+    else:
+        nt.links.new(dt.outputs["Color"], p.inputs["Base Color"])
+    if rt: nt.links.new(rt.outputs["Color"], p.inputs["Roughness"])
+    if nm:
+        n = nt.nodes.new("ShaderNodeNormalMap"); n.inputs["Strength"].default_value = bump
+        nt.links.new(nm.outputs["Color"], n.inputs["Color"]); nt.links.new(n.outputs[0], p.inputs["Normal"])
+    return m

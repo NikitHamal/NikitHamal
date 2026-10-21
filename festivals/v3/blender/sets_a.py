@@ -10,9 +10,9 @@ from lib import _set, _ramp
 
 # ------------------------------------------------------------------ 1/2 lamp room
 def set_lamp_room(sc, A, variant="open"):
-    world(INK, 0)
-    floor = prim("plane", "floor", noisy(mat("floor", (0.09, 0.045, 0.03), rough=0.75), 6, 0.5, 0.15, 0.3), size=8)
-    wall = prim("plane", "wall", noisy(mat("wall", (0.16, 0.06, 0.035), rough=0.9), 3, 0.6, 0.05, 0.6), size=8, location=(0, 0.9, 2), rotation=(math.pi / 2, 0, 0))
+    world(INK, 0); hdri_light("brown_photostudio_02", 0.12)
+    floor = prim("plane", "floor", pbr("brown_mud_dry", noisy(mat("floor", (0.09, 0.045, 0.03), rough=0.75), 6, 0.5, 0.15, 0.3), 2.0, (0.5, 0.35, 0.3)), size=8)
+    wall = prim("plane", "wall", pbr("clay_plaster", noisy(mat("wall", (0.16, 0.06, 0.035), rough=0.9), 3, 0.6, 0.05, 0.6), 1.5, (0.55, 0.3, 0.22)), size=8, location=(0, 0.9, 2), rotation=(math.pi / 2, 0, 0))
     k = kalash("kalash", (0.16, 0.32, 0), 1.25)
     d, fl, li = diyo("diyo", (-0.02, 0, 0), 1.5, 70, 10)
     for i, (x, y) in enumerate([(-0.18, 0.12), (-0.24, 0.2), (0.32, 0.12), (0.05, -0.12)]):
@@ -53,7 +53,7 @@ def set_lamp_room(sc, A, variant="open"):
 
 # ------------------------------------------------------------------ 3 manuscript (Devi Mahatmya)
 def set_manuscript(sc, A):
-    world(INK, 0)
+    world(INK, 0); hdri_light("brown_photostudio_02", 0.1)
     table = prim("plane", "table", noisy(mat("wood", (0.12, 0.05, 0.02), rough=0.45, coat=0.3), 2.5, 0.6, 0.15, 0.2), size=6)
     cloth = prim("plane", "cloth", noisy(mat("redcloth", (0.35, 0.01, 0.015), rough=0.8, sss=0.05), 140, 0.4, 0.1, 0.5), size=1, location=(0, 0, 0.001))
     cloth.scale = (1.1, 0.5, 1)
@@ -117,7 +117,7 @@ def set_demon(sc, A, variant="rise"):
             nt.links.new(tex[0], mul.inputs[6]); nt.links.new(mul.outputs[2], p.inputs["Base Color"])
         _set(p, ["Coat Weight", "Clearcoat"], 0.25)
         horns = []
-        eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.028, location=(s * A.get("eye_x", 0.2), A.get("eye_y", -0.2), A.get("eye_z", -0.3))) for i, s in enumerate((1, -1))]
+        eyes = [prim("uv_sphere", "eye%d" % i, eye_m, radius=0.022, location=(s * A.get("eye_x", 0.2), A.get("eye_y", -0.21), A.get("eye_z", -0.36))) for i, s in enumerate((1, -1))]
         for e in eyes: e.scale = (1.4, 0.6, 0.8)
     else:
         mb = bpy.data.metaballs.new("head"); mb.resolution = mb.render_resolution = 0.03
@@ -166,7 +166,7 @@ def set_demon(sc, A, variant="rise"):
             root.location = (0, 0, lerp(-0.9, 0.0, ease(u * 1.3)))
             eye_m.node_tree.nodes["Emission"].inputs[1].default_value = 60 * ease((u - 0.45) / 0.15)
             crack_gain.default_value = 8 * ease((u - 0.2) / 0.5)
-            aim(cam, lerp((0, -3.4, -0.9), (0.25, -2.6, -0.55), ease(u)), (0, 0, lerp(-0.2, 0.15, ease(u))))
+            aim(cam, lerp((0, -3.4, -1.0), (0.25, -2.5, -0.7), ease(u)), (0, 0, lerp(-0.6, -0.3, ease(u))))
         else:
             root.location = (0, 0, 0)
             eye_m.node_tree.nodes["Emission"].inputs[1].default_value = 60
@@ -310,6 +310,7 @@ def set_moon(sc, A):
 # ------------------------------------------------------------------ 7 Rama: an arrow of light over a dusk sea
 def set_sea(sc, A):
     world(sky=[(0.0, (0.55, 0.18, 0.06)), (0.18, (0.35, 0.09, 0.08)), (0.5, (0.06, 0.03, 0.07)), (1.0, (0.01, 0.01, 0.03))], strength=1.0)
+    hdri_sky("belfast_sunset_puresky", 0.6, A.get("sky_rot", 3.4))
     bpy.ops.mesh.primitive_plane_add(size=2); sea = bpy.context.object
     oc = sea.modifiers.new("ocean", "OCEAN"); oc.size = 1.0; oc.spatial_size = 60; oc.resolution = 14; oc.wave_scale = 0.9; oc.choppiness = 1.2
     oc.geometry_mode = "GENERATE"; oc.repeat_x = oc.repeat_y = 4
