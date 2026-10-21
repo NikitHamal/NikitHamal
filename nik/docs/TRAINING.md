@@ -1,63 +1,108 @@
-# Training Nik
+# How to train the next Nik
 
-## Fully automated (Kaggle API), no notebook clicking
+*(Local-C, 2026-10-21. Every number here was measured in this project and is paired on
+the same item set; the commands are the ones that produced the models. Nothing in this
+document is a guess.)*
+
+## 0. What we are trying to buy
+
+Three abilities, in the order the product needs them:
+
+| ability | how it is measured | where it was before | where it is now |
+|---|---|---|---|
+| **the two-step composition** (produce an intermediate result and carry it) | the ladder: `nik/scripts/word_procedure_probe.py --ladder` (L2 = `39 - (8 x 2) = ?`) | **0/12** in every model (v4c, v4b, v4, b300, v4h, v4f, v4j, v4m, v5, la-b2, la-b3) | **12/12** |
+| **the reading** (bind the numbers in a text to their roles) | `nik/scripts/seq2step_probe.py` (a subtraction in a sentence) and `nik/scripts/roles_probe.py` (26 held-out grounded items) | 2/11 and 7/26 | **10/11** and 12/26 |
+| **the understanding** (the 26 probes: reading, memory, translation, grammar) | `nik/eval_understand.py` (0 exact hits in the mix - the leak audit) | 13/26 (v4f) | **19-20/26** |
+
+The held-out word family of NikBench (48 items, 9 of 10 templates are two-step) is the
+product-facing number: **0/48 -> 17/48**.
+
+## 1. The two lessons that decide everything
+
+1. **The forgetting tax is what the data does not contain.**  A control arm (the same
+   recipe, *no* new data shape) drops the understanding probes 19/26 -> 16/26.  Every
+   named family pays it back: the money scene +4, the role family +3.5pp of bench and
+   the word family 0/48 -> 9/48, `reduce.py` the two-step ladder 0/12 -> 12/12.  So a
+   fine-tune does not "cost" understanding - a fine-tune on a mix that lacks the rows
+   does.
+2. **Small doses of the right rows beat large doses.**  The role family peaks at 12% of
+   the rows (at 20% it is worse on every axis).  `reduce.py` at 40% takes L2 to 12/12
+   but crowds out `iter.py` and costs 7 reason items; at 8-18% it gives L2 12/12 *and*
+   the reason family holds.  A skill that is rare is not learned; a skill that is common
+   starts to crowd out the others.
+
+## 2. The recipe (from the live model - 20 minutes on one GPU)
 
 ```bash
-bash nik/scripts/kaggle_launch.sh smoke   # ~25 min end-to-end check on Kaggle's 2x T4
-bash nik/scripts/kaggle_launch.sh full    # ~11 h: data -> 2-GPU pretrain -> SFT -> 2 verified self-improvement rounds -> eval
-bash nik/scripts/kaggle_fetch.sh full     # download out/, update nik/web/model + manifest, then commit & push
+# 1. the mix: the named families, the shapes, and a small slice of the base mix
+python nik/scripts/polish_mix.py --data data --base sft13 --name sft31 \
+  --families "roles:90000,frame:45000,iter:25000,math:110000,colmath:50000,\
+understand:50000,read:40000,skills:40000,vocab:12000,correct:20000,reduce:110000" \
+  --persona 25000 --chat 80000 --share 0.10
+
+# 2. the stage: 20 minutes from the live model, lr 2e-4
+python nik/train.py --stage sft --init <live>.pt --data data --sft-name sft31 \
+  --out nik/runs/next --steps 100000000 --minutes 20 --bs 16 --accum 2 --lr 2e-4 \
+  --warmup 50 --mix 0.2 --diff-weight 0.3 --diff-frac 0.25 --opt muon --ema 0.998
 ```
 
-The runner (`nik/scripts/kaggle_run.py`) exports a usable model after every phase and keeps the better of SFT or RFT by eval score. It uses both T4s through DDP (`torchrun`), the Muon optimizer, a 25% diffusion window, and LR schedules that anneal to the wall-clock cap.
+The shares, and why each one:
 
-**Measured on Kaggle T4s:**
-- Memory-efficient SDPA runs 6.4× faster than the math fallback.
-- The two-stream objective runs at 7.3k clean tok/s per GPU, against 17.3k for AR alone. That's why the noisy stream is windowed.
-- In a 300-step A/B, Muon reached val ppl 175 versus 511 for AdamW.
-
-## Quick start (GPU: Colab / Kaggle)
-
-Open `nik/notebooks/nik_train.ipynb` in Colab or Kaggle with a T4 GPU and run all cells. It runs:
-
-```bash
-PRESET=nik-0.1 PRE_STEPS=30000 SFT_STEPS=6000 BS=48 bash nik/scripts/pipeline.sh
-```
-
-Each stage is skipped if its output already exists. Pretraining supports `--resume`.
-
-## Stages
-
-| stage | command | notes |
+| what | share | why (measured) |
 |---|---|---|
-| corpus | `python nik/data/build_corpus.py --out data --shards 2` | ~10 min CPU per shard |
-| SFT data | `python nik/data/gen_sft.py --out data/sft.jsonl --n 120000` | seconds |
-| tokenizer | `python nik/tokenizer.py train --input data/pretrain.txt --sft data/sft.jsonl --out nik/web/model/tokenizer.json` | ~8 min CPU; **keep it fixed** once models are trained on it |
-| tokenize | `python nik/prepare.py --data data` | uint16 memmaps |
-| pretrain | `python nik/train.py --stage pretrain --preset nik-0.1 --data data --out nik/runs/nik-0.1/pre --steps 20000 --bs 48 --resume --minutes 200` | hybrid AR + diffusion loss |
-| SFT | `python nik/train.py --stage sft --init nik/runs/nik-0.1/pre/ckpt.pt --data data --out nik/runs/nik-0.1/sft --steps 6000 --lr 1e-3 --mix 0.2` | loss only on Nik's tokens |
-| export | `python nik/export.py --ckpt nik/runs/nik-0.1/sft/ckpt.pt --out nik/web/model/nik-0.1.bin` | int8, < 10 MB |
-| publish | `python nik/scripts/publish.py --preset nik-0.1 --run nik/runs/nik-0.1` | updates `manifest.json`; `/chat` loads it on reload |
+| the grounded-role family (`roles.py`) | 12% of the rows | the peak: at 20% it is worse on every axis |
+| `reduce.py` (Sky's symbolic two-step) | 8% flat, 110k in the family mix | 40% costs 7 reason items; 8-18% gives L2 12/12 with the reason held |
+| the iteration chains (`iter.py`) | 25k | the reason family |
+| the money scene (`frame.py`) | 45k | the one-step reading (2/11 -> 10/11) |
+| the arithmetic (math + colmath) | ~25% | the bench's arith family and the stress items |
+| the understanding families (understand / read / skills / vocab / correct) | ~25% | the 26 understanding probes are **not** taught by the arithmetic half of the base mix |
+| the persona rows (augmented) | 20-25k | the persona gate (1.0) and the identity probes |
+| the everyday chat rows | 75-80k | the chat style |
+| the base mix | a **10% slice** | the general capability - with 0% the model collapses (58.3%) |
 
-## Hyper-parameters (nik-0.1, 20.5M)
+## 3. From scratch instead (if the corpus is the thing you want to change)
 
-AdamW with β = (0.9, 0.95) and weight decay 0.1 on matrices. Peak LR is 3e-3 with 1k warmup steps and a cosine decay to 10%. Gradient clipping is 1.0. Precision is fp16 autocast with GradScaler on a T4, or bf16 on Ampere and newer. The context is 512 tokens (the two-stream input is 1024). A batch of 32 windows is about 16.4k clean tokens per step. 16k steps is about 260M tokens seen, roughly 2 epochs over the ~125M-token two-shard corpus. That is above Chinchilla-optimal for 20M params (~400M tokens is better if you have the time: raise `PRE_STEPS`).
+`sft16` = the v5 mix + the 12% role family + the gate-prompt filter.  The from-scratch
+run on the clean 473M-token corpus (v5) scored **61.5% nested, the understanding
+17/26, the traps 10/12, the ladder L2 1/12** - i.e. it is *not* the corpus that is
+missing, it is the mix.  A from-scratch run should carry stage B (the shapes + the
+role family + `reduce` + the named understanding families) with the shares above.
 
-## What gets pushed
-
-`nik/web/model/` holds the int8 `.bin`, `tokenizer.json`, `manifest.json` and `logs/*.jsonl`. Commit and push those. Checkpoints (`nik/runs/`) and data (`data/`) are git-ignored.
-
-## Local CPU runs
-
-The default `--minutes` cap keeps a laptop run short:
-
-```bash
-python nik/train.py --stage pretrain --preset nik-nano --data data --out nik/runs/nano-pre --minutes 18 --bs 16 --ctx 192
-```
-
-## Self-improvement (verified rejection-sampling fine-tuning)
+## 4. The gates (and what each one is worth)
 
 ```bash
-PRESET=nik-0.1 ROUNDS=2 bash nik/scripts/rft.sh
+python nik/bench.py --model <bin> --n 16 --nested-items --out <dir>/bench-<tag>.json
+python nik/eval_understand.py --model <bin> --out <dir>/understand-<tag>.json
+python nik/scripts/word_procedure_probe.py --out items.json --ladder --contrast
+node nik/scripts/word_probe_run.mjs <bin> items.json --out <dir>/ladder-<tag>.json
+python nik/scripts/collapse_report.py <dir>/ladder-<tag>.json
+python nik/scripts/ship_gate.py --old nik/web/model/logs/<the live model> --new <dir>
 ```
 
-Each round, `nik/selfimprove.py` samples 8 reasoning paths for each fresh problem with a known answer. It keeps a path only if the final answer is right **and** every equation in the trace is arithmetically true, which rejects lucky guesses with broken reasoning. Weekday traces must start from the right day and count the right number of days. The kept paths are mixed with the original SFT data and the model is fine-tuned on them, with EMA and Muon. The report gives pass@1 and pass@8 per problem type.
+**Pair the comparisons.**  `bench.py` draws its items from one RNG stream, so `--n 8` and
+`--n 16` share only 17 of 140 items; use `--nested-items` (a deterministic set) on both
+sides, or `compare.py` (which pairs by text).  A gate that says "NOT COMPARABLE" is not
+a pass - it is a missing measurement.
+
+**What is not decision-grade** (Local-A's leak audit, `nik/scripts/leak_audit.py`):
+the `stress.py` and `chat_check` prompts appear verbatim thousands of times in every
+mix we have trained on, so the stress deltas are inside the contamination for *every*
+model, including the live one.  The understanding probes have 0 exact hits (they are
+held out by `nik/data/teacher/build.py`) and the bench items are held out by
+`nik/tests/test_frame_leak.py` and `nik/tests/test_roles_leak.py` - **those are the
+numbers to rank models on.**
+
+## 5. The leak guards (do not remove them)
+
+* `nik/tests/test_frame_leak.py` - no generated row may contain the distinctive wording
+  of a benchmark word template.
+* `nik/tests/test_roles_leak.py` - the same for the role family, and no row may
+  reproduce an evaluation probe.  It found 4 leaks in its own file on the first run
+  (`kalam`, `bachat`, `chhut`, `km per hour`) - all fixed at the source, not filtered.
+* `nik/scripts/leak_audit.py` (Local-A) - the mix-level audit: no exact
+  `eval_understand` / `stress` / `chat_check` prompt in the training rows.
+* `nik/data/teacher/build.py` - drops the evaluation probes from the teacher rows.
+
+A benchmark that a training template can imitate is not a measurement: the chain30 run
+moved the benchmark's "bagaincha" family from 0/5 to 10/10 with the procedure probe
+still at 0/12.
