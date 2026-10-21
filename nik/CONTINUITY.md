@@ -72,6 +72,16 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## Session context (update every session) - 2026-10-21 ~05:50 UTC
+- **Live:** v4c (nik/web/model/nik-0.1.bin). Strongest candidate so far v4f (reasoning 39/48, traps 9/12) failed only on understanding.
+- **Boxes (molab only, never Kaggle):** box 1 runs LLM jobs via `nik/scripts/molab_run.sh`-style scripts, dashboard auto-detects runs
+  + scoreboard vs live; box 2 runs Nik-Decide (`nik/decide/`) and corpus_v2 (`/tmp/corpus_v2`, audit running). Boxes expire;
+  the owner provides new URL+token; local agents are watch-only.
+- **In flight:** v4h (v4f + sft11 with correct.py + composed chat), Nik-Decide v3, corpus_v2 audit.
+- **Next:** if corpus_v2 audit passes -> tokenise as the replay/pretrain base on the box, re-run the best recipe on it
+  (fixes the understanding drop); then Nik-Hard (Local-A) as the main gate; Nik-Decide yes/no fix; GRPO on verifiable tasks.
+- **Read `nik/docs/LEARNINGS.md`** before planning: findings, mistakes, numbers.
+
 ## Rule (2026-10-21): molab only, never Kaggle. If molab is down, tell the owner and wait for new keys.
 
 ## 2026-10-20 late night: v4c shipped (live on /chat), multi-agent team
