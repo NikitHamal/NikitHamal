@@ -132,7 +132,7 @@ def set_ramayana(sc, A):
     trail = prim("cylinder", "trail", emission("trailm", (1.0, 0.6, 0.2), 25), radius=0.03, depth=1.0, vertices=12)
     light("AREA", (2.5, 0.5, 2.5), 60, (1.0, 0.6, 0.35), size=2, look=(0.55, 1.4, 1.5))
     glare(sc, 1.0, 8, -0.45)
-    cam = camera((-1.15, 0.35, 1.62), (6, 80, 4), 38, dof=1.9, fstop=2.8)
+    cam = camera((0.15, -0.6, 1.5), (20, 330, 10), 40, dof=2.1, fstop=2.8)
     release = A.get("release", 0.3)
     target = Vector((35, 322, top + 10))
 
@@ -155,6 +155,12 @@ def set_ramayana(sc, A):
             glow_m.node_tree.nodes["Emission"].inputs[1].default_value = 120
             L = min(60.0, 5 + 120 * k); trail.hide_render = k >= 1
             trail.scale = (1 + 10 * k, 1 + 10 * k, L); trail.location = p - d * (L / 2); trail.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
+        B = rig.location
+        if u <= release:   # side close-up of the drawn bow, Lanka soft behind
+            aim(cam, B + Vector((-1.45, -0.55, 0.05 + 0.04 * u)), B + Vector((0.0, 0.3, 0.02))); cam.data.lens = 35
+            cam.data.dof.focus_distance = 1.5; cam.data.dof.aperture_fstop = 2.2
+        else:              # over the shoulder: the arrow's line to Lanka
+            aim(cam, (0.15, -0.6, 1.5), (20, 330, 10)); cam.data.lens = 40; cam.data.dof.focus_distance = 60; cam.data.dof.aperture_fstop = 5.6
         hit = (u - (release + 0.3)) * dur
         fire.data.energy = 0 if hit < 0 else 4e6 * math.exp(-hit * 1.5) + 6e5
         burst.data.materials[0].node_tree.nodes["Emission"].inputs[1].default_value = 0 if hit < 0 else 60 * math.exp(-hit * 2.5)
