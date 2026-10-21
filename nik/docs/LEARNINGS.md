@@ -46,6 +46,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   should. Pass 2 audits the KEPT corpus itself (expect 0% dup, 0 contamination) before anything trains on it.
   Lesson: a dup-rate gate measures the source; a second pass on the output is what proves the corpus is clean.
 
+- **GRPO v1 (v4i, 30 min, B16 G8, lr 3e-6, fixed difficulty): no effect at all**: v4i = v4c on every gate (NikBench 62.5% with
+  identical category counts, understanding 19, stress 64, traps 5/12). ~80 groups with signal in 30 min is too little.
+- **Batched GRPO without a KV cache was slower** (1.6 min/step for 384 sequences: full recompute per token + per-row masks block
+  the fast SDPA path). With KV-cached `generate_multi`: **0.14 min/step (11x)**, and adaptive difficulty gives 6-8 of 32 groups
+  with signal; levels climb (div 6, compose 6, word 5) as the policy improves.
+
 ### Mistakes (do not repeat)
 - `pkill -f <pattern>` matched the shell running the pkill itself -> suspended shell -> frozen notebook kernel -> box lost.
   Use exact PIDs (`pgrep` then `kill`), never a pattern that also occurs in your own command line.
