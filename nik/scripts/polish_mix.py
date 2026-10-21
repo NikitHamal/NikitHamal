@@ -136,6 +136,9 @@ def family_rows(spec, seed):
         elif name == 'frame':
             import frame
             take(n, frame.sample)
+        elif name == 'reduce':
+            import reduce
+            take(n, lambda r: reduce.sample(r))
         elif name == 'iter':
             import iter as itgen
             take(n, itgen.make)
