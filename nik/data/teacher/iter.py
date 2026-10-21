@@ -243,16 +243,28 @@ def _day_question_ways(R, n):
 
 def weekday(R):
     """The weekday arithmetic: the order is stated, the wrap-around is the skill."""
-    n = R.randint(1, 13)
+    n = R.randint(6, 13)          # always at least one full week, so the wrap is taught
     order = _day_order_ways(R)
     q = _day_question_ways(R, n) + ' ' + order
-    idx = (2 - 1 + n) % 7          # today is sombar (the 2nd day), n days later
+    # today is sombar (the 2nd day), n days later: the 0-based offset is 1 + n, and
+    # every full week comes off.  No '%' in the trace: the audit's equation checker
+    # does not know the modulo operator.
+    # today is sombar (the 2nd day): the unwrapped number is 2 + n, and every full
+    # week comes off.  No '%' in the trace (the audit's equation checker does not know
+    # the modulo) and no zero (the iter test wants positive terms).
+    x = 2 + n
+    steps = [('kram', f'2 + {n}', x)]
+    y = x
+    while y > 7:
+        steps.append(('kram', f'{y} - 7', y - 7))
+        y -= 7
+    steps.append(('kram', f'{x} - {y}', x - y))
+    num = y
+    idx = num - 1
     name = DAYS[idx]
-    num = idx + 1
-    lines = [('kram', f'{n} % 7', n % 7),
-             ('kram', f'(2 - 1 + {n}) % 7 + 1', num)]
+    lines = steps
     # no '=' in the rule: the arithmetic checker parses every "a = b" in the trace
-    rule = f'sombar 2 ho, aru din (2 - 1 + {n}) % 7 + 1'
+    rule = f'sombar 2 ho, {n} din pachhi ko kram'
     check = f'kram {num} milyo'
     ans = R.choice([f'{name} hunchha (kram {num}).', f'kun bar: {name}, kram {num}.',
                     f'parsi ko din {name} ho, kram {num}.'])
