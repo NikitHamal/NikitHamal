@@ -7,6 +7,16 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 ## 2026-10-21 (molab boxes, Claude + Local-A + Local-C)
 
 ### Findings
+
+- **v4f shipped on the owner's call (07:45 UTC).** NikBench 72.2% vs v4c 62.5%, reason 39/48, word 6/48, traps 9/12,
+  chat 15/15, but understanding 13/26 (v4c 19). The gate said no; the owner weighed reasoning + traps over the probes.
+  Rollback file: `nik/web/model/nik-0.1.v4c.bin`.
+- **GRPO on v4c does nothing at either lr.** v4j (lr 3e-6, 304 steps) NikBench 180/288 = live exactly; v4k (lr 1e-5,
+  440 steps) 181/288. Ladder L2 0/12 for v4j, same as live. Only 0-6 of 32 groups carry signal per step: the model is
+  either always right or always wrong on a problem, so a final-answer reward has almost nothing to push on. A next RL
+  attempt needs a per-step reward, not more steps.
+- **Stop the v4x fine-tune series.** v4d-v4k (8 runs) traded understanding for reasoning or did nothing. The levers
+  left are the base (v5 from scratch on corpus_v2, box 2; v5w = 14 unique blocks, box 1) and the procedure itself.
 - **The understanding drop after v4c comes from the base data, not the new generators.** Control run v4g = live v4c +
   v4c's own sft7 recipe (no frame/iter/names) on the rebuilt box data: understanding **15/26** (v4c 19), traps 2/12.
   Every fine-tune since the Kaggle data was dropped lost understanding (v4d 16, v4e 14, v4f 13, v4g 15). The box data
@@ -85,6 +95,11 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   is wrong in all 5 phrasings; English inputs are mostly garbled. This is the honest picture of how template-bound Nik is.
 
 ### Mistakes (do not repeat)
+
+- **Audit pass 2 audited the wrong file.** It ran on `corpus_work/roman` (the raw input) again, not the kept
+  `corpus_v2.jsonl`, so it re-reported the input's 28% dups and wasted ~60 min. The kept-output audit now runs beside v5.
+- **Too many small fine-tunes in a row.** Eight v4x runs after v4c each tested a small mix change and none shipped. One
+  negative result should have ended the series; the base-data problem was already known after v4g (control run).
 - `pkill -f <pattern>` matched the shell running the pkill itself -> suspended shell -> frozen notebook kernel -> box lost.
   Use exact PIDs (`pgrep` then `kill`), never a pattern that also occurs in your own command line.
 - Data builds + evals beside a training run on one box -> host OOM killed the run at 144/150 min.
