@@ -92,6 +92,44 @@ def _row(cat, gold, user, roles, steps, ans, check):
                          {'role': 'nik', 'content': ans, 'think': think}]}
 
 
+# --------------------------------------------------------------------------- the role labels
+# Why (Local-C, issue #9): the p14 arm read the benchmark's held-out word items with
+# *invented* role labels ("role: prashna = 11, share = 4" for "kaksha ma 11 keta ra 47
+# keti chhan. 6 jana anupasthit chhan") and bound the numbers wrongly (47 read as 4).
+# The reason is visible in the data: the role family had a *fixed set of nine labels*
+# ("paisa", "wata", "ek ko", "rupiya", "eko", "duko", "suru", "diyo", "aayo"), so the
+# model learned to bind *those* nouns and, on a story with other nouns, it invents a
+# label and picks the wrong number.  The skill is "bind by position and by meaning",
+# so the labels have to be many and the binding line has to say which number belongs
+# to which role - in the order the roles appear in the story.
+#
+# The benchmark's own role words stay held out (the leak test bans them): these are
+# different nouns for the same roles, so the model has to learn the *binding*, not the
+# word.
+
+ROLE_POOL = {
+    'count_of_things': ['wata', 'chij', 'joga', 'bimā', 'kura', 'danda', 'guchha', 'pheri',
+                        'kucho', 'tilo', 'moti', 'gatta', 'rupiya', 'paisa', 'taka', 'jhar'],
+    'count_of_people': ['katha', 'man', 'macha', 'loka', 'jana', 'bhai', 'bahini', 'ghar',
+                        'parivar', 'dost', 'sathi', 'premik', 'kura', 'buddhi', 'guru'],
+    'money': ['rupaya', 'paisa', 'taka', 'jhar', 'bighya', 'kuri', 'panas', 'aksh',
+              'rupai', 'mudra', 'dhan', 'bhaji', 'kharcha', 'jira'],
+    'price': ['ek ko', 'duko', 'per', 'each', 'matra', 'bhar', 'daam', 'kimmat', 'mol',
+              'bhav', 'unit', 'ekdam', 'rayat'],
+    'distance': ['gaj', 'meter', 'kilometer', 'fit', 'yojana', 'duru', 'doori', 'gat',
+                 'parikrama', 'managat'],
+    'time': ['ghanta', 'minit', 'second', 'din', 'hafte', 'mahina', 'barsa', 'kalam',
+             'bepar', 'samay'],
+    'part': ['aadha', 'baki', 'ardh', 'thoda', 'baddo', 'baghya', 'hisso'],
+}
+
+
+def _role(R, kind):
+    """a role label for this kind - the pool is wide, so the model learns the binding
+    and not the word."""
+    return R.choice(ROLE_POOL[kind])
+
+
 # --------------------------------------------------------------------------- scenes
 def scene_buy_then_left(R):
     """had M, bought N things at P each -> left.  (two steps, intermediate carried)"""
@@ -125,7 +163,8 @@ def scene_buy_then_left(R):
     else:
         user = (f'mero sanga {money} rupiya thiyo. {price} rupiya ko {thing} {count} wata kinyo. '
                 f'{dis} aba kati rupiya bachyo?')
-    roles = [('paisa', money), ('wata', count), ('ek ko', price)]
+    roles = [(_role(R, 'money'), money), (_role(R, 'count_of_things'), count),
+             (_role(R, 'price'), price)]
     steps = f'{count} x {price} = {cost}; {money} - {cost} = {left}'
     ans = R.choice([f'aba {left} rupiya baki chha.', f'{left} rupiya baki hunchha.',
                     f'baki {left} rupiya cha.', f'aba {left} rupiya bachyo.'])
@@ -160,7 +199,9 @@ def scene_two_prices(R):
     else:
         user = (f'{q1} {u1} {f1} {p1} rupiya ko ra {q2} {u2} {f2} {p2} rupiya ko kinyo. '
                 f'{note} rupiya diye. {dis} kati rupiya bachyo?')
-    roles = [('rupiya', note), ('eko', q1), ('ek ko', p1), ('duko', q2), ('ek ko', p2)]
+    roles = [(_role(R, 'money'), note), (_role(R, 'count_of_things'), q1),
+             (_role(R, 'price'), p1), (_role(R, 'count_of_things'), q2),
+             (_role(R, 'price'), p2)]
     steps = (f'{q1} x {p1} = {p1 * q1}; {q2} x {p2} = {p2 * q2}; '
              f'{p1 * q1} + {p2 * q2} = {total}; {note} - {total} = {change}')
     ans = R.choice([f'aba {change} rupiya bachyo.', f'{change} rupiya baki chha.',
@@ -196,7 +237,8 @@ def scene_give_away(R):
     else:
         user = (f'{n} sanga {start} wata {thing} thiyo. {gave} wata bachhayo. '
                 f'ani {got} wata jamma paryo. {dis} aba kati wata chha?')
-    roles = [('suru', start), ('diyo', gave), ('aayo', got)]
+    roles = [(_role(R, 'money'), start), (_role(R, 'count_of_things'), gave),
+             (_role(R, 'count_of_things'), got)]
     steps = f'{start} - {gave} = {start - gave}; {start - gave} + {got} = {now}'
     ans = R.choice([f'aba {now} wata {thing} chha.', f'{now} wata baki cha.',
                     f'jamma {now} wata {thing} chhan.'])
