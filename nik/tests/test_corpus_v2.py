@@ -57,6 +57,21 @@ class ContaminationTests(unittest.TestCase):
         self.assertIsNotNone(idx.check('malai tha chhaina, timi ko hau?'))
         self.assertIsNone(idx.check('namaste, sanchai chha?'))
 
+    def test_one_shared_ngram_is_not_contamination(self):
+        prompt = 'euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?'
+        idx = contamination.EvalIndex({'bench': [prompt]})
+        shared = ' '.join(contamination.tokens(prompt)[:8])
+        doc = 'yo khabar ho. ' + shared + ' ' + long_doc(0)
+        self.assertIsNone(idx.check(doc))
+
+    def test_full_prompt_is_contamination(self):
+        prompt = 'euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?'
+        idx = contamination.EvalIndex({'bench': [prompt]})
+        doc = 'yo khabar ho. ' + prompt + ' ' + long_doc(0)
+        hit = idx.check(doc)
+        self.assertIsNotNone(hit)
+        self.assertEqual(hit['set'], 'bench')
+
 
 class LicenceTests(unittest.TestCase):
     def test_verified_ok(self):
