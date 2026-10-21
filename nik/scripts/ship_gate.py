@@ -53,9 +53,10 @@ ITER_FAMILIES = ('arithmetic sequence', 'geometric pattern')
 
 def load_dir(d):
     out = {'bench': None, 'understand': None, 'stress': None, 'eval': None, 'chat': None,
-           'ladder': None, 'trap': None}
+           'ladder': None, 'trap': None, 'shape': None}
     for pat, key in (('bench*.json', 'bench'), ('understand*.json', 'understand'),
-                     ('stress*.json', 'stress'), ('eval-*.json', 'eval'), ('ladder*.json', 'ladder')):
+                     ('stress*.json', 'stress'), ('eval-*.json', 'eval'), ('ladder*.json', 'ladder'),
+                     ('shape*.json', 'shape')):
         files = sorted(glob.glob(os.path.join(d, pat)))
         if files:
             try:
@@ -122,6 +123,9 @@ def score_of(d):
         m = re.search(r'chat sanity: (\d+)/(\d+)', d['chat'])
         if m:
             res['chat'] = (int(m.group(1)), int(m.group(2)))
+    if d.get('shape'):
+        res['shape'] = (d['shape'].get('passed', 0), d['shape'].get('of', 0))
+        res['shape_kinds'] = d['shape'].get('by_kind') or {}
     if d.get('trap'):
         ok = len(re.findall(r'^\[ok', d['trap'], flags=re.M))
         bad = len(re.findall(r'^\[FAIL', d['trap'], flags=re.M))
@@ -315,6 +319,9 @@ def main():
                 want(label, ls_old[lvl][0], ls_new[lvl][0], 'items', maximum=ls_new[lvl][1])
         if old['math'] is not None and new['math'] is not None:
             want('math', old['math'], new['math'], 'pp', maximum=100.0, scale=100.0)
+        if old.get('shape') and new.get('shape'):
+            want('the named shapes (the mechanism)', old['shape'][0], new['shape'][0], 'items',
+                 maximum=new['shape'][1])
         if old['persona'] is not None and new['persona'] is not None:
             want('persona', old['persona'], new['persona'], 'acc', maximum=1.0)
         if old['chat'] and new['chat']:
@@ -370,6 +377,13 @@ def main():
     if blocked:
         print('  (a required gate could not be compared - this is NOT a failure of the candidate;'
               '\n   re-run with the same --n on both sides, or with bench.py --nested-items.)')
+    if old.get('shape_kinds') and new.get('shape_kinds'):
+        print('\nthe named shapes (the mechanism, not the template):')
+        for k in sorted(new['shape_kinds']):
+            o = old['shape_kinds'].get(k, '?')
+            n = new['shape_kinds'][k]
+            mark = '  <-- moved' if o != n else ''
+            print(f'  {o:>6s} -> {n:<6s} {k}{mark}')
     if new['families']:
         print('\nper-family (the aggregate hides this):'
               + ('' if comparable else '  [INDICATIVE: the two logs do not share their item set]'))

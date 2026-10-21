@@ -96,11 +96,15 @@ $PY nik/scripts/roles_probe.py --model "$OUT/nik-0.1.$TAG.bin" \
   --out "nik/web/model/logs/$TAG/roles-$TAG.json" 2>&1 | head -2
 $PY nik/scripts/seq2step_probe.py --model "$OUT/nik-0.1.$TAG.bin" \
   --out "nik/web/model/logs/$TAG/seq2step-$TAG.json" 2>&1 | head -1
+# the mechanism probe: the five shapes the failing bench items named (issue #9)
+$PY nik/scripts/shape_probe.py --model "$OUT/nik-0.1.$TAG.bin" \
+  --out "nik/web/model/logs/$TAG/shape-$TAG.json" 2>&1 | head -3
 say "the ladder"
 $PY nik/scripts/word_procedure_probe.py --out "$OUT/ladder_items.json" --ladder --contrast
 node nik/scripts/word_probe_run.mjs "$OUT/nik-0.1.$TAG.bin" "$OUT/ladder_items.json" \
   --out "nik/web/model/logs/$TAG/ladder-$TAG.json" | tail -5
 $PY nik/scripts/collapse_report.py "nik/web/model/logs/$TAG/ladder-$TAG.json" | tail -6
 say "the gate (against the live model, on the same item set)"
-$PY nik/scripts/ship_gate.py --old nik/web/model/logs/v4c-nested --new "nik/web/model/logs/$TAG" 2>&1 | head -12
+$PY nik/scripts/ship_gate.py --old nik/web/model/logs/m50live --new "nik/web/model/logs/$TAG" \
+  --target 5 2>&1 | head -40
 say "done - the artefacts are in nik/web/model/logs/$TAG/ and the bin in $OUT"
