@@ -272,6 +272,40 @@ and a 15% slice of the base mix - and then a **short** stage (10 min at lr 1e-4)
 of v4f.  The hypothesis: the shapes pay the tax back and the small update keeps the
 bench, because every row teaches a shape instead of a template.
 
+## The shape-heavy polish: the first model whose two-step ladder moved
+
+**P1 = the live v4f + a 10-minute stage on a shape-heavy mix** (60k rows of the named
+shapes - the money scene, the grounded-role family, the iteration chains - + 50k chat
++ the persona rows + a 15% slice of the base mix, at lr 1e-4, with the corpus replay
+at 20%):
+
+| paired, same 288 nested items | live v4c | live v4f | v4f4 | **P1** |
+|---|---|---|---|---|
+| NikBench | 65.6% | **75.0%** | 71.9% | **73.6%** |
+| word family (held out) | 0/48 | 11/48 | 9/48 | **13/48** |
+| reason | 30/48 | 41/48 | 37/48 | 38/48 |
+| understanding | 19/26 | 13/26 | 20/26 | **16/26** |
+| stress | 64/103 | 63/103 | 66/103 | **64/103** (flags 0/120) |
+| trap_check | 5/12 | 9/12 | 9/12 | 8/12 |
+| **ladder L1 / L2 / L3 / L4** | 12/**0**/11/2 | - | 11/**1**/11/0 | 10/**5**/6/**5** |
+| math / persona | 94.5 / 1.0 | - | 94 / 0.857 | 94.5 / **1.0** |
+
+**L2 = 5/12 and L4 = 5/12.**  Every model ever built in this project scores **0/12 or
+1/12** on L2 (v4c, v4b, v4, b300, v4h, v4f, v4j, v4m, la-b2, la-b3): L2 is "produce the
+intermediate and carry it" (`39 - (8 x 2) = ?`), L3 is "use an intermediate you are
+given" (`39 - 16 = ?`, 11/12 in every model).  **P1's L2 (5/12) is close to its own L3
+(6/12) - the model now produces the intermediate about as well as it uses one.**  That
+is the ability the whole project has been chasing, and it moved with *ten minutes of
+training on the right rows*.
+
+**Why a shape-heavy polish and not a full-mix stage:** a full-mix stage trades the
+bench for the understanding (v4m: 72.2 -> 68.8 with understanding 13 -> 16; la-f4b:
+understanding 16, stress 60) because the forgetting tax is paid by the *data*, and a
+full mix does not contain the rows that pay it back.  A shape-heavy mix contains them:
+the money scene teaches "bind two amounts in a sentence" (the one-step reading) and
+the role family teaches "carry the intermediate" (the two-step composition) - and
+those are exactly the two things the two champions each miss.
+
 ## What follows
 
 1. **More story frames cannot fix this** - every word problem is at least two steps,

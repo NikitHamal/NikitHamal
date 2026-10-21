@@ -33,6 +33,39 @@ sys.path.insert(0, os.path.join(ROOT, 'nik', 'scripts'))
 from chain_mix import eval_prompts, norm, persona_rows, row_prompt  # noqa: E402
 
 
+def persona_rows_aug(n, seed):
+    """Identity/persona rows, *augmented* so there are enough distinct ones.
+
+    The identity facts are a fixed set (~100 hand-written answers), so asking for 40k
+    rows of them without the augmentation never terminates and returns ~2.4k.  The
+    augmentation (data/teacher/augment.py, the same one make_sft2.py uses) varies the
+    surface, which is exactly what the persona gate needs: the probe asks
+    "nikit hamal ko ho?" and the model has to answer it *in its own words* and still
+    contain the facts.
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('gen_sft_mod',
+                                                  os.path.join(ROOT, 'nik', 'data', 'gen_sft.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    sys.path.insert(0, os.path.join(ROOT, 'nik', 'data', 'teacher'))
+    from augment import augment_example
+    R = random.Random(seed)
+    rows, seen = [], set()
+    tries = 0
+    while len(rows) < n and tries < n * 10:
+        tries += 1
+        g = mod.identity if R.random() < 0.5 else mod.nikit
+        e = augment_example(g(), R, 0.5)
+        key = e['messages'][0]['content']
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append({'cat': e.get('cat', 'identity'), 'gold': e.get('gold'),
+                     'messages': e['messages']})
+    return rows
+
+
 def shape_rows(n, seed):
     """The *shapes* - the rows that pay the forgetting tax back.
 
@@ -120,7 +153,7 @@ def main():
             continue
         base.append(line)
     keep = [x for x in base if R.random() < a.share]
-    extra = persona_rows(a.persona, a.seed + 5)
+    extra = persona_rows_aug(a.persona, a.seed + 5)
     extra = [r for r in extra if norm(row_prompt(r)) not in banned]
     print(f'  persona rows: {len(extra)} of {a.persona} requested '
           f'(the identity facts are a fixed set - the surface variety comes from the '
