@@ -204,7 +204,7 @@ def scene_basket(R):
     steps = _steps([('jamma line', f'{lines} + {extra}', lines + extra),
                     ('jamma mota', f'{lines + extra} x {per}', total)],
                    f'{total} / {per} = {lines + extra}, milyo')
-    ans = f'jamma {total} wata mota cha.'
+    ans = f'jamma {total} wata mota chha.'
     return user, steps, ans, str(total)
 
 
