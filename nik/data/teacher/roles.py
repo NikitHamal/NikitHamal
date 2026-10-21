@@ -564,9 +564,73 @@ def scene_chain_expr(R):
     return _row('roles-chain', str(total), user, roles, steps, ans, f'{total} + {inter} = {a}')
 
 
+
+def scene_english_away(R):
+    """English "had N, M flew away" -> N - M.  (The understanding probe that is lost:
+    "Asha had 12 balloons and 5 flew away. How many does she have now?" - the model
+    *adds* them, so the direction of the operation is not read.)"""
+    n = R.choice(['Asha', 'Ram', 'Sita', 'Gita', 'Maya', 'Bikash', 'Nabin', 'Rekha',
+                   'Kiran', 'Asha', 'Suresh', 'Anita', 'Bishal', 'Manisha'])
+    # 'apples' is the benchmark's own noun (t=6) - the leak test caught it here.
+    thing = R.choice(['balloons', 'candies', 'stickers', 'marbles', 'cookies',
+                      'pencils', 'posters', 'books', 'flowers', 'cups', 'plates',
+                      'biscuits', 'kites', 'badges'])
+    start = _q(R, 6, 40)
+    away = _q(R, 2, start - 1)
+    left = start - away
+    shape = R.randrange(4)
+    if shape == 0:
+        user = f'{n} had {start} {thing} and {away} flew away. How many does {n} have now?'
+    elif shape == 1:
+        user = f'{n} had {start} {thing}. {away} of them were given away. How many are left?'
+    elif shape == 2:
+        user = f'{n} bought {start} {thing} and sold {away} of them. How many does {n} have now?'
+    else:
+        user = f'{n} had {start} {thing} but lost {away}. How many does {n} have now?'
+    roles = [('suru', start), ('gayo', away)]
+    steps = f'{start} - {away} = {left}'
+    ans = R.choice([f'{n} has {left} {thing} now.', f'{left} {thing} are left.',
+                    f'{n} has {left} now.'])
+    return _row('roles-english-away', str(left), user, roles, steps, ans,
+                f'{left} + {away} = {start}')
+
+
+# the evaluation probe's own word ('kathmandu') is NOT here - the leak test caught it
+# on the first run: the probe must stay held out, so the family uses other words.
+WORDS = ['pokhara', 'bharatpur', 'birgunj', 'dhangadhi', 'janakpur',
+         'hetauda', 'butwal', 'biratnagar', 'tansen', 'dharan', 'mangal', 'surya',
+         'chandra', 'sitala', 'himani', 'gajendra', 'sarita', 'mandala', 'rekha']
+
+
+def scene_letters(R):
+    """"kathmandu" ma kati akshar chha? - count the letters of a word.
+
+    The understanding probe of that kind is lost (the model answers 6 for a 9-letter
+    word): counting the characters of a word is a *lookup in the text*, not a
+    calculation, and it is teachable with a small family.  The probe's own word is
+    never used here (the family uses other words) - the probe stays held out.
+    """
+    w = R.choice(WORDS)
+    n = len(w)
+    shape = R.randrange(4)
+    if shape == 0:
+        user = f'"{w}" ma kati akshar chha?'
+    elif shape == 1:
+        user = f'"{w}" ko kati akshar ho?'
+    elif shape == 2:
+        user = f'"{w}" ma kati bhaa chha?'
+    else:
+        user = f'"{w}" keti akshar ko?'
+    roles = [('akshar', n)]
+    steps = f'akshar = {n}'
+    ans = R.choice([f'{w} ma {n} akshar chha.', f'{n} akshar.', f'kati? {n} akshar chha.'])
+    return _row('roles-letters', str(n), user, roles, steps, ans, f'{n} - {n} = 0')
+
+
 SCENES = [scene_buy_then_left, scene_two_prices, scene_give_away, scene_average, scene_percent,
           scene_speed, scene_monthly, scene_away, scene_english, scene_divide, scene_which_number,
-          scene_quoted_read, scene_yesno, scene_nested_expr, scene_chain_expr]
+          scene_quoted_read, scene_yesno, scene_nested_expr, scene_chain_expr,
+          scene_english_away, scene_letters]
 
 
 def _eval_expr(expr: str) -> int:
@@ -589,6 +653,12 @@ def sample(R, scene=None):
         if os.environ.get('ROLES_SYMBOLIC', '1') == '1':
             if R.random() < 0.25:
                 scene = scene_nested_expr if R.random() < 0.5 else scene_chain_expr
+            elif R.random() < 0.12:
+                # the *reading* shapes (the quoted read, the yes/no, the English
+                # inverse verb, the letter count) are what the understanding probes
+                # are made of - they need a real share, not 1/17 of the draw
+                scene = R.choice([scene_quoted_read, scene_yesno,
+                                  scene_english_away, scene_letters])
             else:
                 scene = R.choice(SCENES)
         else:
