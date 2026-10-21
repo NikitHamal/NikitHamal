@@ -40,6 +40,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 - **GRPO needs mixed groups.** v4i (fixed difficulty, G=8): only 2-3 of 16 problem groups per step had any reward variance
   (all-correct or all-wrong groups give zero advantage). Adaptive per-skill difficulty (target 20-80% correct) + G=12 added.
 
+- **corpus_v2 audit, pass 1: FAIL (as designed) on the INPUT.** 6.62M docs in -> **4.77M kept, ~473M tokens**; dup rate
+  28% (1.73M exact + 122k near duplicates, mostly re-published news) > 5% limit; **47 docs contaminated** with eval text.
+  Both groups are excluded from the kept output (`corpus_audit.py` skips them before writing). v5 refused to start, as it
+  should. Pass 2 audits the KEPT corpus itself (expect 0% dup, 0 contamination) before anything trains on it.
+  Lesson: a dup-rate gate measures the source; a second pass on the output is what proves the corpus is clean.
+
 ### Mistakes (do not repeat)
 - `pkill -f <pattern>` matched the shell running the pkill itself -> suspended shell -> frozen notebook kernel -> box lost.
   Use exact PIDs (`pgrep` then `kill`), never a pattern that also occurs in your own command line.
