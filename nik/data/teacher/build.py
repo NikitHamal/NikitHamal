@@ -108,6 +108,20 @@ def _one(R):
 
 
 # ---------------------------------------------------------------- keep the understanding probes unseen
+def _other_eval_prompts():
+    """Questions from the other strict evals (stress.py, chat_check.py).
+
+    The guard below only read eval_understand.py, so stress prompts survived into mixes -
+    5 exact hits (mero naam k ho? x4) in a 24,000-row seed-11 build.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    root = os.path.abspath(os.path.join(here, '..', '..', '..'))
+    sys.path.insert(0, os.path.join(root, 'nik', 'scripts'))
+    import leak_audit
+    return [p for source in leak_audit.FATAL
+            for p in leak_audit.collect_prompts(root).get(source, [])]
+
+
 def _probe_guard():
     import re
     here = os.path.dirname(os.path.abspath(__file__))
@@ -117,7 +131,7 @@ def _probe_guard():
     exec(src[i:j], ns)
     qs = [m['content'].lower() for _, msgs, _ in ns['PROBES'] for m in msgs if m['role'] == 'user']
     norm = lambda t: ' '.join(re.sub(r'[^a-z0-9 ]', ' ', t.lower()).split())  # noqa: E731
-    exact = {norm(q) for q in qs}
+    exact = {norm(q) for q in qs} | {norm(p) for p in _other_eval_prompts()}
     quoted = {norm(x) for q in qs for x in re.findall(r'"([^"]+)"', q)}
     lists = {norm(x) for q in qs for x in re.findall(r'\d+(?:, \d+)+', q)}
 
