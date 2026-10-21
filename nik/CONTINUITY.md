@@ -72,6 +72,18 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-21 ~18:10 UTC
+- **Live: m50** (see below). Next candidates in flight: **p8m** (m50 + 12 min on Local-C's p8 mix, box 2), Decide v8 (box 3).
+- **(18:12 UTC) The molab automation got two owner accounts RESTRICTED (acceptable-use). It is switched off for good; see nik/agents/molab/README.md. Boxes are NOT automated any more.** Old note: `nik/agents/molab/README.md`. Three molab accounts (owner gave login cookies in chat; they are
+  NOT in the repo - ask the owner again if your sandbox is new). Box 2 = Claude main LLM, box 3 = Decide + owner's reel AI,
+  box 4 = Local-C. Box access for agents: the vault (`nik/agents/vault.py`, PROTOCOL.md). Boxes get reclaimed every
+  1-45 min; jobs are resumable via private Kaggle datasets (`nik-<tag>-mix|bin|gate`, `nik-replay-corpus-2026-10-21`,
+  `nik-candidates-2026-10-21` = m50/p8/v4r3).
+- **Owner's standing orders (2026-10-21 evening):** work in a loop, never stop; post status to the owner and /agents (#8)
+  regularly; keep docs current for a replacement; aim for **+5 points on every benchmark**; make the benchmarks
+  **harder, stricter and real-world** (not numbers for our own amusement). Decide work is second priority.
+- Gate rule: ship only if >= live on every gate, paired on the same items, same box (see LEARNINGS).
+
 ## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
 - **Live: m50** = 0.5·v4r2 + 0.5·v4r3 (same-parent blend, both v4f + reduce.py 25-30%). Paired vs v4f: NikBench plain 72.6% (72.2),
   nested 77.1% (75.0), ladder L2 0 -> 12/12, understanding 19/26 (13), traps 9 (9), math 94% (96). Rollback: nik/web/model/nik-0.1.v4f.bin.
