@@ -176,7 +176,23 @@ def memory(R):
     return memory(R)
 
 
+_POLICY = []
+
+
+def nik_pick(R):
+    """Pick the right answer among Nik's own sampled answers (rows from policy_data.py, NIK_POLICY_ROWS=path)."""
+    if not _POLICY:
+        import json
+        _POLICY.extend(json.loads(l) for l in open(os.environ['NIK_POLICY_ROWS']))
+    r = dict(R.choice(_POLICY)); o = list(r['options']); g = o[r['label']]; R.shuffle(o)
+    return dict(task='nik-pick', context=r['context'], question=r['question'], options=o, label=o.index(g))
+
+
 TASKS = [(yes_no, .1), (unknown, .05), (lookup, .12), (arith, .11), (step, .09), (word, .08), (memory, .06), (reading_wide.sample, .24), (intent, .15)]
+
+
+if os.environ.get('NIK_POLICY_ROWS'):
+    TASKS = [(f, w * 0.85) for f, w in TASKS] + [(nik_pick, .15)]
 
 
 def sample(R):
