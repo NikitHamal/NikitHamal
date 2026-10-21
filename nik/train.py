@@ -204,7 +204,7 @@ def main():
     ap.add_argument('--device', default='auto')
     ap.add_argument('--threads', type=int, default=0)
     ap.add_argument('--diff-frac', type=float, default=1.0, help='diffusion stream covers this fraction of each window (speed)')
-    ap.add_argument('--grad-ckpt', action='store_true', help='activation checkpointing per block (less memory, ~30% more compute)')
+    ap.add_argument('--grad-ckpt', action='store_true', help='activation checkpointing per block (less memory, about 30 percent more compute)')
     ap.add_argument('--opt', choices=['adamw', 'muon'], default='adamw', help='muon: Muon for hidden matrices + AdamW for the rest')
     ap.add_argument('--ema', type=float, default=0.0, help='keep an EMA of weights (e.g. 0.999) and save it as the checkpoint')
     ap.add_argument('--sft-name', default='sft', help='SFT token files <name>_tok.bin / <name>_mask.bin')
