@@ -33,7 +33,12 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - `sets_b.py`: real-elevation relief of Nepal from AWS Terrain Tiles, inside the 2020 boundary (Limpiyadhura, Lipulekh, Kalapani labelled) with the Gorkha → Kathmandu Fulpati thread; Taleju on its stepped plinth; jamara growing in the dark; Fulpati doli + salute; 252 Ashtami lamps; khukuri/hasiya with tika; thali with 4,500 rice grains; valley at Kojagrat; linge ping + kites; night bus + switchback lights; lane of doorways.
 - [x] Type: `tools/type_render.py` uses Chromium, because Pillow here has no raqm and so cannot shape Devanagari. It produces per-word PNGs. `tools/composite.py` handles word-synced reveals, kickers, map labels, the Navadurga names, the pixel-art moon calendar (the only pixel element), transitions, grain and vignette.
 - [x] API check without rendering: `blender/render.py --shot N --dry` builds each set in bpy 4.2 and steps its animation. All 21 film shots and the 4 Tihar sets pass. Map framing was checked numerically: Nepal fills the frame width, and the Limpiyadhura/Lipulekh/Kalapani, Gorkha and Kathmandu marks are on screen.
-- [ ] **BLOCKED on molab URL/token (owner to paste).** Not one pixel has been rendered yet.
+- [ ] molab, 2026-10-21: two boxes both went HTTP 410 within about 2–5 min, each time during `build.sh setup` (bpy + Chromium into /tmp/reels). Suspected cause: /tmp counts against the box's memory. Next box:
+  1. Check `free -m`, the cgroup `memory.max` and `df` first.
+  2. Install with `--no-cache` in small steps.
+  3. Watch memory.
+  4. Then run `pipeline.sh` detached (tests first; each shot clip pulled off at once by `/workspace/tools/pull.py`).
+  The local helpers are `/workspace/tools/mx`, `pull.py` and `molab.env`. The token lives only in molab.env, never in the repo.
 - [ ] On molab:
   1. `bash festivals/v3/build.sh setup dem type audio`.
   2. Test stills: `python blender/render.py --shot N --t 2 --samples 32 --still /tmp/sN.png` for every shot. Fix, then iterate.

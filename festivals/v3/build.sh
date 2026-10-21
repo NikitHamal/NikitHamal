@@ -14,7 +14,10 @@ setup)
   # shared box: no apt, everything inside /tmp/reels (bpy 4.5 = Blackwell-capable Cycles)
   export UV_CACHE_DIR=/tmp/reels/uvcache PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw
   [ -x "$PY" ] || uv venv -q -p 3.11 /tmp/reels/venv
-  uv pip install -q -p "$PY" "bpy==4.5.*" numpy scipy soundfile librosa pyloudnorm pillow playwright edge-tts mutagen
+  free -m | head -2; cat /sys/fs/cgroup/memory.max 2>/dev/null; df -h /tmp | tail -1
+  # no download cache (on molab /tmp may count against the box's memory): install the big wheel alone, then the rest
+  uv pip install -q --no-cache -p "$PY" "bpy==4.5.*"
+  uv pip install -q --no-cache -p "$PY" numpy scipy soundfile librosa pyloudnorm pillow playwright edge-tts mutagen
   "$PY" -m playwright install chromium
   command -v ffmpeg >/dev/null || { uv pip install -q -p "$PY" imageio-ffmpeg; ln -sf "$("$PY" -c 'import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())')" /usr/local/bin/ffmpeg; }
   nvidia-smi --query-gpu=name,memory.total --format=csv,noheader || true ;;
