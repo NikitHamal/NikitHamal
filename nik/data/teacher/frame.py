@@ -860,20 +860,26 @@ EN_THINGS = [('marbles', 'oma'), ('stickers', 'sticker'), ('crayons', 'crayon'),
              ('cards', 'card'), ('shells', 'shell')]
 
 
+EN_DISTRACT = ['The shop opens at 9 o'clock.', 'Yesterday was a sunny day.',
+                'They walked for 20 minutes first.', 'The clock on the wall shows 4.',
+                'Her bag weighs 3 kilograms.']
+
+
 def _en_scene(R, kind):
     """One English word problem: the question in English, the answer in English."""
     name = R.choice(EN_NAMES)
     thing, np = R.choice(EN_THINGS)
+    dis = ' ' + R.choice(EN_DISTRACT)
     if kind == 'minus':
         a, b = R.randint(8, 40), R.randint(2, 7)
-        q = f'{name} had {a} {thing} and {b} of them were given away. How many are left?'
+        q = f'{name} had {a} {thing} and {b} of them were given away.{dis} How many are left?'
         ans = f'{name} has {a - b} {thing} now.'
         steps = _steps([('total', f'{a}', a), ('away', f'{b}', b), ('left', f'{a} - {b}', a - b)],
                        f'{a - b} + {b} = {a}, milyo')
         return q, steps, ans, str(a - b)
     if kind == 'mul':
         each, n = R.choice([15, 25, 40, 55, 70, 95]), R.randint(3, 6)
-        q = f'{name} bought {n} {thing} at {each} rupees each. How much did {name} pay in total?'
+        q = f'{name} bought {n} {thing} at {each} rupees each.{dis} How much did {name} pay in total?'
         ans = f'{name} paid {each * n} rupees in total.'
         steps = _steps([('one', f'{each}', each), ('count', f'{n}', n), ('total', f'{each} x {n}', each * n)],
                        f'{each} x {n} = {each * n}, milyo')
@@ -881,7 +887,7 @@ def _en_scene(R, kind):
     if kind == 'mul-minus':
         each, n, used = R.choice([12, 20, 30, 45, 60]), R.randint(3, 6), R.randint(2, 9)
         q = (f'{name} had {each * n} {thing} in {n} boxes, {used} per box. '
-             f'{used} of them were broken. How many are good?')
+             f'{used} of them were broken.{dis} How many are good?')
         total = each * n
         ans = f'{total - used} {thing} are good.'
         steps = _steps([('per box', f'{each}', each), ('boxes', f'{n}', n),
@@ -891,7 +897,7 @@ def _en_scene(R, kind):
     if kind == 'percent':
         price, pct, n = R.choice([200, 300, 400, 500, 800]), R.choice([10, 20, 25, 50]), R.randint(2, 5)
         off = price * pct // 100
-        q = f'One {np} costs {price} rupees. With a {pct}% discount, how much do {n} of them cost?'
+        q = f'One {np} costs {price} rupees.{dis} With a {pct}% discount, how much do {n} of them cost?'
         ans = f'{n} of them cost {(price - off) * n} rupees.'
         steps = _steps([('price', f'{price}', price), ('off', f'{price} x {pct} / 100', off),
                         ('one', f'{price} - {off}', price - off),
@@ -900,7 +906,7 @@ def _en_scene(R, kind):
         return q, steps, ans, str((price - off) * n)
     # the division
     total, per = R.choice([24, 36, 48, 60, 72, 96]), R.choice([4, 6, 8, 12])
-    q = f'{total} {thing} are put into boxes of {per}. How many boxes are there?'
+    q = f'{total} {thing} are put into boxes of {per}.{dis} How many boxes are there?'
     ans = f'There are {total // per} boxes.'
     steps = _steps([('total', f'{total}', total), ('per box', f'{per}', per),
                     ('boxes', f'{total} / {per}', total // per)],

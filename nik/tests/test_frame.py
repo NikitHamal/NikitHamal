@@ -69,7 +69,11 @@ class TestFrame(unittest.TestCase):
         R = random.Random(5)
         for _ in range(300):
             user = frame.sample(R)['messages'][0]['content']
-            self.assertTrue(any(k in user for k in ('aaj ko din', 'ghar ma', 'bazaar ma', 'phole')),
+            # the English frames carry an English decoy (the same job: a number in the
+            # text that must not be used)
+            self.assertTrue(any(k in user for k in ('aaj ko din', 'ghar ma', 'bazaar ma', 'phole',
+                                                    'opens at', 'Yesterday', 'walked for',
+                                                    'clock on the wall', 'weighs')),
                             f'no distractor in: {user}')
 
     def test_rows_are_multi_step(self):
