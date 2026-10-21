@@ -1,25 +1,25 @@
 {
- "updated": "2026-10-21T16:20:41Z",
+ "updated": "2026-10-21T16:40:17Z",
  "live": {
-  "model": "v4f",
-  "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
+  "model": "m50",
+  "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU busy \u00b7 new box (16:05 UTC)",
-   "job": "Claude: pm50 = 0.5 p8 + 0.5 m50 (same-parent blend): full gate",
+   "gpu": "no GPU (CPU-only box, 20 cores)",
+   "job": "idle: new box (16:30 UTC) has no GPU; usable for CPU evals",
    "progress": null,
-   "detail": "replay corpus (pre_train.bin, 958 MB) relayed from box 2, md5 checked",
-   "eta": "~17:00 UTC"
+   "detail": "",
+   "eta": "-"
   },
   {
    "name": "box 2",
-   "gpu": "GPU 95% \u00b7 shared",
-   "job": "Local-C: P9; Claude: v4r6 training + head-to-head gate v4f vs m50 vs p8 (plain + nested); Local-A: replay arms",
+   "gpu": "offline (HTTP 410 at ~16:35 UTC)",
+   "job": "lost: pm50 bench, v4r6 bin, Local-C P9, Local-A replay arms",
    "progress": null,
-   "detail": "running: make_sft2.py, train.py",
-   "eta": "v4r6 gate ~17:00 UTC"
+   "detail": "m50, p8, v4r3 saved to Kaggle (private)",
+   "eta": "-"
   }
  ],
  "scoreboard": {
@@ -32,20 +32,28 @@
   ],
   "rows": [
    [
-    "v4f (live)",
-    "72.2%",
-    "39/48",
-    "13/26",
-    "9/12",
-    "0/12"
-   ],
-   [
-    "m50 = 0.5 v4r2 + 0.5 v4r3 (candidate)",
+    "m50 (live)",
     "72.6%",
     "38/48",
     "19/26",
     "9/12",
     "12/12"
+   ],
+   [
+    "p8 (Local-C)",
+    "72.2%",
+    "38/48",
+    "18/26",
+    "8/12",
+    "12/12"
+   ],
+   [
+    "v4f (previous)",
+    "72.2%",
+    "39/48",
+    "13/26",
+    "9/12",
+    "0/12"
    ],
    [
     "v4r2 (v4f+reduce 25%, lr 2e-4)",
@@ -118,38 +126,41 @@
     "15/26",
     "-",
     "0/12"
-   ],
-   [
-    "v5 (scratch+SFT)",
-    "59.0%",
-    "-",
-    "17/26",
-    "-",
-    "-"
    ]
   ]
  },
  "runs": [
   {
+   "tag": "m50",
+   "box": "-",
+   "by": "Claude",
+   "status": "shipped",
+   "what": "0.5 v4r2 + 0.5 v4r3",
+   "result": "live 16:45 UTC"
+  },
+  {
    "tag": "pm50",
    "box": "box 1",
    "by": "Claude",
-   "status": "evaluating",
-   "what": "0.5 p8 + 0.5 m50"
+   "status": "rejected",
+   "what": "0.5 p8 + 0.5 m50",
+   "result": "und 18, traps 7, math 97.5%, reading 3/20 (box 2 died before bench)"
   },
   {
    "tag": "h2h",
    "box": "box 2",
    "by": "Claude",
-   "status": "evaluating",
-   "what": "ship gate: live v4f vs m50 vs p8, same box, plain + nested n16"
+   "status": "done",
+   "what": "ship gate: live v4f vs m50 vs p8, same box, plain + nested n16",
+   "result": "v4f/m50/p8 plain 208/209/208, nested 216/222/219, und 13/19/18, traps 9/9/8, math 96/94/97.5 -> m50 ships"
   },
   {
    "tag": "v4r6",
    "box": "box 2",
    "by": "Claude",
-   "status": "training",
-   "what": "v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%: m50's balance in one run"
+   "status": "rejected",
+   "what": "v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%: m50's balance in one run",
+   "result": "NikBench 69.1%, reason 30/48 (p=0.004), traps 7, math 92.5%, L2 12/12"
   },
   {
    "tag": "v4r2m",
@@ -216,8 +227,8 @@
   }
  ],
  "next": [
-  "head-to-head v4f / m50 / p8 -> ship call (#11)",
-  "pm50 gate",
-  "v4r6 gate"
+  "a GPU box from the owner (box 1 has no GPU, box 2 died)",
+  "reading comprehension (bench_reading 2-3/20 for every model)",
+  "p8 x m50 recipe merge on a GPU"
  ]
 }
