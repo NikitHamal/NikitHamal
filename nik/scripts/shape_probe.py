@@ -80,6 +80,33 @@ PROBES = [
     # ---- three steps: (a - b) / c
     ('div-after-minus', '90 ota ma 10 ota kina. Baki 80 ota ma 4 ota ko kanda banaune. har kanda ma kati ota huncha?', '20'),
     ('div-after-minus', '120 ota ma 20 ota chhauchha. Baki 100 ota 5 ota ko kanda ma rakhne. har kanda ma kati ota huncha?', '20'),
+
+    # ---------------------------------------------------------------- the paraphrases
+    # The same shapes, asked the way a person would ask them - no "kram" hints, no
+    # order given, no template.  The gap between this block and the one above IS the
+    # generalization gap: the owner showed a paraphrase of a weekday question that the
+    # model answers perfectly in the benchmark's own wording and with pure noise in
+    # real-world wording.
+    ('para-add-minus', 'kaksha ma 12 keta ra 19 keti chhan. 5 keta le aayo. aba kaksha ma kati jana chha?', '26'),
+    ('para-add-minus', 'bazar ma 14 wata sana ra 11 wata karko thiyo. 6 wata milayo. aba kati wata baki cha?', '19'),
+    ('para-mul-minus', 'thela ma 5 kanda thiyo, har kanda ma 11 wata. 13 wata nikalayo. aba kati wata cha?', '42'),
+    ('para-percent-each', 'ek khidai ko mol 300 rupiya ho. 20% bhat pachhi 3 wata khidai ko kati rupiya tirne?', '720'),
+    ('para-percent-each', 'ek jhanda ko mol 500 rupiya ho. 10% bhat pachhi 4 wata jhanda ko kati rupiya tirne?', '1800'),
+    ('para-half', 'kaka sanga 70 ota thiyo. aadha usle liyo. 12 ota khatayo. aba kati ota baki cha?', '23'),
+    ('para-half', 'didi sanga 50 rupiya thiyo. aadha bahira diyo. 8 rupiya khatayo. aba kati rupiya bacha?', '17'),
+    ('para-infer-rule', 'kram: 7, 14, 28, 56, ... aune k ho?', '112'),
+    ('para-infer-rule', 'yo series ko aune k ho: 9, 18, 36, 72, ...?', '144'),
+    ('para-three-money', 'mahina ko 12000 rupaya thiyo. bhuya ko 3000 diyo ani bhat ko 2500 kina. aba kati rupaya bacheko?', '6500'),
+    ('para-group-discount', '5 jana lai 400 rupiya ko ticket kinyo. 20% discount. aba kati rupiya tirne?', '1600'),
+    ('para-half-plus', '40 ota ko aadha ma thiyo, maile 11 ota add gare. aba kati ota chha?', '31'),
+    ('para-div-after-minus', '100 ota ma 25 ota chhauchha. Baki 75 ota 3 ota ko kanda ma rakhne. har kanda ma kati ota huncha?', '25'),
+
+    # ---- the weekday: the benchmark's own wording states the day order, the
+    #      paraphrase states nothing - and the model answers them very differently
+    ('weekday-template', 'aaja sombar ho. 3 din pachhi kun bar? (bar ko kram number: aaitabar 1 ... sanibar 7)', '5'),
+    ('weekday-paraphrase', 'aaja sombar ho bhane 3 din pachhi kun bar hunchha?', '5'),
+    ('weekday-paraphrase', 'sombar bata 3 din pachhi ko din kun ho?', '5'),
+    ('weekday-paraphrase', 'sombar diye 3 din gatayo, tyo din kun ho?', '5'),
 ]
 
 
