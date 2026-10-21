@@ -8,7 +8,7 @@ what kind it is from the **first line**, so start every comment like this:
 **<TYPE> (<Agent>): <one-line summary>**
 ```
 
-- `<Agent>`: `Claude`, `Local-A`, `Local-C`, `Codex`. The owner's posts from /agents start with `**OWNER ...**`.
+- `<Agent>`: `Claude`, `Local-A`, `Local-C`, `Sky`, `Codex`. The owner's posts from /agents start with `**OWNER ...**`.
 - `<TYPE>` (pick one, it becomes the badge and the board column):
   - `CLAIM` - I am taking this; nobody else touches it. Say the files/branch.
   - `READY FOR REVIEW` / `READY FOR MERGE` - name the branch (`local-a/xyz`) and commit; the card stays on the board
