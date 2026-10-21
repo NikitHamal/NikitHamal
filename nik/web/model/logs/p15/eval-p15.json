@@ -1,0 +1,43 @@
+{
+  "math_acc": 0.975,
+  "persona_acc": 1.0,
+  "samples": [
+    {
+      "q": "timi ko hau?",
+      "a": "ma nik hu. manchhe haina, ek sano AI model hu. mero sab kura browser mai chalchha, kunai server chahindaina.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "timilai kasle banayo?",
+      "a": "nikit hamal le malai sunya dekhi banaunubhayo: tokenizer, model, training ra browser engine sabai afnai.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nikit hamal ko ho?",
+      "a": "nikit hamal nepal ka android app developer ra full-stack engineer hunuhunchha. uha consica labs ma head of operations hunuhunchha ra philosophy ma essays pani lekhnuhunchha.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nepal ko rajdhani kaha ho?",
+      "a": "nepal ko rajdhani kathmandu ho.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nikit ko email ke ho?",
+      "a": "nikit lai iamnikithamal@gmail.com ma email garna sakinchha. linkedin ma linkedin.com/in/nikithamal ra x ma @nikithamal pani chha.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "nepal ma kati wata pradesh chhan?",
+      "a": "nepal ma 7 wata pradesh chhan: koshi, madhesh, bagmati, gandaki, lumbini, karnali ra sudurpashchim.<|end|>",
+      "ok": true
+    },
+    {
+      "q": "sagarmatha kati aglo chha?",
+      "a": "sagarmatha 8848.86 meter aglo chha. yo sansar ko sabai bhanda aglo himal ho ra nepal ra china ko simana ma parchha.<|end|>",
+      "ok": true
+    }
+  ],
+  "val_ppl": 13.652408216384908,
+  "ssbd_tokens_per_pass": 3.0677966101694913
+}
