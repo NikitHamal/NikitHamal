@@ -12,7 +12,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import colmath, compose, correct, frame, vocab, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
+import colmath, compose, correct, frame, vocab, ledger, math_gen, math2, read, reason_gen, reason2, reduce, skills, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -20,6 +20,8 @@ from explain2 import GOLD2  # noqa: E402
 ALL_GOLD = GOLD + GOLD2
 
 LEAD = ['', '', '', 'ek prashna: ', 'malai help garnus: ', 'yo bujhina, ', 'kripaya solve garnus: ', 'sir, ']
+# reduce-and-rewrite multi-step arithmetic (reduce.py, Sky, issue #9): L2 0 -> 11/12 in a CPU micro-SFT.
+REDUCE_SHARE = float(os.environ.get('NIK_REDUCE_SHARE', '0.06'))
 FOLLOW = ['arko prashna: ', 'ani yo chai? ', 'dhanyabad! aba yo: ', 'ramro. arko: ']
 
 
@@ -66,6 +68,8 @@ def _one(R):
     if R.random() < 0.04:   # 4% of rows ~= 12% of tokens (ledger rows are ~3x longer; Local-C, issue #9). P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
         d = ledger.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if REDUCE_SHARE and R.random() < REDUCE_SHARE:
+        return reduce.sample(R)
     k = R.random()
     if k < 0.10:     # one general column algorithm for + - x / at every size (1-6 digits)
         return to_example(colmath.sample(R), 'math', R)
