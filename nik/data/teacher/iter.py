@@ -175,6 +175,8 @@ def seq_infer_mul(R):
 
 
 def make(R):
+    if R.random() < 0.12:
+        return weekday(R)
     kind = R.choice(['add', 'add', 'add', 'mul', 'mul', 'div',
                      'infer', 'infer', 'infer_mul'])
     if kind == 'add':
@@ -201,6 +203,65 @@ def make(R):
     return {'cat': 'reason-iter', 'gold': str(nxt),
             'messages': [{'role': 'user', 'content': user},
                          {'role': 'nik', 'content': ans, 'think': think}]}
+
+
+# ---------------------------------------------------------------- the weekday (a modulo)
+# The owner showed the model a real-world paraphrase of a question it answers correctly
+# in the benchmark's exact wording: "aaja sombar ho bhane parsi kun bar hunchha?" came
+# back as pure noise, while the benchmark's phrasing ("aaja sombar ho. 8 din pachhi kun
+# bar?") is answered correctly by the same model.  The benchmark states the day order
+# and asks for the number; the paraphrase states nothing.  So this family teaches the
+# order (in several ways), the wrap-around, and the question asked as a conditional, as
+# a "from Monday", and as a plain "which day".
+#
+# The wording is deliberately not the benchmark's wording: the benchmark writes
+# "bar ko kram number: aaitabar 1 ... sanibar 7", this family says it in other ways and
+# asks in other ways.  The skill has to transfer, the string must not.
+
+DAYS = ['aaitabar', 'sombar', 'mangalbar', 'budhabar', 'bihibar', 'shanibar', 'sanibar']
+
+
+def _day_order_ways(R):
+    return R.choice([
+        'bar ko kram aba bata: ' + ', '.join(f'{d} {i + 1}' for i, d in enumerate(DAYS)) + '.',
+        'aaitabar 1 ho ra aniba 7 ho, beech ma kram milcha. ' + ', '.join(DAYS) + '.',
+        'week ko kram: ' + ', '.join(DAYS) + ' (aaitabar bata sanibar samma).',
+        'har bar ko sankhya chha: ' + ', '.join(f'{i + 1} = {d}' for i, d in enumerate(DAYS)) + '.',
+    ])
+
+
+def _day_question_ways(R, n):
+    """the same question in several ways - that is the point of the family."""
+    return R.choice([
+        f'aaja sombar ho bhane {n} din pachhi kun bar hunchha?',
+        f'sombar bata {n} din pachhi kun bar hunchha?',
+        f'aha {n} din pachhi ko din kun ho (aaja sombar ho)?',
+        f'aaj ko din sombar ra {n} din pachhi ko parko din bata.',
+        f'sombar diye {n} din gatayo, tyo din kun ho?',
+    ])
+
+
+def weekday(R):
+    """The weekday arithmetic: the order is stated, the wrap-around is the skill."""
+    n = R.randint(1, 13)
+    order = _day_order_ways(R)
+    q = _day_question_ways(R, n) + ' ' + order
+    idx = (2 - 1 + n) % 7          # today is sombar (the 2nd day), n days later
+    name = DAYS[idx]
+    num = idx + 1
+    lines = [('kram', f'{n} % 7', n % 7),
+             ('kram', f'(2 - 1 + {n}) % 7 + 1', num)]
+    # no '=' in the rule: the arithmetic checker parses every "a = b" in the trace
+    rule = f'sombar 2 ho, aru din (2 - 1 + {n}) % 7 + 1'
+    check = f'kram {num} milyo'
+    ans = R.choice([f'{name} hunchha (kram {num}).', f'kun bar: {name}, kram {num}.',
+                    f'parsi ko din {name} ho, kram {num}.'])
+    return {'cat': 'reason-weekday', 'gold': str(num),
+            'messages': [{'role': 'user', 'content': q},
+                         {'role': 'nik', 'content': ans,
+                          'think': f'niyam: {rule}. ' +
+                                   '. '.join(f'{lab}: {expr} = {val}' for lab, expr, val in lines) +
+                                   f'. jaach: {check}'}]}
 
 
 def check(row):
