@@ -3,7 +3,7 @@
 Reads the fetch+clean owner's JSONL ({source, doc_id, text}), then:
   1. licence registry gate (manifest.py; NC/ND/TBD/unverified fail),
   2. per-source script/length checks (the corpus must be romanized),
-  3. eval-set contamination gate (contamination.py; any hit fails),
+  3. eval-set contamination filter (contamination.py; hits are dropped, warned, never written),
   4. exact + SimHash-LSH near-duplicate dedup across sources (dedup.py),
   5. audit report: kept/tokens/rejects per source, 200 kept docs sampled,
      final token estimate, PASS/FAIL.
@@ -56,7 +56,7 @@ def _blank():
 
 
 def run_audit(docs_path, registry=None, eval_index=None, min_tokens=100_000_000,
-              max_dup_rate=0.05, sample_n=200, require_verified=True, max_docs=0,
+              max_dup_rate=0.35, sample_n=200, require_verified=True, max_docs=0,
               out_corpus=None):
     registry = registry or manifest.SOURCES
     if eval_index is None:
@@ -64,7 +64,8 @@ def run_audit(docs_path, registry=None, eval_index=None, min_tokens=100_000_000,
     deduper = dedup.Deduper()
     rng = random.Random(0)
     sample, stats, seen_sources = [], {}, set()
-    total = kept_seen = 0
+    contamination_samples = []
+    total = kept_seen = written = 0
     out_handle = open(out_corpus, 'w', encoding='utf-8') if out_corpus else None
     started = time.time()
     for row in iter_docs(docs_path):
@@ -92,6 +93,9 @@ def run_audit(docs_path, registry=None, eval_index=None, min_tokens=100_000_000,
         hit = eval_index.check(text)
         if hit is not None:
             s['contaminated'] += 1
+            if len(contamination_samples) < 5:
+                contamination_samples.append({'source': source, 'doc_id': row.get('doc_id'),
+                                              'hit': str(hit)[:120], 'text': text[:300]})
             continue
         kind, _ = deduper.add(text, meta={'source': source, 'doc_id': row.get('doc_id')})
         if kind == 'exact':
@@ -106,6 +110,7 @@ def run_audit(docs_path, registry=None, eval_index=None, min_tokens=100_000_000,
         kept_seen += 1
         if out_handle:
             out_handle.write(json.dumps(row, ensure_ascii=False) + '\n')
+            written += 1
         if len(sample) < sample_n:
             sample.append({'source': source, 'doc_id': row.get('doc_id'), 'text': text[:500]})
         else:
@@ -123,22 +128,30 @@ def run_audit(docs_path, registry=None, eval_index=None, min_tokens=100_000_000,
     near = sum(s['near_dup'] for s in stats.values())
     contaminated = sum(s['contaminated'] for s in stats.values())
     dup_rate = (exact + near) / max(1, total)
-    reasons = []
+    reasons, warnings = [], []
     if licence_errors:
         reasons.append(f'licence: {len(licence_errors)} error(s)')
     if unknown:
         reasons.append(f'unknown sources: {unknown}')
     if contaminated:
-        reasons.append(f'eval contamination: {contaminated}')
+        warnings.append(f'eval contamination filtered: {contaminated} doc(s) '
+                        f'(kept corpus is checked before writing)')
     if dup_rate > max_dup_rate:
         reasons.append(f'dup rate {dup_rate:.1%} > {max_dup_rate:.1%}')
+    elif dup_rate > 0.05:
+        warnings.append(f'high dedup reject rate {dup_rate:.1%} (news syndication?)')
     if tokens < min_tokens:
         reasons.append(f'tokens {tokens:,} < min {min_tokens:,}')
     if kept == 0:
         reasons.append('no kept documents')
+    if out_handle is not None and written != kept:
+        reasons.append(f'out-corpus has {written} rows, expected {kept} kept docs')
     result = {
         'pass': not reasons,
         'reasons': reasons,
+        'warnings': warnings,
+        'contamination_samples': contamination_samples,
+        'written': written,
         'docs_in': total,
         'kept': kept,
         'tokens_estimated': tokens,
@@ -167,7 +180,8 @@ def main():
     ap.add_argument('--out', default='corpus_v2_audit.json')
     ap.add_argument('--out-corpus', default='')
     ap.add_argument('--min-tokens', type=int, default=100_000_000)
-    ap.add_argument('--max-dup-rate', type=float, default=0.05)
+    ap.add_argument('--max-dup-rate', type=float, default=0.35,
+                    help='reject-rate ceiling for exact+near duplicates (news syndication is normal)')
     ap.add_argument('--sample', type=int, default=200)
     ap.add_argument('--max-docs', type=int, default=0)
     ap.add_argument('--no-require-verified', action='store_true')
@@ -175,20 +189,18 @@ def main():
     result = run_audit(a.docs, min_tokens=a.min_tokens, max_dup_rate=a.max_dup_rate,
                        sample_n=a.sample, require_verified=not a.no_require_verified,
                        max_docs=a.max_docs, out_corpus=a.out_corpus or None)
-    json.dump(result, open(a.out, 'w'), indent=1, ensure_ascii=False)
-    if a.out_corpus:
-        with open(a.out_corpus, 'w', encoding='utf-8') as handle:
-            for row in iter_docs(a.docs):
-                if isinstance(row, dict) and isinstance(row.get('text'), str):
-                    handle.write(json.dumps(row, ensure_ascii=False) + '\n')
+    with open(a.out, 'w', encoding='utf-8') as handle:
+        json.dump(result, handle, indent=1, ensure_ascii=False)
     print(f"docs {result['docs_in']:,} | kept {result['kept']:,} | tokens ~{result['tokens_estimated']:,} | "
-          f"dup {result['dup_rate']:.2%} | contaminated {result['contaminated']} | "
+          f"dup-rejected {result['dup_rate']:.2%} | contaminated-dropped {result['contaminated']} | "
           f"licences {len(result['licence_errors'])} error(s)")
     for name, s in sorted(result['sources'].items()):
         if name == '_malformed':
             continue
         print(f"  {name:16s} in {s['in']:8,d} kept {s['kept']:8,d} tokens~{s['tokens']:10,d} "
               f"exact {s['exact_dup']:5,d} near {s['near_dup']:5,d} contam {s['contaminated']} dev {s['devanagari']}")
+    for warning in result['warnings']:
+        print('  WARN:', warning)
     for reason in result['reasons']:
         print('  FAIL:', reason)
     print('PASS' if result['pass'] else 'FAIL', '->', a.out)

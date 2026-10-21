@@ -18,9 +18,19 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 NIK = os.path.dirname(HERE)
 TEACHER = os.path.join(HERE, 'teacher')
-sys.path[:0] = [NIK, TEACHER, HERE]
+sys.path[:0] = [NIK, TEACHER, HERE, os.path.join(NIK, 'scripts')]
 import reading_contrast  # noqa: E402
 from audit import check  # noqa: E402
+import leak_audit  # noqa: E402
+
+ROOT = os.path.dirname(NIK)
+FATAL_PROMPTS = {leak_audit.norm(p) for source in leak_audit.FATAL
+                 for p in leak_audit.collect_prompts(ROOT).get(source, [])}
+
+
+def leaks_eval(row):
+    return any(m['role'] == 'user' and leak_audit.norm(m['content']) in FATAL_PROMPTS
+               for m in row['messages'])
 
 GOLD = os.path.join(NIK, 'data', 'gold')
 CHAT_GOLD = ['chat-smalltalk.jsonl', 'memory.jsonl', 'nikit-persona.jsonl', 'separate.jsonl', 'honesty.jsonl',
@@ -99,7 +109,9 @@ def main():
         rows.append(R.choice(chat))
     while len(rows) < a.n:
         rows.append(R.choice(math))
-    rows = [r for r in rows if not check(r)]
+    before = len(rows)
+    rows = [r for r in rows if not check(r) and not leaks_eval(r)]
+    print(f'dropped {before - len(rows)} rows that contain an eval prompt (fatal sets)')
     R.shuffle(rows)
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
     with open(a.out, 'w', encoding='utf-8') as f:
