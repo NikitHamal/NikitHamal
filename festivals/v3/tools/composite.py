@@ -137,7 +137,7 @@ def push(sid, u):
     z = 1.0 + 0.085 * ease(u); cw, ch = 1 / z, 1 / z
     dx = [0.5, 0.45, 0.55, 0.5][sid % 4]; dy = [0.5, 0.52, 0.48, 0.46][(sid // 4) % 4]
     cx = 0.5 + (dx - 0.5) * ease(u); cy = 0.5 + (dy - 0.5) * ease(u)
-    return cx - cw / 2, cy - ch / 2, cw, ch
+    return min(max(0.0, cx - cw / 2), 1 - cw), min(max(0.0, cy - ch / 2), 1 - ch), cw, ch
 
 
 def key_blend(sid, t, d):

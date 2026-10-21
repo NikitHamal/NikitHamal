@@ -47,7 +47,7 @@ class Bus:
         n = int(dur * SR) if dur else len(y)
         if loop and n > len(y): y = np.concatenate([y] * (n // len(y) + 1))
         y = y[:n].copy(); n = len(y)
-        e = np.ones(n, np.float32); a = int(fi * SR); b = int(fo * SR)
+        e = np.ones(n, np.float32); a = min(n, int(fi * SR)); b = min(n - a, int(fo * SR))
         if a: e[:a] = np.linspace(0, 1, a) ** 2
         if b: e[-b:] *= np.linspace(1, 0, b) ** 2
         y *= (e * db(gain))[:, None]
@@ -89,7 +89,6 @@ def main():
     fx.put(sx("riser"), at(6, 0.74) - 3.0, -12)
     fx.put(sx("impact"), at(6, 0.74), -3)
     fx.put(sx("braam"), at(6, 0.74), -8)
-    fx.put(load("crowd_cheer", "src") if os.path.exists(f"{A}/src/crowd_cheer.wav") else np.zeros((1, 2), np.float32), at(6, 0.76), -14)
     amb.put(load("kite_wind", seconds=12), at(7), -20, 0.8, 1.5)
     fx.put(sx("whoosh"), at(7, 0.3) - 0.3, -7)
     # ---------------- Nepal: the drone again, the flute begins
