@@ -146,7 +146,7 @@ class Block(nn.Module):
         self.up = Lin(cfg.d, 2 * cfg.ffn, bias=False)    # [gate ; up] fused
         self.down = Lin(cfg.ffn, cfg.d, bias=False)
 
-    def forward(self, x, cos, sin, mask):
+    def forward(self, x, cos, sin, mask, cache=None):
         cfg = self.cfg
         N, T, _ = x.shape
         hd = cfg.head_dim
@@ -156,6 +156,10 @@ class Block(nn.Module):
         k, v = k.transpose(1, 2), v.transpose(1, 2)
         q, k = self.qn(q), self.kn(k)
         q, k = apply_rope(q, cos, sin), apply_rope(k, cos, sin)
+        if cache is not None:                     # incremental decoding: append this step's keys/values
+            if 'k' in cache:
+                k = torch.cat([cache['k'], k], 2); v = torch.cat([cache['v'], v], 2)
+            cache['k'], cache['v'] = k, v
         rep = cfg.heads // cfg.kv_heads
         if rep > 1:
             k = k.repeat_interleave(rep, dim=1)
@@ -220,6 +224,10 @@ class NikLM(nn.Module):
             mask = torch.ones(T, T, dtype=torch.bool, device=idx.device).tril()
         cos, sin = rope_cache(self.cfg, int(pos.max()) + 1, idx.device)
         cos, sin = cos[pos].to(self.emb.weight.dtype), sin[pos].to(self.emb.weight.dtype)
+        if pos.dim() == 2:                      # per-row positions (N, T) for left-padded batches: broadcast over heads
+            cos, sin = cos.unsqueeze(1), sin.unsqueeze(1)
+        if mask.dim() == 3:                     # per-row masks (N, T, T)
+            mask = mask.unsqueeze(1)
         if mask.dtype == torch.bool:
             # additive float mask in the activation dtype lets SDPA pick the
             # memory-efficient kernel instead of materialising T x T scores per layer
@@ -242,6 +250,25 @@ class NikLM(nn.Module):
 # --------------------------------------------------------------------------
 # Hybrid AR + block-diffusion objective
 # --------------------------------------------------------------------------
+
+@torch.no_grad()
+def forward_cached(model, idx, pos, mask, caches, digits=None):
+    """One incremental step for generate_multi: idx (N, t) new tokens, pos (N, t) their positions, mask (N, t, Tk) bool
+    over all keys so far (cached + new); caches: list with one dict per effective layer (filled in place)."""
+    cfg = model.cfg
+    cos, sin = rope_cache(cfg, int(pos.max()) + 1, idx.device)
+    cos, sin = cos[pos].to(model.emb.weight.dtype).unsqueeze(1), sin[pos].to(model.emb.weight.dtype).unsqueeze(1)
+    dt = model.emb.weight.dtype
+    m = torch.zeros(mask.shape, dtype=dt, device=idx.device).masked_fill(~mask, float('-inf')).unsqueeze(1)
+    x = model.emb(idx)
+    if cfg.abacus and digits is not None:
+        x = x + model.abacus(digits)
+    li = 0
+    for b in model.blocks:
+        for _ in range(cfg.n_repeat):
+            x = b(x, cos, sin, m, cache=caches[li]); li += 1
+    return F.linear(model.norm(x), model.emb.weight)
+
 
 def two_stream_mask(L: int, B: int, offset: int, device) -> torch.Tensor:
     """(2L, 2L) bool mask for the sequence [noisy(0..L-1) ; clean(0..L-1)].
@@ -410,6 +437,57 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
             break
         t0 = nxt
     return out, passes
+
+
+@torch.no_grad()
+def generate_multi(model, prompts: list, n_per_prompt: int = 8, max_new: int = 160, temperature: float = 0.8,
+                   min_p: float = 0.05, stop: tuple = (2, 9)):
+    """Sample n_per_prompt continuations for EVERY prompt in one left-padded batch (GRPO throughput).
+    Per-row positions start at 0 after the padding, and pads are never attended, so each row computes exactly what
+    generate_ar would on its own prompt (greedy-identical; tested). Returns, per prompt, [(tokens, mean_logprob)]."""
+    dev = next(model.parameters()).device
+    rows = [p for p in prompts for _ in range(n_per_prompt)]
+    N, L0 = len(rows), max(len(p) for p in rows)
+    pad = torch.tensor([L0 - len(p) for p in rows], device=dev)
+    x = torch.zeros(N, L0, dtype=torch.long, device=dev)
+    for i, p in enumerate(rows):
+        x[i, L0 - len(p):] = torch.tensor(p, device=dev)
+    done = torch.zeros(N, dtype=torch.bool, device=dev)
+    lp_sum = torch.zeros(N, device=dev); lens = torch.zeros(N, device=dev)
+    out = [[] for _ in range(N)]
+    stop_t = torch.tensor(stop, device=dev)
+    cfg = model.cfg
+    caches = [dict() for _ in range(cfg.n_layers)]
+    ar = torch.arange(L0, device=dev)
+    pos = (ar[None] - pad[:, None]).clamp(min=0)
+    real = ar[None] >= pad[:, None]
+    mask = (torch.ones(L0, L0, dtype=torch.bool, device=dev).tril()[None] & real[:, None, :]) | torch.eye(L0, dtype=torch.bool, device=dev)[None]
+    digits = model.digit_index(x) if cfg.abacus else None
+    logits = forward_cached(model, x, pos, mask, caches, digits)[:, -1].float()      # prefill once
+    for step in range(max_new):
+        logits[:, [0, 1, 3, 4, 5]] = -float('inf')
+        if temperature <= 0:
+            nxt = logits.argmax(-1)
+        else:
+            p_ = torch.softmax(logits / temperature, -1)
+            p_ = torch.where(p_ >= min_p * p_.max(-1, keepdim=True).values, p_, torch.zeros_like(p_))
+            nxt = torch.multinomial(p_ / p_.sum(-1, keepdim=True), 1).squeeze(1)
+        lp = torch.log_softmax(logits, -1).gather(1, nxt[:, None]).squeeze(1)
+        live = ~done
+        lp_sum += lp * live; lens += live.float()
+        for i in torch.nonzero(live).flatten().tolist():
+            out[i].append(int(nxt[i]))
+        done |= torch.isin(nxt, stop_t)
+        x = torch.cat([x, nxt[:, None]], 1)
+        if bool(done.all()) or x.shape[1] >= cfg.ctx or step == max_new - 1:
+            break
+        T = x.shape[1]
+        real = torch.cat([real, torch.ones(N, 1, dtype=torch.bool, device=dev)], 1)
+        pos_new = (T - 1 - pad)[:, None]
+        d_new = model.digit_index(x)[:, -1:] if cfg.abacus else None              # digit position needs the context
+        logits = forward_cached(model, nxt[:, None], pos_new, real[:, None, :], caches, d_new)[:, -1].float()
+    res = [(o, float(s / max(1.0, float(l)))) for o, s, l in zip(out, lp_sum, lens)]
+    return [res[i * n_per_prompt:(i + 1) * n_per_prompt] for i in range(len(prompts))]
 
 
 @torch.no_grad()

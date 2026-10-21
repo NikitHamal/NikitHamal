@@ -12,7 +12,7 @@ pass every audit check are written.
 import argparse, json, os, random, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import colmath, compose, frame, ledger, math_gen, math2, read, reason_gen, reason2, skills, understand, understand2  # noqa: E402
+import colmath, compose, correct, frame, vocab, ledger, math_gen, math2, read, reason_gen, reason2, reduce, skills, understand, understand2  # noqa: E402
 from audit import audit  # noqa: E402
 from augment import augment_example  # noqa: E402
 from explain import GOLD  # noqa: E402
@@ -20,6 +20,8 @@ from explain2 import GOLD2  # noqa: E402
 ALL_GOLD = GOLD + GOLD2
 
 LEAD = ['', '', '', 'ek prashna: ', 'malai help garnus: ', 'yo bujhina, ', 'kripaya solve garnus: ', 'sir, ']
+# reduce-and-rewrite multi-step arithmetic (reduce.py, Sky, issue #9): L2 0 -> 11/12 in a CPU micro-SFT.
+REDUCE_SHARE = float(os.environ.get('NIK_REDUCE_SHARE', '0.06'))
 FOLLOW = ['arko prashna: ', 'ani yo chai? ', 'dhanyabad! aba yo: ', 'ramro. arko: ']
 
 
@@ -45,17 +47,29 @@ def one(R):
 
 
 def _one(R):
-    x = R.random()
+    x = R.random() if not os.environ.get('NIK_NO_FRAME_ITER') else 1.0   # control runs: sft7 recipe without frame/iter
     if x < 0.05:            # held-out-style word frames with distractors (frame.py, Local-C, issue #9)
         d = frame.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if 0.12 <= x < 0.14:    # English <-> Nepali vocabulary, 150 hand-written pairs (vocab.py)
+        d = vocab.sample(R)
+        return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if 0.08 <= x < 0.12:    # memory with updates/corrections, latest value wins (correct.py; v4f regressed on this)
+        d = correct.sample(R)
+        return {'cat': d['cat'], 'gold': None, 'messages': d['messages']}
     if x < 0.08:            # iterate-a-rule sequences, one line per step (iter.py, Local-C): sequence/pattern were 0/11
         import iter as itgen
         d = itgen.make(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if 0.14 <= x < 0.26:    # grounded roles: bind each number to its role, carry the intermediate (roles.py, Local-C: word 0 -> 9/48)
+        import roles
+        d = roles.sample(R)
+        return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
     if R.random() < 0.04:   # 4% of rows ~= 12% of tokens (ledger rows are ~3x longer; Local-C, issue #9). P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
         d = ledger.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if REDUCE_SHARE and R.random() < REDUCE_SHARE:
+        return reduce.sample(R)
     k = R.random()
     if k < 0.10:     # one general column algorithm for + - x / at every size (1-6 digits)
         return to_example(colmath.sample(R), 'math', R)

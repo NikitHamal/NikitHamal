@@ -72,6 +72,17 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## Session context (update every session) - 2026-10-21 ~05:50 UTC
+- **Live:** v4f (shipped 2026-10-21 on the owner's call over the understanding gate: NikBench 72.2%, reason 39/48, word 6/48, traps 9/12, understanding 13/26). Rollback: nik/web/model/nik-0.1.v4c.bin.
+- **Boxes (molab only, never Kaggle):** box 1 runs LLM jobs via `nik/scripts/molab_run.sh`-style scripts, dashboard auto-detects runs
+  + scoreboard vs live; box 2 runs Nik-Decide (`nik/decide/`) and corpus_v2 (`/tmp/corpus_v2`, audit running). Boxes expire;
+  the owner provides new URL+token; local agents are watch-only.
+- **Shipped 2026-10-21:** `/decide` (https://nikit.is-a.dev/decide): Nik-Decide v3 in the browser (nik/web/decide.js, decide-v3.bin).
+- **In flight:** GRPO v2 runs v4j (box 2, lr 3e-6) and v4k (box 1, lr 1e-5) from live v4c; corpus_v2 audit pass 2 on the kept corpus (box 2).
+- **Next:** if corpus_v2 audit passes -> tokenise as the replay/pretrain base on the box, re-run the best recipe on it
+  (fixes the understanding drop); then Nik-Hard (Local-A) as the main gate; Nik-Decide yes/no fix; GRPO on verifiable tasks.
+- **Read `nik/docs/LEARNINGS.md`** before planning: findings, mistakes, numbers.
+
 ## Rule (2026-10-21): molab only, never Kaggle. If molab is down, tell the owner and wait for new keys.
 
 ## 2026-10-20 late night: v4c shipped (live on /chat), multi-agent team

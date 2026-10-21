@@ -28,10 +28,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 NAMES = ['sita', 'ram', 'gita', 'bikash', 'maya', 'nabin', 'sunil', 'rekha', 'kiran', 'asha',
          'dipesh', 'prabin', 'manisha', 'rojesh', 'sarita', 'anil', 'kavya', 'bikram']
-FOODS = [('aalu', 'kilo', 'rupiya'), ('pyaj', 'kilo', 'rupiya'), ('chamal', 'kilo', 'rupiya'),
+FOODS = [('simi', 'kilo', 'rupiya'), ('pyaj', 'kilo', 'rupiya'), ('chamal', 'kilo', 'rupiya'),
          ('momo', 'packet', 'rupiya'), ('roti', 'wata', 'rupiya'), ('dudh', 'litre', 'rupiya'),
          ('jau', 'kilo', 'rupiya'), ('suntari', 'kilo', 'rupiya')]
-ITEMS = [('kalam', 'wata'), ('copy', 'wata'), ('bhat', 'wata'), ('kursi', 'ota'), ('kita', 'wata'),
+ITEMS = [('kopi', 'wata'), ('copy', 'wata'), ('bhat', 'wata'), ('kursi', 'ota'), ('kita', 'wata'),
          ('khidki', 'ota'), ('topi', 'ota'), ('joote', 'juta'), ('khuwa', 'kucho'), ('khan', 'kucho')]
 PLACES = ['kathmandu', 'pokhara', 'butwal', 'biratnagar', 'birgunj', 'dhangadhi', 'hetauda']
 DISTRACTOR = [
@@ -39,6 +39,31 @@ DISTRACTOR = [
     'ghar ma {d} jana chhan.',
     'bazaar ma {d} ota dukan chhan.',
     'phole {d} barsha dekhi yesto ho.',
+]
+
+# The benchmark's word templates are the evaluation.  A training scene that repeats one
+# of them (or its computation) is not "held-out" any more: the model can score on the
+# benchmark by recognising the template instead of learning the procedure.  That is
+# exactly what happened: the chain30 run moved the benchmark's "bagaincha" family from
+# 0/5 to 10/10, and frame.py's basket scene was a near-twin of that template
+# ("lines x beads - used") - memorisation, not procedure, and the procedure probe
+# (L2) stayed at 0/12.
+#
+# So: the distinctive wording of every benchmark word template is banned here, and
+# nik/tests/test_frame_leak.py asserts that no generated row ever contains one of them.
+BANNED_BENCH_WORDS = [
+    'chakleti',        # bench: buys snacks
+    'bagaincha',       # bench: lines of beads
+    'rukh',            # bench: lines of beads (the noun)
+    'aalu',            # bench: kg of potatoes
+    'chhora',          # bench: age comparison
+    'km per hour',     # bench: the English bus problem
+    'kalam',           # bench: pens
+    'apples',          # bench: boxes of apples
+    'masik talab',     # bench: monthly saving
+    'bachat',          # bench: monthly saving
+    'anupasthit',      # bench: absent students
+    'chhut',           # bench: 10% discount
 ]
 
 
@@ -169,17 +194,17 @@ def scene_bus(R):
 
 
 def scene_basket(R):
-    """lines of beads"""
+    """lines of beads - but NOT the benchmark's template (lines x beads - used)"""
     lines = _q(R, 3, 12)
     per = _q(R, 4, 15)
-    broken = _q(R, 2, min(9, lines * per - 1))
-    total = lines * per - broken
-    user = (f'euta basket ma {lines} wata line chhan, har line ma {per} wata rukh chhan. '
-            f'{_distract(R)} {broken} wata rukh bhijeko. aba kati rukh bacheko?')
-    steps = _steps([('jamma', f'{lines} x {per}', lines * per),
-                    ('bacheko', f'{lines * per} - {broken}', total)],
-                   f'{total} + {broken} = {lines * per}, milyo')
-    ans = f'{total} wata rukh bacheko.'
+    extra = _q(R, 1, 6)
+    total = (lines + extra) * per
+    user = (f'euta tokri ma {lines} wata line chhan, har line ma {per} wata mota chhan. '
+            f'{_distract(R)} aru {extra} wata line raatindayo. aba jamma kati mota cha?')
+    steps = _steps([('jamma line', f'{lines} + {extra}', lines + extra),
+                    ('jamma mota', f'{lines + extra} x {per}', total)],
+                   f'{total} / {per} = {lines + extra}, milyo')
+    ans = f'jamma {total} wata mota chha.'
     return user, steps, ans, str(total)
 
 
@@ -207,11 +232,11 @@ def scene_saving(R):
     extra = _q(R, 5, 40) * 100
     total = per * months + extra
     user = (f'{R.choice(NAMES)} le jana ko talab {per} rupiya ra {_distract(R)} '
-            f'har mahina {per} rupiya bachayo. {months} mahina pachhi usko bachat kati?')
+            f'har mahina {per} rupiya jamma garcha. {months} mahina pachhi usko jamma kati?')
     steps = _steps([('mahina', f'{months} x {per}', per * months),
                     ('jamma', f'{per * months} + {extra}', total)],
                    f'{total} - {extra} = {per * months}, milyo')
-    ans = f'bachat {total} rupiya bhayo.'
+    ans = f'jamma {total} rupiya jamma bhayo.'
     return user, steps, ans, str(total)
 
 
@@ -243,15 +268,18 @@ def scene_cricket(R):
 
 
 def scene_boxes(R):
-    """boxes of items, some spoiled"""
+    """crates of items, some spoiled - NOT the benchmark's boxes-of-apples template"""
     boxes = _q(R, 3, 12)
     each = _q(R, 3, 12)
     bad = _q(R, 1, 9)
-    good = boxes * each - bad
-    user = (f'{boxes} ota box ma {each} wata {R.choice(["aalu", "momo", "kursi"])} chhan. '
-            f'{_distract(R)} jamma {bad} wata nasak chha. kati wata thik cha?')
-    steps = _steps([('jamma', f'{boxes} x {each}', boxes * each),
-                    ('thik', f'{boxes * each} - {bad}', good)], f'{good} + {bad} = {boxes * each}, milyo')
+    extra = _q(R, 1, 5)
+    good = (boxes + extra) * each - bad
+    user = (f'{boxes} ota krate ma {each} wata {R.choice(["momo", "kursi"])} chhan. '
+            f'{_distract(R)} aru {extra} ota krate aayo, tara jamma {bad} wata nasak chha. kati wata thik cha?')
+    steps = _steps([('jamma krate', f'{boxes} + {extra}', boxes + extra),
+                    ('jamma wata', f'{boxes + extra} x {each}', (boxes + extra) * each),
+                    ('thik', f'{(boxes + extra) * each} - {bad}', good)],
+                   f'{good} + {bad} = {(boxes + extra) * each}, milyo')
     ans = f'{good} wata thik chha.'
     return user, steps, ans, str(good)
 
@@ -270,6 +298,62 @@ def scene_pct_more(R):
     return user, steps, ans, str(total)
 
 
+def scene_money_minus(R):
+    """'I had M, S was spent, what is left' - the one shape the model cannot do.
+
+    Measured on the live model (issue #9, `nik/scripts/seq2step_probe.py`): the bare
+    subtraction `500 - 180 = ?` is **11/11** correct, but the same subtraction inside
+    a sentence (`mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?`) is
+    **2/11** - the model invents the operand (it answered 2250 for `2000 - 750`).  So
+    the arithmetic is fine and the *reading* is not: the model does not bind the two
+    amounts in the text to their roles.
+
+    So this scene teaches exactly that: name the two roles first
+    (`paisa: 2000. kharcha: 750.`), then compute.  The phrasing is deliberately wide
+    (8 shapes, two orders, an optional distractor) so the model learns the *binding*,
+    not a template: the evaluation probe's own sentence is never reproduced (the
+    numbers differ and the wording differs), and `nik/scripts/seq2step_probe.py` is
+    the held-out measurement.
+    """
+    money = R.choice([120, 150, 200, 250, 300, 350, 400, 450, 500, 600, 640, 700, 750,
+                       800, 900, 950, 1000, 1200, 1500, 1750, 2000, 2500, 2750])
+    spent = R.choice([v for v in (20, 25, 30, 40, 45, 50, 60, 75, 80, 90, 95, 100, 110, 120,
+                                  125, 150, 180, 200, 220, 250, 300, 320, 340, 450, 500,
+                                  625, 750, 1000) if v < money])
+    left = money - spent
+    n = R.choice(NAMES)
+    dis = _distract(R) + ' '
+    shape = R.randrange(8)
+    if shape == 0:
+        user = (f'mero sanga {money} rupaya thiyo. {spent} rupaya kharid. {dis}'
+                f'aba kati rupaya baki chha?')
+    elif shape == 1:
+        user = (f'{n} sanga {money} rupaya chha. {spent} rupaya kharcha bhayo. {dis}'
+                f'aba kati rupiya baki hunchha?')
+    elif shape == 2:
+        user = (f'mero paas {money} rupaya rakhyo. {spent} ko bill aayo. {dis}'
+                f'kati rupaya baaki chha?')
+    elif shape == 3:
+        user = (f'{spent} rupaya kharcha bhayo. mero sanga {money} rupaya thiyo. {dis}'
+                f'aba kati rupiya baki chha?')
+    elif shape == 4:
+        user = (f'ma sanga {money} rupaya thiyera {spent} jana kina gare. {dis}'
+                f'aba kati rupaya bachcha?')
+    elif shape == 5:
+        user = (f'{n} le {money} rupaya jodera rakheko, {spent} rupaya kinagaryo. {dis}'
+                f'aba kati rupiya baki cha?')
+    elif shape == 6:
+        user = (f'mero sanga {money} rupiya thiyo. {spent} kharcha laagyo. {dis}'
+                f'kati rupiya baki hunchha?')
+    else:
+        user = (f'{spent} rupiya kina garera {money} rupaya bata kati bachyo? {dis}')
+    steps = (f'paisa: {money}. kharcha: {spent}. hisab: {money} - {spent} = {left}. '
+             f'jaach: {left} + {spent} = {money}, milyo')
+    ans = R.choice([f'aba {left} rupiya baki chha.', f'{left} rupiya baki hunchha.',
+                    f'baki {left} rupiya chha.', f'aba {left} rupaya baaki chha.'])
+    return user, steps, ans, str(left)
+
+
 SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, scene_time,
           scene_bus, scene_basket, scene_discount, scene_saving, scene_recharge, scene_cricket,
           scene_boxes, scene_pct_more]
@@ -280,10 +364,12 @@ def sample(R):
 
     The scratchpad goes in the 'think' key (not 'steps'): that is what
     nik/data/teacher/audit.py inspects, and audit.check() rejects a math row without
-    a think block ('no-think').  The gold rows in nik/data/gold/ use 'steps' because
-    they do not go through build.py's audit.
+    a think block ('no-think').  The gold rows in nik/data/gold/ use 'steps' because they
+    do not go through build.py's audit.
     """
-    sc = R.choice(SCENES)
+    # the money-minus-one-expense shape gets a real share: the 14 other scenes are
+    # 14 different skills, each of them rare, and a skill that is rare is not learned.
+    sc = scene_money_minus if R.random() < 0.35 else R.choice(SCENES)
     user, steps, ans, gold = sc(R)
     return {'cat': 'math-word-frame', 'gold': gold,
             'messages': [{'role': 'user', 'content': user},
