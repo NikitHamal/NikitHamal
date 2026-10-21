@@ -57,6 +57,9 @@ def _drop_eval_prompts(rows, root):
     held = {norm(q) for q in la._prompts_understand(os.path.join(root, 'eval_understand.py')) + la._prompts_stress(os.path.join(root, 'stress.py'))}
     held -= {norm(q) for q in CONTEXT_Q}
     held |= {norm(q) for q in la._prompts_trap_check(os.path.join(root, 'trap_check.py'))} - {norm(q) for q in TRAP_CONTEXT_Q}
+    sys.path.insert(0, root)
+    import bench_rw   # NikBench-RW prompts are held out too
+    held |= {norm(v[-1] if isinstance(v, list) else v) for g in bench_rw.G for v in g[3]}   # scored turns only
     out = [r for r in rows if not any(m['role'] == 'user' and norm(m['content']) in held for m in json.loads(r)['messages'])]
     print(f'eval-prompt guard: dropped {len(rows) - len(out)} rows with an exact understand/stress/trap prompt', flush=True)
     return out

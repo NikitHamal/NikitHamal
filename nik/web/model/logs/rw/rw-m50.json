@@ -1,0 +1,1233 @@
+{
+ "summary": {
+  "groups": "1/45",
+  "items": "24/135",
+  "group_pct": 2.2,
+  "by_cat": {
+   "money": "0/7 groups, 3/21 items",
+   "time": "0/8 groups, 2/24 items",
+   "read": "0/8 groups, 2/24 items",
+   "unknown": "0/6 groups, 0/18 items",
+   "format": "0/6 groups, 1/18 items",
+   "memory": "0/6 groups, 8/18 items",
+   "noisy": "1/4 groups, 8/12 items"
+  }
+ },
+ "rows": [
+  {
+   "group": 0,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "ma sanga 1000 rupiya thiyo. 85 rupiya ko darle 3 ota kapi kine. aba kati rupiya baki chha?",
+   "reply": "aba 915 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "group": 0,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "1000 rupiya lagera pasal gaye, 85 rupiya parne 3 ota kapi kine bhane kati paisa firta aauchha?",
+   "reply": "aba 720 rupiya bachchha.",
+   "ok": false
+  },
+  {
+   "group": 0,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "bro 3 ota copy, euta ko 85, maile 1000 diye, change kati paunchhu",
+   "reply": "425 wata copy baki chhan.",
+   "ok": false
+  },
+  {
+   "group": 1,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "chini 110 rupiya kilo chha ra tel 240 rupiya litre. 2 kilo chini ra 1 litre tel kinda jamma kati hunchha?",
+   "reply": "608 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "group": 1,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "2 kg chini (110/kg) ra 1 litre tel (240) ko jamma bill kati?",
+   "reply": "230 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "group": 1,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "pasal ma 2 kilo chini ani 1 litre tel kine, chini kilo ko 110 tel 240 bhaye kati tirnu parchha",
+   "reply": "20 rupiya tiru paryo.",
+   "ok": false
+  },
+  {
+   "group": 2,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "hami 4 jana sathi khana khana gayau, bill 1840 rupiya aayo. barabar bandda ek jana le kati tirne?",
+   "reply": "ek jana le 4 wata khana tirne.",
+   "ok": false
+  },
+  {
+   "group": 2,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "1840 ko bill 4 jana ma barabar baadda euta lai kati parchha?",
+   "reply": "1664 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "group": 2,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "khana ko bill 1840 bhayo, 4 jana chau, per head kati?",
+   "reply": "16 ho.",
+   "ok": false
+  },
+  {
+   "group": 3,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "1200 rupiya ko jacket ma 25 pratishat chhut chha. aba kati ma paincha?",
+   "reply": "900 rupiya tiru paryo.",
+   "ok": true
+  },
+  {
+   "group": 3,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "jacket ko mol 1200, 25% discount pachhi kati tirne?",
+   "reply": "discount pachhi 900 rupiya tirnu parchha.",
+   "ok": true
+  },
+  {
+   "group": 3,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "25 percent off on 1200 rupees jacket, final price kati hunchha?",
+   "reply": "25l price 280, 18000.",
+   "ok": false
+  },
+  {
+   "group": 4,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "meri didi ko talab mahina ko 18000 ho. usle 40 pratishat bachaunchhe. mahina ma kati bachaunchhe?",
+   "reply": "mahina: 7200 rupiya bachada.",
+   "ok": true
+  },
+  {
+   "group": 4,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "18000 talab ko 40% bachat garda kati bachchha?",
+   "reply": "18000 / 100% = 720.",
+   "ok": false
+  },
+  {
+   "group": 4,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "monthly salary 18000, 40 percent save garne ho bhane saving kati",
+   "reply": "18000 savv 8000, 8000.",
+   "ok": false
+  },
+  {
+   "group": 5,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "office jana bus bhada 45 rupiya ra farkana pani 45 rupiya lagchha. 5 din ma jamma kati kharcha hunchha?",
+   "reply": "jamma 2250 rupiya hunchha.",
+   "ok": false
+  },
+  {
+   "group": 5,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "jaane 45 farkine 45, hapta ma 5 din office gaye bhane bus ma kati kharcha?",
+   "reply": "45\njaach: 225 kharcha 5 mahina.",
+   "ok": false
+  },
+  {
+   "group": 5,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "daily bus fare 45 each way, 5 days ko total kati",
+   "reply": "5 days ko = 40 each.",
+   "ok": false
+  },
+  {
+   "group": 6,
+   "cat": "money",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "500 rupiya diyera 160 rupiya ko 2 plate momo kine. kati firta aauchha?",
+   "reply": "aba 8800 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "group": 6,
+   "cat": "money",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "momo plate ko 160, 2 plate khayo, 500 ko note diyo, change kati?",
+   "reply": "160 rupiya note bhayo, indor (4 x 200 = 800.",
+   "ok": false
+  },
+  {
+   "group": 6,
+   "cat": "money",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "2 plate momo @160, paid 500, kati baki firta",
+   "reply": "aru number 0 hunchha.",
+   "ok": false
+  },
+  {
+   "group": 7,
+   "cat": "time",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "bihana 7:30 ma ghar bata niskiye ra pugna 2 ghanta 45 minute lagyo. kati baje pugen?",
+   "reply": "35:25 ma pugnu bhayo.",
+   "ok": false
+  },
+  {
+   "group": 7,
+   "cat": "time",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "7:30 baje hideko, 2 ghanta 45 minute ko yatra, pugne samaya kati?",
+   "reply": "3000 minet  chhideko, 8 ghanta 4 ghanta ho.",
+   "ok": false
+  },
+  {
+   "group": 7,
+   "cat": "time",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "left at 7:30 am, journey 2 hr 45 min, kati baje pugchhu",
+   "reply": "30 din 3 ghanta pugchhu.",
+   "ok": false
+  },
+  {
+   "group": 8,
+   "cat": "time",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "3.5 kilometer ma kati meter hunchha?",
+   "reply": "3.5 kilometer ma 3000 meter hunchha.",
+   "ok": false
+  },
+  {
+   "group": 8,
+   "cat": "time",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "3.5 km lai meter ma badal",
+   "reply": "3.5 km ho.",
+   "ok": false
+  },
+  {
+   "group": 8,
+   "cat": "time",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "saadhe tin kilometer = kati meter",
+   "reply": "ek kilometer ma 1000 meter hunchha.",
+   "ok": false
+  },
+  {
+   "group": 9,
+   "cat": "time",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "aaja mangalbar ho bhane 10 din pachhi kun bar parchha?",
+   "reply": "10 din pachhi bihibar parchha.",
+   "ok": false
+  },
+  {
+   "group": 9,
+   "cat": "time",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "mangalbar dekhi 10 din pachhi kun din hunchha?",
+   "reply": "10 din pachhi man parchha.",
+   "ok": false
+  },
+  {
+   "group": 9,
+   "cat": "time",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "today tuesday, 10 din pachhi kun bar",
+   "reply": "10 din pachhi shukrabar hunchha.",
+   "ok": false
+  },
+  {
+   "group": 10,
+   "cat": "time",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "1 ghanta 20 minute ma jamma kati minute hunchha?",
+   "reply": "5 minute ma 40 minute hunchha.",
+   "ok": false
+  },
+  {
+   "group": 10,
+   "cat": "time",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "ek ghanta bees minute lai minute ma bhana",
+   "reply": "ek ghanta ma 60 minute hunchha.",
+   "ok": false
+  },
+  {
+   "group": 10,
+   "cat": "time",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "1 hr 20 min = kati min",
+   "reply": "ek hr 20 minute hunchha.",
+   "ok": false
+  },
+  {
+   "group": 11,
+   "cat": "time",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "2500 gram kati kilo hunchha?",
+   "reply": "2500 gram = 10.",
+   "ok": false
+  },
+  {
+   "group": 11,
+   "cat": "time",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "2500 g lai kg ma lekha",
+   "reply": "2500 x 2 = 5000.",
+   "ok": false
+  },
+  {
+   "group": 11,
+   "cat": "time",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "2500 gram = ? kg",
+   "reply": "ek litram ma 25 taram hunchha.",
+   "ok": false
+  },
+  {
+   "group": 12,
+   "cat": "time",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "ma hapta ma 3 din gym janchhu. 4 hapta ma kati din gym jaanchhu?",
+   "reply": "4 hapta ma 12 din hunchha.",
+   "ok": true
+  },
+  {
+   "group": 12,
+   "cat": "time",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "haptako 3 din gym, 4 hapta ma jamma kati din?",
+   "reply": "4 hapta ma jamma 12 din hunchha.",
+   "ok": true
+  },
+  {
+   "group": 12,
+   "cat": "time",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "3 days a week gym, 4 weeks ma total kati din",
+   "reply": "4 days a week gym.",
+   "ok": false
+  },
+  {
+   "group": 13,
+   "cat": "time",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "film 2:15 baje suru bhayo ra 1 ghanta 50 minute lamo chha. kati baje sakinchha?",
+   "reply": "2 ghanta 50 minute hunchha.",
+   "ok": false
+  },
+  {
+   "group": 13,
+   "cat": "time",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "2:15 ma suru bhayeko 1 ghanta 50 minute ko film kati baje sakinchha?",
+   "reply": "2:5 ghanta 50, 1 ghanta 5 ghanta hunchha, tyasaile 2 ghanta 30 minet lagchha.",
+   "ok": false
+  },
+  {
+   "group": 13,
+   "cat": "time",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "movie starts 2:15, length 1h 50m, ends at?",
+   "reply": "25.",
+   "ok": false
+  },
+  {
+   "group": 14,
+   "cat": "time",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "ma 2008 ma janmeko. 2026 ma mero umer kati hunchha?",
+   "reply": "2008 ma tapai 12 barsha ko hunuhunchha (janmadin aaisakeko bhaye).",
+   "ok": false
+  },
+  {
+   "group": 14,
+   "cat": "time",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "2008 ma janmeko manchhe 2026 ma kati barsha ko hunchha?",
+   "reply": "2008 ma tapai 180 barsha ko hunuhunchha (janmadin aaisakeko bhaye).",
+   "ok": false
+  },
+  {
+   "group": 14,
+   "cat": "time",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "born 2008, age in 2026 kati",
+   "reply": "2008 in 40.",
+   "ok": false
+  },
+  {
+   "group": 15,
+   "cat": "read",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "\"didi, bholi ko meeting 3 baje bata sarera 4 baje bhayo. kotha 12 mai ho. - ramesh\" meeting kati baje ho?",
+   "reply": "ramesh\" - 3 baje ho.",
+   "ok": false
+  },
+  {
+   "group": 15,
+   "cat": "read",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "\"bholi ko meeting 3 baje bata sarera 4 baje bhayo, kotha 12.\" aba meeting kati baje?",
+   "reply": "3 baje = 7 baje baje baje.",
+   "ok": false
+  },
+  {
+   "group": 15,
+   "cat": "read",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "message: \"meeting 3 baje thiyo, aba 4 baje sareko chha, room 12.\" naya samaya kati baje?",
+   "reply": "naya samaya 18 baje ho.",
+   "ok": false
+  },
+  {
+   "group": 16,
+   "cat": "read",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "suchana: \"sukrabar dhara ma pani aaudaina. sanibar bihana 6 baje dekhi pani aauchha.\" pani kahile aauchha?",
+   "reply": "",
+   "ok": false
+  },
+  {
+   "group": 16,
+   "cat": "read",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "\"sukrabar pani aaudaina, sanibar bihana 6 baje dekhi aauchha.\" kun bar pani aauchha?",
+   "reply": "sukrabar pani hudaina.",
+   "ok": false
+  },
+  {
+   "group": 16,
+   "cat": "read",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "notice: sukrabar no water, sanibar 6 baje dekhi pani. pani kun din aaune?",
+   "reply": "neutiyo pani water garchha.",
+   "ok": false
+  },
+  {
+   "group": 17,
+   "cat": "read",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "\"sita ka 2 bhai ra 1 bahini chhan.\" sita ka jamma kati bhai bahini chhan?",
+   "reply": "1 bahini chhan, 3 bhai bahini chhan.",
+   "ok": true
+  },
+  {
+   "group": 17,
+   "cat": "read",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "\"sita ko 2 bhai ra 1 bahini chhan.\" sita ka bhai bahini jamma kati jana?",
+   "reply": "15 jana! 2 jana daju bhai didi bahini chhan.",
+   "ok": false
+  },
+  {
+   "group": 17,
+   "cat": "read",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "sita has 2 brothers 1 sister. total siblings kati?",
+   "reply": "sita has 2 brothers 1 sister.",
+   "ok": false
+  },
+  {
+   "group": 18,
+   "cat": "read",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "\"prakash le 3 ota syau kinyo, 1 ota sathi lai diyo ra 2 ota aafai khayo.\" prakash sanga aba kati syau chha?",
+   "reply": "1 wata sathi.",
+   "ok": false
+  },
+  {
+   "group": 18,
+   "cat": "read",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "\"prakash: 3 syau kinyo, 1 diyo, 2 khayo.\" aba usko ma kati syau baki?",
+   "reply": "aba 180 wata syau baki chha.",
+   "ok": false
+  },
+  {
+   "group": 18,
+   "cat": "read",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "prakash bought 3 apples, gave 1, ate 2. kati baki?",
+   "reply": "Sir 16 apples.",
+   "ok": false
+  },
+  {
+   "group": 19,
+   "cat": "read",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "\"kirtipur jaane bus 6:40 ra 7:10 ma chhutchha.\" hari 6:50 ma bus stop pugyo. hari kun bus chadhna sakchha?",
+   "reply": "hari 7:50 ma bus stop pugchha.",
+   "ok": false
+  },
+  {
+   "group": 19,
+   "cat": "read",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "\"bus 6:40 ra 7:10 ma chhutchha.\" 6:50 ma pugne hari le kati baje ko bus paunchha?",
+   "reply": "122 baje hunchha.",
+   "ok": false
+  },
+  {
+   "group": 19,
+   "cat": "read",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "buses at 6:40 and 7:10. hari arrived 6:50. which bus can he take?",
+   "reply": "jamma 11.",
+   "ok": false
+  },
+  {
+   "group": 20,
+   "cat": "read",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "\"gita rita bhanda aglo chhe. rita mina bhanda aglo chhe.\" sabai bhanda hocho ko ho?",
+   "reply": "jawaf mina ho.",
+   "ok": true
+  },
+  {
+   "group": 20,
+   "cat": "read",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "\"gita > rita uchai ma, rita > mina.\" sabai bhanda hocho ko?",
+   "reply": "tapai ko naam gita ho.",
+   "ok": false
+  },
+  {
+   "group": 20,
+   "cat": "read",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "gita taller than rita, rita taller than mina. shortest ko?",
+   "reply": "sahi: \"gita taller than rita\".",
+   "ok": false
+  },
+  {
+   "group": 21,
+   "cat": "read",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "\"pasal: chamal 90 rupiya kilo, daal 160 rupiya kilo.\" 2 kilo daal kati parchha?",
+   "reply": "aba 990 rupiya jamma hunchha.",
+   "ok": false
+  },
+  {
+   "group": 21,
+   "cat": "read",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "\"chamal 90/kg, daal 160/kg.\" 2 kg daal ko mol kati?",
+   "reply": "daalta, 160.",
+   "ok": false
+  },
+  {
+   "group": 21,
+   "cat": "read",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "rate list: rice 90, daal 160 per kg. 2 kg daal kati",
+   "reply": "2 kg daal kam garne.",
+   "ok": false
+  },
+  {
+   "group": 22,
+   "cat": "read",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "\"bholi bida chha tara parsi school khulchha.\" parsi school khulchha ki khuldaina?",
+   "reply": "parsi ko khulchha ki khuldaina. khulchha, khulda ko euta juga chha. yo ritlo ta ho, tyasaile yesto lagchha ki khuldaina, bus ma ali bistar ma bhayera. kun chapter ko khulchha, thaha chhaina. bah! aba yahi yaad rakhe na!",
+   "ok": false
+  },
+  {
+   "group": 22,
+   "cat": "read",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "\"bholi bida, parsi school khulchha.\" parsi ko din school khulne ho?",
+   "reply": "hunchha.",
+   "ok": false
+  },
+  {
+   "group": 22,
+   "cat": "read",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "tomorrow holiday, day after school opens. parsi school open huncha?",
+   "reply": "thik chha, yaad rakhe.",
+   "ok": false
+  },
+  {
+   "group": 23,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 0,
+   "prompt": "\"anil le euta kitab kinyo.\" kitab kati rupiya ko thiyo?",
+   "reply": "kil sanga 1 wata kitab chha.",
+   "ok": false
+  },
+  {
+   "group": 23,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 1,
+   "prompt": "\"anil le kitab kinyo.\" tyo kitab ko mol kati?",
+   "reply": "anil le kitab ko mol 11.",
+   "ok": false
+  },
+  {
+   "group": 23,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 2,
+   "prompt": "anil bought a book. price kati thiyo?",
+   "reply": "\"usle dagure\"",
+   "ok": false
+  },
+  {
+   "group": 24,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 0,
+   "prompt": "\"mero bhai school janchha.\" mero bhai kati kaksha ma padhchha?",
+   "reply": "tapaiki bahini ma padhnuhunchha.",
+   "ok": false
+  },
+  {
+   "group": 24,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 1,
+   "prompt": "\"bhai school janchha.\" u kun class ma chha?",
+   "reply": "\"bhai school janchha\"",
+   "ok": false
+  },
+  {
+   "group": 24,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 2,
+   "prompt": "my brother goes to school. which grade?",
+   "reply": "sahi: \"my brother goes to school.\"",
+   "ok": false
+  },
+  {
+   "group": 25,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 0,
+   "prompt": "\"hijo kathmandu ma pani paryo.\" kati millimeter pani paryo?",
+   "reply": "0 meter tal paisa baki chha.",
+   "ok": false
+  },
+  {
+   "group": 25,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 1,
+   "prompt": "\"hijo pani paryo.\" kati mm pani paryo?",
+   "reply": "",
+   "ok": false
+  },
+  {
+   "group": 25,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 2,
+   "prompt": "it rained yesterday in ktm. how many mm?",
+   "reply": "uttar: 3.",
+   "ok": false
+  },
+  {
+   "group": 26,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 0,
+   "prompt": "\"rina le bazar bata tarkari lyai.\" rina le kati kilo tarkari lyai?",
+   "reply": "rina le bazaar bata tarkari lyai.",
+   "ok": false
+  },
+  {
+   "group": 26,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 1,
+   "prompt": "\"rina tarkari lyai.\" kati kilo?",
+   "reply": "ek kilo ma 1000 rupiya hunchha.",
+   "ok": false
+  },
+  {
+   "group": 26,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 2,
+   "prompt": "rina brought vegetables. how many kg?",
+   "reply": "thau anusar ek bata suru garchhu.",
+   "ok": false
+  },
+  {
+   "group": 27,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 0,
+   "prompt": "\"bus ma dherai manchhe thiye.\" bus ma kati jana thiye?",
+   "reply": "bus le 200 jana lai bhannubhayo, tara 'timi dherai hunuhunchha.",
+   "ok": false
+  },
+  {
+   "group": 27,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 1,
+   "prompt": "\"bus ma bheed thiyo.\" exact kati jana?",
+   "reply": "ek jana le jamma 24 jana hunuhunchha.",
+   "ok": false
+  },
+  {
+   "group": 27,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 2,
+   "prompt": "bus was crowded. exactly how many people?",
+   "reply": "\"head\" ko extra \"heads\" ho.",
+   "ok": false
+  },
+  {
+   "group": 28,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 0,
+   "prompt": "\"mero sathi le naya phone kinyo.\" phone ko mol kati ho?",
+   "reply": "10 le",
+   "ok": false
+  },
+  {
+   "group": 28,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 1,
+   "prompt": "\"sathi le phone kinyo.\" kati ma kinyo?",
+   "reply": "sathi le phone kinyo.",
+   "ok": false
+  },
+  {
+   "group": 28,
+   "cat": "unknown",
+   "kind": "unknown",
+   "variant": 2,
+   "prompt": "friend bought a new phone. kati rupiya?",
+   "reply": "19800 rupiya jamma.",
+   "ok": false
+  },
+  {
+   "group": 29,
+   "cat": "format",
+   "kind": "fmt:only_number",
+   "variant": 0,
+   "prompt": "7 x 8 kati? number matra lekha.",
+   "reply": "7 x 8 = 16.",
+   "ok": false
+  },
+  {
+   "group": 29,
+   "cat": "format",
+   "kind": "fmt:only_number",
+   "variant": 1,
+   "prompt": "7 guna 8 ko jawaf number matra deu.",
+   "reply": "7 x 8 = 16.",
+   "ok": false
+  },
+  {
+   "group": 29,
+   "cat": "format",
+   "kind": "fmt:only_number",
+   "variant": 2,
+   "prompt": "only the number: 7*8",
+   "reply": "8 ho.",
+   "ok": false
+  },
+  {
+   "group": 30,
+   "cat": "format",
+   "kind": "fmt:only_number",
+   "variant": 0,
+   "prompt": "12 + 15 ko jawaf matra deu, aru kehi nalekha.",
+   "reply": "10.",
+   "ok": false
+  },
+  {
+   "group": 30,
+   "cat": "format",
+   "kind": "fmt:only_number",
+   "variant": 1,
+   "prompt": "12 ra 15 jod, number matra.",
+   "reply": "",
+   "ok": false
+  },
+  {
+   "group": 30,
+   "cat": "format",
+   "kind": "fmt:only_number",
+   "variant": 2,
+   "prompt": "answer with just the number: 12+15",
+   "reply": "180 = 180.",
+   "ok": false
+  },
+  {
+   "group": 31,
+   "cat": "format",
+   "kind": "fmt:words<=2",
+   "variant": 0,
+   "prompt": "nepal ko rajdhani ek shabda ma bhana.",
+   "reply": "nepal ko rajdhani kathmandu ho.",
+   "ok": false
+  },
+  {
+   "group": 31,
+   "cat": "format",
+   "kind": "fmt:words<=2",
+   "variant": 1,
+   "prompt": "ek shabda ma: nepal ko rajdhani?",
+   "reply": "kathmandu.",
+   "ok": true
+  },
+  {
+   "group": 31,
+   "cat": "format",
+   "kind": "fmt:words<=2",
+   "variant": 2,
+   "prompt": "one word answer: capital of nepal",
+   "reply": "The capital of Nepal is Kathmandu.",
+   "ok": false
+  },
+  {
+   "group": 32,
+   "cat": "format",
+   "kind": "fmt:list3",
+   "variant": 0,
+   "prompt": "3 ota phal ko naam comma le chhutyayera lekha.",
+   "reply": "thik chha, yaad rakhe.",
+   "ok": false
+  },
+  {
+   "group": 32,
+   "cat": "format",
+   "kind": "fmt:list3",
+   "variant": 1,
+   "prompt": "tin ota phal ko naam, comma lagayera.",
+   "reply": "bujhe!",
+   "ok": false
+  },
+  {
+   "group": 32,
+   "cat": "format",
+   "kind": "fmt:list3",
+   "variant": 2,
+   "prompt": "list 3 fruits separated by commas",
+   "reply": "Cresso 3 fruits sea, 3 crock they,\nTirice and 3 fruit, thatched writes smoo uttar bo!",
+   "ok": false
+  },
+  {
+   "group": 33,
+   "cat": "format",
+   "kind": "fmt:words<=3",
+   "variant": 0,
+   "prompt": "\"namaste\" lai english ma translate gara, ek shabda matra.",
+   "reply": "\"kartaa: \"dali\".",
+   "ok": false
+  },
+  {
+   "group": 33,
+   "cat": "format",
+   "kind": "fmt:words<=3",
+   "variant": 1,
+   "prompt": "namaste ko english ek shabda ma?",
+   "reply": "\"english ma \"live\" bhaninchha.",
+   "ok": false
+  },
+  {
+   "group": 33,
+   "cat": "format",
+   "kind": "fmt:words<=3",
+   "variant": 2,
+   "prompt": "translate namaste to english, one word only",
+   "reply": "The cagular Nepal is Iadard. Iwe you live el. I writes old many sends the capital and more Nepal Kathmandu.",
+   "ok": false
+  },
+  {
+   "group": 34,
+   "cat": "format",
+   "kind": "fmt:words<=4",
+   "variant": 0,
+   "prompt": "ho ki haina matra bhana: 7 bhanda 10 sano ho?",
+   "reply": "aru number 84 hunchha.",
+   "ok": false
+  },
+  {
+   "group": 34,
+   "cat": "format",
+   "kind": "fmt:words<=4",
+   "variant": 1,
+   "prompt": "10, 7 bhanda sano ho? ho/haina ma jawaf deu.",
+   "reply": "haina, 7 sano sano step pahad pani basdaina, rato nai tara arko. sabai bhanda sano sankhya lechhu 2, tyo chai chai 7 ho, 4 bajhango kahani. arko chai, tapai ko bhauj ma sutne manchhe ho.",
+   "ok": false
+  },
+  {
+   "group": 34,
+   "cat": "format",
+   "kind": "fmt:words<=4",
+   "variant": 2,
+   "prompt": "yes/no only: is 10 smaller than 7?",
+   "reply": "10 is 1 is 1.",
+   "ok": false
+  },
+  {
+   "group": 35,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "mero bhai ko naam k thiyo?",
+   "reply": "tapai ko bhai ko naam suman ho.",
+   "ok": true
+  },
+  {
+   "group": 35,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "mero bhai ko naam yaad chha?",
+   "reply": "tapai ko bhai ko naam suman ho.",
+   "ok": true
+  },
+  {
+   "group": 35,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "bhai ko naam bhana ta",
+   "reply": "tapai ko naam bhai ho.",
+   "ok": false
+  },
+  {
+   "group": 36,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "ma kaha kaam garchhu?",
+   "reply": "tapai pokhara ma kaam hunuhunchha.",
+   "ok": true
+  },
+  {
+   "group": 36,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "mero office kun sahar ma chha?",
+   "reply": "sarov sarne ko rajadhani ho.",
+   "ok": false
+  },
+  {
+   "group": 36,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "ma kun sahar ma kaam garchhu?",
+   "reply": "tapai aile pokhara ma basnuhunchha.",
+   "ok": true
+  },
+  {
+   "group": 37,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "mero meeting kati baje ho?",
+   "reply": "tapai ko meat 2 baje nai uthne ho.",
+   "ok": false
+  },
+  {
+   "group": 37,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "aba meeting kati baje?",
+   "reply": "sake meeting 2 baje baje ho.",
+   "ok": false
+  },
+  {
+   "group": 37,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "meeting time kati baje?",
+   "reply": "uttar 3.",
+   "ok": true
+  },
+  {
+   "group": 38,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "aba kati baki chha?",
+   "reply": "250 rupiya baki hunchha.",
+   "ok": false
+  },
+  {
+   "group": 38,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "kati baki?",
+   "reply": "eko recharge: 6000 - 700 = 520.",
+   "ok": false
+  },
+  {
+   "group": 38,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "how much left?",
+   "reply": "250 ko 50% = 25.",
+   "ok": false
+  },
+  {
+   "group": 39,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "27 + 36 kati?",
+   "reply": "18 x 7 = 53.",
+   "ok": false
+  },
+  {
+   "group": 39,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "27 ra 36 jod kati?",
+   "reply": "47 x 3 = 63.",
+   "ok": true
+  },
+  {
+   "group": 39,
+   "cat": "memory",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "aba 27 + 36?",
+   "reply": "uttar: 63.",
+   "ok": true
+  },
+  {
+   "group": 40,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 0,
+   "prompt": "mero kukur ko naam k ho?",
+   "reply": "tapai ko kukur ko naam bhunte ho.",
+   "ok": true
+  },
+  {
+   "group": 40,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 1,
+   "prompt": "kukur ko naam k raichha hamro?",
+   "reply": "tapai ko kukur ko naam kukur ho.",
+   "ok": false
+  },
+  {
+   "group": 40,
+   "cat": "memory",
+   "kind": "text",
+   "variant": 2,
+   "prompt": "what is my dog called?",
+   "reply": "Nikit is a beautiful Hiti and extra.",
+   "ok": false
+  },
+  {
+   "group": 41,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "25 x 4 kati hunxa?",
+   "reply": "25 x 4 = 100 hunchha.",
+   "ok": true
+  },
+  {
+   "group": 41,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "25 gunaa 4 kati",
+   "reply": "25 x 4 = 100 hunchha.",
+   "ok": true
+  },
+  {
+   "group": 41,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "plz 25 times 4",
+   "reply": "25 times 4.",
+   "ok": false
+  },
+  {
+   "group": 42,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "1500 ko 10 percent kati",
+   "reply": "1500 ko 10% = 150.",
+   "ok": true
+  },
+  {
+   "group": 42,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "1500 ko 10%",
+   "reply": "1500 ko 10% = 150.",
+   "ok": true
+  },
+  {
+   "group": 42,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "10% of 1500 kati hola",
+   "reply": "1500 ko 10% = 150.",
+   "ok": true
+  },
+  {
+   "group": 43,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "100 baata 37 ghatau",
+   "reply": "100 baat 18.",
+   "ok": false
+  },
+  {
+   "group": 43,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "100-37 = ?",
+   "reply": "100 - 37 = 63.",
+   "ok": true
+  },
+  {
+   "group": 43,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "100 minus 37 kati hola bro",
+   "reply": "100 minute = 63 hunchha.",
+   "ok": true
+  },
+  {
+   "group": 44,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 0,
+   "prompt": "ek dozen ma kati ota hunchha",
+   "reply": "ek dozen 12 ota.",
+   "ok": true
+  },
+  {
+   "group": 44,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 1,
+   "prompt": "1 darjan = ? ota",
+   "reply": "ek darjan ma 120 wata hunchha.",
+   "ok": false
+  },
+  {
+   "group": 44,
+   "cat": "noisy",
+   "kind": "num",
+   "variant": 2,
+   "prompt": "dozen bhaneko kati ho",
+   "reply": "majja ko kura! majja ko kura yo mol ma yaad rakhchhu. malai ali bistar ma bhannus na.",
+   "ok": false
+  }
+ ]
+}
