@@ -208,6 +208,35 @@ budget and are **not trained yet** (the owner: the family first, then the size):
 Both are int8, so the browser needs no new kernels; the cost is the FLOPs (1.34-1.38x
 the flagship, i.e. roughly 128 tok/s instead of 176 in the browser).
 
+## The family table: the forgetting tax is what you do not add
+
+Five arms, one base (the live v4c), one stage each, lr 2e-4, the same seed, all paired
+on the same 288 nested items (`bench.py --nested-items`):
+
+| arm | mix | NikBench | word | reason | understanding | stress | traps | role probe | L2 |
+|---|---|---|---|---|---|---|---|---|---|
+| live v4c | - | 65.6% | 0/48 | 30/48 | 19/26 | 64 | 5/12 | 7/26 | 0/12 |
+| **control** (no new shape) | sft13 | 69.8% | 2/48 | 35/48 | **16/26** | 65 | 8/12 | - | - |
+| + the money scene | sft14 | 68.4% | 2/48 | 34/48 | **20/26** | 63 | 8/12 | 5/26 | 1/12 |
+| **+ the role family (12%)** | sft15 | **71.9%** | **9/48** | **37/48** | **20/26** | **66** | **9/12** | **12/26** | **1/12** |
+| + the role family (20%) | sft17 | 72.2% | 8/48 | 37/48 | 19/26 | 64 | 8/12 | 7/26 | 0/12 |
+
+Three things this table says:
+
+1. **The control arm is the important one.** The same recipe *without* a new data
+   shape still loses understanding (19/26 -> 16/26).  So the "forgetting tax" is not
+   fine-tuning, not the learning rate and not the stage count: **it is what the data
+   does not contain.**  Every candidate in this project (v4d 16, v4e 14, v4f 13, v4g
+   15, la-b3 15) is the same forgetting, measured at different prices.
+2. **Each named shape pays the tax back and then some.**  The money scene: +4
+   understanding, the held-out money probe 2/11 -> 10/11.  The role family: +3.5pp of
+   bench, the held-out word family 0/48 -> 9/48, stress +2, traps +1, the role probe
+   7/26 -> 12/26.
+3. **The dose has a peak, and it is not "more".**  At 20% of the rows the role family
+   is *worse* than at 12% on every axis (understanding 19 vs 20, stress 64 vs 66,
+   traps 8 vs 9, the role probe 7/26 vs 12/26) for +0.3pp of bench.  A skill that is
+   rare is not learned; a skill that is common starts to crowd out the others.
+
 ## What follows
 
 1. **More story frames cannot fix this** - every word problem is at least two steps,
