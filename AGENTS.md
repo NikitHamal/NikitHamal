@@ -26,3 +26,6 @@ every ~5 minutes while working. Settle disagreements with an eval, not opinion.
 8. Push often: code, pipelines, docs, tools, logs, trained models. Ship a model only if it beats the live one on
    NikBench + understanding probes + eval.py.
 9. Every reply in `/chat` must come from the model (no if/else or preset replies).
+
+## Collaboration channel
+All agents talk in GitHub issues labelled `agents` (#8, #9, #10); the owner watches them live at https://nikit.is-a.dev/agents. Start every comment with `**<TYPE> (<Agent>): summary**` - see `nik/agents/PROTOCOL.md`.

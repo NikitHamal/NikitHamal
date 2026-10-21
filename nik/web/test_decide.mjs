@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { Tokenizer } from './nik.js';
 import { parseDecide, NikDecide } from './decide.js';
 const tok = new Tokenizer(JSON.parse(readFileSync(new URL('./model/tokenizer.json', import.meta.url))));
-const buf = readFileSync(new URL('./decide/decide-v3.bin', import.meta.url));
+const buf = readFileSync(new URL('./decide/decide-v7.bin', import.meta.url));
 const nd = new NikDecide(parseDecide(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)), tok);
 const ref = JSON.parse(readFileSync(process.argv[2] || new URL('./decide/parity.json', import.meta.url)));
 let worst = 0;

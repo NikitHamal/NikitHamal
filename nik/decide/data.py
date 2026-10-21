@@ -3,7 +3,9 @@ audited teacher generators (no hand-labelled or external data). Row: {task, cont
 import random, re, sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'teacher'))
-import chat, colmath, compose, lexicon as L, names, read, skills  # noqa: E402
+import chat, colmath, compose, correct, frame, lexicon as L, names, read, skills  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import reading_wide  # noqa: E402
 
 YNU = ['ho', 'haina', 'thaha chhaina']
 INTENTS = ['kura (chat)', 'hisab (math)', 'padhera jawaf (reading)', 'nik/nikit barema (persona)', 'anuvad/grammar (language)', 'lekhai (writing)']
@@ -130,7 +132,67 @@ def step(R):
     return dict(task='math-step', context=e['q'], question='yo prashna ko sahi hisab ko line kun ho?', options=opts, label=opts.index(good))
 
 
-TASKS = [(yes_no, .16), (unknown, .09), (lookup, .2), (arith, .17), (step, .12), (intent, .26)]
+def word(R):
+    """Pick the final answer of a word problem. Hard negatives are the problem's own numbers and its intermediate
+    results: copying an operand or stopping one step early is exactly how Nik gets word problems wrong."""
+    e = frame.sample(R)
+    q, gold = e['messages'][0]['content'], str(e['gold'])
+    think = e['messages'][-1].get('think', '')
+    inter = [c for _, _, _, c in EQ.findall(think) if c != gold]
+    nums = [x for x in re.findall(r'\d+', q) if x != gold]
+    pool = list(dict.fromkeys(inter + R.sample(nums, min(len(nums), 3))))
+    g = int(gold)
+    for d in (1, 10, 100, -1, -10):
+        if len(pool) >= 6:
+            break
+        if g + d >= 0 and str(g + d) != gold:
+            pool.append(str(g + d))
+    opts = list(dict.fromkeys(pool[:R.randint(3, 6)])) + [gold]
+    R.shuffle(opts)
+    return dict(task='math-word', context=q, question='yo prashna ko antim uttar kun ho?', options=opts, label=opts.index(gold))
+
+
+VALUES = sorted({v for v in L.PLACES + L.FOODS + L.JOBS + L.HOBBIES}, key=len, reverse=True)
+
+
+def memory(R):
+    """Latest value wins: after a correction, the old value is the trap."""
+    for _ in range(20):
+        e = correct.sample(R)
+        if e['cat'] not in ('understand-correct-fix', 'understand-correct-now'):
+            continue
+        gold, msgs = e['gold'], e['messages'][:-1]
+        new = next((v for v in VALUES if v in gold), None)
+        if not new:
+            continue
+        said = ' '.join(m['content'] for m in msgs if m['role'] == 'user')
+        olds = [v for v in VALUES if v in said and v != new and v not in new and new not in v][:3]
+        if not olds:
+            continue
+        opts = [gold] + [gold.replace(new, o) for o in olds] + ['thaha chhaina']
+        R.shuffle(opts)
+        ctx = ' '.join(('user: ' if m['role'] == 'user' else 'nik: ') + m['content'] for m in msgs[:-1])
+        return dict(task='memory-latest', context=ctx, question=msgs[-1]['content'], options=opts, label=opts.index(gold))
+    return memory(R)
+
+
+_POLICY = []
+
+
+def nik_pick(R):
+    """Pick the right answer among Nik's own sampled answers (rows from policy_data.py, NIK_POLICY_ROWS=path)."""
+    if not _POLICY:
+        import json
+        _POLICY.extend(json.loads(l) for l in open(os.environ['NIK_POLICY_ROWS']))
+    r = dict(R.choice(_POLICY)); o = list(r['options']); g = o[r['label']]; R.shuffle(o)
+    return dict(task='nik-pick', context=r['context'], question=r['question'], options=o, label=o.index(g))
+
+
+TASKS = [(yes_no, .1), (unknown, .05), (lookup, .12), (arith, .11), (step, .09), (word, .08), (memory, .06), (reading_wide.sample, .24), (intent, .15)]
+
+
+if os.environ.get('NIK_POLICY_ROWS'):
+    TASKS = [(f, w * 0.85) for f, w in TASKS] + [(nik_pick, .15)]
 
 
 def sample(R):

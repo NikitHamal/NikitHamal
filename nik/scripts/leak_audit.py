@@ -9,8 +9,9 @@ the fixed prompts of the eval sets.
     python nik/scripts/leak_audit.py data/behavior.jsonl
     python nik/scripts/leak_audit.py mix.jsonl --max-exact 0 --show 10
 
-Fatal by default: eval_understand, chat_check, stress. `bench_hard` overlaps are
-reported as advisory because one identity item (`mero naam nikit ho`) is intentionally
+Fatal by default: eval_understand, chat_check, stress. `bench_hard` and `trap_check` overlaps are
+reported as advisory (trap_check's generic follow-ups such as `mero naam k ho?` are context questions;
+`make_sft2.py` drops rows with its full trap sentences) because one identity item (`mero naam nikit ho`) is intentionally
 trained - the unseen items are the honest measurement. Exact match = normalised
 lowercase, collapsed spaces, trailing punctuation stripped.
 
@@ -66,12 +67,19 @@ def _prompts_bench_hard(path):
     return out
 
 
+def _prompts_trap_check(path):
+    src = _read(path)
+    m = re.search(r'TRAPS\s*=\s*\[(.*?)\n\]', src, re.S)
+    return [q for turns in re.findall(r"\(\[([^\]]*)\]", m.group(1)) for q in _quoted(turns)] if m else []
+
+
 def collect_prompts(root=ROOT):
     out = {}
     out['eval_understand'] = _prompts_understand(os.path.join(root, 'nik', 'eval_understand.py'))
     out['chat_check'] = _prompts_chat_check(os.path.join(root, 'nik', 'chat_check.py'))
     out['stress'] = _prompts_stress(os.path.join(root, 'nik', 'stress.py'))
     out['bench_hard'] = _prompts_bench_hard(os.path.join(root, 'nik', 'bench_hard.py'))
+    out['trap_check'] = _prompts_trap_check(os.path.join(root, 'nik', 'trap_check.py'))
     return {k: [p for p in v if p.strip()] for k, v in out.items() if v}
 
 
@@ -85,10 +93,13 @@ def grams(s, n=8):
     return {' '.join(w[i:i + n]) for i in range(max(0, len(w) - n + 1))}
 
 
-def audit_rows(rows, prompts, near_n=8):
+def audit_rows(rows, prompts, near_n=8, near=True):
+    pnorms = {source: {norm(p): p for p in ps} for source, ps in prompts.items()}
+    pgrams = {source: [grams(p, near_n) for p in ps] for source, ps in prompts.items()} if near else {}
     exact = []
-    near = []
+    near_hits = []
     by_source = {}
+    distinct = {}
     for row in rows:
         cat = row.get('cat', '?')
         for m in row.get('messages', []):
@@ -98,20 +109,23 @@ def audit_rows(rows, prompts, near_n=8):
             nt = norm(text)
             if not nt:
                 continue
-            for source, ps in prompts.items():
-                hit = next((p for p in ps if norm(p) == nt), None)
+            for source, table in pnorms.items():
+                hit = table.get(nt)
                 if hit:
                     exact.append({'cat': cat, 'source': source, 'prompt': hit, 'text': text})
                     by_source[source] = by_source.get(source, 0) + 1
+                    distinct[(source, hit)] = distinct.get((source, hit), 0) + 1
                     break
             else:
+                if not near:
+                    continue
                 gs = grams(text, near_n)
                 if gs:
-                    for source, ps in prompts.items():
-                        if any(gs & grams(p, near_n) for p in ps):
-                            near.append({'cat': cat, 'source': source, 'text': text})
+                    for source in pgrams:
+                        if any(gs & pg for pg in pgrams[source]):
+                            near_hits.append({'cat': cat, 'source': source, 'text': text})
                             break
-    return {'exact': exact, 'near': near, 'by_source': by_source}
+    return {'exact': exact, 'near': near_hits, 'by_source': by_source, 'distinct': distinct}
 
 
 def load_rows(paths):
@@ -130,12 +144,13 @@ def main():
     ap.add_argument('--max-exact', type=int, default=0, help='allowed exact hits in fatal sources')
     ap.add_argument('--max-near', type=float, default=0.02, help='allowed near-hit share in fatal sources')
     ap.add_argument('--show', type=int, default=5)
+    ap.add_argument('--exact-only', action='store_true', help='skip the 8-gram near pass on very large mixes')
     ap.add_argument('--root', default=ROOT)
     a = ap.parse_args()
     paths = [p for pat in a.jsonl for p in (glob.glob(pat) or [pat])]
     rows = load_rows(paths)
     prompts = collect_prompts(a.root)
-    report = audit_rows(rows, prompts)
+    report = audit_rows(rows, prompts, near=not a.exact_only)
     fatal_hits = sum(n for s, n in report['by_source'].items() if s in FATAL)
     fatal_near = sum(1 for r in report['near'] if r['source'] in FATAL)
     users = sum(1 for row in rows for m in row.get('messages', []) if m.get('role') == 'user')
@@ -143,6 +158,8 @@ def main():
           f'(fatal {fatal_hits}) | near {len(report["near"])} (fatal {fatal_near})')
     for source, n in sorted(report['by_source'].items()):
         print(f'  exact {source}: {n}')
+    for (source, prompt), n in sorted(report['distinct'].items(), key=lambda kv: -kv[1])[:a.show]:
+        print(f'  TOP [{source}] x{n}: {prompt[:110]}')
     for r in report['exact'][:a.show]:
         print(f'  LEAK [{r["source"]}] {r["cat"]}: {r["text"][:110]}')
     for r in [x for x in report['near'] if x['source'] in FATAL][:a.show]:

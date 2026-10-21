@@ -8,6 +8,34 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **v4r = v4f + 20 min, Sky reduce.py 40% (box): ladder L2 0 -> 12/12, L4 0 -> 6/12**, understanding 16, stress 64, NikBench
+  -2.1 (reason -7, p=0.016: the dose crowds out iter rows). Same-lineage blends v4f + a(v4r - v4f): a=0.7 keeps L2 12/12,
+  NikBench -1.4, understanding 18, stress 61, traps 8; a=0.5 keeps reason and stress but L2 falls to 1/12. The skill is
+  non-linear in a (switches between 0.5 and 0.7).
+- **Decide v7 on held-out reading: 3/20 -> 11/20 pairs** (29/40 items) from reading_wide.py; math-verify fell 93.6 -> 81.9
+  (smaller share). Shipped to /decide with both numbers shown.
+- **v5w (14 unique blocks, from scratch): base 64.6% (n8)**, no better than 12 blocks (v5pre 66.7%). Width is not the lever.
+
+- **v5 from scratch (clean corpus_v2 473M tokens + sft12, 150 min, ~1.25B tokens) loses to the v4 lineage:** v5pre
+  61.8%, v5 (after a 25-min SFT at lr 1.2e-3) 59.0% vs v4f 72.2% on the same 288 items; reason 28 vs 39; understanding
+  15/17 vs 13. The live model's strength is its accumulated SFT stages, not its base data. The post-SFT hurt this base.
+- **Sky reduce.py (merged):** CPU micro-SFT on v4f, 40% reduce rows: ladder L2 0 -> 11/12, held-out a-(bxc) 0 -> 21/24;
+  control stays 0. Story word problems do not move (parsing is a separate skill). Molab check queued (v4r).
+
+- **Nik-Decide as a reranker of Nik hurts (rerank_eval.py, v4f k=8, 288 items):** greedy 72.2%, majority 71.9%, Decide
+  pick 67.7%, vote x Decide 68.1%, oracle 75.0%. Two lessons: (1) sample diversity is low, so even a perfect picker adds
+  only +2.8 pp; (2) a verifier trained on synthetic near-misses does not know the policy's real mistakes. Next: Decide v8
+  trained on Nik's own sampled answers (policy_data.py).
+- **Decide on held-out reading (bench_reading, strict: both option orders):** v5 17/40 items, 3/20 pairs, vs 92-99% on
+  its own generators. In-distribution accuracy says nothing about new surfaces (Local-A). v7 adds reading_wide.py
+  (10 relations, many surfaces, bench vocabulary held out by a test).
+- **v5 base (from scratch, clean corpus, before SFT):** quick n8 NikBench 66.7%, word 5/24, understanding 15/26, math 95%.
+
+- **Task vectors do not cross lineages.** tvF5 = v4f + 0.5(v4f4 - v4c): NikBench -3.8 pp vs v4f (p=0.043), arith
+  -4.2, understanding 12/26. Same-parent edits (Local-A tv20 = v4f4 + 0.2(v4f3 - v4c)) are the safe kind.
+- **v4f4 (Local-C roles family) vs live v4f, plain n16 paired:** 67.4% (-4.9, p=0.016), reason 29/48 (-10, p=0.002),
+  understanding 20/26 (+7), stress 66. Baselines must be the live model: agents compared against v4c after v4f shipped.
+
 - **v4m = v4f + money scene (lr 2e-4, 20 min): NikBench 68.8%, understanding 16, traps 9, stress 61, L2 0.** v4f, v4m
   and v4f3 lie on one trade-off line (reason 39/35/28 vs understanding 13/16/20). Fine-tuning the v4 base cannot move
   the line; only the base can (v5).
@@ -111,6 +139,12 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   is wrong in all 5 phrasings; English inputs are mostly garbled. This is the honest picture of how template-bound Nik is.
 
 ### Mistakes (do not repeat)
+
+- **Killing a duplicate job mid-`git clone` breaks the other copy's clone of the same folder** (v4r and Decide v8 both
+  failed that way). Use a unique folder per job, and kill orphan children (one Decide trainer ran 40 min unseen).
+
+- **Relaunching on a lost marimo response.** The box kernel is shared, and launch output is often dropped. Relaunching
+  started two copies of the same queue. Always check `ps` for the process before relaunching.
 
 - **Audit pass 2 audited the wrong file.** It ran on `corpus_work/roman` (the raw input) again, not the kept
   `corpus_v2.jsonl`, so it re-reported the input's 28% dups and wasted ~60 min. The kept-output audit now runs beside v5.

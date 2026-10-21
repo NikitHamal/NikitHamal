@@ -1,0 +1,184 @@
+{
+ "updated": "2026-10-21T14:47:23Z",
+ "live": {
+  "model": "v4f",
+  "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
+ },
+ "boxes": [
+  {
+   "name": "box 1",
+   "gpu": "GPU 99% \u00b7 29 GB / 96 GB",
+   "job": "Claude: Nik-Decide v8 (Nik's own answers) training 75 min; v4r2 x v4r3 blends m50/m30: full gate",
+   "progress": null,
+   "detail": "running: decide/train.py, bench.py, eval_understand.py, trap_check.py",
+   "eta": "Decide v8 ~15:25 UTC; blend gates ~15:30 UTC"
+  },
+  {
+   "name": "box 2",
+   "gpu": "GPU 99% \u00b7 8 GB / 96 GB",
+   "job": "Local-C: P6 (named-family polish) + P7 synthesis (reduce 18% + roles 12% + iter); Local-A: replay arms + bench_surface",
+   "progress": null,
+   "detail": "running: train.py, chain_mix.py, stress.py (Local-C, Local-A)",
+   "eta": "see #11"
+  }
+ ],
+ "scoreboard": {
+  "cols": [
+   "bench",
+   "reason",
+   "und",
+   "traps",
+   "L2"
+  ],
+  "rows": [
+   [
+    "v4f (live)",
+    "72.2%",
+    "39/48",
+    "13/26",
+    "9/12",
+    "0/12"
+   ],
+   [
+    "v4r2 (v4f+reduce 25%, lr 2e-4)",
+    "73.6%",
+    "37/48",
+    "15/26",
+    "8/12",
+    "12/12"
+   ],
+   [
+    "v4r3 (v4f+reduce 30%, lr 1.5e-4)",
+    "72.2%",
+    "39/48",
+    "19/26",
+    "9/12",
+    "12/12"
+   ],
+   [
+    "b7 = v4f+0.7(v4r-v4f)",
+    "70.8%",
+    "37/48",
+    "18/26",
+    "8/12",
+    "12/12"
+   ],
+   [
+    "b60",
+    "71.5%",
+    "39/48",
+    "17/26",
+    "8/12",
+    "7/12"
+   ],
+   [
+    "v4r (v4f+reduce)",
+    "70.1%",
+    "32/48",
+    "16/26",
+    "-",
+    "12/12"
+   ],
+   [
+    "v4m",
+    "68.8%",
+    "35/48",
+    "16/26",
+    "9/12",
+    "0/12"
+   ],
+   [
+    "v4f4 (Local-C)",
+    "67.4%",
+    "29/48",
+    "20/26",
+    "9/12",
+    "1/12"
+   ],
+   [
+    "v4f3 (Local-C)",
+    "63.2%",
+    "28/48",
+    "20/26",
+    "8/12",
+    "1/12"
+   ],
+   [
+    "v5pre (scratch)",
+    "61.8%",
+    "28/48",
+    "15/26",
+    "-",
+    "0/12"
+   ],
+   [
+    "v5 (scratch+SFT)",
+    "59.0%",
+    "-",
+    "17/26",
+    "-",
+    "-"
+   ]
+  ]
+ },
+ "runs": [
+  {
+   "tag": "mix23",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "evaluating",
+   "what": "same-parent blends of v4r2 and v4r3 (m50 = 0.5/0.5, m30 = 0.7 v4r2 + 0.3 v4r3): keep L2 12/12 + v4r2's math with v4r3's understanding"
+  },
+  {
+   "tag": "decide-v8",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "training",
+   "what": "Decide + Nik's own sampled answers (policy_data); then bench_reading + rerank_eval"
+  },
+  {
+   "tag": "v4r2",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "done",
+   "what": "v4f + 20 min lr 2e-4, reduce 25%",
+   "result": "NikBench 73.6% (+1.4, p=0.45), word 6->12/48, reason 37 (-2), L1/L2/L3/L4 12/12/12/5, und 15, traps 8, math 97.5%, chat 15"
+  },
+  {
+   "tag": "v4r3",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "done",
+   "what": "v4f + 15 min lr 1.5e-4, reduce 30%",
+   "result": "NikBench 72.2% (=), arith -2.1, word 6->10/48, reason 39, L2 12/12, L4 6, und 19, traps 9, math 92.5% (-3.5)"
+  },
+  {
+   "tag": "blends",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "done",
+   "result": "b7: L2 12/12, und 18, -1.4 pp, stress 61, traps 8; b60: L2 7/12, -0.7 pp, und 17, stress 59"
+  },
+  {
+   "tag": "v4r",
+   "box": "box 2",
+   "by": "Claude + Sky",
+   "status": "done",
+   "what": "live v4f + 20 min lr 2e-4, Sky reduce.py at 40% of rows; target L2 >= 6/12, NikBench within 2 pp",
+   "result": "L2 0->12/12, L4 0->6/12, und 16, NikBench -2.1 (reason -7, p=0.016)"
+  },
+  {
+   "tag": "decide-v7",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "shipped",
+   "what": "+ reading_wide, math-word, memory-latest; target bench_reading pairs >= 8/20 (v5: 3/20)",
+   "result": "bench_reading 3/20 -> 11/20 pairs; math-verify 81.9% (v5 93.6)"
+  }
+ ],
+ "next": [
+  "blend m50/m30 gates (~15:30 UTC) -> ship call in #11 if one beats v4f on every gate",
+  "box run MULTITURN_SHARE=0.05 (Sky's pending ask) when a GPU slot frees",
+  "Local-C P7 synthesis result (box 2)"
+ ]
+}

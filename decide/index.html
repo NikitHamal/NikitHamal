@@ -7,88 +7,152 @@
   <meta name="description" content="Nik-Decide: a 5.4M-parameter non-autoregressive decision model built from scratch. One pass, typed answer + confidence, fully in your browser." />
   <link rel="canonical" href="https://nikit.is-a.dev/decide" />
   <link rel="icon" type="image/svg+xml" href="/assets/avatar-upright.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;500;600&family=Silkscreen&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css?v=18" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>(function(){var t=localStorage.getItem('theme');if(!t){t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})();</script>
   <style>
-    body.dc { font-family: 'Poppins', var(--font-sans); max-width: 860px; margin: 0 auto; padding: 28px 18px 60px; color: var(--text-primary); background: var(--bg-primary, #faf9f6); }
-    .dc h1 { font-family: 'Silkscreen', var(--font-mono); font-size: 28px; margin: 0 0 4px; letter-spacing: .5px; }
-    .dc .sub { opacity: .75; margin: 0 0 22px; font-size: 14px; }
-    .dc label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; opacity: .7; margin: 14px 0 6px; }
-    .dc textarea, .dc input { width: 100%; box-sizing: border-box; font: 15px 'Poppins', sans-serif; padding: 10px 12px; border-radius: 10px;
-      border: 1.5px solid rgba(127,127,127,.35); background: transparent; color: inherit; resize: vertical; }
-    .dc .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 4px; }
-    .dc button { font: 500 13px 'Poppins', sans-serif; padding: 8px 14px; border-radius: 999px; border: 1.5px solid rgba(127,127,127,.4); background: transparent; color: inherit; cursor: pointer; }
-    .dc button.go { background: var(--text-primary); color: var(--bg-primary, #faf9f6); border-color: transparent; padding: 10px 22px; font-size: 15px; }
-    .dc button:disabled { opacity: .4; cursor: wait; }
-    .dc .res { margin-top: 22px; padding: 16px; border-radius: 14px; border: 1.5px solid rgba(127,127,127,.25); }
-    .dc .pick { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-    .dc .bar { display: grid; grid-template-columns: minmax(120px, 34%) 1fr 56px; gap: 10px; align-items: center; margin: 6px 0; font-size: 14px; }
-    .dc .bar i { display: block; height: 10px; border-radius: 6px; background: currentColor; opacity: .75; }
-    .dc .meta { font: 12px 'JetBrains Mono', monospace; opacity: .65; margin-top: 10px; }
-    .dc .note { font-size: 13px; opacity: .72; margin-top: 26px; line-height: 1.55; }
-    .dc a { color: inherit; }
+    :root { --bg:#f6f5f1; --card:#ffffff; --card2:#f3f2ee; --line:#e3e2dc; --text:#17181c; --text2:#454851; --muted:#73767f; --accent:#3d5fd9; --accent-soft:#3d5fd91a; --ok:#1f8f4e; --shadow:0 10px 30px #0000000d; }
+    [data-theme=dark] { --bg:#0e1014; --card:#15181e; --card2:#1b1f27; --line:#272c37; --text:#e8eaef; --text2:#b9bfcb; --muted:#808899; --accent:#7c9cff; --accent-soft:#7c9cff22; --ok:#3fb950; --shadow:0 10px 30px #0006; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); }
+    code { font: 13px 'JetBrains Mono', monospace; background: var(--card2); padding: 1px 6px; border-radius: 5px; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 22px 18px 70px; }
+    nav { display: flex; align-items: center; gap: 14px; font-size: 14px; margin-bottom: 26px; }
+    nav a { color: var(--muted); text-decoration: none; } nav a:hover { color: var(--text); }
+    nav .sp { flex: 1; }
+    nav button { background: var(--card); border: 1px solid var(--line); color: var(--text); border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 15px; }
+    h1 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -.02em; margin: 0 0 6px; }
+    .lead { color: var(--text2); font-size: 16px; margin: 0 0 22px; max-width: 720px; }
+    .pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .pill { font-size: 12.5px; padding: 4px 11px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); color: var(--text2); }
+    .grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); }
+    .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
+    .ex { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .ex button { font: 500 12.5px Inter, sans-serif; padding: 6px 11px; border-radius: 99px; border: 1px solid var(--line); background: var(--card2); color: var(--text2); cursor: pointer; }
+    .ex button:hover { border-color: var(--accent); color: var(--text); }
+    .ex button.on { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+    label { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600; color: var(--text2); margin: 14px 0 6px; }
+    label small { font-weight: 400; color: var(--muted); }
+    textarea { width: 100%; font: 15px Inter, sans-serif; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card2); color: var(--text); resize: vertical; outline: none; }
+    textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .row { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+    .go { font: 600 15px Inter, sans-serif; padding: 11px 26px; border-radius: 10px; border: none; background: var(--accent); color: #fff; cursor: pointer; }
+    .go:disabled { opacity: .55; cursor: wait; }
+    .row .hint { font-size: 12.5px; color: var(--muted); }
+    .res .empty { color: var(--muted); font-size: 14px; padding: 30px 6px; text-align: center; }
+    .pick { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .pick b { font-size: 22px; letter-spacing: -.01em; }
+    .conf { font-size: 13px; font-weight: 600; padding: 2px 9px; border-radius: 99px; }
+    .opt { margin: 10px 0; }
+    .opt .top { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+    .opt .top span:first-child { overflow-wrap: anywhere; }
+    .opt .top span:last-child { font: 13px 'JetBrains Mono', monospace; color: var(--text2); }
+    .opt .track { height: 8px; border-radius: 6px; background: var(--card2); overflow: hidden; margin-top: 4px; }
+    .opt .track i { display: block; height: 100%; border-radius: 6px; background: var(--muted); transition: width .45s cubic-bezier(.2,.8,.2,1); }
+    .opt.win .top span:first-child { font-weight: 600; } .opt.win .track i { background: var(--accent); }
+    .meta { font: 12px 'JetBrains Mono', monospace; color: var(--muted); margin-top: 14px; }
+    .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 22px; }
+    .skill { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+    .skill b { display: block; font-size: 20px; } .skill span { font-size: 13px; color: var(--text2); }
+    .note { font-size: 14px; color: var(--text2); margin-top: 22px; line-height: 1.6; }
+    .note h3 { font-size: 15px; color: var(--text); margin: 18px 0 4px; }
+    .loading { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+    .spin { width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: s 0.8s linear infinite; }
+    @keyframes s { to { transform: rotate(360deg); } }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
-<body class="dc">
+<body>
+<div class="wrap">
+  <nav><a href="/">nikit.is-a.dev</a><a href="/chat">Talk to Nik</a><span class="sp"></span><button id="theme" title="Theme">◐</button></nav>
+
   <h1>Nik-Decide</h1>
-  <p class="sub">A 5.4M-parameter <b>decision model</b>, built from scratch. It doesn't write text: it reads everything at once and picks an option in <b>one pass</b>, with a confidence for each. Runs fully in your browser. <a href="/chat">Talk to Nik →</a></p>
+  <p class="lead">A 5.4M-parameter <b>decision model</b>, built from scratch. It doesn't write text: it reads the question, the passage and every option at once and picks one in <b>a single pass</b>, with a confidence for each option. It runs entirely on your device.</p>
+  <div class="pills"><span class="pill">v7 · Oct 2026</span><span class="pill">5.4M params · 10.9 MB</span><span class="pill">one forward pass</span><span class="pill">no server</span></div>
 
-  <div class="row" id="ex"></div>
-  <label for="q">Question or message</label>
-  <textarea id="q" rows="2"></textarea>
-  <label for="c">Passage (optional: what the question is about)</label>
-  <textarea id="c" rows="3"></textarea>
-  <label for="o">Options (one per line, 2 to 8)</label>
-  <textarea id="o" rows="4"></textarea>
-  <div class="row"><button class="go" id="go" disabled>loading model…</button></div>
-  <div class="res" id="res" hidden></div>
+  <div class="grid">
+    <div class="card">
+      <h2>Try it</h2>
+      <div class="ex" id="ex"></div>
+      <label for="q">Question or message</label>
+      <textarea id="q" rows="2"></textarea>
+      <label for="c">Passage <small>optional · what the question is about</small></label>
+      <textarea id="c" rows="3"></textarea>
+      <label for="o">Options <small>one per line, 2 to 8</small></label>
+      <textarea id="o" rows="4"></textarea>
+      <div class="row"><button class="go" id="go" disabled>Loading…</button><span class="hint">Ctrl + Enter</span></div>
+    </div>
+    <div class="card res" id="res"><h2>Decision</h2><div class="empty" id="empty"><span class="loading"><span class="spin"></span>Downloading the model (10.9 MB, once)…</span></div><div id="out"></div></div>
+  </div>
 
-  <p class="note"><b>What it was trained on</b> (all from Nik's own audited generators, held-out accuracy): reading yes/no 99.7%, "not mentioned" 100%,
-    picking the answer from a passage 92.9%, checking arithmetic answers 82.8%, and telling what kind of message something is (chat / math / reading /
-    about Nik or Nikit / language / writing) 100%. It is small and narrow: outside these task types its choices are guesses.
-    For yes/no, write the options like <code>ho, pokhara</code> / <code>haina, pokhara haina</code> / <code>thaha chhaina</code> (the format it learned).</p>
+  <div class="skills">
+    <div class="skill"><b>11/20</b><span>held-out reading pairs (new names and objects; v5: 3/20)</span></div>
+    <div class="skill"><b>99.7%</b><span>reading yes / no</span></div>
+    <div class="skill"><b>100%</b><span>"that wasn't said"</span></div>
+    <div class="skill"><b>92.7%</b><span>answer from a passage</span></div>
+    <div class="skill"><b>99.3%</b><span>a word problem's final answer</span></div>
+    <div class="skill"><b>95.2%</b><span>checking a working step</span></div>
+    <div class="skill"><b>81.9%</b><span>checking a math answer (v5: 93.6%)</span></div>
+    <div class="skill"><b>100%</b><span>latest correction wins</span></div>
+    <div class="skill"><b>100%</b><span>what kind of message it is</span></div>
+  </div>
 
-  <script type="module">
-    import { Tokenizer } from '/nik/web/nik.js';
-    import { parseDecide, NikDecide } from '/nik/web/decide.js';
-    const $ = (id) => document.getElementById(id);
-    const INTENTS = ['kura (chat)', 'hisab (math)', 'padhera jawaf (reading)', 'nik/nikit barema (persona)', 'anuvad/grammar (language)', 'lekhai (writing)'];
-    const EX = [
-      ['reading yes/no', 'ke sita pokhara ma baschhin?', 'sita pokhara ma baschhin. ram doctor ho ra uska bhai kathmandu ma padhchha.', ['ho, pokhara', 'haina, pokhara haina', 'thaha chhaina']],
-      ['not mentioned', 'ram ko umer kati ho?', 'sita pokhara ma baschhin. ram doctor ho.', ['ho', 'haina', 'thaha chhaina']],
-      ['answer from passage', 'gopal le kati kilo pyaj kinyo?', 'gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.', ['3', '2', '5', 'aalu']],
-      ['check the math', '348 + 275 kati hunchha?', '', ['613', '623', '633', '326']],
-      ['route: "mero naam nikit ho"', 'mero naam nikit ho', '', INTENTS],
-      ['route: "nikit ko ho?"', 'nikit ko ho?', '', INTENTS],
-      ['route: a word problem', 'mero sanga 800 rupiya thiyo, 350 ko kitab kine. kati baki?', '', INTENTS],
-      ['route: translation', '"I am going to school" nepali ma bhana', '', INTENTS],
-    ];
-    EX.forEach(([name, q, c, o]) => { const b = document.createElement('button'); b.textContent = name;
-      b.onclick = () => { $('q').value = q; $('c').value = c; $('o').value = o.join('\n'); run(); }; $('ex').append(b); });
-    let nd = null;
-    (async () => {
-      const [tj, bin] = await Promise.all([fetch('/nik/web/model/tokenizer.json').then((r) => r.json()), fetch('/nik/web/decide/decide-v3.bin').then((r) => r.arrayBuffer())]);
-      nd = new NikDecide(parseDecide(bin), new Tokenizer(tj));
-      $('go').disabled = false; $('go').textContent = 'decide';
-      const [_, q, c, o] = EX[4]; $('q').value = q; $('c').value = c; $('o').value = o.join('\n');
-    })().catch((e) => { $('go').textContent = 'could not load: ' + e.message; });
-    function run() {
-      if (!nd) return;
-      const opts = $('o').value.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 8);
-      if (opts.length < 2) { $('res').hidden = false; $('res').textContent = 'give at least 2 options'; return; }
-      $('go').disabled = true;
-      setTimeout(() => {
-        const t0 = performance.now(), r = nd.decide($('q').value.trim(), opts, $('c').value.trim()), ms = performance.now() - t0;
-        const order = opts.map((o, i) => [o, r.probs[i]]);
-        $('res').hidden = false;
-        $('res').innerHTML = `<div class="pick">→ ${r.choice}</div><div>confidence ${(100 * r.confidence).toFixed(1)}%</div>` +
-          order.map(([o, p]) => `<div class="bar"><span>${o.replace(/</g, '&lt;')}</span><i style="width:${Math.max(1, 100 * p)}%"></i><span>${(100 * p).toFixed(1)}%</span></div>`).join('') +
-          `<div class="meta">one forward pass · ${ms.toFixed(0)} ms · 5.4M params · runs on your device</div>`;
-        $('go').disabled = false;
-      }, 10);
-    }
-    $('go').onclick = run;
-  </script>
+  <div class="note">
+    <h3>What it is for</h3>
+    Nik (the chat model) writes; Nik-Decide checks and routes. It can tell whether a passage supports a claim, notice when something was never mentioned, pick an answer from a text, verify an arithmetic result, spot a working line that uses a number the question never gave, and tell chat from math, reading, persona, language or writing requests.
+    <h3>Limits</h3>
+    The percentages above are held-out rows from Nik's own audited generators; the 11/20 is Local-A's hand-written reading test with vocabulary it never saw (both answers of a pair, both option orders, must be right). On open-world text expect the lower number. Outside these task types its choices are guesses. For yes/no, write the options the way it learned them: <code>ho, pokhara</code> / <code>haina, pokhara haina</code> / <code>thaha chhaina</code>.
+  </div>
+</div>
+
+<script type="module">
+  import { Tokenizer } from '/nik/web/nik.js';
+  import { parseDecide, NikDecide } from '/nik/web/decide.js';
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const INTENTS = ['kura (chat)', 'hisab (math)', 'padhera jawaf (reading)', 'nik/nikit barema (persona)', 'anuvad/grammar (language)', 'lekhai (writing)'];
+  const EX = [
+    ['Reading yes/no', 'ke sita pokhara ma baschhin?', 'sita pokhara ma baschhin. ram doctor ho ra uska bhai kathmandu ma padhchha.', ['ho, pokhara', 'haina, pokhara haina', 'thaha chhaina']],
+    ['Not mentioned', 'ram ko umer kati ho?', 'sita pokhara ma baschhin. ram doctor ho.', ['ho', 'haina', 'thaha chhaina']],
+    ['Answer from passage', 'gopal le kati kilo pyaj kinyo?', 'gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.', ['3', '2', '5', 'aalu']],
+    ['Check the math', '348 + 275 kati hunchha?', '', ['613', '623', '633', '326']],
+    ['Who gave it?', 'kasle kitab diyo?', 'pramila le santosh lai 4 wata kitab diyo. santosh le pachhi ek wata saathi lai diyo.', ['pramila', 'santosh', 'saathi']],
+    ['Before / after', 'pachhi kati kilo lyayo?', 'binod le pahile 6 kilo aalu lyayo, pachhi 2 kilo thapyo.', ['6', '2', '8']],
+    ['Check a step', 'yo prashna ko sahi hisab ko line kun ho?', 'ram sanga 50 rupiya chha. usle 3 wata kalam kinyo, ek ko 12 rupiya. kati baki?', ['3 x 12 = 36', '13 x 12 = 156', '3 + 12 = 15', '3 x 12 = 38']],
+    ['Route: "mero naam nikit ho"', 'mero naam nikit ho', '', INTENTS],
+    ['Route: "nikit ko ho?"', 'nikit ko ho?', '', INTENTS],
+    ['Route: word problem', 'mero sanga 800 rupiya thiyo, 350 ko kitab kine. kati baki?', '', INTENTS],
+  ];
+  const fill = (k) => { const [, q, c, o] = EX[k]; $('q').value = q; $('c').value = c; $('o').value = o.join('\n'); document.querySelectorAll('#ex button').forEach((b, i) => b.classList.toggle('on', i === k)); };
+  EX.forEach(([name], k) => { const b = document.createElement('button'); b.textContent = name; b.onclick = () => { fill(k); run(); }; $('ex').append(b); });
+  $('theme').onclick = () => { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('theme', t); };
+  let nd = null;
+  fill(0);
+  (async () => {
+    const [tj, bin] = await Promise.all([fetch('/nik/web/model/tokenizer.json').then((r) => r.json()), fetch('/nik/web/decide/decide-v7.bin').then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })]);
+    nd = new NikDecide(parseDecide(bin), new Tokenizer(tj));
+    $('go').disabled = false; $('go').textContent = 'Decide';
+    run();
+  })().catch((e) => { $('go').textContent = 'Could not load'; $('empty').textContent = 'The model could not be loaded: ' + e.message; });
+  function run() {
+    if (!nd) return;
+    const opts = $('o').value.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 8);
+    if (opts.length < 2) { $('empty').hidden = false; $('empty').textContent = 'Give at least two options, one per line.'; $('out').innerHTML = ''; return; }
+    $('go').disabled = true;
+    setTimeout(() => {
+      const t0 = performance.now(), r = nd.decide($('q').value.trim(), opts, $('c').value.trim()), ms = performance.now() - t0;
+      const c = r.confidence, col = c > .9 ? 'var(--ok)' : c > .6 ? '#c08a00' : '#d1495b';
+      $('empty').hidden = true;
+      $('out').innerHTML = `<div class="pick"><b>${esc(r.choice)}</b><span class="conf" style="color:${col};background:color-mix(in srgb, ${col} 14%, transparent)">${(100 * c).toFixed(1)}% sure</span></div>` +
+        opts.map((o, i) => [o, r.probs[i], i]).sort((a, b) => b[1] - a[1]).map(([o, p, i]) =>
+          `<div class="opt ${i === r.index ? 'win' : ''}"><div class="top"><span>${esc(o)}</span><span>${(100 * p).toFixed(1)}%</span></div><div class="track"><i style="width:${Math.max(1.5, 100 * p)}%"></i></div></div>`).join('') +
+        `<div class="meta">one forward pass · ${ms.toFixed(0)} ms · on your device</div>`;
+      $('go').disabled = false;
+    }, 10);
+  }
+  $('go').onclick = run;
+  document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) run(); });
+</script>
 </body>
 </html>
