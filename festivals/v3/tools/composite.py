@@ -213,6 +213,8 @@ if __name__ == "__main__":
     os.makedirs(f"{B}/frames", exist_ok=True)
     fs = range(TL["frames"])
     if len(sys.argv) > 1 and sys.argv[1] == "--only": fs = [int(x) for x in sys.argv[2].split(",")]
+    if len(sys.argv) > 1 and sys.argv[1] == "--shots":
+        ids = [int(x) for x in sys.argv[2].split(",")]; fs = [f for s in SHOTS if s["id"] in ids for f in range(s["f0"], s["f1"])]
     with Pool(int(os.environ.get("WORKERS", os.cpu_count() or 4))) as p:
         for k, _ in enumerate(p.imap_unordered(frame, fs, chunksize=8)):
             if k % 300 == 0: print("composite", k, flush=True)
