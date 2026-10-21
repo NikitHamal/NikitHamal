@@ -52,6 +52,10 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   the fast SDPA path). With KV-cached `generate_multi`: **0.14 min/step (11x)**, and adaptive difficulty gives 6-8 of 32 groups
   with signal; levels climb (div 6, compose 6, word 5) as the policy improves.
 
+- **Nik-Hard paraphrase (new strict gate, `nik/hard/paraphrase.py`):** live v4c solves **1/12 items in all 5 phrasings**,
+  17/60 phrasings. It computes `640 - 275 = 365` when asked bare and fails the same problem as a story; `cycle kasle kinyo?`
+  is wrong in all 5 phrasings; English inputs are mostly garbled. This is the honest picture of how template-bound Nik is.
+
 ### Mistakes (do not repeat)
 - `pkill -f <pattern>` matched the shell running the pkill itself -> suspended shell -> frozen notebook kernel -> box lost.
   Use exact PIDs (`pgrep` then `kill`), never a pattern that also occurs in your own command line.
