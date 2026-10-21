@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'teacher'))
 import torch  # noqa: E402
 import torch.nn.functional as F  # noqa: E402
-from model import NikConfig, NikLM, generate_batch  # noqa: E402
+from model import NikConfig, NikLM, generate_multi  # noqa: E402
 from rsi import make, prompt_ids  # noqa: E402
 from selfimprove import correct, split  # noqa: E402
 from tokenizer import Tokenizer  # noqa: E402
@@ -101,11 +101,11 @@ def main():
     while time.time() - t0 < a.minutes * 60:
         pol.eval()
         seqs, plens, adv, rewards = [], [], [], []
-        for _ in range(a.B):
-            q, check, sk = problem(R)
-            pr = prompt_ids(tok, q)[-(cfg.ctx - a.max_new):]
-            with torch.no_grad():
-                outs = generate_batch(pol, pr, n=a.G, max_new=a.max_new, temperature=a.temp)
+        probs = [problem(R) for _ in range(a.B)]
+        prs = [prompt_ids(tok, q)[-(cfg.ctx - a.max_new):] for q, _, _ in probs]
+        with torch.no_grad():                            # all B x G samples in ONE left-padded batch
+            groups = generate_multi(pol, prs, n_per_prompt=a.G, max_new=a.max_new, temperature=a.temp)
+        for (q, check, sk), pr, outs in zip(probs, prs, groups):
             r = []
             for toks, _ in outs:
                 text = tok.decode(toks)
