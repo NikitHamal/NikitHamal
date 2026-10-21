@@ -220,6 +220,10 @@ class NikLM(nn.Module):
             mask = torch.ones(T, T, dtype=torch.bool, device=idx.device).tril()
         cos, sin = rope_cache(self.cfg, int(pos.max()) + 1, idx.device)
         cos, sin = cos[pos].to(self.emb.weight.dtype), sin[pos].to(self.emb.weight.dtype)
+        if pos.dim() == 2:                      # per-row positions (N, T) for left-padded batches: broadcast over heads
+            cos, sin = cos.unsqueeze(1), sin.unsqueeze(1)
+        if mask.dim() == 3:                     # per-row masks (N, T, T)
+            mask = mask.unsqueeze(1)
         if mask.dtype == torch.bool:
             # additive float mask in the activation dtype lets SDPA pick the
             # memory-efficient kernel instead of materialising T x T scores per layer
@@ -410,6 +414,51 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
             break
         t0 = nxt
     return out, passes
+
+
+@torch.no_grad()
+def generate_multi(model, prompts: list, n_per_prompt: int = 8, max_new: int = 160, temperature: float = 0.8,
+                   min_p: float = 0.05, stop: tuple = (2, 9)):
+    """Sample n_per_prompt continuations for EVERY prompt in one left-padded batch (GRPO throughput).
+    Per-row positions start at 0 after the padding, and pads are never attended, so each row computes exactly what
+    generate_ar would on its own prompt (greedy-identical; tested). Returns, per prompt, [(tokens, mean_logprob)]."""
+    dev = next(model.parameters()).device
+    rows = [p for p in prompts for _ in range(n_per_prompt)]
+    N, L0 = len(rows), max(len(p) for p in rows)
+    pad = torch.tensor([L0 - len(p) for p in rows], device=dev)
+    x = torch.zeros(N, L0, dtype=torch.long, device=dev)
+    for i, p in enumerate(rows):
+        x[i, L0 - len(p):] = torch.tensor(p, device=dev)
+    done = torch.zeros(N, dtype=torch.bool, device=dev)
+    lp_sum = torch.zeros(N, device=dev); lens = torch.zeros(N, device=dev)
+    out = [[] for _ in range(N)]
+    stop_t = torch.tensor(stop, device=dev)
+    for _ in range(max_new):
+        T = x.shape[1]
+        ar = torch.arange(T, device=dev)
+        pos = (ar[None] - pad[:, None]).clamp(min=0)
+        real = ar[None] >= pad[:, None]                                  # (N, T) non-pad
+        mask = torch.ones(T, T, dtype=torch.bool, device=dev).tril()[None] & real[:, None, :]
+        mask = mask | torch.eye(T, dtype=torch.bool, device=dev)[None]  # pad queries see themselves (no NaN)
+        logits = model(x, pos=pos, mask=mask)[:, -1].float()
+        logits[:, [0, 1, 3, 4, 5]] = -float('inf')
+        if temperature <= 0:
+            nxt = logits.argmax(-1)
+        else:
+            p_ = torch.softmax(logits / temperature, -1)
+            p_ = torch.where(p_ >= min_p * p_.max(-1, keepdim=True).values, p_, torch.zeros_like(p_))
+            nxt = torch.multinomial(p_ / p_.sum(-1, keepdim=True), 1).squeeze(1)
+        lp = torch.log_softmax(logits, -1).gather(1, nxt[:, None]).squeeze(1)
+        live = ~done
+        lp_sum += lp * live; lens += live.float()
+        for i in torch.nonzero(live).flatten().tolist():
+            out[i].append(int(nxt[i]))
+        done |= torch.isin(nxt, stop_t)
+        x = torch.cat([x, nxt[:, None]], 1)
+        if bool(done.all()) or x.shape[1] >= model.cfg.ctx:
+            break
+    res = [(o, float(s / max(1.0, float(l)))) for o, s, l in zip(out, lp_sum, lens)]
+    return [res[i * n_per_prompt:(i + 1) * n_per_prompt] for i in range(len(prompts))]
 
 
 @torch.no_grad()
