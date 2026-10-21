@@ -51,6 +51,24 @@ WEATHER_A = {'garmi': 'garmi ma pani dherai piunus ra ghaam ma dherai nabasnus.'
              'ghaam': 'ghaam laageko din bahira hidna ramro! kahin ghumna jaane plan chha?', 'hawa': 'hawa chalda jhyal dhoka ramro sanga band garnus. kati chiso chha bahira?'}
 
 
+# composed replies: reaction + echo of the user's content + follow-up (hundreds of distinct replies per intent, so a
+# reply cap does not wipe out chat and the model cannot win by reciting one stored answer)
+REACT = ['wah', 'ramro', 'ohho', 'kya baat', 'sunera khusi lagyo', 'majja ko kura', 'ekdam ramro', 'hajur']
+FOLLOW = ['kasto lagyo?', 'feri kahile?', 'kosanga?', 'sabai bhanda ramro k thiyo?', 'arko palta k plan chha?', 'malai ali bistar ma bhannus na.',
+          'tapai lai feri garna man chha?', 'k naya sikyau tyaha?']
+ECHO = {'went': ['{p} gaeko ramro', '{p} ko yatra', '{p} ta sundar thau ho', '{p} pugnu bhayo'],
+        'ate': ['{f} mitho hunchha', '{f} khanu bhayo', '{f} ko swad nai arkai', '{f} ta mero pani favourite jasto'],
+        'did': ['{h} garna ramro', '{h} ramro shokh ho', '{h} le man fresh banauchha', '{h} ma lagan ramro']}
+
+
+def composed(R, kind, **kw):
+    if R.random() < 0.4:
+        bank = {'went': WENT_A, 'ate': ATE_A, 'did': DID_A}[kind]
+        return R.choice(bank).format(**kw)
+    e = R.choice(ECHO[kind]).format(**kw)
+    return f'{R.choice(REACT)}! {e}. {R.choice(FOLLOW)}'
+
+
 def ex(msgs, kind):
     return {'kind': f'chat-{kind}', 'gold': None, 'messages': msgs}
 
@@ -74,13 +92,13 @@ def single(R):
         return ex([U(R.choice(us)), N(R.choice(a_s))], 'feel')
     if k < 0.52:
         p = R.choice(L.PLACES)
-        return ex([U(R.choice(WENT_U).format(p=p)), N(R.choice(WENT_A).format(p=p))], 'went')
+        return ex([U(R.choice(WENT_U).format(p=p)), N(composed(R, 'went', p=p))], 'went')
     if k < 0.64:
         f = R.choice(L.FOODS)
-        return ex([U(R.choice(ATE_U).format(f=f)), N(R.choice(ATE_A).format(f=f))], 'ate')
+        return ex([U(R.choice(ATE_U).format(f=f)), N(composed(R, 'ate', f=f))], 'ate')
     if k < 0.74:
         h = R.choice(L.HOBBIES)
-        return ex([U(R.choice(DID_U).format(h=h)), N(R.choice(DID_A).format(h=h))], 'did')
+        return ex([U(R.choice(DID_U).format(h=h)), N(composed(R, 'did', h=h))], 'did')
     if k < 0.8:
         r = R.choice(L.RELATIONS_M + L.RELATIONS_F)
         return ex([U(R.choice(MET_U).format(r=r)), N(R.choice(MET_A).format(r=r))], 'met')
