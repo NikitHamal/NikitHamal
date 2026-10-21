@@ -540,15 +540,15 @@ def scene_second_discounted(R):
     dis = _distract(R)
     shape = R.randrange(3)
     if shape == 0:
-        user = (f'ek kalam {p1} rupiya ra ek katha {p2} rupiya ko. katha ma {pct}% discount. '
+        user = (f'ek kobo {p1} rupiya ra ek katha {p2} rupiya ko. katha ma {pct}% discount. '
                 f'{dis} jamma kati rupiya?')
     elif shape == 1:
-        user = (f'{p1} rupiya ko kalam ek ra {p2} rupiya ko katha ek kine. {dis} '
+        user = (f'{p1} rupiya ko kobo ek ra {p2} rupiya ko katha ek kine. {dis} '
                 f'katha ma {pct}% off paye. aba kati tirne?')
     else:
         user = (f'duita kine: {p1} ra {p2} rupiya ko. dusro ma {pct}% bhat. {dis} '
                 f'jamma kati rupiya paryo?')
-    steps = _steps([('kalam', f'{p1}', p1), ('katha', f'{p2}', p2),
+    steps = _steps([('kobo', f'{p1}', p1), ('katha', f'{p2}', p2),
                     ('bhat', f'{p2} x {pct} / 100', off),
                     ('jamma', f'{p1} + {p2} - {off}', total)],
                    f'{total} + {off} = {p1 + p2}, milyo')
