@@ -7,6 +7,7 @@ import bpy
 import lib
 import sets_a as A_
 import sets_b as B_
+import sets_d as D_
 
 ROOT = os.path.dirname(HERE)
 SHOTS = {
@@ -16,12 +17,12 @@ SHOTS = {
     4: (A_.set_demon, dict(variant="rise")),
     5: (A_.set_tejas, dict(converge=0.4)),
     6: (A_.set_moon, dict(shatter=0.74)),
-    7: (A_.set_sea, dict(release=0.3)),
+    7: (D_.set_ramayana, dict(release=0.3)),
     8: (B_.set_map, dict(variant="rise")),
     9: (B_.set_taleju, {}),
     10: (B_.set_map, dict(variant="route")),
     12: (B_.set_jamara, dict(variant="grow")),
-    13: (B_.set_fulpati, {}),
+    13: (D_.set_fulpati2, {}),
     14: (B_.set_lamps_tools, dict(cut=0.47)),
     15: (B_.set_thali, dict(variant="dashami")),
     16: (B_.set_valley, {}),

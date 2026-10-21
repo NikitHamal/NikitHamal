@@ -4,10 +4,10 @@ models (glTF 2k), HDRIs (2k .hdr, used for light and reflections only) and PBR t
 import json, os, urllib.request
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); OUT = f"{HERE}/build/ph"
 UA = {"User-Agent": "festivals-v3-build/1.0 (github.com/NikitHamal)"}
-MODELS = ["bull_head"]
+MODELS = ["bull_head", "food_pomegranate_01", "bolt_action_rifle_7_62", "coastal_cliff_01"]
 HDRIS = ["brown_photostudio_02", "dikhololo_night", "kiara_9_dusk", "belfast_sunset_puresky", "kiara_8_sunset", "cobblestone_street_night"]
 TEXTURES = ["castle_brick_02_red", "brown_mud_dry", "coast_sand_01", "clay_roof_tiles", "brick_pavement_02", "bamboo_veneer",
-            "cobblestone_floor_04", "aerial_grass_rock", "fabric_pattern_07", "brown_leather", "clay_plaster", "bark_brown_02"]
+            "cobblestone_floor_04", "aerial_grass_rock", "fabric_pattern_07", "brown_leather", "clay_plaster", "bark_brown_02", "lacquered_cherry_wood", "dark_wood", "medieval_wood"]
 
 
 def get(url, path):

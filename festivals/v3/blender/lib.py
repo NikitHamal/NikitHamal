@@ -543,3 +543,25 @@ def pbr(tex, fallback, scale=1.0, tint=None, bump=1.0):
         n = nt.nodes.new("ShaderNodeNormalMap"); n.inputs["Strength"].default_value = bump
         nt.links.new(nm.outputs["Color"], n.inputs["Color"]); nt.links.new(n.outputs[0], p.inputs["Normal"])
     return m
+
+
+def import_ph(name, loc=(0, 0, 0), scale=1.0, rot=(0, 0, 0)):
+    """Import a Poly Haven glTF model under one empty; returns (root, meshes) or (None, []) if not downloaded."""
+    path = f"{PH}/models/{name}/{name}.gltf"
+    if not _os.path.exists(path): return None, []
+    before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=path)
+    new = [o for o in bpy.data.objects if o not in before]
+    root = bpy.data.objects.new(name + "_root", None); bpy.context.scene.collection.objects.link(root)
+    for o in new:
+        if o.parent is None: o.parent = root
+    root.location = loc; root.scale = (scale,) * 3; root.rotation_euler = rot
+    return root, [o for o in new if o.type == "MESH"]
+
+
+def dup_tree(root, loc, rot=(0, 0, 0), scale=None):
+    """Linked duplicate of an imported model (shares mesh data)."""
+    r2 = bpy.data.objects.new(root.name + "_d", None); bpy.context.scene.collection.objects.link(r2)
+    for c in root.children:
+        c2 = c.copy(); bpy.context.scene.collection.objects.link(c2); c2.parent = r2
+    r2.location = loc; r2.rotation_euler = rot; r2.scale = scale or root.scale
+    return r2
