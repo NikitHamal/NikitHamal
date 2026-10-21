@@ -35,8 +35,8 @@ product-facing number: **0/48 -> 17/48**.
 
 ```bash
 # 1. the mix: the named families, the shapes, and a small slice of the base mix
-python nik/scripts/polish_mix.py --data data --base sft13 --name sft31 \
-  --families "roles:90000,frame:45000,iter:25000,math:110000,colmath:50000,\
+python nik/scripts/polish_mix.py --data data --base sft13 --name p11_mix \
+  --families "roles:100000,frame:150000,iter:25000,math:110000,colmath:50000,\
 understand:50000,read:40000,skills:40000,vocab:12000,correct:20000,reduce:110000" \
   --persona 25000 --chat 80000 --share 0.10
 
@@ -54,6 +54,7 @@ The shares, and why each one:
 | `reduce.py` (Sky's symbolic two-step) | 8% flat, 110k in the family mix | 40% costs 7 reason items; 8-18% gives L2 12/12 with the reason held |
 | the iteration chains (`iter.py`) | 25k | the reason family |
 | the money scene (`frame.py`) | 45k | the one-step reading (2/11 -> 10/11) |
+| the story frames (`frame.py`, 32 now) | 150k in the family mix | the **shape share** is what moves the held-out word family, and it was measured three times: 17% of the rows -> 14/48, 22% -> 17/48, **30% -> 19/48**.  The frames and the role family are the shape rows; everything else is context. |
 | the arithmetic (math + colmath) | ~25% | the bench's arith family and the stress items |
 | the understanding families (understand / read / skills / vocab / correct) | ~25% | the 26 understanding probes are **not** taught by the arithmetic half of the base mix |
 | the persona rows (augmented) | 20-25k | the persona gate (1.0) and the identity probes |
@@ -77,7 +78,15 @@ python nik/scripts/word_procedure_probe.py --out items.json --ladder --contrast
 node nik/scripts/word_probe_run.mjs <bin> items.json --out <dir>/ladder-<tag>.json
 python nik/scripts/collapse_report.py <dir>/ladder-<tag>.json
 python nik/scripts/ship_gate.py --old nik/web/model/logs/<the live model> --new <dir>
+python nik/scripts/ship_gate.py --old <the live logs> --new <dir> --target 5   # the owner's target
 ```
+
+`--target 5` is the owner's target as a table: **every metric gains at least 5** (the
+rates in percentage points, the counts in items).  A metric that is already at its
+ceiling (the ladder L1 is 12/12, the persona is 1.0) cannot gain 5, so for those the
+requirement becomes *no regression*.  The stress and the chat prompts are reported but
+never decisive - they are inside the contamination (section 4).  The verdict is
+SHIP / DO NOT SHIP / CANNOT DECIDE, exit 0 / 1 / 2.
 
 **Pair the comparisons.**  `bench.py` draws its items from one RNG stream, so `--n 8` and
 `--n 16` share only 17 of 140 items; use `--nested-items` (a deterministic set) on both
@@ -92,7 +101,32 @@ held out by `nik/data/teacher/build.py`) and the bench items are held out by
 `nik/tests/test_frame_leak.py` and `nik/tests/test_roles_leak.py` - **those are the
 numbers to rank models on.**
 
-## 5. The leak guards (do not remove them)
+## 5. What the failing items said (read the scratchpads, do not guess)
+
+p8 was 76.0% on the nested bench and still lost 34 of the 288 items.  Every one of those
+items says in its scratchpad *which shape is missing* - the shapes are not "the model is
+weak", they are four or five concrete compositions:
+
+| the failing item | what the model wrote | the shape |
+|---|---|---|
+| "kaksha ma 11 keta ra 47 keti chhan, 6 jana anupasthit" | "21 - 47 = 4" | **(a + b) - c** |
+| "bagaincha ma 6 line, har line ma 4 rukh, 7 rukh dhale" | "6 x 4 = 24. rukh = 24: 24 = 28." | **(a x b) - c** (the intermediate is muddled) |
+| "kitab ko mol 600, 10% chhut pachhi 2 wata kitab" | "600 x 10/100 = 60; 600 - 60 = 540" | **the percent applies to *each* of N items** |
+| "aarati 44 barsha ko chha, chhora aadha bhanda 5 barsha kam" | "44 - 5 = 39" | **(a / 2) - b** |
+| "pattern: 14, 28, 56, ..." | "har step ma 22 joda hunchha" | the **geometric rule inference** |
+
+All of them are now data (`frame.py`, 32 frames: the surfaces, the four diagnostic shapes
+and four three-step shapes; `iter.py`, the "no rule stated" sequences).  Two rules that
+came out of this:
+
+* **the rule inference is a different ability from the iteration** - every iteration row
+  *stated* the rule, and the benchmark's sequence items state nothing.  The trace's first
+  line has to be the inference itself.
+* **a floor division cannot be written as an equation** - the auditor checks every
+  `a / b = c` for exactness, so the box scene divides exactly (`62 = 12 x 5 + 2` is
+  checked, `62 / 12 = 5` is rejected).
+
+## 6. The leak guards (do not remove them)
 
 * `nik/tests/test_frame_leak.py` - no generated row may contain the distinctive wording
   of a benchmark word template.
