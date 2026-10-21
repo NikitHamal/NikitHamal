@@ -740,6 +740,112 @@ def scene_half_minus(R):
     return user, steps, ans, str(result)
 
 
+
+# ---------------------------------------------------------------- the three-step shapes
+# The ladder's L4 (the two-line chain) is 6/12 in p8 and the bench's word family is
+# 14-19/48, so the *third* step is the next thing: the traces now carry two
+# intermediates in a row, and the shapes below are the ones the model cannot yet do.
+
+def scene_three_money_steps(R):
+    """a - b - c: the money goes out twice"""
+    a = R.choice([8000, 10000, 12000, 15000, 20000, 25000])
+    b = int(a * R.choice([0.2, 0.3, 0.4]))
+    c = R.choice([500, 800, 1200, 1500, 2000])
+    left = a - b - c
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'mahina ko {a} rupaya thiyo. kiraye ko {b} diyo, ani bijuli ko {c} janyo. {dis} '
+                f'aba kati rupaya bacheko?')
+    elif shape == 1:
+        user = (f'{a} rupaya bata {b} tiryo ra {c} arko kharcha garyo. {dis} '
+                f'kati rupaya bacha?')
+    else:
+        user = (f'jamma {a} rupaya chha. {b} ra {c} rupaya khatayo. {dis} '
+                f'aba kati rupaya bacheko?')
+    steps = _steps([('suru', f'{a}', a), ('pala', f'{b}', b), ('baki', f'{a} - {b}', a - b),
+                    ('kati', f'{a - b} - {c}', left)],
+                   f'{left} + {c} = {a - b}, milyo')
+    ans = R.choice([f'aba {left} rupaya bacheko.', f'{left} rupaya bacha.',
+                    f'kati? {left} rupaya.'])
+    return user, steps, ans, str(left)
+
+
+def scene_group_discount(R):
+    """(a x b) with a percent off the total"""
+    each = R.choice([40, 50, 80, 100, 150, 200, 250])
+    count = _q(R, 2, 6)
+    pct = R.choice([10, 20, 25, 50])
+    total = each * count
+    off = total * pct // 100
+    pay = total - off
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'{count} jana lai {each} rupiya ko ticket kinyo. {dis} jamma ticket ma '
+                f'{pct}% discount. aba kati rupiya tirne?')
+    elif shape == 1:
+        user = (f'jamma {count} wata {each} rupiya per wata. {dis} '
+                f'{pct}% bhat aayo. kati rupaya jamma?')
+    else:
+        user = (f'party ko bill: {count} x {each} = kati rupiya? {dis} '
+                f'{pct}% discount paye. aba kati tirne?')
+    steps = _steps([('ek', f'{each}', each), ('jamma', f'{each} x {count}', total),
+                    ('bhat', f'{total} x {pct} / 100', off),
+                    ('tirne', f'{total} - {off}', pay)],
+                   f'{pay} + {off} = {total}, milyo')
+    ans = R.choice([f'aba {pay} rupaya tirne.', f'{pay} rupaya.',
+                    f'kati? {pay} rupaya.'])
+    return user, steps, ans, str(pay)
+
+
+def scene_half_each(R):
+    """(a / 2) + b: half of it, plus something"""
+    a = R.choice([20, 30, 40, 50, 60, 80, 100, 120])
+    b = R.choice([3, 5, 7, 8, 12, 15, 20])
+    total = a // 2 + b
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'ek jhola ma {a} ota thiyo, aadha jana le liyo. Baki le {b} ota liyo. {dis} '
+                f'jhola ma kati ota bacha?')
+    elif shape == 1:
+        user = (f'{a} ota ma aadha {b} ota thayera sanga. {dis} jamma kati ota?')
+    else:
+        user = (f'aadha {a} ota ma thiyo, maile {b} ota add gare. {dis} '
+                f'aba kati ota chha?')
+    steps = _steps([('suru', f'{a}', a), ('aadha', f'{a} / 2', a // 2),
+                    ('jamma', f'{a // 2} + {b}', total)],
+                   f'{total} - {b} = {a // 2}, milyo')
+    ans = R.choice([f'aba {total} ota chha.', f'{total} ota bacheko.',
+                    f'kati? {total} ota.'])
+    return user, steps, ans, str(total)
+
+
+def scene_boxes_remainder(R):
+    """(a / b) - the items into boxes, how many boxes (the division is exact)"""
+    per = R.choice([6, 8, 10, 12, 15, 20])
+    boxes = _q(R, 3, 9)
+    items = per * boxes
+    dis = _distract(R)
+    shape = R.randrange(3)
+    if shape == 0:
+        user = (f'{items} ota samagri {per} ota ko kanda ma rakhne paryo. {dis} '
+                f'kati kanda bhancha?')
+    elif shape == 1:
+        user = (f'kanda har ek ma {per} ota rakhincha. {items} ota chha. {dis} '
+                f'kati kanda bhancha?')
+    else:
+        user = (f'{items} ota ma {per} ota ko kanda banaune. {dis} '
+                f'kati kanda banen?')
+    steps = _steps([('jamma', f'{items}', items), ('ek kanda', f'{per}', per),
+                    ('kanda', f'{items} / {per}', boxes)],
+                   f'{per} x {boxes} = {items}, milyo')
+    ans = R.choice([f'{boxes} kanda bhancha.', f'{boxes} kanda banen.',
+                    f'kati? {boxes} kanda.'])
+    return user, steps, ans, str(boxes)
+
+
 SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, scene_time,
           scene_bus, scene_basket, scene_discount, scene_saving, scene_recharge, scene_cricket,
           scene_boxes, scene_pct_more,
@@ -750,7 +856,10 @@ SCENES = [scene_market, scene_school, scene_tickets, scene_farm, scene_kitab, sc
           scene_second_discounted, scene_change_from_note, scene_price_per_kilo,
           # the four gaps the p8 failures pointed at
           scene_counts_minus_absent, scene_items_minus_some,
-          scene_percent_each_item, scene_half_minus]
+          scene_percent_each_item, scene_half_minus,
+          # the three-step shapes (the ladder's L4 is 6/12: the third step is next)
+          scene_three_money_steps, scene_group_discount,
+          scene_half_each, scene_boxes_remainder]
 
 
 def sample(R):
