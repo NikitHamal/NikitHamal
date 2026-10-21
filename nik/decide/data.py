@@ -4,6 +4,8 @@ import random, re, sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'teacher'))
 import chat, colmath, compose, correct, frame, lexicon as L, names, read, skills  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import reading_wide  # noqa: E402
 
 YNU = ['ho', 'haina', 'thaha chhaina']
 INTENTS = ['kura (chat)', 'hisab (math)', 'padhera jawaf (reading)', 'nik/nikit barema (persona)', 'anuvad/grammar (language)', 'lekhai (writing)']
@@ -174,7 +176,7 @@ def memory(R):
     return memory(R)
 
 
-TASKS = [(yes_no, .13), (unknown, .07), (lookup, .17), (arith, .14), (step, .11), (word, .1), (memory, .07), (intent, .21)]
+TASKS = [(yes_no, .1), (unknown, .05), (lookup, .12), (arith, .11), (step, .09), (word, .08), (memory, .06), (reading_wide.sample, .24), (intent, .15)]
 
 
 def sample(R):
