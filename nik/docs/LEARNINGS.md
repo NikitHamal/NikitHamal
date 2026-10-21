@@ -8,6 +8,14 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **Instruments v2 (bench_reading 50 pairs, trap_check 36 items):** with 12 traps a 1-item move blocked ships; on 36,
+  m50 = p8m = 25/36 (the earlier trap "regression" was noise), while p8m's reading loss is real (5 -> 2/50 pairs).
+- **Blends m50 + a(p11 - m50) (a = 0.3, 0.5) lose the shape gain (4, 3/44 vs p11 14/44)**: the shape skill switches on
+  only near a = 1, while the bench cost arrives early, so weight space can't separate them. Replay 0.35 vs 0.2 (p8mr35) ~
+  identical to p8m. p12 (shapes 24%) collapsed like p11 (bench 58%): the share was not the cause (Local-C: trace start).
+- **Reading: two negatives.** reading_wide recast as short chat answers (reading_chat.py), CPU micro-SFT 20%: pairs
+  5 -> 1/50; with a clause-quoting think: 0/50. Reading needs something else (parked; share 0).
+
 - **p11 (Local-C: m50 + 7 min on a 38%-shape family mix, lr 1e-4): shape probe 4 -> 14/44, understanding 21, math
   96.5, but bench 209 -> 162/288, nested 222 -> 164, persona 85.7, traps 7, RW items 21.** The shapes are learnable;
   at 38% they crowd out general arithmetic (same curve as P5). Next: blends with m50 and a bigger base/replay share.
