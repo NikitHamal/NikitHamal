@@ -212,7 +212,34 @@ def ladder():
     return items
 
 
-def build(n_per_template=1, seed=7, with_ladder=False):
+def contrast():
+    """Minimal pairs with the SAME SHAPE and DIFFERENT NUMBERS.
+
+    Local-A's identity finding is that the model answers two different questions with
+    the same stored text ("mero naam nikit ho" and "nikit ko ho?" get the identical
+    bio) - i.e. it does not read the input, it matches the input to a template.
+    The same question in the arithmetic channel: give it two problems of the same
+    shape with different numbers.  A model that *reads* the numbers answers two
+    different numbers; a model that *matches a template* answers the same thing twice
+    (or invents its own operands).
+
+    -> items: [cat, question, gold], and each pair shares a cat suffix so the
+       collapse rate can be computed from the rows.
+    """
+    items = []
+    triples = [(39, 8, 2), (61, 7, 3), (45, 6, 4), (25, 7, 3), (50, 2, 15), (30, 4, 25),
+               (62, 2, 5), (18, 18, 2), (7, 3, 5), (37, 13, 6), (300, 90, 2), (1000, 3, 1),
+               (22, 9, 4), (81, 3, 8), (55, 5, 6), (73, 4, 7), (91, 6, 2), (16, 8, 5),
+               (44, 2, 9), (68, 7, 2)]
+    for level, fmt in (('L2', '{a} - ({b} x {c}) = ?'), ('L1', '{a} - {b} = ?')):
+        for p in range(0, len(triples), 2):
+            for m, (a, b, c) in enumerate((triples[p], triples[p + 1])):
+                gold = a - b * c if level == 'L2' else a - b
+                items.append([f'contrast-{level}-p{p // 2}-m{m}', fmt.format(a=a, b=b, c=c), gold])
+    return items
+
+
+def build(n_per_template=1, seed=7, with_ladder=False, with_contrast=False):
     """-> (items, meta).  items are [cat, question, gold] for the engine harness."""
     R = random.Random(seed)
     items, meta = [], []
@@ -228,6 +255,10 @@ def build(n_per_template=1, seed=7, with_ladder=False):
         for cat, q, gold in ladder():
             items.append([cat, q, gold])
             meta.append({'cat': cat, 'template': 'ladder', 'variant': cat, 'gold': gold, 'q': q})
+    if with_contrast:
+        for cat, q, gold in contrast():
+            items.append([cat, q, gold])
+            meta.append({'cat': cat, 'template': 'contrast', 'variant': cat, 'gold': gold, 'q': q})
     return items, meta
 
 
@@ -238,8 +269,10 @@ def main():
     ap.add_argument('--n', type=int, default=1, help='items per template')
     ap.add_argument('--seed', type=int, default=7)
     ap.add_argument('--ladder', action='store_true', help='also emit the L1-L4 execution ladder')
+    ap.add_argument('--contrast', action='store_true',
+                    help='also emit the same-shape/different-numbers contrast pairs')
     a = ap.parse_args()
-    items, meta = build(a.n, a.seed, with_ladder=a.ladder)
+    items, meta = build(a.n, a.seed, with_ladder=a.ladder, with_contrast=a.contrast)
     json.dump(items, open(a.out, 'w', encoding='utf8'), ensure_ascii=False)
     if a.meta:
         json.dump(meta, open(a.meta, 'w', encoding='utf8'), indent=1, ensure_ascii=False)
