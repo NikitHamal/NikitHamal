@@ -27,7 +27,13 @@ def _split(text):
 def yes_no(R):
     e = read.yes_no(R)
     c, q = _split(_user(e))
-    return dict(task='read-yesno', context=c, question=q, options=YNU, label=0 if e['gold'] == 'ho' else 1)
+    # put the claimed value into the options, so the option span can be matched against the passage (as in lookup);
+    # with value-free options (ho/haina) both v1 and v2 stayed at chance although the rows are 99.4% answerable
+    import re as _re
+    m = _re.search(r'ke \w+ (.+?)(?: ma baschha| ma baschhin| lai man parchha| gayo| gain| ho)\?$', q) or _re.search(r'ke \w+ (?:lai )?(.+?)\?$', q)
+    v = m.group(1) if m else ''
+    opts = [f'ho, {v}', f'haina, {v} haina', 'thaha chhaina'] if v else YNU
+    return dict(task='read-yesno', context=c, question=q, options=opts, label=0 if e['gold'] == 'ho' else 1)
 
 
 def unknown(R):
