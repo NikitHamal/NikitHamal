@@ -41,5 +41,9 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   4. Pull `out/dashain_v3.mp4` back to the repo: base64 chunks via the marimo execute API.
 - [ ] Stills: 5 Dashain + 5 Tihar designs × 3 sizes, as 3D scenes that reuse these sets. The Kukur Tihar dog stays pixel art; it is the one place pixel art is genuinely good.
 
+## Delivery limits (measured)
+- Connector pushes carry blobs up to about 8 MB; 30 MB fails with HTTP 413. So the repo copy of the film has to be at most about 8 MB (or split per section), and the full-quality master goes to the owner as a chat attachment (`actl asset put`).
+- molab → here: base64 chunks through the marimo execute API (see `nik/docs/LEARNINGS.md`: 700 KB reads, md5 on both ends).
+
 ## How to push from this sandbox
-There are no git credentials here. Pushes go through the GitHub connector (Git Data API): `/workspace/tools/ghpush.py`, wrapped by `/workspace/tools/push.sh "msg" paths...`. Both are outside the repo. Re-create them if the sandbox is reset; see the commit history of this file.
+There are no git credentials here. Pushes go through the GitHub connector (Git Data API): `/workspace/tools/ghpush.py`, which runs in actl's own venv (`/app/py/.venv/bin/python`) and calls `ApiClient` in-process (so there is no argv limit) and respects `.gitignore`. It is wrapped by `/workspace/tools/push.sh "msg" paths...`. Both are outside the repo. Re-create them if the sandbox is reset; see the commit history of this file.
