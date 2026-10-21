@@ -186,11 +186,12 @@ def set_jamara(sc, A, variant="grow"):
     floor = prim("plane", "floor", noisy(mat("mud", (0.1, 0.06, 0.04), rough=0.9), 4, 0.5, 0.05, 0.5), size=6)
     bed = prim("cylinder", "bed", noisy(mat("sand", (0.32, 0.25, 0.16), rough=0.95), 300, 0.4, 0.05, 0.9), radius=0.35, depth=0.06, location=(0, 0, 0.03), vertices=96)
     k = kalash("kalash", (0, 0, 0.06), 1.1)
-    jam, blade = jamara("jam", (0, 0, 0.06), 0.33, 1800, 0.22)
+    jam, blade = jamara("jam", (0, 0, 0.06), 0.33, 2600, 0.3)
+    light("AREA", (0.6, -0.7, 0.7), 18, (1.0, 0.7, 0.4), size=0.5, look=(0, 0, 0.12))
     jam_mask = []
     d, fl, li = diyo("diyo", (0.42, -0.25, 0), 1.2, 60, 7)
     slit = light("AREA", (-1.5, 0.4, 0.8), 0, (1.0, 0.8, 0.55), size=0.05, look=(0, 0, 0.1))
-    haze, hv = volume_world(0.15, (1, 0.85, 0.7), 0.6)
+    haze, hv = volume_world(0.05, (1, 0.85, 0.7), 0.6)
     glare(sc, 1.1, 7, -0.6)
     cam = camera((0.05, -1.2, 0.22), (0, 0, 0.16), 55, dof=1.2, fstop=2.2)
 
@@ -199,7 +200,7 @@ def set_jamara(sc, A, variant="grow"):
         g = ease(u * 0.95) if variant == "grow" else 1.0
         jam.scale = (1, 1, max(0.03, g))
         f = flicker(t); fl.scale = (0.75, 0.75, 2.2 * f); li.data.energy = 7 * f
-        aim(cam, lerp((0.4, -1.1, 0.12), (-0.25, -0.95, 0.28), ease(u)), (0, 0, lerp(0.1, 0.2, g)))
+        aim(cam, lerp((0.35, -0.95, 0.16), (-0.2, -0.8, 0.26), ease(u)), (0, 0, lerp(0.07, 0.15, g)))
         cam.data.dof.focus_distance = (Vector(cam.location) - Vector((0, -0.2, 0.15))).length
     return update
 
@@ -409,12 +410,12 @@ def set_valley(sc, A):
     hills.data.materials.append(noisy(mat("hillm", (0.03, 0.05, 0.03), rough=0.9), 0.5, 0.4, 0.05, 0.2))
     ridge = prim("cone", "ridge", mat("ridgem", (0.01, 0.012, 0.02), rough=0.95), radius1=180, radius2=20, depth=40, vertices=7, location=(0, 260, -5))
     ridge.scale = (2.5, 0.4, 1)
-    H, W, P = houses("town", 420, (-14, 14, 4, 40), 3, 0.06)
+    H, W, P = houses("town", 420, (-14, 14, 4, 40), 3, 0.22)
     hero_m = emission("hero", (1.0, 0.6, 0.25), 0)
     hero = prim("cube", "herowin", hero_m, size=1, location=(0.6, 6.5, 0.45)); hero.scale = (0.22, 0.02, 0.28)
     hb = prim("cube", "herohouse", noisy(mat("hb2", (0.25, 0.08, 0.05), rough=0.85), 30, 0.4, 0.1, 0.3), size=1, location=(0.6, 6.92, 0.8)); hb.scale = (1, 0.8, 1.6)
     moon_d = prim("uv_sphere", "moondisc", emission("moonm", (1.0, 0.95, 0.85), 18), radius=6, location=(-18, 230, 38))
-    moon = light("SUN", (0, 0, 0), 0.6, (0.7, 0.8, 1.0), size=0.02); moon.rotation_euler = (math.radians(75), 0, math.radians(170))
+    moon = light("SUN", (0, 0, 0), 2.5, (0.7, 0.8, 1.0), size=0.02); moon.rotation_euler = (math.radians(70), 0, math.radians(165))
     haze, hv = volume_world(0.004, (0.7, 0.8, 1.0), 0.6)
     hl = light("POINT", (0.6, 6.2, 0.45), 0, (1, 0.6, 0.25), size=0.1)
     glare(sc, 1.0, 9, -0.5)
@@ -465,7 +466,7 @@ def set_ping(sc, A):
     for i, c in enumerate([(0.8, 0.05, 0.05), (0.05, 0.25, 0.8), (1.0, 0.7, 0.05), (0.1, 0.6, 0.2), (0.85, 0.2, 0.6), (0.95, 0.4, 0.05)]):
         k = kite("kite%d" % i, c, 0.8); k.location = (-10 + 4.5 * i, 30 + 6 * (i % 2), 14 + 3 * (i % 3)); kites.append((k, i))
     sun = light("SUN", (0, 0, 0), 4.5, (1.0, 0.78, 0.55), size=0.02); sun.rotation_euler = (math.radians(78), 0, math.radians(200))
-    volume_world(0.006, (1.0, 0.85, 0.7), 0.7)
+    volume_world(0.0015, (1.0, 0.85, 0.7), 0.7)
     glare(sc, 1.2, 8, -0.6)
     cam = camera((1.0, -10, 1.2), (0, 4, 6.5), 28, dof=12, fstop=8)
 
@@ -511,7 +512,7 @@ def set_bus(sc, A):
         bag.scale = (2.0, 1.1, 0.7); bevel(bag, 0.1, 2); bag.parent = bus
     hl = light("SPOT", (0, -5.2, 1.2), 3000, (1, 0.9, 0.75), size=0.2, spot=0.9); hl.parent = bus; hl.rotation_euler = (math.radians(95), 0, 0)
     volume_world(0.01, (0.8, 0.85, 1.0), 0.6)
-    moon = light("SUN", (0, 0, 0), 0.25, (0.6, 0.7, 1.0), size=0.02); moon.rotation_euler = (math.radians(60), 0, math.radians(30))
+    moon = light("SUN", (0, 0, 0), 1.2, (0.6, 0.7, 1.0), size=0.02); moon.rotation_euler = (math.radians(60), 0, math.radians(30))
     glare(sc, 1.0, 9, -0.45)
     sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 1.0
     cam = camera((7.0, -4.0, 2.2), (0, 40, 9.0), 30, dof=20, fstop=4)
@@ -523,14 +524,15 @@ def set_bus(sc, A):
             i = int(np.searchsorted(L, s)) - 1; i = max(0, min(len(road) - 2, i))
             f = (s - L[i]) / max(1e-6, L[i + 1] - L[i])
             h.location = road[i].lerp(road[i + 1], f) + Vector((0, 0, 0.4))
-        bus.location = (2.0, lerp(-14, 12, u), 0); bus.rotation_euler = (0, 0, 0)
+        bus.location = (3.2, lerp(2, 22, u), 0); bus.rotation_euler = (0, 0, 0)
         aim(cam, lerp((7.0, -4.0, 2.2), (6.5, -1.0, 2.6), ease(u)), lerp((0, 40, 9), (0, 50, 11), ease(u)))
     return update
 
 
 # ------------------------------------------------------------------ 19 a lane of doorways at dusk, a lamp at each
 def set_lane(sc, A):
-    world(sky=[(0.0, (0.25, 0.12, 0.1)), (0.3, (0.06, 0.04, 0.08)), (1.0, (0.01, 0.01, 0.03))], strength=1.0)
+    world(sky=[(0.0, (0.25, 0.12, 0.1)), (0.3, (0.06, 0.04, 0.08)), (1.0, (0.01, 0.01, 0.03))], strength=3.0)
+    light("AREA", (0, 26, 3), 400, (1.0, 0.6, 0.3), size=4, look=(0, 0, 1))
     ground = prim("plane", "lane", noisy(mat("bricks", (0.2, 0.08, 0.05), rough=0.75), 25, 0.5, 0.2, 0.5), size=60)
     rnd = np.random.default_rng(12)
     cols = [(0.5, 0.05, 0.05), (0.08, 0.18, 0.45), (0.55, 0.38, 0.08), (0.1, 0.35, 0.18), (0.4, 0.12, 0.35), (0.9, 0.85, 0.75), (0.08, 0.06, 0.05)]
@@ -542,7 +544,7 @@ def set_lane(sc, A):
             door = prim("cube", "door", noisy(mat("d%d%d" % (side, i), cols[(i + (side > 0) * 3) % len(cols)], rough=0.6), 40, 0.3, 0.1, 0.3), size=1, location=(side * 1.99, y, 0.95)); door.scale = (0.05, 0.9, 1.9)
             frame = prim("cube", "frame", noisy(mat("fr", (0.06, 0.03, 0.015), rough=0.6), 60, 0.3, 0.1, 0.4), size=1, location=(side * 1.98, y, 1.0)); frame.scale = (0.06, 1.15, 2.15)
             win = prim("cube", "win", emission("lw%d%d" % (side, i), (1, 0.6, 0.25), 3 + 4 * rnd.random()), size=1, location=(side * 1.99, y, 3.3)); win.scale = (0.03, 0.6, 0.7)
-            d, fl, li = diyo("dl%d%d" % (side, i), (side * 1.75, y, 0.0), 2.0, 70, 2.0)
+            d, fl, li = diyo("dl%d%d" % (side, i), (side * 1.75, y, 0.0), 2.0, 70, 6.0)
             lights_.append((fl, li, rnd.random() * 9))
             for k in range(3):
                 marigold("mgl", (side * 1.95, y - 0.4 + 0.4 * k, 2.05), 0.06)
@@ -553,7 +555,7 @@ def set_lane(sc, A):
     def update(t, dur):
         u = t / dur
         for fl, li, s in lights_:
-            f = flicker(t, s); fl.scale = (0.75, 0.75, 2.2 * f); li.data.energy = 2.0 * f
+            f = flicker(t, s); fl.scale = (0.75, 0.75, 2.2 * f); li.data.energy = 6.0 * f
         aim(cam, lerp((0, -3, 1.2), (0.0, 6.5, 1.1), ease(u)), lerp((0, 20, 1.0), (0, 26, 0.9), ease(u)))
         cam.data.dof.focus_distance = 4.0
     return update

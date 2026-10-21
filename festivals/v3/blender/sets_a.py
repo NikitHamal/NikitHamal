@@ -207,8 +207,8 @@ def set_tejas(sc, A):
     tr = trishul(); tr.location = (0, 0, -0.35); tr.scale = (0.001,) * 3
     key = light("AREA", (1.2, -1.5, 1.0), 0, (1, 0.8, 0.6), size=1.2, look=(0, 0, 0.2))
     rim = light("AREA", (-1.0, 1.4, 0.6), 0, (1, 0.3, 0.12), size=1.2, look=(0, 0, 0.2))
-    volume_world(0.03, (1, 0.9, 0.8), 0.3)
-    glare(sc, 0.8, 9, -0.35)
+    volume_world(0.006, (1, 0.9, 0.8), 0.3)
+    glare(sc, 1.0, 8, -0.5)
     cam = camera((0, -3.0, 0.15), (0, 0, 0.1), 60, dof=3.0, fstop=4)
     conv = A.get("converge", 0.42)
 
@@ -222,15 +222,15 @@ def set_tejas(sc, A):
             b.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
             b.scale = (1, 1, L)
             b.hide_render = k >= 0.999
-        bloom = ease((u - conv) / 0.08) * (1 - ease((u - conv - 0.12) / 0.25))
+        bloom = ease((u - conv) / 0.06) * (1 - ease((u - conv - 0.05) / 0.12))
         core.data.materials[0].node_tree.nodes["Emission"].inputs[1].default_value = 200 * bloom + 40 * ease((u - conv * 0.6) / 0.3) * (1 - ease((u - conv - 0.05) / 0.2))
-        core.scale = (1 + 3 * bloom,) * 3
+        core.scale = (1 + 1.2 * bloom,) * 3
         g = ease((u - conv - 0.02) / 0.3)
         tr.scale = (max(0.001, g),) * 3
         tr.location = (0, 0, -0.35 + 0.15 * g)
         tr.rotation_euler = (0, 0, (1 - g) * 2.5 + 0.15 * math.sin(t * 0.4))
         key.data.energy = 400 * g; rim.data.energy = 600 * g
-        aim(cam, lerp((0, -3.0, 0.15), (0.35, -1.9, 0.35), ease(u)), (0, 0, lerp(0.05, 0.3, g)))
+        aim(cam, lerp((0, -3.0, 0.15), (0.3, -1.6, 0.3), ease(u)), (0, 0, lerp(0.05, 0.1, g)))
     return update
 
 

@@ -115,14 +115,20 @@ def finish(fr, f):
     return np.clip(fr * VIG + g, 0, 255)
 
 
+def _load(p):
+    im = Image.open(p).convert("RGB")
+    if im.size != (W, H): im = im.resize((W, H), Image.LANCZOS)   # plates may be rendered below 1080x1920
+    return np.asarray(im).astype(np.float32)
+
+
 def plate(f, sid):
     p = f"{B}/plates/{f:05d}.png"
-    if os.path.exists(p): return np.asarray(Image.open(p).convert("RGB")).astype(np.float32)
+    if os.path.exists(p): return _load(p)
     # missing frame (e.g. plates rendered on twos): nearest earlier existing frame inside the shot
     s = BY[sid]
     for g in range(f - 1, s["f0"] - 1, -1):
         q = f"{B}/plates/{g:05d}.png"
-        if os.path.exists(q): return np.asarray(Image.open(q).convert("RGB")).astype(np.float32)
+        if os.path.exists(q): return _load(q)
     return np.zeros((H, W, 3), np.float32)
 
 
