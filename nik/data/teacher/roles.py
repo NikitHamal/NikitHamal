@@ -526,20 +526,48 @@ def scene_nested_expr(R):
     b = _q(R, 2, 9)
     c = _q(R, 2, 9)
     inter = b * c
-    total = a - inter
-    shape = R.randrange(4)
-    if shape == 0:
-        user = f'{a} - {b}*{c} = ?'
-    elif shape == 1:
-        user = f'{a} - ({b}*{c}) = ?'
-    elif shape == 2:
-        user = f'{a} bata {b} x {c} ghatau = ?'
-    else:
-        user = f'{a} - ({b} guneko {c}) = ?'
     roles = [('a', a), ('b', b), ('c', c)]
-    steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
-    ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
-    return _row('roles-nested', str(total), user, roles, steps, ans, f'{total} + {inter} = {a}')
+    shape = R.randrange(8)
+    if shape in (0, 1, 2, 3):
+        # the subtraction form (the ladder's L2 shape, in held-out surfaces)
+        total = a - inter
+        if shape == 0:
+            user = f'{a} - {b}*{c} = ?'
+        elif shape == 1:
+            user = f'{a} - ({b}*{c}) = ?'
+        elif shape == 2:
+            user = f'{a} bata {b} x {c} ghatau = ?'
+        else:
+            user = f'{a} - ({b} guneko {c}) = ?'
+        steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
+        ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
+        check = f'{total} + {inter} = {a}'
+    else:
+        # the *multiplication* forms: the bench's nested-multiplication families
+        # (mul2x2 44%, mul3x2 38% - the weakest arithmetic the model has) are the
+        # same composition skill in a different surface, so the same trace teaches it.
+        if shape == 4:
+            total = a * b * c
+            user = f'{a} x {b} x {c} = ?'
+            steps = f'{a} x {b} = {a * b}; {a * b} x {c} = {total}'
+            check = f'{total} / {a * b} = {c}'
+        elif shape == 5:
+            total = (a + b) * c
+            user = f'({a} + {b}) x {c} = ?'
+            steps = f'{a} + {b} = {a + b}; {a + b} x {c} = {total}'
+            check = f'{total} / {c} = {a + b}'
+        elif shape == 6:
+            total = a * (b + c)
+            user = f'{a} x ({b} + {c}) = ?'
+            steps = f'{b} + {c} = {b + c}; {a} x {b + c} = {total}'
+            check = f'{total} / {a} = {b + c}'
+        else:
+            total = a - b * c
+            user = f'{a} - {b} x {c} = ?'
+            steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
+            check = f'{total} + {inter} = {a}'
+        ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
+    return _row('roles-nested', str(total), user, roles, steps, ans, check)
 
 
 def scene_chain_expr(R):
