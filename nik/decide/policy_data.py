@@ -33,7 +33,7 @@ def main():
     torch.set_grad_enabled(False)
     tok = Tokenizer.load(os.path.join(ROOT, 'web', 'model', 'tokenizer.json'))
     nik = load_any(a.nik).eval()
-    R = random.Random(a.seed); t0 = time.time(); n = hit = 0
+    R = random.Random(a.seed); t0 = time.time(); n = hit = seen = 0
     with open(a.out, 'a') as f:
         while time.time() - t0 < a.minutes * 60:
             probs = []
@@ -48,7 +48,7 @@ def main():
                 answers = [final_number(tok.decode(t).split('<|/think|>')[-1]) for t, _ in outs]
                 votes = Counter(x for x in answers if x is not None)
                 opts = [x for x, _ in votes.most_common(6)]
-                hit += gold in opts
+                seen += 1; hit += gold in votes
                 if gold not in opts:
                     opts.append(gold)
                 if len(opts) < 2:
@@ -59,7 +59,7 @@ def main():
                            options=opts, label=opts.index(gold), skill=sk, gold_sampled=gold in votes)
                 f.write(json.dumps(row, ensure_ascii=False) + '\n'); n += 1
             f.flush()
-            print(f'{n} rows | gold among samples {hit / max(1, n):.0%} | {(time.time() - t0) / 60:.1f} min', flush=True)
+            print(f'{n} rows from {seen} problems | gold among samples {hit / max(1, seen):.0%} | {(time.time() - t0) / 60:.1f} min', flush=True)
 
 
 if __name__ == '__main__':
