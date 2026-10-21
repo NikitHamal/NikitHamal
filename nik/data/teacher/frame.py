@@ -1,4 +1,4 @@
-﻿"""Arithmetic wrapped in varied frames (Local-C, issue #9).
+"""Arithmetic wrapped in varied frames (Local-C, issue #9).
 
 Why this exists (measured, issue #9): the model scores **82/96 on arithmetic** and
 **0/19 on held-out word-problem templates**, and it fails even `4 x 250` when it
@@ -860,7 +860,7 @@ EN_THINGS = [('marbles', 'oma'), ('stickers', 'sticker'), ('crayons', 'crayon'),
              ('cards', 'card'), ('shells', 'shell')]
 
 
-EN_DISTRACT = ['The shop opens at 9 o'clock.', 'Yesterday was a sunny day.',
+EN_DISTRACT = ["The shop opens at 9 o'clock.", 'Yesterday was a sunny day.',
                 'They walked for 20 minutes first.', 'The clock on the wall shows 4.',
                 'Her bag weighs 3 kilograms.']
 

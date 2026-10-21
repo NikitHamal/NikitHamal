@@ -1,4 +1,4 @@
-﻿"""Iteration drills: apply a rule step by step (Local-C, issue #9).
+"""Iteration drills: apply a rule step by step (Local-C, issue #9).
 
 The measured gap (issue #9, per-family breakdown of the live model):
     unit (h->min) 7/7 | age 2/2 | unit (km->m) 2/2   -> one-step facts: perfect
