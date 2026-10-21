@@ -38,6 +38,7 @@ def main():
     ap.add_argument('--tokens', type=int, default=2048, help='tokens per step (packed rows)')
     ap.add_argument('--seq', type=int, default=256)
     ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--whole-rows', action='store_true', help='every window starts at <|bos|> and holds whole rows (multi-turn rows must not be cut)')
     ap.add_argument('--threads', type=int, default=os.cpu_count() or 2)
     a = ap.parse_args()
     torch.set_num_threads(a.threads)
@@ -55,7 +56,26 @@ def main():
         y = R.random()
         return build.one(R) if y < 0.7 else chat.sample(R) if y < 0.9 else write.sample(R)
 
+    def batch_whole():
+        # windows of whole rows, padded (PAD id 0, mask 0); a row longer than the window is skipped
+        n = a.tokens // a.seq
+        X = torch.zeros(n, a.seq + 1, dtype=torch.long)
+        M = torch.zeros(n, a.seq + 1)
+        for w in range(n):
+            pos = 0
+            while True:
+                i, m = render_chat(tok, lower_user(row())['messages'])
+                if len(i) > a.seq + 1:
+                    continue
+                if pos + len(i) > a.seq + 1:
+                    break
+                X[w, pos:pos + len(i)] = torch.tensor(i); M[w, pos:pos + len(i)] = torch.tensor(m, dtype=torch.float)
+                pos += len(i)
+        return X, M
+
     def batch():
+        if a.whole_rows:
+            return batch_whole()
         # rows packed back to back into windows of --seq tokens (no padding: padded rows cost 4x memory on CPU)
         ids, mask = [], []
         while len(ids) < a.tokens + a.tokens // a.seq:
