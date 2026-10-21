@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T13:08:14Z",
+ "updated": "2026-10-21T13:49:32Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -7,18 +7,18 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "GPU 100% \u00b7 89965 MiB",
+   "gpu": "GPU 95% \u00b7 4514 MiB",
    "job": "fixed corpus audit -> v5w (14 unique blocks) from scratch; Nik-Decide v5 beside it",
-   "progress": 0.7105,
-   "detail": "step 10275 \u00b7 158,225 tok/s \u00b7 142.1 min of stage \u00b7  \u00b7 running: train.py",
+   "progress": null,
+   "detail": " \u00b7 running: bench.py",
    "eta": "v5w results ~14:00 UTC"
   },
   {
    "name": "box 2",
-   "gpu": "GPU 100% \u00b7 8496 MiB",
+   "gpu": "GPU 100% \u00b7 16203 MiB",
    "job": "blends b5/b7 of v4f and v4r: gates",
    "progress": null,
-   "detail": "GPU shared with Local-C runs \u00b7 running: bench.py, train.py",
+   "detail": "GPU shared with Local-C runs \u00b7 running: make_sft2.py, prepare.py, train.py",
    "eta": "~12:30 UTC"
   }
  ],
@@ -38,6 +38,22 @@
     "13/26",
     "9/12",
     "0/12"
+   ],
+   [
+    "b7 = v4f+0.7(v4r-v4f)",
+    "70.8%",
+    "37/48",
+    "18/26",
+    "8/12",
+    "12/12"
+   ],
+   [
+    "b60",
+    "71.5%",
+    "39/48",
+    "17/26",
+    "8/12",
+    "7/12"
    ],
    [
     "v4r (v4f+reduce)",
@@ -91,11 +107,32 @@
  },
  "runs": [
   {
-   "tag": "b5 / b7",
+   "tag": "v4r2",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "training",
+   "what": "v4f + 20 min, reduce 25%"
+  },
+  {
+   "tag": "v4r3",
    "box": "box 2",
    "by": "Claude",
-   "status": "evaluating",
-   "what": "v4f + {0.5,0.7}(v4r - v4f): keep L2, recover reason"
+   "status": "training",
+   "what": "v4f + 15 min lr 1.5e-4, reduce 30%"
+  },
+  {
+   "tag": "blends",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "done",
+   "result": "b7: L2 12/12, und 18, -1.4 pp, stress 61, traps 8; b60: L2 7/12, -0.7 pp, und 17, stress 59"
+  },
+  {
+   "tag": "v5w",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "stopped",
+   "result": "base 64.6% (n8): width does not help"
   },
   {
    "tag": "v4r",
@@ -104,13 +141,6 @@
    "status": "done",
    "what": "live v4f + 20 min lr 2e-4, Sky reduce.py at 40% of rows; target L2 >= 6/12, NikBench within 2 pp",
    "result": "L2 0->12/12, L4 0->6/12, und 16, NikBench -2.1 (reason -7, p=0.016)"
-  },
-  {
-   "tag": "v5w",
-   "box": "box 1",
-   "by": "Claude",
-   "status": "training",
-   "what": "14 unique blocks from scratch (stage A 150 min)"
   },
   {
    "tag": "decide-v7",
@@ -137,9 +167,8 @@
   }
  ],
  "next": [
-  "v4r result (~13:15 UTC)",
-  "Decide v7 bench_reading (~13:10)",
-  "decide whether v6 from scratch is still worth 3.5 h",
-  "Owner: v4f vs Local-C family"
+  "v4r2 / v4r3 results (~14:40 UTC)",
+  "pick the best L2 candidate and ask the owner",
+  "Decide v8 (Nik's own answers) trains after generation"
  ]
 }
