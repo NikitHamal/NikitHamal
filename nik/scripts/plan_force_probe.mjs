@@ -57,4 +57,4 @@ for (const [a, b, c] of items) {
     (ex[k] ||= []).push(`${ok ? 'OK ' : 'XX '} ${q}  think: ${r.think.slice(0, 140)} | ans: ${r.answer.slice(0, 60)}`);
   }
 }
-for (const k of Object.keys(conds)) { console.log(`${k}: ${score[k]}/${items.length}  (gold>=0: ${split[k + 'pos'] || 0}/${split.npos}, gold<0: ${split[k + 'neg'] || 0}/${split.nneg})`); console.log(ex[k].slice(0, 4).join('\n')); }
+for (const k of Object.keys(conds)) { console.log(`${k}: ${score[k]}/${items.length}  (gold>=0: ${split[k + 'pos'] || 0}/${split.npos}, gold<0: ${split[k + 'neg'] || 0}/${split.nneg})`); console.log(ex[k].slice(0, +(process.env.SHOW || 4)).join('\n')); }

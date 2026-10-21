@@ -1,0 +1,1225 @@
+{
+ "rows": [
+  {
+   "cat": "word-orig",
+   "q": "nabin sanga 39 rupiya chha. usle 8 wata chakleti kinyo, ek ko 2 rupiya. aba kati rupiya bachyo?",
+   "gold": 23,
+   "out": "aba 204 rupiya baki chha.",
+   "think": "ek ek wakya padhchhu. (1) suru ma chakleti 39. (2) suru ma paisa 220. (3) kinyo: kharcha 8 x 2 = 16, paisa 220 - 16 = 204, chakleti 39 + 8 = 47. sodheko: rupiya. uttar 204.",
+   "num": "204",
+   "ok": false,
+   "grounding": {
+    "used": 6,
+    "invented": 9,
+    "grounded": 0.4,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "nabin ko jana ma 39 rupiya thiyo. usle 8 wata chakleti 2 rupiya each kinaubhayoo. abhi pugcha kati rupiya baki cha?",
+   "gold": 23,
+   "out": "aba 31 rupiya baki chha.",
+   "think": "paisa: 39. kharcha: 8. hisab: 39. hisab: 39 - 8 = 31. jaach: 31 + 8 = 39, milyo",
+   "num": "31",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 2,
+    "grounded": 0.778,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "nabin: 39 rupiya thiyo. 8 chakleti x 2 rupiya = ? aba kati rupiya baki?",
+   "gold": 23,
+   "out": "aba 37 rupiya baki chha.",
+   "think": "paisa: 39. kharcha: 2 x 2 = 4. hisab: 39 - 2 = 37. jaach: 37 + 2 = 39, milyo",
+   "num": "37",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 3,
+    "grounded": 0.7,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "euta bagaincha ma 4 wata line chhan ra har line ma 11 wata rukh. 7 wata rukh dhale bhane kati rukh baki?",
+   "gold": 37,
+   "out": "jamma 444 wata rukh bhayo.",
+   "think": "jamma rukh: 4 x 11 = 44. rukh: 44 x 11 = 444. jaach: 444 / 11 = 44, milyo",
+   "num": "444",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 5,
+    "grounded": 0.444,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "bagaincha ko 4 ta line chha, ani ek line ma 11 ta rukh pauincha. jati 7 ta rukh milaera use bhayo, baki kati ta rukh bachcha?",
+   "gold": 37,
+   "out": "jamma 132 wata taar bhayo.",
+   "think": "jamma le 11 x + 12 = 132. jaach: 132 / 11 = 12, milyo",
+   "num": "132",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 4,
+    "grounded": 0.333,
+    "coverage": 0.333
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "bagaincha: 4 line, har line ma 11 rukh. jamma 4 x 11 = ? tara 7 rukh use bhayo. baki kati rukh?",
+   "gold": 37,
+   "out": "bagaincha ko jamma.",
+   "think": "jamma: 4 x 11 = 44. bacheko: 44 - 44 = 0. jaach: 44 + 44 = 48, milyo",
+   "num": null,
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 7,
+    "grounded": 0.222,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "ek kilo aalu 30 rupiya. 4 kilo aalu ra 25 rupiya ko dhaniya kinda jamma kati lagchha?",
+   "gold": 145,
+   "out": "jamma 110 rupiya jamma hunchha.",
+   "think": "jamma aalu: 4 x 30 = 120. jamma: 120 + 25 = 145. jamma: 145 - 25 = 110. jaach: 110 + 25 = 145, milyo",
+   "num": "110",
+   "ok": false,
+   "grounding": {
+    "used": 5,
+    "invented": 7,
+    "grounded": 0.417,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "aalu ko daam ek kilo ko 30 rupiya cha. 4 kilo lene sanga 25 rupiya ko bonus pani paunu cha. jamma kati rupiya lagcha?",
+   "gold": 145,
+   "out": "jamma 25 rupiya lagchha.",
+   "think": "ek ek wakya padhchhu. (1) suru ma suntala 25. (2) suru ma paisa 250. (3) barabar bhag: 25 / 4 = 6. (4) barabar bhag: 6 / 5 = 1. (5) gayo: 1 - 2 = 9. (6) gayo: 9 - 1 = 8. (7) gayo: 8 - 2 = 6. sodheko: rupiya. uttar 25.",
+   "num": "25",
+   "ok": false,
+   "grounding": {
+    "used": 5,
+    "invented": 20,
+    "grounded": 0.2,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "4 kilo aalu x 30 rupiya per kilo = ? tara 25 rupiya ko dhaniya pani add hunchha. jamma kati rupiya?",
+   "gold": 145,
+   "out": "60 rupiya prati kilo.",
+   "think": "prati kilo mol nikalera tulana garchhu. pahilo: 25 / 4 = 6. dosro bhag dosro: 25 / 25 = 10. 6 x 10 = 60. 60 rupiya prati kilo. 60 rupiya prati kilo.",
+   "num": "60",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 7,
+    "grounded": 0.364,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "sita 62 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+   "gold": 26,
+   "out": "",
+   "think": "pahila sita ko ahile ko umer: 62 + 6 = 68 barsha. aba 68 barsha ko chha. 68 barsha ko hunchha.",
+   "num": null,
+   "ok": false,
+   "grounding": {
+    "used": 1,
+    "invented": 4,
+    "grounded": 0.2,
+    "coverage": 0.5
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "sita ko umar 62 barsha ho. chhora baba ko umar baba ko umer ko aadha bata 5 barsha sano cha. chhora ko umar kati barsha ho?",
+   "gold": 26,
+   "out": "5 barsha pachhi 4 barsha pugin.",
+   "think": "passage ma: \"sita ko umer 5 barsha ho\".",
+   "num": "4",
+   "ok": false,
+   "grounding": {
+    "used": 1,
+    "invented": 0,
+    "grounded": 1,
+    "coverage": 0.5
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "sita: umar 62 barsha. aadha = 62 / 2. tara 5 barsha kam. chhora kati barsha ko?",
+   "gold": 26,
+   "out": "62 / 2 = 210.",
+   "think": "pahila chhora: 62. 42 x 5 = 210.",
+   "num": "210",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 2,
+    "grounded": 0.5,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "A bus travels at 50 km per hour for 2 hours, then 15 km more. How far did it travel in total?",
+   "gold": 115,
+   "out": "2 hours of 6 km.",
+   "think": "",
+   "num": "6",
+   "ok": false,
+   "grounding": {
+    "used": 0,
+    "invented": 0,
+    "grounded": 0,
+    "coverage": 0
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "A bus drives 50 kilometers in every hour. It keeps moving for 2 hours and then covers 15 more kilometers. What is the total distance it travelled?",
+   "gold": 115,
+   "out": "Title is the teacher moves.",
+   "think": "",
+   "num": null,
+   "ok": false,
+   "grounding": {
+    "used": 0,
+    "invented": 0,
+    "grounded": 0,
+    "coverage": 0
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "A bus: 50 km per hour x 2 hours = ? then + 15 km. Total distance?",
+   "gold": 115,
+   "out": "50 kmperce baki chha.",
+   "think": "8 x 25 = 200.",
+   "num": "50",
+   "ok": false,
+   "grounding": {
+    "used": 0,
+    "invented": 3,
+    "grounded": 0,
+    "coverage": 0
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "gopal sanga 18 wata kalam thiyo. sathi le 18 wata diyo, ani usle aadha bahini lai diyo. aba usko sanga kati?",
+   "gold": 18,
+   "out": "ho, tapai ko jawaf thik chha!",
+   "think": "dieko: suru ma 18, diyo 18. sodheko: baki. dinu bhaneko ghatnu. 18 - 18 = 0. jaach: 0 + 18 = 18, milyo.",
+   "num": null,
+   "ok": false,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "ghar ko sathi sanga 18 ta kalam ra 18 ta kalam tha. sabai loka aadha jana le gopal lai diyo. aba gopal ko sanga kati kalam cha?",
+   "gold": 18,
+   "out": "gopal sanga aba 0 wata kalam chha.",
+   "think": "dieko: suru ma 18, kalam 18. sodheko: baki. dinu bhaneko ghatnu. 18 - 18 = 0. jaach: 0 + 18 = 18, milyo.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "gopal: 18 kalam + 18 kalam = ? aadha (/) = how many pencils does gopal get?",
+   "gold": 18,
+   "out": "uttar: -18.",
+   "think": "koshtha bhitra ko pahila: 18 + 18 = 36. aba 18 - 36 baki chha. 36 chai 18 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 36 - 18 = 18, tyasaile 18 - 36 = -18.",
+   "num": "-18",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 6,
+    "grounded": 0.538,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "There are 7 boxes with 3 apples each. 5 apples are rotten. How many good apples?",
+   "gold": 16,
+   "out": "5 apples are rotte.",
+   "think": "7 - 5 = 2.",
+   "num": "5",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "7 cartons are packed with 3 apples apiece. Out of all of them, 5 apples have gone bad. How many apples are still good to eat?",
+   "gold": 16,
+   "out": "Suman is still Biest.",
+   "think": "",
+   "num": null,
+   "ok": false,
+   "grounding": {
+    "used": 0,
+    "invented": 0,
+    "grounded": 0,
+    "coverage": 0
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "7 boxes x 3 apples in each box = ? then subtract 5 rotten apples. How many good apples?",
+   "gold": 16,
+   "out": "7 boxes aretcher.",
+   "think": "3 - 5 = 8.",
+   "num": "7",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "gopal ko masik talab 7640 rupiya ho. usle 1000 rupiya bachat garchha. 3 mahina ma kati bachat?",
+   "gold": 3000,
+   "out": "baki 11000 rupiya chha.",
+   "think": "7 le 1000 rupiya firta paunchha. 1000 x 1000 = 10000. jamma: 10000 + 1000 = 11000. jaach: 11000 - 1000 = 10000, milyo",
+   "num": "11000",
+   "ok": false,
+   "grounding": {
+    "used": 5,
+    "invented": 6,
+    "grounded": 0.455,
+    "coverage": 0.333
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "gopal le har mahina 1000 rupiya jamma garchha. usko bachat aba 7640 rupiya cha. agni 3 mahina ko aanta kati hunchha?",
+   "gold": 3000,
+   "out": "2 barsha pachhi jamma 7430 rupiya hunchha.",
+   "think": "chakriya byaj ma har barsha ko byaj pani mool ma judchha. pahilo barsha: 7640 x 110 / 100 = 7720. dosro barsha: 7720 x 110 / 100 = 7430. sadharan byaj bhanda 30 rupiya badhi.",
+   "num": "7430",
+   "ok": false,
+   "grounding": {
+    "used": 1,
+    "invented": 8,
+    "grounded": 0.111,
+    "coverage": 0.333
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "gopal: bachat 1000 rupiya per month. 3 months. Total saved?",
+   "gold": 3000,
+   "out": "baki 4900 rupiya chha.",
+   "think": "paisa: 1000. kharcha: 3000 - 3 = 4900. jaach: 4900 + 3 = 4900, milyo",
+   "num": "4900",
+   "ok": false,
+   "grounding": {
+    "used": 3,
+    "invented": 4,
+    "grounded": 0.429,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "kaksha ma 37 keta ra 13 keti chhan. 6 jana anupasthit chhan. kati jana upasthit?",
+   "gold": 44,
+   "out": "72 jana purush: 12.",
+   "think": "6 x 13 = 78. tarakshar chhan: 6 x 13 = 78. farak: 78 - 6 = 72. sankhya 6. 72 / 6 = 12.",
+   "num": "12",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 6,
+    "grounded": 0.538,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "aaj kaksha ma 37 ta keta ra 13 ta keti chhan. tara 6 jana aaja absent chhan. aaj school aaune kati jana?",
+   "gold": 44,
+   "out": "tara 6 jana lai keti chhan.",
+   "think": "katha ma hernu: 6 + 13 = 19.",
+   "num": "6",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "kaksha: 37 boys + 13 girls = ? then 6 absent. How many present?",
+   "gold": 44,
+   "out": "jawaf 301 ho.",
+   "think": "27 x 13 = 301.",
+   "num": "301",
+   "ok": false,
+   "grounding": {
+    "used": 1,
+    "invented": 2,
+    "grounded": 0.333,
+    "coverage": 0.333
+   }
+  },
+  {
+   "cat": "word-orig",
+   "q": "euta kitab ko mol 300 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+   "gold": 540,
+   "out": "sankhya le 260 rupiya tirnu parchha.",
+   "think": "kitab: 300 x 10 / 100 = 30. jamma: 300 + 30 = 330. firta: 300 - 330 = 70. firta: 330 - 70 = 260. jaach: 260 + 70 = 330, milyo",
+   "num": "260",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 12,
+    "grounded": 0.25,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "word-para",
+   "q": "ek kitab ko price 300 rupiya ho, ani 10% discount dincha. aba euta jasto kitab 2 wata kide ko kati lagcha?",
+   "gold": 540,
+   "out": "290 rupiya baki hunchha.",
+   "think": "kitab: 300 - 10 = 290. kitab 10 x 290 = 2900. jaach: 2900 / 2 = 100, milyo",
+   "num": "290",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 5,
+    "grounded": 0.444,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "word-formula",
+   "q": "kitab: 300 rupiya, 10% discount -> one book = ? then 2 books = ?",
+   "gold": 540,
+   "out": "jawaf 300 rupiya ho.",
+   "think": "ek ek wakya padhchhu. (1) suru ma kitab 30. (2) suru ma paisa 300. (3) barabar bhag: 30 / 3 = 10. (4) packet: 2 x 10 = 20 thapiyo, 10 + 20 = 30. (5) gayo: 30 - 2 = 28. (6) thapiyo: 28 + 10 = 38. (7) gayo: 38 - 2 = 36. sodheko: rupiya. uttar 300.",
+   "num": "300",
+   "ok": false,
+   "grounding": {
+    "used": 10,
+    "invented": 18,
+    "grounded": 0.357,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "39 - 8 = ?",
+   "gold": 31,
+   "out": "39 - 8 = 31 hunchha.",
+   "think": "39 - 8 = 31.",
+   "num": "31",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "39 - (8 x 2) = ?",
+   "gold": 23,
+   "out": "39 - (8 x 2) = 23.",
+   "think": "koshtha bhitra ko pahila: 8 x 2 = 16. aba 39 - 16 baki chha. 39 - 16 = 23.",
+   "num": "23",
+   "ok": true,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "39 - 16 = ?",
+   "gold": 23,
+   "out": "39 - 16 = 23.",
+   "think": "39 - 16 = 23.",
+   "num": "23",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "8 x 2 = ? ani 39 - 16 = ?",
+   "gold": 23,
+   "out": "8 x 2 = 0.",
+   "think": "gunan pahila: 8 x 2 = 16. aba 16 - 16 baki chha. 16 - 16 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "4 - 11 = ?",
+   "gold": -7,
+   "out": "4 - 11 = -7.",
+   "think": "11 chai 4 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 11 - 4 = 7, tyasaile 4 - 11 = -7.",
+   "num": "-7",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "4 - (11 x 7) = ?",
+   "gold": -73,
+   "out": "4 - (11 x 7) = -73.",
+   "think": "koshtha bhitra ko pahila: 11 x 7 = 77. aba 4 - 77 baki chha. 77 chai 4 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 77 - 4 = 73, tyasaile 4 - 77 = -73.",
+   "num": "-73",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 7,
+    "grounded": 0.462,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "4 - 77 = ?",
+   "gold": -73,
+   "out": "4 - 77 = -73.",
+   "think": "77 chai 4 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 77 - 4 = 73, tyasaile 4 - 77 = -73.",
+   "num": "-73",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "11 x 7 = ? ani 4 - 77 = ?",
+   "gold": -73,
+   "out": "11 x 7 = 539 hunchha.",
+   "think": "77 x 7 = 539.",
+   "num": "539",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 0.5
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "30 - 4 = ?",
+   "gold": 26,
+   "out": "30 - 4 = 26.",
+   "think": "30 - 4 = 26.",
+   "num": "26",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "30 - (4 x 25) = ?",
+   "gold": -70,
+   "out": "30 - (4 x 25) = 20.",
+   "think": "koshtha bhitra ko pahila: 4 x 25 = 100. aba 30 - 100 baki chha. 30 - 100 = 20.",
+   "num": "20",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "30 - 100 = ?",
+   "gold": -70,
+   "out": "30 - 100 = 0.",
+   "think": "30 chai 30 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 30 - 30 = 0, tyasaile 30 - 30 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 0.5
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "4 x 25 = ? ani 30 - 100 = ?",
+   "gold": -70,
+   "out": "jawaf -100 ho.",
+   "think": "gunan pahila: 4 x 25 = 100. aba 100 - 100 baki chha. 100 - 100 = 0. aba 0 - 100 baki chha. 100 chai 0 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 100 - 0 = 100, tyasaile 0 - 100 = -100.",
+   "num": "-100",
+   "ok": false,
+   "grounding": {
+    "used": 12,
+    "invented": 6,
+    "grounded": 0.667,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "62 - 2 = ?",
+   "gold": 60,
+   "out": "62 - 2 = 60.",
+   "think": "62 - 2 = 60.",
+   "num": "60",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "62 - (2 x 5) = ?",
+   "gold": 52,
+   "out": "62 - (2 x 5) = 52 hunchha.",
+   "think": "koshtha bhitra ko pahila: 2 x 5 = 10. aba 62 - 10 baki chha. 62 - 10 = 52.",
+   "num": "52",
+   "ok": true,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "62 - 10 = ?",
+   "gold": 52,
+   "out": "62 - 10 = 52.",
+   "think": "62 - 10 = 52.",
+   "num": "52",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "2 x 5 = ? ani 62 - 10 = ?",
+   "gold": 52,
+   "out": "2 x 5 + 10 = 0.",
+   "think": "gunan pahila: 2 x 5 = 10. aba 10 - 10 baki chha. 10 - 10 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "50 - 2 = ?",
+   "gold": 48,
+   "out": "50 - 2 = 48.",
+   "think": "50 - 2 = 48.",
+   "num": "48",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "50 - (2 x 15) = ?",
+   "gold": 20,
+   "out": "50 - (2 x 15) = 20 hunchha.",
+   "think": "koshtha bhitra ko pahila: 2 x 15 = 30. aba 50 - 30 baki chha. 50 - 30 = 20.",
+   "num": "20",
+   "ok": true,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "50 - 30 = ?",
+   "gold": 20,
+   "out": "50 - 30 = 20.",
+   "think": "50 - 30 = 20.",
+   "num": "20",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "2 x 15 = ? ani 50 - 30 = ?",
+   "gold": 20,
+   "out": "2 x 15 + 30 = 0.",
+   "think": "gunan pahila: 2 x 15 = 30. aba 30 - 30 baki chha. 30 - 30 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "18 - 18 = ?",
+   "gold": 0,
+   "out": "18 - 18 = 0 hunchha.",
+   "think": "18 - 18 = 0.",
+   "num": "0",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "18 - (18 x 2) = ?",
+   "gold": -18,
+   "out": "18 - (18 x 2) = 12 hunchha.",
+   "think": "koshtha bhitra ko pahila: 18 x 2 = 36. aba 18 - 36 baki chha. 18 - 36 = 12.",
+   "num": "12",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "18 - 36 = ?",
+   "gold": -18,
+   "out": "18 - 36 = -18.",
+   "think": "36 chai 18 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 36 - 18 = 18, tyasaile 18 - 36 = -18.",
+   "num": "-18",
+   "ok": true,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "18 x 2 = ? ani 18 - 36 = ?",
+   "gold": -18,
+   "out": "18 x 2 = 36 hunchha.",
+   "think": "18 x 2 = 36.",
+   "num": "36",
+   "ok": false,
+   "grounding": {
+    "used": 3,
+    "invented": 0,
+    "grounded": 1,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "7 - 3 = ?",
+   "gold": 4,
+   "out": "7 - 3 = 4.",
+   "think": "7 - 3 = 4.",
+   "num": "4",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "7 - (3 x 5) = ?",
+   "gold": -8,
+   "out": "7 - (3 x 5) + (3 x 5) = -8.",
+   "think": "koshtha bhitra ko pahila: 3 x 5 = 15. aba 7 - 15 baki chha. 15 chai 7 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 15 - 7 = 8, tyasaile 7 - 15 = -8.",
+   "num": "-8",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 7,
+    "grounded": 0.462,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "7 - 15 = ?",
+   "gold": -8,
+   "out": "7 - 15 = -8.",
+   "think": "15 chai 7 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 15 - 7 = 8, tyasaile 7 - 15 = -8.",
+   "num": "-8",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "3 x 5 = ? ani 7 - 15 = ?",
+   "gold": -8,
+   "out": "3 x 5 + 15 = 0.",
+   "think": "gunan pahila: 3 x 5 = 15. aba 15 - 15 baki chha. 15 - 15 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "37 - 13 = ?",
+   "gold": 24,
+   "out": "37 - 13 = 24.",
+   "think": "37 - 13 = 24.",
+   "num": "24",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "37 - (13 x 6) = ?",
+   "gold": -41,
+   "out": "37 - (13 x 6) = 1.",
+   "think": "koshtha bhitra ko pahila: 13 x 6 = 78. aba 37 - 78 baki chha. 37 - 78 = 1.",
+   "num": "1",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "37 - 78 = ?",
+   "gold": -41,
+   "out": "37 - 78 = -41.",
+   "think": "78 chai 37 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 78 - 37 = 41, tyasaile 37 - 78 = -41.",
+   "num": "-41",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 2,
+    "grounded": 0.75,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "13 x 6 = ? ani 37 - 78 = ?",
+   "gold": -41,
+   "out": "13 x 6 = 78.",
+   "think": "13 x 6 = 78.",
+   "num": "78",
+   "ok": false,
+   "grounding": {
+    "used": 3,
+    "invented": 0,
+    "grounded": 1,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "300 - 90 = ?",
+   "gold": 210,
+   "out": "jawaf 210 ho.",
+   "think": "thau anusar ek bata suru garchhu. ek: 0 - 0 = 0. das: 0 bata 9 ghatdaina, 1 sapati: 10 - 9 = 1. saya: 2 - 0 = 2. tyasaile 300 - 90 = 210. jaach: 210 + 90 = 300.",
+   "num": "210",
+   "ok": true,
+   "grounding": {
+    "used": 4,
+    "invented": 14,
+    "grounded": 0.222,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "300 - (90 x 2) = ?",
+   "gold": 120,
+   "out": "300 - (90 x 2) = 0.",
+   "think": "koshtha bhitra ko pahila: 90 x 2 = 180. aba 300 - 180 baki chha. 300 chai 300 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 300 - 300 = 0, tyasaile 300 - 300 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 9,
+    "invented": 4,
+    "grounded": 0.692,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "300 - 180 = ?",
+   "gold": 120,
+   "out": "300 - 180 = 0.",
+   "think": "300 chai 300 bhanda thulo chha, tyasaile uttar rinatmak (minus) hunchha: 300 - 300 = 0, tyasaile 30 - 30 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 0.5
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "90 x 2 = ? ani 300 - 180 = ?",
+   "gold": 120,
+   "out": "jawaf 0 ho.",
+   "think": "gunan pahila: 90 x 2 = 180. aba 180 - 180 baki chha. 180 - 180 = 0. aba 0 x 20 baki chha. 0 x 20 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 6,
+    "grounded": 0.538,
+    "coverage": 0.75
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "1000 - 3 = ?",
+   "gold": 997,
+   "out": "1000 - 3 = 997.",
+   "think": "thau anusar ek bata suru garchhu. ek: 0 bata 3 ghatdaina, 1 sapati: 10 - 3 = 7. das: -1 bata 0 ghatdaina, 1 sapati: 9 - 0 = 9. saya: -1 bata 0 ghatdaina, 1 sapati: 9 - 0 = 9. hajar: 0 - 0 = 0. tyasaile 1000 - 3 = 997. jaach: 997 + 3 = 1000.",
+   "num": "997",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 21,
+    "grounded": 0.222,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "1000 - (3 x 1) = ?",
+   "gold": 997,
+   "out": "1000 - (3 x 1) = 997 hunchha.",
+   "think": "koshtha bhitra ko pahila: 3 x 1 = 3. aba 1000 - 3 baki chha. 1000 - 3 = 997.",
+   "num": "997",
+   "ok": true,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "1000 - 3 = ?",
+   "gold": 997,
+   "out": "1000 - 3 = 997.",
+   "think": "thau anusar ek bata suru garchhu. ek: 0 bata 3 ghatdaina, 1 sapati: 10 - 3 = 7. das: -1 bata 0 ghatdaina, 1 sapati: 9 - 0 = 9. saya: -1 bata 0 ghatdaina, 1 sapati: 9 - 0 = 9. hajar: 0 - 0 = 0. tyasaile 1000 - 3 = 997. jaach: 997 + 3 = 1000.",
+   "num": "997",
+   "ok": true,
+   "grounding": {
+    "used": 6,
+    "invented": 21,
+    "grounded": 0.222,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "3 x 1 = ? ani 1000 - 3 = ?",
+   "gold": 997,
+   "out": "3 x 1 = 3.",
+   "think": "gunan pahila: 3 x 1 = 3. aba 3 x 1 baki chha. 3 x 1 = 3.",
+   "num": "3",
+   "ok": false,
+   "grounding": {
+    "used": 8,
+    "invented": 0,
+    "grounded": 1,
+    "coverage": 0.667
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "45 - 6 = ?",
+   "gold": 39,
+   "out": "45 - 6 = 39.",
+   "think": "45 - 6 = 39.",
+   "num": "39",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "45 - (6 x 4) = ?",
+   "gold": 21,
+   "out": "45 - (6 x 4) = 21 hunchha.",
+   "think": "koshtha bhitra ko pahila: 6 x 4 = 24. aba 45 - 24 baki chha. 45 - 24 = 21.",
+   "num": "21",
+   "ok": true,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "45 - 24 = ?",
+   "gold": 21,
+   "out": "45 - 24 = 21.",
+   "think": "45 - 24 = 21.",
+   "num": "21",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "6 x 4 = ? ani 45 - 24 = ?",
+   "gold": 21,
+   "out": "6 x 4 + 24 = 0.",
+   "think": "gunan pahila: 6 x 4 = 24. aba 24 - 45 baki chha. 45 - 45 = 0.",
+   "num": "0",
+   "ok": false,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L1-1step",
+   "q": "25 - 7 = ?",
+   "gold": 18,
+   "out": "25 - 7 = 18.",
+   "think": "25 - 7 = 18.",
+   "num": "18",
+   "ok": true,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L2-2step",
+   "q": "25 - (7 x 3) = ?",
+   "gold": 4,
+   "out": "25 - (7 x 3) = 4 hunchha.",
+   "think": "koshtha bhitra ko pahila: 7 x 3 = 21. aba 25 - 21 baki chha. 25 - 21 = 4.",
+   "num": "4",
+   "ok": true,
+   "grounding": {
+    "used": 4,
+    "invented": 4,
+    "grounded": 0.5,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L3-intermediate-given",
+   "q": "25 - 21 = ?",
+   "gold": 4,
+   "out": "25 - 21 = 1.",
+   "think": "25 - 21 = 1.",
+   "num": "1",
+   "ok": false,
+   "grounding": {
+    "used": 2,
+    "invented": 1,
+    "grounded": 0.667,
+    "coverage": 1
+   }
+  },
+  {
+   "cat": "L4-chain-2line",
+   "q": "7 x 3 = ? ani 25 - 21 = ?",
+   "gold": 4,
+   "out": "7 x 3 = 4.",
+   "think": "gunan pahila: 7 x 3 = 21. aba 25 - 21 baki chha. 25 - 21 = 4.",
+   "num": "4",
+   "ok": true,
+   "grounding": {
+    "used": 7,
+    "invented": 1,
+    "grounded": 0.875,
+    "coverage": 1
+   }
+  }
+ ],
+ "groups": {
+  "word-orig": {
+   "ok": 0,
+   "n": 10,
+   "grounded": 4.121,
+   "invented": 52,
+   "coverage": 6.5009999999999994
+  },
+  "word-para": {
+   "ok": 0,
+   "n": 10,
+   "grounded": 4.283,
+   "invented": 42,
+   "coverage": 5.167
+  },
+  "word-formula": {
+   "ok": 0,
+   "n": 10,
+   "grounded": 4.109999999999999,
+   "invented": 53,
+   "coverage": 6.668
+  },
+  "L1-1step": {
+   "ok": 12,
+   "n": 12,
+   "grounded": 7.197,
+   "invented": 46,
+   "coverage": 12
+  },
+  "L2-2step": {
+   "ok": 8,
+   "n": 12,
+   "grounded": 6.491,
+   "invented": 51,
+   "coverage": 12
+  },
+  "L3-intermediate-given": {
+   "ok": 9,
+   "n": 12,
+   "grounded": 7.9319999999999995,
+   "invented": 39,
+   "coverage": 11
+  },
+  "L4-chain-2line": {
+   "ok": 1,
+   "n": 12,
+   "grounded": 10.122,
+   "invented": 19,
+   "coverage": 9.417
+  }
+ }
+}

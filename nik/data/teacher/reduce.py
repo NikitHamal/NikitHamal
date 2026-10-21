@@ -8,7 +8,7 @@ the bracket; the fix is a trace that *copies the whole remaining expression* aft
 
 Rows: random expression trees with 1-3 operations (30% one op: the stop signal) (+ - x /, exact division), brackets on either side,
 redundant brackets sometimes, the outer operand on either side. One trace shape:
-    koshtha bhitra ko pahila: 8 x 2 = 16. aba 39 - 16 baki chha. 39 - 16 = 23.
+    koshtha bhitra ko pahila: 8 x 2 = 16. (8 x 2) ko satta 16 rakhda: aba 39 - 16 baki chha. ...
 Each step reduces one operation (brackets, then x and /, then + and -, leftmost first) and re-writes
 what is left. A negative last step uses colmath's rinatmak wording.
 
@@ -151,9 +151,11 @@ def trace(root):
         calc = step_line(a, n.op, b)
         lead = 'koshtha bhitra ko pahila: ' if n.paren else (STEP_LEAD[n.op] + ': ' if n.op in STEP_LEAD and not last else '')
         lines.append(lead + calc)
+        sub = f'({a} {n.op} {b})' if n.paren else f'{a} {n.op} {b}'
         n.op, n.l, n.r, n.v = None, None, None, v
         if not root.leaf:
-            lines.append(f'aba {render(root)} baki chha.')
+            # name what is replaced, then copy the rest: v2r40 wrote `aba 16 - (11 x 11)` (a partial rewrite)
+            lines.append(f'{sub} ko satta {v} rakhda: aba {render(root)} baki chha.')
     return ' '.join(lines)
 
 
