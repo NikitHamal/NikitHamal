@@ -66,6 +66,20 @@ def persona_rows_aug(n, seed):
     return rows
 
 
+def probe_guard():
+    """The eval_understand probes must stay out of the training rows.
+
+    data/teacher/build.py has this guard for the teacher rows; the named families are
+    built here, so they need it too (the leak audit found 132 exact hits in p11).
+    """
+    import importlib.util
+    here = os.path.join(ROOT, 'nik', 'data', 'teacher')
+    spec = importlib.util.spec_from_file_location('teacher_build', os.path.join(here, 'build.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod._probe_guard()
+
+
 def shape_rows(n, seed):
     """The *shapes* - the rows that pay the forgetting tax back.
 
@@ -120,12 +134,22 @@ def family_rows(spec, seed):
         spec_.loader.exec_module(mod)
         return mod
 
+    # The named families are generated *here*, not through data/teacher/build.py, so
+    # they do not pass its probe guard.  The leak audit found 132 exact eval_understand
+    # hits in the p11 mix (the shipped mixes have 0): the families used the probes'
+    # own question forms ("ma aile kaha baschhu?", '"kalam" ko plural?').  The guard
+    # drops those rows here, exactly as build.py does.
+    leaks = probe_guard()
+
     def take(n, fn):
         for _ in range(n):
             d = fn(R)
             if d and d.get('messages'):
-                rows.append({'cat': d.get('cat', 'family'), 'gold': d.get('gold'),
-                             'messages': d['messages']})
+                row = {'cat': d.get('cat', 'family'), 'gold': d.get('gold'),
+                       'messages': d['messages']}
+                if leaks(row):
+                    continue
+                rows.append(row)
 
     for name, n in spec.items():
         if not n:
@@ -154,8 +178,11 @@ def family_rows(spec, seed):
             for i in range(n):
                 m = m1 if i % 2 == 0 else m2
                 d = m.sample(R)
-                rows.append({'cat': d.get('cat', 'understand'), 'gold': d.get('gold'),
-                             'messages': d['messages']})
+                row = {'cat': d.get('cat', 'understand'), 'gold': d.get('gold'),
+                       'messages': d['messages']}
+                if leaks(row):
+                    continue
+                rows.append(row)
         elif name == 'read':
             mod = load('read')
             take(n, lambda r: mod.sample(r))
