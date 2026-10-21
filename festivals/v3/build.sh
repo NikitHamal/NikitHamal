@@ -3,18 +3,19 @@
 # stages: setup dem type audio plates composite mux   (default: all, in order; each one skips work already done)
 # env: SAMPLES (48) EVERY (1 = every frame) GPU_JOBS (parallel Blender processes, 3) SHOTS ("1 2 3 ..." subset)
 set -euo pipefail
+export PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw UV_CACHE_DIR=/tmp/reels/uvcache
 V="$(cd "$(dirname "$0")" && pwd)"; cd "$V"; mkdir -p build/logs
-PY=${PY:-/tmp/fv/bin/python}
+PY=${PY:-/tmp/reels/venv/bin/python}
 STAGES=${*:-setup dem type audio plates composite mux}
 SAMPLES=${SAMPLES:-48}; EVERY=${EVERY:-1}; GPU_JOBS=${GPU_JOBS:-3}
 SHOTS=${SHOTS:-"1 2 3 4 5 6 7 8 9 10 12 13 14 15 16 17 18 19 20 21 22"}
 for st in $STAGES; do case $st in
 setup)
-  command -v ffmpeg >/dev/null || { (apt-get update -qq && apt-get install -y -qq ffmpeg) >/dev/null 2>&1 || true; }
-  command -v uv >/dev/null || pip install -q uv
-  [ -x "$PY" ] || uv venv -q -p 3.11 /tmp/fv
-  uv pip install -q -p "$PY" bpy==4.2.0 numpy scipy soundfile librosa pyloudnorm pillow playwright edge-tts mutagen
-  "$PY" -m playwright install --with-deps chromium >/dev/null 2>&1 || "$PY" -m playwright install chromium
+  # shared box: no apt, everything inside /tmp/reels (bpy 4.5 = Blackwell-capable Cycles)
+  export UV_CACHE_DIR=/tmp/reels/uvcache PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw
+  [ -x "$PY" ] || uv venv -q -p 3.11 /tmp/reels/venv
+  uv pip install -q -p "$PY" "bpy==4.5.*" numpy scipy soundfile librosa pyloudnorm pillow playwright edge-tts mutagen
+  "$PY" -m playwright install chromium
   command -v ffmpeg >/dev/null || { uv pip install -q -p "$PY" imageio-ffmpeg; ln -sf "$("$PY" -c 'import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())')" /usr/local/bin/ffmpeg; }
   nvidia-smi --query-gpu=name,memory.total --format=csv,noheader || true ;;
 dem)  [ -f build/dem.npy ] || "$PY" tools/dem.py ;;
