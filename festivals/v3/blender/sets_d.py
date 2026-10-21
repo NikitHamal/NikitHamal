@@ -83,22 +83,27 @@ def set_ramayana(sc, A):
     bpy.ops.mesh.primitive_plane_add(size=2); sea = bpy.context.object
     oc = sea.modifiers.new("ocean", "OCEAN"); oc.size = 1.0; oc.spatial_size = 50; oc.resolution = 16; oc.wave_scale = 0.7; oc.choppiness = 1.3
     oc.geometry_mode = "GENERATE"; oc.repeat_x = oc.repeat_y = 8
-    sea.data.materials.append(mat("sea", (0.008, 0.012, 0.016), rough=0.04, ior=1.33))
-    sea.location = (0, 150, 0)
+    sea.data.materials.append(mat("sea", (0.004, 0.006, 0.009), rough=0.08, ior=1.33))
     # Lanka: a cliff island with a golden city
     gold_m = gold("lanka_gold"); stone = noisy(mat("lstone", (0.25, 0.2, 0.16), rough=0.8), 30, 0.4, 0.1, 0.4)
-    cliff, _ = import_ph("coastal_cliff_01", (35, 330, -2), 9.0, (0, 0, 2.2))
+    cliff, cms = import_ph("coastal_cliff_01", (35, 330, -3), A.get("cliff_scale", 3.5), (0, 0, 2.2))
+    top = 12.0
     if cliff is None:
         isle = prim("cone", "lanka", stone, radius1=40, radius2=10, depth=18, location=(35, 330, 0), vertices=48); isle.scale = (2.0, 0.6, 1)
+    else:
+        bpy.context.view_layer.update()
+        zs = [(o.matrix_world @ Vector(c)).z for o in cms for c in o.bound_box]; top = max(zs) - 1.0
+        for o in cms:
+            for s_ in o.data.materials: s_.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.1, 0.08, 0.06, 1) if not s_.node_tree.nodes["Principled BSDF"].inputs["Base Color"].links else s_.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value
     rnd = np.random.default_rng(9); city_lights = []
     win = emission("lwin", (1.0, 0.55, 0.15), 4)
     for i in range(26):
-        x = 35 + rnd.normal(0, 14); y = 330 + rnd.normal(0, 4); h = rnd.uniform(6, 18) * (1.4 if abs(x - 35) < 8 else 1.0)
-        z = 12 + rnd.uniform(-1, 2)
+        x = 35 + rnd.normal(0, 9); y = 330 + rnd.normal(0, 3); h = rnd.uniform(10, 26) * (1.5 if abs(x - 35) < 6 else 1.0)
+        z = top + rnd.uniform(-1.5, 0.5)
         s = shikhara("tower%d" % i, h, gold_m, stone); s.location = (x, y, z)
         w = prim("cube", "w%d" % i, win, size=1, location=(x, y - h * 0.22, z + h * 0.3)); w.scale = (h * 0.06, 0.2, h * 0.09)
-    fire = light("POINT", (35, 322, 22), 0, (1.0, 0.45, 0.12), size=6)
-    burst = prim("uv_sphere", "burst", emission("burstm", (1.0, 0.7, 0.35), 0), radius=4, location=(35, 322, 20))
+    fire = light("POINT", (35, 318, top + 12), 0, (1.0, 0.45, 0.12), size=6)
+    burst = prim("uv_sphere", "burst", emission("burstm", (1.0, 0.7, 0.35), 0), radius=5, location=(35, 322, top + 10))
     # the bow: a lacquered recurve limb, a red-wrapped grip, gold nocks, a string drawn to the cheek
     lac = pbr("lacquered_cherry_wood", noisy(mat("bowwood", (0.12, 0.03, 0.015), rough=0.25, coat=0.8), 50, 0.3, 0.1, 0.1), 4.0)
     pts = []
@@ -127,9 +132,9 @@ def set_ramayana(sc, A):
     trail = prim("cylinder", "trail", emission("trailm", (1.0, 0.6, 0.2), 25), radius=0.03, depth=1.0, vertices=12)
     light("AREA", (2.5, 0.5, 2.5), 60, (1.0, 0.6, 0.35), size=2, look=(0.55, 1.4, 1.5))
     glare(sc, 1.0, 8, -0.45)
-    cam = camera((0.15, -0.6, 1.5), (8, 330, 6), 40, dof=2.1, fstop=2.8)
+    cam = camera((-1.15, 0.35, 1.62), (6, 80, 4), 38, dof=1.9, fstop=2.8)
     release = A.get("release", 0.3)
-    target = Vector((35, 322, 20))
+    target = Vector((35, 322, top + 10))
 
     def update(t, dur):
         u = t / dur
@@ -176,28 +181,28 @@ def set_fulpati2(sc, A):
     post_prof = smooth_profile([(0.04, 0), (0.05, 0.05), (0.03, 0.12), (0.035, 0.4), (0.05, 0.45), (0.03, 0.5), (0.03, 0.95), (0.05, 1.0), (0.035, 1.05)], 3)
     for x in (-0.6, 0.6):
         for y in (-0.4, 0.4):
-            p = add(lathe("post", post_prof, 24, g)); p.location = (x, y, 0.71)
+            p = add(lathe("post", post_prof, 24, g)); p.location = (x, y, 0.71); p.scale = (1, 1, 1.6)
     # tiered canopy: two flared pyramids (lathe, 4 segments) with gilt finish, and a gajur
-    for k, (s, z) in enumerate(((1.0, 1.78), (0.62, 2.05))):
+    for k, (s, z) in enumerate(((1.0, 2.38), (0.66, 2.66), (0.4, 2.88))):
         prof = [(0.0, 0.32 * s), (0.25 * s, 0.25 * s), (0.6 * s, 0.1 * s), (0.88 * s, 0.0), (0.92 * s, -0.04 * s)]
         r = add(lathe("roof%d" % k, prof, 4, g)); r.location = (0, 0, z); r.rotation_euler = (0, 0, math.pi / 4); r.scale = (1.2, 0.85, 1)
-    gaj = add(lathe("gajur", smooth_profile([(0.08, 0), (0.09, 0.05), (0.05, 0.12), (0.07, 0.17), (0.03, 0.26), (0.0, 0.36)], 4), 32, g, close_bottom=True)); gaj.location = (0, 0, 2.3)
-    for side in (-1, 1):  # drapes, gathered back to the posts
-        V = []; Fc = []; cols, rows = 16, 10
-        for i in range(rows + 1):
-            for j in range(cols + 1):
-                x = -0.6 + 1.2 * j / cols; z = 1.76 - 1.0 * i / rows
-                gather = (1 - math.sin(math.pi * j / cols)) ** 2 * (i / rows)
-                V.append((x * (1 - 0.35 * gather * (1 if abs(x) > 0.1 else 0)), side * (0.44 + 0.04 * math.sin(j * 1.9) * (0.3 + i / rows)), z + 0.12 * (math.sin(math.pi * j / cols)) * (1 - i / rows) * 0))
-        for i in range(rows):
-            for j in range(cols):
-                a = i * (cols + 1) + j; Fc.append((a, a + 1, a + cols + 2, a + cols + 1))
-        d = add(mesh_obj("drape%d" % side, V, Fc, red)); solidify(d, 0.004)
+    gaj = add(lathe("gajur", smooth_profile([(0.08, 0), (0.09, 0.05), (0.05, 0.12), (0.07, 0.17), (0.03, 0.26), (0.0, 0.36)], 4), 32, g, close_bottom=True)); gaj.location = (0, 0, 3.0)
+    for x in (-0.6, 0.6):  # drapes tied back at the four posts
+        for y in (-0.4, 0.4):
+            V = []; Fc = []; cols, rows = 6, 12
+            for i in range(rows + 1):
+                for j in range(cols + 1):
+                    s_ = j / cols; z = 2.36 - 1.5 * i / rows; pinch = 0.25 + 0.75 * abs(i / rows - 0.45) * 1.6
+                    V.append((x - math.copysign(0.22 * s_ * pinch, x), y + 0.03 * math.sin(j * 2.3 + i * 0.3), z))
+            for i in range(rows):
+                for j in range(cols):
+                    q = i * (cols + 1) + j; Fc.append((q, q + 1, q + cols + 2, q + cols + 1))
+            d = add(mesh_obj("drape", V, Fc, red)); solidify(d, 0.004)
     for edge in range(4):
         for i in range(14):
             t = i / 13
             x, y = [(-0.62 + 1.24 * t, -0.46), (0.62, -0.46 + 0.92 * t), (0.62 - 1.24 * t, 0.46), (-0.62, 0.46 - 0.92 * t)][edge]
-            add(marigold("mg%d_%d" % (edge, i), (x, y, 1.72 - 0.1 * math.sin(math.pi * t)), 0.035))
+            add(marigold("mg%d_%d" % (edge, i), (x, y, 2.32 - 0.12 * math.sin(math.pi * t)), 0.035))
     # the navapatrika: nine plants bundled upright on the doli
     banana = leaf_mat("banana", (0.1, 0.32, 0.06)); colo = leaf_mat("colocasia", (0.06, 0.25, 0.08)); turm = leaf_mat("turmeric", (0.14, 0.38, 0.08))
     ashoka = leaf_mat("ashoka", (0.03, 0.16, 0.04)); jayanti = leaf_mat("jayanti", (0.12, 0.3, 0.07))
@@ -249,7 +254,7 @@ def set_fulpati2(sc, A):
     key = light("AREA", (2.2, -2.4, 2.4), 220, (1, 0.72, 0.5), size=1.5, look=(0, 0, 1.2))
     rim = light("AREA", (-1.8, 2.0, 2.2), 140, (1, 0.5, 0.25), size=1.2, look=(0, 0, 1.2))
     glare(sc, 1.0, 8, -0.5)
-    cam = camera((1.7, -2.9, 1.0), (0.0, 0.0, 1.25), 45, dof=3.3, fstop=2.0)
+    cam = camera((2.7, -4.6, 1.3), (0.0, 0.0, 1.45), 40, dof=5.3, fstop=2.8)
     shots = A.get("volleys", [0.55, 0.68, 0.81])
 
     def update(t, dur):
@@ -262,5 +267,5 @@ def set_fulpati2(sc, A):
         salute.data.energy = 9000 * e
         smoke_amt.default_value = 0.0 if since is None else min(1.2, 0.6 + 0.3 * len([v for v in shots if u >= v]))
         nz.inputs["W"].default_value = t * 0.2
-        aim(cam, lerp((1.7, -2.9, 1.0), (1.0, -2.4, 1.15), ease(u)), (0.0, 0.0, 1.25))
+        aim(cam, lerp((2.7, -4.6, 1.3), (2.0, -3.9, 1.4), ease(u)), (0.0, 0.0, 1.45))
     return update
