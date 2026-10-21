@@ -146,7 +146,7 @@ class Block(nn.Module):
         self.up = Lin(cfg.d, 2 * cfg.ffn, bias=False)    # [gate ; up] fused
         self.down = Lin(cfg.ffn, cfg.d, bias=False)
 
-    def forward(self, x, cos, sin, mask):
+    def forward(self, x, cos, sin, mask, cache=None):
         cfg = self.cfg
         N, T, _ = x.shape
         hd = cfg.head_dim
@@ -156,6 +156,10 @@ class Block(nn.Module):
         k, v = k.transpose(1, 2), v.transpose(1, 2)
         q, k = self.qn(q), self.kn(k)
         q, k = apply_rope(q, cos, sin), apply_rope(k, cos, sin)
+        if cache is not None:                     # incremental decoding: append this step's keys/values
+            if 'k' in cache:
+                k = torch.cat([cache['k'], k], 2); v = torch.cat([cache['v'], v], 2)
+            cache['k'], cache['v'] = k, v
         rep = cfg.heads // cfg.kv_heads
         if rep > 1:
             k = k.repeat_interleave(rep, dim=1)
@@ -246,6 +250,25 @@ class NikLM(nn.Module):
 # --------------------------------------------------------------------------
 # Hybrid AR + block-diffusion objective
 # --------------------------------------------------------------------------
+
+@torch.no_grad()
+def forward_cached(model, idx, pos, mask, caches, digits=None):
+    """One incremental step for generate_multi: idx (N, t) new tokens, pos (N, t) their positions, mask (N, t, Tk) bool
+    over all keys so far (cached + new); caches: list with one dict per effective layer (filled in place)."""
+    cfg = model.cfg
+    cos, sin = rope_cache(cfg, int(pos.max()) + 1, idx.device)
+    cos, sin = cos[pos].to(model.emb.weight.dtype).unsqueeze(1), sin[pos].to(model.emb.weight.dtype).unsqueeze(1)
+    dt = model.emb.weight.dtype
+    m = torch.zeros(mask.shape, dtype=dt, device=idx.device).masked_fill(~mask, float('-inf')).unsqueeze(1)
+    x = model.emb(idx)
+    if cfg.abacus and digits is not None:
+        x = x + model.abacus(digits)
+    li = 0
+    for b in model.blocks:
+        for _ in range(cfg.n_repeat):
+            x = b(x, cos, sin, m, cache=caches[li]); li += 1
+    return F.linear(model.norm(x), model.emb.weight)
+
 
 def two_stream_mask(L: int, B: int, offset: int, device) -> torch.Tensor:
     """(2L, 2L) bool mask for the sequence [noisy(0..L-1) ; clean(0..L-1)].
@@ -433,14 +456,15 @@ def generate_multi(model, prompts: list, n_per_prompt: int = 8, max_new: int = 1
     lp_sum = torch.zeros(N, device=dev); lens = torch.zeros(N, device=dev)
     out = [[] for _ in range(N)]
     stop_t = torch.tensor(stop, device=dev)
-    for _ in range(max_new):
-        T = x.shape[1]
-        ar = torch.arange(T, device=dev)
-        pos = (ar[None] - pad[:, None]).clamp(min=0)
-        real = ar[None] >= pad[:, None]                                  # (N, T) non-pad
-        mask = torch.ones(T, T, dtype=torch.bool, device=dev).tril()[None] & real[:, None, :]
-        mask = mask | torch.eye(T, dtype=torch.bool, device=dev)[None]  # pad queries see themselves (no NaN)
-        logits = model(x, pos=pos, mask=mask)[:, -1].float()
+    cfg = model.cfg
+    caches = [dict() for _ in range(cfg.n_layers)]
+    ar = torch.arange(L0, device=dev)
+    pos = (ar[None] - pad[:, None]).clamp(min=0)
+    real = ar[None] >= pad[:, None]
+    mask = (torch.ones(L0, L0, dtype=torch.bool, device=dev).tril()[None] & real[:, None, :]) | torch.eye(L0, dtype=torch.bool, device=dev)[None]
+    digits = model.digit_index(x) if cfg.abacus else None
+    logits = forward_cached(model, x, pos, mask, caches, digits)[:, -1].float()      # prefill once
+    for step in range(max_new):
         logits[:, [0, 1, 3, 4, 5]] = -float('inf')
         if temperature <= 0:
             nxt = logits.argmax(-1)
@@ -455,8 +479,13 @@ def generate_multi(model, prompts: list, n_per_prompt: int = 8, max_new: int = 1
             out[i].append(int(nxt[i]))
         done |= torch.isin(nxt, stop_t)
         x = torch.cat([x, nxt[:, None]], 1)
-        if bool(done.all()) or x.shape[1] >= model.cfg.ctx:
+        if bool(done.all()) or x.shape[1] >= cfg.ctx or step == max_new - 1:
             break
+        T = x.shape[1]
+        real = torch.cat([real, torch.ones(N, 1, dtype=torch.bool, device=dev)], 1)
+        pos_new = (T - 1 - pad)[:, None]
+        d_new = model.digit_index(x)[:, -1:] if cfg.abacus else None              # digit position needs the context
+        logits = forward_cached(model, nxt[:, None], pos_new, real[:, None, :], caches, d_new)[:, -1].float()
     res = [(o, float(s / max(1.0, float(l)))) for o, s, l in zip(out, lp_sum, lens)]
     return [res[i * n_per_prompt:(i + 1) * n_per_prompt] for i in range(len(prompts))]
 
