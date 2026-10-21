@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T15:55:43Z",
+ "updated": "2026-10-21T16:20:41Z",
  "live": {
   "model": "v4f",
   "note": "NikBench 72.2% \u00b7 reason 39/48 \u00b7 understanding 13/26 \u00b7 traps 9/12 (rollback: v4c)"
@@ -7,16 +7,16 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "offline (HTTP 410, recycled ~15:58 UTC)",
-   "job": "waiting for a new URL + token from the owner",
+   "gpu": "GPU busy \u00b7 new box (16:05 UTC)",
+   "job": "Claude: pm50 = 0.5 p8 + 0.5 m50 (same-parent blend): full gate",
    "progress": null,
-   "detail": "lost: v4r2/v4r2m bins, Decide v8, m50m gate. m50 + v4r3 saved by Claude",
-   "eta": "-"
+   "detail": "replay corpus (pre_train.bin, 958 MB) relayed from box 2, md5 checked",
+   "eta": "~17:00 UTC"
   },
   {
    "name": "box 2",
    "gpu": "GPU 95% \u00b7 shared",
-   "job": "Local-C: P9; Claude: v4r6 (v4f + 20 min lr 1.5e-4, reduce 25% + multiturn 5%); Local-A: replay arms",
+   "job": "Local-C: P9; Claude: v4r6 training + head-to-head gate v4f vs m50 vs p8 (plain + nested); Local-A: replay arms",
    "progress": null,
    "detail": "running: make_sft2.py, train.py",
    "eta": "v4r6 gate ~17:00 UTC"
@@ -131,6 +131,20 @@
  },
  "runs": [
   {
+   "tag": "pm50",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "evaluating",
+   "what": "0.5 p8 + 0.5 m50"
+  },
+  {
+   "tag": "h2h",
+   "box": "box 2",
+   "by": "Claude",
+   "status": "evaluating",
+   "what": "ship gate: live v4f vs m50 vs p8, same box, plain + nested n16"
+  },
+  {
    "tag": "v4r6",
    "box": "box 2",
    "by": "Claude",
@@ -202,8 +216,8 @@
   }
  ],
  "next": [
-  "owner call on shipping m50 (#11)",
-  "new box 1 URL from the owner",
-  "v4r6 gate (~17:00 UTC)"
+  "head-to-head v4f / m50 / p8 -> ship call (#11)",
+  "pm50 gate",
+  "v4r6 gate"
  ]
 }
