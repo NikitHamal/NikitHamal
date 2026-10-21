@@ -22,6 +22,9 @@ ALL_GOLD = GOLD + GOLD2
 LEAD = ['', '', '', 'ek prashna: ', 'malai help garnus: ', 'yo bujhina, ', 'kripaya solve garnus: ', 'sir, ']
 # reduce-and-rewrite multi-step arithmetic (reduce.py, Sky, issue #9): L2 0 -> 11/12 in a CPU micro-SFT.
 REDUCE_SHARE = float(os.environ.get('NIK_REDUCE_SHARE', '0.06'))
+# multi-turn robustness (multiturn.py, Sky, issue #9): a fresh problem after earlier exchanges, far recall of a user fact.
+# CPU: raw long-chat bench 11 -> 17/60, recall 23 -> 32/64 vs control. Off until a box run; NIK_MULTITURN_SHARE=0.05.
+MULTITURN_SHARE = float(os.environ.get('NIK_MULTITURN_SHARE', '0'))
 FOLLOW = ['arko prashna: ', 'ani yo chai? ', 'dhanyabad! aba yo: ', 'ramro. arko: ']
 
 
@@ -68,6 +71,9 @@ def _one(R):
     if R.random() < 0.04:   # 4% of rows ~= 12% of tokens (ledger rows are ~3x longer; Local-C, issue #9). P6 Grounded Ledger (Local-A, issue #9): bind quantities from the text, then formula, then compute
         d = ledger.sample(R)
         return {'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']}
+    if MULTITURN_SHARE and R.random() < MULTITURN_SHARE:
+        import multiturn            # imports build itself: keep it lazy
+        return multiturn.sample(R)
     if REDUCE_SHARE and R.random() < REDUCE_SHARE:
         return reduce.sample(R)
     k = R.random()

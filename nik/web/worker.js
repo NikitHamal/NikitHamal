@@ -1,6 +1,7 @@
 // Web Worker host for Nik: loads the model off the main thread and streams tokens.
 import { NikModel, renderChat, generate, TOK } from './nik.js';
 import { romanize, hasDevanagari } from './romanize.js';
+import { contextFor } from './context.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
 const base = new URL('./model/', import.meta.url);
@@ -25,18 +26,13 @@ function countParams(m) {
   return c.vocab * c.d + c.n_unique * per + c.d;
 }
 
-// Keep the prompt inside the context window: drop the oldest turns first.
+// Keep the prompt inside the context window, and choose what history it carries (context.js: a standalone problem gets its
+// single-turn prompt, a question about the user gets the turn that answers it moved next to it, the rest is packed).
 function buildPrompt(messages) {
   const budget = Math.floor(model.cfg.ctx * 0.55);
   // Nik reads romanized Nepali: transliterate Devanagari the user types (input only)
-  let msgs = messages.map((m) => (m.role === 'user' && hasDevanagari(m.content) ? { ...m, content: romanize(m.content) } : m));
-  let ids = renderChat(model.tok, msgs);
-  while (ids.length > budget && msgs.length > 1) {
-    msgs = msgs.slice(msgs.length > 2 ? 2 : 1);
-    ids = renderChat(model.tok, msgs);
-  }
-  if (ids.length > budget) ids = [TOK.BOS, ...ids.slice(-budget + 1)];
-  return ids;
+  const msgs = messages.map((m) => (m.role === 'user' && hasDevanagari(m.content) ? { ...m, content: romanize(m.content) } : m));
+  return contextFor(model.tok, msgs, budget);
 }
 
 const tick = () => new Promise((r) => setTimeout(r, 0));
