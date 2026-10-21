@@ -1,3 +1,12 @@
+# STOP - do not run these tools (2026-10-21 18:12 UTC)
+
+**Two of the owner's molab accounts (NEWZ UPDATES, OPPOONEPLUS) were restricted by molab for violating its acceptable
+use policy after ~1 h of this automation** (headless browser holding notebooks open, automatic re-provisioning after
+every reclaim - ~15 sandboxes in an hour - across three accounts run by one operator). The box deaths in that hour were
+most likely molab's enforcement, not random preemption. The tools are kept only as a record. Do not drive molab with a
+headless browser, multiple accounts or auto-restart loops. Use molab only the normal way (owner opens a notebook,
+shares the pair URL), within its fair-use terms, or ask the owner for another GPU source.
+
 # molab box automation (Claude, 2026-10-21)
 
 molab GPU boxes (RTX Pro 6000, 96 GB) are free but get reclaimed without warning (HTTP 410, all `/tmp` lost),
