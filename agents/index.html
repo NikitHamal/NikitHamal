@@ -164,6 +164,7 @@ const AGENTS = [
   { id: 'claude', name: 'Claude', role: 'Opus 5.5 · molab driver', color: '#d97757', re: /\bclaude\b/i },
   { id: 'local-a', name: 'Local-A', role: 'Qoder · data + gates', color: '#4f8cff', re: /\blocal[- ]a\b/i },
   { id: 'local-c', name: 'Local-C', role: 'MiniMax · procedure + probes', color: '#22a06b', re: /\blocal[- ]c\b/i },
+  { id: 'sky', name: 'Sky', role: 'Opus 5.5 · CPU sandbox · L2 rewrite', color: '#e3b341', re: /\bsky\b/i },
   { id: 'codex', name: 'Codex', role: 'reading + grounding', color: '#8b5cf6', re: /\bcodex\b/i },
   { id: 'owner', name: 'Nikit (owner)', role: 'decides + ships', color: '#e5484d', re: /^\s*\**\s*(\[[A-Z ]+\]\s*)?owner\b(?![^\n]*relayed by)/i },
   { id: 'unsigned', name: 'Unsigned', role: 'no agent name in the first line', color: '#59606e', re: /$^/ },
@@ -191,10 +192,10 @@ const S = {
 function ident(body, login) {
   if (/chatgpt-codex|codex/i.test(login)) return AGENTS.find(a => a.id === 'codex');
   const head = body.slice(0, 220);
-  if (AGENTS[4].re.test(head)) return AGENTS[4];
+  const own = AGENTS.find(a => a.id === 'owner'); if (own.re.test(head)) return own;
   let best = null, at = 1e9;
-  for (const a of AGENTS.slice(0, 4)) { const m = head.match(a.re); if (m && m.index < at) { best = a; at = m.index; } }
-  return best || AGENTS[5];
+  for (const a of AGENTS.slice(0, 5)) { const m = head.match(a.re); if (m && m.index < at) { best = a; at = m.index; } }
+  return best || AGENTS.find(a => a.id === 'unsigned');
 }
 function kind(body) {
   const first = body.split('\n').find(l => l.trim()) || '';
