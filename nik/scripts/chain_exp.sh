@@ -49,7 +49,8 @@ say "SFT $MIN min on $MIX (lr $LR)"
 python nik/train.py --stage sft --init "$OUT/init.pt" --data data --sft-name "$MIX" \
   --out "nik/runs/$TAG" --steps 100000000 --minutes "$MIN" --bs 16 --accum 2 --lr "$LR" \
   --warmup 50 --eval-every 1000 --mix 0.2 --diff-weight 0.3 --diff-frac 0.25 \
-  --opt muon --ema 0.998 2>&1 | tail -40
+  --opt muon --ema 0.998 > "$OUT/sft.log" 2>&1
+tail -5 "$OUT/sft.log"
 
 # --- 3. export + the full gate + the ladder ----------------------------------
 say "export"
@@ -58,13 +59,17 @@ cp "$OUT/nik-0.1.$TAG.bin" "nik/web/model/logs/$TAG/" 2>/dev/null || true
 
 say "evals"
 python nik/bench.py --model "$OUT/nik-0.1.$TAG.bin" --n 16 --nested-items \
-  --out "nik/web/model/logs/$TAG/bench-$TAG.json" | tail -4
+  --out "nik/web/model/logs/$TAG/bench-$TAG.json" > "$OUT/bench.log" 2>&1
+tail -4 "$OUT/bench.log"
 python nik/eval_understand.py --model "$OUT/nik-0.1.$TAG.bin" \
-  --out "nik/web/model/logs/$TAG/understand-$TAG.json" | tail -2
+  --out "nik/web/model/logs/$TAG/understand-$TAG.json" > "$OUT/understand.log" 2>&1
+tail -2 "$OUT/understand.log"
 python nik/eval.py --model "$OUT/nik-0.1.$TAG.bin" --data data --n-math 200 \
-  --out "nik/web/model/logs/$TAG/eval-$TAG.json" | head -4
+  --out "nik/web/model/logs/$TAG/eval-$TAG.json" > "$OUT/eval.log" 2>&1
+tail -4 "$OUT/eval.log"
 python nik/stress.py --model "$OUT/nik-0.1.$TAG.bin" \
-  --out "nik/web/model/logs/$TAG/stress-$TAG.json" | tail -2
+  --out "nik/web/model/logs/$TAG/stress-$TAG.json" > "$OUT/stress.log" 2>&1
+tail -2 "$OUT/stress.log"
 python nik/chat_check.py --model "$OUT/nik-0.1.$TAG.bin" > "nik/web/model/logs/$TAG/chat-$TAG.log" 2>&1 || true
 
 say "the procedure ladder (the mechanism number)"
