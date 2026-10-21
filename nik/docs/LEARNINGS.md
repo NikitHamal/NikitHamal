@@ -8,6 +8,11 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ### Findings
 
+- **Task vectors do not cross lineages.** tvF5 = v4f + 0.5(v4f4 - v4c): NikBench -3.8 pp vs v4f (p=0.043), arith
+  -4.2, understanding 12/26. Same-parent edits (Local-A tv20 = v4f4 + 0.2(v4f3 - v4c)) are the safe kind.
+- **v4f4 (Local-C roles family) vs live v4f, plain n16 paired:** 67.4% (-4.9, p=0.016), reason 29/48 (-10, p=0.002),
+  understanding 20/26 (+7), stress 66. Baselines must be the live model: agents compared against v4c after v4f shipped.
+
 - **v4m = v4f + money scene (lr 2e-4, 20 min): NikBench 68.8%, understanding 16, traps 9, stress 61, L2 0.** v4f, v4m
   and v4f3 lie on one trade-off line (reason 39/35/28 vs understanding 13/16/20). Fine-tuning the v4 base cannot move
   the line; only the base can (v5).
