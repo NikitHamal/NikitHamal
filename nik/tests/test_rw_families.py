@@ -20,6 +20,7 @@ sys.path.insert(0, TEACHER)
 sys.path.insert(0, NIK)
 sys.path.insert(0, os.path.join(NIK, 'scripts'))
 import abstain  # noqa: E402
+import opwords  # noqa: E402
 import bench_rw  # noqa: E402
 import format_ask  # noqa: E402
 import leak_audit  # noqa: E402
@@ -77,6 +78,34 @@ class TestHeldOut(unittest.TestCase):
         res = leak_audit.audit_rows(rows, prompts, near_n=8)
         self.assertEqual(res['exact'][:3], [], 'a generated row is a bench_rw prompt verbatim')
         self.assertEqual(res['near'][:3], [], 'a generated row is 8-gram close to a bench_rw prompt')
+
+
+class TestOpwords(unittest.TestCase):
+    def test_every_equation_in_the_reply_is_true(self):
+        R = random.Random(11)
+        for _ in range(500):
+            row = opwords.sample(R)
+            reply = row['messages'][1]['content']
+            m = bench_rw.re.match(r'(\d+) ([-+x/]) (\d+) = (\d+)', reply)
+            self.assertIsNotNone(m, 'reply has no equation: %r' % reply)
+            a, sym, b, got = int(m.group(1)), m.group(2), int(m.group(3)), int(m.group(4))
+            want = {'+': a + b, '-': a - b, 'x': a * b, '/': a // b}[sym]
+            self.assertEqual(got, want, 'wrong arithmetic in %r' % reply)
+            self.assertEqual(str(got), row['gold'])
+
+    def test_subtraction_uses_the_unambiguous_argument_structure(self):
+        """`a ra b ghatnus` is ambiguous Nepali and the live model reads it as addition"""
+        R = random.Random(12)
+        for _ in range(300):
+            row = opwords.sample(R)
+            q = row['messages'][0]['content']
+            if ' ghat' in q or 'ghatnus' in q or 'ghatda' in q:
+                self.assertIn('bata', q, 'ambiguous subtraction prompt: %r' % q)
+
+    def test_rows_pass_the_teacher_audit(self):
+        R = random.Random(13)
+        for _ in range(300):
+            self.assertEqual(check(opwords.sample(R)), [])
 
 
 if __name__ == '__main__':
