@@ -5,7 +5,7 @@ unset PYTHONPATH PYTHONSAFEPATH
 set -uo pipefail
 export PLAYWRIGHT_BROWSERS_PATH=/tmp/reels/pw UV_NO_CACHE=1
 V="$(cd "$(dirname "$0")" && pwd)"; cd "$V"; mkdir -p build/logs out
-PY=/tmp/reels/venv/bin/python; SAMPLES=${SAMPLES:-24}; SCALE=${SCALE:-0.8}
+PY=/tmp/reels/venv/bin/python; SAMPLES=${SAMPLES:-32}; SCALE=${SCALE:-0.9}
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 "$PY" -c "import bpy, playwright, librosa" 2>/dev/null || bash build.sh setup
 log setup ok
