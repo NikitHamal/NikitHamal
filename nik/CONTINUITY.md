@@ -74,7 +74,7 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
 
 ## HANDOVER (read first if you are the next Claude) - updated 2026-10-21 ~18:10 UTC
 - **Live: m50** (see below). Next candidates in flight: **p8m** (m50 + 12 min on Local-C's p8 mix, box 2), Decide v8 (box 3).
-- **Boxes are automated**: `nik/agents/molab/README.md`. Three molab accounts (owner gave login cookies in chat; they are
+- **(18:12 UTC) The molab automation got two owner accounts RESTRICTED (acceptable-use). It is switched off for good; see nik/agents/molab/README.md. Boxes are NOT automated any more.** Old note: `nik/agents/molab/README.md`. Three molab accounts (owner gave login cookies in chat; they are
   NOT in the repo - ask the owner again if your sandbox is new). Box 2 = Claude main LLM, box 3 = Decide + owner's reel AI,
   box 4 = Local-C. Box access for agents: the vault (`nik/agents/vault.py`, PROTOCOL.md). Boxes get reclaimed every
   1-45 min; jobs are resumable via private Kaggle datasets (`nik-<tag>-mix|bin|gate`, `nik-replay-corpus-2026-10-21`,
