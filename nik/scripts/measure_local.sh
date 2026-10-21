@@ -1,17 +1,11 @@
 #!/bin/bash
-# Local-C: measure a model on the local machine (CPU) and write the gate's logs.
-#
-# The cloud boxes live ~8-12 minutes, which is enough for a training stage but not for
-# the whole measurement suite.  The measurements are cheap on the local CPU (the model
-# is 20M parameters), so: train on the box, measure here, and the logs are exactly the
-# files the ship gate reads.
-#
-#   bash nik/scripts/measure_local.sh <bin> <tag>
+# Local-C on the owner's CPU box: measure the p11 candidate exactly like the baseline.
+#   bash nik/scripts/measure_local.sh <bin> p11
 set -uo pipefail
 ROOT=${ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}
 cd "$ROOT"
 export PYTHONUNBUFFERED=1
-export CUDA_VISIBLE_DEVICES=""      # the CPU: the owner's laptop GPU is not ours to use
+export CUDA_VISIBLE_DEVICES=""
 BIN=${1:?usage: measure_local.sh <bin> <tag>}
 TAG=${2:?usage: measure_local.sh <bin> <tag>}
 LOGDIR="nik/web/model/logs/$TAG"
@@ -43,7 +37,7 @@ say "the stress"
 python nik/stress.py --model "$BIN" --out "$LOGDIR/stress-$TAG.json" > "$OUT/stress.log" 2>&1
 tail -1 "$OUT/stress.log"
 
-say "the shape probe (the mechanism)"
+say "the shape probe (the mechanism, with the paraphrase block)"
 python nik/scripts/shape_probe.py --model "$BIN" --out "$LOGDIR/shape-$TAG.json" 2>&1 | head -3
 
 say "the role probe"
@@ -53,5 +47,8 @@ say "the procedure ladder"
 python nik/scripts/word_procedure_probe.py --out "$OUT/ladder_items.json" --ladder --contrast 2>&1 | tail -2
 node nik/scripts/word_probe_run.mjs "$BIN" "$OUT/ladder_items.json" --out "$LOGDIR/ladder-$TAG.json" 2>&1 | tail -4
 python nik/scripts/collapse_report.py "$LOGDIR/ladder-$TAG.json" 2>&1 | tail -5
+
+say "the gate: the owner's +5 on every metric, against the live model (the same item set)"
+python nik/scripts/ship_gate.py --old nik/web/model/logs/m50live --new "$LOGDIR" --target 5 2>&1 | head -45
 
 say "done - the logs are in $LOGDIR"
