@@ -8,14 +8,14 @@
 #
 #   bash nik/scripts/measure_local.sh <bin> <tag>
 set -uo pipefail
-ROOT=${ROOT:-F:/NikitHamal}
+ROOT=${ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}
 cd "$ROOT"
 export PYTHONUNBUFFERED=1
 export CUDA_VISIBLE_DEVICES=""      # the CPU: the owner's laptop GPU is not ours to use
 BIN=${1:?usage: measure_local.sh <bin> <tag>}
 TAG=${2:?usage: measure_local.sh <bin> <tag>}
 LOGDIR="nik/web/model/logs/$TAG"
-OUT="E:/Temp/opencode/measure_$TAG"
+OUT=${OUT:-/tmp/measure_$TAG}
 mkdir -p "$LOGDIR" "$OUT"
 say() { echo "[$TAG $(date +%H:%M:%S)] $*" | tee -a "$OUT/run.log"; }
 
