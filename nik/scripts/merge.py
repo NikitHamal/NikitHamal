@@ -17,7 +17,7 @@ import argparse
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path[:0] = [os.path.dirname(os.path.abspath(__file__)), os.path.dirname(os.path.dirname(os.path.abspath(__file__)))]
 import torch  # noqa: E402
 from export import export, load_exported  # noqa: E402
 from soup import cfg_of, _tmp_ckpt  # noqa: E402
