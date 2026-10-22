@@ -1,0 +1,12 @@
+[
+ {"name": "smoke money", "turns": ["mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?"], "want": ["\\b320\\b"]},
+ {"name": "ma sanga", "turns": ["ma sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki chha?"], "want": ["\\b320\\b"]},
+ {"name": "no owner", "turns": ["500 rupiya thiyo, 180 kharcha garyo. aba kati bachyo?"], "want": ["\\b320\\b"]},
+ {"name": "book", "turns": ["mero sanga 1000 rupiya chha. 350 ko kitab kine. kati bachyo?"], "want": ["\\b650\\b"]},
+ {"name": "ram spend", "turns": ["ram sanga 50 rupiya chha. usle 18 rupiya kharcha garyo. kati bachyo?"], "want": ["\\b32\\b"]},
+ {"name": "pocket money", "turns": ["aama le malai 200 rupiya dinubhayo. maile 75 ko chocolate kine. aba kati chha?"], "want": ["\\b125\\b"]},
+ {"name": "salary", "turns": ["mero talab 25000 ho. 8000 ghar bhada tire. kati bachyo?"], "want": ["\\b17,?000\\b"]},
+ {"name": "got more", "turns": ["sita sanga 340 rupiya thiyo, didi le 160 thap dinubhayo. jamma kati bhayo?"], "want": ["\\b500\\b"]},
+ {"name": "two buys", "turns": ["1500 rupiya lagera bajar gaye. 600 ko tarkari ra 450 ko phal kine. kati firta lyaye?"], "want": ["\\b450\\b"]},
+ {"name": "english", "turns": ["i had 900 rupees and spent 250. how much is left?"], "want": ["\\b650\\b"]}
+]

@@ -25,6 +25,7 @@ run() {  # tag bin outdir
   # (*_heldout.json is guarded out of every mix by make_sft2) and follow-ups (common phrases, a sanity row)
   grep -q '^score' $o/everyday.txt 2>/dev/null  || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/everyday_heldout.json > $o/everyday.txt 2>&1 &
   grep -q '^score' $o/followups.txt 2>/dev/null || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/followups.json > $o/followups.txt 2>&1 &
+  grep -q '^score' $o/money.txt 2>/dev/null     || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/money_heldout.json > $o/money.txt 2>&1 &
   [ -f $o/stress.json ]  || $PY nik/stress.py --model $b --out $o/stress.json > $o/stress.txt 2>&1 &
   [ -f $o/long.json ]    || $PY nik/bench_long.py --model $b --out $o/long.json > $o/long.txt 2>&1 &
   if [ -f ${EN_DATA:-data/english}/en_heldout.jsonl ]; then
