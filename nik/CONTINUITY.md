@@ -72,34 +72,11 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
-## HANDOVER (read first if you are the next Claude) - updated 2026-10-21 ~19:15 UTC
-- **Live: m50.** Gate = `bash nik/scripts/full_gate.sh <bin> <tag>` on a GPU box (all gates in parallel vs live, verdict SHIP
-  only if >= live on every row: bench plain+nested, understanding, math/persona, NikBench-RW, shape_probe, bench_reading,
-  ladder, traps; stress/chat are contaminated sanity rows). Owner's bar: **zero regressions, real gains everywhere**.
-- **New strict benchmark NikBench-RW** (`nik/bench_rw.py`): m50 1/45 groups, 25/135 items; p8m 3/45. Local-C's
-  `shape_probe.py`: m50 2/27, p8m 4/27. More of the existing read/correct/roles data does NOT move RW (CPU test) -> new
-  purpose-built data is needed (spec in #8, assigned to Local-C who owns data; Claude owns gate/merge/ship).
-- **p8m** (m50 + 12 min on p8 mix): und 22, math 97.5, RW 3/45, shapes 4/27, but nested word 16->10, traps 8, reading
-  1/20 -> not shipped. Bin: sandbox + Kaggle `nik-p8m-bin` (may not exist; md5 52d2e0e4).
-- **GPU: the owner opens molab notebooks by hand and pastes the pair URL+token in chat.** Box 1 is shared Claude + Local-C
-  via the vault; protocol: one GPU job at a time via `/tmp/gpu.lock`, chunks <= 9 min, artefacts off the box at once,
-  work dirs `/tmp/claude` `/tmp/localc`. **Launch jobs detached (setsid nohup ... &)**: an execute call from another
-  agent interrupts a blocking scratchpad call (Claude's status check killed Local-C's p11 at 19:29). Do not call the box while the lock names someone else. A status panel (marimo `mo.ui.refresh` cards + refresh button) sits at the top
-  of each notebook. **Never automate molab accounts** (two owner accounts were restricted for that; see molab/README.md).
-- Kaggle is storage only: `nik-replay-corpus-2026-10-21` (173M-token replay corpus), `nik-candidates-2026-10-21`, `nik-p8m-mix`.
-- **English (owner, 2026-10-22): make Nik good at English without losing any romanized Nepali.** Data: human-written
-  only (Dolly-15k, OASST1, Simple English Wikipedia; no LLM-generated sets) via `nik/data/english/fetch.py` + `build_en.py`
-  (private Kaggle `nik-english-2026-10-22`). Eval: `nik/bench_en.py` (in full_gate). m50: en_qa_ppl 308.8, en_wiki_ppl
-  126.2, en_reply 46/60, NE fidelity 22/22. GPU arm ready: `nik/agents/molab/jobs/job_en.sh` (e1 = m50 + 12 min on sftb +
-  10% English + English wiki in replay). Tokenizer is Nepali-trained (English ~2.5-3 tok/word): keep English answers short.
-- **(2026-10-22 ~13:00 UTC) Owner parked long context. Goal now: +10 points on every benchmark with headroom, no drops.**
-  Main lever: `train.py --ref <live.bin> --kl <w>` (self-distillation anchor to the live model). Arms k1/k2: job_kl.sh.
-- **16k context (owner, 2026-10-22, PARKED): ctx 16384, 8k input / 8k output per turn; mixed Nepali-English sentences are OK
-  if proper.** Groundwork on main: train.py --set-ctx/--rope-base (NTK base 403175), SDPA is_causal, nik.js on-demand KV,
-  longctx.py, add_rows.py, bench_long.py (in full_gate; m50 0/6 at 400 tokens), job_long.sh (L1). Backlog: browser
-  attention is scalar JS (4.8k-token prefill = 441 s on 2 cores) -> WASM-SIMD or WebGPU attention before 16k ships;
-  context.js budget + worker/chat maxNew to 8k once a 16k model ships.
-- Owner wants: continuous loop, status messages mid-work, /agents (#8, state.json) current, docs current.
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~13:15 UTC
+**The full handover prompt is `nik/agents/HANDOVER.md`.** Short version: live = m50; main lever = KL anchor
+(`train.py --ref <live.bin> --kl 1.0`); gate = `nik/scripts/full_gate.sh` (ship only if >= live on every row);
+box 1 runs k1/k2/k3 then the record loop (`nik/agents/molab/jobs/loop.sh`, promoted bins -> Kaggle `nik-loop-best`);
+long context parked; no molab automation; owner wants +10 points where there is headroom and no drops.
 
 ## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
 - **Live: m50** = 0.5·v4r2 + 0.5·v4r3 (same-parent blend, both v4f + reduce.py 25-30%). Paired vs v4f: NikBench plain 72.6% (72.2),
