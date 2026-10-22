@@ -1,17 +1,17 @@
 {
- "updated": "2026-10-21T23:05:00Z",
+ "updated": "2026-10-22T08:56:25Z",
  "live": {
   "model": "m50",
-  "note": "NikBench 72.6% (nested 77.1%) · ladder L2 12/12 · understanding 19/26 · traps 9/12 · math 94% (rollback: v4f)"
+  "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "RTX Pro 6000 · owner notebook, shared Claude + Local-C",
-   "job": "Local-C: p15 (the p14 recipe + the wide role-label pool) -> the gate vs m50",
+   "gpu": "RTX Pro 6000 \u00b7 owner notebook (shared Claude + Local-C)",
+   "job": "Claude: e1 English arm (m50 + 12 min on sftb + 10% English + English wiki replay) -> full_gate + bench_en",
    "progress": null,
-   "detail": "the GPU box is the owner's notebook: it does not die, so a 12-minute stage is safe. The arms today: p11 56.9%, p12 58.0%, p13 66.3%, p14 74.3%",
-   "eta": "the p15 measurement ~23:20 UTC"
+   "detail": "queue after: Local-C p19 + gates of p17/p18",
+   "eta": "~10:00 UTC"
   }
  ],
  "scoreboard": {
@@ -32,6 +32,15 @@
     "9/12",
     "12/12",
     "1/45"
+   ],
+   [
+    "p15 (Local-C, sftb base)",
+    "72.2%",
+    "-",
+    "19/26",
+    "24/36",
+    "12/12",
+    "2/45"
    ],
    [
     "p8m (m50 + p8 mix)",
@@ -122,35 +131,10 @@
     "9/12",
     "0/12",
     "-"
-   ],
-   [
-    "v4f4 (Local-C)",
-    "67.4%",
-    "29/48",
-    "20/26",
-    "9/12",
-    "1/12",
-    "-"
    ]
   ]
  },
  "runs": [
-  {
-   "tag": "p14 (Local-C)",
-   "box": "box 1 (the shared GPU)",
-   "by": "Local-C",
-   "status": "done",
-   "what": "the p8 recipe on the sftb base (31% direct arithmetic) with today's generators, from m50: bs 128, lr 1e-4, 12 min, the corpus replay on",
-   "result": "the arithmetic family is EXACTLY the live model's (168/192), the named shapes 2/27 -> 9/27 (14/44), the math 94% -> 97.5%, the persona 1.0, the chat 15/15, the understanding 19/26 - but the bench 77.1% -> 74.3% and the held-out word family 16/48 -> 9/48. The mechanism moved; the held-out word family did not, and the reason is named: the model reads the story's numbers with invented role labels."
-  },
-  {
-   "tag": "p11/p12/p13 (Local-C)",
-   "box": "box 1",
-   "by": "Local-C",
-   "status": "rejected",
-   "what": "the same stage on mixes whose base carries only 18% of direct arithmetic",
-   "result": "the bench collapsed to 56.9% / 58.0% / 66.3%: below ~30% of direct arithmetic the model loses the *entry point* into the procedure (the bench's out field: \"66 ra 47 tulana garau. 66 > 66\" instead of the digit-by-digit trace)"
-  },
   {
    "tag": "m50",
    "box": "-",
@@ -248,8 +232,8 @@
   }
  ],
  "next": [
-  "p15 (the p14 recipe + the wide role-label pool): the held-out word family is the last gap",
-  "the owner: the molab accounts are restricted - a new GPU or Kaggle has to be decided",
-  "the third-party identity rows (Local-A's family) for the trap_check 9/12 -> 12/12"
+  "p11 (Local-C) -> full_gate",
+  "RW-targeted data (Local-C, spec in #8)",
+  "ship only a zero-regression candidate"
  ]
 }

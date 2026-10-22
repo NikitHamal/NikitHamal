@@ -79,13 +79,6 @@ PRESETS = {
     'nik-0.1r3': NikConfig(d=384, n_unique=12, n_repeat=3, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     # Local-C (issue #9): fill the 25 MB cap with int8: 14 unique blocks -> 23.6M params, 23.8 MB, +16% FLOPs, no new kernels
     'nik-0.1w': NikConfig(d=384, n_unique=14, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
-    # Local-C (issue #9): the owner raised the cap to 30 MB.  'nik-0.1x' fills it with
-    # DEPTH (17 unique blocks -> 34 effective layers, 28.5M params, ~28.9 MB): the model
-    # fails at *composing* two steps (ladder L2 = 0/12 everywhere) and depth is the cheapest
-    # way to add that.  'nik-0.1v' buys WIDTH instead (d=448, 24 layers, ~26 MB) for the
-    # reading side.  Both are int8 -> no new kernels in the browser.
-    'nik-0.1x': NikConfig(d=384, n_unique=17, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
-    'nik-0.1v': NikConfig(d=448, n_unique=12, n_repeat=2, heads=14, kv_heads=4, ffn=1216, ctx=512, abacus=20),
     'nik-0.1': NikConfig(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     # ~8.3M params -> ~8.4 MB int8 (the original <10 MB design).
     'nik-small': NikConfig(abacus=20),
@@ -153,7 +146,7 @@ class Block(nn.Module):
         self.up = Lin(cfg.d, 2 * cfg.ffn, bias=False)    # [gate ; up] fused
         self.down = Lin(cfg.ffn, cfg.d, bias=False)
 
-    def forward(self, x, cos, sin, mask):
+    def forward(self, x, cos, sin, mask, cache=None):
         cfg = self.cfg
         N, T, _ = x.shape
         hd = cfg.head_dim
@@ -163,11 +156,18 @@ class Block(nn.Module):
         k, v = k.transpose(1, 2), v.transpose(1, 2)
         q, k = self.qn(q), self.kn(k)
         q, k = apply_rope(q, cos, sin), apply_rope(k, cos, sin)
+        if cache is not None:                     # incremental decoding: append this step's keys/values
+            if 'k' in cache:
+                k = torch.cat([cache['k'], k], 2); v = torch.cat([cache['v'], v], 2)
+            cache['k'], cache['v'] = k, v
         rep = cfg.heads // cfg.kv_heads
         if rep > 1:
             k = k.repeat_interleave(rep, dim=1)
             v = v.repeat_interleave(rep, dim=1)
-        a = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
+        if mask is None:
+            a = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+        else:
+            a = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
         x = x + self.o(a.transpose(1, 2).reshape(N, T, -1))
         g, u = self.up(self.n2(x)).chunk(2, dim=-1)
         return x + self.down(F.silu(g) * u)
@@ -223,11 +223,14 @@ class NikLM(nn.Module):
         N, T = idx.shape
         if pos is None:
             pos = torch.arange(T, device=idx.device)
-        if mask is None:
-            mask = torch.ones(T, T, dtype=torch.bool, device=idx.device).tril()
+        causal = mask is None                   # plain causal: SDPA is_causal (flash kernel, no T x T mask in memory)
         cos, sin = rope_cache(self.cfg, int(pos.max()) + 1, idx.device)
         cos, sin = cos[pos].to(self.emb.weight.dtype), sin[pos].to(self.emb.weight.dtype)
-        if mask.dtype == torch.bool:
+        if pos.dim() == 2:                      # per-row positions (N, T) for left-padded batches: broadcast over heads
+            cos, sin = cos.unsqueeze(1), sin.unsqueeze(1)
+        if not causal and mask.dim() == 3:      # per-row masks (N, T, T)
+            mask = mask.unsqueeze(1)
+        if not causal and mask.dtype == torch.bool:
             # additive float mask in the activation dtype lets SDPA pick the
             # memory-efficient kernel instead of materialising T x T scores per layer
             dt = self.emb.weight.dtype
@@ -249,6 +252,25 @@ class NikLM(nn.Module):
 # --------------------------------------------------------------------------
 # Hybrid AR + block-diffusion objective
 # --------------------------------------------------------------------------
+
+@torch.no_grad()
+def forward_cached(model, idx, pos, mask, caches, digits=None):
+    """One incremental step for generate_multi: idx (N, t) new tokens, pos (N, t) their positions, mask (N, t, Tk) bool
+    over all keys so far (cached + new); caches: list with one dict per effective layer (filled in place)."""
+    cfg = model.cfg
+    cos, sin = rope_cache(cfg, int(pos.max()) + 1, idx.device)
+    cos, sin = cos[pos].to(model.emb.weight.dtype).unsqueeze(1), sin[pos].to(model.emb.weight.dtype).unsqueeze(1)
+    dt = model.emb.weight.dtype
+    m = torch.zeros(mask.shape, dtype=dt, device=idx.device).masked_fill(~mask, float('-inf')).unsqueeze(1)
+    x = model.emb(idx)
+    if cfg.abacus and digits is not None:
+        x = x + model.abacus(digits)
+    li = 0
+    for b in model.blocks:
+        for _ in range(cfg.n_repeat):
+            x = b(x, cos, sin, m, cache=caches[li]); li += 1
+    return F.linear(model.norm(x), model.emb.weight)
+
 
 def two_stream_mask(L: int, B: int, offset: int, device) -> torch.Tensor:
     """(2L, 2L) bool mask for the sequence [noisy(0..L-1) ; clean(0..L-1)].
@@ -417,6 +439,57 @@ def generate_ssbd(model, prompt: list[int], max_new: int = 128, temperature: flo
             break
         t0 = nxt
     return out, passes
+
+
+@torch.no_grad()
+def generate_multi(model, prompts: list, n_per_prompt: int = 8, max_new: int = 160, temperature: float = 0.8,
+                   min_p: float = 0.05, stop: tuple = (2, 9)):
+    """Sample n_per_prompt continuations for EVERY prompt in one left-padded batch (GRPO throughput).
+    Per-row positions start at 0 after the padding, and pads are never attended, so each row computes exactly what
+    generate_ar would on its own prompt (greedy-identical; tested). Returns, per prompt, [(tokens, mean_logprob)]."""
+    dev = next(model.parameters()).device
+    rows = [p for p in prompts for _ in range(n_per_prompt)]
+    N, L0 = len(rows), max(len(p) for p in rows)
+    pad = torch.tensor([L0 - len(p) for p in rows], device=dev)
+    x = torch.zeros(N, L0, dtype=torch.long, device=dev)
+    for i, p in enumerate(rows):
+        x[i, L0 - len(p):] = torch.tensor(p, device=dev)
+    done = torch.zeros(N, dtype=torch.bool, device=dev)
+    lp_sum = torch.zeros(N, device=dev); lens = torch.zeros(N, device=dev)
+    out = [[] for _ in range(N)]
+    stop_t = torch.tensor(stop, device=dev)
+    cfg = model.cfg
+    caches = [dict() for _ in range(cfg.n_layers)]
+    ar = torch.arange(L0, device=dev)
+    pos = (ar[None] - pad[:, None]).clamp(min=0)
+    real = ar[None] >= pad[:, None]
+    mask = (torch.ones(L0, L0, dtype=torch.bool, device=dev).tril()[None] & real[:, None, :]) | torch.eye(L0, dtype=torch.bool, device=dev)[None]
+    digits = model.digit_index(x) if cfg.abacus else None
+    logits = forward_cached(model, x, pos, mask, caches, digits)[:, -1].float()      # prefill once
+    for step in range(max_new):
+        logits[:, [0, 1, 3, 4, 5]] = -float('inf')
+        if temperature <= 0:
+            nxt = logits.argmax(-1)
+        else:
+            p_ = torch.softmax(logits / temperature, -1)
+            p_ = torch.where(p_ >= min_p * p_.max(-1, keepdim=True).values, p_, torch.zeros_like(p_))
+            nxt = torch.multinomial(p_ / p_.sum(-1, keepdim=True), 1).squeeze(1)
+        lp = torch.log_softmax(logits, -1).gather(1, nxt[:, None]).squeeze(1)
+        live = ~done
+        lp_sum += lp * live; lens += live.float()
+        for i in torch.nonzero(live).flatten().tolist():
+            out[i].append(int(nxt[i]))
+        done |= torch.isin(nxt, stop_t)
+        x = torch.cat([x, nxt[:, None]], 1)
+        if bool(done.all()) or x.shape[1] >= cfg.ctx or step == max_new - 1:
+            break
+        T = x.shape[1]
+        real = torch.cat([real, torch.ones(N, 1, dtype=torch.bool, device=dev)], 1)
+        pos_new = (T - 1 - pad)[:, None]
+        d_new = model.digit_index(x)[:, -1:] if cfg.abacus else None              # digit position needs the context
+        logits = forward_cached(model, nxt[:, None], pos_new, real[:, None, :], caches, d_new)[:, -1].float()
+    res = [(o, float(s / max(1.0, float(l)))) for o, s, l in zip(out, lp_sum, lens)]
+    return [res[i * n_per_prompt:(i + 1) * n_per_prompt] for i in range(len(prompts))]
 
 
 @torch.no_grad()
