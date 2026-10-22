@@ -22,7 +22,7 @@ from format_ask import only_number_think  # noqa: E402
 HISTORY_CATS = ('followup', 'reason-followup')
 
 
-def fix(r, c):
+def fix(r, c, history_only=False):
     cat = r.get('cat', '')
     nik = [m for m in r['messages'] if m['role'] == 'nik']
     if cat.startswith(HISTORY_CATS) and len(nik) > 1:
@@ -30,7 +30,7 @@ def fix(r, c):
             if not m.get('think') and m.get('train', True):
                 m['train'] = False
                 c['history turn -> context only'] += 1
-    if cat == 'understand-format' and len(nik) == 1 and not nik[0].get('think'):
+    if not history_only and cat == 'understand-format' and len(nik) == 1 and not nik[0].get('think'):
         t = only_number_think(r['messages'][0]['content'], nik[0]['content'])
         if t:
             nik[0]['think'] = t
@@ -41,11 +41,12 @@ def fix(r, c):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--data', required=True); ap.add_argument('--base', required=True); ap.add_argument('--name', required=True)
+    ap.add_argument('--history-only', action='store_true', help='only fix 1 (history turns); format rows keep no think')
     a = ap.parse_args()
     c = collections.Counter()
     with open(os.path.join(a.data, f'{a.base}.jsonl')) as f, open(os.path.join(a.data, f'{a.name}.jsonl'), 'w') as g:
         for line in f:
-            g.write(json.dumps(fix(json.loads(line), c), ensure_ascii=False) + '\n')
+            g.write(json.dumps(fix(json.loads(line), c, a.history_only), ensure_ascii=False) + '\n')
             c['rows'] += 1
     print(dict(c), flush=True)
     subprocess.run([sys.executable, os.path.join(ROOT, 'nik', 'prepare.py'), '--data', a.data, '--sft-only', '--sft-name', a.name,
