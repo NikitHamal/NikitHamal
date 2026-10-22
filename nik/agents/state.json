@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T00:27:09Z",
+ "updated": "2026-10-22T08:56:25Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -7,11 +7,11 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "RTX Pro 6000 \u00b7 owner notebook, shared Claude + Local-C",
-   "job": "Local-C arms (p15/p16 gated by Claude: closest yet, reading + nested word still regress)",
+   "gpu": "RTX Pro 6000 \u00b7 owner notebook (shared Claude + Local-C)",
+   "job": "Claude: e1 English arm (m50 + 12 min on sftb + 10% English + English wiki replay) -> full_gate + bench_en",
    "progress": null,
-   "detail": "one job at a time via /tmp/gpu.lock; status panel in the notebook",
-   "eta": "-"
+   "detail": "queue after: Local-C p19 + gates of p17/p18",
+   "eta": "~10:00 UTC"
   }
  ],
  "scoreboard": {
