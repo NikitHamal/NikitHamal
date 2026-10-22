@@ -6,7 +6,7 @@ import json, os, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import bpy
 import lib
-from render import SHOTS, assets
+from render import SHOTS, assets, DATA, BUILD, FILM
 ROOT = os.path.dirname(HERE)
 NIGHT = [round((n + 0.5) / 9 * 0.74, 3) for n in range(9)]
 # shot: (camera u, [key u ...], dissolve seconds)
@@ -21,6 +21,10 @@ KEYS = {
 }
 
 
+if FILM == "tihar":
+    from shots_tihar import KEYS
+
+
 def main():
     threads = int(os.environ.get("THREADS", "0"))
     args = [a for a in sys.argv[1:] if a != "--"]
@@ -28,8 +32,8 @@ def main():
     for k in list(opt):
         if k in args: i = args.index(k); opt[k] = type(opt[k])(args[i + 1]); del args[i:i + 2]
     shots = [int(a) for a in args] or list(KEYS)
-    tl = json.load(open(f"{ROOT}/timeline.json")); S = {s["id"]: s for s in tl["shots"]}
-    out = f"{ROOT}/build/keys"; os.makedirs(out, exist_ok=True)
+    tl = json.load(open(f"{DATA}/timeline.json")); S = {s["id"]: s for s in tl["shots"]}
+    out = f"{BUILD}/keys"; os.makedirs(out, exist_ok=True)
     mpath = f"{out}/marks.json"; marks = json.load(open(mpath)) if os.path.exists(mpath) else {}
     json.dump({str(k): v for k, v in KEYS.items()}, open(f"{out}/keys.json", "w"))
     for sid in shots:

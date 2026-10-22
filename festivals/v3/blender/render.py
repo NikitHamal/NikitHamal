@@ -10,6 +10,9 @@ import sets_b as B_
 import sets_d as D_
 
 ROOT = os.path.dirname(HERE)
+FILM = os.environ.get("FILM", "dashain")
+DATA = ROOT if FILM == "dashain" else f"{ROOT}/{FILM}"          # lines.json / timeline.json of the film
+BUILD = f"{ROOT}/build" if FILM == "dashain" else f"{ROOT}/build_{FILM}"
 SHOTS = {
     1: (A_.set_lamp_room, dict(variant="open", strike=1.0)),
     2: (A_.set_lamp_room, dict(variant="title")),
@@ -35,6 +38,10 @@ SHOTS = {
 }
 
 
+if FILM == "tihar":
+    from shots_tihar import SHOTS
+
+
 def assets():
     a = {"tex": {"verse": f"{ROOT}/build/type/verse.png"},
          "nepal": f"{ROOT}/../lib/nepal.json", "dem": f"{ROOT}/build/dem.npy",
@@ -54,7 +61,7 @@ def main():
     ap.add_argument("--still", default=None, help="output path for --t")
     ap.add_argument("--dry", action="store_true", help="build the set and step the animation, render nothing (API check)")
     a = ap.parse_args([x for x in sys.argv[1:] if x != "--"])
-    tl = json.load(open(f"{ROOT}/timeline.json")); fps = tl["fps"]
+    tl = json.load(open(f"{DATA}/timeline.json")); fps = tl["fps"]
     shot = next(s for s in tl["shots"] if s["id"] == a.shot)
     build, kw = SHOTS[a.shot]
     sc = lib.reset(int(a.w * a.scale), int(a.h * a.scale), a.samples)
