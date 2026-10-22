@@ -43,6 +43,13 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   did not fix it. k8 (repair only, no colrows / money1) isolates the cause.
 - **/chat vote:** a sampled path whose answer contradicts its own think (`3 x 1000 = 3000` -> "3 km dur chha.") no
   longer votes (vote.js). m50 held-out chat 71 -> 77, k4 75 -> 83 (3 seeds x 56 items).
+- **The repair caused the trap loss; targeted reading data fixed it.** k8 (repair only, on k4's mix) lost traps too
+  (22): giving the only-number format rows a think taught "numbers in the question -> compute" (`3 kilo syau lyaye.
+  kati kilo?` -> 18). `lookup.py` (lookup vs compute on the same facts; le/lai; gayo tara gayena) + `mention.py`
+  (people called nikit/nik in everyday stories) -> k9 traps 28, reading 6 (k9b: 28, 6 again: not seed luck).
+- **A sum over a sanity row hid the owner's bug.** k9 writes `aghi ko jawaf 632 ho.` and then an EMPTY answer on
+  `kati rey?` in 3/5 samples (m50 5/5); the 26-item follow-up sum was unchanged. Cause: op follow-ups had a think, plain
+  ones did not. The owner's reported cases are now their own gating row (5 seeds); /chat re-asks on an empty reply.
 - **Mistakes this session:** (1) I put `followups.json`'s generic phrases ("kati rey?", "timi ko hau?", "mero naam k
   ho?") into the eval-prompt guard: the first p8mxe build dropped 26,644 persona/memory/follow-up rows. Caught from the
   mix log (normal: ~5) before training; only `*_heldout.json` is guarded now. Always read the guard's drop count.
