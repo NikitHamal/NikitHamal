@@ -116,8 +116,11 @@ def main():
             if why:
                 continue
             seen.add(norm(turns[0][1]))
-            if (cat in ('open_qa', 'closed_qa', 'classification') and len(turns) == 2 and len(turns[1][1].split()) <= 6
-                    and '\n' not in turns[0][1] and len(heldout) < a.heldout and R.random() < 0.15):
+            # held-out QA answerable FROM THE PROMPT (a passage + question, short answer that appears in the passage):
+            # tests English reading, not trivia a 20M model cannot know
+            if (cat in ('closed_qa', 'information_extraction') and len(turns) == 2 and len(turns[1][1].split()) <= 6
+                    and norm(turns[1][1]) and norm(turns[1][1]) in norm(turns[0][1]) and len(heldout) < a.heldout
+                    and R.random() < 0.5):
                 heldout.append({'q': turns[0][1], 'a': turns[1][1], 'cat': cat}); continue
             msgs = [{'role': r, 'content': t} for r, t in turns]
             if R.random() < a.ask_share:
