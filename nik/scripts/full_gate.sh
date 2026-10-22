@@ -26,7 +26,8 @@ run() {  # tag bin outdir
     [ -f $o/en.json ]    || $PY nik/bench_en.py --model $b --data ${EN_DATA:-data/english} --out $o/en.json > $o/en.txt 2>&1 &
   fi
 }
-run live $LB /tmp/gate_live
+LD=${LIVE_DIR:-/tmp/gate_live}
+run live $LB $LD
 run $T $B /tmp/gate_$T
 wait
-$PY nik/scripts/gate_verdict.py /tmp/gate_live /tmp/gate_$T $T | tee /tmp/gate_$T/verdict.txt
+$PY nik/scripts/gate_verdict.py $LD /tmp/gate_$T $T | tee /tmp/gate_$T/verdict.txt
