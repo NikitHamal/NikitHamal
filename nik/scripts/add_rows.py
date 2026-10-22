@@ -37,6 +37,8 @@ def main():
             r = gen.sample(R); got += len(render_chat(tok, r['messages'])[0]); n += 1
             rows.append(json.dumps(r, ensure_ascii=False) + '\n')
         print(f'{mod}: {n:,} rows, {got / 1e6:.1f}M tokens (target {share:.0%} of the mix)', flush=True)
+    import make_sft2   # the same held-out guard as every mix: no eval / stress / trap / NikBench-RW prompt is trained on
+    rows = make_sft2._drop_eval_prompts(rows, os.path.join(ROOT, 'nik'))
     R.shuffle(rows)
     with open(os.path.join(a.data, f'{a.name}.jsonl'), 'w') as f:
         f.writelines(rows)
