@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path[:0] = [os.path.join(ROOT, 'nik'), os.path.join(ROOT, 'nik', 'data', 'teacher')]
+sys.path[:0] = [os.path.join(ROOT, 'nik'), os.path.join(ROOT, 'nik', 'data', 'teacher'), os.path.join(ROOT, 'nik', 'scripts')]
 from prepare import render_chat  # noqa: E402
 from tokenizer import Tokenizer  # noqa: E402
 
