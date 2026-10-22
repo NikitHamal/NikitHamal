@@ -1,0 +1,541 @@
+{
+ "summary": {
+  "en_qa_ppl": 308.8,
+  "en_wiki_ppl": 126.17,
+  "en_reply": "46/60",
+  "en_contains": "1/60",
+  "ne_fidelity": "22/22"
+ },
+ "rows": [
+  {
+   "q": "Who played Billy the Kid in The Left Handed Gun",
+   "gold": "Paul Newman",
+   "reply": "Dear Sir, THe als you the ory, bith Gunne (toke Nepali C T ris Laded CS.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Classify each of the following as a primary color or a secondary color",
+   "gold": "blue, yellow, green, red, purple, orange",
+   "reply": "You scolorfinaly colorful tahunchhar work so or colorful a smieping by colorful followings or any lie of hispy lyaidin colorful from his and how with the colorful. What's doctor't mary: 'colorful his lectorkve' and each' card bowl by chhissically protectoners. Thank you have his faydas.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What is the name of the Winslow's nerdy next-door neighbor on the TV show \"Family Matters\"?",
+   "gold": "Steve Urkel",
+   "reply": "No.  kineko: Apples = next missed.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or woodwind: Janzi, Gemshorn",
+   "gold": "Gemshorn is woodwind, Janzi is string.",
+   "reply": "Sear. Gemshor String or weats month. Gearshipull thes were bought of year. Sirfull or weats clicks, so it oneSledist fo. Ciensorpters: Janzi, Geoncult's subtitutekows. Dow good recent lemaltype save letterpad Practice ofDMake Fatic who have.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "The former Chairman of Tata Sons died in road accident  en route  from where?",
+   "gold": "Ahmedabad to Mumbai",
+   "reply": "Eok, Cher Crounds they wearthner. Nous! Crounds they wearthner and the hardbirds and screen it one. Chyal the sme roke  sodhnus, and any bighead, wecause small and sleep in Netricks on R.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Who was the first American to win a Nobel Peace?",
+   "gold": "Theodore Roosevelt",
+   "reply": "Peace S Bearuddha Sir, wasn't meet I, was small Tith Isam darsan of Bide in I ra Lete Sir. WAnd thes fullses you a bhetera offline pani take tell block God Ceal Lople Nepalight love I't happiness's on your browser does nowin views backs and referent :",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which characters belong to DC or Marvel Universe? Hulk, Spectre",
+   "gold": "Spectre is DC, Hulk is Marvel",
+   "reply": "Nickespears beginsa Nepal, Hamal Shan do apple, Coca is beginovast or an Loving Nepal's also Nepal' beginnew Nepal's beginnew Nepal's moneyfinal, Dow to beginnews on Nepal's Madians Nepal's Madians. Dow many rupees are left internet.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What dog breed is a mix between a Cocker Spaniel and a Poodle?",
+   "gold": "Cockapoo",
+   "reply": "Igle dogs Sffar be a small Sfields the smooth a camera. BepaliM kose Boul, online shoppe art and count unlid. Skiyaeld a small eCompleed with the smalle. Sfield with the small eCest He have 'code. Starting is fiy enti or gred, was small-a.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Sabar, Sharud",
+   "gold": "Sharud is string, Sabar is percussion.",
+   "reply": "Helefi or shork means Sabarti. She is sleeping or small Sharu is small or trust. She is small or trust. Sir, She is small or trust.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What is the team that Michael Jordan played?",
+   "gold": "Chicago Bulls",
+   "reply": "Mouttar Bimorr Each load at a dirghakalinning Bythonl comes himorrung, Myable each yeas of Sust a story with them. Do you have a silld we thems were and has them at the plummed. Letter you ms like very count, with team have to removed name.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which car manufacturer is French or American: Alpine, Cadillac",
+   "gold": "Cadillac is American, Alpine is French",
+   "reply": "No.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Name a style of hot yoga.",
+   "gold": "Bikram.",
+   "reply": "Bikash is Nepal, The Croote, water. TPle, and still today, so it can small it. Do you have a snay to rems. I k naya sikyau tyaha all was sele, today.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What is a less known rule or move in Chess?",
+   "gold": "En passant",
+   "reply": "Dasha le discount farkyae. Sota l they does means command in Irful.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which characters belong to DC or Marvel Universe? Ultron, Brainiac",
+   "gold": "Brainiac is DC, Ultron is Marvel",
+   "reply": "No. or need on the project A hand-tolne, and Bi-to the otherM (- or belome and triverse UNES U For 26 and somyash ci-r-i-olandge). Rove has 12 apples, today.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Who was the Greek goddess of love",
+   "gold": "Aphrodite",
+   "reply": "nikit hamal le malai sunya dekhi banaunubhayo: afnai romanizer, tokenizer, transformer model, training ra yo browser engine. nepal ko news ra wikipedia padhera ma nepali sikeko hu.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "What are the words of House Allyrion?",
+   "gold": "\"No Foe May Pass\"",
+   "reply": "Ye aaye the 20 you neverland, so I can sney of Hew to one. It you devil of lake side, it do youne right in this A very own regular HRo to a small thereI card and hows and requale.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Give me a title of one of the \"Harry Potter\" novels.",
+   "gold": "Harry Potter and the Philosopher's Stone",
+   "reply": "The etter is Pot Co. Harly ai Potter, so Coting Potters and Poch, I raits in Po.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Maraca, Valiha",
+   "gold": "Valiha is string, Maraca is percussion.",
+   "reply": "He has 'Valihas in terCyalis on the string or an ealibul 16. (Hhelo, very out, I'd-waters, I' or an old Ssthan English too. Timar has 125, so or 12\nFen pos: Hamal is a wana and buthe.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which animal species is alive or extinct: Xenoposeidon, Sloth",
+   "gold": "Sloth is alive, Xenoposeidon is extinct.",
+   "reply": "Hoes real ore in or autoregeed the pecified on talies than Soch. Datefies a cleentisty wearth> small medicine and tech. Then C elecs were does or a smallumarfular, Bith Sable and extrawer the small it aparetting on mind small unit. They does a neighber?",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which is a species of fish? Tarp or Carp",
+   "gold": "Carp",
+   "reply": "Darpen caroce, u-hors, popen carorey, loopep and a species of Pyarpen of Youal; carpenhhook you feel with Paudi or an question, Cheshen and waspens are species of Po. The one fiyed, yi Cheshlies, and would mann missed for a plash cleving the species",
+   "english": true,
+   "contains": true
+  },
+  {
+   "q": "Best Actor award in 27th Screen Actors Guild(SAG) Awards was given posthumously to whom?",
+   "gold": "Chadwick Boseman for Black Bottom",
+   "reply": "namaskar Atard best CAYdev.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Which country is alphabetically last",
+   "gold": "Zimbabwe",
+   "reply": "You'mer = \"uthness\" ko extra is aapbhaenically. Sunillhell is oldgen, carbon dioxide, and a shorf macedry and good samising\nFafe, every, e apple, but money and variable and it view, it well and compack\nFor faltel to mostyful: it well and much, for song 30 minet Kav for the ghar = Phewa Dames and each. She also gi",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Kakko, Akonting",
+   "gold": "Akoting is string, Kakko is percussion.",
+   "reply": "He has Kak, or mak its Kakat. String or antill the sorry, Kakakarma I bhandaises. Kakakarma and the small best or anta, Check. DMake and sell were bought you enderal and small. Dippa sakchhuses sleep.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Dholak, Sitar",
+   "gold": "Sitar is string, Dholak is percussion.",
+   "reply": "The hearcus atricky or String or Fy or Sir, String or ses, closed Circuse or any bits like yesterday String give or any people, which have 'The fast west at sending'. Dirflowe if/her was string give aloney and biggest I't lost. What' days the small yourselfs, and a small model.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What are the India’s Foreign Exchange Reserves as on week ended Sept 23, 2022?",
+   "gold": "$545.65 bn",
+   "reply": "Ti, din ma Heepered Sept = 23\nhisab: 23 x 23 = 429; 23 + 429 = 452\njaach: 452 - 429 = 23, milyo<|/think|>452 rupiya baki chha.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Given a polynomial x^2 + 2x + 1, what is x?",
+   "gold": "x is equal to -1",
+   "reply": "12.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Dollu, Tidinet",
+   "gold": "Tidinet is string, Dollu is percussion.",
+   "reply": "Timi, Circussion with String or Sir. Do you live exhio, it with Tim have Sirf number and Do you liverond with Sstirfs on the Do you live. Iforpecussionsets imarat a lake or a string and extrae some on old or vegetable and small back. This is small problems, with the smoo, week starting with or vegetable",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What was the first credit card",
+   "gold": "Diners Club",
+   "reply": "jawaf janu ko ho.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Count de Grisly was the first to perform what trick in 1799",
+   "gold": "Saw woman in half",
+   "reply": "Grade 1799, Grif in 1799. Latal in 1799. Dshockwer in,<|/think|>NEBikash and 1799.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Tell me which of the following are body parts: head, ankle, banana, finger, earlobe, kiwi, toe, car, shoulder, bed",
+   "gold": "head, ankle, finger, earlobe, toe, shoulder",
+   "reply": "",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Who is the most famous left-handed baseball player?",
+   "gold": "Babe Ruth",
+   "reply": "Mouts-left-aot niskane-hen curry, ko satta Dipesh thatchedy guess. What kind of book and have \"milk",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Who is the most sensational player in MLB today?",
+   "gold": "Shohei Ohtani",
+   "reply": "Bout a = most and 5 x a prizol to rece Io kura, so I can his Ile, cards only ost who' know.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Where was 52nd International Film Festival of India held ?",
+   "gold": "Goa (Nov 20 to Nov 28)",
+   "reply": "You'm Tidar is Ind work and you, block in Frue and Nighl of Bision Fewa and Chinal.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Gong, Oungum",
+   "gold": "Gong is percussion, Oungum is string",
+   "reply": "Bear String or sends means Ctrician and or Main. Gonguly Hari can small protective, it but the C, years of Nepal; Srit anddhibe the orum and Ctrack and smoo, has Forma are small understood. She all the suits post intotal oney means you have.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which animal species is alive or extinct: Opabinia, Dugong",
+   "gold": "Dugong is alive, Opabinia is extinct.",
+   "reply": "Hembest or extint (enor et)t means you end menigstery. Dug or a selsica, which matter, so much theremo cence, or live, with all in it, so it pro-total, and extractly small not supplementary.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Whale skin is how many cm deep?",
+   "gold": "15 cm",
+   "reply": "Blue.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "What is Mr. Burn's assistant name on the Simpsons?",
+   "gold": "Smithers",
+   "reply": "Sirmpsan'tommons a rules. Sir, Simphas, if-elands. I will always bestinroprice. Sir, Simphas nepali k: many wassistwil.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What famous Italian plumber brothers were featured in the Nintendo Entertainment System?",
+   "gold": "The Super Mario Brothers.",
+   "reply": "You're wells brothers and each matters in theUThetarin and dristory as UThen 2 apples year. Syted: Happynew to count and drinking and now and Montime Pydrows of Bher and fansiouse in it was, Sydnee and oney means you'd now.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "The LIVA Miss Diva Supranational 2021 was given to whom?",
+   "gold": "Ritika Khatnani (Pune)",
+   "reply": "Tiva is ofeshit be Nepal.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which car manufacturer is German or American: Dodge, Volkswagen",
+   "gold": "Dodge is American, Volkswagen is German",
+   "reply": "Nicloure sister or any bigger is the biggest or any. Do you licant at the game many the short and really with Powow. If you like and a viewter Nepali backular by or amal tellsme and casht and by views and remove and political and a small history. Do you have a televice and block-diffusionround mages than old many small news.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "In the series A Song of Ice and Fire, who is the founder of House Massey?",
+   "gold": "Maldon Massey",
+   "reply": "He has Mulinesme is take turns on Feemer and room of Fee_ststring e-oce in 20 minet Kathmandu, Hadow to night.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "tell me whether these are girl names or boy names: Ali, Billie, Cameron",
+   "gold": "They are gender neutral names",
+   "reply": "The capital, Camerouse or ashiya. Came, Cacos, blst baithakless, bhyali is fill.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which were the top 3 nations in the medal tally of World Wrestling Championship 2022",
+   "gold": "USA(15), Japan(13), Turkey(7)",
+   "reply": "Championship is the ok, so the Tepled in their and Championships in the xambest Sorhampionships in rewawend in Championships are week in the main points from mempald Championships and retaind too. Championships in Lain: not from mempald Sorhanes, and the krainfaing curry and much bime's ontulen.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Who did the USA beat in Women's World Cup final in 2019?",
+   "gold": "The Netherlands",
+   "reply": "Tok, 'The USAfl' New SAThen CSAfl of Wearing's family soup, it said 'Then Csa is only one' orled Copeko Nepal's Cain and Cope 'comes' be awed Cope 'country' Chesia is supplexeed 'country'.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which is a species of fish? Pickerel or Pickle",
+   "gold": "Pickerel",
+   "reply": "Dickerel SPickle Pickle Pydroid apps packet = PIck garnusing Pickle Pickle or a species of Pickle Dickerel and Oney Pice Hydrology, Itarkfin ra you total Pydanda.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which instrument is string or percussion: Kecer, Saz",
+   "gold": "Saz is string, Kecer is percussion.",
+   "reply": "Tene or sticans Sathmandu Sasign folol or the still and sends mee 10 screen.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What was Skippy ( on TV )",
+   "gold": "The bush kangaroo",
+   "reply": "TPhige is Sippy, but Kathmandu. Skippy, nayaC prastutraes, Ppadan gardaishwar. Skippy, a fulsajar.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify the bird from the list: Lint, Linnet, Lining",
+   "gold": "Linnet",
+   "reply": "Nust He my fain 5 crore box. Linus = 245 - 17 = 288. jaach: 288 > 5, < 288, < 3.<|/think|>Linttygroups ko english topise, The Linten, Linsf falte, w, carore download<|eos|>",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "In France if you were served le miel what would you eat",
+   "gold": "Honey",
+   "reply": "I'm is the small have a lot. Bills the year, happiness with eat or is small. If you live view, give me a lot of work and political bhotej and each buys and total. If you like ory tomm and from meists and then check the nainsular year. If the small can not best, weatd hear. Then 5 packs arpi, only oney going writing and not w",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Identify which animal is domesticated or wild: Hedgehog, Sea-monkey",
+   "gold": "Hedgehog is domesticated, Sea-monkey is wild.",
+   "reply": "",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "What are the most common languages in the world?",
+   "gold": "English, Spanish, Chinese, Arabic, Hindi",
+   "reply": "nikit ko essay anusar, satya ko yo awasthanu ho. tapai lai iamnikithamal@gmail.com ma 'a khojinna' tyaha bata<|eos|>",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Tell me if these are baseball teams or football teams: Seattle Mariners, Chicago Cubs, Tampa Bay Devil Rays",
+   "gold": "They are all baseball teams",
+   "reply": "TUate tuwached thems boul elands dom on theSinerlmele. Then Shatfoot bata orled Cheers or any 4. Sir, and drilteched the peak. She has 10 were the plz",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "What was the Rolling Stones first no 1 hit",
+   "gold": "Its all over now",
+   "reply": "Suruwat What mat, Sone work and Machhaugh. Soch Dolling Slelo, so I found Ch What mat, You smove love.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which letters denote Jesus Nazareth King of the Jews",
+   "gold": "INRI",
+   "reply": "Naceular New Juare to hiching a vargasms the sme and load offline and Jiws of Nepal. Dashain back sabai if re-new male, phone, sorry,med, Bindows, y<|eos|>",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Which of the following are companies that sell sports apparel? Nike, adidas, Energizer, Logitech, Dell, Saucony",
+   "gold": "Nike, Adidas, Saucony",
+   "reply": "",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "How many feet are in 1 mile?",
+   "gold": "5,280 feet",
+   "reply": "1000 meter.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Tell me which of these are brands of soap: Dove, Colgate, Palmolive, Ivory, Pearl Milling Co, Sofsoap, Dawn, Ethan",
+   "gold": "Dove, Palmolive, Ivory, Sofsoap, Dawn",
+   "reply": "Totall me the soas, Pearmal bus, Copsa, Consica Nikit, I winds Cosas in or vegetables, Copsa, Copsa, I windo, Copsa, Copsa, Copsa, movie, Copsa, Copsa, windows, stopsint means or beginnews. Copsa, Copsa, which is pome, funts coming mokharas.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Who was the Italian dictator responsible for introducing fascism to Italy and joining the Axis in World War 2?",
+   "gold": "Benito Mussolini",
+   "reply": "Hart means Itald in I, Itall and joining, I, wasns, exampincise, weard ray for one it.",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "Hindi Diwas is observed every year on which date?",
+   "gold": "September 14",
+   "reply": "Diwas' whe-topatra Nepal-NESendi (Nepal-AS). TU Diwas\" lai nepali ma \"himal\" bhanchha.",
+   "english": false,
+   "contains": false
+  },
+  {
+   "q": "Identify the bird from the list: Bar-tailed godwit, Leopard, Shark",
+   "gold": "Bar-tailed godwit",
+   "reply": "Nimber, Leption ra Sust is fors you alofy, By I can-let orry. Lete or legin, Jhere in the smpany. How mand more cheeed in Nepal. Leted fales are thesseed to meating. Lete art and endroid how to mahainsag. Letterfoo. Let! selfi",
+   "english": true,
+   "contains": false
+  },
+  {
+   "q": "hi, ma rojina. dharan bata.",
+   "reply": "namaste rojina! ramro naam.",
+   "nepali": true
+  },
+  {
+   "q": "ma kun thau bata hu?",
+   "reply": "tapai ko nam nabin ho.",
+   "nepali": true
+  },
+  {
+   "q": "mero bhai ko naam suraj ho ra u 12 barsha ko chha.",
+   "reply": "ok, yaad gare.",
+   "nepali": true
+  },
+  {
+   "q": "bhai kati barsha ko bhayo?",
+   "reply": "bhai ko umer = 29 barsha ho.",
+   "nepali": true
+  },
+  {
+   "q": "ma pahila butwal basthe, aile lalitpur ma baschhu.",
+   "reply": "hunchha.",
+   "nepali": true
+  },
+  {
+   "q": "ma aile kaha baschhu?",
+   "reply": "tapai aile pokhara ma basnuhunchha.",
+   "nepali": true
+  },
+  {
+   "q": "mero naam binod ho. mero buwa ko naam k ho?",
+   "reply": "tapai ko afnai bhannubhayeko chhaina.",
+   "nepali": true
+  },
+  {
+   "q": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo pyaj kinyo?",
+   "reply": "gopal le 3 kilo aalu kinyo.",
+   "nepali": true
+  },
+  {
+   "q": "\"sunita doctor ho ra uski bahini engineer.\" sunita ko bahini k kaam garchhe?",
+   "reply": "sunita ko bahini engineer ko kaam chha.",
+   "nepali": true
+  },
+  {
+   "q": "\"ram ghar gayo tara shyam school mai basyo.\" ke shyam ghar gayo?",
+   "reply": "ho, shyam school gayo.",
+   "nepali": true
+  },
+  {
+   "q": "\"river\" lai nepali ma k bhanchha?",
+   "reply": "\"river\" lai nepali ma \"nadi\" bhanchha.",
+   "nepali": true
+  },
+  {
+   "q": "\"u kheldai chha\" lai negative banau.",
+   "reply": "\"u kheldai chhaina\"",
+   "nepali": true
+  },
+  {
+   "q": "\"kalam\" ko plural?",
+   "reply": "\"kalam\" ko bahubachan \"kalamharu\" ho.",
+   "nepali": true
+  },
+  {
+   "q": "\"children\" ko singular k ho?",
+   "reply": "\"children\" ko singular \"child\" ho.",
+   "nepali": true
+  },
+  {
+   "q": "5, 9, 2 lai thulo bata sano kram ma lekha.",
+   "reply": "9, 5, 2",
+   "nepali": true
+  },
+  {
+   "q": "\"kathmandu\" ma kati akshar chha?",
+   "reply": "\"kathmandu\" ma 7 akshar chhan.",
+   "nepali": true
+  },
+  {
+   "q": "euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?",
+   "reply": "ek bhag ma 1000 rupiya parchha.",
+   "nepali": true
+  },
+  {
+   "q": "mero sanga 500 rupiya thiyo. 180 kharcha bhayo. kati baki?",
+   "reply": "320 rupiya baki hunchha.",
+   "nepali": true
+  },
+  {
+   "q": "15 ko 20 percent kati?",
+   "reply": "15 ko 20% = 3.",
+   "nepali": true
+  },
+  {
+   "q": "kaksha ma 14 keta ra 17 keti chhan. keti kati le badhi chhan?",
+   "reply": "kaksha ma 31 jana chhan.",
+   "nepali": true
+  },
+  {
+   "q": "aaja mero exam naramro bhayo, ekdam dukhi chhu.",
+   "reply": "sunera dukha lagyo. chinta nagarnus, bistarai thik hunchha. ma sanga kura garna sakinchha.",
+   "nepali": true
+  },
+  {
+   "q": "timi lai kasle banako ho?",
+   "reply": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+   "nepali": true
+  }
+ ]
+}

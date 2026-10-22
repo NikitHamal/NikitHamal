@@ -87,6 +87,11 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
   agent interrupts a blocking scratchpad call (Claude's status check killed Local-C's p11 at 19:29). Do not call the box while the lock names someone else. A status panel (marimo `mo.ui.refresh` cards + refresh button) sits at the top
   of each notebook. **Never automate molab accounts** (two owner accounts were restricted for that; see molab/README.md).
 - Kaggle is storage only: `nik-replay-corpus-2026-10-21` (173M-token replay corpus), `nik-candidates-2026-10-21`, `nik-p8m-mix`.
+- **English (owner, 2026-10-22): make Nik good at English without losing any romanized Nepali.** Data: human-written
+  only (Dolly-15k, OASST1, Simple English Wikipedia; no LLM-generated sets) via `nik/data/english/fetch.py` + `build_en.py`
+  (private Kaggle `nik-english-2026-10-22`). Eval: `nik/bench_en.py` (in full_gate). m50: en_qa_ppl 308.8, en_wiki_ppl
+  126.2, en_reply 46/60, NE fidelity 22/22. GPU arm ready: `nik/agents/molab/jobs/job_en.sh` (e1 = m50 + 12 min on sftb +
+  10% English + English wiki in replay). Tokenizer is Nepali-trained (English ~2.5-3 tok/word): keep English answers short.
 - Owner wants: continuous loop, status messages mid-work, /agents (#8, state.json) current, docs current.
 
 ## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
