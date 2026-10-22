@@ -50,6 +50,13 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 - **A sum over a sanity row hid the owner's bug.** k9 writes `aghi ko jawaf 632 ho.` and then an EMPTY answer on
   `kati rey?` in 3/5 samples (m50 5/5); the 26-item follow-up sum was unchanged. Cause: op follow-ups had a think, plain
   ones did not. The owner's reported cases are now their own gating row (5 seeds); /chat re-asks on an empty reply.
+- **To keep a live-model behaviour, train on the live model's own outputs for it.** Every polished arm lost the
+  owner's follow-up cases (live 25/25; k1 21 ... k11 17), whatever follow-up rows the mix had: hand-written rows teach
+  a new reply style, the KL anchor pulls toward the live one, and the arm produces hybrids (`ho, pakka.` with no number;
+  roles.py's template on the history). `web/selfdistill.mjs` runs the live model through the /chat path on 10,800
+  follow-up conversations and keeps the 3,194 where both answers state the gold; with those rows instead of the
+  hand-written ones, k13: owner cases **24/25**, follow-ups 59 (live 53), money 22 (18), RW 36 (15 fixed / 4 broken).
+  `--kl-all` alone did not do it (k12: 19).
 - **Mistakes this session:** (1) I put `followups.json`'s generic phrases ("kati rey?", "timi ko hau?", "mero naam k
   ho?") into the eval-prompt guard: the first p8mxe build dropped 26,644 persona/memory/follow-up rows. Caught from the
   mix log (normal: ~5) before training; only `*_heldout.json` is guarded now. Always read the guard's drop count.
