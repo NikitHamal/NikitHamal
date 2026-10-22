@@ -136,59 +136,63 @@ def set_yama(sc, A, variant="shadow"):
 
 
 # ------------------------------------------------------------------ Kag Tihar: crows on a tiled ridge at dawn
-def crow(name, loc, yaw, peck=0.0, m=None):
-    m = m or mat("feather", (0.01, 0.01, 0.012), rough=0.32, coat=0.4)
+def crow(name, loc, yaw, peck=0.0, m=None, s=1.0):
+    """A house crow in side profile (reads as a silhouette against the dawn): round head, heavy beak, oval body tilted
+    forward, folded wings, long wedge tail, thin legs."""
+    m = m or mat("feather", (0.004, 0.004, 0.005), rough=0.45, coat=0.3)
     root = bpy.data.objects.new(name, None); link(root)
-    mb = bpy.data.metaballs.new(name + "_mb"); mb.resolution = mb.render_resolution = 0.006
+    mb = bpy.data.metaballs.new(name + "_mb"); mb.resolution = mb.render_resolution = 0.004; mb.threshold = 0.6
     body = link(bpy.data.objects.new(name + "_b", mb)); mb.materials.append(m); body.parent = root
-    for (x, y, z, r) in [(0, 0, 0.11, 0.075), (0.05, 0, 0.12, 0.06), (-0.06, 0, 0.1, 0.055), (-0.12, 0, 0.09, 0.035),
-                         (0.11 + 0.03 * peck, 0, 0.19 - 0.08 * peck, 0.045)]:
-        e = mb.elements.new(); e.co = (x, y, z); e.radius = r
-    beak = prim("cone", name + "_k", mat("beak", (0.02, 0.02, 0.02), rough=0.3), radius1=0.012, radius2=0.0, depth=0.055,
-                location=(0.165 + 0.04 * peck, 0, 0.19 - 0.1 * peck), rotation=(0, math.pi / 2 + 0.6 * peck, 0)); beak.parent = root
-    tail = mesh_obj(name + "_t", [(-0.13, -0.025, 0.1), (-0.13, 0.025, 0.1), (-0.25, 0.035, 0.07), (-0.25, -0.035, 0.07)], [(0, 1, 2, 3)], m, smooth=False); tail.parent = root
-    for s in (-1, 1):
-        leg = prim("cylinder", name + "_l", mat("leg", (0.03, 0.03, 0.03), rough=0.5), radius=0.004, depth=0.07, location=(0.0, s * 0.02, 0.035)); leg.parent = root
-    eye = prim("uv_sphere", name + "_e", mat("eye", (0.05, 0.04, 0.03), rough=0.1, coat=1), radius=0.006, location=(0.135, 0.028, 0.205)); eye.parent = root
-    root.location = loc; root.rotation_euler = (0, 0, yaw)
+    hx, hz = 0.1 + 0.05 * peck, 0.2 - 0.09 * peck
+    for (x, z, r, sx, sz) in [(0.0, 0.11, 0.07, 1.6, 1.0), (0.05, 0.13, 0.05, 1.2, 1.0), (-0.07, 0.1, 0.05, 1.5, 0.8), (-0.14, 0.09, 0.03, 1.6, 0.6),
+                              (hx, hz, 0.042, 1.1, 1.0), (hx - 0.03, hz - 0.03, 0.035, 1.0, 1.0)]:
+        e = mb.elements.new(type="ELLIPSOID"); e.co = (x, 0, z); e.radius = r; e.size_x = sx * r; e.size_y = r * 0.9; e.size_z = sz * r
+    beak = prim("cone", name + "_k", m, radius1=0.014, radius2=0.0015, depth=0.06, location=(hx + 0.05, 0, hz - 0.005 - 0.02 * peck),
+                rotation=(0, math.pi / 2 + 0.25 + 0.6 * peck, 0)); beak.scale = (0.8, 1, 1); beak.parent = root
+    tail = mesh_obj(name + "_t", [(-0.14, -0.022, 0.095), (-0.14, 0.022, 0.095), (-0.3, 0.04, 0.05), (-0.31, 0.0, 0.045), (-0.3, -0.04, 0.05)],
+                    [(0, 1, 2, 3), (0, 3, 4)], m, smooth=False); solidify(tail, 0.004); tail.parent = root
+    for sd in (-1, 1):
+        leg = prim("cylinder", name + "_l", m, radius=0.0035, depth=0.065, location=(0.0, sd * 0.018, 0.035), rotation=(0, 0.15, 0)); leg.parent = root
+    root.location = loc; root.rotation_euler = (0, 0, yaw); root.scale = (s, s, s)
     return root
 
 
 def set_crows(sc, A):
-    world(sky=[(0.0, (1.0, 0.62, 0.35)), (0.15, (0.85, 0.55, 0.45)), (0.5, (0.35, 0.42, 0.6)), (1.0, (0.12, 0.2, 0.45))], strength=1.1)
-    hdri_light("kiara_8_sunset", 0.9, 0.6)
-    tiles = pbr("clay_roof_tiles", noisy(mat("tile", (0.2, 0.08, 0.05), rough=0.7), 40, 0.4, 0.1, 0.3), 2.5, (0.75, 0.55, 0.45))
-    for s in (-1, 1):  # a long gabled roof; the camera sits on its ridge
+    world(sky=[(0.0, (1.0, 0.5, 0.16)), (0.08, (1.0, 0.62, 0.3)), (0.3, (0.75, 0.45, 0.4)), (0.7, (0.25, 0.25, 0.42)), (1.0, (0.08, 0.1, 0.25))], strength=2.2)
+    tiles = pbr("clay_roof_tiles", noisy(mat("tile", (0.2, 0.08, 0.05), rough=0.7), 40, 0.4, 0.1, 0.3), 2.5, (0.5, 0.35, 0.3))
+    for s in (-1, 1):
         r = prim("cube", "roof%d" % s, tiles, size=1, location=(0, s * 1.05, -0.62)); r.scale = (12, 2.4, 0.08); r.rotation_euler = (s * -0.52, 0, 0)
-    ridge = prim("cylinder", "ridge", tiles, radius=0.08, depth=12, location=(0, 0, 0.0), rotation=(0, math.pi / 2, 0))
-    gaj = lathe("gajur", smooth_profile([(0.08, 0), (0.09, 0.05), (0.05, 0.12), (0.07, 0.17), (0.03, 0.26), (0.0, 0.4)], 4), 32, gold("g"), close_bottom=True); gaj.location = (3.2, 0, 0.06)
-    # leaf plate (tapari) with rice and a marigold
-    plate = prim("cylinder", "tapari", noisy(mat("leafplate", (0.25, 0.3, 0.08), rough=0.6), 60, 0.4, 0.1, 0.3), radius=0.16, depth=0.012, location=(0.25, -0.35, 0.03), vertices=48)
-    plate.rotation_euler = (0.25, 0, 0)
-    rice = rice_heap("rice", (0.25, -0.35, 0.045), 0.09, 0.03, 900, color=(0.92, 0.9, 0.85))
-    marigold("mgc", (0.33, -0.3, 0.06), 0.03)
-    sunl = light("SUN", (0, 0, 0), 4.0, (1.0, 0.72, 0.48), size=0.03); sunl.rotation_euler = (math.radians(80), 0, math.radians(110))
-    sun_disc = prim("uv_sphere", "sun", emission("sund", (1.0, 0.65, 0.3), 30), radius=6, location=(-80, 200, 14))
-    hills = prim("cone", "hills", mat("hm", (0.12, 0.1, 0.12), rough=0.9), radius1=200, radius2=40, depth=30, vertices=9, location=(0, 300, -10)); hills.scale = (2, 0.3, 1)
-    volume_world(0.004, (1.0, 0.85, 0.7), 0.7)
-    glare(sc, 1.0, 8, -0.5)
-    cam = camera((-0.9, -1.2, 0.45), (0.6, 0.6, 0.12), 45, dof=1.5, fstop=2.4)
-    fm = mat("feather", (0.01, 0.01, 0.012), rough=0.32, coat=0.4)
-    poses = [  # (x, y, yaw, peck) for 3 key moments
-        [(0.0, 0.0, 0.3, 0), (0.6, 0.02, 2.9, 0), (1.3, -0.02, 0.1, 0), (2.2, 0.0, 3.3, 0)],
-        [(0.05, -0.18, -0.9, 0), (0.6, 0.02, 2.9, 0.6), (1.2, 0.0, 0.4, 0), (2.4, 0.0, 3.0, 0)],
-        [(0.1, -0.24, -1.1, 1.0), (0.45, -0.2, -2.0, 0.8), (1.3, 0.0, 0.2, 0), (2.4, 0.02, 3.0, 0.5)],
+    ridge = prim("cylinder", "ridge", tiles, radius=0.07, depth=12, location=(0, 0, 0.0), rotation=(0, math.pi / 2, 0))
+    gaj = lathe("gajur", smooth_profile([(0.08, 0), (0.09, 0.05), (0.05, 0.12), (0.07, 0.17), (0.03, 0.26), (0.0, 0.42)], 4), 32, gold("g"), close_bottom=True); gaj.location = (2.9, 0, 0.05)
+    plate = prim("cylinder", "tapari", noisy(mat("leafplate", (0.25, 0.3, 0.08), rough=0.6), 60, 0.4, 0.1, 0.3), radius=0.15, depth=0.012, location=(0.55, -0.05, 0.075), vertices=48)
+    rice = rice_heap("rice", (0.55, -0.05, 0.085), 0.08, 0.03, 700, color=(0.95, 0.92, 0.85))
+    marigold("mgc", (0.62, 0.0, 0.1), 0.03)
+    sunl = light("SUN", (0, 0, 0), 2.5, (1.0, 0.65, 0.35), size=0.04); sunl.rotation_euler = (math.radians(84), 0, math.radians(180))
+    sun_disc = prim("uv_sphere", "sun", emission("sund", (1.0, 0.7, 0.35), 40), radius=5, location=(4, 160, 9))
+    for i, (x, h) in enumerate([(-60, 25), (-10, 35), (40, 22), (90, 30)]):
+        hl = prim("cone", "hill%d" % i, mat("hm%d" % i, (0.2, 0.08, 0.06), rough=0.9), radius1=60, radius2=8, depth=h, vertices=7, location=(x, 260, 0))
+    volume_world(0.006, (1.0, 0.75, 0.55), 0.75)
+    glare(sc, 0.9, 9, -0.4)
+    cam = camera((1.0, -2.3, -0.12), (1.1, 0.0, 0.22), 50, dof=2.3, fstop=2.8)
+    fm = mat("feather", (0.004, 0.004, 0.005), rough=0.45, coat=0.3)
+    poses = [
+        [(0.0, 0.0, 0.0, 0), (0.85, 0.0, math.pi, 0.0), (1.6, 0.0, 0.0, 0.0), (2.3, 0.0, math.pi, 0.2)],
+        [(0.25, 0.0, 0.0, 0.3), (0.82, 0.0, math.pi, 0.9), (1.55, 0.0, 0.0, 0.0), (2.2, 0.0, math.pi, 0.0)],
+        [(0.38, 0.0, 0.0, 1.0), (0.75, 0.0, math.pi, 1.0), (1.4, 0.0, 0.0, 0.2), (2.35, 0.0, math.pi, 0.5)],
     ]
     built = {}
 
     def update(t, dur):
         u = t / dur; k = 0 if u < 0.38 else (1 if u < 0.7 else 2)
-        for i, c in built.items(): c.hide_render = True; [ch.__setattr__("hide_render", True) for ch in c.children]
+        for c in built.values():
+            c.hide_render = True
+            for ch in c.children: ch.hide_render = True
         for i, (x, y, yaw, peck) in enumerate(poses[k]):
             key = (k, i)
-            if key not in built: built[key] = crow("crow%d_%d" % key, (x, y, 0.06 if abs(y) < 0.1 else 0.0), yaw, peck, fm)
-            c = built[key]; c.hide_render = False; [ch.__setattr__("hide_render", False) for ch in c.children]
-        aim(cam, lerp((-0.9, -1.2, 0.45), (-0.75, -1.05, 0.42), ease(u)), (0.6, 0.4, 0.12))
+            if key not in built: built[key] = crow("crow%d_%d" % key, (x, y, 0.06), yaw, peck, fm, 1.2)
+            c = built[key]; c.hide_render = False
+            for ch in c.children: ch.hide_render = False
+        aim(cam, lerp((1.0, -2.3, -0.12), (1.05, -2.05, -0.08), ease(u)), (1.1, 0.0, 0.22))
     return update
 
 
@@ -200,7 +204,7 @@ def set_gai_laxmi(sc, A):
     floor = prim("plane", "floor2", pbr("brown_mud_dry", mat("f2", (0.1, 0.06, 0.04), rough=0.8), 2.0, (0.5, 0.36, 0.28)), size=3, location=off)
     bowl = lathe("milkbowl", smooth_profile([(0.0, 0.0), (0.06, 0.0), (0.11, 0.03), (0.13, 0.07), (0.128, 0.075), (0.115, 0.04), (0.0, 0.012)], 6), 96, brass("mb"))
     bowl.location = off
-    milk = prim("cylinder", "milk", mat("milk", (0.95, 0.94, 0.9), rough=0.12, sss=0.8), radius=0.112, depth=0.004, location=off + Vector((0, 0, 0.062)), vertices=96)
+    milk = prim("cylinder", "milk", mat("milk", (0.93, 0.9, 0.82), rough=0.28, sss=0.25), radius=0.112, depth=0.004, location=off + Vector((0, 0, 0.062)), vertices=96)
     for i in range(7): marigold("mgm%d" % i, tuple(off + Vector((0.2 * math.cos(i), 0.2 * math.sin(i) - 0.02, 0.03))), 0.03)
     tika = prim("uv_sphere", "tk", noisy(mat("tk2", TIKA, rough=0.6), 300, 0.3, 0.1, 0.5), radius=0.03, location=off + Vector((-0.17, -0.12, 0.012))); tika.scale = (1, 1, 0.3)
     bell = lathe("cowbell", smooth_profile([(0.0, 0.1), (0.02, 0.1), (0.035, 0.07), (0.05, 0.02), (0.055, 0.0)], 5), 48, brass("bell"))
@@ -231,10 +235,14 @@ def set_ox(sc, A):
             if src:
                 mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs[0].default_value = 1.0
                 mx.inputs[7].default_value = (0.9, 0.62, 0.45, 1); m.node_tree.links.new(src[0], mx.inputs[6]); m.node_tree.links.new(mx.outputs[2], p.inputs["Base Color"])
-    for i in range(30):  # marigold garland around the neck
-        a = 2 * math.pi * i / 30
-        marigold("g%d" % i, (0.3 * math.cos(a), 0.02 + 0.22 * math.sin(a), 0.3 + 0.05 * math.sin(2 * a)), 0.045)
-    tk = prim("uv_sphere", "tika", noisy(mat("tk", TIKA, rough=0.6, sss=0.2), 300, 0.3, 0.1, 0.6), radius=0.05, location=(0.0, -0.31, 0.78)); tk.scale = (1, 0.35, 1.2)
+    rnd = np.random.default_rng(12)   # a loose double marigold garland, drooping at the front
+    for strand, (r0, z0, drop) in enumerate(((0.31, 0.32, 0.12), (0.34, 0.24, 0.2))):
+        for i in range(34):
+            a = 2 * math.pi * i / 34; front = max(0.0, -math.sin(a))
+            c = (1.0, 0.36 + 0.3 * rnd.random(), 0.02)
+            marigold("g%d_%d" % (strand, i), (r0 * math.cos(a), 0.02 + (r0 * 0.75) * math.sin(a), z0 - drop * front ** 2 + rnd.normal(0, 0.008)),
+                     0.036 + 0.01 * rnd.random(), noisy(mat("mgo%d" % (i % 4), c, rough=0.55, sss=0.25), 300, 0.35, 0.1, 0.6))
+    tk = prim("uv_sphere", "tika", noisy(mat("tk", TIKA, rough=0.6, sss=0.2), 300, 0.3, 0.1, 0.6), radius=0.03, location=(0.0, -0.33, 0.86)); tk.scale = (1, 0.25, 1.4)
     lamps = [diyo("od%d" % i, (x, -0.55, 0.0), 1.6, 70, 6) for i, x in enumerate((-0.45, 0.45))]
     light("AREA", (0.9, -1.4, 1.6), 60, (1.0, 0.7, 0.45), size=1.0, look=(0, 0, 0.8))
     light("AREA", (-1.0, 0.8, 1.4), 40, (1.0, 0.5, 0.25), size=1.0, look=(0, 0, 0.8))
