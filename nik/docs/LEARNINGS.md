@@ -19,6 +19,26 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   (followup-op: the think names the previous answer first).
 - **Persona data was stale** ("8 million parameters, 10 MB"); the model is ~20M params / 20 MB.
 - `nik/web/chat_audit.mjs`: multi-turn replay through the exact worker path, seeded. Use it before blaming the model.
+- **The strict gate measures luck as much as skill.** `scripts/gate_flips.py` (per row: items fixed / broken vs live,
+  exact sign test): k3's four "regressions" are 5/6, 1/3, 1/2 and 0/1 flips (p >= 0.6); r1 (k3's recipe on a full GPU:
+  bench 212, math 98.5, RW 31, shapes 5, English ppl 12.6) fails only understanding 18/19 (0 fixed / 1 broken: one
+  translation) and reading 4/5 (1/2). With ~14 rows, ">= on every row" is ~14 coin flips. The one drop that repeats
+  across arms is nested (k1 4/12, k2 2/6, kb85 2/8): a real, small drift (see next). Before shipping a winner picked on
+  fixed items, re-check it on fresh ones (`bench.py --seed`, `scripts/confirm.sh`).
+- **Nested drift = think-style drift:** the p8m-family word-problem thinks do multi-digit sums in one line (`hisab: 250 x
+  20 / 100 = 50; 250 - 50 = 200`; compose / word-frame / roles-* / readfirst-*), pure column rows are 2.4% of p8mxf, and
+  the polished models start writing `217 + 404 = 621. 621 + 404 = 1025` on plain sums. Fine with /chat's pencil, wrong
+  without it (bench runs without). `colrows.py` puts column rows back (k5).
+- **A template can teach the wrong meaning of a word:** every money scene in roles.py has a count and a price, so
+  `role:` means "paisa, wata, ek ko" to the model: r1 greedy on the ship-smoke question writes `wata = 180, ek ko = 180`
+  -> 0, and m50/r1 invent `ek ko = 15` for `50 - 18`. The ship smoke caught what 14 gate rows missed; r1 is not shipped.
+  `money1.py` (roles = only what the text gives) + `tests/chat/money_heldout.json` (live 6/10).
+- **Mistakes this session:** (1) I put `followups.json`'s generic phrases ("kati rey?", "timi ko hau?", "mero naam k
+  ho?") into the eval-prompt guard: the first p8mxe build dropped 26,644 persona/memory/follow-up rows. Caught from the
+  mix log (normal: ~5) before training; only `*_heldout.json` is guarded now. Always read the guard's drop count.
+  (2) `add_rows.py` could not import its own guard (ModuleNotFoundError): the mix silently failed and the queue would
+  have trained on a missing file. (3) 8 confirmation bench runs beside a training run cut it from 133k to 48k tok/s:
+  every eval process started a 20-thread CPU pool; gates now use 2 threads per process.
 
 ## 2026-10-22 (Claude)
 
