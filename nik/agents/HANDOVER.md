@@ -13,6 +13,22 @@ drive the GPU box, merge/review, run the ship gate, ship models, keep `nik/agent
 and `nik/CONTINUITY.md` current. The owner (a young developer) wants honest expert guidance: explain things simply,
 send status updates in the middle of the work, and work in a continuous loop.
 
+## Update ~13:20 box clock (latest; read this first)
+- **k1** (p8m recipe + KL 1.0): NO SHIP: bench 205, nested 214, und 17, math 97, RW 2/22, reading 4, traps 23. The
+  anchor alone does not remove p8m's drift and damps its gains.
+- **k2** (p8m mix + English 10% + abstain 3% + format_ask 3% + KL 1.0): **closest ever**, NO SHIP only on three
+  small rows: nested 218 (-4), ladder 43 (-1), traps 23 (-2). Gains: bench 209 =, und 20 (+1), math 98 (+4), RW 3/45
+  groups, 31/135 items (+6), shapes 4 =, reading 5 =, persona 100, EN qa ppl 229 -> 12.9, wiki 126 -> 23, EN reply 56,
+  NE fidelity 22/22.
+- Running on box 1 (all detached; do not kill them): **kb70 / kb85** = m50 + 0.70 / 0.85 (k2 - m50) being gated
+  (`/tmp/gate_kb70`, `/tmp/gate_kb85`); **k3** (k2 + multiturn/followup/needles, but only ~1/3 of k2's steps because
+  it shared the GPU with the gates) trains then gates (`/tmp/gate_k3`); then **loop.sh** starts: round 0 promotes the
+  k1/k2/k3/kb70/kb85 candidate with the most '+' rows among those whose verdict is SHIP vs m50, then trains rounds.
+  Watch `/tmp/claude/loop.log`; pause it with `touch /tmp/claude/loop.pause`.
+- Best next moves if nothing passes: (a) blends between 0.5 and 0.85 of k2; (b) k2's recipe with `--kl-all`;
+  (c) TIES-merge k2 with a model that is strong on nested/traps (m50 itself is the anchor); (d) before shipping any
+  loop winner, re-check it on a fresh bench item set (it was selected among several tries on fixed items).
+
 ## Read first
 1. `AGENTS.md` (rules), `nik/CONTINUITY.md` (top HANDOVER section), `nik/docs/LEARNINGS.md` (newest first),
    `nik/web/model/logs/GATES-2026-10-21.md` (scorecard), `nik/agents/molab/README.md` (**the STOP section**).
