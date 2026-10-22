@@ -114,7 +114,7 @@ def layout(design, size, w, h):
              "linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,.42) 35%,rgba(0,0,0,0) 62%)")
     hs = 92 if land else (96 if size == "story" else 84)
     return f"""<style>
-@font-face {{ font-family: Deva; src: url(file://{FONTS}/NotoSansDevanagari-Variable.ttf); font-weight: 100 900; }}
+@font-face {{ font-family: Deva; src: url(https://fonts.local/NotoSansDevanagari-Variable.ttf); font-weight: 100 900; }}
 html,body{{margin:0;width:{w}px;height:{h}px;overflow:hidden;background:transparent}}
 #s{{position:absolute;inset:0;background:{scrim}}}
 #c{{position:absolute;{box};display:flex;flex-direction:column;font-family:Deva;color:#fff6ea}}
@@ -132,6 +132,7 @@ async def main():
     os.makedirs(f"{B}/type", exist_ok=True)
     async with async_playwright() as p:
         br = await p.chromium.launch(); pg = await br.new_page()
+        await pg.route("https://fonts.local/**", lambda route: route.fulfill(path=os.path.join(FONTS, route.request.url.rsplit('/', 1)[1])))
         for design in COPY:
             fest = design.split("-")[0]; od = f"{HERE}/out/cards_v3/{fest}"; os.makedirs(od, exist_ok=True)
             for size, (w, h) in SIZES.items():

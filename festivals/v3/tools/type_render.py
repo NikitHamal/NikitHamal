@@ -15,9 +15,9 @@ OUT = f"{ROOTV}/build/type" if FILM == "dashain" else f"{ROOTV}/build_{FILM}/typ
 FONTS = os.path.abspath(f"{ROOTV}/../fonts")
 
 CSS = f"""
-@font-face {{ font-family: Deva; src: url(file://{FONTS}/NotoSansDevanagari-Variable.ttf); font-weight: 100 900; font-stretch: 62.5% 100%; }}
-@font-face {{ font-family: Tiro; src: url(file://{FONTS}/TiroDevanagariSanskrit-Regular.ttf); }}
-@font-face {{ font-family: Yatra; src: url(file://{FONTS}/YatraOne-Regular.ttf); }}
+@font-face {{ font-family: Deva; src: url(https://fonts.local/NotoSansDevanagari-Variable.ttf); font-weight: 100 900; font-stretch: 62.5% 100%; }}
+@font-face {{ font-family: Tiro; src: url(https://fonts.local/TiroDevanagariSanskrit-Regular.ttf); }}
+@font-face {{ font-family: Yatra; src: url(https://fonts.local/YatraOne-Regular.ttf); }}
 html, body {{ margin: 0; background: transparent; }}
 #stage {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }}
 .cap {{ position: absolute; left: 90px; width: 900px; text-align: center; font-family: Deva; font-weight: 500;
@@ -53,6 +53,7 @@ async def main():
     L = json.load(open(f"{HERE}/lines.json"))
     async with async_playwright() as p:
         b = await p.chromium.launch(); page = await b.new_page(device_scale_factor=1)
+        await page.route("https://fonts.local/**", lambda route: route.fulfill(path=os.path.join(FONTS, route.request.url.rsplit('/', 1)[1])))
         # palm-leaf texture: three lines of verse, ink with slight warmth, on transparent
         await shot_el(page, f"""<div id=x style="width:3840px;height:400px;display:flex;flex-direction:column;justify-content:center;
             padding:0 140px;box-sizing:border-box;font-family:Tiro;font-size:84px;line-height:118px;color:#2a120a;opacity:.9;
