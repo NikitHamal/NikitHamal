@@ -321,7 +321,8 @@ def _kl_to_ref(ref, clean, logits, w, kl):
 
 
 def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
-                diff_weight: float = 1.0, t_min: float = 0.1, diff_frac: float = 1.0, user_w=0.0, ref=None, kl=0.0):
+                diff_weight: float = 1.0, t_min: float = 0.1, diff_frac: float = 1.0, user_w=0.0, ref=None, kl=0.0,
+                kl_all=False):
     """x: (N, L+1) token ids. loss_mask: (N, L+1) 1 where tokens count as targets
     (SFT: assistant tokens only). diff_frac < 1 trains the diffusion stream on a
     random window of that fraction of the sequence (the AR stream always sees all
@@ -340,7 +341,8 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
         if user_w > 0:     # also learn the user's side a little: models the *questions*, not just the answers
             ar_w = ar_w + user_w * (~lm[:, 1:]).float()
         ar = (F.cross_entropy(logits.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
-        total = ar + (_kl_to_ref(ref, clean, logits, lm[:, 1:].float(), kl) if ref is not None and kl > 0 else 0)
+        kw = torch.ones_like(lm[:, 1:], dtype=torch.float) if kl_all else lm[:, 1:].float()
+        total = ar + (_kl_to_ref(ref, clean, logits, kw, kl) if ref is not None and kl > 0 else 0)
         return total, ar.detach(), torch.zeros((), device=x.device)
     B = cfg.block
     offset = int(torch.randint(0, B, (1,)))
@@ -368,7 +370,7 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
     df = (F.cross_entropy(ln.reshape(-1, cfg.vocab).float(), seg.reshape(-1), reduction='none') * mf.reshape(-1)).sum() / mf.sum().clamp(min=1)
     total = ar + diff_weight * df
     if ref is not None and kl > 0:
-        total = total + _kl_to_ref(ref, clean, lc, ar_w, kl)
+        total = total + _kl_to_ref(ref, clean, lc, torch.ones_like(ar_w) if kl_all else ar_w, kl)
     return total, ar.detach(), df.detach()
 
 
