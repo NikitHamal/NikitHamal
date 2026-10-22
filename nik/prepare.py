@@ -50,7 +50,8 @@ def render_chat(tok: Tokenizer, messages: list[dict]) -> tuple[list[int], list[i
             if m.get('think'):
                 seg += [THINK] + tok.encode(m['think'], allow_special=False) + [ETHINK]
             seg += tok.encode(m['content'], allow_special=False) + [END]
-            ids += seg; mask += [1] * len(seg)
+            # "train": false = context only (a history turn written the way /chat sends history: no think), not a lesson
+            ids += seg; mask += [1 if m.get('train', True) else 0] * len(seg)
     ids.append(EOS); mask.append(1)
     return ids, mask
 

@@ -12,6 +12,7 @@ parameterised, because a 2% token share of a real mix is thousands of rows.
     python nik/data/teacher/format_ask.py --n 24 --seed 1
 """
 import random
+import re
 
 NUMS = [19, 23, 17, 24, 31, 18, 26, 14, 27, 22, 34, 16]
 MULTS = [3, 4, 5, 6, 7, 8, 9, 11, 12]
@@ -80,10 +81,31 @@ def _list3(R):
 GENS = [_only_number, _words2, _words3, _words4, _list3]
 
 
+def only_number_think(q, a):
+    """The working for an only-number arithmetic row (`24 x 4 kati? number matra lekha.` -> think `24 x 4 = 96.`).
+    The user still sees only the number (the think is hidden in /chat). Without it these rows taught the model to answer
+    sums with no think at all (k4 on NikBench nested: `jodnus 87 ra 68` -> `355`), which also bypasses /chat's pencil."""
+    n = [int(x) for x in re.findall(r'\d+', q)]
+    if len(n) != 2:
+        return None
+    op = 'x' if re.search(r' x |gunne|\*', q) else '+' if 'jod' in q else '-' if 'ghatne' in q else '/' if '/' in q else None
+    if op is None:
+        return None
+    v = {'x': n[0] * n[1], '+': n[0] + n[1], '-': n[0] - n[1], '/': n[0] / n[1] if n[1] else None}[op]
+    if v is None or str(int(v)) != str(a) or v != int(v):
+        return None
+    return f'{n[0]} {op} {n[1]} = {a}.'
+
+
 def sample(R):
     kind, spec, q, a = R.choice(GENS)(R)
+    nik = {'role': 'nik', 'content': a}
+    if kind == 'fmt:only_number':
+        t = only_number_think(q, a)
+        if t:
+            nik['think'] = t
     return {'cat': 'understand-format', 'kind': kind, 'spec': spec, 'gold': a,
-            'messages': [{'role': 'user', 'content': q}, {'role': 'nik', 'content': a}]}
+            'messages': [{'role': 'user', 'content': q}, nik]}
 
 
 def main():
