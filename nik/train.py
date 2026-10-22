@@ -192,6 +192,7 @@ def main():
     ap.add_argument('--ctx', type=int, default=0, help='override training context')
     ap.add_argument('--ref', default='', help='frozen reference model (.bin or ckpt) for the --kl self-distillation anchor')
     ap.add_argument('--kl', type=float, default=0.0, help='weight of KL(ref || student) on target positions (0 = off)')
+    ap.add_argument('--kl-all', action='store_true', help='KL on every position (user text too): no conflict with any target')
     ap.add_argument('--set-ctx', type=int, default=0, help='long context: set the model cfg.ctx (saved in the ckpt/.bin)')
     ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
     ap.add_argument('--lr', type=float, default=3e-3)
@@ -350,7 +351,7 @@ def main():
             x, m = train_b.get(a.bs, L, device)
             with amp():
                 loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight, diff_frac=a.diff_frac, user_w=a.user_w,
-                                               ref=ref_model, kl=a.kl)
+                                               ref=ref_model, kl=a.kl, kl_all=a.kl_all)
             scaler.scale(loss / a.accum).backward()
             tot += loss.detach() / a.accum; ar += l_ar / a.accum; df += l_df / a.accum   # tensors: no GPU sync per step
             if ref_model is not None:
