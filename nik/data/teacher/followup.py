@@ -89,7 +89,7 @@ def en_row(R):
     g = _apply(a, op, b)
     q0 = R.choice(['what is {a} {op} {b}?', '{a} {op} {b} = ?', 'calculate {a} {op} {b}.', 'how much is {a} {op} {b}?'])
     prev = [{'role': 'user', 'content': q0.format(a=a, op=op, b=b)},
-            {'role': 'nik', 'content': f'{a} {op} {b} = {g}.'}]
+            {'role': 'nik', 'content': f'{a} {op} {b} = {g}.', 'train': False}]
     if R.random() < 0.5:
         return {'cat': 'followup-en', 'gold': str(g), 'messages': prev + [
             {'role': 'user', 'content': R.choice(EN_SURE)},
@@ -115,7 +115,9 @@ def sample(R):
         m = r['messages']
         if len(m) < 2 or m[0]['role'] != 'user' or m[1]['role'] != 'nik':
             continue
-        prev = [{'role': 'user', 'content': m[0]['content']}, {'role': 'nik', 'content': m[1]['content']}]
+        # the earlier turn is context, written as /chat sends history (no think): never a lesson ("train": false), or
+        # every row teaches "arithmetic question -> bare answer" (k4: nested -10, think skipped)
+        prev = [{'role': 'user', 'content': m[0]['content']}, {'role': 'nik', 'content': m[1]['content'], 'train': False}]
         g = r.get('gold')
         gi = _int(g) if g is not None and str(g) in m[1]['content'] else None
         if gi is not None and gi >= 0 and R.random() < 0.45:
