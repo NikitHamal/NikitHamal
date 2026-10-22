@@ -40,6 +40,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--whole-rows', action='store_true', help='every window starts at <|bos|> and holds whole rows (multi-turn rows must not be cut)')
     ap.add_argument('--threads', type=int, default=os.cpu_count() or 2)
+    ap.add_argument('--kl', type=float, default=0.0, help='KL(init || student) on the reply tokens, like train.py --ref --kl')
     a = ap.parse_args()
     torch.set_num_threads(a.threads)
     torch.manual_seed(a.seed)
@@ -87,6 +88,7 @@ def main():
         return X, M
 
     model = load_exported(a.init).train()
+    ref = load_exported(a.init).eval().requires_grad_(False) if a.kl > 0 else None
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, betas=(0.9, 0.95), weight_decay=0.0)
     t0, step, budget = time.time(), 0, a.minutes * 60
     while time.time() - t0 < budget:
@@ -97,6 +99,11 @@ def main():
         logits = model(X[:, :-1])
         m = M[:, 1:]
         loss = (F.cross_entropy(logits.reshape(-1, logits.size(-1)), X[:, 1:].reshape(-1), reduction='none') * m.reshape(-1)).sum() / m.sum()
+        if ref is not None:          # self-distillation anchor: stay at the init model where the data does not say otherwise
+            with torch.no_grad():
+                lp_ref = F.log_softmax(ref(X[:, :-1]).float(), -1)
+            kl = (lp_ref.exp() * (lp_ref - F.log_softmax(logits.float(), -1))).sum(-1)
+            loss = loss + a.kl * (kl * m).sum() / m.sum()
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
