@@ -22,7 +22,7 @@ run() {  # tag bin outdir
   grep -q 'trap check:' $o/trap.txt 2>/dev/null  || $PY nik/trap_check.py --model $b > $o/trap.txt 2>&1 &
   grep -q 'chat sanity:' $o/chat.txt 2>/dev/null || $PY nik/chat_check.py --model $b > $o/chat.txt 2>&1 &
   # /chat as users see it (worker path: context packing, pencil, sampler, vote 5; seeded): held-out everyday questions
-  # and follow-ups (nik/tests/chat/*.json, guarded out of every mix by make_sft2)
+  # (*_heldout.json is guarded out of every mix by make_sft2) and follow-ups (common phrases, a sanity row)
   grep -q '^score' $o/everyday.txt 2>/dev/null  || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/everyday_heldout.json > $o/everyday.txt 2>&1 &
   grep -q '^score' $o/followups.txt 2>/dev/null || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/followups.json > $o/followups.txt 2>&1 &
   [ -f $o/stress.json ]  || $PY nik/stress.py --model $b --out $o/stress.json > $o/stress.txt 2>&1 &
