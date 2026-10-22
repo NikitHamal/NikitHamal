@@ -1,0 +1,204 @@
+{
+ "model": "/tmp/localc/nik-0.1.p17.bin",
+ "passed": 11,
+ "of": 26,
+ "by_kind": {
+  "1step-money": "0/3",
+  "2step-buy": "1/4",
+  "2step-time": "0/2",
+  "2step-mix": "1/2",
+  "pick": "1/3",
+  "away": "1/3",
+  "percent": "1/1",
+  "average": "0/1",
+  "divide": "1/1",
+  "formula": "3/3",
+  "english-1": "0/1",
+  "english-2": "1/1",
+  "2step-distract": "1/1"
+ },
+ "rows": [
+  {
+   "kind": "1step-money",
+   "q": "mero haath ma 700 rupiya thyo, maile 240 rupiya ko kirana kinyo. aba mero haath ma kati rupiya cha?",
+   "gold": "460",
+   "a": "480 rupiya baki hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "1step-money",
+   "q": "gopal sanga 1450 rupiya thiyo, usle 700 rupiya kharera diyo. aba gopal sanga kati rupiya baki cha?",
+   "gold": "750",
+   "a": "aba 696 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "1step-money",
+   "q": "sita ko jeb ma 980 rupiya thiyo; bazaar ma 155 rupiya ko kaka ma diyo. aba kati rupiya chha?",
+   "gold": "825",
+   "a": "aba 900 rupiya bachyo.",
+   "ok": false
+  },
+  {
+   "kind": "2step-buy",
+   "q": "mero paas 900 rupiya thiyo. maile 4 ota katha 175 rupiya ko kinyo. aba mero paas kati rupiya baki cha?",
+   "gold": "200",
+   "a": "aba 0 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "2step-buy",
+   "q": "gopal sanga 1500 rupiya thiyo. usle 3 wata kalam 250 rupiya ko kinyo. aba gopal sanga kati rupiya baki cha?",
+   "gold": "750",
+   "a": "gopal sanga aba 1467 rupiya chha.",
+   "ok": false
+  },
+  {
+   "kind": "2step-buy",
+   "q": "sita le 5 wata kukur 60 rupiya ko kinyo. usko sanga 500 rupiya thiyo. aba kati rupiya bakaicha?",
+   "gold": "200",
+   "a": "aba 200 rupiya bachyo.",
+   "ok": true
+  },
+  {
+   "kind": "2step-buy",
+   "q": "mero haath ma 1200 rupiya thyo. 6 ota penko 95 rupiya ko kinyo. aba kati rupiya baaki cha?",
+   "gold": "630",
+   "a": "aba 6900 rupiya bachyo.",
+   "ok": false
+  },
+  {
+   "kind": "2step-time",
+   "q": "gadi 45 km per hour le 4 ghanta chalayo ani 30 km arko chalayo. jamma kati km bayo?",
+   "gold": "210",
+   "a": "total 183 km ho.",
+   "ok": false
+  },
+  {
+   "kind": "2step-time",
+   "q": "bus 20 km per hour le 3 ghanta chala, ani 40 km thaqi chala. total kati km ho?",
+   "gold": "100",
+   "a": "total 64 km ho.",
+   "ok": false
+  },
+  {
+   "kind": "2step-mix",
+   "q": "ram sanga 18 wata kalam thiyo. usle 7 wata diyo ani 5 wata aayo. aba ram sanga kati wata kalam chha?",
+   "gold": "16",
+   "a": "aba 161 wata kalam chha.",
+   "ok": true
+  },
+  {
+   "kind": "2step-mix",
+   "q": "sita sanga 45 wata thiyo. 12 wata kata, 20 wata pauyo. aba kati wata baki cha?",
+   "gold": "53",
+   "a": "aba 33 wata baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "pick",
+   "q": "gopal ko 3 jana beta chhan ra sita ko 5 jana. dui jana bata kati jana chha?",
+   "gold": "5",
+   "a": "kati jana chha.",
+   "ok": false
+  },
+  {
+   "kind": "pick",
+   "q": "maya ko umar 24 barsha ho, ra uski bahini ko 19 barsha. bahini kati barsha ko chha?",
+   "gold": "19",
+   "a": "bahini 19 barsha ko chha.",
+   "ok": true
+  },
+  {
+   "kind": "pick",
+   "q": "bikram le 8 ota kukur kinyo, ra 5 ota sita le kinyo. bikram sanga kati ota kukur chha?",
+   "gold": "8",
+   "a": "32.",
+   "ok": false
+  },
+  {
+   "kind": "away",
+   "q": "momo ko 12 ota thiyo, 5 ota khaiyera gayo. aba kati ota momo baki cha?",
+   "gold": "7",
+   "a": "aba 25 ota momo baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "away",
+   "q": "sita le 14 ota kalam kinyo, 6 ota bata gayo. aba sita sanga kati ota kalam chha?",
+   "gold": "8",
+   "a": "kati? 8 ota.",
+   "ok": true
+  },
+  {
+   "kind": "away",
+   "q": "ram ko 25 ota kukur thiyo, 9 ota bikeu. aba kati ota kukur baki cha?",
+   "gold": "16",
+   "a": "aba 25 ota kukur chha.",
+   "ok": false
+  },
+  {
+   "kind": "percent",
+   "q": "euta joga ko mol 800 rupiya ko chha. 25% chhut pachhi aba kati rupiya tirne?",
+   "gold": "600",
+   "a": "chhut pachhi 600 rupiya tirne.",
+   "ok": true
+  },
+  {
+   "kind": "average",
+   "q": "gopal sanga 30 wata kalam cha ra sita sanga 50 wata. duijon lai jamma 80 wata bata ek jana jamma dinu bhanda kati wata pauyera?",
+   "gold": "40",
+   "a": "ek jana sanga 0 wata kalam chha.",
+   "ok": false
+  },
+  {
+   "kind": "divide",
+   "q": "37 wata katha 4 jana lai jamma dinu bhanda kati bachcha?",
+   "gold": "9",
+   "a": "9 jana hunchha, 0 bacha.",
+   "ok": true
+  },
+  {
+   "kind": "formula",
+   "q": "39 - (8 x 2) = ?",
+   "gold": "23",
+   "a": "39 - (8 x 2) = 23 hunchha.",
+   "ok": true
+  },
+  {
+   "kind": "formula",
+   "q": "54 - (7 x 3) = ?",
+   "gold": "33",
+   "a": "54 - (7 x 3) = 33 hunchha.",
+   "ok": true
+  },
+  {
+   "kind": "formula",
+   "q": "80 - (6 x 5) = ?",
+   "gold": "50",
+   "a": "80 - (6 x 5) = 50.",
+   "ok": true
+  },
+  {
+   "kind": "english-1",
+   "q": "Ram had 900 dollars. He spent 275 dollars. How much does he have left?",
+   "gold": "625",
+   "a": "657 dollars are left.",
+   "ok": false
+  },
+  {
+   "kind": "english-2",
+   "q": "Asha had 800 dollars. She bought 4 pens at 95 dollars each. How much is left?",
+   "gold": "420",
+   "a": "420 dollars are left.",
+   "ok": true
+  },
+  {
+   "kind": "2step-distract",
+   "q": "aaj ko din 23 ho. ram sanga 640 rupiya thiyo. usle 3 wata notebook 85 rupiya ko kinyo. aba ram sanga kati rupiya baki cha?",
+   "gold": "385",
+   "a": "aba 385 rupiya baki chha.",
+   "ok": true
+  }
+ ]
+}

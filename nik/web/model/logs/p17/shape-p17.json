@@ -1,0 +1,338 @@
+{
+ "model": "/tmp/localc/nik-0.1.p17.bin",
+ "passed": 5,
+ "of": 44,
+ "by_kind": {
+  "add-then-minus": "0/4",
+  "mul-then-minus": "0/3",
+  "percent-each": "0/3",
+  "half-minus": "0/3",
+  "infer-rule": "0/4",
+  "infer-add": "2/2",
+  "three-money": "0/2",
+  "group-discount": "0/2",
+  "half-plus": "0/2",
+  "div-after-minus": "1/2",
+  "para-add-minus": "0/2",
+  "para-mul-minus": "0/1",
+  "para-percent-each": "0/2",
+  "para-half": "0/2",
+  "para-infer-rule": "1/2",
+  "para-three-money": "0/1",
+  "para-group-discount": "0/1",
+  "para-half-plus": "0/1",
+  "para-div-after-minus": "0/1",
+  "weekday-template": "1/1",
+  "weekday-paraphrase": "0/3"
+ },
+ "rows": [
+  {
+   "kind": "add-then-minus",
+   "q": "aafai ma 23 keti ra 19 ghar chhan. 8 ghar le aafai bata gaye. aba aafai ma kati ghar chhan?",
+   "gold": "34",
+   "a": "aba 46 wata ghar chha.",
+   "ok": false
+  },
+  {
+   "kind": "add-then-minus",
+   "q": "school ma 41 keta ra 26 keti chhan. 11 keta le school bata nikalke. aba school ma kati chha?",
+   "gold": "56",
+   "a": "kati? 84 keti 8.",
+   "ok": false
+  },
+  {
+   "kind": "add-then-minus",
+   "q": "bazar ma 17 wata mithu ra 22 wata karko thiyo. 9 wata milayo. aba kati wata baki cha?",
+   "gold": "30",
+   "a": "0 wata baki cha.",
+   "ok": false
+  },
+  {
+   "kind": "add-then-minus",
+   "q": "ghar ma 28 jana chhan: 15 jana purkhar, 13 jana nari. 12 jana bahira gaye. aba ghar ma kati jana chhan?",
+   "gold": "16",
+   "a": "aba ghar ma 14 jana chhan.",
+   "ok": false
+  },
+  {
+   "kind": "mul-then-minus",
+   "q": "thela ma 8 kanda thiyo, har kanda ma 12 wata. 19 wata nikalayo. aba kati wata baki cha?",
+   "gold": "77",
+   "a": "5832 wata baki hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "mul-then-minus",
+   "q": "jhola ma 6 kanda thiyo, har kanda ma 9 wata. 14 wata nikalayo. aba jhola ma kati wata cha?",
+   "gold": "40",
+   "a": "0 kanda.",
+   "ok": false
+  },
+  {
+   "kind": "mul-then-minus",
+   "q": "crate ma 7 kanda thiyo, har kanda ma 15 wata. 23 wata nikalayo. aba kati wata baki cha?",
+   "gold": "82",
+   "a": "jamma 2",
+   "ok": false
+  },
+  {
+   "kind": "percent-each",
+   "q": "ek notebook ko mol 250 rupiya ko chha. 20% bhat pachhi 3 wata notebook ko kati rupiya tirne?",
+   "gold": "600",
+   "a": "kati? 200 rupiya tiru paryo.",
+   "ok": false
+  },
+  {
+   "kind": "percent-each",
+   "q": "ek khidai ko mol 400 rupiya ko chha. 50% bhat pachhi 4 wata khidai ko kati rupiya tirne?",
+   "gold": "800",
+   "a": "aba 200 rupiya tirne.",
+   "ok": false
+  },
+  {
+   "kind": "percent-each",
+   "q": "ek jhanda ko mol 600 rupiya ko chha. 10% bhat pachhi 5 wata jhanda ko kati rupiya tirne?",
+   "gold": "2700",
+   "a": "300 rupiya tiru paryo.",
+   "ok": false
+  },
+  {
+   "kind": "half-minus",
+   "q": "kaka sanga 56 ota thiyo. aadha usle diyo. aayera 9 ota khatayo. aba kati ota baki cha?",
+   "gold": "19",
+   "a": "aba 47 ota baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "half-minus",
+   "q": "didi sanga 84 rupiya thiyo. aadha bahira diyo. 15 rupiya khatayo. aba kati rupiya baki cha?",
+   "gold": "27",
+   "a": "aba 69 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "half-minus",
+   "q": "ghar ma 62 ota thiyo. aadha banaayo. 8 ota khaayo. aba kati ota chha?",
+   "gold": "23",
+   "a": "54 ota baki chhan.",
+   "ok": false
+  },
+  {
+   "kind": "infer-rule",
+   "q": "number ko series: 6, 12, 24, 48, ... aba aune k ho?",
+   "gold": "96",
+   "a": "aru number 14 hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "infer-rule",
+   "q": "number ko series: 5, 10, 20, 40, ... aune k ho?",
+   "gold": "80",
+   "a": "aru number 85 hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "infer-rule",
+   "q": "number ko series: 3, 6, 12, 24, ... aune k ho?",
+   "gold": "48",
+   "a": "aru number 51 hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "infer-rule",
+   "q": "number ko series: 4, 8, 16, 32, ... aba k aauncha?",
+   "gold": "64",
+   "a": "aru number 52 hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "infer-add",
+   "q": "number ko series: 7, 11, 15, 19, ... aba k aauncha?",
+   "gold": "23",
+   "a": "aru number 23 hunchha.",
+   "ok": true
+  },
+  {
+   "kind": "infer-add",
+   "q": "number ko series: 4, 9, 14, 19, ... aune k ho?",
+   "gold": "24",
+   "a": "aru number 24 hunchha.",
+   "ok": true
+  },
+  {
+   "kind": "three-money",
+   "q": "mahina ko 9000 rupaya thiyo. bhuya ko 2400 diyo ani bhat ko 1500 kina. aba kati rupaya bacheko?",
+   "gold": "5100",
+   "a": "aba 36000 rupaya bacheko.",
+   "ok": false
+  },
+  {
+   "kind": "three-money",
+   "q": "jamma 15000 rupaya chha. 4500 ra 3000 rupaya khatayo. aba kati bacheko?",
+   "gold": "7500",
+   "a": "aba 12000 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "group-discount",
+   "q": "6 jana lai 350 rupiya ko ticket kinyo. 20% discount. aba kati rupiya tirne?",
+   "gold": "1680",
+   "a": "aba 40 rupiya tirne.",
+   "ok": false
+  },
+  {
+   "kind": "group-discount",
+   "q": "4 wata 250 rupiya ko kina. 25% bhat aayo. aba kati rupaya tirne?",
+   "gold": "750",
+   "a": "aba 312 rupaya tirne.",
+   "ok": false
+  },
+  {
+   "kind": "half-plus",
+   "q": "ek jhola ma 40 ota thiyo, aadha jana le liyo. Baki le 7 ota liyo. aba jhola ma kati ota bacha?",
+   "gold": "13",
+   "a": "36 ota baki cha.",
+   "ok": false
+  },
+  {
+   "kind": "half-plus",
+   "q": "aadha 30 ota ma thiyo, maile 9 ota add gare. aba kati ota chha?",
+   "gold": "24",
+   "a": "aba 3 ota chha.",
+   "ok": false
+  },
+  {
+   "kind": "div-after-minus",
+   "q": "90 ota ma 10 ota kina. Baki 80 ota ma 4 ota ko kanda banaune. har kanda ma kati ota huncha?",
+   "gold": "20",
+   "a": "90 x 10 = -20.",
+   "ok": true
+  },
+  {
+   "kind": "div-after-minus",
+   "q": "120 ota ma 20 ota chhauchha. Baki 100 ota 5 ota ko kanda ma rakhne. har kanda ma kati ota huncha?",
+   "gold": "20",
+   "a": "110 rupiya tiru paryo.",
+   "ok": false
+  },
+  {
+   "kind": "para-add-minus",
+   "q": "kaksha ma 12 keta ra 19 keti chhan. 5 keta le aayo. aba kaksha ma kati jana chha?",
+   "gold": "26",
+   "a": "kaksha ma 16 jana chhan.",
+   "ok": false
+  },
+  {
+   "kind": "para-add-minus",
+   "q": "bazar ma 14 wata sana ra 11 wata karko thiyo. 6 wata milayo. aba kati wata baki cha?",
+   "gold": "19",
+   "a": "148 wata baki cha.",
+   "ok": false
+  },
+  {
+   "kind": "para-mul-minus",
+   "q": "thela ma 5 kanda thiyo, har kanda ma 11 wata. 13 wata nikalayo. aba kati wata cha?",
+   "gold": "42",
+   "a": "4 wata baki cha.",
+   "ok": false
+  },
+  {
+   "kind": "para-percent-each",
+   "q": "ek khidai ko mol 300 rupiya ho. 20% bhat pachhi 3 wata khidai ko kati rupiya tirne?",
+   "gold": "720",
+   "a": "210 rupiya tiru paryo.",
+   "ok": false
+  },
+  {
+   "kind": "para-percent-each",
+   "q": "ek jhanda ko mol 500 rupiya ho. 10% bhat pachhi 4 wata jhanda ko kati rupiya tirne?",
+   "gold": "1800",
+   "a": "300 rupiya tiru paryo.",
+   "ok": false
+  },
+  {
+   "kind": "para-half",
+   "q": "kaka sanga 70 ota thiyo. aadha usle liyo. 12 ota khatayo. aba kati ota baki cha?",
+   "gold": "23",
+   "a": "58 ota baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "para-half",
+   "q": "didi sanga 50 rupiya thiyo. aadha bahira diyo. 8 rupiya khatayo. aba kati rupiya bacha?",
+   "gold": "17",
+   "a": "aba 42 rupiya baki chha.",
+   "ok": false
+  },
+  {
+   "kind": "para-infer-rule",
+   "q": "kram: 7, 14, 28, 56, ... aune k ho?",
+   "gold": "112",
+   "a": "aru number 87 hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "para-infer-rule",
+   "q": "yo series ko aune k ho: 9, 18, 36, 72, ...?",
+   "gold": "144",
+   "a": "aru number 144 hunchha.",
+   "ok": true
+  },
+  {
+   "kind": "para-three-money",
+   "q": "mahina ko 12000 rupaya thiyo. bhuya ko 3000 diyo ani bhat ko 2500 kina. aba kati rupaya bacheko?",
+   "gold": "6500",
+   "a": "aba 10800 rupaya bacheko.",
+   "ok": false
+  },
+  {
+   "kind": "para-group-discount",
+   "q": "5 jana lai 400 rupiya ko ticket kinyo. 20% discount. aba kati rupiya tirne?",
+   "gold": "1600",
+   "a": "aba 20 rupiya tirne.",
+   "ok": false
+  },
+  {
+   "kind": "para-half-plus",
+   "q": "40 ota ko aadha ma thiyo, maile 11 ota add gare. aba kati ota chha?",
+   "gold": "31",
+   "a": "aba 29 ota chha.",
+   "ok": false
+  },
+  {
+   "kind": "para-div-after-minus",
+   "q": "100 ota ma 25 ota chhauchha. Baki 75 ota 3 ota ko kanda ma rakhne. har kanda ma kati ota huncha?",
+   "gold": "25",
+   "a": "93 ota ma 9 baki chhan.",
+   "ok": false
+  },
+  {
+   "kind": "weekday-template",
+   "q": "aaja sombar ho. 3 din pachhi kun bar? (bar ko kram number: aaitabar 1 ... sanibar 7)",
+   "gold": "5",
+   "a": "3 din pachhi bihibar hunchha, arthat 5 number.",
+   "ok": true
+  },
+  {
+   "kind": "weekday-paraphrase",
+   "q": "aaja sombar ho bhane 3 din pachhi kun bar hunchha?",
+   "gold": "5",
+   "a": "3 din pachhi mangalbar hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "weekday-paraphrase",
+   "q": "sombar bata 3 din pachhi ko din kun ho?",
+   "gold": "5",
+   "a": "ek din ma 2 din hunchha.",
+   "ok": false
+  },
+  {
+   "kind": "weekday-paraphrase",
+   "q": "sombar diye 3 din gatayo, tyo din kun ho?",
+   "gold": "5",
+   "a": "3 din pachhi kartik 12.",
+   "ok": false
+  }
+ ]
+}
