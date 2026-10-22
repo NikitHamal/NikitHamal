@@ -1,7 +1,7 @@
 // Web Worker host for Nik: loads the model off the main thread and streams tokens.
 import { NikModel, renderChat, generate, TOK } from './nik.js';
 import { romanize, hasDevanagari } from './romanize.js';
-import { contextFor } from './context.js';
+import { contextFor, plainNumbers } from './context.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
 const base = new URL('./model/', import.meta.url);
@@ -33,7 +33,9 @@ function buildPrompt(messages) {
   // leaving >= 8k for the reply (owner: 8k in / 8k out).
   const budget = model.cfg.ctx > 512 ? Math.min(8192, model.cfg.ctx - 8192) : Math.floor(model.cfg.ctx * 0.55);
   // Nik reads romanized Nepali: transliterate Devanagari the user types (input only)
-  const msgs = messages.map((m) => (m.role === 'user' && hasDevanagari(m.content) ? { ...m, content: romanize(m.content) } : m));
+  // and plain digits for grouped numbers (`1,200` -> `1200`), which it never saw in training
+  const msgs = messages.map((m) => (m.role !== 'user' ? m
+    : { ...m, content: plainNumbers(hasDevanagari(m.content) ? romanize(m.content) : m.content) }));
   return contextFor(model.tok, msgs, budget);
 }
 

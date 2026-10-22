@@ -1,0 +1,20 @@
+[
+ {"name": "owner case: kati rey", "turns": ["347 + 285 kati hunchha?", "kati rey?"], "want": ["\\b632\\b", "\\b632\\b"]},
+ {"name": "pakka ho", "turns": ["48 x 7 kati?", "pakka ho?"], "want": ["\\b336\\b", "\\b336\\b"]},
+ {"name": "ani op on previous", "turns": ["120 + 45 kati?", "ani tyasma 15 ghatayo bhane?"], "want": ["\\b165\\b", "\\b150\\b"]},
+ {"name": "feri bhana", "turns": ["nepal ko rajdhani k ho?", "feri bhana ta."], "want": ["kathmandu", "kathmandu"]},
+ {"name": "name memory then math", "turns": ["mero naam sita ho.", "25 x 4 kati?", "mero naam k ho?"], "want": [null, "\\b100\\b", "sita"]},
+ {"name": "word problem then repeat", "turns": ["ram sanga 50 rupiya chha. usle 18 rupiya kharcha garyo. kati bachyo?", "jawaf kati aayo?"], "want": ["\\b32\\b", "\\b32\\b"]},
+ {"name": "ani 2 le gunda", "turns": ["9 x 9 kati?", "ani 2 le gunda?"], "want": ["\\b81\\b", "\\b162\\b"]},
+ {"name": "english follow-up", "turns": ["what is 12 + 30?", "are you sure?"], "want": ["\\b42\\b", "\\b42\\b"]},
+ {"name": "grouped number", "turns": ["1,200 + 300 kati hunchha?"], "want": ["\\b1,?500\\b"]},
+ {"name": "negative", "turns": ["5 - 12 kati?"], "want": ["-7\\b"]},
+ {"name": "km to m", "turns": ["3 km ma kati meter hunchha?"], "want": ["\\b3,?000\\b"]},
+ {"name": "hours to minutes", "turns": ["2 ghanta ma kati minet?"], "want": ["\\b120\\b"]},
+ {"name": "kg to g", "turns": ["2.5 kg ma kati gram?"], "want": ["\\b2,?500\\b"]},
+ {"name": "percent", "turns": ["400 ko 25 pratishat kati?"], "want": ["\\b100\\b"]},
+ {"name": "weekday", "turns": ["aaja sombar ho bhane 3 din pachhi kun bar?"], "want": ["bihibar"]},
+ {"name": "age", "turns": ["ma 2060 sal ma janmeko. 2081 ma mero umer kati?"], "want": ["\\b21\\b"]},
+ {"name": "who are you", "turns": ["timi ko hau?"], "want": ["nik"]},
+ {"name": "creator", "turns": ["timilai kasle banayo?"], "want": ["nikit"]}
+]

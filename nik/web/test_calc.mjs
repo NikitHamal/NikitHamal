@@ -13,4 +13,13 @@ check('no read across <|/think|>', [TOK.THINK, ...enc('saya: 3 + 2 + 1 = 6. tyas
 check('plain answer', enc('jawaf: 347 + 285 ='), '632');
 check('inside think', [TOK.THINK, ...enc('ek: 7 + 5 =')], '12');
 check('decimal kept', enc('2.5 x 4 ='), '10');
+// grouped numbers, signs and clock times (2026-10-22 audit: 1,200 + 300 -> 500, -5 + 3 -> 8, 2:30 + 1 -> 31)
+check('grouped thousands', enc('1,200 + 300 ='), '1500');
+check('nepali grouping', enc('2,50,000 + 50,000 ='), '300000');
+check('list is not a number', enc('10,20 + 5 ='), null);
+check('leading minus', enc('jawaf: -5 + 3 ='), '-2');
+check('negative times', enc('0 - 5 = -5. aba -5 x 2 ='), '-10');
+check('binary minus unchanged', enc('10 - 3 - 2 ='), '5');
+check('no clock time', enc('samaya 2:30 + 1 ='), null);
+check('no date', enc('miti 2081/05/12 + 3 ='), null);
 console.log(`${ok}/${n} tests OK`); if (ok !== n) process.exit(1);

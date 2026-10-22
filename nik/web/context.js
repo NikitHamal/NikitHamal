@@ -124,6 +124,11 @@ export function dropNumberTurns(msgs) {
   return msgs.filter((_, i) => !drop.has(i));
 }
 
+// Nik never saw grouped numbers in training: `1,200 + 300` reads as `1 + 300` (2026-10-22 audit: -> 301). User turns get
+// plain digits (`1200`, `250000`) before tokenizing, like Devanagari gets romanized. Lists (`10,20,30`) are left alone.
+const GROUPED = /(?<![\d.,])(?:\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})+,\d{3})(?!,?\d)/g;
+export const plainNumbers = (s) => s.replace(GROUPED, (m) => m.replace(/,/g, ''));
+
 // The one entry point the worker uses.
 // A standalone problem gets exactly its single-turn prompt: ANY earlier exchange costs the live model accuracy
 // (long chat 60 bench items: single 46, number turns dropped 38, only `mero naam rojina ho` before it 39, old 6).
