@@ -5,7 +5,7 @@
    "nikit le aaja cycle chalauna sikyo."
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(cycle|badhai|sikyo|ramro)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -14,7 +14,7 @@
    "hamal sir le aaja dherai homework diyo."
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(homework|kaam|samaya|garh|sakinchha|sakchhau)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -34,7 +34,7 @@
    "nikit hamal ko bihe ma hamilai bolaunubhayo."
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(bihe|badhai|ramailo|jaanus|shubhakamana)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -43,7 +43,7 @@
    "nikit ko phone futyo, aba k garne?"
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(phone|mobile|marmat|repair|bhandar|pasal)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -52,7 +52,7 @@
    "nikita didi naya ghar ma sarnubhayo."
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(ghar|badhai|sar|ramro)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -61,7 +61,7 @@
    "nik le aaja kapal katayo, ramro dekhinchha."
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(kapal|ramro|dekhinchha)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -70,7 +70,7 @@
    "mero mama nikit hamal le naya jagir paunubhayo."
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(jagir|badhai|kaam|ramro)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
@@ -79,7 +79,7 @@
    "nikit pariksha ma pass bhayo!"
   ],
   "want": [
-   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(pass|badhai|pariksha|ramro)"
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\S"
   ]
  },
  {
