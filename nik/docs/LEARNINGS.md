@@ -4,6 +4,22 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-22 afternoon (Claude, new session)
+
+- **The pencil had more wrong-number bugs, all silent:** `1,200 + 300 =` -> 500 (read "200 + 300"), `-5 + 3 =` -> 8
+  (dropped the sign), `2:30 + 1 =` -> 31 (clock time). Python `calc.py` (bench/stress) would even "correct" a right
+  `1,200 + 300 = 1,500` to 500. Fixed in both (`bfd3511`); `test_calc.mjs`, `tests/test_calc.py`.
+- **Input normalisation is a tool too:** the model reads `1,200` as `1` (no grouped numbers in training). worker.js
+  now hands it plain digits, like romanize.js does for Devanagari. `1,200 + 300 kati?` 301 -> 1500.
+- **One question shape per skill = template recall, again:** units (colmath.units: full names, whole numbers, one
+  direction) and weekdays (reason_gen.weekday: one sentence) score **2/20** on held-out phrasings
+  (`tests/chat/everyday_heldout.json`, live m50): `3 km` -> "3 meter", `aaja sombar ho bhane 3 din pachhi` -> wrong day.
+  `everyday.py` gives each skill many shapes; held-out phrasings are guarded out of every mix (make_sft2).
+- **Follow-ups that operate on the last answer** (`9 x 9` -> 81, `ani 2 le gunda?` -> 81 again) need their own rows
+  (followup-op: the think names the previous answer first).
+- **Persona data was stale** ("8 million parameters, 10 MB"); the model is ~20M params / 20 MB.
+- `nik/web/chat_audit.mjs`: multi-turn replay through the exact worker path, seeded. Use it before blaming the model.
+
 ## 2026-10-22 (Claude)
 
 - **A "model error" in /chat was our tool:** the exact-arithmetic pencil (nik.js calcForce) decoded the last 48 tokens

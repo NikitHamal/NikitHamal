@@ -18,8 +18,13 @@ run() {  # tag bin outdir
   [ -f $o/shape.json ]   || $PY nik/scripts/shape_probe.py --model $b --out $o/shape.json > $o/shape.txt 2>&1 &
   [ -f $o/reading.json ] || $PY nik/bench_reading.py --model $b --out $o/reading.json > $o/reading.txt 2>&1 &
   [ -f $o/ladder.json ]  || node nik/scripts/word_probe_run.mjs $b /tmp/ladder/items.json --out $o/ladder.json > $o/ladder.txt 2>&1 &
-  [ -f $o/trap.txt ]     || $PY nik/trap_check.py --model $b > $o/trap.txt 2>&1 &
-  [ -f $o/chat.txt ]     || $PY nik/chat_check.py --model $b > $o/chat.txt 2>&1 &
+  # trap/chat write .txt even when they crash: rerun unless the file holds a score (kb70/kb85 kept a stale traceback)
+  grep -q 'trap check:' $o/trap.txt 2>/dev/null  || $PY nik/trap_check.py --model $b > $o/trap.txt 2>&1 &
+  grep -q 'chat sanity:' $o/chat.txt 2>/dev/null || $PY nik/chat_check.py --model $b > $o/chat.txt 2>&1 &
+  # /chat as users see it (worker path: context packing, pencil, sampler, vote 5; seeded): held-out everyday questions
+  # and follow-ups (nik/tests/chat/*.json, guarded out of every mix by make_sft2)
+  grep -q '^score' $o/everyday.txt 2>/dev/null  || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/everyday_heldout.json > $o/everyday.txt 2>&1 &
+  grep -q '^score' $o/followups.txt 2>/dev/null || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/followups.json > $o/followups.txt 2>&1 &
   [ -f $o/stress.json ]  || $PY nik/stress.py --model $b --out $o/stress.json > $o/stress.txt 2>&1 &
   [ -f $o/long.json ]    || $PY nik/bench_long.py --model $b --out $o/long.json > $o/long.txt 2>&1 &
   if [ -f ${EN_DATA:-data/english}/en_heldout.jsonl ]; then
