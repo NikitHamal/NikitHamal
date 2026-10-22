@@ -6,13 +6,22 @@ Inexact division (quotient + remainder style) is left alone. Mirrors web/nik.js 
 import re
 from fractions import Fraction
 
-NUM = r'\d+(?:\.\d+)?'
-# EXPR = NUMBER, then a terminator that is not an operator, digit or decimal point
-DONE = re.compile(rf'((?<![\d./])(?:{NUM})(?:\s*[-+x*/]\s*{NUM})+)(\s*=\s*)({NUM})(?=([^\d.\s+\-x*/]|\.(?!\d)|\s+[^\d\s+\-x*/=]))')
+# a number: grouped (`1,200`, `1,000,000`, `2,50,000`) or plain; lists like `10,20,30` are not numbers
+NUM = r'(?:\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})+,\d{3}|\d+)(?:\.\d+)?'
+# EXPR = NUMBER, then a terminator that is not an operator, digit or decimal point. EXPR never starts inside a number,
+# a date (`2081/05/12`) or a clock time (`2:30`); a leading `-` right before a digit is a sign (`-5 + 3 = -2`)
+DONE = re.compile(rf'((?<![\d.,/:\-])-?(?:{NUM})(?:\s*[-+x*/]\s*{NUM})+)(\s*=\s*)(-?{NUM})(?=([^\d.,\s+\-x*/]|[.,](?!\d)|\s+[^\d\s+\-x*/=]))')
+
+
+def _frac(t):
+    return Fraction(t.replace(',', ''))
 
 
 def evaluate(expr):
-    toks = re.findall(rf'{NUM}|[-+x*/]', expr)
+    expr = expr.replace(',', '').strip()
+    if expr.startswith('-'):
+        expr = '0' + expr                          # `-5 x 2` = 0 - 5 x 2
+    toks = re.findall(r'\d+(?:\.\d+)?|[-+x*/]', expr)
     vals, ops = [Fraction(toks[0])], []
     for i in range(1, len(toks), 2):
         op, v = toks[i], Fraction(toks[i + 1])
@@ -43,7 +52,7 @@ def correct(text, start=0):
         if not m:
             return text, fixes
         v = evaluate(m.group(1))
-        if v is not None and Fraction(v) != Fraction(m.group(3)):
+        if v is not None and Fraction(v) != _frac(m.group(3)):
             text = text[:m.start(3)] + v + text[m.end(3):]
             fixes += 1
         pos = m.start(3) + 1

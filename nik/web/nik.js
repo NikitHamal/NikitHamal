@@ -462,6 +462,9 @@ const gcd = (a, b) => { a = a < 0n ? -a : a; b = b < 0n ? -b : b; while (b) [a, 
 function frac(n, d = 1n) { if (d < 0n) { n = -n; d = -d; } const g = gcd(n, d) || 1n; return [n / g, d / g]; }
 function parseNum(t) { const [i, f = ''] = t.split('.'); return frac(BigInt(i + f), 10n ** BigInt(f.length)); }
 export function calcEvaluate(expr) {
+  // `1,200` / `2,50,000` are grouped numbers; a leading `-` is a sign (`-5 x 2` = 0 - 5 x 2)
+  expr = expr.replace(/,/g, '').trim();
+  if (expr.startsWith('-')) expr = '0' + expr;
   const toks = expr.match(/\d+(?:\.\d+)?|[-+x*\/]/g);
   const vals = [parseNum(toks[0])], ops = [];
   for (let i = 1; i < toks.length; i += 2) {
@@ -479,7 +482,11 @@ export function calcEvaluate(expr) {
   const s = (Number(r[0]) / Number(r[1])).toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
   return s.length <= 12 ? s : null;
 }
-const CALC_TAIL = /(?:^|[^\d.\/])(\d+(?:\.\d+)?(?:\s*[-+x*\/]\s*\d+(?:\.\d+)?)+)\s*=\s?$/;
+// a number: grouped (`1,200`, `1,000,000`, `2,50,000`) or plain; lists like `10,20,30` are not numbers
+const CALC_NUM = String.raw`(?:\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})+,\d{3}|\d+)(?:\.\d+)?`;
+// EXPR = at the end of the output. Never starts inside a number, a date (`2081/05/12`) or a clock time (`2:30`);
+// a leading `-` right before a digit is the number's sign (`aba -5 x 2 =`)
+const CALC_TAIL = new RegExp(String.raw`(?:^|[^\d.,\/:\-])(-?${CALC_NUM}(?:\s*[-+x*\/]\s*${CALC_NUM})+)\s*=\s?$`);
 export function calcForce(tok, out) {
   // never read across <|think|> / <|/think|> / turn markers (ids < 16 decode to ''): "... = 632." + <|/think|> +
   // "347 + 285 =" decoded as one string is "632.347 + 285 =" -> 917.347 (owner's /chat report, 2026-10-22)

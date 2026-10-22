@@ -2,12 +2,18 @@
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { Tokenizer, renderChat } from './nik.js';
-import { oldPolicy, contextFor, standalone, dropNumberTurns } from './context.js';
+import { oldPolicy, contextFor, standalone, dropNumberTurns, plainNumbers } from './context.js';
 const tok = new Tokenizer(JSON.parse(readFileSync(new URL('./model/tokenizer.json', import.meta.url))));
 const U = (t) => ({ role: 'user', content: t }), N = (t) => ({ role: 'nik', content: t });
 const same = (m) => assert.deepEqual(contextFor(tok, m, 281), oldPolicy(tok, m, 281));
 let n = 0; const t = (name, f) => { f(); n++; console.log('ok', name); };
 
+t('grouped numbers become plain digits', () => {
+  assert.equal(plainNumbers('1,200 + 300 kati?'), '1200 + 300 kati?');
+  assert.equal(plainNumbers('2,50,000 ko 10%'), '250000 ko 10%');
+  assert.equal(plainNumbers('10,20,30 ma sabse thulo'), '10,20,30 ma sabse thulo');
+  assert.equal(plainNumbers('rs 1,200.50 ra 3,4'), 'rs 1200.50 ra 3,4');
+});
 t('single turn is unchanged', () => same([U('38 x 26 = ?')]));
 t('short memory chat is unchanged', () => same([U('ma sanga 2 ota biralo chhan.'), N('ramro!'), U('ani 1 kukur.'), N('thik chha.'), U('jamma kati pet?')]));
 t('follow-up keeps the earlier sum', () => same([U('18 x 7 kati?'), N('18 x 7 = 126.'), U('ani tyo lai 2 le gunda?')]));
