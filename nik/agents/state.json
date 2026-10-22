@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T15:49:49Z",
+ "updated": "2026-10-22T20:33:14Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -8,10 +8,10 @@
   {
    "name": "box 1",
    "gpu": "RTX Pro 6000 Blackwell \u00b7 owner notebook",
-   "job": "Claude: k-arms (KL anchor to m50): k5c (seed 15) -> soup s5 = (k5+k5b+k5c)/3 -> k7 (k5b + reading/identity contrast rows)",
+   "job": "session ended ~20:55 UTC; all results on Kaggle",
    "progress": null,
-   "detail": "sequential train/gate queue (/tmp/claude/queue.log); best so far k5b",
-   "eta": "~16:30 box clock"
+   "detail": "best candidate s13 (confirmed on fresh items, smoke 4/4); owner deciding",
+   "eta": "-"
   }
  ],
  "scoreboard": {
@@ -21,9 +21,9 @@
    "und",
    "math",
    "RW items",
-   "reading",
    "traps",
-   "everyday"
+   "everyday",
+   "owner cases"
   ],
   "rows": [
    [
@@ -33,57 +33,68 @@
     "19/26",
     "94%",
     "25",
-    "5/50",
-    "25/36",
-    "2/20"
+    "6/60",
+    "25/25"
    ],
    [
-    "k5b (repaired mix, seed 14)",
-    "212",
-    "226",
-    "19/26",
-    "98%",
-    "32",
-    "3/50",
-    "21/36",
-    "8/20"
-   ],
-   [
-    "k5 (repaired mix, seed 13)",
-    "206",
-    "222",
-    "18/26",
-    "98%",
-    "31",
-    "3/50",
-    "22/36",
-    "4/20"
-   ],
-   [
-    "r1 (k3 recipe, full GPU)",
-    "212",
-    "222",
-    "18/26",
-    "98.5%",
-    "31",
-    "4/50",
-    "25/36",
-    "3/20"
-   ],
-   [
-    "k4 (unrepaired mix)",
-    "205",
-    "212",
-    "19/26",
+    "s13 = (k13+k13b)/2",
+    "209",
+    "220",
+    "17/26",
     "99%",
-    "29",
-    "6/50",
-    "25/36",
-    "4/20"
+    "37",
+    "20/60",
+    "24/25"
+   ],
+   [
+    "k13 (self-distilled follow-ups)",
+    "209",
+    "221",
+    "17/26",
+    "99%",
+    "36",
+    "15/60",
+    "24/25"
+   ],
+   [
+    "s12 = (k11+k11b+k12)/3",
+    "210",
+    "222",
+    "18/26",
+    "98%",
+    "35",
+    "18/60",
+    "19/25"
+   ],
+   [
+    "k9 (lookup + mention)",
+    "211",
+    "222",
+    "18/26",
+    "98%",
+    "35",
+    "16/60",
+    "20/25"
    ]
   ]
  },
  "runs": [
+  {
+   "tag": "s13",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "candidate",
+   "what": "(k13 + k13b)/2, self-distilled follow-ups",
+   "result": "RW 37 (p=0.01), math 99, fresh items 865 vs 855, smoke 4/4; und 17, nested 220, owner 24/25: owner deciding"
+  },
+  {
+   "tag": "k13",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "candidate",
+   "what": "k11 mix + live model's own follow-up replies",
+   "result": "owner cases 24/25 (arms before: 17-23), RW 36, fresh 859 vs 855"
+  },
   {
    "tag": "k5b",
    "box": "box 1",
