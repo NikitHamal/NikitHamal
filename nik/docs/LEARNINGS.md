@@ -33,6 +33,16 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
   `role:` means "paisa, wata, ek ko" to the model: r1 greedy on the ship-smoke question writes `wata = 180, ek ko = 180`
   -> 0, and m50/r1 invent `ek ko = 15` for `50 - 18`. The ship smoke caught what 14 gate rows missed; r1 is not shipped.
   `money1.py` (roles = only what the text gives) + `tests/chat/money_heldout.json` (live 6/10).
+- **The no-think repair works; the KL-anchored recipe now gains for real.** fix_mix (history turns context-only +
+  thinks on only-number format rows) restored nested (k4 212 -> k5 222, k5b 226). Seeds 13/14/15 of one recipe still
+  spread by 6 on bench and 4 on nested; their soup s5 and k7 reach **RW items 36 vs 25 (13 fixed / 2 broken, p=0.01)**,
+  the first RW gain that passes a sign test, with math 98, nested 225-226, everyday held-out 2 -> 7.
+- **A regression that repeats across seeds is real even when each p-value is not.** Every k5-family model (5 of 5)
+  breaks the same trap items (third-person "nikit" stories -> Nik's biography; `dubai 20 barsha ka hun` -> 40) and
+  the same 2 reading pairs; the p8mxe family (r1, k4, k4a, s4) keeps traps 24-25. 3% of reading_contrast rows (k7)
+  did not fix it. k8 (repair only, no colrows / money1) isolates the cause.
+- **/chat vote:** a sampled path whose answer contradicts its own think (`3 x 1000 = 3000` -> "3 km dur chha.") no
+  longer votes (vote.js). m50 held-out chat 71 -> 77, k4 75 -> 83 (3 seeds x 56 items).
 - **Mistakes this session:** (1) I put `followups.json`'s generic phrases ("kati rey?", "timi ko hau?", "mero naam k
   ho?") into the eval-prompt guard: the first p8mxe build dropped 26,644 persona/memory/follow-up rows. Caught from the
   mix log (normal: ~5) before training; only `*_heldout.json` is guarded now. Always read the guard's drop count.
