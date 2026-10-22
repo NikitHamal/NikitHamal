@@ -56,7 +56,7 @@ def main():
         for msg, v in items:
             ids, _ = render_chat(tok, [{'role': 'user', 'content': msg}])
             with torch.no_grad():
-                out = tok.decode(generate_ar(m, ids[:-1] + [6], 40, temperature=0.0))
+                out = tok.decode(generate_ar(m, ids[:-1] + [6], 120, temperature=0.0))
             out = re.sub(r'<\|think\|>.*?(<\|/think\|>|$)', '', out, flags=re.S).replace('<|end|>', '').strip()
             hit = v in out; ok += hit; rows.append({'len': L, 'gold': v, 'reply': out, 'ok': hit})
         res[f'{L}'] = f'{ok}/{a.per}'
