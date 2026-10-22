@@ -20,7 +20,9 @@ THINGS = ['kitab', 'kapi', 'jutta', 'kalam', 'chiya', 'momo', 'tarkari', 'phal',
 LEFT_Q = ['kati baki?', 'kati baki chha?', 'aba kati bachyo?', 'kati rahyo?', 'aba kati paisa chha?', 'kati bachyo?',
           'baki kati?', 'aba mero sanga kati chha?']
 GOT_Q = ['aba kati bhayo?', 'aba jamma kati chha?', 'jamma kati bhayo?', 'aba kati paisa chha?']
-DISTRACT = ['ma {n} barsha ko chhu.', 'aaja {n} gate ho.', 'mero kaksha ma {n} jana chhan.', 'ghar ma {n} wata kursi chhan.']
+# no ages: k5/k5b (money1 2%) both lost the trap `nikit ra hari dubai 20 barsha ka hun. hari kati barsha ko ho?` (no
+# number), while k4 and r1 (no money1) kept it. "ma 20 barsha ko chhu" marked as unused taught "barsha = ignore".
+DISTRACT = ['aaja {n} gate ho.', 'mero kaksha ma {n} jana chhan.', 'ghar ma {n} wata kursi chhan.', 'bus ma {n} jana thiye.']
 
 
 def _amount(R):
