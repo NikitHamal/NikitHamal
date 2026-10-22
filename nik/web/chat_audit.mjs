@@ -5,14 +5,16 @@
 import { readFileSync } from 'node:fs';
 import { NikModel, Tokenizer, generate, parseBin, TOK } from './nik.js';
 import { contextFor, plainNumbers } from './context.js';
+import { vote, finalNumber } from './vote.js';
 
 const args = process.argv.slice(2);
-let modelPath = new URL('./model/nik-0.1.bin', import.meta.url).pathname, seed = 1, K = 5, file = null, verbose = true;
+let modelPath = new URL('./model/nik-0.1.bin', import.meta.url).pathname, seed = 1, K = 5, file = null, verbose = true, oldVote = false;
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--model') modelPath = args[++i];
   else if (args[i] === '--seed') seed = +args[++i];
   else if (args[i] === '--vote') K = +args[++i];
   else if (args[i] === '--quiet') verbose = false;
+  else if (args[i] === '--old-vote') oldVote = true;   // the vote before the consistency filter (A/B)
   else file = args[i];
 }
 // mulberry32: Math.random is what nik.js samples with
@@ -40,7 +42,6 @@ function once(prompt, o) {
   }
   return { think: tok.decode(think).trim(), answer: tok.decode(answer).trim(), thought: think.length > 0, conf: n ? Math.exp(lp / n) : 1 };
 }
-const finalNumber = (x) => { const m = x.replace(/,/g, '').match(/-?\d+(\.\d+)?/g); return m ? m[m.length - 1] : null; };
 
 function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confidence-weighted vote
   const prompt = contextFor(tok, msgs.map((m) => (m.role === 'user' ? { ...m, content: plainNumbers(m.content) } : m)), Math.floor(model.cfg.ctx * 0.55));
@@ -48,10 +49,14 @@ function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confid
   if (K > 1 && first.thought && finalNumber(first.answer) !== null) {
     const paths = [first];
     for (let i = 1; i < K; i++) paths.push(once(prompt, { ...opts, temperature: Math.max(0.7, opts.temperature) }));
-    const score = new Map();
-    for (const p of paths) { const v = finalNumber(p.answer); if (v !== null) score.set(v, (score.get(v) || 0) + p.conf); }
-    const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
-    return { ...paths.find((p) => finalNumber(p.answer) === best), promptLen: prompt.length };
+    if (oldVote) {
+      const score = new Map();
+      for (const p of paths) { const v = finalNumber(p.answer); if (v !== null) score.set(v, (score.get(v) || 0) + p.conf); }
+      const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
+      return { ...paths.find((p) => finalNumber(p.answer) === best), promptLen: prompt.length };
+    }
+    const v = vote(paths);
+    return { ...(v ? v.path : first), promptLen: prompt.length };
   }
   return { ...first, promptLen: prompt.length };
 }

@@ -11,8 +11,19 @@ cd "$(dirname "$0")/../.."
 # sharing the box (k4: 133k -> 48k tok/s beside 8 bench runs)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-2} MKL_NUM_THREADS=${MKL_NUM_THREADS:-2}
 [ -f /tmp/ladder/items.json ] || { mkdir -p /tmp/ladder; $PY nik/scripts/word_procedure_probe.py --out /tmp/ladder/items.json --ladder > /dev/null 2>&1; }
+# Cached results are only comparable if the code that produced them is the same: each code-dependent row is stamped
+# with a hash of its code, and a stale row is rerun (the live cache once mixed an old calc.py with a new one).
+stamp() { cat "$@" 2>/dev/null | md5sum | cut -c1-12; }
+CHAT_V=$(stamp nik/web/chat_audit.mjs nik/web/vote.js nik/web/context.js nik/web/nik.js nik/tests/chat/*.json)
+RW_V=$(stamp nik/calc.py nik/bench_rw.py)
+fresh() {  # dir name version files...: drop the files if the dir's stamp for `name` differs
+  local o=$1 n=$2 v=$3; shift 3
+  [ "$(cat $o/.v_$n 2>/dev/null)" = "$v" ] || { (cd $o && rm -f "$@"); echo $v > $o/.v_$n; }
+}
 run() {  # tag bin outdir
   t=$1; b=$2; o=$3; mkdir -p $o
+  fresh $o chat $CHAT_V everyday.txt money.txt followups.txt
+  fresh $o rw $RW_V rw.json rw.txt
   [ -f $o/bench.json ]   || $PY nik/bench.py --model $b --n 16 --out $o/bench.json > $o/bench.txt 2>&1 &
   [ -f $o/nbench.json ]  || $PY nik/bench.py --model $b --n 16 --nested-items --out $o/nbench.json > $o/nbench.txt 2>&1 &
   [ -f $o/und.json ]     || $PY nik/eval_understand.py --model $b --out $o/und.json > $o/und.txt 2>&1 &
