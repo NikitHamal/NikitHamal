@@ -1,6 +1,7 @@
 // Multi-turn /chat audit through the exact worker.js path (contextFor packing, exact-arithmetic pencil, /chat sampler,
 // self-consistency vote), seeded so runs are reproducible. Nik's own replies are fed back as history, like in /chat.
-//   node nik/web/chat_audit.mjs [--model path] [--seed N] [--vote K] convs.json
+//   node nik/web/chat_audit.mjs [--model path] [--seed N | --seeds 1,2,3] [--vote K] [--old-vote] [--quiet] convs.json
+//   --seeds: the whole set once per seed (sampled replies vary), one summed score: less noise for small sets
 // convs.json: [{"name": "...", "turns": ["user turn 1", "user turn 2", ...], "want": [null, "regex for turn 2", ...]}]
 import { readFileSync } from 'node:fs';
 import { NikModel, Tokenizer, generate, parseBin, TOK } from './nik.js';
@@ -8,17 +9,18 @@ import { contextFor, plainNumbers } from './context.js';
 import { vote, finalNumber } from './vote.js';
 
 const args = process.argv.slice(2);
-let modelPath = new URL('./model/nik-0.1.bin', import.meta.url).pathname, seed = 1, K = 5, file = null, verbose = true, oldVote = false;
+let modelPath = new URL('./model/nik-0.1.bin', import.meta.url).pathname, seeds = [1], K = 5, file = null, verbose = true, oldVote = false;
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--model') modelPath = args[++i];
-  else if (args[i] === '--seed') seed = +args[++i];
+  else if (args[i] === '--seed') seeds = [+args[++i]];
+  else if (args[i] === '--seeds') seeds = args[++i].split(',').map(Number);
   else if (args[i] === '--vote') K = +args[++i];
   else if (args[i] === '--quiet') verbose = false;
   else if (args[i] === '--old-vote') oldVote = true;   // the vote before the consistency filter (A/B)
   else file = args[i];
 }
-// mulberry32: Math.random is what nik.js samples with
-let s = seed >>> 0;
+// mulberry32: Math.random is what nik.js samples with (re-seeded per --seeds pass)
+let s = 0;
 Math.random = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 
 const buf = readFileSync(modelPath);
@@ -63,6 +65,9 @@ function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confid
 
 const convs = JSON.parse(readFileSync(file, 'utf8'));
 let ok = 0, scored = 0;
+for (const seed of seeds) {
+s = seed >>> 0;
+if (seeds.length > 1 && verbose) console.log(`\n##### seed ${seed}`);
 for (const c of convs) {
   const msgs = [];
   if (verbose) console.log(`\n=== ${c.name}`);
@@ -80,4 +85,5 @@ for (const c of convs) {
     }
   });
 }
-console.log(`\nscore ${ok}/${scored}`);
+}
+console.log(`\nscore ${ok}/${scored}` + (seeds.length > 1 ? ` (seeds ${seeds.join(',')})` : ''));

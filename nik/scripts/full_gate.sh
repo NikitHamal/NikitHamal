@@ -14,7 +14,7 @@ export OMP_NUM_THREADS=${OMP_NUM_THREADS:-2} MKL_NUM_THREADS=${MKL_NUM_THREADS:-
 # Cached results are only comparable if the code that produced them is the same: each code-dependent row is stamped
 # with a hash of its code, and a stale row is rerun (the live cache once mixed an old calc.py with a new one).
 stamp() { cat "$@" 2>/dev/null | md5sum | cut -c1-12; }
-CHAT_V=$(stamp nik/web/chat_audit.mjs nik/web/vote.js nik/web/context.js nik/web/nik.js nik/tests/chat/*.json)
+CHAT_V=$(stamp nik/scripts/full_gate.sh nik/web/chat_audit.mjs nik/web/vote.js nik/web/context.js nik/web/nik.js nik/tests/chat/*.json)
 RW_V=$(stamp nik/calc.py nik/bench_rw.py)
 fresh() {  # dir name version files...: drop the files if the dir's stamp for `name` differs
   local o=$1 n=$2 v=$3; shift 3
@@ -35,11 +35,12 @@ run() {  # tag bin outdir
   # trap/chat write .txt even when they crash: rerun unless the file holds a score (kb70/kb85 kept a stale traceback)
   grep -q 'trap check:' $o/trap.txt 2>/dev/null  || $PY nik/trap_check.py --model $b > $o/trap.txt 2>&1 &
   grep -q 'chat sanity:' $o/chat.txt 2>/dev/null || $PY nik/chat_check.py --model $b > $o/chat.txt 2>&1 &
-  # /chat as users see it (worker path: context packing, pencil, sampler, vote 5; seeded): held-out everyday questions
+  # /chat as users see it (worker path: context packing, pencil, sampler, vote 5), summed over 3 seeds (one seed of 10
+  # items moved 7 -> 6 -> 5 between same-recipe models: too noisy to gate on): held-out everyday questions
   # (*_heldout.json is guarded out of every mix by make_sft2) and follow-ups (common phrases, a sanity row)
-  grep -q '^score' $o/everyday.txt 2>/dev/null  || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/everyday_heldout.json > $o/everyday.txt 2>&1 &
-  grep -q '^score' $o/followups.txt 2>/dev/null || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/followups.json > $o/followups.txt 2>&1 &
-  grep -q '^score' $o/money.txt 2>/dev/null     || node nik/web/chat_audit.mjs --model $b --quiet nik/tests/chat/money_heldout.json > $o/money.txt 2>&1 &
+  grep -q '^score' $o/everyday.txt 2>/dev/null  || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/everyday_heldout.json > $o/everyday.txt 2>&1 &
+  grep -q '^score' $o/followups.txt 2>/dev/null || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/followups.json > $o/followups.txt 2>&1 &
+  grep -q '^score' $o/money.txt 2>/dev/null     || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/money_heldout.json > $o/money.txt 2>&1 &
   [ -f $o/stress.json ]  || $PY nik/stress.py --model $b --out $o/stress.json > $o/stress.txt 2>&1 &
   [ -f $o/long.json ]    || $PY nik/bench_long.py --model $b --out $o/long.json > $o/long.txt 2>&1 &
   if [ -f ${EN_DATA:-data/english}/en_heldout.jsonl ]; then
