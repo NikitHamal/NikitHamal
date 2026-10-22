@@ -190,6 +190,7 @@ def main():
     ap.add_argument('--bs', type=int, default=32)
     ap.add_argument('--accum', type=int, default=1)
     ap.add_argument('--ctx', type=int, default=0, help='override training context')
+    ap.add_argument('--seed', type=int, default=0, help='data-order seed (different rounds of the same recipe see different windows)')
     ap.add_argument('--ref', default='', help='frozen reference model (.bin or ckpt) for the --kl self-distillation anchor')
     ap.add_argument('--kl', type=float, default=0.0, help='weight of KL(ref || student) on target positions (0 = off)')
     ap.add_argument('--kl-all', action='store_true', help='KL on every position (user text too): no conflict with any target')
@@ -238,7 +239,7 @@ def main():
         import builtins
         builtins.print = lambda *x, **k: None      # only rank 0 talks
     os.makedirs(a.out, exist_ok=True)
-    torch.manual_seed(0)
+    torch.manual_seed(a.seed)
 
     ck = None
     if a.resume and os.path.exists(os.path.join(a.out, 'ckpt.pt')):
@@ -273,11 +274,11 @@ def main():
 
     D = a.data
     if a.stage == 'pretrain':
-        train_b = Batches(os.path.join(D, 'pre_train.bin'), seed=100 + rank)
+        train_b = Batches(os.path.join(D, 'pre_train.bin'), seed=100 + rank + 1000 * a.seed)
         val_b = Batches(os.path.join(D, 'pre_val.bin'), seed=1)
     else:
         train_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'),
-                          os.path.join(D, 'pre_train.bin'), a.mix, seed=100 + rank, split='train')
+                          os.path.join(D, 'pre_train.bin'), a.mix, seed=100 + rank + 1000 * a.seed, split='train')
         val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1, split='val')
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
