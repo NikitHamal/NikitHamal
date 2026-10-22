@@ -725,7 +725,7 @@ def sample(R, scene=None):
         # The p14/p15 arms read the benchmark's held-out word templates by grabbing one
         # of the labelled trace styles they had learned and then binding the numbers
         # wrongly, so the missing move is the *derivation*, not the arithmetic.
-        if os.environ.get('ROLES_READFIRST', '1') == '1' and R.random() < 0.2:
+        if os.environ.get('ROLES_READFIRST', '1') == '1' and R.random() < float(os.environ.get('ROLES_READFIRST_SHARE', '0.35')):
             try:
                 import readfirst
                 return readfirst.sample(R)
