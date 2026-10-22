@@ -82,6 +82,8 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
 **fresh items 865 vs 855** (`confirm.sh`). Loses: understanding 17 vs 19 (honest "not told" -> invented father's name,
 "sunita ... bahini engineer", "we are reading" -> "uni padhdai chhin"), nested 220 vs 222, owner cases 24/25 vs 25.
 k13 (md5 47629680, Kaggle `nik-k13-bin`): fresh 859 vs 855, smoke 4/4. k13b: owner cases 25/25 but und 16.
+**k13c** (seed 16 of k13's recipe, 850 steps) was trained in the box's last minutes and is **UNGATED** (Kaggle
+`nik-k13c-bin`): next session, gate it and try the 3-way soup (k13 + k13b + k13c)/3 before training anything new.
 **Owner decision pending:** card `ship-s13-1022` (keep live and fix understanding / ship s13 / ship k13) and the older
 `gate-rule-1022b`. To ship s13: `python nik/scripts/ship_model.py --bin s13.bin --tag s13 --prev-tag m50 --gate
 gate_s13 --live-gate gate_live ...` (gate dirs in `gates_final.tgz` on `nik-final-1022`), push, DECISION in #11.
