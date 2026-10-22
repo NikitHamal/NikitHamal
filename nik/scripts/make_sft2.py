@@ -61,8 +61,10 @@ def _drop_eval_prompts(rows, root):
     sys.path.insert(0, root)
     import bench_rw   # NikBench-RW prompts are held out too
     held |= {norm(v[-1] if isinstance(v, list) else v) for g in bench_rw.G for v in g[3]}   # scored turns only
-    # chat_audit.mjs sets (nik/tests/chat/*.json): every scored user turn
-    for f in glob.glob(os.path.join(root, 'tests', 'chat', '*.json')):
+    # held-out chat_audit.mjs sets (nik/tests/chat/*_heldout.json): every scored user turn. NOT followups.json: its
+    # scored turns are generic phrases that must be trained on ("kati rey?", "timi ko hau?", "mero naam k ho?");
+    # guarding them dropped 26,644 rows (persona, memory, follow-ups) from the first p8mxe build
+    for f in glob.glob(os.path.join(root, 'tests', 'chat', '*_heldout.json')):
         for c in json.load(open(f)):
             held |= {norm(t) for t, w in zip(c['turns'], c.get('want') or [None] * len(c['turns'])) if w}
     out = [r for r in rows if not any(m['role'] == 'user' and norm(m['content']) in held for m in json.loads(r)['messages'])]

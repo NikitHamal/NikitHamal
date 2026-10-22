@@ -27,7 +27,7 @@ def collect(d):
     r['ladder ALL'] = num(f'{d}/ladder.txt', r'ALL (\d+)/')
     r['traps'] = num(f'{d}/trap.txt', r'trap check: (\d+)/')
     r['everyday (held-out)'] = num(f'{d}/everyday.txt', r'score (\d+)/')
-    r['follow-ups'] = num(f'{d}/followups.txt', r'score (\d+)/')
+    r['follow-ups*'] = num(f'{d}/followups.txt', r'score (\d+)/')   # in-distribution phrases: sanity, not gating
     try:
         for L, v in json.load(open(f'{d}/long.json'))['summary'].items():
             if '/' in v:
