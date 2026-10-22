@@ -87,9 +87,12 @@ on held-out chat items). Box 1 (sb-7b28...) alive; jobs in `/tmp/claude`, log `/
 - **Done 16:30:** k5b (bench 212, nested 226, RW 32), k5c, s5 = (k5+k5b+k5c)/3 (RW 36, p=0.01), k7 (+ rc_clean 3%:
   RW 36, ladder 46) all fail only on traps (21-23, the same items in every seed: third-person nikit -> biography) +
   reading 3-4 (+ und 18). Bins on Kaggle `nik-k5fam-bin`.
-- **Running (`queue_k8.sh`, ~17:10):** k8 = fix_mix(p8mxe) only (is it colrows/money1 that costs traps?), soups x45 =
-  (k4+k5b)/2, x17 = (r1+k7)/2. Gate chat rows are now summed over 3 seeds (`c6786b4`). Then: best candidate ->
-  `scripts/confirm.sh` (fresh items) + `ship_smoke.mjs` + chat audit; ship with `scripts/ship_model.py`.
+- **17:50:** k8 (repair only) lost traps too -> the repair's format thinks caused it; lookup.py + mention.py -> **k9**
+  traps 28, reading 6, RW 35, everyday 16/60, money =, but und 18, shapes 3 and the owner's `kati rey?` case 5/5 -> 2/5
+  (empty answers). Fixed followup.py (consistent think) -> **k11** (p8mxu) training; `queue_k11s.sh` then runs k11b,
+  k11c, s11 (~19:00). New gating rows: `mention (held-out)`, `owner cases (5 seeds)`. Bins: Kaggle nik-k9-bin.
+- **Ship path:** a strict pass -> `scripts/confirm.sh` (pass = sum over 1,152 fresh items >= live and no set with p<0.1
+  drop) + `ship_smoke.mjs` 4/4 -> `scripts/ship_model.py` -> push -> DECISION in #11.
 - **Owner decision pending (card gate-rule-1022b):** strict ">= every row" vs "real drops only (sign test p<0.1) +
   fresh-item re-check". Do not ship a model on the second rule without their answer.
 - **Bins off the box (private Kaggle):** nik-r1-bin, nik-cands-1022b (k2, k3, k4, u23, t23), nik-k5-bin (k5, k4a, s4 +
