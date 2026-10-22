@@ -110,7 +110,7 @@ def finish(fr, f):
         d = np.sqrt(((xx - W / 2) / (W * 0.62)) ** 2 + ((yy - H / 2) / (H * 0.62)) ** 2)
         VIG = (1 - 0.38 * np.clip(d - 0.35, 0, 1) ** 1.6)[..., None].astype(np.float32)
     rng = np.random.default_rng(f)
-    g = rng.normal(0, 4.2, (H // 2, W // 2, 1)).astype(np.float32)
+    g = rng.normal(0, 2.4, (H // 2, W // 2, 1)).astype(np.float32)
     g = np.repeat(np.repeat(g, 2, 0), 2, 1)
     return np.clip(fr * VIG + g, 0, 255)
 
@@ -265,7 +265,7 @@ def frame(f):
             st = strip(day, (1, 7, 8, 9, 10, 15), mag=2)
             over(fr, st, (W - st.shape[1]) / 2, 170, 0.95)
     fr = finish(fr, f)
-    Image.fromarray(fr.astype(np.uint8)).save(out, quality=94, subsampling=0)
+    Image.fromarray(fr.astype(np.uint8)).save(out, quality=97, subsampling=0)
 
 
 if __name__ == "__main__":

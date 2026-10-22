@@ -59,7 +59,7 @@ def align_el(mp3, text):
     key = os.environ.get("ELEVEN_KEY")
     if not key: return None
     r = subprocess.run(["curl", "-s", "-X", "POST", "https://api.elevenlabs.io/v1/forced-alignment", "-H", f"xi-api-key: {key}",
-                        "-F", f"file=@{mp3}", "-F", f"text={text}"], capture_output=True, text=True)
+                        "-F", f"file=@{mp3}", "--form-string", f"text={text}"], capture_output=True, text=True)
     try: ws = json.loads(r.stdout)["words"]
     except Exception: return None
     return [[w["text"], round(w["start"], 3), round(w["end"], 3)] for w in ws if w["text"].strip() and w["text"].strip() != "—"]
