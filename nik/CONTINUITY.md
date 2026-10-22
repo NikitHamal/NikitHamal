@@ -92,7 +92,9 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
   (private Kaggle `nik-english-2026-10-22`). Eval: `nik/bench_en.py` (in full_gate). m50: en_qa_ppl 308.8, en_wiki_ppl
   126.2, en_reply 46/60, NE fidelity 22/22. GPU arm ready: `nik/agents/molab/jobs/job_en.sh` (e1 = m50 + 12 min on sftb +
   10% English + English wiki in replay). Tokenizer is Nepali-trained (English ~2.5-3 tok/word): keep English answers short.
-- **16k context (owner, 2026-10-22): ctx 16384, 8k input / 8k output per turn; mixed Nepali-English sentences are OK
+- **(2026-10-22 ~13:00 UTC) Owner parked long context. Goal now: +10 points on every benchmark with headroom, no drops.**
+  Main lever: `train.py --ref <live.bin> --kl <w>` (self-distillation anchor to the live model). Arms k1/k2: job_kl.sh.
+- **16k context (owner, 2026-10-22, PARKED): ctx 16384, 8k input / 8k output per turn; mixed Nepali-English sentences are OK
   if proper.** Groundwork on main: train.py --set-ctx/--rope-base (NTK base 403175), SDPA is_causal, nik.js on-demand KV,
   longctx.py, add_rows.py, bench_long.py (in full_gate; m50 0/6 at 400 tokens), job_long.sh (L1). Backlog: browser
   attention is scalar JS (4.8k-token prefill = 441 s on 2 cores) -> WASM-SIMD or WebGPU attention before 16k ships;
