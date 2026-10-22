@@ -190,6 +190,8 @@ def main():
     ap.add_argument('--bs', type=int, default=32)
     ap.add_argument('--accum', type=int, default=1)
     ap.add_argument('--ctx', type=int, default=0, help='override training context')
+    ap.add_argument('--ref', default='', help='frozen reference model (.bin or ckpt) for the --kl self-distillation anchor')
+    ap.add_argument('--kl', type=float, default=0.0, help='weight of KL(ref || student) on target positions (0 = off)')
     ap.add_argument('--set-ctx', type=int, default=0, help='long context: set the model cfg.ctx (saved in the ckpt/.bin)')
     ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
     ap.add_argument('--lr', type=float, default=3e-3)
@@ -311,6 +313,18 @@ def main():
     def amp():
         return torch.autocast('cuda', dtype=amp_dtype) if use_cuda_amp else torch.autocast('cpu', enabled=False)
 
+    ref_model = None
+    if a.ref and a.kl > 0:
+        if a.ref.endswith('.bin'):
+            from export import load_exported
+            ref_model = load_exported(a.ref)
+        else:
+            rk = torch.load(a.ref, map_location='cpu', weights_only=False)
+            ref_model = NikLM(NikConfig(**rk['cfg'])); ref_model.load_state_dict(rk['model'])
+        ref_model = ref_model.to(device).eval()
+        for p_ in ref_model.parameters():
+            p_.requires_grad_(False)
+        print(f'KL anchor: {a.ref} (weight {a.kl})', flush=True)
     fwd_model = torch.compile(model) if a.compile else model
     if world > 1:
         fwd_model = torch.nn.parallel.DistributedDataParallel(
@@ -331,13 +345,16 @@ def main():
                    sched=a.sched, decay_frac=a.decay_frac)
         for g in opt.param_groups:
             g['lr'] = lr
-        tot = ar = df = 0.0
+        tot = ar = df = klsum = 0.0
         for _ in range(a.accum):
             x, m = train_b.get(a.bs, L, device)
             with amp():
-                loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight, diff_frac=a.diff_frac, user_w=a.user_w)
+                loss, l_ar, l_df = hybrid_loss(fwd_model, x, m, diff_weight=a.diff_weight, diff_frac=a.diff_frac, user_w=a.user_w,
+                                               ref=ref_model, kl=a.kl)
             scaler.scale(loss / a.accum).backward()
             tot += loss.detach() / a.accum; ar += l_ar / a.accum; df += l_df / a.accum   # tensors: no GPU sync per step
+            if ref_model is not None:
+                klsum = klsum + hybrid_loss.last_kl / a.accum
             tok_seen += x.numel() * world
         scaler.unscale_(opt)
         gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -351,7 +368,8 @@ def main():
         el = time.time() - t0
         if step % 25 == 0 or step == 1:
             tot, ar, df = float(tot), float(ar), float(df)
-            print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}) | lr {lr:.2e} | gn {float(gn):.2f} | '
+            klp = f' kl {float(klsum):.4f}' if ref_model is not None else ''
+            print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}{klp}) | lr {lr:.2e} | gn {float(gn):.2f} | '
                   f'{tok_seen / el:,.0f} tok/s | {el / 60:.1f} min', flush=True)
         if (step % a.eval_every == 0 or step == a.steps) and main_proc:
             v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
