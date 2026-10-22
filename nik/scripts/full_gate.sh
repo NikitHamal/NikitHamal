@@ -21,6 +21,9 @@ run() {  # tag bin outdir
   [ -f $o/trap.txt ]     || $PY nik/trap_check.py --model $b > $o/trap.txt 2>&1 &
   [ -f $o/chat.txt ]     || $PY nik/chat_check.py --model $b > $o/chat.txt 2>&1 &
   [ -f $o/stress.json ]  || $PY nik/stress.py --model $b --out $o/stress.json > $o/stress.txt 2>&1 &
+  if [ -f ${EN_DATA:-data/english}/en_heldout.jsonl ]; then
+    [ -f $o/en.json ]    || $PY nik/bench_en.py --model $b --data ${EN_DATA:-data/english} --out $o/en.json > $o/en.txt 2>&1 &
+  fi
 }
 run live $LB /tmp/gate_live
 run $T $B /tmp/gate_$T
