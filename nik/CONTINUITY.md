@@ -72,11 +72,25 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
-## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~13:15 UTC
-**The full handover prompt is `nik/agents/HANDOVER.md`.** Short version: live = m50; main lever = KL anchor
-(`train.py --ref <live.bin> --kl 1.0`); gate = `nik/scripts/full_gate.sh` (ship only if >= live on every row);
-box 1 runs k1/k2/k3 then the record loop (`nik/agents/molab/jobs/loop.sh`, promoted bins -> Kaggle `nik-loop-best`);
-long context parked; no molab automation; owner wants +10 points where there is headroom and no drops.
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~13:55 UTC (session 2)
+**The full handover prompt is `nik/agents/HANDOVER.md`.** Live = m50. Box 1 (sb-7b28...) is alive; jobs in `/tmp/claude`.
+- **k-arms (KL anchor to m50) vs m50, none passed the strict gate:** k3 (p8mxf, 1/3 steps) is the best ever: bench +2,
+  und +1, math +3.5, RW +4, ladder +3; nested -1, reading -2, traps -1, EN reply -1. `scripts/gate_flips.py` (paired
+  fixed/broke + sign test) shows those drops are noise (k3 nested 5 fixed / 6 broke, p=1.0; reading 1/3; traps 1/2),
+  while **nested drops in every arm** (k1 4/12, k2 2/6, kb85 2/8): the polish swaps m50's column method for one-line sums
+  (word-problem thinks in p8m mixes do `250 - 50 = 200` in one line; pure column rows are 2.4% of p8mxf).
+- **Owner asked (card gate-rule-1022b):** keep strict ">= on every row", or "real drops only (sign test p<0.1) + re-check
+  on fresh items". Check their answer before shipping anything.
+- **Running (box 1):** the record loop did r1 (= k3 recipe on a full GPU) and is paused (`/tmp/claude/loop.pause`);
+  `job_soup.sh` gates u23 = (k2+k3)/2 and t23 = TIES(k2,k3) beside r1's gate (each with its own live-dir copy);
+  `queue_k4.sh` then stops the loop and runs k4 (p8mxe = p8mxf + everyday 3% + followup 2%, KL 1.0, seed 11,
+  step-boxed to r1's steps), k4a (same + --kl-all), s4 = (k4+k4a)/2, all gated. `p8mxc` (= p8mxe + colrows 4%) is
+  built next for k5 (counter the nested drift). Log: `/tmp/claude/queue.log`.
+- **This session's fixes (main):** pencil bugs (grouped numbers, signs, clock times; `bfd3511`), plain digits for `1,200`
+  in user turns, persona size facts, `chat_audit.mjs` + `tests/chat/` (everyday held-out: live 2/20; CPU micro-SFT with
+  everyday rows -> 9/20), `everyday.py`, followup-op/en, gate rows `everyday (held-out)` + `follow-ups*`, trap/chat
+  stale-file rerun, add_rows guard import, guard only `*_heldout.json` (followups.json's generic phrases had dropped
+  26,644 persona/memory rows from the first p8mxe build: caught before training).
 
 ## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
 - **Live: m50** = 0.5·v4r2 + 0.5·v4r3 (same-parent blend, both v4f + reduce.py 25-30%). Paired vs v4f: NikBench plain 72.6% (72.2),
