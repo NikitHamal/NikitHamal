@@ -84,6 +84,14 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - The owner may record Kaanchi for Tihar: see `tihar/narration/README.md`.
 - Gotcha: two builds running `fetch_audio.py` at the same time corrupt the shared `.src` downloads. Run audio once, then the other film.
 
+- [x] **Delivered 2026-10-22 (HD):**
+  - `dashain_v3_1080p.mp4` (220 MB, 2:23, Kaanchi voice) and `tihar_v3_1080p.mp4` (213 MB, 2:19, George expressive first cut). Both are 12 Mbps 1080×1920, plus CRF-17 masters of about 560 MB.
+  - Download buttons are in the molab notebook status cell. Backups are in the sandbox at `/workspace/pulled/hd/`; previews were posted in chat.
+  - Captions sit on a soft scrim (`composite.scrim`). `recut.sh` re-composites and re-encodes both films from existing keys and scores in about 8 min.
+- [ ] Next:
+  - When the owner pushes `tihar/narration/all.mp3` (Kaanchi), run `tools/split_take.py` with `FILM_DIR=…/tihar`.
+  - Then on the box: `FILM=tihar python tools/type_render.py`, then `score_tihar.py` → `out/tihar_score.m4a`, then `FILMS=tihar bash recut.sh`.
+
 ## Delivery limits (measured)
 - Connector pushes carry blobs up to about 8 MB; 30 MB fails with HTTP 413. So the repo copy of the film has to be at most about 8 MB (or split per section), and the full-quality master goes to the owner as a chat attachment (`actl asset put`).
 - molab → here: base64 chunks through the marimo execute API (see `nik/docs/LEARNINGS.md`: 700 KB reads, md5 on both ends).
