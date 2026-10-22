@@ -29,6 +29,7 @@ def collect(d):
     r['everyday (held-out)'] = num(f'{d}/everyday.txt', r'score (\d+)/')
     r['money (held-out)'] = num(f'{d}/money.txt', r'score (\d+)/')
     r['mention (held-out)'] = num(f'{d}/mention.txt', r'score (\d+)/')
+    r['owner cases (5 seeds)'] = num(f'{d}/owner.txt', r'score (\d+)/')
     r['follow-ups*'] = num(f'{d}/followups.txt', r'score (\d+)/')   # in-distribution phrases: sanity, not gating
     try:
         for L, v in json.load(open(f'{d}/long.json'))['summary'].items():
