@@ -1,0 +1,5 @@
+[
+ {"name": "owner report 2026-10-22: kati rey", "turns": ["347 + 285 kati hunchha?", "kati rey?"], "want": ["\\b632\\b", "\\b632\\b"]},
+ {"name": "pakka ho", "turns": ["48 x 7 kati?", "pakka ho?"], "want": ["\\b336\\b", "\\b336\\b"]},
+ {"name": "grouped number", "turns": ["1,200 + 300 kati hunchha?"], "want": ["\\b1,?500\\b"]}
+]
