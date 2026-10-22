@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-22T08:56:25Z",
+ "updated": "2026-10-22T15:49:49Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -7,134 +7,115 @@
  "boxes": [
   {
    "name": "box 1",
-   "gpu": "RTX Pro 6000 \u00b7 owner notebook (shared Claude + Local-C)",
-   "job": "Claude: e1 English arm (m50 + 12 min on sftb + 10% English + English wiki replay) -> full_gate + bench_en",
+   "gpu": "RTX Pro 6000 Blackwell \u00b7 owner notebook",
+   "job": "Claude: k-arms (KL anchor to m50): k5c (seed 15) -> soup s5 = (k5+k5b+k5c)/3 -> k7 (k5b + reading/identity contrast rows)",
    "progress": null,
-   "detail": "queue after: Local-C p19 + gates of p17/p18",
-   "eta": "~10:00 UTC"
+   "detail": "sequential train/gate queue (/tmp/claude/queue.log); best so far k5b",
+   "eta": "~16:30 box clock"
   }
  ],
  "scoreboard": {
   "cols": [
    "bench",
-   "reason",
+   "nested",
    "und",
+   "math",
+   "RW items",
+   "reading",
    "traps",
-   "L2",
-   "RW"
+   "everyday"
   ],
   "rows": [
    [
     "m50 (live)",
-    "72.6%",
-    "38/48",
+    "209",
+    "222",
     "19/26",
-    "9/12",
-    "12/12",
-    "1/45"
+    "94%",
+    "25",
+    "5/50",
+    "25/36",
+    "2/20"
    ],
    [
-    "p15 (Local-C, sftb base)",
-    "72.2%",
-    "-",
+    "k5b (repaired mix, seed 14)",
+    "212",
+    "226",
     "19/26",
-    "24/36",
-    "12/12",
-    "2/45"
+    "98%",
+    "32",
+    "3/50",
+    "21/36",
+    "8/20"
    ],
    [
-    "p8m (m50 + p8 mix)",
-    "73.6%",
-    "-",
-    "22/26",
-    "8/12",
-    "12/12",
-    "3/45"
-   ],
-   [
-    "p11 (Local-C, shapes 38%)",
-    "56.3%",
-    "-",
-    "21/26",
-    "7/12",
-    "-",
-    "2/45"
-   ],
-   [
-    "p8 (Local-C)",
-    "72.2%",
-    "38/48",
+    "k5 (repaired mix, seed 13)",
+    "206",
+    "222",
     "18/26",
-    "8/12",
-    "12/12",
-    "-"
+    "98%",
+    "31",
+    "3/50",
+    "22/36",
+    "4/20"
    ],
    [
-    "v4f (previous)",
-    "72.2%",
-    "39/48",
-    "13/26",
-    "9/12",
-    "0/12",
-    "-"
-   ],
-   [
-    "v4r2 (v4f+reduce 25%, lr 2e-4)",
-    "73.6%",
-    "37/48",
-    "15/26",
-    "8/12",
-    "12/12",
-    "-"
-   ],
-   [
-    "v4r3 (v4f+reduce 30%, lr 1.5e-4)",
-    "72.2%",
-    "39/48",
-    "19/26",
-    "9/12",
-    "12/12",
-    "-"
-   ],
-   [
-    "b7 = v4f+0.7(v4r-v4f)",
-    "70.8%",
-    "37/48",
+    "r1 (k3 recipe, full GPU)",
+    "212",
+    "222",
     "18/26",
-    "8/12",
-    "12/12",
-    "-"
+    "98.5%",
+    "31",
+    "4/50",
+    "25/36",
+    "3/20"
    ],
    [
-    "b60",
-    "71.5%",
-    "39/48",
-    "17/26",
-    "8/12",
-    "7/12",
-    "-"
-   ],
-   [
-    "v4r (v4f+reduce)",
-    "70.1%",
-    "32/48",
-    "16/26",
-    "-",
-    "12/12",
-    "-"
-   ],
-   [
-    "v4m",
-    "68.8%",
-    "35/48",
-    "16/26",
-    "9/12",
-    "0/12",
-    "-"
+    "k4 (unrepaired mix)",
+    "205",
+    "212",
+    "19/26",
+    "99%",
+    "29",
+    "6/50",
+    "25/36",
+    "4/20"
    ]
   ]
  },
  "runs": [
+  {
+   "tag": "k5b",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "m50 + p8mxn (repaired mix) KL 1.0, seed 14",
+   "result": "bench 212, nested 226, math 98, RW 32, everyday 8/20, smoke 4/4; traps 21 (-4), reading 3 (-2): systematic"
+  },
+  {
+   "tag": "k5",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "m50 + p8mxn KL 1.0, seed 13",
+   "result": "nested 222 restored (k4: 212); bench 206, traps 22, reading 3"
+  },
+  {
+   "tag": "k4",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "k3 mix + everyday 3% + followup 2%, KL 1.0",
+   "result": "nested 212 (4 fixed / 14 broken): mix taught arithmetic -> bare answer (fixed: fix_mix.py)"
+  },
+  {
+   "tag": "r1",
+   "box": "box 1",
+   "by": "Claude",
+   "status": "rejected",
+   "what": "k3 recipe on a full GPU (record loop round 1)",
+   "result": "bench 212, math 98.5, RW 31; und 18, reading 4; fails ship smoke 3/4 (invented roles)"
+  },
   {
    "tag": "m50",
    "box": "-",
