@@ -1,4 +1,4 @@
-﻿"""Iteration drills: apply a rule step by step (Local-C, issue #9).
+"""Iteration drills: apply a rule step by step (Local-C, issue #9).
 
 The measured gap (issue #9, per-family breakdown of the live model):
     unit (h->min) 7/7 | age 2/2 | unit (km->m) 2/2   -> one-step facts: perfect
@@ -105,24 +105,175 @@ def seq_div(R):
     return seq, nxt, lines, rule, check
 
 
+
+# ---------------------------------------------------------------- no rule stated
+# The benchmark's sequence families give the terms and nothing else ("shrinkhala: 3, 7,
+# 11, 15, ... arko number?"), so the model has to *infer* the rule from the terms.
+# iter.py's families above always STATE the rule ("niyam: har step ma 3 joda hunchha"),
+# which is a different ability - and the reason the benchmark's arithmetic-sequence
+# family is 0/9..0/10 in every model ever built while the iteration families are fine.
+# So: the same generator, but the first line of the trace is the *inference*.
+INFER_FORMS = [
+    'kram: {seq}, ... aru number k hunchha?',
+    'yo kram ko aru k ke ho: {seq}, ...?',
+    'number ko kram dekhe aru number k aauncha: {seq}, ...?',
+    '{seq}, ... yeuta kram ho. aru number k?',
+    'kram ko aru member k ho: {seq}, ...?',
+    'suru dekhi yeuta kram chalirakhyo: {seq}, ... auru k?',
+    'kram: {seq} - aaruniu number k?',
+    'yo number ko kram k ho: {seq}, ...?',
+]
+INFER_PATTERNS = [
+    'yo pattern ko aru number k hunchha: {seq}, ...?',
+    'kram ko kura dekhe aru k aauncha: {seq}, ...?',
+    'yo pattern ma aru number k aauncha: {seq}, ...?',
+    'yo number kram ko aru member k ho: {seq}, ...?',
+]
+
+
+def seq_infer(R):
+    """a, a+d, a+2d, ... with NO rule stated - the trace has to infer d first.
+
+    The inference line is an *equation* on its own ('49 - 43 = 6') so that
+    iter.check() can verify it like every other line of the trace, and the difference
+    is always written positive (the direction is in the steps)."""
+    d = R.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25,
+                  -1, -2, -3, -4, -5, -6, -7, -8])
+    n = R.randint(3, 5)
+    dd = abs(d)
+    lo = 1 + dd * n if d < 0 else 2
+    hi = max(lo + 1, 999 - dd * (n + 1))
+    a = R.randint(lo, hi)
+    seq = [a + d * i for i in range(n)]
+    nxt = a + d * n
+    step = '+' if d > 0 else '-'
+    lines = []
+    for i in range(n - 1):
+        lines.append((f'step{i + 1}', f'{seq[i]} {step} {dd}', seq[i + 1]))
+    lines.append(('aru', f'{seq[-1]} {step} {dd}', nxt))
+    # the inference is the first thing the trace says: the difference, read off the terms
+    hi_t, lo_t = max(seq[0], seq[1]), min(seq[0], seq[1])
+    rule = f'{hi_t} - {lo_t} = {dd}'
+    check = f'{seq[-1]} {step} {dd} = {nxt}, milyo'
+    return seq, nxt, lines, rule, check
+
+
+def seq_infer_mul(R):
+    """a, a*r, a*r^2, ... with NO rule stated - the trace has to infer r first."""
+    a = R.randint(1, 12)
+    r = R.choice([2, 3, 4, 5])
+    n = R.randint(3, 4)
+    seq = [a * r ** i for i in range(n)]
+    nxt = a * r ** n
+    lines = []
+    for i in range(n - 1):
+        lines.append((f'step{i + 1}', f'{seq[i]} x {r}', seq[i + 1]))
+    lines.append(('aru', f'{seq[-1]} x {r}', nxt))
+    rule = f'{seq[1]} / {seq[0]} = {r}'
+    check = f'{seq[-1]} x {r} = {nxt}, milyo'
+    return seq, nxt, lines, rule, check
+
+
 def make(R):
-    kind = R.choice(['add', 'add', 'add', 'mul', 'mul', 'div'])
+    if R.random() < 0.12:
+        return weekday(R)
+    kind = R.choice(['add', 'add', 'add', 'mul', 'mul', 'div',
+                     'infer', 'infer', 'infer_mul'])
     if kind == 'add':
         seq, nxt, lines, rule, check = seq_add(R)
         form = R.choice(FORMS)
     elif kind == 'mul':
         seq, nxt, lines, rule, check = seq_mul(R)
         form = R.choice(PATTERNS)
+    elif kind == 'infer':
+        seq, nxt, lines, rule, check = seq_infer(R)
+        form = R.choice(INFER_FORMS)
+    elif kind == 'infer_mul':
+        seq, nxt, lines, rule, check = seq_infer_mul(R)
+        form = R.choice(INFER_PATTERNS)
     else:
         seq, nxt, lines, rule, check = seq_div(R)
         form = R.choice(PATTERNS)
     user = form.format(seq=_fmt(seq))
     body = '. '.join(f'{lab}: {expr} = {val}' for lab, expr, val in lines)
     think = f'niyam: {rule}. {body}. jaach: {check}'
+    if kind in ('infer', 'infer_mul'):
+        think = f'kram: {rule}. {body}. jaach: {check}'
     ans = f'aru number {nxt} hunchha.'
     return {'cat': 'reason-iter', 'gold': str(nxt),
             'messages': [{'role': 'user', 'content': user},
                          {'role': 'nik', 'content': ans, 'think': think}]}
+
+
+# ---------------------------------------------------------------- the weekday (a modulo)
+# The owner showed the model a real-world paraphrase of a question it answers correctly
+# in the benchmark's exact wording: "aaja sombar ho bhane parsi kun bar hunchha?" came
+# back as pure noise, while the benchmark's phrasing ("aaja sombar ho. 8 din pachhi kun
+# bar?") is answered correctly by the same model.  The benchmark states the day order
+# and asks for the number; the paraphrase states nothing.  So this family teaches the
+# order (in several ways), the wrap-around, and the question asked as a conditional, as
+# a "from Monday", and as a plain "which day".
+#
+# The wording is deliberately not the benchmark's wording: the benchmark writes
+# "bar ko kram number: aaitabar 1 ... sanibar 7", this family says it in other ways and
+# asks in other ways.  The skill has to transfer, the string must not.
+
+DAYS = ['aaitabar', 'sombar', 'mangalbar', 'budhabar', 'bihibar', 'shanibar', 'sanibar']
+
+
+def _day_order_ways(R):
+    return R.choice([
+        'bar ko kram aba bata: ' + ', '.join(f'{d} {i + 1}' for i, d in enumerate(DAYS)) + '.',
+        'aaitabar 1 ho ra aniba 7 ho, beech ma kram milcha. ' + ', '.join(DAYS) + '.',
+        'week ko kram: ' + ', '.join(DAYS) + ' (aaitabar bata sanibar samma).',
+        'har bar ko sankhya chha: ' + ', '.join(f'{i + 1} = {d}' for i, d in enumerate(DAYS)) + '.',
+    ])
+
+
+def _day_question_ways(R, n):
+    """the same question in several ways - that is the point of the family."""
+    return R.choice([
+        f'aaja sombar ho bhane {n} din pachhi kun bar hunchha?',
+        f'sombar bata {n} din pachhi kun bar hunchha?',
+        f'aha {n} din pachhi ko din kun ho (aaja sombar ho)?',
+        f'aaj ko din sombar ra {n} din pachhi ko parko din bata.',
+        f'sombar diye {n} din gatayo, tyo din kun ho?',
+    ])
+
+
+def weekday(R):
+    """The weekday arithmetic: the order is stated, the wrap-around is the skill."""
+    n = R.randint(6, 13)          # always at least one full week, so the wrap is taught
+    order = _day_order_ways(R)
+    q = _day_question_ways(R, n) + ' ' + order
+    # today is sombar (the 2nd day), n days later: the 0-based offset is 1 + n, and
+    # every full week comes off.  No '%' in the trace: the audit's equation checker
+    # does not know the modulo operator.
+    # today is sombar (the 2nd day): the unwrapped number is 2 + n, and every full
+    # week comes off.  No '%' in the trace (the audit's equation checker does not know
+    # the modulo) and no zero (the iter test wants positive terms).
+    x = 2 + n
+    steps = [('kram', f'2 + {n}', x)]
+    y = x
+    while y > 7:
+        steps.append(('kram', f'{y} - 7', y - 7))
+        y -= 7
+    steps.append(('kram', f'{x} - {y}', x - y))
+    num = y
+    idx = num - 1
+    name = DAYS[idx]
+    lines = steps
+    # no '=' in the rule: the arithmetic checker parses every "a = b" in the trace
+    rule = f'sombar 2 ho, {n} din pachhi ko kram'
+    check = f'kram {num} milyo'
+    ans = R.choice([f'{name} hunchha (kram {num}).', f'kun bar: {name}, kram {num}.',
+                    f'parsi ko din {name} ho, kram {num}.'])
+    return {'cat': 'reason-weekday', 'gold': str(num),
+            'messages': [{'role': 'user', 'content': q},
+                         {'role': 'nik', 'content': ans,
+                          'think': f'niyam: {rule}. ' +
+                                   '. '.join(f'{lab}: {expr} = {val}' for lab, expr, val in lines) +
+                                   f'. jaach: {check}'}]}
 
 
 def check(row):

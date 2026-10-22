@@ -1,0 +1,24 @@
+old: nik/web/model/logs/v4c
+new: nik/web/model/logs/v4f4
+
+  [PASS] understanding                          19/26 -> 20/26
+  [PASS] stress (strict)                        64/103 -> 66/103
+  [FAIL] persona                                1.0 -> 0.8571428571428571
+  [PASS] math                                   0.945 -> 0.94
+  [SKIP] bench overall                          NOT COMPARABLE: the two logs share only 13/280 items (different --n item sets). Use compare.py (paired) on one dumped item set, or bench.py --nested-items.
+  [SKIP] held-out word families off zero        NOT COMPARABLE: the two logs share only 13/280 items (different --n item sets). Use compare.py (paired) on one dumped item set, or bench.py --nested-items. (indicative only: 0 -> 2)
+  [SKIP] reason iteration families off zero     NOT COMPARABLE: the two logs share only 13/280 items (different --n item sets). Use compare.py (paired) on one dumped item set, or bench.py --nested-items. (indicative only: 0 -> 2)
+  [SKIP] no family fell back to zero            NOT COMPARABLE: the two logs share only 13/280 items (different --n item sets). Use compare.py (paired) on one dumped item set, or bench.py --nested-items.
+  [PASS] ladder L1 (one step)                   0 -> 11/12  operand-coverage 1.0
+  [PASS] ladder L2 (two steps)                  0 -> 1/12  operand-coverage 0.695
+  [PASS] ladder L3 (intermediate given)         0 -> 11/12  operand-coverage 1.0
+  [PASS] ladder L4 (chain)                      0 -> 0/12  operand-coverage 0.646
+
+VERDICT: CANNOT DECIDE
+  (a required gate could not be compared - this is NOT a failure of the candidate;
+   re-run with the same --n on both sides, or with bench.py --nested-items.)
+
+per-family (the aggregate hides this):  [INDICATIVE: the two logs do not share their item set]
+   6/6  -> 10/10  reason/age comparison  <-- moved
+   0/10 ->  1/7   reason/arithmetic sequence  <-- moved
+   0/10 ->  5/10  reason/geometric pattern  <-- moved

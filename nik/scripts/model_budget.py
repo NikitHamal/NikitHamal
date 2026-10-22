@@ -1,6 +1,6 @@
 """Browser budget calculator for NikLM presets (Local-C, issue #9).
 
-The 25 MB cap applies to the *model file* only. What a browser tab actually pays is:
+The 30 MB cap applies to the *model file* only. What a browser tab actually pays is:
 
     file bytes  +  KV cache bytes  +  activation buffers
 
@@ -34,11 +34,16 @@ PRESETS = {
     'nik-0.1':   dict(d=384, n_unique=12, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     'nik-0.1r3': dict(d=384, n_unique=12, n_repeat=3, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
     'nik-0.1w': dict(d=384, n_unique=14, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
+    # Local-C (issue #9): the owner raised the cap to 30 MB -> depth (nik-0.1x) and width
+    # (nik-0.1v) become possible.  The model fails at composing two steps, so capacity
+    # for that is what the extra budget buys.
+    'nik-0.1x': dict(d=384, n_unique=17, n_repeat=2, heads=12, kv_heads=4, ffn=1024, ctx=512, abacus=20),
+    'nik-0.1v': dict(d=448, n_unique=12, n_repeat=2, heads=14, kv_heads=4, ffn=1216, ctx=512, abacus=20),
     'nik-0.2f':  dict(d=640, n_unique=16, n_repeat=2, heads=10, kv_heads=2, ffn=1792, ctx=512, abacus=20),
     'nik-0.2t':  dict(d=640, n_unique=16, n_repeat=2, heads=10, kv_heads=2, ffn=1792, ctx=512, abacus=20),
 }
 VOCAB = 4096
-FILE_CAP_MB = 25.0
+FILE_CAP_MB = 30.0        # owner raised the cap from 25 MB (2026-10-21)
 # Chinchilla (Hoffmann et al. 2022): compute-optimal token budget ~= 20 tokens/param.
 CHINCHILLA_TOKENS_PER_PARAM = 20.0
 # Measured on molab RTX PRO 6000, bs 128, stage A, 20.5M params: 292 012 tok/s.
@@ -125,8 +130,8 @@ def gpu_minutes(b: dict, tokens: float) -> float:
 def fit(preset: str, cap_mb: float = FILE_CAP_MB, fmt: str = 'auto') -> dict:
     """Largest number of *unique blocks* of `preset` that still fits the file cap.
 
-    The 25 MB cap is a bytes cap, so a preset can be scaled until the file reaches
-    it.  nik-0.2t as specified (16 unique blocks) uses only 20.79 of the 25 MB,
+    The 30 MB cap is a bytes cap, so a preset can be scaled until the file reaches
+    it.  nik-0.2t as specified (16 unique blocks) uses only 20.79 of the 30 MB,
     i.e. it leaves budget on the table: the same shape with more blocks fits more
     parameters for free (at the cost of FLOPs per token).
     """
@@ -161,7 +166,7 @@ def main():
     ap.add_argument('--fmt', default='auto', choices=['auto', 'int8', 'ternary', 'fp32'])
     ap.add_argument('--tokens', type=float, default=3e8, help='token budget for the rate columns')
     ap.add_argument('--fit', action='store_true',
-                    help='largest block count of each preset that still fits the 25 MB file cap')
+                    help='largest block count of each preset that still fits the 30 MB file cap')
     ap.add_argument('--json', action='store_true')
     a = ap.parse_args()
 
@@ -200,13 +205,13 @@ def main():
     print()
     for b in rows:
         flag = 'OK ' if b['file_bytes'] <= FILE_CAP_MB * 1e6 else 'OVER'
-        print(f'{b["preset"]:11s} file {flag} ({b["file_bytes"] / 1e6:.2f} MB / 25 MB cap) | '
+        print(f'{b["preset"]:11s} file {flag} ({b["file_bytes"] / 1e6:.2f} MB / 30 MB cap) | '
               f'Chinchilla-optimal {b["chin_tokens"] / 1e9:.3f}B tokens '
               f'({gpu_minutes(b, b["chin_tokens"]):.0f} GPU-min) | '
               f'RAM file+KV {b["ram_with_kv_bytes"] / 1e6:.1f} MB | '
               f'f32 fallback would need {b["ram_f32_weights_bytes"] / 1e6:.0f} MB')
     if a.fit:
-        print('\nlargest block count that still fits 25 MB (the cap is a *bytes* cap):')
+        print('\nlargest block count that still fits 30 MB (the cap is a *bytes* cap):')
         for b in rows:
             if 'fit_params' not in b:
                 continue

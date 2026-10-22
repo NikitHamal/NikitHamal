@@ -93,8 +93,15 @@ def translate(R):
         a = R.choice(['"{t}"', 'english ma: "{t}"', '"{s}" ko english "{t}" ho.']).format(t=en, s=ne)
         gold = en.lower().rstrip('.')
     tense_ne = {'cont': 'aahile gardai gareko (continuous)', 'hab': 'sadhai garne (habitual)', 'past': 'bhutkaal (past)'}[info['tense']]
+    # the trace must show the *mapping*, not just the English side: the model answered
+    # "we are reading" with "uni padhdai chhin" (the wrong pronoun and the wrong
+    # register), so the subject and the auxiliary are written out.
+    ne_subj = info['subj']
+    en_subj = {k: e for _, e, k in SUBJ}[info['key']]
+    aux = CONT_AUX[info['key']]
     return {'kind': 'skill-translate', 'gold': gold, 'messages': [{'role': 'user', 'content': q},
-            {'role': 'nik', 'content': a, 'think': f"kartaa: {info['subj']}, kriya: {info['verb']}, kaal: {tense_ne}."}]}
+            {'role': 'nik', 'content': a, 'think': f"kartaa: {en_subj} -> {ne_subj}, "
+                    f"sahayak: {aux}, kriya: {info['verb']}, kaal: {tense_ne}."}]}
 
 
 def negate(R):

@@ -33,6 +33,53 @@ sys.path.insert(0, os.path.join(ROOT, 'nik', 'scripts'))
 from chain_mix import eval_prompts, norm, persona_rows, row_prompt  # noqa: E402
 
 
+def persona_rows_aug(n, seed):
+    """Identity/persona rows, *augmented* so there are enough distinct ones.
+
+    The identity facts are a fixed set (~100 hand-written answers), so asking for 40k
+    rows of them without the augmentation never terminates and returns ~2.4k.  The
+    augmentation (data/teacher/augment.py, the same one make_sft2.py uses) varies the
+    surface, which is exactly what the persona gate needs: the probe asks
+    "nikit hamal ko ho?" and the model has to answer it *in its own words* and still
+    contain the facts.
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('gen_sft_mod',
+                                                  os.path.join(ROOT, 'nik', 'data', 'gen_sft.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    sys.path.insert(0, os.path.join(ROOT, 'nik', 'data', 'teacher'))
+    from augment import augment_example
+    R = random.Random(seed)
+    rows, seen = [], set()
+    tries = 0
+    while len(rows) < n and tries < n * 10:
+        tries += 1
+        g = mod.identity if R.random() < 0.5 else mod.nikit
+        e = augment_example(g(), R, 0.5)
+        key = e['messages'][0]['content']
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append({'cat': e.get('cat', 'identity'), 'gold': e.get('gold'),
+                     'messages': e['messages']})
+    return rows
+
+
+def probe_guard():
+    """The eval_understand probes must stay out of the training rows.
+
+    data/teacher/build.py has this guard for the teacher rows; the named families are
+    built here, so they need it too (the leak audit found 132 exact hits in p11).
+    """
+    import importlib.util
+    here = os.path.join(ROOT, 'nik', 'data', 'teacher')
+    spec = importlib.util.spec_from_file_location('teacher_build', os.path.join(here, 'build.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod._probe_guard()
+
+
 def shape_rows(n, seed):
     """The *shapes* - the rows that pay the forgetting tax back.
 
@@ -57,6 +104,99 @@ def shape_rows(n, seed):
         else:
             d = itgen.make(R)
         rows.append({'cat': d['cat'], 'gold': d['gold'], 'messages': d['messages']})
+    return rows
+
+
+
+def family_rows(spec, seed):
+    """Rows from the named teacher families, by name.
+
+    Why (issue #9): a polish mix built from a *uniform slice* of the base mix trades
+    the bench against the understanding, because the base mix is 36% arithmetic and the
+    understanding probes are reading, memory, translation and grammar (the
+    understand/read/skills/vocab/correct families).  P3 (an 8% slice) held the bench
+    (75.3%) with understanding 16/26; P4 (a 25% slice) reached understanding 20/26
+    with the bench at 73.3%.  So the mix has to be composed from *named families*:
+    the shapes (the bench and the composition), the understanding families, the
+    arithmetic (the one-step, which the stress suite checks), and the everyday rows.
+
+    spec: {'roles': 80000, 'frame': 40000, 'iter': 20000, 'math': 60000, ...}
+    """
+    import importlib.util
+    teacher = os.path.join(ROOT, 'nik', 'data', 'teacher')
+    sys.path.insert(0, teacher)
+    R = random.Random(seed)
+    rows = []
+
+    def load(name):
+        spec_ = importlib.util.spec_from_file_location('fam_' + name, os.path.join(teacher, name + '.py'))
+        mod = importlib.util.module_from_spec(spec_)
+        spec_.loader.exec_module(mod)
+        return mod
+
+    # The named families are generated *here*, not through data/teacher/build.py, so
+    # they do not pass its probe guard.  The leak audit found 132 exact eval_understand
+    # hits in the p11 mix (the shipped mixes have 0): the families used the probes'
+    # own question forms ("ma aile kaha baschhu?", '"kalam" ko plural?').  The guard
+    # drops those rows here, exactly as build.py does.
+    leaks = probe_guard()
+
+    def take(n, fn):
+        for _ in range(n):
+            d = fn(R)
+            if d and d.get('messages'):
+                row = {'cat': d.get('cat', 'family'), 'gold': d.get('gold'),
+                       'messages': d['messages']}
+                if leaks(row):
+                    continue
+                rows.append(row)
+
+    for name, n in spec.items():
+        if not n:
+            continue
+        if name == 'roles':
+            import roles
+            take(n, roles.sample)
+        elif name == 'frame':
+            import frame
+            take(n, frame.sample)
+        elif name == 'reduce':
+            import reduce
+            take(n, lambda r: reduce.sample(r))
+        elif name == 'iter':
+            import iter as itgen
+            take(n, itgen.make)
+        elif name == 'math':
+            mod = load('math_gen')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'colmath':
+            mod = load('colmath')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'understand':
+            m1 = load('understand')
+            m2 = load('understand2')
+            for i in range(n):
+                m = m1 if i % 2 == 0 else m2
+                d = m.sample(R)
+                row = {'cat': d.get('cat', 'understand'), 'gold': d.get('gold'),
+                       'messages': d['messages']}
+                if leaks(row):
+                    continue
+                rows.append(row)
+        elif name == 'read':
+            mod = load('read')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'skills':
+            mod = load('skills')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'vocab':
+            mod = load('vocab')
+            take(n, lambda r: mod.sample(r))
+        elif name == 'correct':
+            mod = load('correct')
+            take(n, lambda r: mod.sample(r))
+        else:
+            raise SystemExit(f'unknown family: {name}')
     return rows
 
 
@@ -97,6 +237,9 @@ def main():
     ap.add_argument('--name', required=True)
     ap.add_argument('--persona', type=int, default=20000)
     ap.add_argument('--chat', type=int, default=30000)
+    ap.add_argument('--families', default='',
+                    help='comma-separated name:count list of named teacher families, '
+                         'e.g. roles:80000,frame:40000,understand:40000,math:60000')
     ap.add_argument('--shapes', type=int, default=0,
                     help='rows of the named data shapes (the money scene, the role '
                          'family, the iteration chains) - a polish stage must be '
@@ -120,13 +263,23 @@ def main():
             continue
         base.append(line)
     keep = [x for x in base if R.random() < a.share]
-    extra = persona_rows(a.persona, a.seed + 5)
+    extra = persona_rows_aug(a.persona, a.seed + 5)
     extra = [r for r in extra if norm(row_prompt(r)) not in banned]
     print(f'  persona rows: {len(extra)} of {a.persona} requested '
           f'(the identity facts are a fixed set - the surface variety comes from the '
           f'other generators)', flush=True)
     for r in extra:
         keep.append(json.dumps(r, ensure_ascii=False))
+    if a.families:
+        spec = {}
+        for part in a.families.split(','):
+            k, v = part.split(':')
+            spec[k.strip()] = int(v)
+        fam = family_rows(spec, a.seed + 17)
+        fam = [r for r in fam if norm(row_prompt(r)) not in banned]
+        for r in fam:
+            keep.append(json.dumps(r, ensure_ascii=False))
+        print(f'+ {len(fam)} rows from the named families: {spec}', flush=True)
     if a.shapes:
         sh = shape_rows(a.shapes, a.seed + 13)
         sh = [r for r in sh if norm(row_prompt(r)) not in banned]

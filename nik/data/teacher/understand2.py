@@ -26,6 +26,9 @@ def long_memory(R):
     """6-10 turns. Facts are spread out, there is small talk in between, and sometimes the
     user corrects a fact; the final question needs the *latest* value."""
     n, p, f, h, j = pick(R, NAMES), pick(R, PLACES), pick(R, FOODS), pick(R, HOBBIES), pick(R, JOBS)
+    thing = pick(R, ['ramalaxhan', 'nepali gana', 'pari jatra', 'gajalu', 'surajko garmi',
+                     'kutumba sanga ramailo samay', 'pahadi yatra', 'aafno room', 'kaphi',
+                     'kukur ko awaj', 'phul ko rang', 'nepali film'])
     pet_np, _ = pick(R, PETS)
     pet_name = pick(R, ['tommy', 'kale', 'bhunte', 'lucky', 'chinu', 'moti'])
     sib = R.randint(1, 4)
@@ -39,6 +42,12 @@ def long_memory(R):
         'kaam': (pick(R, [f'ma {j} hu.', f'ma {j} ko kaam garchhu.', f'pesa le ma {j} hu.']), f'{j} ko kaam mahattwapurna chha.', j),
         'pet': (f'mero euta {pet_np} chha, usko naam {pet_name} ho.', f'{pet_name} ramro naam ho! {pet_np} sanga khelna ramailo hunchha.', pet_name),
         'sib': (pick(R, [f'mero {sib} jana daju bhai didi bahini chhan.', f'hami ghar ma {sib} jana sibling chhau, ma bahek.']), f'{sib} jana! ghar ma ramailo hola.', str(sib)),
+        # a *general* favourite thing (not only food): the probe asks "maile kun kura
+        # dherai man parchha bhaneko?" and the model answered with the wrong item, so the
+        # general question form is taught with many different items.
+        'kura': (pick(R, [f'malai {thing} dherai man parchha.', f'mero man parne kura {thing} ho.',
+                          f'{thing} lai maile dherai pasand cha.', f'ma {thing} ko banda ho.']),
+                 f'{thing} ramro kura ho!', thing),
     }
     keys = R.sample(list(facts), R.randint(3, 5))
     small = [('aaja mausam kasto chha hola?', 'ma mausam herna sakdina, tara jhyal bata heryo bhane thaha hunchha.'),
@@ -66,8 +75,17 @@ def long_memory(R):
         gold = n2
     ask = {'naam': (pick(R, ['mero naam k ho?', 'mero naam yaad chha?', 'ma ko hu, bhana ta?', 'maile mero naam k bhaneko thiye?']), f'tapai ko naam {gold} ho.'),
            'thau': (pick(R, ['ma aile kaha baschhu?', 'mero ghar kata ho?', 'ma kun sahar ma chhu?', 'maile kaha basne bhaneko?']), f'tapai aile {gold} ma basnuhunchha.'),
-           'khana': (pick(R, ['malai sabai bhanda kun khana man parchha?', 'mero favourite khana k ho?', 'maile kun khana man parchha bhaneko thiye?']),
+           'khana': (pick(R, ['malai sabai bhanda kun khana man parchha?', 'mero favourite khana man parchha?',
+                              'maile kun khana man parchha bhaneko thiye?']),
                      f'tapailai {gold} sabai bhanda man parchha.'),
+           # the general form: "which thing do I like a lot" - the wording varies, the
+           # skill is the same: name the item the user said they liked.
+           'kura': (pick(R, ['maile kun kura dherai man parchha bhaneko thiye?',
+                             'kun kura lai maile dherai man parchha?',
+                             'maile kun kura man parchha bhaneko?',
+                             'maile kun kura dherai pasand garchha bhaneko?',
+                             'maile kun kura ramro lagcha bhaneko thiye?']),
+                    f'tapailai {gold} dherai man parchha.'),
            'ruchi': (pick(R, ['ma phursad ma k garchhu?', 'mero hobby k ho?', 'khali samaya ma ma k garna rumaauchhu?']), f'tapai phursad ma {gold} rumaaunuhunchha.'),
            'kaam': (pick(R, ['ma k kaam garchhu?', 'mero pesa k ho?', 'maile aafno kaam k bhaneko thiye?']), f'tapai {gold} hunuhunchha.'),
            'pet': (pick(R, ['mero pet ko naam k ho?', f'mero {pet_np} ko naam yaad chha?']), f'tapai ko {pet_np} ko naam {gold} ho.'),
@@ -78,7 +96,7 @@ def long_memory(R):
         q = 'ahile samma mero barema timi lai k k thaha chha?'
         bits = {'naam': f'naam {facts["naam"][2] if target != "naam" else gold}', 'thau': f'basne thau {gold if target == "thau" else p}',
                 'khana': f'man parne khana {f}', 'ruchi': f'ruchi {h}', 'kaam': f'kaam {j}', 'pet': f'{pet_np} ko naam {pet_name}',
-                'sib': f'{sib} jana daju bhai didi bahini'}
+                'sib': f'{sib} jana daju bhai didi bahini', 'kura': f'man parne kura {thing}'}
         a = 'tapai le bhannu bhayeko anusar: ' + ', '.join(bits[k] for k in keys) + '.'
         gold = bits[keys[0]].split()[-1]
     m += [{'role': 'user', 'content': q}, {'role': 'nik', 'content': a}]
@@ -90,11 +108,54 @@ def not_mentioned(R):
     n, p = pick(R, NAMES), pick(R, PLACES)
     told = [f'mero naam {n} ho', f'ma {p} ma baschhu']
     asks = [('mero umer kati ho?', 'umer'), ('malai kun khana man parchha?', 'man parne khana'), ('ma k kaam garchhu?', 'kaam'),
-            ('mero bahini ko naam k ho?', 'bahini ko naam')]
+            ('mero bahini ko naam k ho?', 'bahini ko naam'),
+            # the relative's name, asked right after the user's own name: the model
+            # invented one ("tapai ko buwa ko naam binod ho"), so the answer has to say
+            # plainly that it does not know.
+            ('mero ba ko naam k ho?', 'ba ko naam'),
+            ('mero mama ko naam k tha?', 'mama ko naam'),
+            ('mero sasu ko naam k ho?', 'sasu ko naam'),
+            ('mero daju ko naam k ho?', 'daju ko naam'),
+            ('mero kukur ko naam k ho?', 'kukur ko naam'),
+            ('mero bagal ko naam k ho?', 'bagal ko naam')]
     q, what = pick(R, asks)
-    a = f'tapai le aafno {what} ko barema ahile samma bhannu bhayeko chhaina. tapai ko naam {n} ho ra tapai {p} ma basnuhunchha bhanne matra thaha chha. bhannus na!'
+    a = f'tapai le aafno {what} ko barema ahile samma bhannu bhayeko chhaina. malai {what} thahudaina. tapai ko naam {n} ho ra tapai {p} ma basnuhunchha bhanne matra thaha chha. bhannus na!'
     return ex('. '.join(told) + '. ' + q, a, what.split()[-1], 'honest',
               f'user le naam ({n}) ra thau ({p}) matra bhannu bhayo. {what} bhaneko chhaina, tyasaile anuman nagarne.')
+
+
+def false_premise(R):
+    """The user claims something about the model that never happened.
+
+    The trap probe: "hijo nikit sanga football kheleko thiye." and the model answered
+    "ok, yaad gare." - it accepted a memory that is not its own.  The right reply is to
+    correct the premise, not to accept it and not to refuse to help.
+    """
+    n = pick(R, NAMES)
+    # (the claim, the reply, the token the answer must carry - None when the answer
+    # corrects the premise with a true fact instead of a denial)
+    claims = [
+        ('hijo {n} sanga football kheleko thiye.',
+         'ma football kheleko chhaina, tara khelna ramro lagan hunchha!', 'chhaina'),
+        ('{n} le mero gamera khabana khaayo.',
+         'ma gamera khaeko chhaina, tara ramro khabana khana man parchha!', 'chhaina'),
+        ('timi mero chacha ho.',
+         'ma tapailai chacha maanidaina, tara sathi jasto sanga kura garne ma man parchha!', None),
+        ('{n} ramailo sanga party garda aauchha.',
+         'ma party ma aana chhaina, tara ramailo sanga kura garne ma man parchha.', 'chhaina'),
+        ('{n} le mero photograph khaayo.',
+         'ma kahile photo khayeko chhaina, tara ramro photo chaiyo.', 'chhaina'),
+        ('{n} sange cricket khelna gayo thiye.',
+         'ma cricket khela chhaina, tara khelna chahdina kura garu.', 'chhaina'),
+        ('{n} ko umar 30 barsha ko thiyo.',
+         'mero umar {u} barsha ko ho.', None),
+    ]
+    claim, reply, gold = pick(R, claims)
+    age = R.randint(18, 40)
+    q = claim.format(n=n, u=age)
+    a = reply.format(n=n, u=age)
+    return ex(q, a, gold, 'honest-false-premise',
+              f'user le mero barema ye bhannu bhayo, tara yo fact mero hoina. sahi fact ma rahnu.')
 
 
 def yes_no(R):
@@ -225,7 +286,7 @@ def instruct_lang(R):
 
 
 FAMILIES = [(long_memory, 4), (not_mentioned, 1.5), (yes_no, 2), (english_qa, 3), (english_grammar, 2.5), (list_ops, 2.5),
-            (sentiment, 1.5), (instruct_lang, 1.5)]
+            (sentiment, 1.5), (instruct_lang, 1.5), (false_premise, 1.5)]
 
 
 def sample(R):

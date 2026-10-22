@@ -92,6 +92,44 @@ def _row(cat, gold, user, roles, steps, ans, check):
                          {'role': 'nik', 'content': ans, 'think': think}]}
 
 
+# --------------------------------------------------------------------------- the role labels
+# Why (Local-C, issue #9): the p14 arm read the benchmark's held-out word items with
+# *invented* role labels ("role: prashna = 11, share = 4" for "kaksha ma 11 keta ra 47
+# keti chhan. 6 jana anupasthit chhan") and bound the numbers wrongly (47 read as 4).
+# The reason is visible in the data: the role family had a *fixed set of nine labels*
+# ("paisa", "wata", "ek ko", "rupiya", "eko", "duko", "suru", "diyo", "aayo"), so the
+# model learned to bind *those* nouns and, on a story with other nouns, it invents a
+# label and picks the wrong number.  The skill is "bind by position and by meaning",
+# so the labels have to be many and the binding line has to say which number belongs
+# to which role - in the order the roles appear in the story.
+#
+# The benchmark's own role words stay held out (the leak test bans them): these are
+# different nouns for the same roles, so the model has to learn the *binding*, not the
+# word.
+
+ROLE_POOL = {
+    'count_of_things': ['wata', 'chij', 'joga', 'bimā', 'kura', 'danda', 'guchha', 'pheri',
+                        'kucho', 'tilo', 'moti', 'gatta', 'rupiya', 'paisa', 'taka', 'jhar'],
+    'count_of_people': ['katha', 'man', 'macha', 'loka', 'jana', 'bhai', 'bahini', 'ghar',
+                        'parivar', 'dost', 'sathi', 'premik', 'kura', 'buddhi', 'guru'],
+    'money': ['rupaya', 'paisa', 'taka', 'jhar', 'bighya', 'kuri', 'panas', 'aksh',
+              'rupai', 'mudra', 'dhan', 'bhaji', 'kharcha', 'jira'],
+    'price': ['ek ko', 'duko', 'per', 'each', 'matra', 'bhar', 'daam', 'kimmat', 'mol',
+              'bhav', 'unit', 'ekdam', 'rayat'],
+    'distance': ['gaj', 'meter', 'kilometer', 'fit', 'yojana', 'duru', 'doori', 'gat',
+                 'parikrama', 'managat'],
+    'time': ['ghanta', 'minit', 'second', 'din', 'hafte', 'mahina', 'barsa', 'kalam',
+             'bepar', 'samay'],
+    'part': ['aadha', 'baki', 'ardh', 'thoda', 'baddo', 'baghya', 'hisso'],
+}
+
+
+def _role(R, kind):
+    """a role label for this kind - the pool is wide, so the model learns the binding
+    and not the word."""
+    return R.choice(ROLE_POOL[kind])
+
+
 # --------------------------------------------------------------------------- scenes
 def scene_buy_then_left(R):
     """had M, bought N things at P each -> left.  (two steps, intermediate carried)"""
@@ -125,7 +163,8 @@ def scene_buy_then_left(R):
     else:
         user = (f'mero sanga {money} rupiya thiyo. {price} rupiya ko {thing} {count} wata kinyo. '
                 f'{dis} aba kati rupiya bachyo?')
-    roles = [('paisa', money), ('wata', count), ('ek ko', price)]
+    roles = [(_role(R, 'money'), money), (_role(R, 'count_of_things'), count),
+             (_role(R, 'price'), price)]
     steps = f'{count} x {price} = {cost}; {money} - {cost} = {left}'
     ans = R.choice([f'aba {left} rupiya baki chha.', f'{left} rupiya baki hunchha.',
                     f'baki {left} rupiya cha.', f'aba {left} rupiya bachyo.'])
@@ -160,7 +199,9 @@ def scene_two_prices(R):
     else:
         user = (f'{q1} {u1} {f1} {p1} rupiya ko ra {q2} {u2} {f2} {p2} rupiya ko kinyo. '
                 f'{note} rupiya diye. {dis} kati rupiya bachyo?')
-    roles = [('rupiya', note), ('eko', q1), ('ek ko', p1), ('duko', q2), ('ek ko', p2)]
+    roles = [(_role(R, 'money'), note), (_role(R, 'count_of_things'), q1),
+             (_role(R, 'price'), p1), (_role(R, 'count_of_things'), q2),
+             (_role(R, 'price'), p2)]
     steps = (f'{q1} x {p1} = {p1 * q1}; {q2} x {p2} = {p2 * q2}; '
              f'{p1 * q1} + {p2 * q2} = {total}; {note} - {total} = {change}')
     ans = R.choice([f'aba {change} rupiya bachyo.', f'{change} rupiya baki chha.',
@@ -196,7 +237,8 @@ def scene_give_away(R):
     else:
         user = (f'{n} sanga {start} wata {thing} thiyo. {gave} wata bachhayo. '
                 f'ani {got} wata jamma paryo. {dis} aba kati wata chha?')
-    roles = [('suru', start), ('diyo', gave), ('aayo', got)]
+    roles = [(_role(R, 'money'), start), (_role(R, 'count_of_things'), gave),
+             (_role(R, 'count_of_things'), got)]
     steps = f'{start} - {gave} = {start - gave}; {start - gave} + {got} = {now}'
     ans = R.choice([f'aba {now} wata {thing} chha.', f'{now} wata baki cha.',
                     f'jamma {now} wata {thing} chhan.'])
@@ -526,20 +568,48 @@ def scene_nested_expr(R):
     b = _q(R, 2, 9)
     c = _q(R, 2, 9)
     inter = b * c
-    total = a - inter
-    shape = R.randrange(4)
-    if shape == 0:
-        user = f'{a} - {b}*{c} = ?'
-    elif shape == 1:
-        user = f'{a} - ({b}*{c}) = ?'
-    elif shape == 2:
-        user = f'{a} bata {b} x {c} ghatau = ?'
-    else:
-        user = f'{a} - ({b} guneko {c}) = ?'
     roles = [('a', a), ('b', b), ('c', c)]
-    steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
-    ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
-    return _row('roles-nested', str(total), user, roles, steps, ans, f'{total} + {inter} = {a}')
+    shape = R.randrange(8)
+    if shape in (0, 1, 2, 3):
+        # the subtraction form (the ladder's L2 shape, in held-out surfaces)
+        total = a - inter
+        if shape == 0:
+            user = f'{a} - {b}*{c} = ?'
+        elif shape == 1:
+            user = f'{a} - ({b}*{c}) = ?'
+        elif shape == 2:
+            user = f'{a} bata {b} x {c} ghatau = ?'
+        else:
+            user = f'{a} - ({b} guneko {c}) = ?'
+        steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
+        ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
+        check = f'{total} + {inter} = {a}'
+    else:
+        # the *multiplication* forms: the bench's nested-multiplication families
+        # (mul2x2 44%, mul3x2 38% - the weakest arithmetic the model has) are the
+        # same composition skill in a different surface, so the same trace teaches it.
+        if shape == 4:
+            total = a * b * c
+            user = f'{a} x {b} x {c} = ?'
+            steps = f'{a} x {b} = {a * b}; {a * b} x {c} = {total}'
+            check = f'{total} / {a * b} = {c}'
+        elif shape == 5:
+            total = (a + b) * c
+            user = f'({a} + {b}) x {c} = ?'
+            steps = f'{a} + {b} = {a + b}; {a + b} x {c} = {total}'
+            check = f'{total} / {c} = {a + b}'
+        elif shape == 6:
+            total = a * (b + c)
+            user = f'{a} x ({b} + {c}) = ?'
+            steps = f'{b} + {c} = {b + c}; {a} x {b + c} = {total}'
+            check = f'{total} / {a} = {b + c}'
+        else:
+            total = a - b * c
+            user = f'{a} - {b} x {c} = ?'
+            steps = f'{b} x {c} = {inter}; {a} - {inter} = {total}'
+            check = f'{total} + {inter} = {a}'
+        ans = R.choice([f'{total}.', f'uttar {total}.', f'{total} ho.'])
+    return _row('roles-nested', str(total), user, roles, steps, ans, check)
 
 
 def scene_chain_expr(R):
@@ -564,9 +634,73 @@ def scene_chain_expr(R):
     return _row('roles-chain', str(total), user, roles, steps, ans, f'{total} + {inter} = {a}')
 
 
+
+def scene_english_away(R):
+    """English "had N, M flew away" -> N - M.  (The understanding probe that is lost:
+    "Asha had 12 balloons and 5 flew away. How many does she have now?" - the model
+    *adds* them, so the direction of the operation is not read.)"""
+    n = R.choice(['Asha', 'Ram', 'Sita', 'Gita', 'Maya', 'Bikash', 'Nabin', 'Rekha',
+                   'Kiran', 'Asha', 'Suresh', 'Anita', 'Bishal', 'Manisha'])
+    # 'apples' is the benchmark's own noun (t=6) - the leak test caught it here.
+    thing = R.choice(['balloons', 'candies', 'stickers', 'marbles', 'cookies',
+                      'pencils', 'posters', 'books', 'flowers', 'cups', 'plates',
+                      'biscuits', 'kites', 'badges'])
+    start = _q(R, 6, 40)
+    away = _q(R, 2, start - 1)
+    left = start - away
+    shape = R.randrange(4)
+    if shape == 0:
+        user = f'{n} had {start} {thing} and {away} flew away. How many does {n} have now?'
+    elif shape == 1:
+        user = f'{n} had {start} {thing}. {away} of them were given away. How many are left?'
+    elif shape == 2:
+        user = f'{n} bought {start} {thing} and sold {away} of them. How many does {n} have now?'
+    else:
+        user = f'{n} had {start} {thing} but lost {away}. How many does {n} have now?'
+    roles = [('suru', start), ('gayo', away)]
+    steps = f'{start} - {away} = {left}'
+    ans = R.choice([f'{n} has {left} {thing} now.', f'{left} {thing} are left.',
+                    f'{n} has {left} now.'])
+    return _row('roles-english-away', str(left), user, roles, steps, ans,
+                f'{left} + {away} = {start}')
+
+
+# the evaluation probe's own word ('kathmandu') is NOT here - the leak test caught it
+# on the first run: the probe must stay held out, so the family uses other words.
+WORDS = ['pokhara', 'bharatpur', 'birgunj', 'dhangadhi', 'janakpur',
+         'hetauda', 'butwal', 'biratnagar', 'tansen', 'dharan', 'mangal', 'surya',
+         'chandra', 'sitala', 'himani', 'gajendra', 'sarita', 'mandala', 'rekha']
+
+
+def scene_letters(R):
+    """"kathmandu" ma kati akshar chha? - count the letters of a word.
+
+    The understanding probe of that kind is lost (the model answers 6 for a 9-letter
+    word): counting the characters of a word is a *lookup in the text*, not a
+    calculation, and it is teachable with a small family.  The probe's own word is
+    never used here (the family uses other words) - the probe stays held out.
+    """
+    w = R.choice(WORDS)
+    n = len(w)
+    shape = R.randrange(4)
+    if shape == 0:
+        user = f'"{w}" ma kati akshar chha?'
+    elif shape == 1:
+        user = f'"{w}" ko kati akshar ho?'
+    elif shape == 2:
+        user = f'"{w}" ma kati bhaa chha?'
+    else:
+        user = f'"{w}" keti akshar ko?'
+    roles = [('akshar', n)]
+    steps = f'akshar = {n}'
+    ans = R.choice([f'{w} ma {n} akshar chha.', f'{n} akshar.', f'kati? {n} akshar chha.'])
+    return _row('roles-letters', str(n), user, roles, steps, ans, f'{n} - {n} = 0')
+
+
 SCENES = [scene_buy_then_left, scene_two_prices, scene_give_away, scene_average, scene_percent,
           scene_speed, scene_monthly, scene_away, scene_english, scene_divide, scene_which_number,
-          scene_quoted_read, scene_yesno, scene_nested_expr, scene_chain_expr]
+          scene_quoted_read, scene_yesno, scene_nested_expr, scene_chain_expr,
+          scene_english_away, scene_letters]
 
 
 def _eval_expr(expr: str) -> int:
@@ -586,9 +720,26 @@ def sample(R, scene=None):
         # the uniform draw - a skill that is rare is not learned (the money scene
         # needed 35% of the frame rows for the same reason).
         # ROLES_SYMBOLIC=0 switches them off, for the A/B against a mix without them.
+        # The "read the story first" family (readfirst.py): the first line of the trace
+        # is the numbers of the story in the order they appear, with no invented labels.
+        # The p14/p15 arms read the benchmark's held-out word templates by grabbing one
+        # of the labelled trace styles they had learned and then binding the numbers
+        # wrongly, so the missing move is the *derivation*, not the arithmetic.
+        if os.environ.get('ROLES_READFIRST', '1') == '1' and R.random() < float(os.environ.get('ROLES_READFIRST_SHARE', '0.3')):
+            try:
+                import readfirst
+                return readfirst.sample(R)
+            except Exception:
+                pass
         if os.environ.get('ROLES_SYMBOLIC', '1') == '1':
             if R.random() < 0.25:
                 scene = scene_nested_expr if R.random() < 0.5 else scene_chain_expr
+            elif R.random() < 0.12:
+                # the *reading* shapes (the quoted read, the yes/no, the English
+                # inverse verb, the letter count) are what the understanding probes
+                # are made of - they need a real share, not 1/17 of the draw
+                scene = R.choice([scene_quoted_read, scene_yesno,
+                                  scene_english_away, scene_letters])
             else:
                 scene = R.choice(SCENES)
         else:
