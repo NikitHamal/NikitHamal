@@ -399,7 +399,11 @@ def generate_ar(model, prompt: list[int], max_new: int = 128, temperature: float
     ids = list(prompt)
     dev = next(model.parameters()).device
     upto = 0
-    while len(ids) - len(prompt) < max_new:
+    steps = 0
+    # a calc rewrite does not lengthen the text, so the length test alone can spin forever when a rewrite keeps
+    # reappearing (k13b's bench_rw ran 30+ min at 100% CPU on 2026-10-22): also cap the number of model steps
+    while len(ids) - len(prompt) < max_new and steps < 3 * max_new:
+        steps += 1
         ctx = torch.tensor([ids[-model.cfg.ctx:]], device=dev)
         nxt = _sample(model(ctx)[0, -1], temperature, top_p)
         ids.append(nxt)
