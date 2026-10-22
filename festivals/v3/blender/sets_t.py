@@ -141,12 +141,12 @@ def crow(name, loc, yaw, peck=0.0, m=None, s=1.0):
     forward, folded wings, long wedge tail, thin legs."""
     m = m or mat("feather", (0.004, 0.004, 0.005), rough=0.45, coat=0.3)
     root = bpy.data.objects.new(name, None); link(root)
-    mb = bpy.data.metaballs.new(name + "_mb"); mb.resolution = mb.render_resolution = 0.004; mb.threshold = 0.6
+    mb = bpy.data.metaballs.new(name + "_mb"); mb.resolution = mb.render_resolution = 0.004
     body = link(bpy.data.objects.new(name + "_b", mb)); mb.materials.append(m); body.parent = root
     hx, hz = 0.1 + 0.05 * peck, 0.2 - 0.09 * peck
     for (x, z, r, sx, sz) in [(0.0, 0.11, 0.07, 1.6, 1.0), (0.05, 0.13, 0.05, 1.2, 1.0), (-0.07, 0.1, 0.05, 1.5, 0.8), (-0.14, 0.09, 0.03, 1.6, 0.6),
                               (hx, hz, 0.042, 1.1, 1.0), (hx - 0.03, hz - 0.03, 0.035, 1.0, 1.0)]:
-        e = mb.elements.new(type="ELLIPSOID"); e.co = (x, 0, z); e.radius = r; e.size_x = sx * r; e.size_y = r * 0.9; e.size_z = sz * r
+        e = mb.elements.new(type="ELLIPSOID"); e.co = (x, 0, z); e.radius = r; e.size_x = sx; e.size_y = 0.9; e.size_z = sz
     beak = prim("cone", name + "_k", m, radius1=0.014, radius2=0.0015, depth=0.06, location=(hx + 0.05, 0, hz - 0.005 - 0.02 * peck),
                 rotation=(0, math.pi / 2 + 0.25 + 0.6 * peck, 0)); beak.scale = (0.8, 1, 1); beak.parent = root
     tail = mesh_obj(name + "_t", [(-0.14, -0.022, 0.095), (-0.14, 0.022, 0.095), (-0.3, 0.04, 0.05), (-0.31, 0.0, 0.045), (-0.3, -0.04, 0.05)],
@@ -204,7 +204,7 @@ def set_gai_laxmi(sc, A):
     floor = prim("plane", "floor2", pbr("brown_mud_dry", mat("f2", (0.1, 0.06, 0.04), rough=0.8), 2.0, (0.5, 0.36, 0.28)), size=3, location=off)
     bowl = lathe("milkbowl", smooth_profile([(0.0, 0.0), (0.06, 0.0), (0.11, 0.03), (0.13, 0.07), (0.128, 0.075), (0.115, 0.04), (0.0, 0.012)], 6), 96, brass("mb"))
     bowl.location = off
-    milk = prim("cylinder", "milk", mat("milk", (0.93, 0.9, 0.82), rough=0.28, sss=0.25), radius=0.112, depth=0.004, location=off + Vector((0, 0, 0.062)), vertices=96)
+    milk = prim("cylinder", "milk", mat("milk", (0.98, 0.95, 0.86), rough=0.4, sss=0.08), radius=0.112, depth=0.004, location=off + Vector((0, 0, 0.062)), vertices=96)
     for i in range(7): marigold("mgm%d" % i, tuple(off + Vector((0.2 * math.cos(i), 0.2 * math.sin(i) - 0.02, 0.03))), 0.03)
     tika = prim("uv_sphere", "tk", noisy(mat("tk2", TIKA, rough=0.6), 300, 0.3, 0.1, 0.5), radius=0.03, location=off + Vector((-0.17, -0.12, 0.012))); tika.scale = (1, 1, 0.3)
     bell = lathe("cowbell", smooth_profile([(0.0, 0.1), (0.02, 0.1), (0.035, 0.07), (0.05, 0.02), (0.055, 0.0)], 5), 48, brass("bell"))
@@ -239,9 +239,9 @@ def set_ox(sc, A):
     for strand, (r0, z0, drop) in enumerate(((0.31, 0.32, 0.12), (0.34, 0.24, 0.2))):
         for i in range(34):
             a = 2 * math.pi * i / 34; front = max(0.0, -math.sin(a))
-            c = (1.0, 0.36 + 0.3 * rnd.random(), 0.02)
+            c = (1.0, 0.22 + 0.28 * rnd.random(), 0.0)
             marigold("g%d_%d" % (strand, i), (r0 * math.cos(a), 0.02 + (r0 * 0.75) * math.sin(a), z0 - drop * front ** 2 + rnd.normal(0, 0.008)),
-                     0.036 + 0.01 * rnd.random(), noisy(mat("mgo%d" % (i % 4), c, rough=0.55, sss=0.25), 300, 0.35, 0.1, 0.6))
+                     0.036 + 0.01 * rnd.random(), noisy(mat("mgo%d" % (i % 4), c, rough=0.6, sss=0.1), 300, 0.45, 0.1, 0.9))
     tk = prim("uv_sphere", "tika", noisy(mat("tk", TIKA, rough=0.6, sss=0.2), 300, 0.3, 0.1, 0.6), radius=0.03, location=(0.0, -0.33, 0.86)); tk.scale = (1, 0.25, 1.4)
     lamps = [diyo("od%d" % i, (x, -0.55, 0.0), 1.6, 70, 6) for i, x in enumerate((-0.45, 0.45))]
     light("AREA", (0.9, -1.4, 1.6), 60, (1.0, 0.7, 0.45), size=1.0, look=(0, 0, 0.8))
