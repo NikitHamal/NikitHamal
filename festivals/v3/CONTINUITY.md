@@ -92,6 +92,12 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - When the owner pushes `tihar/narration/all.mp3` (Kaanchi), run `tools/split_take.py` with `FILM_DIR=…/tihar`.
   - Then on the box: `FILM=tihar python tools/type_render.py`, then `score_tihar.py` → `out/tihar_score.m4a`, then `FILMS=tihar bash recut.sh`.
 
+- [x] **Nepali text fix (2026-10-22).** Root cause: Chromium silently blocks `file://` @font-face loads in `set_content()` pages. Every caption, label, title and card had fallen back to a system Devanagari font with poor conjunct shaping.
+  - Fonts are now served through `page.route("https://fonts.local/**")`, and each page waits on explicit `document.fonts.load(...)` for every weight, so a missing font throws instead of falling back.
+  - All on-screen Nepali is now **Noto Sans Devanagari** (OFL; `fonts/NotoSansDevanagari-Variable.ttf`). Mukta draws visible halants in सम्झनामा, आफ्ना, खुल्छ, बल्छ and शङ्खधर. Word-final halants (छैनन्, भनिन्) are correct Nepali.
+  - `tools/type_proof.py` makes a proof sheet of every conjunct word in both films.
+  - The Sanskrit verse texture (shot 3) was re-rendered for the same reason.
+
 ## Delivery limits (measured)
 - Connector pushes carry blobs up to about 8 MB; 30 MB fails with HTTP 413. So the repo copy of the film has to be at most about 8 MB (or split per section), and the full-quality master goes to the owner as a chat attachment (`actl asset put`).
 - molab → here: base64 chunks through the marimo execute API (see `nik/docs/LEARNINGS.md`: 700 KB reads, md5 on both ends).
