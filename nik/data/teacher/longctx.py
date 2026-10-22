@@ -12,7 +12,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-NAMES = ['saugat', 'rijana', 'pramod', 'samjhana', 'bikash', 'anisha', 'kushal', 'pratiksha']
+import lexicon as _lx
+_HELD = {'hemanta', 'sulochana', 'dinanath', 'bhawana', 'trilochan', 'manjari'}   # nik/bench_long.py's names
+NAMES = [n for n in _lx.NAMES_M + _lx.NAMES_F if n not in _HELD]                 # ~180 names: no name -> answer shortcut
 KINDS = [  # (statement, question, answer) with {n} name and {v} value
     ('{n} ko gopya number {v} ho.', '{n} ko gopya number kati ho?', '{n} ko gopya number {v} ho.'),
     ('{n} ko bus ticket ko number {v} ho.', '{n} ko bus ticket ko number kati thiyo?', 'ticket ko number {v} thiyo.'),
@@ -34,7 +36,7 @@ def _filler(R, chars):
 def _fact(R, used):
     n = R.choice([x for x in NAMES if x not in used]); used.add(n)
     st, q, a = R.choice(KINDS)
-    v = str(R.randint(2, 12)) if 'baje' in st else str(R.randint(100, 9999))
+    v = str(R.randint(2, 12)) if 'baje' in st else str(R.randint(10 ** (d - 1), 10 ** d - 1)) if (d := R.randint(2, 6)) else ''   # 2-6 digits
     return st.format(n=n, v=v), q.format(n=n), a.format(n=n, v=v), v
 
 
