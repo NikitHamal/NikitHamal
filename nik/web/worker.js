@@ -2,6 +2,7 @@
 import { NikModel, renderChat, generate, TOK } from './nik.js';
 import { romanize, hasDevanagari } from './romanize.js';
 import { contextFor, plainNumbers } from './context.js';
+import { vote as pickVote, finalNumber } from './vote.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
 const base = new URL('./model/', import.meta.url);
@@ -70,8 +71,6 @@ async function sampleOnce(id, prompt, opts, stream) {
            conf: lpN ? Math.exp(lpSum / lpN) : 1 };
 }
 
-// The final number of an answer (what self-consistency votes on).
-const finalNumber = (s) => { const m = s.replace(/,/g, '').match(/-?\d+(\.\d+)?/g); return m ? m[m.length - 1] : null; };
 
 async function run(id, messages, opts) {
   busy = true; stopFlag = false;
@@ -93,19 +92,12 @@ async function run(id, messages, opts) {
       tokens += p.stats.tokens; passes += p.stats.passes;
       paths.push(p);
     }
-    // confidence-weighted vote: each path votes with the model's own mean token probability
-    const score = new Map(), count = new Map();
-    for (const p of paths) {
-      const n = finalNumber(p.answer);
-      if (n === null) continue;
-      score.set(n, (score.get(n) || 0) + p.conf);
-      count.set(n, (count.get(n) || 0) + 1);
-    }
-    const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
-    vote = { agree: count.get(best), k: paths.length, answer: best };
-    if (best !== n0) {
-      const win = paths.find((p) => finalNumber(p.answer) === best);
-      postMessage({ type: 'replace', id, think: win.think, answer: win.answer });
+    // confidence-weighted vote (each path votes with the model's own mean token probability) over the paths whose answer
+    // agrees with their own working (vote.js); the shown reply is replaced when another path wins
+    const v = pickVote(paths);
+    if (v) {
+      vote = { agree: v.agree, k: v.k, answer: v.answer };
+      if (v.path !== first) postMessage({ type: 'replace', id, think: v.path.think, answer: v.path.answer });
     }
   }
   const ms = performance.now() - t0;
