@@ -114,17 +114,18 @@ def layout(design, size, w, h):
              "linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,.42) 35%,rgba(0,0,0,0) 62%)")
     hs = 92 if land else (96 if size == "story" else 84)
     return f"""<style>
-@font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-Bold.ttf); font-weight: 700; }}
-@font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-ExtraBold.ttf); font-weight: 800; }}
-@font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-Medium.ttf); font-weight: 500; }}
+@font-face {{ font-family: Deva; src: url(file://{FONTS}/NotoSansDevanagari-Variable.ttf); font-weight: 100 900; }}
 html,body{{margin:0;width:{w}px;height:{h}px;overflow:hidden;background:transparent}}
 #s{{position:absolute;inset:0;background:{scrim}}}
-#c{{position:absolute;{box};display:flex;flex-direction:column;font-family:Mukta;color:#fff6ea}}
+#c{{position:absolute;{box};display:flex;flex-direction:column;font-family:Deva;color:#fff6ea}}
 .k{{font-weight:700;font-size:38px;letter-spacing:.05em;color:{acc};padding-top:12px;border-top:4px solid #d8202a;align-self:{'flex-start' if land else 'center'}}}
 .h{{font-weight:800;font-size:{hs}px;line-height:1.16;margin-top:22px;text-shadow:0 4px 28px rgba(0,0,0,.45)}}
 .p{{font-weight:500;font-size:40px;line-height:1.4;margin-top:22px;color:#ffe9cc}}
 .sig{{font-weight:700;font-size:30px;margin-top:36px;color:#ffffffb0}}
 </style><div id=s></div><div id=c><div class=k>{kick}</div><div class=h>{head}</div><div class=p>{sub}</div><div class=sig>— निकित हमाल</div></div>"""
+
+
+FONTLOAD = "Promise.all([400,500,700,800].map(w => document.fonts.load(w + ' 60px Deva', 'अआ क्ष त्र ज्ञ म्झ फ्न ल्छ'))).then(() => document.fonts.ready)"
 
 
 async def main():
@@ -135,7 +136,7 @@ async def main():
             fest = design.split("-")[0]; od = f"{HERE}/out/cards_v3/{fest}"; os.makedirs(od, exist_ok=True)
             for size, (w, h) in SIZES.items():
                 await pg.set_viewport_size({"width": w, "height": h})
-                await pg.set_content(layout(design, size, w, h)); await pg.evaluate("document.fonts.ready")
+                await pg.set_content(layout(design, size, w, h)); await pg.evaluate(FONTLOAD)
                 tp = f"{B}/type/{design}-{size}.png"; await pg.screenshot(path=tp, omit_background=True)
                 if design == "tihar-kukur": base = pixel_scene(w, h).astype(np.float32)
                 else:

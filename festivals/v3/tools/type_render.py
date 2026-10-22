@@ -15,15 +15,13 @@ OUT = f"{ROOTV}/build/type" if FILM == "dashain" else f"{ROOTV}/build_{FILM}/typ
 FONTS = os.path.abspath(f"{ROOTV}/../fonts")
 
 CSS = f"""
-@font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-Medium.ttf); font-weight: 500; }}
-@font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-Bold.ttf); font-weight: 700; }}
-@font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-ExtraBold.ttf); font-weight: 800; }}
+@font-face {{ font-family: Deva; src: url(file://{FONTS}/NotoSansDevanagari-Variable.ttf); font-weight: 100 900; font-stretch: 62.5% 100%; }}
 @font-face {{ font-family: Tiro; src: url(file://{FONTS}/TiroDevanagariSanskrit-Regular.ttf); }}
 @font-face {{ font-family: Yatra; src: url(file://{FONTS}/YatraOne-Regular.ttf); }}
 html, body {{ margin: 0; background: transparent; }}
 #stage {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }}
-.cap {{ position: absolute; left: 90px; width: 900px; text-align: center; font-family: Mukta; font-weight: 500;
-        font-size: 62px; line-height: 1.32; color: #fff8ee; text-shadow: 0 2px 14px rgba(0,0,0,.55); }}
+.cap {{ position: absolute; left: 90px; width: 900px; text-align: center; font-family: Deva; font-weight: 500;
+        font-size: 58px; line-height: 1.42; color: #fff8ee; text-shadow: 0 2px 14px rgba(0,0,0,.55); }}
 .cap span {{ display: inline-block; margin: 0 .14em; }}
 """
 
@@ -35,15 +33,18 @@ ORD = ["पहिलो", "दोस्रो", "तेस्रो", "चौथ
 LABELS = {"ktm": "काठमाडौँ", "gorkha": "गोरखा", "west": "लिम्पियाधुरा · लिपुलेक · कालापानी"}
 if FILM == "tihar":
     KICK = {3: "यमपञ्चक", 4: "यम र यमुना", 5: "यमुनाको वचन", 6: "पाँच दिन", 7: "१ · काग तिहार", 8: "२ · कुकुर तिहार", 9: "३ · गाई तिहार · लक्ष्मी पूजा",
-            10: "३ · औँसीको रात", 11: "भैलो · देउसी", 12: "४ · गोवर्धन पूजा · गोरु तिहार", 13: "४ · म्ह पूजा", 14: "नेपाल संवत्", 15: "५ · भाइटीका", 16: "आशीर्वाद", 17: "माया"}
+            10: "३ · औँसीको रात", 11: "भैलो · देउसी", 12: "४ · गोवर्धन पूजा · गोरु तिहार", 13: "४ · म्ह पूजा", 14: "४ · नयाँ वर्ष", 15: "५ · भाइटीका", 16: "आशीर्वाद", 17: "माया"}
 VERSE = ("या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥ "
          "या देवी सर्वभूतेषु मातृरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥ "
          "या देवी सर्वभूतेषु बुद्धिरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥")
 
 
+FONTLOAD = "Promise.all([400,500,700,800].map(w => document.fonts.load(w + ' 60px Deva', 'अआ क्ष त्र ज्ञ म्झ फ्न ल्छ'))).then(() => document.fonts.ready)"
+
+
 async def shot_el(page, html, path, w, h, sel="#x"):
     await page.set_viewport_size({"width": w, "height": h})
-    await page.set_content(f"<style>{CSS}</style>{html}"); await page.evaluate("document.fonts.ready")
+    await page.set_content(f"<style>{CSS}</style>{html}"); await page.evaluate(FONTLOAD)
     await page.locator(sel).screenshot(path=path, omit_background=True)
 
 
@@ -62,7 +63,7 @@ async def main():
             spans = "".join(f'<span id=w{k}>{w}</span>' for k, w in enumerate(words))
             await page.set_viewport_size({"width": 1080, "height": 1920})
             await page.set_content(f"<style>{CSS}</style><div id=stage><div class=cap id=cap style='top:1180px'>{spans}</div></div>")
-            await page.evaluate("document.fonts.ready")
+            await page.evaluate(FONTLOAD)
             d = f"{OUT}/cap_{r['id']}"; os.makedirs(d, exist_ok=True); boxes = []
             for k in range(len(words)):
                 loc = page.locator(f"#w{k}"); bb = await loc.bounding_box()
@@ -73,27 +74,27 @@ async def main():
                 boxes.append([round(clip["x"]), round(clip["y"]), round(clip["width"]), round(clip["height"])])
             json.dump({"words": words, "boxes": boxes}, open(f"{d}.json", "w"), ensure_ascii=False)
             if KICK.get(r["id"]):
-                await shot_el(page, f"""<div id=x style="display:inline-block;padding:10px 24px;font-family:Mukta;font-weight:700;font-size:34px;
+                await shot_el(page, f"""<div id=x style="display:inline-block;padding:10px 24px;font-family:Deva;font-weight:700;font-size:34px;
                     letter-spacing:.06em;color:#ffb347;border-top:3px solid #d8202a">{KICK[r['id']]}</div>""", f"{OUT}/kick_{r['id']}.png", 1080, 300)
         for k, v in LABELS.items():
-            await shot_el(page, f"""<div id=x style="display:inline-block;padding:6px 16px;font-family:Mukta;font-weight:700;font-size:{30 if k=='west' else 40}px;
+            await shot_el(page, f"""<div id=x style="display:inline-block;padding:6px 16px;font-family:Deva;font-weight:700;font-size:{30 if k=='west' else 40}px;
                 color:#fff4e0;text-shadow:0 2px 10px rgba(0,0,0,.8)">{v}</div>""", f"{OUT}/label_{k}.png", 1080, 300)
         for n in range(9):
-            await shot_el(page, f"""<div id=x style="display:inline-block;text-align:center;padding:10px 20px;font-family:Mukta;color:#fff4e0">
+            await shot_el(page, f"""<div id=x style="display:inline-block;text-align:center;padding:10px 20px;font-family:Deva;color:#fff4e0">
                 <div style="font-weight:700;font-size:30px;letter-spacing:.08em;color:#ffb347">{ORD[n]} रात</div>
                 <div style="font-weight:800;font-size:72px;line-height:1.1;text-shadow:0 2px 16px rgba(0,0,0,.7)">{NIGHTS[n]}</div></div>""", f"{OUT}/night_{n + 1}.png", 1080, 400)
         TITLE = "दशैँ" if FILM == "dashain" else "तिहार"
-        await shot_el(page, f"""<div id=x style="display:inline-block;padding:40px 60px;font-family:Mukta;font-weight:800;font-size:{300 if FILM == 'dashain' else 260}px;line-height:1.1;
+        await shot_el(page, f"""<div id=x style="display:inline-block;padding:40px 60px;font-family:Deva;font-weight:800;font-size:{300 if FILM == 'dashain' else 260}px;line-height:1.1;
             color:#fff1dc;text-shadow:0 0 60px rgba(255,140,40,.55)">{TITLE}</div>""", f"{OUT}/title.png", 1080, 700)
         if FILM == "tihar":
-            await shot_el(page, """<div id=x style="display:inline-block;text-align:center;padding:20px 40px;font-family:Mukta;color:#fff4e0">
+            await shot_el(page, """<div id=x style="display:inline-block;text-align:center;padding:20px 40px;font-family:Deva;color:#fff4e0">
                 <div style="font-weight:700;font-size:36px;letter-spacing:.08em;color:#ffcf6e">नेपाल संवत्</div>
                 <div style="font-weight:800;font-size:220px;line-height:1.05;text-shadow:0 0 50px rgba(255,170,60,.5)">११४७</div></div>""", f"{OUT}/ns.png", 1080, 600)
-        await shot_el(page, """<div id=x style="display:inline-block;width:960px;text-align:center;font-family:Mukta;color:#fff4e6">
+        await shot_el(page, """<div id=x style="display:inline-block;width:960px;text-align:center;font-family:Deva;color:#fff4e6">
             <div style="font-weight:700;font-size:40px;letter-spacing:.06em;color:#ffcf6e">""" + ("विजया दशमी २०८३" if FILM == "dashain" else "शुभ दीपावली · तिहार २०८३") + """</div>
             <div style="font-weight:800;font-size:96px;line-height:1.15;margin-top:18px;text-shadow:0 4px 30px rgba(0,0,0,.5)">""" + ("हार्दिक मंगलमय<br>शुभकामना" if FILM == "dashain" else "हार्दिक<br>शुभकामना") + """</div></div>""",
             f"{OUT}/wish.png", 1080, 800)
-        await shot_el(page, """<div id=x style="display:inline-block;padding:10px 30px;font-family:Mukta;font-weight:700;font-size:46px;color:#fff4e6">— निकित हमाल</div>""",
+        await shot_el(page, """<div id=x style="display:inline-block;padding:10px 30px;font-family:Deva;font-weight:700;font-size:46px;color:#fff4e6">— निकित हमाल</div>""",
             f"{OUT}/sign.png", 1080, 300)
         await b.close()
     print("type done")
