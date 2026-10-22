@@ -4,6 +4,24 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-22 (Claude)
+
+- **A "model error" in /chat was our tool:** the exact-arithmetic pencil (nik.js calcForce) decoded the last 48 tokens
+  together, and special tokens decode to '', so a think ending "= 632." plus the answer "347 + 285 =" became
+  "632.347 + 285" -> 917.347; it also split the 5-path vote (1/5). Fixed (never read across think/turn markers);
+  `test_calc.mjs`. With the fix all 5 paths answer 632. Audit tools before blaming the model.
+- **Vague follow-ups fail:** after "jawaf 632 ho.", "kati rey?" gets nonsense even though the prompt carries the
+  history. `followup.py` (repeat / restate / "pakka ho?") is in the k3 mix.
+- **Long context (parked by the owner):** NTK RoPE base 10k -> 403k alone, no training, drops m50 to 23/288 (8%);
+  15 min of training at seq 16384 recovers only to 163 and recall stays 0 (L1). Keeping base 10000 and training at
+  seq 2048 (L2a) holds nested 222 and lifts reading to 6/50 and 400-token recall to 2/6, but costs ladder/traps.
+- **English:** e1/e2 (10% Dolly/OASST + English wiki in the replay) take English ppl 229 -> 4.5 with Nepali fidelity
+  22/22, but the polish costs a few Nepali rows; English generation is fluent but often content-free.
+- **Every plain polish drifts.** Hence the KL anchor (`train.py --ref --kl`): with kl <= 1 the gold token still wins
+  wherever CE supervises it; elsewhere the model stays at the reference. k1/k2/k3 + the record loop test it.
+- **Mistakes:** a status poll interrupted a teammate's blocking job (launch detached; don't poll a locked box);
+  `pkill -f` matched its own shell again (use `pgrep` with a bracket pattern, then kill by pid).
+
 ## 2026-10-21 (molab boxes, Claude + Local-A + Local-C)
 
 ### Findings
