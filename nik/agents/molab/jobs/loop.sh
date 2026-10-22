@@ -15,14 +15,14 @@ kput() { d=/tmp/kp_$1; n=$1; mkdir -p $d; shift; cp "$@" $d/; echo "{\"title\":\
 note() { echo "$(date -u +%FT%T) $*" | tee -a $LOG; }
 
 # wait for the k-arms (k1/k2/k3) to finish their gates
-while [ ! -f /tmp/claude/k3.done ]; do sleep 30; done
+while [ ! -f /tmp/claude/k3.done ] || [ ! -f /tmp/claude/kb.done ]; do sleep 30; done
 git pull -q   # train.py --seed and full_gate LIVE_DIR (pulled after k3, which trains from this checkout)
 best=nik/web/model/nik-0.1.bin; bestdir=/tmp/gate_live; besttag=m50
 # round 0: promote the k-arm with the most improved rows among those that passed vs live
 pick=$($PY - <<'PYEOF'
 import re
 best, score = None, -1
-for t in ('k1', 'k2', 'k3'):
+for t in ('k1', 'k2', 'k3', 'kb70', 'kb85'):
     try:
         v = open(f'/tmp/gate_{t}/verdict.txt').read()
     except FileNotFoundError:
@@ -34,7 +34,7 @@ for t in ('k1', 'k2', 'k3'):
 print(best or '')
 PYEOF
 )
-if [ -n "$pick" ]; then best=/tmp/claude/$pick/nik-0.1.$pick.bin; bestdir=/tmp/gate_$pick; besttag=$pick; note "round 0: promoted $pick"; fi
+if [ -n "$pick" ]; then best=$(ls /tmp/claude/$pick/nik-0.1.$pick.bin /tmp/claude/$pick.bin 2>/dev/null | head -1); bestdir=/tmp/gate_$pick; besttag=$pick; note "round 0: promoted $pick"; fi
 note "start: best=$besttag"
 
 MIXES=(data_en:p8mxf data_en:p8mx data_en:p8mxf data:p8m)
