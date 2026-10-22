@@ -26,6 +26,12 @@ def collect(d):
     r['reading pairs'] = num(f'{d}/reading.txt', r'pairs (\d+)/')
     r['ladder ALL'] = num(f'{d}/ladder.txt', r'ALL (\d+)/')
     r['traps'] = num(f'{d}/trap.txt', r'trap check: (\d+)/')
+    try:
+        e = json.load(open(f'{d}/en.json'))['summary']
+        r['EN qa ppl (lower)'] = e['en_qa_ppl']; r['EN wiki ppl (lower)'] = e['en_wiki_ppl']
+        r['EN reply'] = int(e['en_reply'].split('/')[0]); r['NE fidelity'] = int(e['ne_fidelity'].split('/')[0])
+    except Exception:
+        pass
     r['chat*'] = num(f'{d}/chat.txt', r'chat sanity: (\d+)/')
     r['stress*'] = num(f'{d}/stress.txt', r'stress: (\d+)/')
     return r
@@ -35,11 +41,17 @@ def main():
     live, cand, tag = sys.argv[1], sys.argv[2], sys.argv[3]
     L, C = collect(live), collect(cand)
     bad, rows = [], []
-    for k in L:
-        a, b = L[k], C[k]
+    for k in dict.fromkeys(list(L) + list(C)):
+        a, b = L.get(k), C.get(k)
         flag = ''
         if a is None or b is None:
             flag = 'MISSING'; bad.append(k) if not k.endswith('*') else None
+        elif '(lower)' in k and b > a:
+            flag = 'REGRESSION'; bad.append(k)
+        elif '(lower)' in k and b < a:
+            flag = '+'
+        elif '(lower)' in k:
+            flag = ''
         elif b < a:
             flag = 'REGRESSION' if not k.endswith('*') else '(sanity)'
             if not k.endswith('*'):
