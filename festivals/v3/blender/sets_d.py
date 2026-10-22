@@ -164,7 +164,7 @@ def set_ramayana(sc, A):
         hit = (u - (release + 0.3)) * dur
         fire.data.energy = 0 if hit < 0 else 4e6 * math.exp(-hit * 1.5) + 6e5
         burst.data.materials[0].node_tree.nodes["Emission"].inputs[1].default_value = 0 if hit < 0 else 60 * math.exp(-hit * 2.5)
-        burst.scale = (1 + 3 * max(0, hit),) * 3; burst.hide_render = hit < 0
+        burst.scale = (1 + 1.5 * max(0, hit),) * 3; burst.hide_render = hit < 0 or hit > 0.5
         arrow.hide_render = hit > 0
     return update
 
