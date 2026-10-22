@@ -307,8 +307,21 @@ def two_stream_mask_seg(L: int, B: int, offset: int, s: int, Ln: int, device) ->
     return torch.cat([top, bot], dim=0)
 
 
+def _kl_to_ref(ref, clean, logits, w, kl):
+    """Self-distillation anchor (Claude, 2026-10-22): KL(ref || student) on the target positions, ref = the frozen
+    live model. With kl <= 1 the gold token still wins the argmax wherever CE supervises it (optimal p(y) >=
+    (1 + kl * p_ref(y)) / (1 + kl)), while every unsupervised direction stays near the reference: new skills without drift."""
+    with torch.no_grad():
+        lr = F.log_softmax(ref(clean).float(), -1)
+    lp = F.log_softmax(logits.float(), -1)
+    v = (lr.exp() * (lr - lp)).sum(-1)
+    t = (v * w).sum() / w.sum().clamp(min=1)
+    hybrid_loss.last_kl = t.detach()
+    return kl * t
+
+
 def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
-                diff_weight: float = 1.0, t_min: float = 0.1, diff_frac: float = 1.0, user_w=0.0):
+                diff_weight: float = 1.0, t_min: float = 0.1, diff_frac: float = 1.0, user_w=0.0, ref=None, kl=0.0):
     """x: (N, L+1) token ids. loss_mask: (N, L+1) 1 where tokens count as targets
     (SFT: assistant tokens only). diff_frac < 1 trains the diffusion stream on a
     random window of that fraction of the sequence (the AR stream always sees all
@@ -327,7 +340,8 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
         if user_w > 0:     # also learn the user's side a little: models the *questions*, not just the answers
             ar_w = ar_w + user_w * (~lm[:, 1:]).float()
         ar = (F.cross_entropy(logits.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
-        return ar, ar.detach(), torch.zeros((), device=x.device)
+        total = ar + (_kl_to_ref(ref, clean, logits, lm[:, 1:].float(), kl) if ref is not None and kl > 0 else 0)
+        return total, ar.detach(), torch.zeros((), device=x.device)
     B = cfg.block
     offset = int(torch.randint(0, B, (1,)))
     Ln = L if diff_frac >= 1 else max(B, int(round(L * diff_frac / B)) * B)
@@ -352,7 +366,13 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
     ar = (F.cross_entropy(lc.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
     mf = m.float()
     df = (F.cross_entropy(ln.reshape(-1, cfg.vocab).float(), seg.reshape(-1), reduction='none') * mf.reshape(-1)).sum() / mf.sum().clamp(min=1)
-    return ar + diff_weight * df, ar.detach(), df.detach()
+    total = ar + diff_weight * df
+    if ref is not None and kl > 0:
+        total = total + _kl_to_ref(ref, clean, lc, ar_w, kl)
+    return total, ar.detach(), df.detach()
+
+
+hybrid_loss.last_kl = torch.zeros(())
 
 
 # --------------------------------------------------------------------------
