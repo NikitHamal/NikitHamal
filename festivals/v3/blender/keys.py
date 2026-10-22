@@ -54,7 +54,7 @@ def main():
             if camu is not None:
                 cam.matrix_world = M; cam.data.dof.focus_distance = fd
             bpy.context.view_layer.update()
-            if sid in (8, 10): marks[f"{sid}_{k}"] = _remark(sc, upd)
+            if FILM == "dashain" and sid in (8, 10): marks[f"{sid}_{k}"] = _remark(sc, upd)
             sc.render.filepath = f"{out}/s{sid}_{k}.png"
             if not os.environ.get("DRYKEYS"): bpy.ops.render.render(write_still=True)
             print(f"key s{sid}_{k} u={u} {time.time() - t0:.0f}s", flush=True)
