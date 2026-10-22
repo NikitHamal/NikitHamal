@@ -1,0 +1,22 @@
+[
+ {"name": "km->m", "turns": ["3 km dur chha, meter ma kati bhayo?"], "want": ["\\b3,?000\\b"]},
+ {"name": "kg->g dec", "turns": ["2.5 kg ma kati gram?"], "want": ["\\b2,?500\\b"]},
+ {"name": "hr->min", "turns": ["mero class 2 ghanta ko chha. tyo kati minet bhayo?"], "want": ["\\b120\\b"]},
+ {"name": "m->cm", "turns": ["mero uchai 1.5 meter. centimeter ma kati?"], "want": ["\\b150\\b"]},
+ {"name": "l->ml", "turns": ["ek bottle ma 2 liter pani chha, mililiter ma bhanda?"], "want": ["\\b2,?000\\b"]},
+ {"name": "g->kg", "turns": ["5000 gram bhaneko kati kilo ho?"], "want": ["\\b5\\b"]},
+ {"name": "min->hr", "turns": ["180 minet barabar kati ghanta?"], "want": ["\\b3\\b"]},
+ {"name": "dozen", "turns": ["4 darjan anda kineko, jamma kati wata?"], "want": ["\\b48\\b"]},
+ {"name": "week->day", "turns": ["3 hapta ko chhutti chha, kati din bhayo?"], "want": ["\\b21\\b"]},
+ {"name": "lakh digits", "turns": ["5 lakh ank ma kasari lekhne?"], "want": ["\\b500,?000\\b"]},
+ {"name": "lakh->hajar", "turns": ["2 lakh ma kati hajar parchha?"], "want": ["\\b200\\b"]},
+ {"name": "en km", "turns": ["how many meters are there in 4 km?"], "want": ["\\b4,?000\\b"]},
+ {"name": "wd fwd", "turns": ["aaja sombar, 3 din pachhi chai kun bar aauchha?"], "want": ["bihibar"]},
+ {"name": "wd bholi", "turns": ["aaja sukrabar, bholi chai k bar?"], "want": ["sanibar"]},
+ {"name": "wd hijo", "turns": ["hijo mangalbar thiyo, aaja kun bar?"], "want": ["budhabar"]},
+ {"name": "wd back", "turns": ["aaja budhabar ho. 2 din aghi kun bar thiyo?"], "want": ["sombar"]},
+ {"name": "wd parsi", "turns": ["aaja sanibar ho, parsi kun bar parchha?"], "want": ["sombar"]},
+ {"name": "wd long", "turns": ["aaja aaitabar. 10 din pachhi kun bar hola?"], "want": ["budhabar"]},
+ {"name": "wd en", "turns": ["if today is friday, what day is it after 3 days?"], "want": ["monday"]},
+ {"name": "wd week", "turns": ["aaja bihibar ho bhane thik 7 din pachhi kun bar?"], "want": ["bihibar"]}
+]

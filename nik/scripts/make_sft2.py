@@ -48,6 +48,7 @@ TRAP_CONTEXT_Q = {'mero naam k ho?', 'mero kukur ko naam k ho?', 'mero didi ko n
 
 
 def _drop_eval_prompts(rows, root):
+    import glob
     """Held-out gates stay held out: drop any row whose user turn is an exact eval_understand, stress or trap_check
     prompt (write.py had 5 stress prompts verbatim; names.py emitted the trap sentences "mero naam nikit ho" and
     "ma nikit, kathmandu bata"). chat_check is a sanity gate of generic greetings and is not filtered."""
@@ -60,6 +61,10 @@ def _drop_eval_prompts(rows, root):
     sys.path.insert(0, root)
     import bench_rw   # NikBench-RW prompts are held out too
     held |= {norm(v[-1] if isinstance(v, list) else v) for g in bench_rw.G for v in g[3]}   # scored turns only
+    # chat_audit.mjs sets (nik/tests/chat/*.json): every scored user turn
+    for f in glob.glob(os.path.join(root, 'tests', 'chat', '*.json')):
+        for c in json.load(open(f)):
+            held |= {norm(t) for t, w in zip(c['turns'], c.get('want') or [None] * len(c['turns'])) if w}
     out = [r for r in rows if not any(m['role'] == 'user' and norm(m['content']) in held for m in json.loads(r)['messages'])]
     print(f'eval-prompt guard: dropped {len(rows) - len(out)} rows with an exact understand/stress/trap prompt', flush=True)
     return out
