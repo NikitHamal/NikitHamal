@@ -41,6 +41,9 @@ MIXES=(data_en:p8mxf data_en:p8mx data_en:p8mxf data:p8m)
 KLS=(1.0 1.0 0.5 1.0)
 r=0
 while true; do
+  # another agent may pause the loop between rounds: `touch /tmp/claude/loop.pause` (the lock is released while paused)
+  while [ -f /tmp/claude/loop.pause ]; do rm -f /tmp/gpu.lock; sleep 60; done
+  while [ -f /tmp/gpu.lock ] && ! grep -q "Claude loop" /tmp/gpu.lock; do sleep 60; done   # someone else's job runs
   r=$((r + 1)); i=$(( (r - 1) % ${#MIXES[@]} ))
   D=${MIXES[$i]%%:*}; MX=${MIXES[$i]##*:}; KL=${KLS[$i]}; T=r$r
   echo "Claude loop $T $(date -u +%T)" > /tmp/gpu.lock
