@@ -154,10 +154,11 @@ def main():
     ap.add_argument('--calc', action='store_true', help='verified arithmetic decoding (calc.py)')
     ap.add_argument('--out', default='')
     ap.add_argument('--dump', default='', help='write the items as JSON (for web/test_engine.mjs) and exit')
+    ap.add_argument('--seed', type=int, default=2026, help='item seed (2026 = the historical items; another seed = a fresh confirmation set)')
     ap.add_argument('--nested-items', action='store_true', help='one rng stream per category, so --n 4 is a subset of --n 8 is a subset of --n 16 (changes the item set: the historical scores are then a different benchmark)')
     a = ap.parse_args()
     if a.dump:
-        json.dump(items(a.n, nested=a.nested_items), open(a.dump, 'w'))
+        json.dump(items(a.n, seed=a.seed, nested=a.nested_items), open(a.dump, 'w'))
         return
     torch.set_grad_enabled(False)
     tok = Tokenizer.load(a.tok)
@@ -165,7 +166,7 @@ def main():
     calc = Calc(tok) if a.calc else None
     model = load_any(a.model)
     res, rows = {}, []
-    for cat, q, g in items(a.n, nested=a.nested_items):
+    for cat, q, g in items(a.n, seed=a.seed, nested=a.nested_items):
         ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
         text = tok.decode(generate_ar(model, ids[:-1] + [6], 320, temperature=0.0, calc=calc))
         ans = text.split('<|/think|>')[-1]
