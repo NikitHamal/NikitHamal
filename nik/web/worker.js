@@ -29,7 +29,9 @@ function countParams(m) {
 // Keep the prompt inside the context window, and choose what history it carries (context.js: a standalone problem gets its
 // single-turn prompt, a question about the user gets the turn that answers it moved next to it, the rest is packed).
 function buildPrompt(messages) {
-  const budget = Math.floor(model.cfg.ctx * 0.55);
+  // 512-ctx models: 55% of the window for the prompt (unchanged). Long-context models (16k): up to 8k input per turn,
+  // leaving >= 8k for the reply (owner: 8k in / 8k out).
+  const budget = model.cfg.ctx > 512 ? Math.min(8192, model.cfg.ctx - 8192) : Math.floor(model.cfg.ctx * 0.55);
   // Nik reads romanized Nepali: transliterate Devanagari the user types (input only)
   const msgs = messages.map((m) => (m.role === 'user' && hasDevanagari(m.content) ? { ...m, content: romanize(m.content) } : m));
   return contextFor(model.tok, msgs, budget);

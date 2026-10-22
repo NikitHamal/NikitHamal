@@ -334,6 +334,7 @@
         const M = m.meta;
         $('ver').textContent = (M.name || 'nik 0.1').replace(/^nik\s*/, '');
         $('trained').textContent = M.trained || 'ready';
+        if (M.ctx > 512) { $('sMax').max = 8192; $('sMax').step = 64; }   // long-context model: up to 8k output tokens
         setStatus(`ready · ${(M.params / 1e6).toFixed(1)}m params · ${(M.bytes / 1e6).toFixed(1)} mb · on-device`, 'ready');
         updateSend();
         if (pending) { pending = null; startGeneration(); }
