@@ -4,7 +4,7 @@ whole script gives every word's time; each line is cut in the middle of the paus
   ELEVEN_KEY=... python tools/split_take.py narration/all.mp3
 -> audio/vo/NN.mp3, exact word timings + vo_dur in lines.json, then timeline.py."""
 import json, os, re, subprocess, sys
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HERE = os.environ.get("FILM_DIR") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 take = sys.argv[1]; key = os.environ["ELEVEN_KEY"]
 L = json.load(open(f"{HERE}/lines.json")); voiced = [r for r in L if r.get("speak")]
 script = " ".join(r["speak"] for r in voiced)

@@ -3,7 +3,7 @@
 -> audio/vo/NN.mp3 + exact word timings from the character alignment, then timeline.py.
 Free-plan output: credit "Voice: ElevenLabs" (elevenlabs.io) wherever the film is posted."""
 import base64, json, os, subprocess, sys, time, urllib.request
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HERE = os.environ.get("FILM_DIR") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KEY = os.environ["ELEVEN_KEY"]; VOICE = os.environ.get("EL_VOICE", "JBFqnCBsd6RMkjVDRZzb")  # George - warm storyteller
 SETTINGS = {"stability": 0.5, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True}
 

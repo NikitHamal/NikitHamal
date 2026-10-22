@@ -6,7 +6,7 @@ nudged onto the nearest pauses in the energy envelope, so the captions keep ligh
 import glob, json, os, re, subprocess, sys
 import numpy as np
 import soundfile as sf
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); TAKES = f"{HERE}/narration/takes"; SR = 48000
+HERE = os.environ.get("FILM_DIR") or os.path.dirname(os.path.dirname(os.path.abspath(__file__))); TAKES = f"{HERE}/narration/takes"; SR = 48000
 
 
 def decode(path):
