@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-21T20:34:46Z",
+ "updated": "2026-10-22T00:27:09Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -8,7 +8,7 @@
   {
    "name": "box 1",
    "gpu": "RTX Pro 6000 \u00b7 owner notebook, shared Claude + Local-C",
-   "job": "Claude: full_gate on blends m50 + a(p11 - m50), a = 0.3 / 0.5",
+   "job": "Local-C arms (p15/p16 gated by Claude: closest yet, reading + nested word still regress)",
    "progress": null,
    "detail": "one job at a time via /tmp/gpu.lock; status panel in the notebook",
    "eta": "-"
@@ -32,6 +32,15 @@
     "9/12",
     "12/12",
     "1/45"
+   ],
+   [
+    "p15 (Local-C, sftb base)",
+    "72.2%",
+    "-",
+    "19/26",
+    "24/36",
+    "12/12",
+    "2/45"
    ],
    [
     "p8m (m50 + p8 mix)",
@@ -121,15 +130,6 @@
     "16/26",
     "9/12",
     "0/12",
-    "-"
-   ],
-   [
-    "v4f4 (Local-C)",
-    "67.4%",
-    "29/48",
-    "20/26",
-    "9/12",
-    "1/12",
     "-"
    ]
   ]
