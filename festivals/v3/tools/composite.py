@@ -172,6 +172,19 @@ def pixel_dog_scene(t):
 
 
 # ------------------------------------------------------------ captions
+_SCRIM = {}
+
+
+def scrim(dst, top, bottom, k):
+    """A soft dark band behind the caption block so type stays legible over bright, lamp-lit plates."""
+    key = (int(top), int(bottom))
+    if key not in _SCRIM:
+        y = np.arange(H, dtype=np.float32); c0, c1 = top - 70, bottom + 70
+        a = np.clip(np.minimum((y - (c0 - 160)) / 160, ((c1 + 160) - y) / 160), 0, 1) ** 1.6
+        _SCRIM[key] = a[:, None, None]
+    dst *= 1 - 0.5 * k * _SCRIM[key]
+
+
 def caption(dst, sid, t_abs):
     r = LINES[sid]; s = BY[sid]
     meta_p = f"{B}/type/cap_{sid}.json"
@@ -179,6 +192,8 @@ def caption(dst, sid, t_abs):
     meta = json.load(open(meta_p)); words = meta["words"]; spoken = r.get("words", [])
     end = s["start"] + s["dur"]
     out_k = 1 - ease((t_abs - (end - 0.35)) / 0.3)
+    top = min(b[1] for b in meta["boxes"]) - 60; bot = max(b[1] + b[3] for b in meta["boxes"])
+    scrim(dst, top, bot, ease((t_abs - s["start"]) / 0.5) * out_k)
     n, m = len(words), max(1, len(spoken))
     for k, (box, w) in enumerate(zip(meta["boxes"], words)):
         j = min(m - 1, int(round(k * (m - 1) / max(1, n - 1)))) if spoken else 0
