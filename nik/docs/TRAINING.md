@@ -157,6 +157,26 @@ without moving the held-out word family ✗ (16/48 -> 9/48 ✗) - **the shape da
 the composition, and the composition is not what the benchmark's word templates fail
 at ✓ - they fail at reading the story's numbers ✓.**
 
+**And the fifth lever: the held-out word templates are decided by which *trace style* is
+most available** ✓. p16 added a family whose trace's first line is the story's numbers
+in the order they appear, with no invented labels ✓ (`readfirst.py` ✓, 20% of the role
+rows ✓) - **and not one of the held-out word traces changed** ✓:
+
+```
+"kaksha ma 11 keta ra 47 keti chhan. 6 jana anupasthit chhan"
+  p14: role: prashna = 11, share = 4      hisab: 11 + 4 = 15; 15 - 6 = 9
+  p15: role: prashna = 11, sharanya = 1     hisab: 11 / 6 = 1
+  p16: role: prashna = 11, share = 4      hisab: 11 + 4 = 15; 15 - 6 = 9
+```
+
+The model reaches for the **reduce** family's labels ("prashna" ✓, "share" ✓) and the
+**frames** family's labels ("kitab" ✓, "jamma" ✓, "fal" ✓) - the held-out word items
+*look like* symbolic two-step items ✓, so the style that is most available wins ✓ (the
+reduce family is 8% of the mix ✓) and the binding is wrong ✓ (47 read as 4 ✓, the count
+added to the price ✓). **Three labelled styles in the mix (the wide role labels ✓, the
+read-first trace ✓) did not change one of those traces ✓ - so the lever is the
+competition between the styles ✓, not the vocabulary of one of them ✓.**
+
 **And the interpolation does not rescue a collapsed arm ✓**: 0.5 m50 + 0.5 p11 gave
 73.3% ✓ with the arithmetic back ✓ (117 -> 160 ✓) but the shapes diluted to 3/44 ✓ and
 the word family still down ✓ (16 -> 14 ✓). **You cannot interpolate a broken model
