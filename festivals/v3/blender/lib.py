@@ -411,7 +411,7 @@ def _leaf(name, length, width, m, n=10):
 
 def marigold(name, loc, r=0.03, m=None):
     """A ball of petals: an icosphere with displaced spikes (cheap, reads well at distance)."""
-    m = m or noisy(mat("marigold", MARIGOLD, rough=0.6, sss=0.12), 300, 0.45, 0.1, 0.9)
+    m = m or noisy(mat("marigold", (1.0, 0.24, 0.0), rough=0.7, sss=0.05), 300, 0.4, 0.1, 0.9)
     o = prim("ico_sphere", name, m, subdivisions=4, radius=r, location=loc)
     tx = bpy.data.textures.new(name + "_tx", "VORONOI"); tx.noise_scale = r * 0.16; tx.distance_metric = "DISTANCE"
     d = o.modifiers.new("d", "DISPLACE"); d.texture = tx; d.strength = r * 0.55; d.mid_level = 0.3

@@ -144,15 +144,15 @@ def crow(name, loc, yaw, peck=0.0, m=None, s=1.0):
     mb = bpy.data.metaballs.new(name + "_mb"); mb.resolution = mb.render_resolution = 0.004
     body = link(bpy.data.objects.new(name + "_b", mb)); mb.materials.append(m); body.parent = root
     hx, hz = 0.1 + 0.05 * peck, 0.2 - 0.09 * peck
-    for (x, z, r, sx, sz) in [(0.0, 0.11, 0.07, 1.6, 1.0), (0.05, 0.13, 0.05, 1.2, 1.0), (-0.07, 0.1, 0.05, 1.5, 0.8), (-0.14, 0.09, 0.03, 1.6, 0.6),
-                              (hx, hz, 0.042, 1.1, 1.0), (hx - 0.03, hz - 0.03, 0.035, 1.0, 1.0)]:
+    for (x, z, r, sx, sz) in [(0.0, 0.1, 0.085, 1.35, 1.05), (0.05, 0.12, 0.065, 1.1, 1.0), (-0.07, 0.095, 0.06, 1.3, 0.85), (-0.13, 0.085, 0.035, 1.4, 0.6),
+                              (hx, hz, 0.055, 1.05, 1.0), (hx - 0.035, hz - 0.035, 0.05, 1.0, 1.0)]:
         e = mb.elements.new(type="ELLIPSOID"); e.co = (x, 0, z); e.radius = r; e.size_x = sx; e.size_y = 0.9; e.size_z = sz
-    beak = prim("cone", name + "_k", m, radius1=0.014, radius2=0.0015, depth=0.06, location=(hx + 0.05, 0, hz - 0.005 - 0.02 * peck),
+    beak = prim("cone", name + "_k", m, radius1=0.019, radius2=0.002, depth=0.065, location=(hx + 0.06, 0, hz - 0.005 - 0.02 * peck),
                 rotation=(0, math.pi / 2 + 0.25 + 0.6 * peck, 0)); beak.scale = (0.8, 1, 1); beak.parent = root
-    tail = mesh_obj(name + "_t", [(-0.14, -0.022, 0.095), (-0.14, 0.022, 0.095), (-0.3, 0.04, 0.05), (-0.31, 0.0, 0.045), (-0.3, -0.04, 0.05)],
+    tail = mesh_obj(name + "_t", [(-0.13, -0.025, 0.09), (-0.13, 0.025, 0.09), (-0.25, 0.045, 0.055), (-0.26, 0.0, 0.05), (-0.25, -0.045, 0.055)],
                     [(0, 1, 2, 3), (0, 3, 4)], m, smooth=False); solidify(tail, 0.004); tail.parent = root
     for sd in (-1, 1):
-        leg = prim("cylinder", name + "_l", m, radius=0.0035, depth=0.065, location=(0.0, sd * 0.018, 0.035), rotation=(0, 0.15, 0)); leg.parent = root
+        leg = prim("cylinder", name + "_l", m, radius=0.004, depth=0.04, location=(0.0, sd * 0.02, 0.02), rotation=(0, 0.15, 0)); leg.parent = root
     root.location = loc; root.rotation_euler = (0, 0, yaw); root.scale = (s, s, s)
     return root
 
@@ -173,7 +173,7 @@ def set_crows(sc, A):
         hl = prim("cone", "hill%d" % i, mat("hm%d" % i, (0.2, 0.08, 0.06), rough=0.9), radius1=60, radius2=8, depth=h, vertices=7, location=(x, 260, 0))
     volume_world(0.006, (1.0, 0.75, 0.55), 0.75)
     glare(sc, 0.9, 9, -0.4)
-    cam = camera((1.0, -2.3, -0.12), (1.1, 0.0, 0.22), 50, dof=2.3, fstop=2.8)
+    cam = camera((1.1, -3.1, -0.1), (1.15, 0.0, 0.24), 40, dof=3.1, fstop=2.8)
     fm = mat("feather", (0.004, 0.004, 0.005), rough=0.45, coat=0.3)
     poses = [
         [(0.0, 0.0, 0.0, 0), (0.85, 0.0, math.pi, 0.0), (1.6, 0.0, 0.0, 0.0), (2.3, 0.0, math.pi, 0.2)],
@@ -192,7 +192,7 @@ def set_crows(sc, A):
             if key not in built: built[key] = crow("crow%d_%d" % key, (x, y, 0.06), yaw, peck, fm, 1.2)
             c = built[key]; c.hide_render = False
             for ch in c.children: ch.hide_render = False
-        aim(cam, lerp((1.0, -2.3, -0.12), (1.05, -2.05, -0.08), ease(u)), (1.1, 0.0, 0.22))
+        aim(cam, lerp((1.1, -3.1, -0.1), (1.12, -2.8, -0.07), ease(u)), (1.15, 0.0, 0.24))
     return update
 
 
@@ -239,7 +239,7 @@ def set_ox(sc, A):
     for strand, (r0, z0, drop) in enumerate(((0.31, 0.32, 0.12), (0.34, 0.24, 0.2))):
         for i in range(34):
             a = 2 * math.pi * i / 34; front = max(0.0, -math.sin(a))
-            c = (1.0, 0.22 + 0.28 * rnd.random(), 0.0)
+            c = (1.0, 0.14 + 0.22 * rnd.random(), 0.0)
             marigold("g%d_%d" % (strand, i), (r0 * math.cos(a), 0.02 + (r0 * 0.75) * math.sin(a), z0 - drop * front ** 2 + rnd.normal(0, 0.008)),
                      0.036 + 0.01 * rnd.random(), noisy(mat("mgo%d" % (i % 4), c, rough=0.6, sss=0.1), 300, 0.45, 0.1, 0.9))
     tk = prim("uv_sphere", "tika", noisy(mat("tk", TIKA, rough=0.6, sss=0.2), 300, 0.3, 0.1, 0.6), radius=0.03, location=(0.0, -0.33, 0.86)); tk.scale = (1, 0.25, 1.4)
