@@ -38,7 +38,8 @@ def _fact(R, used):
     return st.format(n=n, v=v), q.format(n=n), a.format(n=n, v=v), v
 
 
-def sample(R, lo=1500, hi=10000):
+def sample(R, lo=None, hi=None):
+    lo = lo or int(os.environ.get('NIK_LONG_LO', 1500)); hi = hi or int(os.environ.get('NIK_LONG_HI', 10000))
     k = R.random()
     target = R.randint(lo, hi) * 4
     if k < 0.75:
