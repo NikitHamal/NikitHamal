@@ -47,10 +47,13 @@ def sample(R, lo=None, hi=None):
         parts = _filler(R, target)
         for st, _, _, _ in facts:
             parts.insert(R.randint(0, len(parts)), st)
-        st, q, a, v = R.choice(facts)
-        return {'cat': 'long-' + ('needle' if len(facts) == 1 else 'multi'), 'gold': v,
-                'messages': [{'role': 'user', 'content': ' '.join(parts) + ' ' + q},
-                             {'role': 'nik', 'content': a, 'think': f'mathi lekheko chha: "{st}"'}]}
+        order = R.sample(facts, len(facts))     # every hidden fact is asked once (follow-up turns): more recall signal per row
+        st, q, a, v = order[0]
+        msgs = [{'role': 'user', 'content': ' '.join(parts) + ' ' + q},
+                {'role': 'nik', 'content': a, 'think': f'mathi lekheko chha: "{st}"'}]
+        for st2, q2, a2, _ in order[1:]:
+            msgs += [{'role': 'user', 'content': q2}, {'role': 'nik', 'content': a2, 'think': f'mathi lekheko chha: "{st2}"'}]
+        return {'cat': 'long-' + ('needle' if len(facts) == 1 else 'multi'), 'gold': v, 'messages': msgs}
     used = set(); st, q, a, v = _fact(R, used)
     import build
     msgs = [{'role': 'user', 'content': st}, {'role': 'nik', 'content': 'hunchha, yaad rakhe.'}]
