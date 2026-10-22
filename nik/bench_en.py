@@ -59,12 +59,13 @@ def main():
     tok = Tokenizer.load(os.path.join(HERE, 'web/model/tokenizer.json'))
     m = load_any(a.model).eval()
     ctx = m.cfg.ctx
+    dev = next(m.parameters()).device
     qa = [json.loads(l) for l in open(os.path.join(a.data, 'en_heldout.jsonl'))]
     wiki = [l.strip() for l in open(os.path.join(a.data, 'en_wiki_heldout.txt')) if l.strip()]
 
     def nll(ids, mask):
         ids, mask = ids[:ctx], mask[:ctx]
-        x = torch.tensor([ids[:-1]]); y = torch.tensor(ids[1:]); w = torch.tensor(mask[1:], dtype=torch.float)
+        x = torch.tensor([ids[:-1]], device=dev); y = torch.tensor(ids[1:], device=dev); w = torch.tensor(mask[1:], dtype=torch.float, device=dev)
         with torch.no_grad():
             lp = F.cross_entropy(m(x)[0].float(), y, reduction='none')
         return float((lp * w).sum()), float(w.sum())
@@ -89,7 +90,7 @@ def main():
         g = torch.Generator().manual_seed(seed); out = list(ids); think = False
         for _ in range(n):
             with torch.no_grad():
-                lg = m(torch.tensor([out[-ctx:]]))[0, -1].float()
+                lg = m(torch.tensor([out[-ctx:]], device=dev))[0, -1].float().cpu()
             if not think:
                 for t in set(out[len(ids):][-64:]) - exempt:
                     lg[t] = lg[t] / 1.15 if lg[t] > 0 else lg[t] * 1.15
