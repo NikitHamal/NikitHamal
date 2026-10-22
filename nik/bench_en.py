@@ -6,7 +6,7 @@ Rows (all from held-out data that build_en.py keeps OUT of training):
   en_reply      held-out English questions: reply is English and does not loop (rate)
   en_contains   held-out English questions: reply contains the reference answer (strict, reported)
   ne_fidelity   the understanding probes' romanized-Nepali questions: reply stays Nepali (rate) - must not drop
-Language id: counts of common English vs romanized-Nepali function words.
+Language id: counts of common English vs romanized-Nepali function words. Generation uses /chat's sampler (seeded).
 
     python nik/bench_en.py --model nik/web/model/nik-0.1.bin --data data/english --out en.json
 """
@@ -47,6 +47,7 @@ def main():
     ap.add_argument('--data', default='data/english')
     ap.add_argument('--n-gen', type=int, default=60)
     ap.add_argument('--out', default=None)
+    ap.add_argument('--greedy', action='store_true', help='greedy instead of /chat sampling')
     a = ap.parse_args()
     import torch
     import torch.nn.functional as F
@@ -79,10 +80,36 @@ def main():
         a1, b1 = nll(ids, [0] + [1] * (len(ids) - 1)); s += a1; t += b1
     wiki_ppl = math.exp(s / t)
 
+    exempt = {i for i in range(tok.vocab_size)
+              if re.fullmatch(r'[\s\d.,:;!?+\-x/=()%]*', tok.decode([i]) or '')}
+
+    def chat_decode(ids, n, seed):
+        # /chat's sampler (nik.js sample): rep penalty 1.15 on recent tokens (digits/punct exempt), temperature 0.7,
+        # top-p 0.9, min-p 0.05; no penalty inside <|think|>. Seeded per item, so the run is reproducible.
+        g = torch.Generator().manual_seed(seed); out = list(ids); think = False
+        for _ in range(n):
+            with torch.no_grad():
+                lg = m(torch.tensor([out[-ctx:]]))[0, -1].float()
+            if not think:
+                for t in set(out[len(ids):][-64:]) - exempt:
+                    lg[t] = lg[t] / 1.15 if lg[t] > 0 else lg[t] * 1.15
+            pr = torch.softmax(lg / 0.7, -1)
+            pr[pr < 0.05 * pr.max()] = 0
+            sp, si = torch.sort(pr, descending=True); keep = torch.cumsum(sp, 0) - sp < 0.9
+            pr2 = torch.zeros_like(pr); pr2[si[keep]] = sp[keep]
+            nxt = int(torch.multinomial(pr2 / pr2.sum(), 1, generator=g))
+            out.append(nxt)
+            think = (think or nxt == 7) and nxt != 8
+            if nxt in (2, 9):
+                break
+        return out[len(ids):]
+
     def reply(q):
         ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
         with torch.no_grad():
-            out = tok.decode(generate_ar(m, ids[:-1] + [6], 160, temperature=0.0))
+            gen = (generate_ar(m, ids[:-1] + [6], 160, temperature=0.0) if a.greedy
+                   else chat_decode(ids[:-1] + [6], 160, seed=len(q)))
+            out = tok.decode(gen)
         return re.sub(r'<\|think\|>.*?(<\|/think\|>|$)', '', out, flags=re.S).replace('<|end|>', '').strip()
 
     rows, en_ok, contains = [], 0, 0
