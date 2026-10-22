@@ -8,8 +8,11 @@ Outputs build/type/:
 """
 import asyncio, json, os, sys
 from playwright.async_api import async_playwright
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); OUT = f"{HERE}/build/type"
-FONTS = os.path.abspath(f"{HERE}/../fonts")
+ROOTV = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FILM = os.environ.get("FILM", "dashain")
+HERE = ROOTV if FILM == "dashain" else f"{ROOTV}/{FILM}"
+OUT = f"{ROOTV}/build/type" if FILM == "dashain" else f"{ROOTV}/build_{FILM}/type"
+FONTS = os.path.abspath(f"{ROOTV}/../fonts")
 
 CSS = f"""
 @font-face {{ font-family: Mukta; src: url(file://{FONTS}/Mukta-Medium.ttf); font-weight: 500; }}
@@ -30,6 +33,9 @@ KICK = {1: "", 3: "देवी माहात्म्य", 4: "महिष�
 NIGHTS = ["शैलपुत्री", "ब्रह्मचारिणी", "चन्द्रघण्टा", "कुष्माण्डा", "स्कन्दमाता", "कात्यायनी", "कालरात्रि", "महागौरी", "सिद्धिदात्री"]
 ORD = ["पहिलो", "दोस्रो", "तेस्रो", "चौथो", "पाँचौँ", "छैटौँ", "सातौँ", "आठौँ", "नवौँ"]
 LABELS = {"ktm": "काठमाडौँ", "gorkha": "गोरखा", "west": "लिम्पियाधुरा · लिपुलेक · कालापानी"}
+if FILM == "tihar":
+    KICK = {3: "यमपञ्चक", 4: "यम र यमुना", 5: "यमुनाको वचन", 6: "पाँच दिन", 7: "१ · काग तिहार", 8: "२ · कुकुर तिहार", 9: "३ · गाई तिहार · लक्ष्मी पूजा",
+            10: "३ · औँसीको रात", 11: "भैलो · देउसी", 12: "४ · गोवर्धन पूजा · गोरु तिहार", 13: "४ · म्ह पूजा", 14: "नेपाल संवत्", 15: "५ · भाइटीका", 16: "आशीर्वाद", 17: "माया"}
 VERSE = ("या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥ "
          "या देवी सर्वभूतेषु मातृरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥ "
          "या देवी सर्वभूतेषु बुद्धिरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥")
@@ -51,7 +57,7 @@ async def main():
             padding:0 140px;box-sizing:border-box;font-family:Tiro;font-size:84px;line-height:118px;color:#2a120a;opacity:.9;
             white-space:nowrap;overflow:hidden">{''.join(f'<div>{v.strip()}॥</div>' for v in VERSE.split('॥') if v.strip())}</div>""", f"{OUT}/verse.png", 3840, 400)
         for r in L:
-            if r["id"] in (2, 21, 22): continue
+            if r["id"] in ((2, 21, 22) if FILM == "dashain" else (2, 18, 19)): continue
             words = r["text"].split()
             spans = "".join(f'<span id=w{k}>{w}</span>' for k, w in enumerate(words))
             await page.set_viewport_size({"width": 1080, "height": 1920})
@@ -76,11 +82,16 @@ async def main():
             await shot_el(page, f"""<div id=x style="display:inline-block;text-align:center;padding:10px 20px;font-family:Mukta;color:#fff4e0">
                 <div style="font-weight:700;font-size:30px;letter-spacing:.08em;color:#ffb347">{ORD[n]} रात</div>
                 <div style="font-weight:800;font-size:72px;line-height:1.1;text-shadow:0 2px 16px rgba(0,0,0,.7)">{NIGHTS[n]}</div></div>""", f"{OUT}/night_{n + 1}.png", 1080, 400)
-        await shot_el(page, """<div id=x style="display:inline-block;padding:40px 60px;font-family:Mukta;font-weight:800;font-size:300px;line-height:1.1;
-            color:#fff1dc;text-shadow:0 0 60px rgba(255,140,40,.55)">दशैँ</div>""", f"{OUT}/title.png", 1080, 700)
+        TITLE = "दशैँ" if FILM == "dashain" else "तिहार"
+        await shot_el(page, f"""<div id=x style="display:inline-block;padding:40px 60px;font-family:Mukta;font-weight:800;font-size:{300 if FILM == 'dashain' else 260}px;line-height:1.1;
+            color:#fff1dc;text-shadow:0 0 60px rgba(255,140,40,.55)">{TITLE}</div>""", f"{OUT}/title.png", 1080, 700)
+        if FILM == "tihar":
+            await shot_el(page, """<div id=x style="display:inline-block;text-align:center;padding:20px 40px;font-family:Mukta;color:#fff4e0">
+                <div style="font-weight:700;font-size:36px;letter-spacing:.08em;color:#ffcf6e">नेपाल संवत्</div>
+                <div style="font-weight:800;font-size:220px;line-height:1.05;text-shadow:0 0 50px rgba(255,170,60,.5)">११४७</div></div>""", f"{OUT}/ns.png", 1080, 600)
         await shot_el(page, """<div id=x style="display:inline-block;width:960px;text-align:center;font-family:Mukta;color:#fff4e6">
-            <div style="font-weight:700;font-size:40px;letter-spacing:.06em;color:#ffcf6e">विजया दशमी २०८३</div>
-            <div style="font-weight:800;font-size:96px;line-height:1.15;margin-top:18px;text-shadow:0 4px 30px rgba(0,0,0,.5)">हार्दिक मंगलमय<br>शुभकामना</div></div>""",
+            <div style="font-weight:700;font-size:40px;letter-spacing:.06em;color:#ffcf6e">""" + ("विजया दशमी २०८३" if FILM == "dashain" else "शुभ दीपावली · तिहार २०८३") + """</div>
+            <div style="font-weight:800;font-size:96px;line-height:1.15;margin-top:18px;text-shadow:0 4px 30px rgba(0,0,0,.5)">""" + ("हार्दिक मंगलमय<br>शुभकामना" if FILM == "dashain" else "हार्दिक<br>शुभकामना") + """</div></div>""",
             f"{OUT}/wish.png", 1080, 800)
         await shot_el(page, """<div id=x style="display:inline-block;padding:10px 30px;font-family:Mukta;font-weight:700;font-size:46px;color:#fff4e6">— निकित हमाल</div>""",
             f"{OUT}/sign.png", 1080, 300)

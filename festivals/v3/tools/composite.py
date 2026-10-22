@@ -5,12 +5,17 @@ import json, math, os, sys
 from multiprocessing import Pool
 import numpy as np
 from PIL import Image, ImageFilter
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); B = f"{HERE}/build"
+ROOTV = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FILM = os.environ.get("FILM", "dashain")
+HERE = ROOTV if FILM == "dashain" else f"{ROOTV}/{FILM}"
+B = f"{ROOTV}/build" if FILM == "dashain" else f"{ROOTV}/build_{FILM}"
 TL = json.load(open(f"{HERE}/timeline.json")); FPS = TL["fps"]; W, H = TL["w"], TL["h"]
 LINES = {r["id"]: r for r in json.load(open(f"{HERE}/lines.json"))}
+SPEC = dict(title=2, wish=(21, 22), pixel=11, nights=6, labels=(8, 10), flood=20) if FILM == "dashain" else \
+       dict(title=2, wish=(18, 19), pixel=8, nights=None, labels=(), flood=None, ns=14)
 SHOTS = TL["shots"]; BY = {s["id"]: s for s in SHOTS}
 ACCENT = np.array([255, 179, 71], np.float32); TIKA = np.array([170, 8, 18], np.float32)
-DAY_OF_SHOT = {11: 1, 12: 1, 13: 7, 14: 8, 15: 10, 16: 15}
+DAY_OF_SHOT = {11: 1, 12: 1, 13: 7, 14: 8, 15: 10, 16: 15} if FILM == "dashain" else {7: 1, 8: 2, 9: 3, 10: 3, 11: 3, 12: 4, 13: 4, 14: 4, 15: 5}
 _cache = {}
 
 
@@ -68,6 +73,102 @@ def strip(active, highlight=(), cell=18, gap=6, mag=4):
             im[cell + 5:cell + 7, x + 7:x + cell - 7] = [1.0, 0.7, 0.28, 1]
     big = np.repeat(np.repeat(im, mag, 0), mag, 1)
     return big
+
+
+# ------------------------------------------------------------ Tihar pixel art: five diyas, and the Kukur Tihar dog
+DIYA = ["...Y...", "..YOY..", "..OYO..", "...O...", "KbbbbbK", ".KbbbK.", "..KKK.."]
+DOGL = """
+................
+....KK..........
+...KbbK.........
+...KbbbK........
+...KbbBBKKKKKKKK
+...KbBBBBBBBBBBB
+....KBBBBBBBBBBR
+....KBBBBBBBBBBR
+....KBBBBBBBBBBB
+...KBBBBKKKBBBBB
+...KBBBKEWKBBBBB
+...KBBBKEEKBBBBB
+...KBBBBKKBBBBLL
+...KBBBBBBBBBLLL
+....KBBBBBBBLLLL
+....KBBBBBBLLLKK
+.....KBBBBBLLKNN
+.....KBBBBBLLLKK
+......KBBBBLLLLL
+......KKBBBBLLLL
+.....OoOYOoOYOoO
+....oOYOoOYOoOYO
+.....KoOoOoOoOoO
+.....KBBBBLLLLLL
+....KBBBBBLLLLLL
+....KBBBBBLLLLLL
+...KBBBBBBLLLLLL
+...KBBBBBBBLLLLL
+...KBBBKBBBLLLLL
+...KBBBKBBBBLLLL
+...KBBBKBBBBKLLL
+...KBLLKBLLLKLLL
+...KKKKKKKKKKKKK
+"""
+PAL = {"K": (30, 16, 12), "b": (92, 52, 28), "B": (150, 92, 48), "L": (226, 186, 132), "E": (16, 10, 10), "W": (255, 255, 255),
+       "N": (40, 22, 20), "O": (255, 140, 20), "o": (220, 84, 10), "Y": (255, 205, 40), "R": (200, 14, 30)}
+
+
+def _sprite(rows, mirror=True, pal=PAL):
+    rows = [r for r in rows.strip("\n").split("\n")] if isinstance(rows, str) else rows
+    if mirror: rows = [r + r[::-1] for r in rows]
+    h, w = len(rows), max(len(r) for r in rows); im = np.zeros((h, w, 4), np.float32)
+    for y, r in enumerate(rows):
+        for x, c in enumerate(r):
+            if c in pal: im[y, x] = (*[v / 255 for v in pal[c]], 1)
+    return im
+
+
+def diya_strip(day, mag=5):
+    n = 5; cell = 9; gap = 5; w = n * cell + (n - 1) * gap; im = np.zeros((10, w, 4), np.float32)
+    for i in range(n):
+        sp = _sprite(DIYA, mirror=False, pal={**PAL, "b": (150, 70, 40)})
+        if i + 1 > day: sp[:4, :, :3] *= 0.25   # unlit flame
+        x = i * (cell + gap) + 1; im[0:7, x:x + 7] = sp
+        if i + 1 == day: im[8:10, x:x + 7] = [0.85, 0.05, 0.08, 1]
+    return np.repeat(np.repeat(im, mag, 0), mag, 1)
+
+
+def pixel_dog_scene(t):
+    px = 6; lw, lh = W // px, H // px
+    yy = np.linspace(0, 1, lh)[:, None, None]
+    img = (np.array([14, 10, 30]) * (1 - yy) + np.array([70, 18, 26]) * yy) * np.ones((1, lw, 1))
+    rng = np.random.default_rng(2)
+    for _ in range(lw * lh // 160):
+        x, y = rng.integers(0, lw), rng.integers(0, int(lh * 0.5)); tw = 0.6 + 0.4 * math.sin(t * 3 + x)
+        img[y, x] = np.array([255, 236, 200]) * tw
+    dw, dh = lw // 2, int(lh * 0.36); dx = (lw - dw) // 2; dy = int(lh * 0.62) - dh
+    img[dy - 2:dy + dh, dx - 2:dx + dw + 2] = (40, 16, 10); img[dy:dy + dh, dx:dx + dw] = (255, 170, 70); img[dy + 2:dy + dh, dx + 2:dx + dw - 2] = (255, 200, 110)
+    floor = int(lh * 0.62); img[floor:] = (70, 30, 20); img[floor:floor + 1] = (120, 55, 30)
+    for k in range(0, lw, 4):
+        yk = dy - 4 + int(2 * math.sin(k / 3)); img[yk:yk + 2, k:k + 2] = (255, 140, 20) if (k // 4) % 2 else (255, 205, 40)
+    def blit(sp, x0, y0, s=1):
+        sp = np.repeat(np.repeat(sp, s, 0), s, 1); hh, ww = sp.shape[:2]
+        reg = img[y0:y0 + hh, x0:x0 + ww]; a = sp[:reg.shape[0], :reg.shape[1], 3:4]
+        img[y0:y0 + hh, x0:x0 + ww] = reg * (1 - a) + sp[:reg.shape[0], :reg.shape[1], :3] * 255 * a
+    dog = _sprite(DOGL); s = 3; gx = (lw - dog.shape[1] * s) // 2; gy = floor + 6 - dog.shape[0] * s
+    bob = int(round(math.sin(t * 7) * 0.6))
+    blit(dog, gx, gy + bob, s)
+    # tail: a little wagging stub to the right of the body
+    ta = math.sin(t * 14) * 0.9
+    for k in range(6):
+        x = gx + dog.shape[1] * s - 2 + int(k * math.cos(ta)); y = gy + dog.shape[0] * s - 18 - int(k * (0.8 + math.sin(ta) * 0.6))
+        img[max(0, y):y + 2, x:x + 2] = (150, 92, 48)
+    di = _sprite(DIYA, mirror=False, pal={**PAL, "b": (150, 70, 40)})
+    for k in range(6):
+        x = int(lw * (0.06 + 0.17 * k)); f = 1 if math.sin(t * 9 + k * 2) > -0.3 else 0
+        d2 = di.copy(); d2[0, :, :3] *= f
+        blit(d2, x, floor + 14, 2)
+    up = np.repeat(np.repeat(img.astype(np.float32), px, 0), px, 1)
+    out = np.zeros((H, W, 3), np.float32); out[:up.shape[0], :up.shape[1]] = up[:H, :W]
+    return out
 
 
 # ------------------------------------------------------------ captions
@@ -142,7 +243,7 @@ def push(sid, u):
 
 def key_blend(sid, t, d):
     """Which key(s) show at shot time t: hold each key, dissolve around the midpoint between key times."""
-    src = 21 if sid == 22 else sid
+    src = SPEC["wish"][0] if sid == SPEC["wish"][1] else sid
     us = KEYS[str(src)][1]; xf = KEYS[str(src)][2]; tk = [x * d for x in us]
     if src != sid: return [(src, 0, 1.0)]
     for k in range(len(tk) - 1):
@@ -174,7 +275,7 @@ def key_marks(sid, f):
 
 
 def plate(f, sid):
-    if KEYS is not None and sid != 11: return plate_keys(f, sid)
+    if KEYS is not None and sid != SPEC["pixel"]: return plate_keys(f, sid)
     p = f"{B}/plates/{f:05d}.png"
     if os.path.exists(p): return _load(p)
     # missing frame (e.g. plates rendered on twos): nearest earlier existing frame inside the shot
@@ -203,7 +304,8 @@ def frame(f):
     t = f / FPS
     s = next(x for x in SHOTS if x["f0"] <= f < x["f1"]) if f < SHOTS[-1]["f1"] else SHOTS[-1]
     sid = s["id"]; tl = t - s["start"]; u = tl / s["dur"]
-    fr = bg_pixel(t) if sid == 11 else plate(f, sid)
+    if sid == SPEC["pixel"]: fr = bg_pixel(t) if FILM == "dashain" else pixel_dog_scene(t)
+    else: fr = plate(f, sid)
     # transitions: section change = dip through black; otherwise a short dissolve from the last frame of the previous shot
     i = SHOTS.index(s)
     if i > 0 and sid != 2:
@@ -213,36 +315,40 @@ def frame(f):
             k = ease(tl / L)
             if sec_change: fr = fr * k
             else:
-                pf = bg_pixel(prev["start"] + prev["dur"]) if prev["id"] == 11 else plate(prev["f1"] - 1, prev["id"])
-                if sid == 21: pf = np.ones_like(fr) * TIKA
+                pf = (bg_pixel(prev["start"] + prev["dur"]) if FILM == "dashain" else pixel_dog_scene(prev["start"] + prev["dur"])) if prev["id"] == SPEC["pixel"] else plate(prev["f1"] - 1, prev["id"])
+                if SPEC["flood"] and sid == SPEC["flood"] + 1: pf = np.ones_like(fr) * TIKA
                 fr = pf * (1 - k) + fr * k
-    if i < len(SHOTS) - 1 and SHOTS[i + 1]["section"] != s["section"] and sid not in (20,):
+    if i < len(SHOTS) - 1 and SHOTS[i + 1]["section"] != s["section"] and sid != SPEC["flood"]:
         fr = fr * (1 - ease((tl - (s["dur"] - 0.45)) / 0.45))
     if sid == 1: fr = fr * ease(tl / 1.2)
     # blessing -> the frame floods tika red as the rice reaches the lens; the wish shot begins red and clears
-    if sid == 20: fr = fr * (1 - ease((u - 0.8) / 0.2)) + TIKA * ease((u - 0.8) / 0.2)
-    if sid == 21: fr = fr * ease(tl / 1.2) + TIKA * (1 - ease(tl / 1.2))
+    if SPEC["flood"] and sid == SPEC["flood"]: fr = fr * (1 - ease((u - 0.8) / 0.2)) + TIKA * ease((u - 0.8) / 0.2)
+    if SPEC["flood"] and sid == SPEC["flood"] + 1: fr = fr * ease(tl / 1.2) + TIKA * (1 - ease(tl / 1.2))
     # type
-    if sid == 2:
+    W0, W1 = SPEC["wish"]
+    if sid == SPEC["title"]:
         ti = img(f"{B}/type/title.png"); k = ease(tl / 0.9); sc_ = 0.92 + 0.08 * ease(tl / 3.0)
         over(fr, ti, (W - ti.shape[1] * sc_) / 2, 760 + (1 - k) * 30, k * (1 - ease((tl - 2.7) / 0.5)), scale=sc_)
-    elif sid in (21, 22):
+    elif sid in (W0, W1):
         wi = img(f"{B}/type/wish.png")
-        k = ease((t - BY[21]["start"] - 0.8) / 0.8) * (1 - ease((t - (TL["duration"] - 0.8)) / 0.8))
+        k = ease((t - BY[W0]["start"] - 0.8) / 0.8) * (1 - ease((t - (TL["duration"] - 0.8)) / 0.8))
         over(fr, wi, (W - wi.shape[1]) / 2, 1080 + (1 - k) * 24, k)
-        if sid == 22:
+        if sid == W1:
             si = img(f"{B}/type/sign.png"); k2 = ease((tl - 0.3) / 0.6) * (1 - ease((t - (TL["duration"] - 0.8)) / 0.8))
             over(fr, si, (W - si.shape[1]) / 2, 1560, k2)
-        if sid == 21: caption(fr, 21, t) if os.path.exists(f"{B}/type/cap_21.json") else None
+        if sid == W0 and os.path.exists(f"{B}/type/cap_{W0}.json"): caption(fr, W0, t)
     else:
         caption(fr, sid, t)
-    if sid == 6:  # the nine nights, one Navadurga per night
+    if SPEC.get("ns") and sid == SPEC["ns"]:
+        ns = img(f"{B}/type/ns.png"); k = ease((u - 0.25) / 0.2)
+        over(fr, ns, (W - ns.shape[1]) / 2, 330 + (1 - k) * 30, k * (1 - ease((u - 0.93) / 0.07)))
+    if sid == SPEC["nights"]:  # the nine nights, one Navadurga per night
         sh = 0.74; n = min(9, int(u / sh * 9) + 1) if u < sh else None
         if n:
             ln = img(f"{B}/type/night_{n}.png"); tn = (u * s["dur"]) - (n - 1) * sh * s["dur"] / 9
             a = ease(tn / 0.25) * (1 - ease((tn - sh * s["dur"] / 9 + 0.15) / 0.15))
             over(fr, ln, (W - ln.shape[1]) / 2, 250, a)
-    if sid in (8, 10):
+    if sid in SPEC["labels"]:
         mp = f"{B}/plates/marks_{sid}.json"
         if KEYS is not None or os.path.exists(mp):
             mk = key_marks(sid, f) if KEYS is not None else json.load(open(mp)).get(str(f))
@@ -255,7 +361,9 @@ def frame(f):
                     px, py = x * W, y * H
                     fr[int(py) - 1:int(py) + 2, int(px) - 1:int(px) + 2] = fr[int(py) - 1:int(py) + 2, int(px) - 1:int(px) + 2] * (1 - a) + 255 * a
                     over(fr, lb, min(max(24, px - lb.shape[1] / 2), W - lb.shape[1] - 24), py - lb.shape[0] - 18, a)
-    if sid in DAY_OF_SHOT:  # pixel calendar: centre-stage in shot 11, docked at the top for the days
+    if FILM == "tihar" and sid in DAY_OF_SHOT:
+        st = diya_strip(DAY_OF_SHOT[sid], 5); over(fr, st, (W - st.shape[1]) / 2, 150, 0.95)
+    if FILM == "dashain" and sid in DAY_OF_SHOT:  # pixel calendar: centre-stage in shot 11, docked at the top for the days
         day = DAY_OF_SHOT[sid]
         if sid == 14 and u > 0.47: day = 9
         if sid == 11:
