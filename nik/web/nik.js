@@ -481,7 +481,11 @@ export function calcEvaluate(expr) {
 }
 const CALC_TAIL = /(?:^|[^\d.\/])(\d+(?:\.\d+)?(?:\s*[-+x*\/]\s*\d+(?:\.\d+)?)+)\s*=\s?$/;
 export function calcForce(tok, out) {
-  const tail = tok.decode(out.slice(-48));
+  // never read across <|think|> / <|/think|> / turn markers (ids < 16 decode to ''): "... = 632." + <|/think|> +
+  // "347 + 285 =" decoded as one string is "632.347 + 285 =" -> 917.347 (owner's /chat report, 2026-10-22)
+  let s = Math.max(0, out.length - 48);
+  for (let i = out.length - 1; i >= s; i--) if (out[i] < 16) { s = i + 1; break; }
+  const tail = tok.decode(out.slice(s));
   const m = CALC_TAIL.exec(tail);
   if (!m) return null;
   const v = calcEvaluate(m[1]);
