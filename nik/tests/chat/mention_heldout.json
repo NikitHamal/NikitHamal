@@ -1,0 +1,118 @@
+[
+ {
+  "name": "cycle",
+  "turns": [
+   "nikit le aaja cycle chalauna sikyo."
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(cycle|badhai|sikyo|ramro)"
+  ]
+ },
+ {
+  "name": "homework",
+  "turns": [
+   "hamal sir le aaja dherai homework diyo."
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(homework|kaam|samaya|garh|sakinchha|sakchhau)"
+  ]
+ },
+ {
+  "name": "guitar",
+  "turns": [
+   "mero dai nik guitar bajauna sikdai chha.",
+   "mero dai k sikdai chha?"
+  ],
+  "want": [
+   null,
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*guitar"
+  ]
+ },
+ {
+  "name": "wedding",
+  "turns": [
+   "nikit hamal ko bihe ma hamilai bolaunubhayo."
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(bihe|badhai|ramailo|jaanus|shubhakamana)"
+  ]
+ },
+ {
+  "name": "phone",
+  "turns": [
+   "nikit ko phone futyo, aba k garne?"
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(phone|mobile|marmat|repair|bhandar|pasal)"
+  ]
+ },
+ {
+  "name": "moving",
+  "turns": [
+   "nikita didi naya ghar ma sarnubhayo."
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(ghar|badhai|sar|ramro)"
+  ]
+ },
+ {
+  "name": "haircut",
+  "turns": [
+   "nik le aaja kapal katayo, ramro dekhinchha."
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(kapal|ramro|dekhinchha)"
+  ]
+ },
+ {
+  "name": "new job",
+  "turns": [
+   "mero mama nikit hamal le naya jagir paunubhayo."
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(jagir|badhai|kaam|ramro)"
+  ]
+ },
+ {
+  "name": "exam",
+  "turns": [
+   "nikit pariksha ma pass bhayo!"
+  ],
+  "want": [
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(pass|badhai|pariksha|ramro)"
+  ]
+ },
+ {
+  "name": "swimming",
+  "turns": [
+   "nikit pauri khelna sikdai chha.",
+   "nikit k sikdai chha?"
+  ],
+  "want": [
+   null,
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*(pauri|swim)"
+  ]
+ },
+ {
+  "name": "class memory",
+  "turns": [
+   "mero bhanja ko naam nikit ho, u 8 kaksha ma padhchha.",
+   "mero bhanja kun kaksha ma padhchha?"
+  ],
+  "want": [
+   null,
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\b8\\b"
+  ]
+ },
+ {
+  "name": "fish memory",
+  "turns": [
+   "hamal dai le hijo 3 wata machha samatnubhayo.",
+   "hamal dai le kati machha samatnubhayo?"
+  ],
+  "want": [
+   null,
+   "^(?![\\s\\S]*(android|consica|full.?stack|developer|engineer|lami nepal|nebians|astroweb|essay|sunya dekhi|banaunubhayo|banaunubhayeko))[\\s\\S]*\\b3\\b"
+  ]
+ }
+]

@@ -22,7 +22,7 @@ fresh() {  # dir name version files...: drop the files if the dir's stamp for `n
 }
 run() {  # tag bin outdir
   t=$1; b=$2; o=$3; mkdir -p $o
-  fresh $o chat $CHAT_V everyday.txt money.txt followups.txt
+  fresh $o chat $CHAT_V everyday.txt money.txt followups.txt mention.txt
   fresh $o rw $RW_V rw.json rw.txt
   [ -f $o/bench.json ]   || $PY nik/bench.py --model $b --n 16 --out $o/bench.json > $o/bench.txt 2>&1 &
   [ -f $o/nbench.json ]  || $PY nik/bench.py --model $b --n 16 --nested-items --out $o/nbench.json > $o/nbench.txt 2>&1 &
@@ -41,6 +41,7 @@ run() {  # tag bin outdir
   grep -q '^score' $o/everyday.txt 2>/dev/null  || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/everyday_heldout.json > $o/everyday.txt 2>&1 &
   grep -q '^score' $o/followups.txt 2>/dev/null || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/followups.json > $o/followups.txt 2>&1 &
   grep -q '^score' $o/money.txt 2>/dev/null     || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/money_heldout.json > $o/money.txt 2>&1 &
+  grep -q '^score' $o/mention.txt 2>/dev/null   || node nik/web/chat_audit.mjs --model $b --quiet --seeds 1,2,3 nik/tests/chat/mention_heldout.json > $o/mention.txt 2>&1 &
   [ -f $o/stress.json ]  || $PY nik/stress.py --model $b --out $o/stress.json > $o/stress.txt 2>&1 &
   [ -f $o/long.json ]    || $PY nik/bench_long.py --model $b --out $o/long.json > $o/long.txt 2>&1 &
   if [ -f ${EN_DATA:-data/english}/en_heldout.jsonl ]; then
