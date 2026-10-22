@@ -7,6 +7,9 @@ set -u
 B=$1; T=$2; LB=${3:-nik/web/model/nik-0.1.bin}
 PY=${PY:-/tmp/uv-venv/bin/python}; command -v $PY >/dev/null || PY=python3
 cd "$(dirname "$0")/../.."
+# each eval process is GPU-bound; torch's default CPU pool (one thread per core) x ~15 processes starved a training run
+# sharing the box (k4: 133k -> 48k tok/s beside 8 bench runs)
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-2} MKL_NUM_THREADS=${MKL_NUM_THREADS:-2}
 [ -f /tmp/ladder/items.json ] || { mkdir -p /tmp/ladder; $PY nik/scripts/word_procedure_probe.py --out /tmp/ladder/items.json --ladder > /dev/null 2>&1; }
 run() {  # tag bin outdir
   t=$1; b=$2; o=$3; mkdir -p $o
