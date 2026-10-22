@@ -70,6 +70,20 @@ Branch: `agent-b/festivals-v3` (never main). The other agent's festival work (`f
   - If the owner pushes Kaanchi takes: run `ELEVEN_KEY=… python tools/import_vo.py`, then `cpu_build.sh` (composite + score only).
   - Possible polish: shot 5 (early beam keys are dark), shot 18 (bus), kalash leaves.
 
+- [x] **2026-10-22.**
+  - The owner recorded the Dashain narration as **one continuous Kaanchi take** (`narration/all.mp3`). `tools/split_take.py` splits it per line with ElevenLabs forced alignment against the whole script. Note the `--form-string` fix: a `;` in the text was truncating the curl form.
+  - New CPU box `sb-0e9be4d28bfdcc98`.
+  - **HQ build:** native 1080×1920 keys at 64 spp, grain 2.4, CRF 17 film plus a 12 Mbps `*_1080p.mp4`. Downloads come straight from the notebook status cell (`mo.download` per file in `out/`).
+- [x] **Tihar film** (`tihar/`):
+  - Script with sourced notes.
+  - Expressive George narration, Scribe-checked.
+  - Sets in `blender/sets_t.py`: valley lighting up, Yama–Yamuna oil ring with Yama's buffalo shadow, dawn crows, milk bowl → rangoli, garlanded ox, Mha Puja top.
+  - `blender/shots_tihar.py` (SHOTS + KEYS).
+  - The type pass and compositor are film-aware via `FILM=tihar`: 5-diya pixel calendar, animated pixel Kukur Tihar dog, NS 1147.
+  - `tools/score_tihar.py`; build with `tihar_build.sh` (outputs in `build_tihar/`, `out/tihar_v3*.mp4`).
+  - The owner may record Kaanchi for Tihar: see `tihar/narration/README.md`.
+- Gotcha: two builds running `fetch_audio.py` at the same time corrupt the shared `.src` downloads. Run audio once, then the other film.
+
 ## Delivery limits (measured)
 - Connector pushes carry blobs up to about 8 MB; 30 MB fails with HTTP 413. So the repo copy of the film has to be at most about 8 MB (or split per section), and the full-quality master goes to the owner as a chat attachment (`actl asset put`).
 - molab → here: base64 chunks through the marimo execute API (see `nik/docs/LEARNINGS.md`: 700 KB reads, md5 on both ends).
