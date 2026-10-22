@@ -22,7 +22,7 @@ from export import load_exported
 src = 'nik/web/model/nik-0.1.bin'; raw = open(src, 'rb').read(); hl = struct.unpack('<I', raw[4:8])[0]
 torch.save({'model': load_exported(src).state_dict(), 'cfg': json.loads(raw[8:8 + hl])['config']}, '/tmp/claude/init_live.pt')
 PYEOF
-  TR="$PY nik/train.py --stage sft --init ${INIT:-/tmp/claude/init_live.pt} --data data --sft-name sftl_$T --out /tmp/claude/runs/$T --steps 100000000 --minutes ${MIN:-12} --bs ${BS:-32} --accum 2 --lr 1e-4 --warmup 50 --eval-every 1000 --mix 0.2 --diff-weight 0 --opt muon --ema 0.998 --ctx ${SEQ:-2048} --set-ctx 16384 "
+  TR="$PY nik/train.py --stage sft --init ${INIT:-/tmp/claude/init_live.pt} --data data --sft-name sftl_$T --out /tmp/claude/runs/$T --steps 100000000 --minutes ${MIN:-12} --bs ${BS:-32} --accum 2 --lr 1e-4 --warmup 50 --eval-every 1000 --mix 0.2 --diff-weight ${DIFF:-0.3} --diff-frac 0.25 --opt muon --ema 0.998 --ctx ${SEQ:-2048} --set-ctx 16384 "
   $TR --compile > $O/train.log 2>&1 || $TR > $O/train.log 2>&1
   $PY nik/export.py --ckpt /tmp/claude/runs/$T/ckpt.pt --out $B && kput nik-$T-bin $B $O/train.log
 fi
