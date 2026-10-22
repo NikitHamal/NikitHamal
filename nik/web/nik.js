@@ -230,8 +230,10 @@ export class NikModel {
     this.hd = c.d / c.heads;
     this.L = c.n_unique * c.n_repeat;
     const kvw = c.kv_heads * this.hd;
-    this.K = Array.from({ length: this.L }, () => new Float32Array(c.ctx * kvw));
-    this.V = Array.from({ length: this.L }, () => new Float32Array(c.ctx * kvw));
+    // KV cache grows on demand (long-context models: cfg.ctx up to 16k would be ~400 MB if allocated up front)
+    this.kvw = kvw; this.kvCap = Math.min(c.ctx, 1024);
+    this.K = Array.from({ length: this.L }, () => new Float32Array(this.kvCap * kvw));
+    this.V = Array.from({ length: this.L }, () => new Float32Array(this.kvCap * kvw));
     this.n = 0; // committed cache length
     const half = this.hd / 2;
     this.invFreq = new Float32Array(half);
@@ -251,6 +253,16 @@ export class NikModel {
   }
 
   reset() { this.n = 0; this._history = []; }
+
+  _ensureKV(n) {
+    if (n <= this.kvCap) return;
+    const cap = Math.min(this.cfg.ctx, Math.max(n, 2 * this.kvCap));
+    for (let l = 0; l < this.L; l++) {
+      const K = new Float32Array(cap * this.kvw); K.set(this.K[l]); this.K[l] = K;
+      const V = new Float32Array(cap * this.kvw); V.set(this.V[l]); this.V[l] = V;
+    }
+    this.kvCap = cap;
+  }
 
   _mm(name, X, T, inD, outD, Y) {
     if (this.kernel) this.kernel.mm(name, X, T, Y);
@@ -313,6 +325,7 @@ export class NikModel {
     const c = this.cfg, T = ids.length, d = c.d, hd = this.hd, H = c.heads, KV = c.kv_heads;
     if (T > this.capT) throw new Error('batch too large');
     if (pos0 + T > c.ctx) throw new Error('context overflow');
+    this._ensureKV(pos0 + T);
     const B = this.buf, W = this.W, rep = H / KV, kvw = KV * hd, scale = 1 / Math.sqrt(hd);
     let prevK = pos0 > 0 ? this.kpos[pos0 - 1] : 0;
     for (let t = 0; t < T; t++) {

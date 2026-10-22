@@ -27,6 +27,12 @@ def collect(d):
     r['ladder ALL'] = num(f'{d}/ladder.txt', r'ALL (\d+)/')
     r['traps'] = num(f'{d}/trap.txt', r'trap check: (\d+)/')
     try:
+        for L, v in json.load(open(f'{d}/long.json'))['summary'].items():
+            if '/' in v:
+                r[f'long recall {L}'] = int(v.split('/')[0])
+    except Exception:
+        pass
+    try:
         e = json.load(open(f'{d}/en.json'))['summary']
         r['EN qa ppl (lower)'] = e['en_qa_ppl']; r['EN wiki ppl (lower)'] = e['en_wiki_ppl']
         r['EN reply'] = int(e['en_reply'].split('/')[0]); r['NE fidelity'] = int(e['ne_fidelity'].split('/')[0])
@@ -44,7 +50,9 @@ def main():
     for k in dict.fromkeys(list(L) + list(C)):
         a, b = L.get(k), C.get(k)
         flag = ''
-        if a is None or b is None:
+        if a is None and b is not None and k.startswith('long recall'):
+            flag = '+ (new: live cannot)'
+        elif a is None or b is None:
             flag = 'MISSING'; bad.append(k) if not k.endswith('*') else None
         elif '(lower)' in k and b > a:
             flag = 'REGRESSION'; bad.append(k)

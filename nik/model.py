@@ -164,7 +164,10 @@ class Block(nn.Module):
         if rep > 1:
             k = k.repeat_interleave(rep, dim=1)
             v = v.repeat_interleave(rep, dim=1)
-        a = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
+        if mask is None:
+            a = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+        else:
+            a = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
         x = x + self.o(a.transpose(1, 2).reshape(N, T, -1))
         g, u = self.up(self.n2(x)).chunk(2, dim=-1)
         return x + self.down(F.silu(g) * u)
@@ -220,15 +223,14 @@ class NikLM(nn.Module):
         N, T = idx.shape
         if pos is None:
             pos = torch.arange(T, device=idx.device)
-        if mask is None:
-            mask = torch.ones(T, T, dtype=torch.bool, device=idx.device).tril()
+        causal = mask is None                   # plain causal: SDPA is_causal (flash kernel, no T x T mask in memory)
         cos, sin = rope_cache(self.cfg, int(pos.max()) + 1, idx.device)
         cos, sin = cos[pos].to(self.emb.weight.dtype), sin[pos].to(self.emb.weight.dtype)
         if pos.dim() == 2:                      # per-row positions (N, T) for left-padded batches: broadcast over heads
             cos, sin = cos.unsqueeze(1), sin.unsqueeze(1)
-        if mask.dim() == 3:                     # per-row masks (N, T, T)
+        if not causal and mask.dim() == 3:      # per-row masks (N, T, T)
             mask = mask.unsqueeze(1)
-        if mask.dtype == torch.bool:
+        if not causal and mask.dtype == torch.bool:
             # additive float mask in the activation dtype lets SDPA pick the
             # memory-efficient kernel instead of materialising T x T scores per layer
             dt = self.emb.weight.dtype

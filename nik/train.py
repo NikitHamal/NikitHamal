@@ -190,6 +190,8 @@ def main():
     ap.add_argument('--bs', type=int, default=32)
     ap.add_argument('--accum', type=int, default=1)
     ap.add_argument('--ctx', type=int, default=0, help='override training context')
+    ap.add_argument('--set-ctx', type=int, default=0, help='long context: set the model cfg.ctx (saved in the ckpt/.bin)')
+    ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
     ap.add_argument('--lr', type=float, default=3e-3)
     ap.add_argument('--warmup', type=int, default=500)
     ap.add_argument('--sched', choices=['cosine', 'wsd'], default='cosine')
@@ -253,6 +255,10 @@ def main():
         if cfg.abacus:
             cfg.digit_sp = [tok.encode(f' {d}', allow_special=False)[0] for d in range(10)]
             cfg.digit_ns = [tok.encode(str(d), allow_special=False)[0] for d in range(10)]
+    if a.set_ctx:
+        cfg.ctx = a.set_ctx
+    if a.rope_base:
+        cfg.rope_base = a.rope_base
     model = NikLM(cfg).to(device)
     if ck:
         missing, unexpected = model.load_state_dict(ck['model'], strict=False)
