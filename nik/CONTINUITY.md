@@ -72,30 +72,28 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
-## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~19:20 UTC box clock (session 2)
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~20:40 UTC (session 2, box 1 ended ~20:55)
 **Full handover prompt: `nik/agents/HANDOVER.md`.** Live model = **m50 (unchanged)**. Live /chat code improved today
-(all on main): pencil fixes (grouped numbers, signs, clock times), plain digits for `1,200`, consistency vote (m50 held-out
-chat 71 -> 77), re-ask on empty replies. Box 1 (sb-7b28...) ends ~20:55; jobs in `/tmp/claude`, log `/tmp/claude/queue.log`.
+(main): pencil fixes (grouped numbers, signs, clock times), plain digits for `1,200`, consistency vote (m50 held-out chat
+71 -> 77), re-ask on empty replies. Box 1 is gone after ~20:55; everything is on private Kaggle (below).
 
-**Best candidate: s12** = (k11 + k11b + k12)/3 (Kaggle `nik-s12-bin`, md5 652b13ac). vs m50: bench 210, nested 222 =,
-math 98, RW 35 (p=0.01-0.03 across the family), reading 9, ladder 45, traps 28, everyday 18/60, money 20/30, mention
-29/36, EN ppl 229 -> 12. Fresh-item check (`confirm.sh`, 1,152 new NikBench items): 861 vs 855, no set drops.
-**Blocks:** understanding 18/19 (one item, p=1.0) and **owner cases 19/25 vs 25/25** (the owner's `kati rey?` /
-`pakka ho?` follow-ups; a real drop: 6 broken, 0 fixed). Every polished arm today loses those follow-ups (17-23).
+**Best candidate: s13** = (k13 + k13b)/2, md5 619ab4cc (Kaggle `nik-final-1022`). vs m50: RW items 37 vs 25 (16 fixed /
+4 broken, p=0.01), math 99 vs 94, everyday 20 vs 6 (/60), traps 27, reading 6, money 19, EN ppl 229 -> 12.4, smoke 4/4,
+**fresh items 865 vs 855** (`confirm.sh`). Loses: understanding 17 vs 19 (honest "not told" -> invented father's name,
+"sunita ... bahini engineer", "we are reading" -> "uni padhdai chhin"), nested 220 vs 222, owner cases 24/25 vs 25.
+k13 (md5 47629680, Kaggle `nik-k13-bin`): fresh 859 vs 855, smoke 4/4. k13b: owner cases 25/25 but und 16.
+**Owner decision pending:** card `ship-s13-1022` (keep live and fix understanding / ship s13 / ship k13) and the older
+`gate-rule-1022b`. To ship s13: `python nik/scripts/ship_model.py --bin s13.bin --tag s13 --prev-tag m50 --gate
+gate_s13 --live-gate gate_live ...` (gate dirs in `gates_final.tgz` on `nik-final-1022`), push, DECISION in #11.
 
-**Recipe that got here (all from m50, KL 1.0 to m50, 850 steps, Muon lr 1e-4):** p8mx (k2's mix: p8m + English 10% +
-abstain/format) + followup/multiturn/needles (p8mxf) + everyday 3% + colrows 4% + money1 2% + lookup 2.5% + mention 1.5%,
-repaired by `fix_mix.py` (history turns context-only, format rows with thinks), followup.py rows regenerated (p8mxu).
-**In flight:** k13 = p8mxu with the hand-written follow-ups replaced by the live model's own follow-up replies
-(`web/selfdistill.mjs`: /chat path, kept only if both answers state the gold; 3,194/10,800 kept; Kaggle
-`nik-selfdistill-1022`), then k13b + s13 = (k13 + k13b)/2 (~20:05).
+**Recipe (from m50, KL 1.0 to m50, 850 steps, Muon lr 1e-4, bs 128 x accum 2, seq 512, diffusion 0.3):** mix p8mxs =
+p8mx (k2) + multiturn/needles + everyday 3% + colrows 4% + money1 2% + lookup 2.5% + mention 1.5%, repaired by
+`fix_mix.py`, hand-written follow-ups replaced by the live model's own (`web/selfdistill.mjs`, Kaggle
+`nik-selfdistill-1022`). Jobs: `nik/agents/molab/jobs/queue_k13.sh`, `queue_k13s.sh`.
 
-**Owner decision pending (card gate-rule-1022b):** strict ">= every row" vs "real drops only (sign test p<0.1) +
-fresh-item re-check". Under either rule nothing ships while the owner cases drop.
-
-**Next session, in order:** (1) if s13 holds the owner cases: confirm.sh + ship_smoke + ship_model.py; (2) else: more
-self-distilled multi-turn data (the live model's own replies) for every behaviour the polish erodes, then seeds + soup;
-(3) gate noise: the chat rows are summed over seeds; the owner cases row is per item; mention row scores persona leaks.
+**Next session, in order:** (1) owner's answer -> ship or not; (2) if not: held-out data for the 3 understanding items,
+keep the self-distilled follow-ups, then seeds + soup + `confirm.sh`; (3) self-distill (the live model's own outputs,
+kept if verified) any other behaviour a polish erodes; (4) harness: `generate_ar` step cap (`6799701`).
 
 ## Session context - 2026-10-21 ~16:45 UTC (new Claude session; covers Claude's + Sky's roles)
 - **Live: m50** = 0.5·v4r2 + 0.5·v4r3 (same-parent blend, both v4f + reduce.py 25-30%). Paired vs v4f: NikBench plain 72.6% (72.2),
