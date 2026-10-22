@@ -77,8 +77,14 @@ def _distract(R):
 
 
 def _steps(pairs, check):
-    """format the trace: 'label: expr = value. ... jaach: ...'"""
-    body = '. '.join(f'{lab}: {expr} = {val}' for lab, expr, val in pairs)
+    """format the trace: 'label: expr = value. ... jaach: ...'
+
+    A pair whose value is None is written as text only ('label: expr'): the auditor
+    checks every "a = b" in a trace for exactness, and a division with a remainder
+    (36 / 5 = 7) is not exact - so it must not be written as an equation.
+    """
+    body = '. '.join(f'{lab}: {expr}' if val is None else f'{lab}: {expr} = {val}'
+                     for lab, expr, val in pairs)
     return f'{body}. jaach: {check}'
 
 
@@ -453,7 +459,8 @@ def scene_split_sweets(R):
     else:
         user = (f'{sweets} ota mithai bantunu paryo {kids} jana lai. {dis} '
                 f'ek jana ko koto? baki kati?')
-    steps = _steps([('jamma', f'{sweets}', sweets), ('ek jana', f'{sweets} / {kids}', each)],
+    steps = _steps([('jamma', f'{sweets}', sweets),
+                    ('ek jana', f'{sweets} / {kids} le {each} ota each, {left} bacheko', None)],
                    f'{each} x {kids} = {each * kids}, bacheko {left}, milyo')
     ans = R.choice([f'jana jana {each} ota, bacheko {left}.', f'{each} ota each, {left} bacheko.',
                     f'ek jana ko {each} ota pauncha.'])
