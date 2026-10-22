@@ -20,6 +20,8 @@ ASK_ANY = ['feri bhana ta.', 'k bhannubhayo?', 'bujhina, feri bhannus na.', 'ek 
 SURE = ['pakka ho?', 'sachchai?', 'thik ho ni?', 'pakka thik ho?']
 NUM_REPLY = ['jawaf {g} ho.', 'maile bhaneko jawaf {g} ho.', '{g} ho.', 'feri bhanda: jawaf {g} ho.']
 SURE_REPLY = ['ho, pakka. jawaf {g} nai ho.', 'ho, {g} nai ho.', 'ho, maile jaach gare: jawaf {g} ho.']
+ASK_THINK = ['aghi ko jawaf {g} ho.', 'maile aghi {g} bhaneko thiye.', 'pahile ko uttar {g} thiyo.']
+SURE_THINK = ['aghi ko jawaf {g} ho. pheri herda pani {g} nai aauchha.', 'maile aghi {g} bhaneko thiye. tyo thik ho.']
 
 # operations on the previous answer: (follow-up templates, sign, english templates)
 OPS = {
@@ -93,7 +95,8 @@ def en_row(R):
     if R.random() < 0.5:
         return {'cat': 'followup-en', 'gold': str(g), 'messages': prev + [
             {'role': 'user', 'content': R.choice(EN_SURE)},
-            {'role': 'nik', 'content': R.choice(EN_SURE_REPLY).format(a=a, op=op, b=b, g=g)}]}
+            {'role': 'nik', 'content': R.choice(EN_SURE_REPLY).format(a=a, op=op, b=b, g=g),
+             'think': f'the previous answer was {g}.'}]}
     op2 = R.choice('+-x')
     n = R.randint(2, 9) if op2 == 'x' else R.randint(1, 50)
     r = _apply(g, op2, n)
@@ -125,14 +128,19 @@ def sample(R):
             if row:
                 return row
         if g is not None and str(g) in m[1]['content'] and len(str(g)) <= 12:
+            # every numeric follow-up starts its think the same way as followup-op ("aghi ko jawaf G ho."), then
+            # restates G: k9 (op rows had this think, kati-rey rows had none) wrote the think and then an EMPTY answer
+            # in 3/5 samples of `347 + 285 kati hunchha?` -> `kati rey?` (the owner's bug report; live m50: 5/5)
+            nik = {'role': 'nik'}
             if not _isnum(g):                       # yes/no or word answers: "kati?" makes no sense, repeat instead
-                q, a = R.choice(ASK_ANY), m[1]['content']
+                q, nik['content'] = R.choice(ASK_ANY), m[1]['content']
             elif R.random() < 0.3:
-                q, a = R.choice(SURE), R.choice(SURE_REPLY).format(g=g)
+                q, nik['content'] = R.choice(SURE), R.choice(SURE_REPLY).format(g=g)
+                nik['think'] = R.choice(SURE_THINK).format(g=g)
             else:
-                q, a = R.choice(ASK_NUM), R.choice(NUM_REPLY).format(g=g)
-            return {'cat': 'followup-num', 'gold': str(g), 'messages': prev + [{'role': 'user', 'content': q},
-                                                                              {'role': 'nik', 'content': a}]}
+                q, nik['content'] = R.choice(ASK_NUM), R.choice(NUM_REPLY).format(g=g)
+                nik['think'] = R.choice(ASK_THINK).format(g=g)
+            return {'cat': 'followup-num', 'gold': str(g), 'messages': prev + [{'role': 'user', 'content': q}, nik]}
         if len(m[1]['content']) < 300:
             return {'cat': 'followup-repeat', 'gold': None,
                     'messages': prev + [{'role': 'user', 'content': R.choice(ASK_ANY)}, {'role': 'nik', 'content': m[1]['content']}]}

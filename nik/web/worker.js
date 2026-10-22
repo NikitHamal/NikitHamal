@@ -78,7 +78,7 @@ async function run(id, messages, opts) {
   const t0 = performance.now();
   const first = await sampleOnce(id, prompt, opts, true);
   let tokens = first.stats.tokens, passes = first.stats.passes;
-  let vote = null;
+  let vote = null, shown = first;
   // Self-consistency (Wang et al., 2022): for answers Nik reasoned about, sample
   // more independent reasoning paths and keep the majority final answer.
   const K = opts.vote ?? 5;
@@ -97,8 +97,14 @@ async function run(id, messages, opts) {
     const v = pickVote(paths);
     if (v) {
       vote = { agree: v.agree, k: v.k, answer: v.answer };
-      if (v.path !== first) postMessage({ type: 'replace', id, think: v.path.think, answer: v.path.answer });
+      if (v.path !== first) { shown = v.path; postMessage({ type: 'replace', id, think: v.path.think, answer: v.path.answer }); }
     }
+  }
+  // an empty reply (k9: think "aghi ko jawaf 632 ho." then <|end|>) is never shown: ask the model again, up to 2 times
+  for (let i = 0; i < 2 && !stopFlag && !(shown.answer || '').trim(); i++) {
+    const p = await sampleOnce(id, prompt, { ...opts, temperature: Math.max(0.7, opts.temperature ?? 0.7) }, false);
+    tokens += p.stats.tokens; passes += p.stats.passes;
+    if (p.answer.trim()) { shown = p; postMessage({ type: 'replace', id, think: p.think, answer: p.answer }); }
   }
   const ms = performance.now() - t0;
   postMessage({ type: 'done', id, stats: { tokens, passes, ms, tps: tokens / (ms / 1000), promptTokens: prompt.length }, vote, stopped: stopFlag });

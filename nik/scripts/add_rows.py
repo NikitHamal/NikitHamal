@@ -21,10 +21,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--data', default='data'); ap.add_argument('--base', required=True); ap.add_argument('--name', required=True)
     ap.add_argument('--gen', action='append', default=[]); ap.add_argument('--seed', type=int, default=5)
+    ap.add_argument('--drop', action='append', default=[], help='drop base rows whose cat starts with this (repeatable)')
     a = ap.parse_args()
     R = random.Random(a.seed)
     tok = Tokenizer.load(os.path.join(ROOT, 'nik', 'web', 'model', 'tokenizer.json'))
     base = open(os.path.join(a.data, f'{a.base}.jsonl')).readlines()
+    if a.drop:
+        n0 = len(base)
+        base = [l for l in base if not json.loads(l).get('cat', '').startswith(tuple(a.drop))]
+        print(f'dropped {n0 - len(base):,} base rows with cat {a.drop}', flush=True)
     sample = R.sample(base, min(3000, len(base)))
     avg = sum(len(render_chat(tok, json.loads(l)['messages'])[0]) for l in sample) / len(sample)
     base_tok = avg * len(base)

@@ -45,6 +45,15 @@ function once(prompt, o) {
   return { think: tok.decode(think).trim(), answer: tok.decode(answer).trim(), thought: think.length > 0, conf: n ? Math.exp(lp / n) : 1 };
 }
 
+// worker.js: an empty reply is never shown, the model is asked again (up to 2 times)
+function retryEmpty(r, prompt) {
+  for (let i = 0; i < 2 && !r.answer.trim(); i++) {
+    const p = once(prompt, { ...opts, temperature: Math.max(0.7, opts.temperature) });
+    if (p.answer.trim()) r = { ...p, promptLen: r.promptLen };
+  }
+  return r;
+}
+
 function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confidence-weighted vote
   const prompt = contextFor(tok, msgs.map((m) => (m.role === 'user' ? { ...m, content: plainNumbers(m.content) } : m)), Math.floor(model.cfg.ctx * 0.55));
   const first = once(prompt, opts);
@@ -58,9 +67,9 @@ function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confid
       return { ...paths.find((p) => finalNumber(p.answer) === best), promptLen: prompt.length };
     }
     const v = vote(paths);
-    return { ...(v ? v.path : first), promptLen: prompt.length };
+    return retryEmpty({ ...(v ? v.path : first), promptLen: prompt.length }, prompt);
   }
-  return { ...first, promptLen: prompt.length };
+  return retryEmpty({ ...first, promptLen: prompt.length }, prompt);
 }
 
 const convs = JSON.parse(readFileSync(file, 'utf8'));
