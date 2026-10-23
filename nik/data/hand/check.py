@@ -4,7 +4,7 @@
     python nik/data/hand/check.py raw/a/x.txt     # one file: prints every rejected example with its reason
 
 Writing format (STYLE.md): examples are blocks; a block starts with `### <category>`; then one line per turn:
-    U: user text              N: Nik's reply             T: Nik's private working for the NEXT N (optional)
+    U: user text              N: Nik's reply             T: worked solution for the NEXT N (optional)
     G: the gold answer (optional; must appear in the last N)
 Every line is one turn (no line breaks inside a turn). Lines starting with `#` (not `###`) are comments.
 
@@ -78,7 +78,7 @@ def forbidden():
     if not os.path.exists(lad):
         os.system(f'{sys.executable} {os.path.join(NIK, "scripts", "word_procedure_probe.py")} --out {lad} --ladder > /dev/null 2>&1')
     try:
-        add(r.get('q', '') for r in json.load(open(lad)))
+        add(r.get('q', '') if isinstance(r, dict) else r[1] for r in json.load(open(lad)))   # --out rows are [cat, q, gold]
     except Exception:  # noqa: BLE001
         pass
     return out
@@ -176,6 +176,13 @@ def main():
     one = len(sys.argv) > 1
     forb = forbidden()
     seen, rows = {}, []
+    if one:   # one-file mode also catches first user turns that another raw file already has
+        mine = {os.path.abspath(f) for f in files}
+        for f in sorted(glob.glob(os.path.join(HERE, 'raw', '**', '*.txt'), recursive=True)):
+            if os.path.abspath(f) not in mine:
+                for ex in parse(f):
+                    if ex[2]:
+                        seen.setdefault(norm(ex[2][0][1]), f'{os.path.relpath(f, HERE)}:{ex[0]}')
     per_file, per_cat, rej_reason = collections.Counter(), collections.Counter(), collections.Counter()
     for f in files:
         exs = parse(f)
