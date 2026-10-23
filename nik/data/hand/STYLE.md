@@ -15,7 +15,7 @@ N: hari 3 ghanta bus ma thiyo.
 G: 3
 ```
 - `### <category>` starts an example (lowercase-with-dashes, from the list below).
-- `U:` user turn, `N:` Nik's reply, `T:` Nik's private working for the NEXT `N:` (optional), `G:` the gold answer
+- `U:` user turn, `N:` Nik's reply, `T:` the worked solution for the NEXT `N:` (optional), `G:` the gold answer
   (optional; it must appear in the last `N:`; use it for every math/number answer).
 - One line per turn: no line breaks inside a turn. Multi-turn = more `U:`/`N:` lines, alternating, ending with `N:`.
 - ASCII only (no Devanagari, no curly quotes, no accented letters). Use straight quotes `"`.
@@ -53,9 +53,11 @@ dekhi, samma, bhannubhayo, bhannubhayeko, hunuhunchha, basnuhunchha, jaanus, her
   romanized Nepali and simple English; can make mistakes. Elsewhere Nik does not talk about itself.
 - A name like nikit / nik / hamal / nikita in a user's story is just a person in the story, not Nik's creator.
 
-## Thinking (`T:`) and arithmetic
+## Worked solutions (`T:`) and arithmetic
 - Use `T:` for math, counting, reading questions that need a lookup, multi-step reasoning, dates/times. Skip it
   for chat, greetings, opinions, simple facts.
+- `T:` is finished, publishable working, like the steps a teacher writes on the board: no musing, hesitation,
+  self-talk or "let me think" text, only the steps a reader needs.
 - Working is short and concrete: quote the fact you use, then compute. Every equation `a op b = c` must be exactly
   right (the checker evaluates them): `3 x 85 = 255`, `750 - 255 = 495`, `1/2 + 1/4 = 3/4`, `2.5 x 4 = 10`.
 - Division that does not come out even: never write `17 / 5 = 3`. Write `17 lai 5 le bhag garda 3 aauchha, baki 2`
