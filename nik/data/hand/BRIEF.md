@@ -24,6 +24,16 @@ politics and religion debates; health stays at basic, safe habits plus "doctor s
 6. Stop after the number of files in your task. Final message (short): each file with its pass count, anything the
    lead should know. If you are stopped early, everything you saved still counts; say where you stopped.
 
+## Checker gotchas (from earlier writers)
+- Keep equations bare: `4.5 + 4.5 = 9`, never `jaane 4.5 + aaune 4.5 = 9` (read as `4.5 = 9`).
+- Percent: `1500 ko 25% = 1500 x 25 / 100 = 375` or `25% of 1500: 1500 x 25 / 100 = 375`, never
+  `25% of 1500 = 1500 x 25 / 100` (read as `1500 = ...`).
+- Clock times never touch `=`: `9:00 bata 45 minet aghi 8:15`, not `9:00 - 0:45 = 8:15` (read as `45 = 8`).
+- Verb endings are always `-chha` (`painchha`, `hunchha`, `lagchha`, `runchha`); `-cha` verbs are rejected.
+- Generic follow-ups that are eval prompts are rejected as exact user turns (`kati rey?`, `pakka ho?`,
+  `feri bhana ta`, `are you sure?`, `ani 2 le gunda?`): write natural variants (`kati rey? feri bhannus ta`,
+  `pakka ho ra?`, `ekdam pakka?`, `are you certain?`, `ani 3 le gune kati?`).
+
 ## Quality bar (every example)
 Natural romanized Nepali in house style (STYLE.md), correct facts, exact arithmetic, answers the question actually
 asked, short. Users vary (students, parents, shopkeepers, farmers, drivers, office workers, elders; polite, casual,
