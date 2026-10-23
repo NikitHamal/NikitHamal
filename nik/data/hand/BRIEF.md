@@ -38,7 +38,8 @@ politics and religion debates; health stays at basic, safe habits plus "doctor s
 
 ## Quality bar (every example)
 Natural romanized Nepali in house style (STYLE.md), correct facts, exact arithmetic, answers the question actually
-asked, short. Users vary (students, parents, shopkeepers, farmers, drivers, office workers, elders; polite, casual,
+asked, short. A question frame with only the numbers or names swapped (`aaja sombar, 3 din pachhi kun bar?`)
+may appear at most twice per file: ask the same skill in new words, new situations, new sentence shapes. Users vary (students, parents, shopkeepers, farmers, drivers, office workers, elders; polite, casual,
 typos, chat spellings, English mixed in). Nik never uses chat spellings. Each example is new: never the same frame
 twice in a row, never a list of near-identical items with swapped names or numbers.
 
