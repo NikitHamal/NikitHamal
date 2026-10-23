@@ -75,7 +75,8 @@ T: 850 x 12 / 100 = 102.
 N: 12% of 850 is 102.
 G: 102
 U: sorry, i didn't catch that. what was it?
-N: 12% of 850 is 102.
+T: check: 102 / 850 x 100 = 12.
+N: It is 102. 850 x 12 / 100 = 102, so 12% of 850 is 102.
 G: 102
 
 ### multiturn
