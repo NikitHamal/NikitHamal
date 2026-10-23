@@ -86,6 +86,8 @@ G: 40
 - Restate and confirm: `kati rey?`, `pakka ho?`, `feri bhana ta`, `malai bujhena`, `english ma bhana`, `chhoto ma
   bhana`, `ali bistar ma bhana`: same number/fact again, clearly; for `pakka ho?` add a check (`jaach: ...`).
 - Polite pushback when Nik is right (`haina hola, 60 hunchha`): keep the right answer and show the check, kindly.
+- When Nik slipped earlier (misread which item the user meant) and the user points it out, write the slip as a
+  `C:` line (context only, never trained; no `T:` before it) and the corrected answer as a normal `T:` + `N:`.
 - Ambiguous first question (`kati parchha?`): Nik asks what is meant; the user answers; Nik answers.
 - Lists built over turns (shopping, tasks, guests) then `jamma kati?`; topic switch then return; switch to English.
 - `G:` = the number in the last `N:` when the last answer is a number.

@@ -1,0 +1,1084 @@
+### multiturn
+U: 2500 ko 3 guna kati?
+T: 2500 x 3 = 7500.
+N: 2500 ko 3 guna 7500.
+U: ani tyasko 40%?
+T: aghi ko jawaf 7500. 7500 ko 40% = 7500 x 40 / 100 = 3000.
+N: 7500 ko 40% = 3000.
+G: 3000
+
+### multiturn
+U: hamro 3 wata bakhri chhan: chhiri, kali ra phuli.
+N: ramro naam! chhiri, kali ra phuli.
+U: bakhri lai kun ghans ramro?
+N: hariyo ghans ra kimbu, badahar jasta dale ghans ko paat bakhri lai ramro hunchha. bhijeko ghans dherai nadinus, ra saphha pani sadhai rakhnus.
+U: tesro bakhri ko naam k bhaneko thiye?
+N: tesro bakhri ko naam phuli ho.
+G: phuli
+
+### multiturn
+U: rickshaw le km ko 12 rupiya lincha, 6 km ko kati?
+T: 6 x 12 = 72.
+N: 6 km ko 72 rupiya.
+U: km ko 15 lagyo bhane?
+T: aba km ko 15, 6 km nai. 6 x 15 = 90.
+N: km ko 15 bhaye 6 km ko 90 rupiya.
+G: 90
+
+### multiturn
+U: 1500 ko saman ma 13% VAT thapda kati tirne?
+T: 1500 ko 13% = 1500 x 13 / 100 = 195. 1500 + 195 = 1695.
+N: VAT 195 thapera 1695 rupiya tirne.
+U: 195 kasari aayo? step ma bhannus
+T: 1500 ko 10% = 150. 1500 ko 1% = 15, 3% = 45. 150 + 45 = 195.
+N: 13% lai 10% ra 3% ma chhutyaunus. 1500 ko 10% = 150. 1% = 15, tyasaile 3% = 45. jodda 150 + 45 = 195.
+G: 195
+
+### multiturn
+U: futsal court hapta ko din ghanta ko 1500, shanibar 2000. shanibar 2 ghanta khelda kati?
+C: 3000 rupiya.
+U: shanibar ko rate 2000 ho ni
+T: shanibar ghanta ko 2000. 2 x 2000 = 4000.
+N: maaf garnus, maile arko din ko rate lagae. shanibar ghanta ko 2000, tyasaile 2 ghanta ko 2 x 2000 = 4000 rupiya.
+G: 4000
+
+### multiturn
+U: hami bihe ma 150 jana bolaune.
+N: thik chha, 150 jana.
+U: haina, 150 hoina 180 jana.
+N: hunchha, 180 jana.
+U: plate ko 650 le khana ko kharcha kati?
+T: 180 jana (sachyaeko). 180 x 650 = 117000.
+N: 180 jana ko khana ko 117000 rupiya.
+G: 117000
+
+### multiturn
+U: 1 ghanta 30 minet lai ghanta ma dashamlab ma kasari lekhne?
+T: 30 minet bhaneko 30 / 60 = 0.5 ghanta. 1 + 0.5 = 1.5.
+N: 1 ghanta 30 minet bhaneko 1.5 ghanta.
+U: 1.30 ghanta hoina ra?
+N: haina, ghanta ma 100 haina 60 minet hunchha. 30 minet bhaneko aadha ghanta, arthat 0.5, tyasaile 1.5 ghanta. 1.30 ghanta lekhda ta 1 ghanta 18 minet jati bujhinchha.
+G: 1.5
+
+### multiturn
+U: kati jana chahinchha?
+N: k kaam ko lagi kati jana chahinchha bhanna khojnu bhayeko? kaam kati chha ra euta le kati sakchha bhannus.
+U: 600 wata biruwa ropnu chha, euta le din ma 150 wata ropchha, 1 din mai sakaunu chha
+T: 600 / 150 = 4.
+N: 1 din mai sakauna 4 jana chahinchha.
+G: 4
+
+### multiturn
+U: what's 7 times 27?
+T: 7 x 27 = 189.
+N: 7 x 27 = 189.
+U: what's a third of that?
+T: previous answer 189. 189 / 3 = 63.
+N: A third of 189 is 63.
+G: 63
+
+### multiturn
+U: kaka ko chhori ko bihe falgun 22 ma chha.
+N: thik chha, falgun 22.
+U: bihe ma k lagaune hola, sari ki kurta?
+N: dubai ramro hunchhan. lamo samaya ubhinu ra nachnu parchha bhane kurta sajilo hunchha; bhitri karyakram ma sari pani ramro dekhinchha.
+U: aaja falgun 9, kati din baki?
+T: bihe falgun 22 (pahila bhannubhayeko). 22 - 9 = 13.
+N: bihe ko lagi 13 din baki chha.
+G: 13
+
+### multiturn
+U: Small pizza is 600 and large is 950. How much for 3 large pizzas?
+C: 1800 rupees.
+U: 1800 is three small ones
+T: large 950. 3 x 950 = 2850.
+N: You're right, I used the small price. 3 large pizzas cost 3 x 950 = 2850 rupees.
+G: 2850
+
+### multiturn
+U: 456 + 789 kati?
+T: 456 + 789 = 1245.
+N: 456 + 789 = 1245.
+U: ekdam sahi ho? ek choti jaanchnus
+T: jaach: 1245 - 789 = 456.
+N: sahi ho, 1245 nai. jaach: 1245 - 789 = 456, milyo.
+G: 1245
+
+### multiturn
+U: how many 30 cm tiles fit in a row along a 6 m wall?
+T: 6 m is 600 cm. 600 / 30 = 20.
+N: 20 tiles fit in a row.
+U: explain it step by step
+N: First put both in the same unit: 6 m is 6 x 100 = 600 cm. Then see how many 30 cm pieces fit in 600 cm: 600 / 30 = 20 tiles.
+G: 20
+
+### multiturn
+U: 6 jana le 4800 ko jeep bhada baadda ek jana ko kati?
+T: 4800 / 6 = 800.
+N: ek jana ko 800 rupiya.
+U: 8 jana bhaye?
+T: bhada 4800 nai, 8 jana. 4800 / 8 = 600.
+N: 8 jana bhaye ek jana ko 600 rupiya.
+G: 600
+
+### multiturn
+U: my internet plan is 1500 rupees a month.
+N: Okay, 1500 a month.
+U: the wifi is slow in my bedroom, what can I do?
+N: Move the router to a central, open spot, keep it off the floor and away from metal. A simple wifi extender can help in far rooms.
+U: how much do I pay in a year for internet?
+T: 1500 a month (said earlier). 12 x 1500 = 18000.
+N: You pay 18000 rupees a year.
+G: 18000
+
+### multiturn
+U: euta manchhe lai hapta ma 2 kilo chamal lagchha. 6 jana ko pariwar lai hapta ma kati?
+T: 6 x 2 = 12.
+N: 6 jana lai hapta ma 12 kilo chamal lagchha.
+U: ani mahina ma, 4 hapta maanda?
+T: aghi ko jawaf 12 kilo hapta ko. 4 x 12 = 48.
+N: 4 hapta ma 48 kilo chamal lagchha.
+G: 48
+
+### multiturn
+U: bus ka stop: kalanki, nagdhunga, naubise, mugling. mugling bhanda theek agadi ko stop kun?
+C: kalanki.
+U: kalanki ta pahilo ho, mugling bhanda theek agadi sodheko
+N: tapai thik hunuhunchha, maile suru ko stop bhane. kram kalanki, nagdhunga, naubise ra mugling ho, tyasaile mugling bhanda theek agadi naubise.
+G: naubise
+
+### multiturn
+U: 45 lai 4 le bhag garda baki kati rahanchha?
+T: 4 x 11 = 44. 45 - 44 = 1.
+N: baki 1 rahanchha.
+U: kasari thaha payo? bujhaunus
+N: 4 ko pahada ma 45 bhanda nakatne thulo sankhya 44 ho: 4 x 11 = 44. 45 bata 44 ghatauda 45 - 44 = 1, tyasaile bhagfal 11 ra baki 1.
+G: 1
+
+### multiturn
+U: 4 workers can paint a house in 6 days. how many days for 8 workers?
+T: 4 x 6 = 24 worker-days. 24 / 8 = 3.
+N: 8 workers can do it in 3 days, if they all work at the same speed.
+U: and with 12 workers?
+T: 24 worker-days. 24 / 12 = 2.
+N: 12 workers would take 2 days.
+G: 2
+
+### multiturn
+U: mero pasal bihana 7 baje khulchha.
+N: thik chha, bihana 7 baje.
+U: ani beluka 8 baje banda garchhu.
+N: bujhe, beluka 8 baje.
+U: pasal ma chor bata bachna k garne?
+N: rati ramro tala ra shutter ma dohoro lock lagaunus, bahira batti balera rakhnus. sakchhu bhane CCTV camera ra chhimeki sanga milera rati herne byabastha garnus.
+U: mero pasal din ma kati ghanta khulchha?
+T: bihana 7 baje dekhi beluka 8 baje samma (pahila bhannubhayeko). 7 bata 12 samma 5 ghanta, 12 bata 8 samma 8 ghanta. 5 + 8 = 13.
+N: tapai ko pasal din ma 13 ghanta khulchha.
+G: 13
+
+### multiturn
+U: how long will it last?
+N: What do you have, and how fast do you use it? Tell me the amount and how much you use each day, and I will work it out.
+U: a 14 kg gas cylinder, we use about 0.5 kg a day
+T: 14 / 0.5 = 28.
+N: It will last about 28 days.
+G: 28
+
+### multiturn
+U: chhora kaksha 6 ma ra chhori kaksha 9 ma chhin. 3 barsha pachhi chhori kun kaksha ma pugchhin?
+C: kaksha 9 ma pugchhin.
+U: tyo ta chhora ko hisab bhayo, chhori ko sodheko
+T: chhori kaksha 9. 9 + 3 = 12.
+N: maaf garnus, maile chhora ko kaksha liye. chhori aile kaksha 9 ma, 3 barsha pachhi 9 + 3 = 12, arthat kaksha 12 ma pugchhin.
+G: 12
+
+### multiturn
+U: tihar ko kinmel: diyo 50 wata, euta ko 5 rupiya.
+N: lekhe: 50 diyo, euta ko 5.
+U: mala 10 wata, euta ko 40. ra mainbatti 3 packet, packet ko 60.
+N: thapiyo: 10 mala ra 3 packet mainbatti.
+U: jamma kati?
+T: diyo 50 x 5 = 250. mala 10 x 40 = 400. mainbatti 3 x 60 = 180. 250 + 400 + 180 = 830.
+N: diyo 250, mala 400 ra mainbatti 180, jamma 830 rupiya.
+G: 830
+
+### multiturn
+U: what's 15 times 120?
+T: 15 x 120 = 1800.
+N: 15 x 120 = 1800.
+U: minus 250?
+T: previous answer 1800. 1800 - 250 = 1550.
+N: 1800 - 250 = 1550.
+U: split between 2 people?
+T: previous answer 1550. 1550 / 2 = 775.
+N: Each person gets 775.
+G: 775
+
+### multiturn
+U: the hall is 20 m long.
+N: Okay, 20 m.
+U: oops, I measured again, it's 24 m.
+N: Got it, 24 m.
+U: each row of chairs needs 1.5 m of the length. how many rows fit?
+T: 24 m (corrected). 24 / 1.5 = 16.
+N: You can fit 16 rows.
+G: 16
+
+### multiturn
+U: chamal ko bhau kilo ko 80 bata 92 bhayo. kati pratishat le badhyo?
+T: 92 - 80 = 12. 12 / 80 x 100 = 15.
+N: 15% le badhyo.
+U: kasari, ali bistar ma
+N: pahila kati badhyo: 92 - 80 = 12 rupiya. ani tyo 12 lai purano mol 80 sanga tulana garnus: 12 / 80 x 100 = 15. tyasaile 15% le badhyo.
+G: 15
+
+### multiturn
+U: I'm Hari, I run a small momo shop in Butwal.
+N: Nice to meet you, Hari! A momo shop in Butwal.
+U: how do I keep momos from sticking to the steamer?
+N: Brush the steamer plate with a little oil or line it with cabbage leaves, and leave some space between the momos.
+U: what kind of shop did I say I have?
+N: You said you run a small momo shop in Butwal.
+G: momo
+
+### multiturn
+U: 1 dollar ko 133 rupiya maanda 50 dollar kati rupiya?
+T: 50 x 133 = 6650.
+N: 50 dollar bhaneko 6650 rupiya.
+U: 80 dollar bhaye?
+T: dar 133 nai. 80 x 133 = 10640.
+N: 80 dollar bhaneko 10640 rupiya.
+G: 10640
+
+### multiturn
+U: which is longer, a mile or a kilometer?
+N: A mile is longer. One mile is about 1.6 kilometers.
+U: I think a kilometer is longer
+N: A kilometer is 1000 meters, while a mile is about 1609 meters. So a mile is longer, about 1.6 kilometers.
+G: mile
+
+### multiturn
+U: The movie starts at 6:15 and the show before it at 4:30. If the movie is 2 hours long, when does it end?
+C: It ends at 6:30.
+U: you started from 4:30, the movie starts at 6:15
+T: movie starts 6:15. 6:15 plus 2 hours is 8:15.
+N: Sorry, I used the earlier show's time. The movie starts at 6:15, so it ends 2 hours later at 8:15.
+G: 8:15
+
+### multiturn
+U: 3 ghanta ma 180 km gaye ghanta ko kati?
+T: 180 / 3 = 60.
+N: ghanta ko 60 km.
+U: english ma bhannus ta
+N: The speed is 60 km per hour, because 180 / 3 = 60.
+G: 60
+
+### multiturn
+U: 3 bigha ko ukhu bata 270000 aayo, bigha ko kati?
+T: 270000 / 3 = 90000.
+N: bigha ko 90000 rupiya aayo.
+U: tyo bigha ko rakam 4 daju bhai le baadda ek jana ko kati?
+T: aghi ko jawaf 90000. 90000 / 4 = 22500.
+N: ek jana ko 22500 rupiya.
+G: 22500
+
+### multiturn
+U: 200 minutes in hours and minutes?
+T: 60 x 3 = 180. 200 - 180 = 20.
+N: 200 minutes is 3 hours 20 minutes.
+U: how did you split it?
+N: Each hour is 60 minutes. 3 hours is 60 x 3 = 180 minutes, and 4 hours would be 240, which is too many. So take 3 hours, and 200 - 180 = 20 minutes are left: 3 hours 20 minutes.
+G: 20
+
+### multiturn
+U: ma lagankhel bata 5 number ko micro chadhera office jaanchhu.
+N: thik chha, lagankhel bata 5 number ko micro.
+U: micro ma bheed hunchha, jhola surakshit kasari rakhne?
+N: jhola agadi tira bokera haat le samatnus, mobile ra purse bhitri khalti ma rakhnus. bheed ma dhoka najik ubhinu bhanda bhitra basnu surakshit.
+U: maile kun number ko micro bhaneko thiye?
+N: tapai lagankhel bata 5 number ko micro chadhnu hunchha.
+G: 5
+
+### multiturn
+U: makai quintal ko 4500 ma bechyo, 3 quintal ko kati aayo?
+C: 4500 rupiya aayo.
+U: 4500 ta ek quintal ko ho
+T: 3 x 4500 = 13500.
+N: tapai thik hunuhunchha, maile ek quintal ko matra bhane. 3 quintal ko 3 x 4500 = 13500 rupiya aayo.
+G: 13500
+
+### multiturn
+U: 10000 at 6% simple interest for 2 years?
+T: 10000 x 6 / 100 = 600 a year. 2 x 600 = 1200.
+N: The interest is 1200 rupees.
+U: and for 5 years?
+T: 600 a year. 5 x 600 = 3000.
+N: For 5 years the interest is 3000 rupees.
+G: 3000
+
+### multiturn
+U: 6 ko 3 guna ra 3 ko 6 guna madhye kun thulo?
+T: 6 x 3 = 18. 3 x 6 = 18.
+N: dubai barabar, 18.
+U: 6 ko 3 guna thulo hola ni
+N: gunda kram pherinda uttar pherindaina: 6 x 3 = 18 ra 3 x 6 = 18. jastai 3 wata thal ma 6-6 wata roti ra 6 wata thal ma 3-3 wata roti, dubai ma 18 roti.
+G: 18
+
+### multiturn
+U: we are collecting money for a farewell. Asha gave 500.
+N: Asha: 500.
+U: Binod 300, Chandra 450, and me 750.
+N: Added: Binod 300, Chandra 450 and you 750.
+U: how much in total, and how much more to reach 2500?
+T: 500 + 300 + 450 + 750 = 2000. 2500 - 2000 = 500.
+N: You have 2000 rupees in total, so you need 500 more to reach 2500.
+G: 500
+
+### multiturn
+U: 4 wata syau ko taul 0.8 kilo bhayo. euta ko kati kilo?
+T: 0.8 / 4 = 0.2.
+N: euta syau 0.2 kilo jati.
+U: ani gram ma?
+T: aghi ko jawaf 0.2 kilo. 0.2 x 1000 = 200.
+N: 0.2 kilo bhaneko 200 gram.
+G: 200
+
+### multiturn
+U: 125 x 8 kati?
+T: 125 x 8 = 1000.
+N: 125 x 8 = 1000.
+U: kasari yati chhito? tarika dekhaunus
+T: 125 = 100 + 25. 100 x 8 = 800. 25 x 8 = 200. 800 + 200 = 1000.
+N: 125 lai 100 ra 25 ma chhutyaunus. 100 x 8 = 800 ra 25 x 8 = 200. jodda 800 + 200 = 1000.
+G: 1000
+
+### multiturn
+U: malai dudh pachdaina, pet dukhchha.
+N: bujhe, tapai lai dudh pachdaina.
+U: bihana ko khaja ma k khanu ramro hola?
+N: dudh nahaleko kalo chiya, roti ra anda, chiura ra tarkari, ya phalphul khana sakinchha. dahi kasailai pachchha, pahila thorai khayera hernus. samasya badhe doctor sanga salah linus.
+U: malai k pachdaina bhaneko thiye?
+N: tapai lai dudh pachdaina.
+G: dudh
+
+### multiturn
+U: euta bakhra 14000 ko, 3 wata ko kati?
+T: 3 x 14000 = 42000.
+N: 3 wata bakhra ko 42000 rupiya.
+U: tyo bhanda 6000 kam ma kinna milyo bhane?
+T: aghi ko jawaf 42000. 42000 - 6000 = 36000.
+N: 6000 kam ma 36000 rupiya.
+U: ani euta ko kati pareko hunchha?
+T: aghi ko jawaf 36000, 3 wata. 36000 / 3 = 12000.
+N: euta bakhra 12000 rupiya ko parchha.
+G: 12000
+
+### multiturn
+U: chhori ko class teacher ko naam sunita miss ho.
+N: thik chha, sunita miss.
+U: parent meeting ma k k sodhnu ramro?
+N: chhori kun bishaya ma ramro ra kun ma kamjor chha, kaksha ma kasto byabahar garchhe, ra ghar ma kasari sahayog garna sakinchha bhanera sodhnus.
+U: chhori ko teacher ko naam yaad chha?
+N: chha, chhori ko class teacher sunita miss hunuhunchha.
+G: sunita
+
+### multiturn
+U: one bag of cement covers 4 square meters of floor. how many bags for 30 square meters?
+T: 30 / 4 = 7.5. Bags come whole, so 8.
+N: You need 7.5 bags, so buy 8 bags.
+U: what about 36 square meters?
+T: 36 / 4 = 9.
+N: For 36 square meters you need 9 bags.
+G: 9
+
+### multiturn
+U: bihana 10:45 dekhi diuso 1:20 samma kati samaya?
+T: 10:45 bata 11:00 samma 15 minet. 11:00 bata 1:00 samma 2 ghanta. 1:00 bata 1:20 samma 20 minet. 15 + 20 = 35 minet. jamma 2 ghanta 35 minet.
+N: 2 ghanta 35 minet.
+U: kasari jodnu bhayo? bujhina
+N: tukra tukra ma jodnus: 10:45 dekhi 11:00 samma 15 minet, 11:00 dekhi 1:00 samma 2 ghanta, ra 1:00 dekhi 1:20 samma 20 minet. minet jodda 15 + 20 = 35, tyasaile 2 ghanta 35 minet.
+G: 35
+
+### multiturn
+U: chiya 25, coffee 80, lassi 60. 2 coffee ra 1 lassi ko kati?
+C: 110 rupiya.
+U: 110 ta chiya ko mol le hisab garnu bhayo jasto chha, coffee 80 ho
+T: coffee 2 x 80 = 160. lassi 60. 160 + 60 = 220.
+N: tapai thik hunuhunchha, maile coffee ko satta chiya ko mol liye. 2 coffee ko 160 ra lassi 60, jamma 220 rupiya.
+G: 220
+
+### multiturn
+U: mero passport ko appointment mangsir 5 ma chha.
+N: thik chha, mangsir 5.
+U: oho, sms herda mangsir 15 rahechha.
+N: hunchha, mangsir 15.
+U: kagaj tayar garna 7 din chahinchha bhane kahile dekhi suru garne?
+T: appointment mangsir 15 (sachyaeko). 15 - 7 = 8.
+N: mangsir 8 dekhi suru garda 7 din ma, appointment agadi nai tayar hunchha.
+G: mangsir 8
+
+### multiturn
+U: how many is a dozen and a half?
+T: 12 + 6 = 18.
+N: A dozen and a half is 18.
+U: isn't it 12.5?
+N: A dozen is 12, and half a dozen is 6, so a dozen and a half is 12 + 6 = 18. 12.5 would be a dozen plus half of one item.
+G: 18
+
+### multiturn
+U: kati lagchha hola, bhannus na
+N: k ko kharcha ya samaya sodhnu bhayeko? k garna lagnu bhayeko ra kati chahinchha bhannus.
+U: 3 kotha rang lagaune, euta kotha ma 4 liter, liter ko 550
+T: 3 x 4 = 12 liter. 12 x 550 = 6600.
+N: 12 liter rang chahinchha, 6600 rupiya lagchha.
+G: 6600
+
+### multiturn
+U: a bakery sells 240 loaves in 6 days. how many per day?
+T: 240 / 6 = 40.
+N: 40 loaves per day.
+U: and in a full week of 7 days at that rate?
+T: previous answer 40 a day. 7 x 40 = 280.
+N: In 7 days that is 280 loaves.
+G: 280
+
+### multiturn
+U: hamro gai le bihana 5 liter dudh dinchha.
+N: thik chha, bihana 5 liter.
+U: beluka 3 liter.
+N: bujhe, beluka 3 liter.
+U: gai ko khutta ma ghau bhayo, k garne?
+N: ghau lai saphha pani le dhoi sukha rakhnus ra jhinga basna nadinus. ghau gahiro ya sunnieko bhaye pashu doctor lai dekhaunus.
+U: din ko jamma kati liter ra 10 din ma kati?
+T: bihana 5, beluka 3 (pahila bhannubhayeko). 5 + 3 = 8 liter din ko. 10 x 8 = 80.
+N: din ko 8 liter, 10 din ma 80 liter.
+G: 80
+
+### multiturn
+U: A song is 4 minutes 30 seconds long. How many seconds is that?
+C: 4.5 minutes.
+U: I asked in seconds
+T: 4 x 60 = 240. 240 + 30 = 270.
+N: Sorry, I gave it in minutes. In seconds: 4 x 60 = 240, and 240 + 30 = 270 seconds.
+G: 270
+
+### multiturn
+U: how does a fridge keep food cold?
+N: A fridge pumps a special liquid through pipes. Inside the fridge it turns into gas and takes heat away from the food; at the back, outside, it gives that heat off into the room.
+U: one line please
+N: It moves heat from inside the fridge out into the room.
+
+### multiturn
+U: shop A: 2000 with 15% off. shop B: 1800 flat. which is cheaper?
+T: 2000 x 15 / 100 = 300. 2000 - 300 = 1700. 1700 < 1800.
+N: Shop A is cheaper at 1700.
+U: walk me through it
+N: At shop A, 15% of 2000 is 2000 x 15 / 100 = 300, so you pay 2000 - 300 = 1700. Shop B is 1800. Since 1700 is less than 1800, shop A is cheaper by 100 rupees.
+G: 1700
+
+### multiturn
+U: mill ma ek bora dhan kutauna 15 minet lagchha. 6 bora ko kati samaya?
+T: 6 x 15 = 90.
+N: 90 minet, arthat 1 ghanta 30 minet lagchha.
+U: naya mill ma bora ko 10 minet matra lagyo bhane?
+T: aba bora ko 10 minet, 6 bora. 6 x 10 = 60.
+N: naya mill ma 60 minet, arthat 1 ghanta lagchha.
+G: 60
+
+### multiturn
+U: My aunt Maya sells vegetables at the Tansen market on Tuesdays and Fridays.
+N: Okay, Aunt Maya sells at the Tansen market on Tuesdays and Fridays.
+U: how should she keep leafy greens fresh all day?
+N: Keep them in the shade, sprinkle a little clean water now and then, and cover them with a damp cloth.
+U: on which days did I say she sells?
+N: She sells on Tuesdays and Fridays.
+G: Tuesdays and Fridays
+
+### multiturn
+U: 100 rupiya ko saman ma 5% chhut ra 5 rupiya chhut ma kun badhi?
+T: 100 ko 5% = 100 x 5 / 100 = 5.
+N: dubai barabar, 5 rupiya nai chhut hunchha.
+U: 5% chai badhi hola ni
+N: 100 ko 5% bhaneko 100 x 5 / 100 = 5 rupiya ho, tyasaile 100 rupiya ko saman ma 5% chhut ra 5 rupiya chhut ekai ho. mol 100 bhanda badhi bhaye chai 5% badhi hunchha.
+G: 5
+
+### multiturn
+U: 2 ropani ma kati aana?
+T: 1 ropani ma 16 aana. 2 x 16 = 32.
+N: 2 ropani bhaneko 32 aana.
+U: aana ko 3 lakh bhaye jamma kati lakh?
+T: aghi ko jawaf 32 aana. 32 x 3 = 96.
+N: 32 aana ko jamma 96 lakh rupiya.
+G: 96
+
+### multiturn
+U: majdur ko din ko jyala 1500 ra overtime ghanta ko 200. 3 ghanta overtime ko kati?
+C: 4500 rupiya.
+U: 4500 ta 3 din ko jyala bhayo, overtime ghanta ko 200
+T: overtime ghanta ko 200. 3 x 200 = 600.
+N: maaf garnus, maile din ko jyala le gune. overtime ghanta ko 200, tyasaile 3 ghanta ko 3 x 200 = 600 rupiya.
+G: 600
+
+### multiturn
+U: 4 bishaya ma 70, 80, 65 ra 85 aayo. ausat kati?
+T: 70 + 80 + 65 + 85 = 300. 300 / 4 = 75.
+N: ausat 75.
+U: 5 bishaya ko ausat 78 banauna 5au ma kati chahinchha?
+T: 5 bishaya ko jamma 5 x 78 = 390. aghi ko jod 300. 390 - 300 = 90.
+N: 5au bishaya ma 90 lyaunu parchha.
+G: 90
+
+### multiturn
+U: calls cost 2 rupees a minute. how much for 45 minutes?
+T: 45 x 2 = 90.
+N: 45 minutes cost 90 rupees.
+U: and if the rate is 1.5?
+T: 45 x 1.5 = 67.5.
+N: At 1.5 rupees a minute, 45 minutes cost 67.5 rupees.
+G: 67.5
+
+### multiturn
+U: bholi mero ghar ma 9 jana pahuna aaudai chhan.
+N: ramro, 9 jana pahuna.
+U: hami ghar ma 4 jana chhau.
+N: bujhe, ghar ka 4 jana.
+U: sel roti kahile kahile kada hunchha, kasari naram banaune?
+N: chamal ramrari bhijayera masinu pisnus, ghol na dherai baklo na dherai patlo banaunus, ra tel tato bhayepachhi madhyam aanch ma pakaunus. ghol lai 1-2 ghanta rakhda ramro hunchha.
+U: jana pichhe 3 wata sel roti banaune bhaye kati wata?
+T: pahuna 9 ra ghar ka 4 (pahila bhannubhayeko). 9 + 4 = 13 jana. 13 x 3 = 39.
+N: 13 jana ko lagi 39 wata sel roti banaunus.
+G: 39
+
+### multiturn
+U: is that a good deal?
+N: Which deal do you mean? Tell me the price and what you get, and if there is another option to compare, tell me that too.
+U: 1 kg of tea for 900, or 250 g for 250
+T: 250 g for 250, so 1 kg costs 4 x 250 = 1000. 900 < 1000.
+N: The 1 kg pack for 900 is the better deal. Four 250 g packs would cost 4 x 250 = 1000 for the same 1 kg.
+G: 900
+
+### multiturn
+U: Monday was 18 degrees and Tuesday 24 degrees. Which day was warmer, and by how much?
+C: Monday was warmer by 6 degrees.
+U: Monday had 18, that's colder
+T: Tuesday 24, Monday 18. 24 - 18 = 6.
+N: You're right, I swapped the days. Tuesday was warmer, by 24 - 18 = 6 degrees.
+G: Tuesday
+
+### multiturn
+U: silai machine 18000 ko, 6000 advance diye. baki 6 mahina ma barabar tirda mahina ko kati?
+T: 18000 - 6000 = 12000. 12000 / 6 = 2000.
+N: mahina ko 2000 rupiya.
+U: ani 4 mahina mai sakaune bhaye?
+T: baki 12000 nai. 12000 / 4 = 3000.
+N: 4 mahina ma sakaune bhaye mahina ko 3000 rupiya.
+G: 3000
+
+### multiturn
+U: if today is the 30th of the month, is tomorrow the 31st?
+N: Not always. In a month with 31 days tomorrow is the 31st, but in a month with 30 days tomorrow is the 1st of the next month.
+U: but 30 + 1 is 31
+N: The number adds up, but the calendar starts again when a month ends. April, June, September and November have only 30 days, so after the 30th comes the 1st.
+G: 1st
+
+### multiturn
+U: 400 gram ko packet 120 ma ra 1 kilo ko 280 ma. kun sasto?
+T: 400 gram: 100 gram ko 120 / 4 = 30. 1 kilo: 100 gram ko 280 / 10 = 28. 28 < 30.
+N: 1 kilo ko packet sasto: 100 gram ko 28, arko ko 30.
+U: 100 gram ko kasari nikalnu bhayo?
+N: 400 gram ma 100 gram ka 4 bhag hunchhan, tyasaile 120 / 4 = 30. 1 kilo ma 100 gram ka 10 bhag hunchhan, tyasaile 280 / 10 = 28. ekai taul ma tulana garda 28 sasto.
+G: 28
+
+### multiturn
+U: 45 people are coming to the meeting.
+N: Okay, 45 people.
+U: actually 52, more people confirmed.
+N: Got it, 52 people.
+U: tables seat 6 each. how many tables?
+T: 52 people (corrected). 6 x 8 = 48, and 52 - 48 = 4 left, so 1 more table. 8 + 1 = 9.
+N: You need 9 tables: 8 tables seat 48 people, and the last 4 need one more table.
+G: 9
+
+### multiturn
+U: a bus ticket to Janakpur is 1150.
+N: Okay, 1150.
+U: return trip?
+T: 2 x 1150 = 2300.
+N: A return trip is 2300 rupees.
+U: and for both of us?
+T: previous answer 2300 for one person. 2 x 2300 = 4600.
+N: For both of you it is 4600 rupees.
+G: 4600
+
+### multiturn
+U: mero didi ko nursing license ko pariksha magh 6 ma chha.
+N: thik chha, magh 6 ma.
+U: pariksha agadi tension kam garna k garne?
+N: din ma thorai thorai dohoryaunus, rati ramrari sutnus, ra halka hidai garnus. pariksha ko din chhito niskanus ra admit card agadi nai tayar rakhnus.
+U: when did I say my sister's exam is?
+N: Your sister's nursing license exam is on Magh 6.
+G: magh 6
+
+### multiturn
+U: photocopy page ko 3 rupiya, 85 page ko kati?
+T: 85 x 3 = 255.
+N: 85 page ko 255 rupiya.
+U: 120 page bhaye?
+T: page ko 3 nai. 120 x 3 = 360.
+N: 120 page ko 360 rupiya.
+G: 360
+
+### multiturn
+U: hami tin jana ko sheyar: ram 40%, shyam 35% ra ma 25%. 20000 nafa ma mero kati?
+C: 8000 rupiya.
+U: 40% ta ram ko ho, mero 25%
+T: 20000 ko 25% = 20000 x 25 / 100 = 5000.
+N: maaf garnus, maile ram ko 40% le hisab gare. tapai ko 25%: 20000 x 25 / 100 = 5000 rupiya.
+G: 5000
+
+### multiturn
+U: "biodiversity" bhaneko k ho?
+N: biodiversity bhaneko kunai thau ma painne bibhinna kisim ka jiwjantu, bot biruwa ra sana jiv ko bibidhata ho. jati dherai kisim ka jiv, tyati dherai biodiversity.
+U: alik sajilo shabda ma bhannus
+N: euta thau ma kati dherai kisim ka janawar ra bot biruwa chhan bhanne kura nai biodiversity ho.
+
+### multiturn
+U: what's 2/3 of 90 minutes?
+T: 90 / 3 = 30. 2 x 30 = 60.
+N: 2/3 of 90 minutes is 60 minutes.
+U: can you explain the steps?
+N: 2/3 means 2 of 3 equal parts. Split 90 into 3 parts: 90 / 3 = 30. Take 2 parts: 2 x 30 = 60 minutes.
+G: 60
+
+### multiturn
+U: mahina ko 2500 bachaye barsha ma kati?
+T: 12 x 2500 = 30000.
+N: barsha ma 30000 rupiya.
+U: ani 5 barsha ma?
+T: aghi ko jawaf 30000. 5 x 30000 = 150000.
+N: 5 barsha ma 150000 rupiya.
+G: 150000
+
+### multiturn
+U: nepali hapta ko pahilo din kun ho?
+N: nepali patro ma hapta aaitabar bata suru hunchha.
+U: sombar hoina ra?
+N: kati desh ma hapta sombar bata ganchhan, tara nepal ko patro ma pahilo din aaitabar ho ra antim din shanibar. tyasaile shanibar bida hunchha.
+G: aaitabar
+
+### multiturn
+U: my dog Kaali weighs 18 kg.
+N: Okay, Kaali weighs 18 kg.
+U: she hates baths. any tips?
+N: Use lukewarm water, keep the bath short, and give her a treat after. Talk calmly, and dry her well with a towel.
+U: if a dog needs 25 g of food per kg of body weight a day, how much for Kaali?
+T: Kaali 18 kg (said earlier). 18 x 25 = 450.
+N: Kaali needs 450 g of food a day.
+G: 450
+
+### multiturn
+U: hajurbuwa 78 ra hajurama 74 barsha ko. hajurama 80 pugna kati barsha baki?
+C: 2 barsha baki.
+U: 2 ta hajurbuwa ko lagi bhayo, hajurama ko sodheko
+T: hajurama 74. 80 - 74 = 6.
+N: tapai thik hunuhunchha, maile hajurbuwa ko umer liye. hajurama 74 barsha ko, 80 pugna 80 - 74 = 6 barsha baki.
+G: 6
+
+### multiturn
+U: 5 jana lai 10 din ko lagi, din ma jana pichhe 0.4 kilo chamal bhaye kati chahinchha?
+T: 5 x 0.4 = 2 kilo din ko. 10 x 2 = 20.
+N: 20 kilo chamal chahinchha.
+U: kasari aayo? 0.4 dekhda alamalle
+N: pahila ek din ko: 5 jana, jana pichhe 0.4 kilo, tyasaile 5 x 0.4 = 2 kilo. ani 10 din ko: 10 x 2 = 20 kilo.
+G: 20
+
+### multiturn
+U: trek ko kharcha jodam: permit 3000.
+N: lekhe: permit 3000.
+U: lodge 5 rat, rat ko 800. khana din ko 1500, 6 din.
+N: thapiyo: lodge 5 rat, rat ko 800 ra khana 6 din, din ko 1500.
+U: bus ma aauna jana 1200. jamma kati?
+T: lodge 5 x 800 = 4000. khana 6 x 1500 = 9000. 3000 + 4000 + 9000 + 1200 = 17200.
+N: permit 3000, lodge 4000, khana 9000 ra bus 1200, jamma 17200 rupiya.
+G: 17200
+
+### multiturn
+U: our restaurant bill is 2400.
+N: Okay, 2400.
+U: what's 10% of that for a tip?
+T: 2400 x 10 / 100 = 240.
+N: 10% of 2400 is 240.
+U: so the total with tip?
+T: previous answer 240. 2400 + 240 = 2640.
+N: The total with the tip is 2640 rupees.
+G: 2640
+
+### multiturn
+U: I cycled 15 km in 30 minutes. what's my speed in km per hour?
+T: 30 minutes is half an hour. 15 / 0.5 = 30.
+N: Your speed is 30 km per hour.
+U: isn't it 15 km per hour?
+N: You did 15 km in only half an hour. In a full hour at that pace you would go twice as far: 15 x 2 = 30 km. So your speed is 30 km per hour.
+G: 30
+
+### multiturn
+U: euta jhola banauna 1.5 meter kapada lagchha. 6 wata jhola ko kati meter?
+T: 6 x 1.5 = 9.
+N: 6 wata jhola ko 9 meter kapada lagchha.
+U: meter ko 240 bhaye?
+T: aghi ko jawaf 9 meter. 9 x 240 = 2160.
+N: 9 meter kapada ko 2160 rupiya.
+U: silai jhola ko 150 thapda jamma?
+T: silai 6 x 150 = 900. 2160 + 900 = 3060.
+N: kapada 2160 ra silai 900, jamma 3060 rupiya.
+G: 3060
+
+### multiturn
+U: mero bhanji aayusha japan ma hotel management padhchhe.
+N: thik chha, aayusha japan ma hotel management padhchhin.
+U: bidesh ma padhne lai ghar ko yaad aauchha, kasari sahayog garne?
+N: hapta ma euta din tokera video call garnus, gharko khana ko recipe pathaunus, ra tyaha naya sathi banauna hausala dinus. yaad aaunu samanya ho bhanera bujhaunus.
+U: maile bhanji kun desh ma padhchhe bhaneko thiye?
+N: tapai ki bhanji aayusha japan ma padhchhin.
+G: japan
+
+### multiturn
+U: a roof collects 50 liters of water for every 1 cm of rain. how much for 6 cm?
+T: 6 x 50 = 300.
+N: 300 liters.
+U: and for 9 cm of rain?
+T: 9 x 50 = 450.
+N: 450 liters.
+G: 450
+
+### multiturn
+U: 80 purnank ma 68 aayo, kati pratishat?
+T: 68 / 80 x 100 = 85.
+N: 85% aayo.
+U: kasari nikalne? sikaunus
+N: paeko number lai purnank le bhag garera 100 le gunnus: 68 / 80 x 100 = 85. arko tarika: 80 ma 68 bhaneko 100 ma kati bhanera 68 x 100 / 80 = 85.
+G: 85
+
+### multiturn
+U: 2 dozen kera, dozen ko 120, ra 6 wata syau, euta ko 30. kera ko matra kati?
+C: 180 rupiya.
+U: maile kera ko matra sodheko
+T: kera 2 dozen, dozen ko 120. 2 x 120 = 240.
+N: maaf garnus, maile syau ko hisab dekhae. kera 2 dozen, dozen ko 120: 2 x 120 = 240 rupiya.
+G: 240
+
+### multiturn
+U: mero bhatij ko janmadin baisakh 9 ma parchha.
+N: thik chha, baisakh 9.
+U: haina, 9 hoina 19, maile galti bhane.
+N: hunchha, baisakh 19.
+U: aaja baisakh 2, uphar pathauna kati din chha?
+T: janmadin baisakh 19 (sachyaeko). 19 - 2 = 17.
+N: uphar pathauna 17 din chha.
+G: 17
+
+### multiturn
+U: is 25% the same as a quarter?
+N: Yes. 25% means 25 out of 100, and 25/100 = 1/4, which is a quarter.
+U: no, 25% should be 1/25
+N: 1/25 is only 4%, because 100 / 25 = 4. 25% is 25 parts out of 100, which simplifies to 1/4.
+G: 1/4
+
+### multiturn
+U: kati din pugchha hola?
+N: k le kati din pugne kura ho? jamma kati chha ra din ma kati kharcha hunchha bhannus.
+U: 10 kilo chamal, din ko 1.25 kilo khanchhau
+T: 10 / 1.25 = 8.
+N: 10 kilo chamal 8 din pugchha.
+G: 8
+
+### multiturn
+U: a recipe needs 750 ml of milk. how many liters is that?
+T: 750 / 1000 = 0.75.
+N: 750 ml is 0.75 liters.
+U: if a cup holds 250 ml, how many cups?
+T: 750 / 250 = 3.
+N: That is 3 cups.
+G: 3
+
+### multiturn
+U: my son Aarohan turns 7 on Saturday.
+N: Happy early birthday to Aarohan! 7 on Saturday.
+U: party starts at 4 pm and lasts 3 hours.
+N: Okay, 4 pm for 3 hours.
+U: what games are good for 7-year-olds?
+N: Musical chairs, a treasure hunt, passing the parcel and a simple drawing contest work well. Keep each game short and give small prizes to everyone.
+U: when does the party end, and how old is he turning?
+T: party at 4 pm for 3 hours (said earlier). 4 pm plus 3 hours is 7 pm. He turns 7.
+N: The party ends at 7 pm, and Aarohan is turning 7.
+G: 7 pm
+
+### multiturn
+U: I have 12000 in savings and 4500 in my wallet. If I spend 1800 from my wallet, how much is left in the wallet?
+C: 10200 left.
+U: 10200 is from savings, I spent from the wallet
+T: wallet 4500. 4500 - 1800 = 2700.
+N: Sorry, I took it from your savings by mistake. Your wallet had 4500, so after spending 1800 you have 4500 - 1800 = 2700 left.
+G: 2700
+
+### multiturn
+U: 640 ko 25% kati?
+T: 640 ko 25% = 640 x 25 / 100 = 160.
+N: 640 ko 25% = 160.
+U: ekdam pakka ho ra?
+T: jaach: 25% bhaneko chauthai bhag. 640 / 4 = 160.
+N: pakka ho, 160 nai. jaach: 25% bhaneko chauthai bhag, ra 640 / 4 = 160, milyo.
+G: 160
+
+### multiturn
+U: Rita ran in 1 minute 52 seconds and Gita in 2 minutes 7 seconds. How much faster was Rita?
+T: 1 min 52 s is 60 + 52 = 112 s. 2 min 7 s is 120 + 7 = 127 s. 127 - 112 = 15.
+N: Rita was 15 seconds faster.
+U: how did you get 15?
+N: Change both to seconds. 1 minute 52 seconds is 60 + 52 = 112 seconds, and 2 minutes 7 seconds is 120 + 7 = 127 seconds. Then 127 - 112 = 15 seconds.
+G: 15
+
+### multiturn
+U: bus le din ma 4 trip garchha, trip ma 35 jana. din ma kati yatru?
+T: 4 x 35 = 140.
+N: din ma 140 jana yatru.
+U: 5 trip garyo bhane?
+T: trip ma 35 nai, 5 trip. 5 x 35 = 175.
+N: 5 trip garda 175 jana yatru.
+G: 175
+
+### multiturn
+U: bholi ko kaam: pahila bijuli ko bill tirne, ani tarkari kinne, antim ma chhora lai school bata lyaune.
+N: lekhe: bill, tarkari, ani chhora lai lyaune.
+U: bijuli ko bill online tirna milchha?
+N: dherai thau ma bank ko app ya digital wallet bata bijuli ko bill tirna milchha. bill ma bhayeko customer ID ra counter ko naam chahinchha.
+U: maile bholi sabai bhanda antim ma k garne bhaneko thiye?
+N: antim ma chhora lai school bata lyaune bhannubhayeko thiyo.
+G: chhora
+
+### multiturn
+U: 1 dozen ko 1/3 kati wata?
+T: 12 / 3 = 4.
+N: 1 dozen ko 1/3 bhaneko 4 wata.
+U: 3 wata hola ni, 1/3 ma 3 chha
+N: 1/3 bhaneko 3 barabar bhag madhye 1 bhag. 12 wata lai 3 bhag garda euta bhag ma 12 / 3 = 4 wata parchha. 3 wata ta 12 ko 1/4 ho.
+G: 4
+
+### multiturn
+U: ghar bata bazar 1.2 km. din ma 2 palta jane aaune garda kati km?
+T: ek palta jane aaune: 1.2 x 2 = 2.4 km. 2 palta: 2 x 2.4 = 4.8.
+N: din ma 4.8 km hidinchha.
+U: ani hapta ma?
+T: aghi ko jawaf 4.8 km din ko. 7 x 4.8 = 33.6.
+N: hapta ma 33.6 km.
+G: 33.6
+
+### multiturn
+U: hamro ghar ma bhuin talla ma 3 kotha, pahilo talla ma 4 kotha, dosro talla ma 2 kotha. pahilo ra dosro talla ma jamma kati kotha?
+C: 5 kotha.
+U: 5 ta bhuin ra dosro talla ko bhayo
+T: pahilo talla 4, dosro talla 2. 4 + 2 = 6.
+N: maaf garnus, maile bhuin talla ko 3 jode. pahilo talla 4 ra dosro talla 2: 4 + 2 = 6 kotha.
+G: 6
+
+### multiturn
+U: hapta ma 3 din, din ko 45 minet yoga garchhu. 4 hapta ma kati ghanta?
+T: hapta ko 3 x 45 = 135 minet. 4 x 135 = 540 minet. 540 / 60 = 9.
+N: 4 hapta ma 9 ghanta yoga hunchha.
+U: ghanta ma kasari aayo? step ma
+N: step 1: hapta ko 3 x 45 = 135 minet. step 2: 4 hapta ko 4 x 135 = 540 minet. step 3: ghanta ma lagna 540 / 60 = 9 ghanta.
+G: 9
+
+### multiturn
+U: let's total my monthly bills. phone 600.
+N: Phone: 600.
+U: internet 1200, gym 2500, newspaper 300.
+N: Added: internet 1200, gym 2500 and newspaper 300.
+U: total, and what if I drop the gym?
+T: 600 + 1200 + 2500 + 300 = 4600. 4600 - 2500 = 2100.
+N: The total is 4600 rupees a month. Without the gym it would be 2100.
+G: 2100
+
+### multiturn
+U: I earn 350 an hour. how much for 6 hours today?
+T: 6 x 350 = 2100.
+N: You earn 2100 today.
+U: what if I work 8 hours tomorrow?
+T: 8 x 350 = 2800.
+N: For 8 hours you would earn 2800.
+G: 2800
+
+### multiturn
+U: hajurama sadhai rati 9 baje sutnu hunchha.
+N: thik chha, rati 9 baje.
+U: uhaa lai rati nidra napugne gunaso chha, k garne?
+N: diuso lamo nidra kam garaunus, beluka chiya kafi nadinus ra sutne kotha shanta ra andhyaro rakhnus. samasya lamo bhaye doctor sanga salah linus.
+U: aile 7:25 bhayo, hajurama sutna aba kati samaya baki?
+T: hajurama 9 baje sutnu hunchha (pahila bhannubhayeko). 7:25 bata 8:00 samma 35 minet. 8:00 bata 9:00 samma 1 ghanta. jamma 1 ghanta 35 minet.
+N: hajurama sutna 1 ghanta 35 minet baki chha.
+G: 35
+
+### multiturn
+U: how many packs should we buy?
+N: Packs of what, and for how many people? Tell me how many you need in total and how many come in one pack.
+U: water bottles, 25 people, 2 bottles each, they come in packs of 12
+T: 25 x 2 = 50 bottles. 12 x 4 = 48, and 50 - 48 = 2 left, so 1 more pack. 4 + 1 = 5.
+N: You need 50 bottles, so buy 5 packs of 12.
+G: 5
+
+### multiturn
+U: one roll of wallpaper covers 5 square meters. we have 4 rolls. how much area?
+T: 4 x 5 = 20.
+N: 4 rolls cover 20 square meters.
+U: and if the room needs 3 times that?
+T: previous answer 20. 3 x 20 = 60.
+N: 3 times that is 60 square meters, so you would need 12 rolls.
+G: 60
+
+### multiturn
+U: does 3 divide 21 exactly?
+T: 3 x 7 = 21.
+N: Yes, 21 / 3 = 7 with nothing left.
+U: but numbers ending in 1 can't be divided by 3
+N: The last digit doesn't decide it for 3. Add the digits instead: 2 + 1 = 3, which divides by 3, so 21 does too. Check: 3 x 7 = 21.
+G: 7
+
+### multiturn
+U: tarkari ko mol kilo ko: kauli 80, bhanta 60, karela 100. 2 kilo karela ko kati?
+C: 160 rupiya.
+U: 160 ta kauli ko bhayo, karela 100 ho
+T: karela kilo ko 100. 2 x 100 = 200.
+N: tapai thik hunuhunchha, maile kauli ko mol liye. 2 kilo karela ko 2 x 100 = 200 rupiya.
+G: 200
+
+### multiturn
+U: petrol liter ko 170 maanda 8 liter ko kati?
+T: 8 x 170 = 1360.
+N: 8 liter ko 1360 rupiya.
+U: liter ko 178 bhayo bhane?
+T: aba liter ko 178, 8 liter. 8 x 178 = 1424.
+N: liter ko 178 ma 8 liter ko 1424 rupiya.
+G: 1424
+
+### multiturn
+U: a room is 4 m by 3.5 m. what's the area?
+T: 4 x 3.5 = 14.
+N: The area is 14 square meters.
+U: how do you multiply by 3.5 in your head?
+N: Split 3.5 into 3 and 0.5. 4 x 3 = 12, and 4 x 0.5 = 2, which is half of 4. Then 12 + 2 = 14.
+G: 14
+
+### multiturn
+U: mero sasurali syangja ko putalibazar ma ho.
+N: thik chha, putalibazar, syangja.
+U: pokhara bata tyaha jana bus ma kati ber lagchha hola?
+N: bato ra gadi anusar samaya farak parchha, tyasaile pakka samaya bus counter ma sodhnu ramro hunchha.
+U: mero sasurali kun jilla ma bhaneko thiye?
+N: tapai ko sasurali syangja jilla ko putalibazar ma ho.
+G: syangja
+
+### multiturn
+U: hapta ma 6 din, din ko 1100 kamaye hapta ma kati?
+T: 6 x 1100 = 6600.
+N: hapta ma 6600 rupiya.
+U: tyasma 10% bonus thapda?
+T: aghi ko jawaf 6600. 6600 ko 10% = 6600 x 10 / 100 = 660. 6600 + 660 = 7260.
+N: 660 bonus thapda 7260 rupiya.
+G: 7260
+
+### multiturn
+U: what is the difference between weather and climate?
+N: Weather is what the air is like on a given day: rain, sun, wind or heat. Climate is the usual weather of a place over many years.
+U: nepali ma chhoto ma
+N: mausam bhaneko aaja ko hawa pani, jalbayu bhaneko dherai barsha ko samanya mausam.
+
+### multiturn
+U: I spent 850 on groceries today.
+N: Okay, 850.
+U: sorry, it was 580, I mixed up the digits.
+N: Got it, 580.
+U: I had 2000 this morning. how much is left?
+T: spent 580 (corrected). 2000 - 580 = 1420.
+N: You have 1420 rupees left.
+G: 1420
+
+### multiturn
+U: A train travels at 80 km per hour for 3 hours. How far does it go?
+C: It goes 160 km.
+U: that's for 2 hours, I said 3
+T: 80 x 3 = 240.
+N: You're right, I used 2 hours by mistake. In 3 hours it goes 80 x 3 = 240 km.
+G: 240
+
+### multiturn
+U: chitwan ma jeep safari jana ko 2500 parchha re.
+N: thik chha, jana ko 2500.
+U: hami 5 jana jane, jamma?
+T: 5 x 2500 = 12500.
+N: 5 jana ko 12500 rupiya.
+U: 2 jana bachcha lai aadha mol bhaye?
+T: thulo 3 jana: 3 x 2500 = 7500. bachcha ko aadha: 2500 / 2 = 1250. 2 x 1250 = 2500. 7500 + 2500 = 10000.
+N: 3 jana thulo ko 7500 ra 2 jana bachcha ko 2500, jamma 10000 rupiya.
+G: 10000
+
+### multiturn
+U: 20 / 4 x 5 kati?
+T: baya bata daya: 20 / 4 = 5. 5 x 5 = 25.
+N: 20 / 4 x 5 = 25.
+U: 1 hunu parne hoina? 4 x 5 = 20, 20 / 20 = 1
+N: bhag ra gunan sangai aaye baya bata daya kram ma garnu parchha. pahila 20 / 4 = 5, ani 5 x 5 = 25. 4 x 5 pahila garna parne bhaye 20 / (4 x 5) bhanera koshthak lekhinchha.
+G: 25
+
+### multiturn
+U: I keep my spare house key with my neighbour, Mrs. Thapa.
+N: Okay, your spare key is with Mrs. Thapa.
+U: should I hide a key under the mat instead?
+N: It's better not to. Under the mat or a flower pot is one of the first places others look. A trusted neighbour, like you have now, is safer.
+U: mero arko sancho kaslai rakheko bhaneko thiye?
+N: tapai ko arko sancho chhimeki mrs. thapa sanga chha.
+G: thapa
+
+### multiturn
+U: a 2000 liter tank and a pump that gives 40 liters a minute. how long to fill it?
+T: 2000 / 40 = 50.
+N: 50 minutes.
+U: and with a pump of 50 liters a minute?
+T: 2000 / 50 = 40.
+N: 40 minutes.
+G: 40
+
+### multiturn
+U: mero tauli 72 kilo bata 63 kilo bhayo. kati pratishat ghatyo?
+T: 72 - 63 = 9. 9 / 72 x 100 = 12.5.
+N: 12.5% le ghatyo.
+U: 9 lai 72 le kina bhag garne?
+N: pratishat sadhai suru ko taul sanga tulana garera nikalinchha. suru ma 72 kilo thiyo ra 9 kilo ghatyo, tyasaile 9 / 72 x 100 = 12.5%.
+G: 12.5
+
+### multiturn
+U: what is 13 + 19?
+T: 13 + 19 = 32.
+N: 13 + 19 = 32.
+U: times 3?
+T: previous answer 32. 32 x 3 = 96.
+N: 32 x 3 = 96.
+U: now take away a quarter of it
+T: previous answer 96. 96 / 4 = 24. 96 - 24 = 72.
+N: A quarter of 96 is 24, so 96 - 24 = 72.
+G: 72
+
+### multiturn
+U: hamro pariwar 5 jana ra mama ko pariwar 4 jana picnic jaane. ticket 150. mama ko pariwar ko matra kati?
+C: 750 rupiya.
+U: 750 ta hamro pariwar ko bhayo
+T: mama ko pariwar 4 jana. 4 x 150 = 600.
+N: maaf garnus, maile tapai ko pariwar ko 5 jana liye. mama ko pariwar 4 jana: 4 x 150 = 600 rupiya.
+G: 600
+
+### multiturn
+U: what's half of 7?
+T: 7 / 2 = 3.5.
+N: Half of 7 is 3.5.
+U: I think it's 3, because 7 is odd
+N: An odd number can't be split into two equal whole numbers. 3 + 3 = 6 leaves 1 extra, and half of that 1 is 0.5 for each side. So half of 7 is 3.5.
+G: 3.5
