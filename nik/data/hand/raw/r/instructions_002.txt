@@ -1,0 +1,856 @@
+### instructions
+U: chau chau ko ek packet 25 rupiya. 6 packet ko kati? sirf number
+T: 6 x 25 = 150.
+N: 150
+G: 150
+
+### instructions
+U: "didi, ma 4 baje ghar aauchhu. bhaat napakaunu, ma momo lyauchhu. - suraj" suraj k lyauchha? ek shabda ma
+T: SMS ma "ma momo lyauchhu" lekheko chha.
+N: momo.
+G: momo
+
+### instructions
+U: yes/no ma matra: bhyaguto pani ra jamin dubai ma basna sakchha?
+N: Yes.
+G: Yes
+
+### instructions
+U: bhansa ma hune 5 wata saman ko list, comma halera
+N: dekchi, karai, thal, chammach, gilas
+
+### instructions
+U: ek vakya, chhoto: ghadi kina chahinchha?
+N: ghadi le samaya thaha paauna ra kaam samaya mai garna maddat garchha.
+
+### instructions
+U: dui vakya ma bhannus: pani kina dherai piunu parchha?
+N: pani le sarir lai chiso rakhchha ra khana pachauna maddat garchha. din bhari thorai thorai pani piyo bhane thakai pani kam hunchha.
+
+### instructions
+U: bus ko ticket kasari katne? 3 step ma
+N: 1. bus park ko ticket counter ma jaanus. 2. kaha jane ho bhanera bhada tirnus. 3. ticket ma bus number ra seat number hernus.
+
+### instructions
+U: "suchana: bholi bihana 7 baje dekhi 11 baje samma bijuli katinchha. - bijuli karyalaya, dhulikhel" bijuli kati ghanta katinchha? ank matra
+T: suchana ma "7 baje dekhi 11 baje samma" lekheko chha. 11 - 7 = 4.
+N: 4.
+G: 4
+
+### instructions
+U: hiud ma painne 3 ota phal, numbered list ma
+N: 1. suntala 2. junar 3. amala
+
+### instructions
+U: english ma matrai: sagarmatha kun desh ma chha?
+N: Mount Everest is on the border of Nepal and China.
+G: Nepal
+
+### instructions
+U: Answer in Nepali only: what is 10 x 10?
+T: 10 x 10 = 100.
+N: 10 lai 10 le gunda 100 hunchha.
+G: 100
+
+### instructions
+U: 2 km 300 m lai meter ma bhana, meter lekhera
+T: 1 km ma 1000 m. 2 x 1000 = 2000. 2000 + 300 = 2300.
+N: 2300 meter
+G: 2300
+
+### instructions
+U: 63 lai das ko najik ma round off gara
+T: 63 ko ek ko thau 3 ho, 5 bhanda kam bhayekale tala ko das linchhau: 60.
+N: 60
+G: 60
+
+### instructions
+U: pokhara ko sabai bhanda prasiddha tal ko naam THULO AKSHAR MA
+N: PHEWA
+G: PHEWA
+
+### instructions
+U: hatti ko lamo naak lai nepali ma k bhanchhan? pahilo akshar matra
+T: hatti ko lamo naak lai sundh bhanchhan.
+N: S.
+G: S
+
+### instructions
+U: tel pani ma dubchha ki tairanchha? uttar ra karan ek line ma
+N: tairanchha, kinabhane tel pani bhanda halka hunchha.
+G: tairanchha
+
+### instructions
+U: kun sabai bhanda chhito gudchha: cycle, bus ki hawaijahaj? ek shabda matra
+N: hawaijahaj.
+G: hawaijahaj
+
+### instructions
+U: jetho dekhi kanchho kram ma, comma le: hari 12, sita 15, gopal 9, anu 13
+T: 15 > 13 > 12 > 9.
+N: sita, anu, hari, gopal
+
+### instructions
+U: "kathmandu" shabda ma kati wata swar (a, e, i, o, u) chhan? number matra
+T: k-a-t-h-m-a-n-d-u: a, a ra u, jamma 3.
+N: 3.
+G: 3
+
+### instructions
+U: "chatpate 40, panipuri 60, lassi 80, samosa 25" 2 wata samosa ra 1 lassi ko kati? number only
+T: samosa: 2 x 25 = 50. lassi 80. 50 + 80 = 130.
+N: 130
+G: 130
+
+### instructions
+U: bus bhada ek jana ko 45 rupiya, 4 jana ko kati hunchha? numbar matra
+T: 4 x 45 = 180.
+N: 180
+G: 180
+
+### instructions
+U: Yes or no: is the Sun the closest star to the Earth?
+N: Yes.
+G: Yes
+
+### instructions
+U: One word: what is the hard outer cover of an egg called?
+N: Shell.
+G: Shell
+
+### instructions
+U: aama ko umer 42, chhora ko 15. dui jana ko umer ko farak? ank ma
+T: 42 - 15 = 27.
+N: 27
+G: 27
+
+### instructions
+U: sagarmatha kun jilla ma parchha? ek shabda
+N: solukhumbu.
+G: solukhumbu
+
+### instructions
+U: dudh bata banne 2 ota kura matra
+N: dahi, ghiu
+
+### instructions
+U: ek vakya ma: bank ma paisa kina rakhne?
+N: bank ma paisa surakshit rahanchha ra thorai byaj pani aauchha.
+
+### instructions
+U: 785 lai najik ko das ma, number matra
+T: 785 ko ek ko thau 5 ho, 5 wa badhi bhae mathi ko das linchhau: 790.
+N: 790
+G: 790
+
+### instructions
+U: kun chai nadi ho: rara, koshi ki phewa? ek shabda
+N: koshi.
+G: koshi
+
+### instructions
+U: "nepali 72, ganit 88, english 65, vigyan 79" sabai bhanda kam number kun bishaya ma aayo? ek shabda
+T: 65 < 72 < 79 < 88, ra 65 english ko ho.
+N: english.
+G: english
+
+### instructions
+U: dui vakya ma bhana: motorcycle chadhda helmet kina lagaune?
+N: motorcycle bata ladda tauko ma gahiro chot lagna sakchha. helmet le tauko lai tyo chot bata jogauchha.
+
+### instructions
+U: english ma matra jawaf: 12 ko aadha kati?
+T: 12 / 2 = 6.
+N: Half of 12 is 6.
+G: 6
+
+### instructions
+U: 3 kilo 250 gram lai gram ma badla. gram sanga
+T: 3 x 1000 = 3000. 3000 + 250 = 3250.
+N: 3250 gram
+G: 3250
+
+### instructions
+U: 36 jana bidyarthi lai 4 ota team ma barabar baadda ek team ma kati? sankhya matrai
+T: 36 / 4 = 9.
+N: 9.
+G: 9
+
+### instructions
+U: hiud ko luga kun: kurta, sweater ki half pant? ek shabda
+N: sweater.
+G: sweater
+
+### instructions
+U: english ma matra: nepal ko rajdhani kun ho?
+C: nepal ko rajdhani kathmandu ho.
+U: english ma bhaneko ni
+N: The capital of Nepal is Kathmandu.
+G: Kathmandu
+
+### instructions
+U: Answer in capital letters: what day comes after Friday?
+N: SATURDAY
+G: SATURDAY
+
+### instructions
+U: pahilo akshar matra lekha: hapta ko chautho bar
+T: aaitabar, sombar, mangalbar, budhabar: chautho bar budhabar.
+N: B.
+G: B
+
+### instructions
+U: 4 ota matra: hariyo rang ka kura
+N: pat, ghans, kakro, hariyo khursani
+
+### instructions
+U: numbered list ma nepal ka 3 ota pradesh ko naam
+N: 1. madhesh 2. bagmati 3. lumbini
+
+### instructions
+U: jawaf ra karan ek line ma: 84 lai 7 le pura bhag lagchha?
+N: lagchha, kinabhane 7 x 12 = 84.
+G: lagchha
+
+### instructions
+U: Nepali only please: what do cows eat?
+N: gai le ghans, paral ra dana khanchha.
+
+### instructions
+U: "jiri jane bus: bihana 5:30, 7:00 ra 9:30. bhada 750." sabai bhanda pahilo bus kati baje chhutchha? samaya matra
+T: talika ma "bihana 5:30, 7:00 ra 9:30" lekheko chha. pahilo 5:30.
+N: 5:30
+G: 5:30
+
+### instructions
+U: 3 wata 50 ko note ra 4 wata 20 ko note. jamma rupiya ma bhana
+T: 3 x 50 = 150. 4 x 20 = 80. 150 + 80 = 230.
+N: 230 rupiya
+G: 230
+
+### instructions
+U: ho/haina ma: 9 x 9 = 81 ho?
+T: 9 x 9 = 81.
+N: ho.
+G: ho
+
+### instructions
+U: juta polish garne tarika, steps 1 2 3
+N: 1. juta ko dhulo puchhnus. 2. brush le polish lagaunus. 3. polish sukepachhi safa kapada le ragadera chamkaunus.
+
+### instructions
+U: In one sentence, what does a fire brigade do?
+N: A fire brigade puts out fires and rescues people who are in danger.
+
+### instructions
+U: gaun ma pahuna aaunda k garne? 2 vakya ma
+N: pahuna lai namaste garera bhitra bolaunus ra basne thau dinus. pani wa chiya dinus ani sanchai hunuhunchha bhanera sodhnus.
+
+### instructions
+U: 2349 lai saya ko najik ma? ank matra
+T: 2349 ko antim dui ank 49 ho, 50 bhanda kam bhayekale tala ko saya linchhau: 2300.
+N: 2300
+G: 2300
+
+### instructions
+U: z dekhi a ko ulto kram ma: dolpa, humla, jumla, mugu
+T: pahilo akshar: d, h, j, m. ulto kram: m, j, h, d.
+N: mugu, jumla, humla, dolpa
+
+### instructions
+U: kun ko sabai bhanda dherai khutta: kukhura, makura ki gai? ek shabda
+N: makura.
+G: makura
+
+### instructions
+U: "elephant" ma kati wata "e" chhan? just number
+T: e-l-e-p-h-a-n-t: e dui palta aauchha.
+N: 2.
+G: 2
+
+### instructions
+U: ek shabda: kun ritu ma laliguras phulchha?
+N: basanta.
+G: basanta
+
+### instructions
+U: "didi, ma 4 baje ghar aauchhu. bhaat napakaunu, ma momo lyauchhu. - suraj" didi le bhaat pakaunu parchha? ho ki haina matra
+T: SMS ma "bhaat napakaunu" lekheko chha.
+N: haina.
+G: haina
+
+### instructions
+U: 1000 ko note diyera 750 ko masu kine. kati firta aaunu parchha? rupiya ma
+T: 1000 - 750 = 250.
+N: 250 rupiya
+G: 250
+
+### instructions
+U: List exactly 2 things at home that run on batteries.
+N: torch, TV remote
+
+### instructions
+U: barf ghaam ma rakhda k hunchha? jawaf ra karan ek line ma
+N: barf pagchha, kinabhane ghaam ko garmi le barf lai pani banauchha.
+G: pagchha
+
+### instructions
+U: ek ropani ma 16 aana hunchha. 3 ropani ma kati aana? number matra
+T: 3 x 16 = 48.
+N: 48
+G: 48
+
+### instructions
+U: nilo ra pahelo milauda kun rang banchha? capital ma lekha
+N: HARIYO
+G: HARIYO
+
+### instructions
+U: "aaja maile 2 ghanta padhe, 1 ghanta khele ra 30 minet TV here." jamma kati minet bhayo? number matra
+T: 2 x 60 = 120. 1 x 60 = 60. 120 + 60 + 30 = 210.
+N: 210
+G: 210
+
+### instructions
+U: kun thulo: 3/5 ki 2/3? jawaf matra
+T: 3/5 = 9/15 ra 2/3 = 10/15. 10/15 > 9/15.
+N: 2/3
+G: 2/3
+
+### instructions
+U: euta football team ma maidan bhitra kati jana khelaadi hunchhan? number only
+N: 11
+G: 11
+
+### instructions
+U: nepali ma matra: What is the opposite of "day"?
+N: din ko ulto raat ho.
+G: raat
+
+### instructions
+U: 90 minet lai ghanta ma bhana, ghanta lekhera
+T: 1 ghanta ma 60 minet. 90 / 60 = 1.5.
+N: 1.5 ghanta
+G: 1.5
+
+### instructions
+U: dui vakya ma: kitab kina padhnu ramro?
+N: kitab padhda naya kura sikinchha ra shabda bhandar badhchha. ramro kitab le kalpana garne shakti pani badhauchha.
+
+### instructions
+U: kukhura 18 wata chhan. jamma khutta kati? number matra
+T: euta kukhura ko 2 khutta. 18 x 2 = 36.
+N: 36
+G: 36
+
+### instructions
+U: ek vakya ma: dhan dherai jaso kun mahina tira ropinchha?
+N: dhan dherai jaso asar mahina tira ropinchha.
+G: asar
+
+### instructions
+U: 15 lai najik ko 10 ma lagau. number matra
+T: 15 ko ek ko thau 5 ho, 5 wa badhi bhae mathi ko das linchhau: 20.
+N: 20
+G: 20
+
+### instructions
+U: "suchana: bholi bihana 7 baje dekhi 11 baje samma bijuli katinchha. - bijuli karyalaya, dhulikhel" 11 baje pachhi bijuli aauchha? ho ki haina
+T: suchana ma "11 baje samma bijuli katinchha" lekheko chha, tyasaile 11 baje pachhi bijuli aauchha.
+N: ho.
+G: ho
+
+### instructions
+U: List 3 things to carry on a short hike, numbered.
+N: 1. a bottle of water 2. a snack 3. a jacket
+
+### instructions
+U: english ma matra: hamro desh ko mudra ko naam k ho?
+N: The currency of Nepal is the Nepali rupee.
+G: rupee
+
+### instructions
+U: Reply in romanized Nepali only: how many days are there in a leap year?
+N: lip barsha ma 366 din hunchhan.
+G: 366
+
+### instructions
+U: 150 cm kati meter? meter ma matra
+T: 1 meter ma 100 cm. 150 / 100 = 1.5.
+N: 1.5 meter
+G: 1.5
+
+### instructions
+U: 6050 lai najik ko saya ma round gara, number matra
+T: 6050 ko antim dui ank 50 ho, 50 wa badhi bhae mathi ko saya linchhau: 6100.
+N: 6100
+G: 6100
+
+### instructions
+U: dashain ma aakash ma udaune kura ko naam CAPITAL letter ma
+N: CHANGA
+G: CHANGA
+
+### instructions
+U: First letter only: what colour is the sky on a clear day?
+T: The sky on a clear day is blue.
+N: B.
+G: B
+
+### instructions
+U: jawaf ani karan ek line ma: 1/2 ra 1/3 ma kun thulo?
+N: 1/2 thulo, kinabhane 1/2 = 3/6 ra 1/3 = 2/6.
+G: 1/2
+
+### instructions
+U: (a) 10 (b) 14 (c) 12. 3 x 4 kati? a, b ki c matra
+T: 3 x 4 = 12, jun (c) ho.
+N: c.
+G: c
+
+### instructions
+U: mahango dekhi sasto: momo 150, chiya 30, khaja set 250, chowmein 90
+T: 250 > 150 > 90 > 30.
+N: khaja set, momo, chowmein, chiya
+
+### instructions
+U: "ram ra sita le 3 wata syau kine. hari le 2 wata suntala kinyo." path ma kati jana ko naam aayo? number
+T: ram, sita, hari: 3 jana.
+N: 3.
+G: 3
+
+### instructions
+U: 7 hapta ma kati din? sirf ank
+T: 7 x 7 = 49.
+N: 49
+G: 49
+
+### instructions
+U: ek shabda: hamile sas ferda kun gas bhitra linchhau?
+N: oxygen.
+G: oxygen
+
+### instructions
+U: Is half a kilo the same as 500 grams? yes or no
+T: 1 kilo is 1000 grams, and half of 1000 is 500.
+N: Yes.
+G: Yes
+
+### instructions
+U: ek vakya ma bhannus: kukur lai kina khop lagaunu parchha?
+N: khop le kukur lai rabies jasta khatarnak rog bata jogauchha.
+
+### instructions
+U: nepal ma dherai bolinne 3 ota bhasa matra
+N: nepali, maithili, bhojpuri
+
+### instructions
+U: steps 1-2-3 garera: library bata kitab line
+N: 1. library card dekhaunus. 2. man parne kitab chhanera counter ma lannus. 3. kitab firta garne miti yaad garnus.
+
+### instructions
+U: 12 ko 25% kati? ank matrai
+T: 12 ko 25% = 12 x 25 / 100 = 3.
+N: 3.
+G: 3
+
+### instructions
+U: "nepali 72, ganit 88, english 65, vigyan 79" ganit ra nepali ma kati number farak? number only
+T: ganit 88, nepali 72. 88 - 72 = 16.
+N: 16
+G: 16
+
+### instructions
+U: "aama le dudh kinnubhayo tara dahi kinnubhaena." aama le dahi kinnubhayo? ho ki haina matra
+T: path ma "dahi kinnubhaena" lekheko chha.
+N: haina.
+G: haina
+
+### instructions
+U: ek shabda ma: dherai jaso bhanta kun rang ko hunchha?
+N: baijani.
+G: baijani
+
+### instructions
+U: english ma matra jawaf dinus: volleyball ma court bhitra ek team ko kati jana khelchhan?
+N: A volleyball team has 6 players on the court.
+G: 6
+
+### instructions
+U: 2 dozen ra 5 wata kera, jamma kati wata? number matra
+T: 1 dozen ma 12. 2 x 12 = 24. 24 + 5 = 29.
+N: 29
+G: 29
+
+### instructions
+U: tin ota matra: ghar ma palne chara
+N: suga, parewa, kukhura
+
+### instructions
+U: euta pentagon ko kati wata bhuja hunchhan? number matra
+N: 5.
+G: 5
+
+### instructions
+U: 999 lai najik ko 10 ma round gara, number only
+T: 999 ko ek ko thau 9 ho, 5 bhanda badhi bhayekale mathi ko das linchhau: 1000.
+N: 1000
+G: 1000
+
+### instructions
+U: ek vakya ma: library bhitra kina chup lagnu parchha?
+N: library ma aru manchhe padhdai hunchhan, halla garda unko dhyan bhangchha.
+
+### instructions
+U: phone ko battery chhitai sakiyo bhane k garne? dui vakya ma
+N: screen ko ujyalo ghataunus ra nachahine app band garnus. bahira jada charger wa power bank sangai boknus.
+
+### instructions
+U: list 4: hapta ka bar haru
+C: aaitabar, sombar, mangalbar, budhabar, bihibar, sukrabar, sanibar
+U: 4 wata matra bhaneko
+N: aaitabar, sombar, mangalbar, budhabar
+
+### instructions
+U: "dharan bata itahari 15 km ra itahari bata biratnagar 25 km." dharan bata itahari hudai biratnagar kati km? km sanga lekha
+T: path ma "15 km" ra "25 km" lekheko chha. 15 + 25 = 40.
+N: 40 km
+G: 40
+
+### instructions
+U: ho ki haina: tihar 5 din samma manainchha?
+N: ho.
+G: ho
+
+### instructions
+U: sabai bhanda sano dekhi milau: -3, 5, 0, -8
+T: -8 < -3 < 0 < 5.
+N: -8, -3, 0, 5
+
+### instructions
+U: Nepali only: what do we call the day in tihar when sisters put tika on brothers?
+N: tyo din lai bhaitika bhanchhan.
+G: bhaitika
+
+### instructions
+U: kun sabai bhanda garungo: 1 kilo kapas, 2 kilo chamal ki 500 gram chini? jawaf matra
+T: 1 kilo 1000 gram, 2 kilo 2000 gram, chini 500 gram. 2000 > 1000 > 500.
+N: 2 kilo chamal.
+G: chamal
+
+### instructions
+U: 4444 lai najik ko 100 ma lagau
+T: 4444 ko antim dui ank 44 ho, 50 bhanda kam bhayekale tala ko saya linchhau: 4400.
+N: 4400
+G: 4400
+
+### instructions
+U: 1.5 liter lai ml ma bhannus
+T: 1 liter ma 1000 ml. 1.5 x 1000 = 1500.
+N: 1500 ml
+G: 1500
+
+### instructions
+U: jawaf ra karan ek line ma: raati aakash ma ghaam dekhinchha?
+N: dekhindaina, kinabhane raati prithvi ko hamro bhag ghaam bata ulto tira hunchha.
+G: dekhindaina
+
+### instructions
+U: List exactly 3 musical instruments, numbered.
+N: 1. madal 2. guitar 3. bansuri
+
+### instructions
+U: english ma matrai bhana: hatti ko lamo naak lai english ma k bhanchhan?
+N: An elephant's long nose is called a trunk.
+G: trunk
+
+### instructions
+U: sagarmatha ko uchai kati meter? number matra
+N: 8848.86
+G: 8848.86
+
+### instructions
+U: "rojina le hijo 3 kilo pyaj ra 2 kilo aalu kini." rojina le kati kilo aalu kini? ank matra
+T: path ma "2 kilo aalu" lekheko chha. yo herne matra ho.
+N: 2.
+G: 2
+
+### instructions
+U: What do we call someone who grows rice and vegetables on a farm? one word
+N: Farmer.
+G: Farmer
+
+### instructions
+U: jawaf ra karan ek line ma: 3 kilo ra 3000 gram barabar ho?
+N: ho, kinabhane 1 kilo ma 1000 gram hunchha ra 3 x 1000 = 3000.
+G: ho
+
+### instructions
+U: namaste kasari garne? 2 vakya ma bhannus
+N: dui haat jodera chhati agadi rakhnus ra ali tauko jhukaunus. sangai mitho swor ma "namaste" bhannus.
+
+### instructions
+U: "dhulikhel ma bihana 6 baje 8 degree ra diuso 2 baje 18 degree tapakram thiyo." diuso kati degree thiyo? number matra
+T: path ma "diuso 2 baje 18 degree" lekheko chha.
+N: 18
+G: 18
+
+### instructions
+U: euta kalam 15 rupiya, 8 wata kinda kati? ank ma matra
+T: 8 x 15 = 120.
+N: 120
+G: 120
+
+### instructions
+U: picnic jaada k k lane? 2 vakya ma matra
+N: khana, pani ra sukha khaja boknus. phohor halne jhola pani lanus ra phohor sangai pharkaunus.
+
+### instructions
+U: shabda ko lambai anusar chhoto dekhi lamo: bidyalaya, ghar, kitab, pustakalaya
+T: ghar 4, kitab 5, bidyalaya 9, pustakalaya 11 akshar.
+N: ghar, kitab, bidyalaya, pustakalaya
+
+### instructions
+U: kun chai graha ho: chandrama, mangal ki surya? ek shabda
+N: mangal.
+G: mangal
+
+### instructions
+U: "sagarmatha" ma kati akshar chhan? number
+T: s-a-g-a-r-m-a-t-h-a: 10.
+N: 10
+G: 10
+
+### instructions
+U: 11 dekhi 21 samma ka bijor sankhya, comma le
+N: 11, 13, 15, 17, 19, 21
+
+### instructions
+U: CAPITAL ma uttar: sabai bhanda aglo himal ko nepali naam
+N: SAGARMATHA
+G: SAGARMATHA
+
+### instructions
+U: pahilo akshar matra: nepal ko rashtriya chara ko naam
+T: nepal ko rashtriya chara danphe ho.
+N: D.
+G: D
+
+### instructions
+U: english ma matra: kukhura le hamilai k dinchha?
+N: A hen gives us eggs.
+G: eggs
+
+### instructions
+U: Answer in Nepali only: which planet do we live on?
+N: hami prithvi ma baschhau.
+G: prithvi
+
+### instructions
+U: 3951 lai saya ma round off, sankhya matra
+T: 3951 ko antim dui ank 51 ho, 50 bhanda badhi bhayekale mathi ko saya linchhau: 4000.
+N: 4000
+G: 4000
+
+### instructions
+U: 45 minet ra 30 minet jodda kati? minet ma
+T: 45 + 30 = 75.
+N: 75 minet
+G: 75
+
+### instructions
+U: chha ki chhaina matra: "canteen ma aaja momo chha, chowmein sakiyo." canteen ma chowmein chha?
+T: path ma "chowmein sakiyo" lekheko chha.
+N: chhaina.
+G: chhaina
+
+### instructions
+U: thulo manchhe ko mukh ma jamma kati daat hunchhan? number matra
+N: 32
+G: 32
+
+### instructions
+U: ek shabda ma: hami kun angga le sungchhau?
+N: naak.
+G: naak
+
+### instructions
+U: ek vakya ma: paisa bachat kina garne?
+N: bachat le aapat ma ra bhawishya ko thula kharcha ma maddat garchha.
+
+### instructions
+U: haat ko nang katne tarika 3 step ma
+N: 1. haat sabun pani le dhunus. 2. nang katne le bistarai sidha katnus. 3. dhar bhayeko kuna lai ragadera milaunus.
+
+### instructions
+U: 5 wata 100 ko note ra 1 wata 500 ko note. jamma kati? rupiya sanga
+T: 5 x 100 = 500. 500 + 500 = 1000.
+N: 1000 rupiya
+G: 1000
+
+### instructions
+U: list 4 school subjects, comma separated
+N: Nepali, English, Maths, Science
+
+### instructions
+U: 72 lai najik ko das ma lagau, ank matra
+T: 72 ko ek ko thau 2 ho, 5 bhanda kam bhayekale tala ko das linchhau: 70.
+N: 70
+G: 70
+
+### instructions
+U: jawaf ra karan ek line ma: chamero chara ho?
+N: haina, kinabhane chamero le phul pardaina, bachcha janmauchha ra dudh khuwauchha.
+G: haina
+
+### instructions
+U: "anita: ma bholi aaudina. ramesh: ma ta aauchhu." bholi ko aauchha? ek shabda
+T: path ma ramesh le "ma ta aauchhu" bhaneko chha.
+N: ramesh.
+G: ramesh
+
+### instructions
+U: In Nepali only: how many wheels does a bicycle have?
+N: cycle ma 2 wata pangra hunchhan.
+G: 2
+
+### instructions
+U: din ma 3 chhak khana khane bhae 5 din ma kati chhak? number
+T: 5 x 3 = 15.
+N: 15
+G: 15
+
+### instructions
+U: "pahila aalu katnus, ani tel tataunus, tyaspachhi aalu halera bhutnus." tel tataunu agadi k garne? ek vakya ma
+T: path ma "pahila aalu katnus, ani tel tataunus" lekheko chha.
+N: tel tataunu agadi aalu katnu parchha.
+
+### instructions
+U: yes or no: do all birds lay eggs?
+N: Yes.
+G: Yes
+
+### instructions
+U: ek shabda: nepali barsha ko pahilo mahina
+N: baisakh.
+G: baisakh
+
+### instructions
+U: 3.5 ra 2.25 jodda kati? number matra
+T: 3.5 + 2.25 = 5.75.
+N: 5.75
+G: 5.75
+
+### instructions
+U: capital letter ma lekha: chin ko rajdhani
+C: chin ko rajdhani beijing ho.
+U: capital letter ma bhaneko
+N: BEIJING
+G: BEIJING
+
+### instructions
+U: hiud ma kasari nyano basne? 2 vakya ma bhana
+N: bahira jada sweater, topi ra moja lagaunus. raati bakhlo sirak odhnus ra tato pani piunus.
+
+### instructions
+U: ek line ma jawaf ra karan: cycle ra motorcycle madhye kun lai petrol chahinchha?
+N: motorcycle lai, kinabhane yo engine le chalchha ra cycle paila le pedal ghumaera chalainchha.
+G: motorcycle
+
+### instructions
+U: thulo dekhi sano: 0.9, 0.09, 9, 0.99
+T: 9 > 0.99 > 0.9 > 0.09.
+N: 9, 0.99, 0.9, 0.09
+
+### instructions
+U: "pasal: chamal 5 kilo ko 450, dal 1 kilo ko 160" 5 kilo chamal ra 1 kilo dal ko jamma? rupiya ma
+T: path ma 5 kilo chamal 450 ra 1 kilo dal 160 lekheko chha. 450 + 160 = 610.
+N: 610 rupiya
+G: 610
+
+### instructions
+U: First letter only: which farm animal says "moo"?
+T: The animal is a cow.
+N: C.
+G: C
+
+### instructions
+U: hapta ma 6 din school, 4 hapta ma kati din? sirf number
+T: 4 x 6 = 24.
+N: 24
+G: 24
+
+### instructions
+U: comma le 3 ota matra: chiya pasal ma painne khaja
+N: samosa, sel roti, biskut
+
+### instructions
+U: english ma matra, ek vakya: nepal ko jhanda ko aakar kasto chha?
+N: The flag of Nepal is made of two triangles, one above the other.
+
+### instructions
+U: Reply in Nepali only: what is half of 30?
+T: 30 / 2 = 15.
+N: 30 ko aadha 15 hunchha.
+G: 15
+
+### instructions
+U: chha ki chhaina matra: sarpa ko khutta chha?
+N: chhaina.
+G: chhaina
+
+### instructions
+U: kun mahina ma holi parchha: falgun, kartik ki asar? ek shabda
+N: falgun.
+G: falgun
+
+### instructions
+U: steps 1-2-3: phone ma naya number save garne
+N: 1. phone ko contacts kholnus. 2. naya contact thichera naam ra number lekhnus. 3. save thichnus.
+
+### instructions
+U: bihana hidna kina ramro? 2 vakya ma bhana
+N: bihana ko hawa sapha hunchha ra hidda sarir sakriya rahanchha. yasle din bhari man pani taja rakhchha.
+
+### instructions
+U: "tapai ko order: 2 plate momo (plate ko 150), 1 coke (80)" jamma bill kati? number matra
+T: momo: 2 x 150 = 300. 300 + 80 = 380.
+N: 380
+G: 380
+
+### instructions
+U: kharcha 1348 rupiya bhayo. najik ko 10 ma bhannus
+T: 1348 ko ek ko thau 8 ho, 5 bhanda badhi bhayekale mathi ko das linchhau: 1350.
+N: 1350
+G: 1350
+
+### instructions
+U: jawaf ra karan ek line ma: 36 jor sankhya ho?
+N: ho, kinabhane 36 lai 2 le bhag garda 18 aauchha ra kehi baki rahadaina.
+G: ho
+
+### instructions
+U: one word: what do we call the meal we eat in the morning?
+N: Breakfast.
+G: Breakfast
+
+### instructions
+U: numbered list ma 4 ota rato phal
+N: 1. syau 2. strawberry 3. anaar 4. cherry
+
+### instructions
+U: 1276 lai najik ko 100 ma round gara
+C: 1276 lai najik ko 100 ma lagauda 1300 hunchha, kinabhane 76 bhaneko 50 bhanda badhi ho.
+U: number matra lekha na
+T: 1276 ko antim dui ank 76 ho, 50 bhanda badhi: 1300.
+N: 1300
+G: 1300
+
+### instructions
+U: English only: name 3 animals that are worshipped during tihar, comma separated
+N: crow, dog, cow
+
+### instructions
+U: Yes or no only: does the Earth go around the Sun?
+N: Yes.
+G: Yes

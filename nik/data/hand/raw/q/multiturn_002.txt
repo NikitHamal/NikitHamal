@@ -1,0 +1,838 @@
+### multiturn
+U: asti dashain ko kinmel gare: aama lai sari 4500 ma, buwa lai daura suruwal 3800 ma.
+N: ramro kinmel! aama ko sari 4500, buwa ko daura suruwal 3800.
+U: buwa ko lagi kati tireko bhaneko?
+T: aghi "buwa lai daura suruwal 3800 ma" bhannu bhayo.
+N: buwa ko daura suruwal 3800 ma kinnu bhayeko thiyo.
+G: 3800
+
+### multiturn
+U: aaja mero exam ramro bhayo!
+N: badhai chha! mehanat ko phal payau.
+U: maile timilai mero naam bhaneko thiye ni, yaad chha?
+T: kurakani ma exam ramro bhayeko kura matra chha; naam aayeko chhaina.
+N: yo kurakani ma tapai le aafno naam bhannu bhayeko chhaina; exam ramro bhayo bhanne matra bhannu bhayo. naam bhannus na, yaad rakhchhu.
+
+### multiturn
+U: mero naam sushila ho, ma biratnagar ma padhauchhu.
+N: namaste sushila ji! biratnagar ma padhaunu hunchha, ramro.
+U: maile aafno bare ma k k bhane, ek choti bhannus ta.
+T: kurakani ma: naam sushila, biratnagar ma padhauchhu.
+N: tapai le aafno naam sushila ho ra tapai biratnagar ma padhaunu hunchha bhannu bhayo.
+G: sushila
+
+### multiturn
+U: asti mama ko ghar gaye, hijo didi ko ghar.
+N: bujhe: asti mama ko ghar, hijo didi ko ghar.
+U: aaja kaha gaye bhaneko thiye?
+N: aaja ko kura tapai le bhannu bhayeko chhaina. asti mama ko ghar ra hijo didi ko ghar gayeko bhannu bhayeko thiyo.
+
+### multiturn
+U: asti 5 kilo dhan kutaye, hijo 8 kilo.
+N: thik chha: asti 5, hijo 8 kilo.
+U: asti kati kilo kutayeko bhaneko?
+T: aghi "asti 5 kilo" bhannu bhayo.
+N: asti 5 kilo dhan kutaunu bhayeko thiyo.
+G: 5
+
+### multiturn
+U: maile 40 wata kukhura ka challa kine, 25 wata beche.
+N: thik chha: 40 kine, 25 beche.
+U: aba kati baki chhan?
+T: 40 - 25 = 15.
+N: 40 madhye 25 bechnu bhayo, aba 15 wata baki chhan.
+G: 15
+
+### multiturn
+U: kukhura euta 450 ma kine.
+N: thik chha, euta 450 ma kinnu bhayo.
+U: kati ma beche bhaneko thiye?
+N: bechne mol ta tapai le bhannu bhayeko chhaina; euta 450 ma kinnu bhayo bhanne matra aayo.
+
+### multiturn
+U: aghillo hapta 3 din bida liye, yo hapta 1 din.
+N: thik chha: aghillo hapta 3 din, yo hapta 1 din.
+U: yo hapta kati din bida liyeko bhaneko?
+N: yo hapta 1 din bida linu bhayeko thiyo.
+U: dui hapta ma jamma?
+T: aghillo hapta 3, yo hapta 1. 3 + 1 = 4.
+N: aghillo hapta 3 ra yo hapta 1 gari jamma 4 din bida linu bhayo.
+G: 4
+
+### multiturn
+U: My cousin Aarav got into medical school in Kathmandu.
+N: That's great news for Aarav!
+U: Which college did he get into?
+N: You didn't name the college. You only said Aarav got into medical school in Kathmandu.
+
+### multiturn
+U: ma mahina ko 3000 bachaunchhu, mero shrimati 2500.
+N: ramro! tapai 3000, shrimati 2500.
+U: dubai ko milayera barsha ma kati?
+T: 3000 + 2500 = 5500 mahina ko. 5500 x 12 = 66000.
+N: dubai ko mahina ko 5500, barsha ma 66000 rupiya bachat hunchha.
+G: 66000
+
+### multiturn
+U: mero shrimati le pasal chalaunu hunchha.
+N: thik chha, shrimati le pasal chalaunu hunchha.
+U: mero chhora ko kaam k bhaneko thiye?
+N: chhora ko kaam ko kura aayeko chhaina; shrimati le pasal chalaunu hunchha bhanne matra bhannu bhayo.
+
+### multiturn
+U: hijo hamro gaun ma mela thiyo.
+N: ramro! mela ma ramailo bhayo hola.
+U: ma ra bhai le 3 choti jhulo chadhyau, 2 wata balloon kinyau.
+N: kasto ramailo!
+U: mela ma ghumda kahile kahi bhai harauchha.
+N: bhid ma bachcha ko sadhai haat samatera hidnus, ra haraye kaha bhetne bhanne thau pahila nai bhanidinus.
+U: hami le kati choti jhulo chadhyau bhaneko?
+T: aghi "3 choti jhulo chadhyau" bhannu bhayo.
+N: tapai ra bhai le 3 choti jhulo chadhnu bhayo bhannu bhayeko thiyo.
+G: 3
+
+### multiturn
+U: bazar ma chhori lai 3 wata chura kinidiye.
+N: chhori khusi bhain hola!
+U: chura euta kati ko thiyo bhaneko?
+N: chura ko mol bhannu bhayeko chhaina; chhori lai 3 wata chura kinidinu bhayo bhanne matra aayo.
+
+### multiturn
+U: pahilo exam ganit ko, dosro bigyan ko.
+N: thik chha: pahilo ganit, dosro bigyan.
+U: dosro exam kun bishaya ko bhaneko?
+N: dosro exam bigyan ko bhannu bhayeko thiyo.
+G: bigyan
+
+### multiturn
+U: pahilo din nepali ko exam, dosro din samajik ko.
+N: bujhe: pahilo nepali, dosro samajik.
+U: tesro din k ko exam bhaneko thiye?
+N: tesro din ko kura aayeko chhaina; pahilo din nepali ra dosro din samajik bhanne matra bhannu bhayo.
+
+### multiturn
+U: I'm 34 and my wife is 31.
+N: Got it: you're 34 and your wife is 31.
+U: What's the gap between our ages?
+T: 34 - 31 = 3.
+N: There's a 3-year gap: you're 34 and she's 31.
+G: 3
+
+### multiturn
+U: mero dai qatar ma driver ho.
+N: thik chha, dai qatar ma driver.
+U: What's his salary?
+N: You haven't told me his salary. You only said your brother is a driver in Qatar.
+
+### multiturn
+U: pasal bata 2 kilo chini, 1 kilo dal, 3 packet chau chau ra 1 bottle tel lyaye.
+N: lekhe: chini 2 kilo, dal 1 kilo, chauchau 3 packet, tel 1 bottle.
+U: chau chau kati packet bhaneko thiye?
+N: chauchau 3 packet lyaunu bhayeko thiyo.
+G: 3
+
+### multiturn
+U: bazar bata gajar, golbheda ra pyaj lyaye.
+N: thik chha: gajar, golbheda ra pyaj.
+U: aalu pani lyayeko thiye ni?
+N: aalu ta suchi ma aayeko chhaina. tapai le gajar, golbheda ra pyaj lyaunu bhayo bhannu bhayeko thiyo.
+
+### multiturn
+U: hami tin daju bhai: ma 30, mahila 27, kanchha 24.
+N: thik chha: tapai 30, mahila 27, kanchha 24.
+U: mahila kati barsha ko bhaneko?
+N: mahila 27 barsha ko bhannu bhayeko thiyo.
+G: 27
+
+### multiturn
+U: mero bahini 19 barsha ki bhai.
+N: thik chha, bahini 19.
+U: didi kati barsha ki bhaneko thiye?
+N: didi ko umer yo chat ma aayeko chhaina; tapai le bahini 19 barsha ki bhain bhannu bhayeko thiyo.
+
+### multiturn
+U: bus 6:15 ma chhutyo, 4 ghanta 30 minet lagchha re.
+N: thik chha, 6:15 ma chhutyo, 4 ghanta 30 minet.
+U: kati baje pugchha?
+T: 6:15 bata 4 ghanta pachhi 10:15, ani 30 minet pachhi 10:45.
+N: 6:15 ma chhuteko bus 4 ghanta 30 minet pachhi 10:45 ma pugchha.
+G: 10:45
+
+### multiturn
+U: bus 7:30 ma kalanki bata chhutchha.
+N: thik chha, kalanki bata 7:30.
+U: bus ko number kati bhaneko?
+N: bus ko number tapai le bhannu bhayeko chhaina; kalanki bata 7:30 ma chhutchha bhanne matra bhannu bhayo.
+
+### multiturn
+U: mero ghar ko gate kalo rang ko chha.
+N: thik chha, kalo gate.
+U: haina, hijo maile hariyo rang lagaye.
+N: hunchha, aba gate hariyo.
+U: gate ko rang aba k bhaneko?
+T: pahila kalo, hijo hariyo lagaunu bhayo.
+N: gate aba hariyo rang ko chha; hijo kalo bata hariyo banaunu bhayo.
+G: hariyo
+
+### multiturn
+U: I moved to Butwal last year for work.
+N: Got it: you moved to Butwal last year for work.
+U: Where did I live before that?
+N: You haven't told me where you lived before. I only know you moved to Butwal last year for work.
+
+### multiturn
+U: suntala kilo ko 140 rahechha.
+N: thik chha, kilo ko 140.
+U: 2.5 kilo line ho.
+N: bujhe, 2.5 kilo.
+U: kati tirne?
+T: kilo ko 140, 2.5 kilo. 2.5 x 140 = 350.
+N: 2.5 kilo suntala ko 350 rupiya tirne.
+G: 350
+
+### multiturn
+U: aanp kilo ko 160 rahechha.
+N: thik chha, aanp kilo ko 160.
+U: kati kilo kineko thiye bhaneko?
+N: kati kilo kinnu bhayo, yo chat ma chhaina; aanp kilo ko 160 rahechha bhanne matra bhannu bhayo.
+
+### multiturn
+U: mero tuition sombar, budhabar ra sukrabar hunchha.
+N: thik chha: sombar, budhabar, sukrabar.
+U: mangalbar pani tuition hunchha bhaneko thiye?
+T: tuition ko din: sombar, budhabar, sukrabar. mangalbar suchi ma chhaina.
+N: haina, mangalbar bhannu bhayeko chhaina; tapai ko tuition sombar, budhabar ra sukrabar hunchha.
+
+### multiturn
+U: chhori ko dance class sanibar hunchha.
+N: thik chha, sanibar dance class.
+U: kati baje bhaneko thiye?
+N: kati baje bhanne chai bhannu bhayeko chhaina; chhori ko dance class sanibar hunchha bhanne matra aayo.
+
+### multiturn
+U: I have a meeting at 10, lunch with Sita at 1, and a call at 4.
+N: Noted: meeting at 10, lunch with Sita at 1, call at 4.
+U: Who am I having lunch with?
+N: You're having lunch with Sita at 1.
+G: Sita
+
+### multiturn
+U: I'm making dal bhat for 6 people tonight.
+N: Nice, dal bhat for 6.
+U: Which dal did I say I'm using?
+N: You didn't say which dal. I only know you're making dal bhat for 6 people tonight.
+
+### multiturn
+U: ma ghanta ko 5 km hidchhu.
+N: thik chha, ghanta ko 5 km.
+U: 2 ghanta hide kati km pugchhu?
+T: 2 x 5 = 10.
+N: ghanta ko 5 km ka dar le 2 ghanta ma 10 km pugnu hunchha.
+G: 10
+
+### multiturn
+U: ma bazar samma cycle ma jaanchhu, 20 minet lagchha.
+N: thik chha, cycle ma 20 minet.
+U: bazar kati km tadha bhaneko thiye?
+N: dura ta bhannu bhayeko chhaina; cycle ma 20 minet lagchha bhanne matra aayo. cycle ko gati bhannu bhayo bhane anuman garna sakinchha.
+
+### multiturn
+U: hajurbuwa 2020 sal ma prahari ma bharti hunu bhayo, 2045 ma retire.
+N: thik chha: 2020 ma bharti, 2045 ma retire.
+U: kati barsha jagir khanu bhayo?
+T: 2045 - 2020 = 25.
+N: 2020 dekhi 2045 samma, 25 barsha jagir khanu bhayo.
+G: 25
+
+### multiturn
+U: hajurama 15 barsha ko umer ma bihe garnu bhayeko re.
+N: tyo bela sano umer mai bihe hunthyo.
+U: hajurama kun sal ma janmanu bhayeko bhaneko?
+N: hajurama ko janma sal ko kura aayeko chhaina; 15 barsha ko umer ma bihe garnu bhayeko bhanne matra bhannu bhayo.
+
+### multiturn
+U: restaurant ma maile thukpa ra sathi le chowmein magayau.
+N: thik chha: tapai thukpa, sathi chowmein.
+U: sathi le k magayo bhaneko?
+N: sathi le chowmein magayo bhannu bhayeko thiyo.
+G: chowmein
+
+### multiturn
+U: restaurant ma momo ra sekuwa magayau.
+N: mitho!
+U: pina k magayeko bhaneko?
+N: pine kura ko kura aayeko chhaina; momo ra sekuwa magaunu bhayo bhanne matra bhannu bhayo.
+
+### multiturn
+U: bill 2400 aayo, hami 4 jana.
+N: thik chha, 2400, 4 jana.
+U: ek jana ko kati?
+T: 2400 / 4 = 600.
+N: 2400 lai 4 jana ma bandda ek jana ko 600 rupiya.
+G: 600
+
+### multiturn
+U: We split the bill between 5 friends.
+N: Okay, five of you split it.
+U: How much did each of us pay?
+N: You haven't told me the bill total, only that five of you split it. Tell me the total and I'll divide it.
+
+### multiturn
+U: didi melbourne ma basnu hunchha, bhinaju sydney ma kaam garnu hunchha.
+N: thik chha: didi melbourne, bhinaju sydney.
+U: Where does my brother-in-law work?
+N: Your brother-in-law works in Sydney.
+G: Sydney
+
+### multiturn
+U: hijo bihana ma ra sathi ramesh pokhara bata syangja gayau, bato ma putalibazar ma khana khayau.
+N: ramro yatra! pokhara bata syangja, putalibazar ma khana.
+U: hami kati baje niskeko bhaneko thiye?
+T: kurakani ma "hijo bihana" chha, kati baje bhanne chhaina.
+N: hijo bihana niskeko bhannu bhayo, tara kati baje bhanne bhannu bhayeko chhaina. putalibazar ma khana khayeko ra ramesh sangai gayeko chai bhannu bhayo.
+
+### multiturn
+U: gaya barsha hami 5 jana le rara ghumna gayau, 7 din lagyo.
+N: rara ko yatra ta ramailo bhayo hola!
+U: kati din lageko bhaneko thiye?
+N: rara ko yatra ma 7 din lageko bhannu bhayeko thiyo.
+G: 7
+
+### multiturn
+U: gaya barsha dashain ma ghar gaye.
+N: ramro, pariwar sanga dashain manaunu bhayo.
+U: yo barsha ghar jaane ki najaane bhaneko thiye?
+N: yo barsha ko yojana tapai le bhannu bhayeko chhaina; gaya barsha dashain ma ghar gayeko matra bhannu bhayo. yo barsha ko yojana bhannus na.
+
+### multiturn
+U: momo plate ko 160, chiya cup ko 40.
+N: thik chha, momo 160, chiya 40.
+U: 3 plate momo ra 3 cup chiya ko jamma?
+T: momo 3 x 160 = 480. chiya 3 x 40 = 120. 480 + 120 = 600.
+N: 3 plate momo 480 ra 3 cup chiya 120 gari jamma 600 rupiya.
+G: 600
+
+### multiturn
+U: dahi kilo ko 220 ho, 2 liter dudh pani line.
+N: thik chha, dahi kilo ko 220, 2 liter dudh pani.
+U: 1 kilo dahi ra 2 liter dudh ko jamma kati?
+T: dahi ko mol 220 chha; dudh ko mol kurakani ma chhaina.
+N: dudh liter ko kati ho, tyo bhannu bhayeko chhaina, tyasaile jamma nikalna sakdina. dahi ko chai 220 thaha chha; dudh ko mol bhannus.
+
+### multiturn
+U: aaja bihana mama le phone garnu bhayo.
+N: ramro, mama sanga kura bhayo.
+U: mama bholi aaune bhayo, khana k pakaune?
+N: mama lai man parne khana pakaunus; nathaha bhaye dal bhat, masu ra achar prayah sabai lai man parchha.
+U: bihana kasle phone gareko bhaneko thiye?
+N: aaja bihana mama le phone garnu bhayeko bhannu bhayeko thiyo.
+G: mama
+
+### multiturn
+U: hijo raati didi le video call garnu bhayo.
+N: didi sanga kura garda ramro lagyo hola.
+U: kati baje call aayeko bhaneko thiye?
+N: call ko samaya bhannu bhayeko chhaina; hijo raati didi le video call garnu bhayo bhanne matra aayo.
+
+### multiturn
+U: I bought a jacket for 3500 and shoes for 2800.
+N: Okay: jacket 3500, shoes 2800.
+U: How much more was the jacket?
+T: 3500 - 2800 = 700.
+N: The jacket cost 700 more than the shoes.
+G: 700
+
+### multiturn
+U: I bought a jacket for my son.
+N: Nice, a new jacket for your son.
+U: What size did I get?
+N: You didn't mention the size, only that you bought your son a jacket.
+
+### multiturn
+U: bihe ma bolaune: thulo buwa ko pariwar 6 jana.
+N: lekhe: thulo buwa ko pariwar 6 jana.
+U: sano buwa ko pariwar 4 jana.
+N: thapiyo: sano buwa ko 4 jana.
+U: mama ko pariwar 5 jana.
+N: thapiyo: mama ko 5 jana.
+U: jamma kati jana bhaye?
+T: 6 + 4 + 5 = 15.
+N: thulo buwa ko 6, sano buwa ko 4 ra mama ko 5 gari jamma 15 jana.
+G: 15
+
+### multiturn
+U: bihe ma phupu ko pariwar 3 jana ra maiju ko pariwar 2 jana bolaune.
+N: lekhe: phupu ko 3, maiju ko 2.
+U: kaka ko pariwar kati jana bhaneko thiye?
+N: kaka ko pariwar suchi ma aayeko chhaina; phupu ko 3 jana ra maiju ko 2 jana matra bhannu bhayo.
+
+### multiturn
+U: bholi ma 8 baje bank jaanchhu ra 11 baje hospital.
+N: thik chha: 8 baje bank, 11 baje hospital.
+U: pahila kaha jaane bhaneko?
+T: 8 baje bank, 11 baje hospital. 8 baje pahila aauchha.
+N: pahila 8 baje bank jaane bhannu bhayeko thiyo.
+G: bank
+
+### multiturn
+U: bholi 10 baje hospital jaanu chha.
+N: thik chha, bholi 10 baje hospital.
+U: hospital kina jaane bhaneko thiye?
+N: kina jaane bhanne kura tapai le bhannu bhayeko chhaina; bholi 10 baje hospital jaanu chha bhanne matra aayo. sabai thik hos!
+
+### multiturn
+U: mero 2 daju, 1 didi ra 2 bahini chhan.
+N: thik chha: 2 daju, 1 didi, 2 bahini.
+U: mero jamma kati jana daju didi bahini bhaye?
+T: 2 + 1 + 2 = 5.
+N: 2 daju, 1 didi ra 2 bahini gari tapai ka 5 jana daju didi bahini chhan.
+G: 5
+
+### multiturn
+U: ma ghar ko jetho chhora hu, mero 2 bahini chhan.
+N: thik chha: tapai jetho chhora, 2 bahini.
+U: bhai kati jana bhaneko thiye?
+N: bhai ko kura aayeko chhaina; tapai ghar ko jetho chhora ra tapai ka 2 bahini chhan bhannu bhayo. bhai chhan bhane bhannus.
+
+### multiturn
+U: chhori aile 7 barsha ki chhe.
+N: thik chha, chhori 7 barsha.
+U: 5 barsha pachhi kati ki hunchhe?
+T: 7 + 5 = 12.
+N: aile 7 barsha ki chhori 5 barsha pachhi 12 barsha ki hunchhe.
+G: 12
+
+### multiturn
+U: chhori 9 barsha ki bhai.
+N: thik chha, chhori 9.
+U: chhora 3 barsha pachhi kati ko hunchha?
+N: chhora ko aile ko umer tapai le bhannu bhayeko chhaina, tyasaile 3 barsha pachhi ko umer bhanna sakdina. chhori 9 barsha ki bhanne matra thaha chha.
+
+### multiturn
+U: My garden has 6 rows of beans with 10 plants in each row.
+N: Nice: 6 rows, 10 bean plants each.
+U: How many bean plants in total?
+T: 6 x 10 = 60.
+N: You have 60 bean plants.
+G: 60
+
+### multiturn
+U: bari ma 4 line makai ropeko chhu.
+N: thik chha, 4 line makai.
+U: euta line ma kati bot chhan bhaneko?
+N: line ma kati bot chhan, tyo bhannu bhayeko chhaina; 4 line makai ropnu bhayo bhanne matra thaha chha.
+
+### multiturn
+U: ma bhaktapur ma baschhu, kaam chai thamel ma garchhu.
+N: thik chha: ghar bhaktapur, kaam thamel.
+U: bato ma dherai jam hunchha.
+N: bihana chadai niskida jam kam hunchha; bike chalaunu hunchha bhane bato chhanera chalaunus.
+U: ma kaha kaam garchhu bhaneko thiye?
+N: tapai thamel ma kaam garnu hunchha bhannu bhayeko thiyo, ghar chai bhaktapur ma.
+G: thamel
+
+### multiturn
+U: ma lalitpur ko euta software company ma kaam garchhu.
+N: ramro, lalitpur ma software company.
+U: company ko naam yaad chha timilai?
+N: company ko naam ta tapai le bhannu bhayeko chhaina; lalitpur ko euta software company ma kaam garnu hunchha bhanne matra aayo.
+
+### multiturn
+U: chhutti mangsir 5 dekhi mangsir 12 samma.
+N: thik chha, mangsir 5 dekhi 12 samma.
+U: kati din ko chhutti bhayo?
+T: 5 dekhi 12 samma dubai din gane: 12 - 5 = 7, ani 7 + 1 = 8.
+N: mangsir 5 dekhi 12 samma dubai din gane 8 din ko chhutti ho.
+G: 8
+
+### multiturn
+U: dashain ko chhutti asoj 20 dekhi suru hunchha.
+N: thik chha, asoj 20 dekhi.
+U: kati din ko chhutti bhaneko?
+N: chhutti kahile sakinchha ya kati din ko ho, yo bhannu bhayeko chhaina; asoj 20 dekhi suru hunchha bhanne matra aayo.
+
+### multiturn
+U: Hi, I'm Kiran. I drive a taxi in Pokhara.
+N: Hi Kiran! Driving a taxi in Pokhara must keep you busy.
+U: Long hours make my back hurt.
+N: Adjust your seat so your back is supported, take a short walk every couple of hours, and stretch gently. If the pain stays, see a doctor.
+U: Do you remember my name?
+N: Yes, you told me your name is Kiran.
+G: Kiran
+
+### multiturn
+U: Hi! I teach maths at a school in Nepalgunj.
+N: Hi! Teaching maths in Nepalgunj sounds rewarding.
+U: Do you remember what my name is?
+N: You haven't told me your name in this chat. I only know you teach maths at a school in Nepalgunj.
+
+### multiturn
+U: chhora lai din ko 40 rupiya khaja ko paisa dinchhu, hapta ma 5 din.
+N: thik chha, din ko 40, hapta ma 5 din.
+U: hapta ma kati dinchhu?
+T: 5 x 40 = 200.
+N: din ko 40 ka dar le 5 din ko 200 rupiya dinu hunchha.
+G: 200
+
+### multiturn
+U: bhanji hostel ma chhe, uslai mahina ko 1000 kharcha pathaunchhu.
+N: thik chha, bhanji lai mahina ko 1000.
+U: bhanja lai kati pathaunchhu bhaneko thiye?
+N: bhanja ko kura yo chat ma aayeko chhaina; hostel ma bhayeki bhanji lai mahina ko 1000 pathaunu hunchha bhanne matra bhannu bhayo.
+
+### multiturn
+U: hamro ghar 4 talla ko chha, 12 wata kotha chhan, 2 wata bhanchha.
+N: thulo ghar! 4 talla, 12 kotha, 2 bhanchha.
+U: kati wata kotha bhaneko?
+N: 12 wata kotha bhannu bhayeko thiyo.
+G: 12
+
+### multiturn
+U: hamro ghar 3 talla ko chha.
+N: thik chha, 3 talla.
+U: ghar ma kati jana baschhau bhaneko thiye?
+N: kati jana basnu hunchha, yo bhannu bhayeko chhaina; ghar 3 talla ko chha bhanne matra aayo.
+
+### multiturn
+U: mero mahina ko bijuli bill 1800 aauchha.
+N: thik chha, 1800.
+U: haina, 1600 matra, galti bhayo.
+N: hunchha, sachyaeko: 1600.
+U: barsha ma kati jaanchha?
+T: sachyaeko bill 1600. 1600 x 12 = 19200.
+N: mahina ko 1600 ka dar le barsha ma 19200 rupiya bijuli bill jaanchha.
+G: 19200
+
+### multiturn
+U: mero mahina ko internet bill 1500.
+N: thik chha, internet 1500.
+U: pani ko bill kati bhaneko thiye?
+N: pani ko bill ko kura aayeko chhaina; internet ko 1500 matra bhannu bhayo.
+
+### multiturn
+U: mero chhori aditi 5 kaksha ma, chhora arjun 2 kaksha ma.
+N: thik chha: aditi 5 kaksha, arjun 2 kaksha.
+U: Which class is Arjun in?
+N: Arjun is in class 2.
+G: 2
+
+### multiturn
+U: aditi ki class teacher le dherai ramro padhaunu hunchha re.
+N: ramro kura! ramro teacher le bachcha lai hausala dinchhan.
+U: teacher ko naam k bhaneko thiye?
+N: teacher ko naam bhannu bhayeko chhaina; aditi ki class teacher le ramro padhaunu hunchha bhanne matra aayo.
+
+### multiturn
+U: hamro 6 ropani khet chha, 2 ropani ma tarkari, baki ma dhan.
+N: thik chha: 6 ropani, 2 ma tarkari, baki dhan.
+U: dhan kati ropani ma bhayo?
+T: 6 - 2 = 4.
+N: 6 ropani madhye 2 ma tarkari, tyasaile dhan 4 ropani ma bhayo.
+G: 4
+
+### multiturn
+U: 4 ropani ma dhan ropeko chhu.
+N: thik chha, 4 ropani dhan.
+U: kati muri phalyo bhaneko thiye?
+N: bali kati phalyo, yo bhannu bhayeko chhaina; 4 ropani ma dhan ropnu bhayo bhanne matra aayo.
+
+### multiturn
+U: dai dubai ma hunuhunchha, tyaha nepal bhanda 1 ghanta 45 minet pachhadi hunchha re.
+N: thik chha, dubai 1 ghanta 45 minet pachhadi.
+U: yaha beluka 7 baje hunda tyaha kati bajchha?
+T: 7 baje bata 1 ghanta aghi 6 baje, 45 minet aghi 5:15.
+N: yaha beluka 7 baje hunda dubai ma beluka 5:15 bajchha.
+G: 5:15
+
+### multiturn
+U: dai qatar ma 4 barsha dekhi hunuhunchha.
+N: thik chha, dai 4 barsha dekhi qatar ma.
+U: dai le tyaha k kaam garnu hunchha bhaneko?
+N: dai ko kaam ko kura aayeko chhaina; dai 4 barsha dekhi qatar ma hunuhunchha bhanne matra bhannu bhayo.
+
+### multiturn
+U: My grandmother turns 80 next month, on the 9th.
+N: How lovely! 80 on the 9th next month.
+U: What date is her birthday?
+N: Her birthday is on the 9th, next month.
+G: 9
+
+### multiturn
+U: rina 150 cm ki, mina 158 cm.
+N: thik chha: rina 150, mina 158.
+U: ko aglo?
+T: 158 - 150 = 8.
+N: mina aglo chhe, rina bhanda 8 cm.
+G: mina
+
+### multiturn
+U: rina ra mina dubai 10 kaksha ma padhchhan.
+N: thik chha, rina ra mina 10 kaksha ma.
+U: tina kun kaksha ma padhchhe bhaneko?
+N: tina ko kura yo chat ma aayeko chhaina; rina ra mina dubai 10 kaksha ma padhchhan bhanne matra bhannu bhayo.
+
+### multiturn
+U: 3 kilo masu 2100 ma kine.
+N: thik chha: 3 kilo, 2100.
+U: kati kilo kineko bhaneko?
+N: 3 kilo masu kinnu bhayeko thiyo, 2100 ma.
+G: 3
+
+### multiturn
+U: 4 kilo machha 2800 ma lyaye.
+N: thik chha: 4 kilo machha, 2800.
+U: kilo ko kati paryo?
+T: 2800 / 4 = 700.
+N: 2800 lai 4 kilo le bhag garda kilo ko 700 rupiya paryo.
+G: 700
+
+### multiturn
+U: aaja 5 kilo golbheda kine.
+N: thik chha, 5 kilo golbheda.
+U: jamma kati tireko bhaneko?
+N: kati tirnu bhayo, yo bhannu bhayeko chhaina; 5 kilo golbheda kinnu bhayo bhanne matra aayo.
+
+### multiturn
+U: I'm Bina, I run a small tailoring shop in Birgunj, and I have two daughters.
+N: Nice to meet you, Bina! A tailoring shop in Birgunj and two daughters.
+U: Can you repeat what I told you about myself?
+T: Told: name Bina, small tailoring shop in Birgunj, two daughters.
+N: You said your name is Bina, you run a small tailoring shop in Birgunj, and you have two daughters.
+G: Bina
+
+### multiturn
+U: chiya banauda pahila pani umalne ki dudh?
+N: pahila pani ma chiya patti halera umalnus, ani dudh ra chini halera ek choti umalnus. kasaile sidhai dudh mai banauchhan, swad anusar.
+U: maile aafno bare ma k k bhaneko chhu yo chat ma?
+N: aafno bare ma tapai le kehi bhannu bhayeko chhaina; yo chat ma tapai le chiya banaune tarika matra sodhnu bhayo.
+
+### multiturn
+U: hami poush 8 gate lumbini jaane.
+N: thik chha, poush 8.
+U: haina, poush 10 ma sarnu paryo.
+N: hunchha, aba poush 10.
+U: bus ticket chadai linu parla?
+N: chad ko bela haina bhane 2-3 din aghi line pugchha, tara sit chhanna man chha bhane chadai linu ramro.
+U: kati gate jaane bhaneko thiye?
+T: pahila poush 8, pachhi poush 10 ma sarayo.
+N: poush 10 gate jaane; pahila 8 bhannu bhayeko thiyo, pachhi 10 ma sarnu bhayo.
+G: 10
+
+### multiturn
+U: lumbini ma 2 din basne.
+N: thik chha, lumbini ma 2 din.
+U: kaha basne bhaneko thiye?
+N: basne thau ko kura aayeko chhaina; lumbini ma 2 din basne matra bhannu bhayo.
+
+### multiturn
+U: dharmendra le din ko 1100 jyala linchha, 5 din kaam garyo.
+N: thik chha: din ko 1100, 5 din.
+U: kati dinu parchha usko?
+T: 5 x 1100 = 5500.
+N: din ko 1100 ka dar le 5 din ko 5500 rupiya dinu parchha.
+G: 5500
+
+### multiturn
+U: mistri le din ko 1500 linchhan.
+N: thik chha, mistri ko din ko 1500.
+U: jyami ko din ko kati bhaneko thiye?
+N: jyami ko jyala ta bhannu bhayeko chhaina; mistri ko din ko 1500 matra aayo.
+
+### multiturn
+U: Our team came third in the quiz, and Ravi's team came first.
+N: Well done! Third place for you, first for Ravi's team.
+U: Which place did my team get?
+N: Your team came third.
+G: third
+
+### multiturn
+U: Our team came second in the futsal tournament.
+N: Second place, that's great!
+U: How many goals did we score in the final?
+N: You haven't told me the goals. I only know your team came second in the futsal tournament.
+
+### multiturn
+U: hamro ghar ma 2 kukur, 3 biralo ra 10 kukhura chhan.
+N: ramro! 2 kukur, 3 biralo, 10 kukhura.
+U: biralo kati wata bhaneko?
+N: biralo 3 wata bhannu bhayeko thiyo.
+G: 3
+
+### multiturn
+U: hamro ghar ma 2 wata kukur chhan.
+N: thik chha, 2 kukur.
+U: kukur haru ko naam k bhaneko thiye?
+N: kukur ko naam bhannu bhayeko chhaina; ghar ma 2 wata kukur chhan bhanne matra thaha chha.
+
+### multiturn
+U: The cake needs 45 minutes in the oven. I put it in at 3:20.
+N: Okay: 45 minutes, in at 3:20.
+U: When should I take it out?
+T: 3:20 plus 45 minutes is 4:05.
+N: Take it out at 4:05.
+G: 4:05
+
+### multiturn
+U: cake 40 minet oven ma rakhnu parchha re.
+N: thik chha, 40 minet.
+U: kati degree ma bhaneko thiye?
+N: taapkram ko kura aayeko chhaina; cake 40 minet oven ma rakhnu parchha bhanne matra bhannu bhayo.
+
+### multiturn
+U: sir le bholi test hunchha bhannu bhayo, madam le homework dinu bhayo.
+N: bujhe: sir le test ko kura, madam le homework.
+U: test ko kura kasle gareko bhaneko?
+T: aghi "sir le bholi test hunchha bhannu bhayo" bhannu bhayo.
+N: bholi test hunchha bhanne kura sir le garnu bhayeko thiyo.
+G: sir
+
+### multiturn
+U: bholi test chha re.
+N: thik chha, bholi test.
+U: kun bishaya ko test bhaneko thiye?
+N: test kun bishaya ko ho, tyo bhannu bhayeko chhaina; bholi test chha bhanne matra aayo.
+
+### multiturn
+U: tin din ko bikri: 4500, 5200 ra 3800.
+N: thik chha: 4500, 5200, 3800.
+U: ausat bikri kati bhayo?
+T: 4500 + 5200 + 3800 = 13500. 13500 / 3 = 4500.
+N: tin din ko jamma 13500, ausat bikri din ko 4500 rupiya.
+G: 4500
+
+### multiturn
+U: sombar 3200 ra mangalbar 4100 ko bikri bhayo.
+N: thik chha: sombar 3200, mangalbar 4100.
+U: budhabar kati bhaneko thiye?
+N: budhabar ko bikri ko kura aayeko chhaina; sombar 3200 ra mangalbar 4100 matra bhannu bhayo.
+
+### multiturn
+U: mama le suntala, maiju le achar ra didi le chiura pathaunu bhayo.
+N: kasto ramro kosheli! suntala, achar ra chiura.
+U: achar kasle pathaunu bhayeko bhaneko?
+N: achar maiju le pathaunu bhayeko bhannu bhayeko thiyo.
+G: maiju
+
+### multiturn
+U: kaka le gaun bata ghiu pathaunu bhayo.
+N: kaka le ghiu pathaunu bhayo, mitho hola!
+U: phupu le k pathaunu bhayo bhaneko thiye?
+N: phupu ko kosheli ko kura aayeko chhaina; kaka le ghiu pathaunu bhayo bhanne matra bhannu bhayo.
+
+### multiturn
+U: hijo raati 11:30 ma sute, aaja bihana 6 baje uthe.
+N: thik chha, 11:30 ma sutnu bhayo, 6 baje uthnu bhayo.
+U: kati ghanta nidaye?
+T: 11:30 bata 12:00 samma 30 minet, 12 dekhi bihana 6 samma 6 ghanta. jamma 6 ghanta 30 minet, arthat 6.5 ghanta.
+N: raati 11:30 dekhi bihana 6 baje samma 6.5 ghanta, arthat 6 ghanta 30 minet nidaunu bhayo.
+G: 6.5
+
+### multiturn
+U: aaja raati 11 baje sutchhu.
+N: thik chha, 11 baje.
+U: hijo kati baje sute bhaneko thiye?
+N: hijo ko nidra ko kura aayeko chhaina; aaja raati 11 baje sutne bhanne matra bhannu bhayo.
+
+### multiturn
+U: My son's school bus comes at 7:40 and returns at 3:15.
+N: Noted: pickup 7:40, return 3:15.
+U: What time does it come back?
+N: The bus brings him back at 3:15.
+G: 3:15
+
+### multiturn
+U: chhori ko tuition 6 baje suru hunchha.
+N: thik chha, 6 baje suru.
+U: kati baje sakinchha bhaneko thiye?
+N: sakine samaya bhannu bhayeko chhaina; chhori ko tuition 6 baje suru hunchha bhanne matra aayo.
+
+### multiturn
+U: hamro tanki 1000 liter ko, aile aadha bhari chha.
+N: thik chha, 1000 liter, aadha bhari.
+U: aba kati liter pani chha?
+T: 1000 ko aadha: 1000 / 2 = 500.
+N: 1000 liter ko tanki aadha bhari bhaye 500 liter pani chha.
+G: 500
+
+### multiturn
+U: tanki ma 600 liter pani chha.
+N: thik chha, 600 liter.
+U: kati din chalchha bhaneko thiye?
+N: kati din chalchha bhanne kura aayeko chhaina, ra din ko kharcha pani bhannu bhayeko chhaina; tanki ma 600 liter chha bhanne matra thaha chha.
+
+### multiturn
+U: sita mero didi ho, ra hari sita ko chhora.
+N: bujhe: sita tapai ki didi, hari sita ko chhora.
+U: hari mero k parchha?
+T: hari didi ko chhora. didi ko chhora bhanja hunchha.
+N: hari tapai ki didi ko chhora bhaekale tapai ko bhanja parchha.
+G: bhanja
+
+### multiturn
+U: hari mero bhanja ho.
+N: thik chha, hari tapai ko bhanja.
+U: hari kati barsha ko bhaneko thiye?
+N: hari ko umer bhannu bhayeko chhaina; hari tapai ko bhanja ho bhanne matra aayo.
+
+### multiturn
+U: I have 3 notebooks of 200 pages and 2 of 100 pages.
+N: Okay: three 200-page and two 100-page notebooks.
+U: How many pages in total?
+T: 3 x 200 = 600. 2 x 100 = 200. 600 + 200 = 800.
+N: That's 800 pages in total.
+G: 800
+
+### multiturn
+U: barsha ko lagi 4 wata chhata kine.
+N: ramro, 4 chhata.
+U: chhata euta kati ko bhaneko thiye?
+N: chhata ko mol bhannu bhayeko chhaina; 4 wata chhata kinnu bhayo bhanne matra aayo.
+
+### multiturn
+U: sathi haru sanga sanibar 3 baje basantapur ma bhetne.
+N: thik chha: sanibar, 3 baje, basantapur.
+U: kaha bhetne bhaneko?
+N: sanibar 3 baje basantapur ma bhetne bhannu bhayeko thiyo.
+G: basantapur
+
+### multiturn
+U: sanibar sathi haru sanga bhetne.
+N: ramro, sanibar sathi haru sanga.
+U: ko ko aaune bhaneko thiye?
+N: ko ko aaune bhanne naam bhannu bhayeko chhaina; sanibar sathi haru sanga bhetne bhanne matra aayo.
+
+### multiturn
+U: mero jhola ma 6 kilo saman thiyo, 1.5 kilo nikale.
+N: thik chha: 6 kilo, 1.5 kilo nikalnu bhayo.
+U: aba kati kilo bhayo?
+T: 6 - 1.5 = 4.5.
+N: 6 kilo bata 1.5 kilo nikalda jhola 4.5 kilo bhayo.
+G: 4.5
+
+### multiturn
+U: flight ma laijane jhola 18 kilo chha.
+N: thik chha, 18 kilo.
+U: airline le kati kilo samma dinchha bhaneko thiye?
+N: airline ko seema tapai le bhannu bhayeko chhaina; jhola 18 kilo chha bhanne matra aayo. seema ticket ma ya airline ko website ma hunchha.
+
+### multiturn
+U: bihe sukrabar ho, mehendi tyo bhanda ek din aghi.
+N: thik chha: bihe sukrabar, mehendi ek din aghi.
+U: mehendi kun bar parchha?
+T: sukrabar bhanda ek din aghi bihibar.
+N: mehendi bihibar parchha.
+G: bihibar
+
+### multiturn
+U: bhai ko bihe sukrabar ho.
+N: badhai chha! sukrabar bihe.
+U: reception kun bar bhaneko thiye?
+N: reception ko kura aayeko chhaina; bihe sukrabar ho bhanne matra bhannu bhayo.
+
+### multiturn
+U: I had 2000 rupees. I spent 650 on groceries and 400 on a taxi.
+N: Okay: 2000, minus 650 for groceries and 400 for a taxi.
+U: How much do I have left?
+T: 650 + 400 = 1050. 2000 - 1050 = 950.
+N: You have 950 rupees left.
+G: 950
