@@ -1,0 +1,614 @@
+### english
+U: Sita bought 3 notebooks at 45 rupees each and a pen for 20 rupees. How much did she spend?
+T: notebooks: 3 x 45 = 135. total: 135 + 20 = 155.
+N: Sita spent 155 rupees.
+G: 155
+
+### english
+U: A farmer has 240 kg of rice and sells 3/8 of it. How much rice is left?
+T: 240 / 8 = 30. sold: 3 x 30 = 90. left: 240 - 90 = 150.
+N: The farmer has 150 kg of rice left.
+G: 150
+
+### english
+U: A bus leaves Kathmandu at 7:30 am and reaches Pokhara at 2:00 pm. How long is the journey?
+T: 7:30 to 1:30 is 6 hours. 1:30 to 2:00 is 30 minutes.
+N: The journey takes 6 hours and 30 minutes.
+G: 6
+
+### english
+U: Hari is 8 years older than Gita. Gita is 15. How old is Hari?
+T: 15 + 8 = 23.
+N: Hari is 23 years old.
+G: 23
+
+### english
+U: The sum of two numbers is 50. One of them is 18. What is the other?
+T: 50 - 18 = 32.
+N: The other number is 32.
+G: 32
+
+### english
+U: A rectangle has an area of 72 square meters and a length of 9 m. What is its width?
+T: width = area / length = 72 / 9 = 8.
+N: The width is 8 meters.
+G: 8
+
+### english
+U: 5 kg of potatoes cost 275 rupees. How much do 8 kg cost?
+T: 1 kg: 275 / 5 = 55. 8 kg: 8 x 55 = 440.
+N: 8 kg of potatoes cost 440 rupees.
+G: 440
+
+### english
+U: A shopkeeper buys a bag for 1200 rupees and sells it at 25% profit. What is the selling price?
+T: profit: 1200 x 25 / 100 = 300. selling price: 1200 + 300 = 1500.
+N: The selling price is 1500 rupees.
+G: 1500
+
+### english
+U: A school has 480 students and 45% are girls. How many boys are there?
+T: girls: 480 x 45 / 100 = 216. boys: 480 - 216 = 264.
+N: There are 264 boys.
+G: 264
+
+### english
+U: A car uses 8 liters of petrol per 100 km. How much petrol for 350 km?
+T: 350 / 100 = 3.5. 3.5 x 8 = 28.
+N: The car needs 28 liters of petrol.
+G: 28
+
+### english
+U: What is the simple interest on 25000 rupees at 8% per year for 3 years?
+T: 25000 x 8 x 3 / 100 = 6000.
+N: The simple interest is 6000 rupees, so the total becomes 31000 rupees.
+G: 6000
+
+### english
+U: A tap fills a tank at 20 liters per minute. How long to fill a 1000-liter tank?
+T: 1000 / 20 = 50.
+N: It takes 50 minutes to fill the tank.
+G: 50
+
+### english
+U: Ram walks 2.5 km to school and back home every school day. How far does he walk in 6 days?
+T: one day: 2.5 x 2 = 5 km. 6 days: 5 x 6 = 30.
+N: Ram walks 30 km in 6 days.
+G: 30
+
+### english
+U: A rope 15 m long is cut into pieces of 75 cm. How many pieces?
+T: 15 m = 1500 cm. 1500 / 75 = 20.
+N: You get 20 pieces.
+G: 20
+
+### english
+U: The average of 5 numbers is 24. What is their sum?
+T: sum = 5 x 24 = 120.
+N: The sum of the 5 numbers is 120.
+G: 120
+
+### english
+U: 6 workers finish a job in 10 days. How long would 4 workers take, working at the same speed?
+T: total work = 6 x 10 = 60 worker-days. 60 / 4 = 15.
+N: 4 workers would take 15 days.
+G: 15
+
+### english
+U: What is the angle between the hands of a clock at 3:00?
+T: each hour mark is 360 / 12 = 30 degrees apart. 3 x 30 = 90.
+N: At 3:00 the angle between the hands is 90 degrees.
+G: 90
+
+### english
+U: The price of milk went up from 80 to 100 rupees per liter. What is the percent increase?
+T: increase: 100 - 80 = 20. 20 x 100 / 80 = 25.
+N: The price increased by 25%.
+G: 25
+
+### english
+U: In a class of 35, two-fifths are boys. How many girls are there?
+T: boys: 35 / 5 x 2 = 14. girls: 35 - 14 = 21.
+N: There are 21 girls.
+G: 21
+
+### english
+U: A train goes at 90 km/h for 2 hours 20 minutes. How far does it travel?
+T: 2 hours: 90 x 2 = 180 km. 20 minutes is 1/3 hour: 90 / 3 = 30 km. total: 180 + 30 = 210.
+N: The train travels 210 km.
+G: 210
+
+### english
+U: A phone costs 15000 rupees. There is a 10% discount, then 13% VAT on the new price. What is the final price?
+T: discount: 15000 x 10 / 100 = 1500. after discount: 15000 - 1500 = 13500. VAT: 13500 x 13 / 100 = 1755. final: 13500 + 1755 = 15255.
+N: The final price is 15255 rupees.
+G: 15255
+
+### english
+U: Laxmi saves 250 rupees every week. How many weeks to save 4000 rupees?
+T: 4000 / 250 = 16.
+N: She needs 16 weeks.
+G: 16
+
+### english
+U: A cake is cut into 12 equal pieces and 5 are eaten. What fraction is left?
+T: 12 - 5 = 7 pieces left.
+N: 7/12 of the cake is left.
+G: 7/12
+
+### english
+U: Kabita read 30 pages on Monday, 45 on Tuesday and 25 on Wednesday. How many pages in total?
+T: 30 + 45 + 25 = 100.
+N: She read 100 pages in total.
+G: 100
+
+### english
+U: A tea packet has 250 g. How many packets make 2 kg?
+T: 2 kg = 2000 g. 2000 / 250 = 8.
+N: 8 packets make 2 kg.
+G: 8
+
+### english
+U: At night it was -4 degrees and in the day it was 11 degrees. What is the difference?
+T: from -4 up to 0 is 4 degrees, and from 0 to 11 is 11 degrees. 4 + 11 = 15.
+N: The difference is 15 degrees.
+G: 15
+
+### english
+U: A square garden has a perimeter of 64 m. What is the length of one side, and the area?
+T: side: 64 / 4 = 16. area: 16 x 16 = 256.
+N: Each side is 16 m, and the area is 256 square meters.
+G: 256
+
+### english
+U: 3 pencils and 2 erasers cost 50 rupees. A pencil costs 10 rupees. How much is one eraser?
+T: pencils: 3 x 10 = 30. erasers: 50 - 30 = 20. one eraser: 20 / 2 = 10.
+N: One eraser costs 10 rupees.
+G: 10
+
+### english
+U: Bimala earns 18000 a month and spends 13500. What percent does she save?
+T: savings: 18000 - 13500 = 4500. 4500 x 100 / 18000 = 25.
+N: She saves 25% of her income.
+G: 25
+
+### english
+U: How many seconds are there in 2.5 minutes?
+T: 2.5 x 60 = 150.
+N: There are 150 seconds in 2.5 minutes.
+G: 150
+
+### english
+U: How many kattha are in 2 bigha?
+T: 1 bigha = 20 kattha. 2 x 20 = 40.
+N: 2 bigha is 40 kattha.
+G: 40
+
+### english
+U: Write 1 ropani 8 aana in aana only.
+T: 1 ropani = 16 aana. 16 + 8 = 24.
+N: 1 ropani 8 aana is 24 aana.
+G: 24
+
+### english
+U: A cyclist rides 18 km in 45 minutes. What is the speed in km per hour?
+T: 45 minutes is 3 parts of 15 minutes, so in 15 minutes: 18 / 3 = 6 km. 60 minutes is 4 parts: 4 x 6 = 24.
+N: The speed is 24 km per hour.
+G: 24
+
+### english
+U: A father is 40 and his son is 10. In how many years will the father be twice as old as the son?
+T: try 20 years: father 40 + 20 = 60, son 10 + 20 = 30, and 2 x 30 = 60. it works.
+N: In 20 years, when the father is 60 and the son is 30.
+G: 20
+
+### english
+U: A shop gives 2 free packets for every 10 you buy. If I buy 30, how many packets do I get?
+T: 30 / 10 = 3 groups. free: 3 x 2 = 6. total: 30 + 6 = 36.
+N: You get 36 packets (30 bought + 6 free).
+G: 36
+
+### english
+U: A blue bus has 40 seats. 28 people are sitting in it. How many seats are empty?
+T: the colour of the bus is not needed. 40 - 28 = 12.
+N: 12 seats are empty.
+G: 12
+
+### english
+U: A shop is open from 9 am to 6 pm, 6 days a week. How many hours is it open each week?
+T: 9 am to 6 pm is 9 hours. 9 x 6 = 54.
+N: The shop is open 54 hours a week.
+G: 54
+
+### english
+U: For Dashain I bought 3 kurtas at 1200 rupees each and 2 pairs of shoes at 1800 each. Total?
+T: kurtas: 3 x 1200 = 3600. shoes: 2 x 1800 = 3600. total: 3600 + 3600 = 7200.
+N: You spent 7200 rupees in total.
+G: 7200
+
+### english
+U: A dozen bananas cost 120 rupees. How much do 30 bananas cost?
+T: one banana: 120 / 12 = 10. 30 x 10 = 300.
+N: 30 bananas cost 300 rupees.
+G: 300
+
+### english
+U: We used 3/4 of a 2 liter bottle of milk. How many ml are left?
+T: 2 liters = 2000 ml. 1/4 is left: 2000 / 4 = 500.
+N: 500 ml of milk is left.
+G: 500
+
+### english
+U: A bus ticket costs 650 rupees. A group of 7 gets a 10% discount. What do they pay?
+T: 7 x 650 = 4550. discount: 4550 x 10 / 100 = 455. pay: 4550 - 455 = 4095.
+N: The group pays 4095 rupees.
+G: 4095
+
+### english
+U: 100 sweets are shared equally among 8 children. How many does each get and how many are left?
+T: 8 x 12 = 96. left: 100 - 96 = 4.
+N: Each child gets 12 sweets, and 4 sweets are left over.
+G: 12
+
+### english
+U: A book has 320 pages. I have read 40% of it. How many pages are left?
+T: read: 320 x 40 / 100 = 128. left: 320 - 128 = 192.
+N: 192 pages are left.
+G: 192
+
+### english
+U: A tank that is 3/5 full holds 300 liters. What is its full capacity?
+T: 3/5 is 300 liters, so 1/5 is 300 / 3 = 100. full: 5 x 100 = 500.
+N: The full tank holds 500 liters.
+G: 500
+
+### english
+U: On a map, 1 cm = 2 km. Two villages are 4.5 cm apart on the map. What is the real distance?
+T: 4.5 x 2 = 9.
+N: The villages are 9 km apart.
+G: 9
+
+### english
+U: A worker is paid 1200 rupees a day. He works 22 days and gets a 2000 rupee bonus. Total pay?
+T: 22 x 1200 = 26400. 26400 + 2000 = 28400.
+N: His total pay is 28400 rupees.
+G: 28400
+
+### english
+U: A plant is 10 cm tall and grows 1.5 cm every week. How tall after 8 weeks?
+T: growth: 1.5 x 8 = 12. height: 10 + 12 = 22.
+N: The plant will be 22 cm tall.
+G: 22
+
+### english
+U: 3 bulbs of 10 watts each are on for 6 hours a day. How many units in 30 days?
+T: 3 x 10 = 30 watts. per day: 30 x 6 = 180 watt-hours. 30 days: 180 x 30 = 5400 watt-hours. 5400 / 1000 = 5.4 units.
+N: They use 5.4 units of electricity in 30 days.
+G: 5.4
+
+### english
+U: One bus leaves every 12 minutes and another every 18 minutes. They leave together at 8:00. When will they next leave together?
+T: LCM of 12 and 18: multiples of 18 are 18, 36. 36 / 12 = 3, so 36 is the LCM.
+N: They will leave together again after 36 minutes, at 8:36.
+G: 36
+
+### english
+U: I have 24 apples and 36 oranges. What is the largest number of baskets I can make so each basket has the same mix?
+T: HCF of 24 and 36: 12 divides both (24 / 12 = 2, 36 / 12 = 3), and no larger number does.
+N: You can make 12 baskets, each with 2 apples and 3 oranges.
+G: 12
+
+### english
+U: 15% of 60 students were absent. How many were present?
+T: absent: 60 x 15 / 100 = 9. present: 60 - 9 = 51.
+N: 51 students were present.
+G: 51
+
+### english
+U: Cement and sand are mixed in the ratio 1:4. For 25 bags in total, how many bags of each?
+T: 1 + 4 = 5 parts. 25 / 5 = 5 bags per part. cement: 5, sand: 4 x 5 = 20.
+N: Use 5 bags of cement and 20 bags of sand.
+G: 20
+
+### english
+U: I bought a watch for 400 and sold it for 460. What was my profit percent?
+T: profit: 460 - 400 = 60. 60 x 100 / 400 = 15.
+N: Your profit was 15%.
+G: 15
+
+### english
+U: Convert 145 minutes into hours and minutes.
+T: 2 x 60 = 120. 145 - 120 = 25.
+N: 145 minutes is 2 hours and 25 minutes.
+G: 25
+
+### english
+U: If 1 January is a Monday, what day is 15 January?
+T: 1, 8 and 15 January are 7 days apart, so all are Mondays.
+N: 15 January is also a Monday.
+
+### english
+U: How many days are there from 10 May to 25 May, counting both days?
+T: 25 - 10 + 1 = 16.
+N: There are 16 days, counting both 10 May and 25 May.
+G: 16
+
+### english
+U: I have 5 notes of 500 rupees and 7 notes of 100 rupees. How much money is that?
+T: 5 x 500 = 2500. 7 x 100 = 700. 2500 + 700 = 3200.
+N: You have 3200 rupees.
+G: 3200
+
+### english
+U: I paid with a 1000 rupee note for items costing 245 and 380. How much change?
+T: 245 + 380 = 625. 1000 - 625 = 375.
+N: Your change is 375 rupees.
+G: 375
+
+### english
+U: A taxi charges 100 rupees to start plus 40 rupees per km. What is the fare for 7 km?
+T: 7 x 40 = 280. 100 + 280 = 380.
+N: The fare is 380 rupees.
+G: 380
+
+### english
+U: I drive 60 km at 30 km/h and then 60 km at 60 km/h. What is my average speed?
+T: first part: 60 / 30 = 2 hours. second part: 60 / 60 = 1 hour. total: 120 km in 3 hours. 120 / 3 = 40.
+N: The average speed is 40 km/h, not 45, because more time was spent at the slower speed.
+G: 40
+
+### english
+U: What is the perimeter of a triangle with sides 7 cm, 8 cm and 9 cm?
+T: 7 + 8 + 9 = 24.
+N: The perimeter is 24 cm.
+G: 24
+
+### english
+U: Using pi = 22/7, what is the circumference of a circle with radius 7 cm?
+T: circumference = 2 x pi x r. 2 x 22/7 x 7 = 44.
+N: The circumference is 44 cm.
+G: 44
+
+### english
+U: Using 22/7 for pi, find the area of a circle with radius 7 m.
+T: area = pi x r x r. 22/7 x 7 x 7 = 154.
+N: The area is 154 square meters.
+G: 154
+
+### english
+U: A water tank is 2 m long, 1.5 m wide and 1 m deep. How many liters can it hold?
+T: volume: 2 x 1.5 x 1 = 3 cubic meters. 1 cubic meter = 1000 liters. 3 x 1000 = 3000.
+N: The tank holds 3000 liters.
+G: 3000
+
+### english
+U: Interest is 1% per month. How much interest on 50000 rupees for 6 months?
+T: 50000 x 1 x 6 / 100 = 3000.
+N: The interest is 3000 rupees.
+G: 3000
+
+### english
+U: Three friends invest 2000, 3000 and 5000 rupees. They earn a profit of 1500 and share it in the same ratio. How much does each get?
+T: ratio 2:3:5, total 10 parts. 1500 / 10 = 150 per part. 2 x 150 = 300, 3 x 150 = 450, 5 x 150 = 750.
+N: They get 300, 450 and 750 rupees.
+G: 750
+
+### english
+U: How many kg are 12 bags of cement of 25 kg each? How many quintals is that?
+T: 12 x 25 = 300 kg. 1 quintal = 100 kg. 300 / 100 = 3.
+N: That is 300 kg, which is 3 quintals.
+G: 300
+
+### english
+U: A school bus makes 4 trips a day with 35 students each trip. How many students in 5 days?
+T: per day: 4 x 35 = 140. 5 days: 5 x 140 = 700.
+N: The bus carries 700 students in 5 days.
+G: 700
+
+### english
+U: A shirt is marked 1600 rupees and sold at 1200. What is the discount percent?
+T: discount: 1600 - 1200 = 400. 400 x 100 / 1600 = 25.
+N: The discount is 25%.
+G: 25
+
+### english
+U: If 8 pens cost 96 rupees, how many pens can I buy with 180 rupees?
+T: one pen: 96 / 8 = 12. 180 / 12 = 15.
+N: You can buy 15 pens.
+G: 15
+
+### english
+U: A runner runs 400 m laps. How many laps for 10 km?
+T: 10 km = 10000 m. 10000 / 400 = 25.
+N: The runner needs 25 laps.
+G: 25
+
+### english
+U: Pooja is 3 times as old as her sister. Their ages add up to 24. How old is each?
+T: sister = 1 part, Pooja = 3 parts, total 4 parts. 24 / 4 = 6. Pooja: 3 x 6 = 18.
+N: Pooja is 18 and her sister is 6.
+G: 18
+
+### english
+U: A box has 6 rows of 8 chocolates. 15 are eaten. How many are left?
+T: 6 x 8 = 48. 48 - 15 = 33.
+N: 33 chocolates are left.
+G: 33
+
+### english
+U: A man buys 2.5 kg of meat at 700 rupees per kg. How much does he pay?
+T: 2.5 x 700 = 1750.
+N: He pays 1750 rupees.
+G: 1750
+
+### english
+U: The bus fare is 45 rupees each way. How much for a person going to work and back for 26 days?
+T: per day: 45 x 2 = 90. 26 days: 26 x 90 = 2340.
+N: It costs 2340 rupees for 26 days.
+G: 2340
+
+### english
+U: A 2 liter bottle of oil is shared equally into 8 small bottles. How many ml in each?
+T: 2000 / 8 = 250.
+N: Each small bottle gets 250 ml.
+G: 250
+
+### english
+U: A cricket team scored 48, 63 and 75 runs in three matches. What is the average score?
+T: 48 + 63 + 75 = 186. 186 / 3 = 62.
+N: The average score is 62 runs.
+G: 62
+
+### english
+U: A tree was planted 7 years ago when it was 1.2 m tall. Now it is 8.9 m. How much did it grow each year on average?
+T: growth: 8.9 - 1.2 = 7.7 m. 7.7 / 7 = 1.1.
+N: It grew 1.1 meters per year on average.
+G: 1.1
+
+### english
+U: There are 4 shelves with 28 books each and I give away 19 books. How many books remain?
+T: 4 x 28 = 112. 112 - 19 = 93.
+N: 93 books remain.
+G: 93
+
+### english
+U: If it is 11:40 now, what time will it be after 1 hour 35 minutes?
+T: 11:40 + 1 hour = 12:40. 12:40 + 35 minutes = 1:15.
+N: It will be 1:15.
+G: 1:15
+
+### english
+U: What time was it 2 hours 50 minutes before 9:10?
+T: 9:10 minus 2 hours is 7:10. 7:10 minus 50 minutes is 6:20.
+N: It was 6:20.
+G: 6:20
+
+### english
+U: A wall needs 1500 bricks. 6 people each carry 125 bricks. How many more bricks are needed?
+T: carried: 6 x 125 = 750. needed: 1500 - 750 = 750.
+N: 750 more bricks are needed.
+G: 750
+
+### english
+U: Anita scored 18 out of 25 in a test. What is her percentage?
+T: 18 x 100 / 25 = 72.
+N: Anita scored 72%.
+G: 72
+
+### english
+U: A shop sells juice at 60 rupees a glass. On Saturday it sold 85 glasses. How much money did it make?
+T: 85 x 60 = 5100.
+N: The shop made 5100 rupees.
+G: 5100
+
+### english
+U: A family uses 15 liters of water per person per day. There are 5 people. How much in a week?
+T: per day: 15 x 5 = 75 liters. week: 75 x 7 = 525.
+N: The family uses 525 liters in a week.
+G: 525
+
+### english
+U: What number is 3 more than twice 17?
+T: twice 17: 2 x 17 = 34. 34 + 3 = 37.
+N: The number is 37.
+G: 37
+
+### english
+U: I think of a number, multiply it by 4 and add 6. I get 50. What was my number?
+T: 50 - 6 = 44. 44 / 4 = 11. check: 11 x 4 + 6 = 50.
+N: Your number was 11.
+G: 11
+
+### english
+U: The difference between two numbers is 15 and the bigger one is 42. What is the smaller?
+T: 42 - 15 = 27.
+N: The smaller number is 27.
+G: 27
+
+### english
+U: Half of a number is 37. What is the number?
+T: 37 x 2 = 74.
+N: The number is 74.
+G: 74
+
+### english
+U: A pizza costs 900 rupees and is shared by 4 friends equally, with a 100 rupee delivery charge also shared. How much does each pay?
+T: total: 900 + 100 = 1000. 1000 / 4 = 250.
+N: Each friend pays 250 rupees.
+G: 250
+
+### english
+U: A man earns 600 rupees per hour. How much for 7.5 hours?
+T: 7.5 x 600 = 4500.
+N: He earns 4500 rupees.
+G: 4500
+
+### english
+U: A tailor needs 2.25 m of cloth for one kurta. How much cloth for 8 kurtas?
+T: 8 x 2.25 = 18.
+N: The tailor needs 18 meters of cloth.
+G: 18
+
+### english
+U: Which is more: 3/4 of 200 or 2/3 of 210?
+T: 3/4 of 200: 200 / 4 x 3 = 150. 2/3 of 210: 210 / 3 x 2 = 140.
+N: 3/4 of 200 (which is 150) is more than 2/3 of 210 (which is 140).
+G: 150
+
+### english
+U: A bag of rice is 30 kg. A family eats 750 g a day. How many days will it last?
+T: 30 kg = 30000 g. 30000 / 750 = 40.
+N: The rice will last 40 days.
+G: 40
+
+### english
+U: What is 125% of 80?
+T: 80 x 125 / 100 = 100.
+N: 125% of 80 is 100.
+G: 100
+
+### english
+U: A number is increased by 20% to become 360. What was the original number?
+T: 120% is 360, so 1% is 360 / 120 = 3. 100% is 3 x 100 = 300.
+N: The original number was 300.
+G: 300
+
+### english
+U: The ratio of red to blue balls is 2:7. There are 14 red balls. How many blue?
+T: 14 / 2 = 7 per part. blue: 7 x 7 = 49.
+N: There are 49 blue balls.
+G: 49
+
+### english
+U: 7 notebooks cost 455 rupees. What is the cost of 1 notebook?
+T: 455 / 7 = 65.
+N: One notebook costs 65 rupees.
+G: 65
+
+### english
+U: A man walks 5 km north, then 3 km south. How far is he from the start?
+T: 5 - 3 = 2.
+N: He is 2 km north of where he started (he walked 8 km in total).
+G: 2
+
+### english
+U: what is the sum of all angles in a rectangle?
+T: a rectangle has 4 right angles. 4 x 90 = 360.
+N: The angles of a rectangle add up to 360 degrees.
+G: 360
+
+### english
+U: Can you show me how to find 15% of a number quickly in my head?
+N: Find 10% by moving the decimal one place left, then add half of that for 5%. For 15% of 260: 10% is 26, 5% is 13, so 15% is 26 + 13 = 39.
+
+### english
+U: what's a quick way to multiply by 5?
+N: Multiply by 10 and then halve the answer. For 5 x 48: 48 x 10 = 480, and half of 480 is 240.
+
+### english
+U: easy trick to multiply by 11 for two-digit numbers
+N: Add the two digits and put the sum in the middle. For 11 x 36: 3 + 6 = 9, so the answer is 396. If the sum is 10 or more, carry the 1: 11 x 57 = 627.
+
+### english
+U: how do I check if my addition is right?
+N: Subtract one number from the total and see if you get the other number. If 345 + 278 = 623, then 623 - 278 should be 345.

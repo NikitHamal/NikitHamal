@@ -1,0 +1,687 @@
+### english
+U: what is a fraction?
+N: A fraction shows a part of a whole. In 3/4, the whole is cut into 4 equal parts and we take 3 of them.
+
+### english
+U: numerator and denominator meaning
+N: In a fraction, the numerator is the top number and the denominator is the bottom number. In 2/5, 2 is the numerator and 5 is the denominator.
+
+### english
+U: what is a decimal number
+N: A decimal number uses a point to show parts of a whole. In 4.5, the 4 is the whole number and .5 means 5 tenths, or one half.
+
+### english
+U: what does percent mean?
+N: "Percent" means "out of 100". So 30% means 30 out of every 100.
+
+### english
+U: what is a factor?
+N: A factor is a number that divides another number exactly. The factors of 12 are 1, 2, 3, 4, 6 and 12.
+
+### english
+U: what is a multiple
+N: A multiple is what you get when you multiply a number by 1, 2, 3 and so on. The multiples of 5 are 5, 10, 15, 20 and so on.
+
+### english
+U: what are integers
+N: Integers are whole numbers and their negatives, including zero: ... -3, -2, -1, 0, 1, 2, 3 ... They have no fractions or decimals.
+
+### english
+U: What is a negative number?
+N: A negative number is less than zero. It is written with a minus sign, like -5. Temperatures below zero on a cold mountain are negative numbers.
+
+### english
+U: place value of 7 in 4728?
+N: In 4728, the digit 7 is in the hundreds place, so its value is 700.
+G: 700
+
+### english
+U: round 368 to the nearest ten
+N: 368 rounded to the nearest ten is 370, because the ones digit 8 is 5 or more, so we round up.
+G: 370
+
+### english
+U: difference between area and perimeter
+N: Perimeter is the distance around the outside of a shape, measured in units like meters. Area is the space inside the shape, measured in square units like square meters.
+
+### english
+U: what is volume?
+N: Volume is the amount of space an object takes up or can hold. It is measured in cubic units like cubic cm, or in liters for liquids.
+
+### english
+U: what is a ratio
+N: A ratio compares two amounts. If there are 3 boys and 2 girls, the ratio of boys to girls is 3:2.
+
+### english
+U: What are mean, median and mode?
+N: The mean is the average (add all and divide by how many). The median is the middle value when the numbers are in order. The mode is the value that appears most often.
+
+### english
+U: find the median of 3, 9, 4, 7, 5
+T: in order: 3, 4, 5, 7, 9. the middle (3rd) value is 5.
+N: The median is 5.
+G: 5
+
+### english
+U: what is the mode of 2, 4, 4, 6, 4, 8
+N: The mode is 4, because 4 appears most often (3 times).
+G: 4
+
+### english
+U: what is probability in simple words
+N: Probability tells how likely something is to happen, from 0 (impossible) to 1 (certain). When you toss a coin, the probability of heads is 1/2.
+
+### english
+U: probability of rolling a 6 on a dice?
+N: A dice has 6 equal faces and only one of them is 6, so the probability is 1/6.
+G: 1/6
+
+### english
+U: what is an acute angle?
+N: An acute angle is smaller than 90 degrees. The angle between the hands of a clock at 1 o'clock is acute.
+
+### english
+U: what is an obtuse angle
+N: An obtuse angle is bigger than 90 degrees but smaller than 180 degrees.
+
+### english
+U: what's a reflex angle
+N: A reflex angle is bigger than 180 degrees but smaller than 360 degrees.
+
+### english
+U: types of triangles by sides
+N: By sides, there are three types: equilateral (all 3 sides equal), isosceles (2 sides equal) and scalene (no sides equal).
+
+### english
+U: how many sides does a pentagon have?
+N: A pentagon has 5 sides.
+G: 5
+
+### english
+U: how many sides in an octagon
+N: An octagon has 8 sides. Many stop signs are octagons.
+G: 8
+
+### english
+U: radius and diameter difference
+N: The radius goes from the centre of a circle to its edge. The diameter goes all the way across through the centre, so it is twice the radius.
+
+### english
+U: if the radius of a circle is 7 cm, what is the diameter?
+T: diameter = 2 x radius = 2 x 7 = 14.
+N: The diameter is 14 cm.
+G: 14
+
+### english
+U: what are parallel lines
+N: Parallel lines are lines that always stay the same distance apart and never meet, like the two rails of a railway track.
+
+### english
+U: what are perpendicular lines?
+N: Perpendicular lines meet or cross at a right angle (90 degrees), like the corner of a book.
+
+### english
+U: what is an equation
+N: An equation is a math sentence that says two things are equal, using "=". For example, 3 + 4 = 7. An equation can also have an unknown, like "x plus 2 equals 5", where x is 3.
+
+### english
+U: solve x + 5 = 12
+T: x = 12 - 5 = 7. check: 7 + 5 = 12.
+N: x = 7.
+G: 7
+
+### english
+U: solve 3x = 21
+T: x = 21 / 3 = 7. check: 3 x 7 = 21.
+N: x = 7.
+G: 7
+
+### english
+U: solve 2x + 4 = 10
+T: 2x = 10 - 4 = 6. x = 6 / 2 = 3. check: 2 x 3 + 4 = 10.
+N: x = 3.
+G: 3
+
+### english
+U: what is x if x - 9 = 15?
+T: x = 15 + 9 = 24. check: 24 - 9 = 15.
+N: x = 24.
+G: 24
+
+### english
+U: what is XIV in roman numerals?
+T: X = 10, and IV = 4. 10 + 4 = 14.
+N: XIV is 14.
+G: 14
+
+### english
+U: write 50 in roman numerals
+N: 50 is written as L in Roman numerals.
+
+### english
+U: roman numeral for 100 and 1000?
+N: 100 is C and 1000 is M in Roman numerals. Also, 500 is D.
+
+### english
+U: what is 2026 in roman numerals
+T: 2000 = MM, 20 = XX, 6 = VI.
+N: 2026 is MMXXVI in Roman numerals.
+
+### english
+U: how do I know if a number is divisible by 3?
+N: Add its digits. If the sum can be divided by 3, the number can too. For 471: 4 + 7 + 1 = 12, and 12 is divisible by 3, so 471 is divisible by 3.
+
+### english
+U: divisibility rule for 9
+N: A number is divisible by 9 if the sum of its digits is divisible by 9. For 729: 7 + 2 + 9 = 18, so 729 is divisible by 9.
+
+### english
+U: when is a number divisible by 5?
+N: A number is divisible by 5 if its last digit is 0 or 5, like 35, 120 or 905.
+
+### english
+U: what is BODMAS
+N: BODMAS tells the order to solve a math problem: Brackets, Orders (powers and roots), Division and Multiplication (left to right), then Addition and Subtraction (left to right).
+
+### english
+U: what is 6 + 4 x 2?
+T: multiply first: 4 x 2 = 8. then 6 + 8 = 14.
+N: 6 + 4 x 2 = 14, because we multiply before adding.
+G: 14
+
+### english
+U: solve (8 + 2) x 5
+T: brackets first: 8 + 2 = 10. then 10 x 5 = 50.
+N: (8 + 2) x 5 = 50.
+G: 50
+
+### english
+U: what is 20 - 12 / 4?
+T: divide first: 12 / 4 = 3. then 20 - 3 = 17.
+N: 20 - 12 / 4 = 17.
+G: 17
+
+### english
+U: square root of 144
+T: 12 x 12 = 144.
+N: The square root of 144 is 12.
+G: 12
+
+### english
+U: what is 10 to the power 3
+T: 10 x 10 x 10 = 1000.
+N: 10 to the power 3 is 1000.
+G: 1000
+
+### english
+U: change 0.35 into a percentage
+T: 0.35 x 100 = 35.
+N: 0.35 is 35%.
+G: 35
+
+### english
+U: what is 45% as a decimal
+T: 45 / 100 = 0.45.
+N: 45% is 0.45 as a decimal.
+G: 0.45
+
+### english
+U: simplify 12/16
+T: 12 and 16 can both be divided by 4. 12 / 4 = 3 and 16 / 4 = 4.
+N: 12/16 simplifies to 3/4.
+G: 3/4
+
+### english
+U: which is bigger, 2/3 or 3/5?
+T: 2/3 = 10/15 and 3/5 = 9/15. 10/15 is bigger.
+N: 2/3 is bigger than 3/5.
+
+### english
+U: multiply 2/3 by 3/4
+T: 2/3 x 3/4 = 6/12 = 1/2.
+N: 2/3 x 3/4 = 1/2.
+G: 1/2
+
+### english
+U: what are the three states of matter?
+N: The three common states of matter are solid, liquid and gas. Ice is a solid, water is a liquid and steam is a gas.
+
+### english
+U: what is the melting point of ice?
+N: Ice melts at 0 degrees Celsius. Below that, water stays frozen.
+
+### english
+U: what are conductors and insulators
+N: Conductors let electricity or heat pass through easily, like copper and iron. Insulators do not, like rubber, plastic, wood and glass.
+
+### english
+U: magnets: what are the poles?
+N: Every magnet has two poles, north and south. Opposite poles attract each other, and the same poles push each other away.
+
+### english
+U: name the simple machines
+N: The six simple machines are the lever, pulley, wheel and axle, inclined plane (ramp), wedge and screw. They make work easier.
+
+### english
+U: what are the parts of a plant
+N: The main parts of a plant are the roots, stem, leaves, flowers, fruits and seeds. Roots take in water, leaves make food, and flowers help make seeds.
+
+### english
+U: parts of a flower?
+N: The main parts of a flower are the petals, sepals, stamens (male part, with pollen) and the pistil (female part). After pollination, the pistil can grow into a fruit with seeds.
+
+### english
+U: what happens in the digestive system?
+N: Food is chewed in the mouth, goes down the food pipe to the stomach, and is broken down further in the small intestine, where nutrients go into the blood. The large intestine takes back water, and waste leaves the body.
+
+### english
+U: what are the five senses?
+N: The five senses are sight (eyes), hearing (ears), smell (nose), taste (tongue) and touch (skin).
+
+### english
+U: list the planets in order from the sun
+N: From the sun: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune. A trick to remember: "My Very Educated Mother Just Served Us Noodles."
+
+### english
+U: why does the moon change shape?
+N: The moon does not really change shape. As it goes around Earth, we see different amounts of its sunlit side, so it looks full, half or thin like a crescent.
+
+### english
+U: what causes day and night?
+N: Day and night happen because the Earth spins on its axis once about every 24 hours. The side facing the sun has day, and the side away from the sun has night.
+
+### english
+U: what is friction
+N: Friction is a force that slows things down when two surfaces rub together. It helps our shoes grip the ground, and it makes our hands warm when we rub them.
+
+### english
+U: what is energy?
+N: Energy is the ability to do work or make things change. It comes in forms like heat, light, sound, electricity and movement, and it can change from one form to another.
+
+### english
+U: renewable vs non renewable energy
+N: Renewable energy comes from sources that do not run out, like sun, wind and flowing water. Non-renewable energy comes from sources that will run out, like coal, oil and gas.
+
+### english
+U: what is air pollution
+N: Air pollution is when the air has harmful gases, smoke or dust in it. Vehicle smoke, factories, burning rubbish and dust from roads are common causes.
+
+### english
+U: why should we recycle?
+N: Recycling turns used things like paper, plastic, glass and metal into new products. It saves resources and energy, and it reduces waste in landfills and rivers.
+
+### english
+U: what is global warming
+N: Global warming is the slow rise in Earth's average temperature. It happens mainly because burning coal, oil and gas adds gases like carbon dioxide that trap heat in the air.
+
+### english
+U: what is democracy?
+N: Democracy is a system of government where people choose their leaders by voting. People have rights like freedom of speech, and leaders must follow the law.
+
+### english
+U: what is a constitution
+N: A constitution is the main law of a country. It explains how the government works and lists the rights and duties of citizens.
+
+### english
+U: what is an election
+N: An election is when people vote to choose their leaders or representatives. In Nepal, citizens aged 18 and above can vote.
+
+### english
+U: what is a map scale
+N: A map scale shows how distances on the map compare to real distances. For example, 1 cm on the map might equal 10 km on the ground.
+
+### english
+U: if 1 cm on a map is 5 km, how far is 7 cm?
+T: 7 x 5 = 35.
+N: 7 cm on the map is 35 km on the ground.
+G: 35
+
+### english
+U: what are the four main directions
+N: The four main directions are north, south, east and west. The sun rises in the east and sets in the west.
+
+### english
+U: what is a census?
+N: A census is an official count of all the people in a country, with details like age and education. Nepal holds a census every 10 years.
+
+### english
+U: What are rights and duties?
+N: Rights are things every person should be allowed to have or do, like education and free speech. Duties are things we should do for others and the country, like obeying laws and keeping our surroundings clean.
+
+### english
+U: what is a computer?
+N: A computer is a machine that takes in information, processes it with instructions, and gives a result. It can store data and do tasks very fast.
+
+### english
+U: hardware vs software
+N: Hardware is the physical part of a computer you can touch, like the keyboard, screen and mouse. Software is the programs and apps that tell the hardware what to do.
+
+### english
+U: what is a CPU
+N: The CPU (Central Processing Unit) is the "brain" of the computer. It follows instructions and does the calculations.
+
+### english
+U: what is an operating system
+N: An operating system is the main software that runs a computer or phone and lets other programs work. Windows, macOS and Linux are examples.
+
+### english
+U: what is the internet?
+N: The internet is a huge network that connects computers and phones all over the world, so they can share information, websites, messages and videos.
+
+### english
+U: what is an email
+N: An email (electronic mail) is a message sent from one person to another over the internet. It can include text, pictures and files.
+
+### english
+U: what is a web browser
+N: A web browser is an app used to open websites. Chrome, Firefox and Safari are examples.
+
+### english
+U: what is wifi
+N: Wi-Fi is a way to connect devices to the internet without wires, using radio signals from a router.
+
+### english
+U: What does Ctrl+C do?
+N: Ctrl+C copies the selected text or file. Then Ctrl+V pastes it where you want.
+
+### english
+U: what is ctrl z for
+N: Ctrl+Z undoes your last action, like deleting a word by mistake. Ctrl+Y (or Ctrl+Shift+Z in some apps) redoes it.
+
+### english
+U: what is the difference between a file and a folder
+N: A file is a single item, like a document, photo or song. A folder is like a box that holds files and other folders to keep them organised.
+
+### english
+U: what is a computer virus?
+N: A computer virus is a harmful program that can spread to other files or computers and damage data or steal information. Antivirus software and careful downloading help protect you.
+
+### english
+U: what is cloud storage
+N: Cloud storage means saving your files on internet servers instead of only on your own device. You can open them from any device with your login.
+
+### english
+U: what is an app
+N: An app (application) is a program made to do a task, like sending messages, taking photos or playing games, on a phone or computer.
+
+### english
+U: what is a URL
+N: A URL is the address of a web page, like "www.example.com". You type it into a browser to open that page.
+
+### english
+U: what does "download" mean?
+N: To download means to copy a file from the internet onto your device. "Upload" is the opposite: sending a file from your device to the internet.
+
+### english
+U: what is a keyboard shortcut to save a file?
+N: On most computers, Ctrl+S saves the file you are working on. On a Mac, it is Command+S.
+
+### english
+U: what is spam email
+N: Spam is unwanted email sent to many people, often ads or scams. Don't click strange links in spam, and never share passwords by email.
+
+### english
+U: what is phishing?
+N: Phishing is a trick where someone pretends to be a bank, company or friend to steal your password or money. Always check the sender, and don't share OTP codes with anyone.
+
+### english
+U: numerator bhaneko k ho?
+N: "numerator" bhaneko bhinna (fraction) ko mathi ko sankhya ho. jastai 3/4 ma 3 numerator ra 4 "denominator" ho.
+
+### english
+U: BODMAS bhaneko k ho nepali ma bujhaunus
+N: "BODMAS" le hisab garne kram janauchha: pahila koshthak (Brackets), ani ghat (Orders), tyas pachhi bhag ra gun, antma jod ra ghatau. jastai 6 + 4 x 2 ma pahila 4 x 2 = 8 garinchha, ani 6 + 8 = 14.
+
+### english
+U: perimeter ra area ko farak k ho?
+N: "perimeter" bhaneko kunai aakar ko bahiri kinara ko jamma lambai ho. "area" bhaneko tyo aakar bhitra ko thau (chhetrafal) ho, jun square meter jasta ekai ma naapinchha.
+
+### english
+U: ctrl+c le k garchha?
+N: "Ctrl+C" le chhaneko akshar ya file copy garchha. tyas pachhi "Ctrl+V" thichera chahiyeko thau ma paste garna sakinchha.
+
+### english
+U: hardware ra software ko farak nepali ma
+N: "hardware" bhaneko computer ko chhuna milne bhag ho, jastai keyboard, mouse ra screen. "software" bhaneko computer lai kaam garna sikaune program ho, jastai app ra operating system.
+
+### english
+U: acute angle bhaneko k ho?
+N: "acute angle" bhaneko 90 degree bhanda sano kon ho. 90 degree ko kon lai "right angle" ra 90 bhanda thulo tara 180 bhanda sano lai "obtuse angle" bhaninchha.
+
+### english
+U: "median" kasari nikalne?
+N: "median" nikalna sabai sankhya lai sano dekhi thulo kram ma rakhnus ra thik bich ko sankhya hernus. jastai 2, 5, 9 ma median 5 ho.
+
+### english
+U: "equilateral triangle" ko arth?
+N: "equilateral triangle" bhaneko tinai bhuja barabar bhayeko tribhuj ho. yasko tinai kon pani 60 degree ka hunchhan.
+
+### english
+U: "renewable energy" bhaneko k ho?
+N: "renewable energy" bhaneko nasakine srot bata aaune urja ho, jastai ghaam, hawa ra bagne pani. nepal ma jalvidyut nai mukhya renewable energy ho.
+
+### english
+U: phishing bhaneko k ho nepali ma?
+N: "phishing" bhaneko bank, company ya sathi ko naam ma jhukyayera tapai ko password, OTP ya paisa chorne chal ho. aparichit link ma click nagarnus ra OTP kasailai nadinus.
+
+### english
+U: "download" ra "upload" ma farak bhana
+N: "download" bhaneko internet bata file aafno phone ya computer ma lyaunu ho. "upload" bhaneko aafno device bata internet ma file pathaunu ho.
+
+### english
+U: what is an even number?
+N: An even number can be divided by 2 with no remainder, like 2, 8, 14 or 100. Odd numbers, like 3, 7 and 15, leave a remainder of 1.
+
+### english
+U: is 1 a prime number?
+N: No, 1 is not a prime number. A prime number must have exactly two different factors, and 1 has only one factor.
+
+### english
+U: how many zeros in one million?
+N: One million (1000000) has 6 zeros. In Nepali counting, it is 10 lakh.
+G: 6
+
+### english
+U: how much is one lakh in numbers?
+N: One lakh is 100000 (one hundred thousand).
+G: 100000
+
+### english
+U: how many lakhs make one crore?
+T: 1 crore = 10000000 and 1 lakh = 100000. 10000000 / 100000 = 100.
+N: 100 lakhs make one crore. One crore is 10 million.
+G: 100
+
+### english
+U: what is 1 billion in crore?
+T: 1 billion = 1000000000. 1 crore = 10000000. 1000000000 / 10000000 = 100.
+N: One billion is 100 crore (also called 1 arab in Nepali).
+G: 100
+
+### english
+U: Add 345 and 789
+T: 345 + 789 = 1134.
+N: 345 + 789 = 1134.
+G: 1134
+
+### english
+U: subtract 478 from 1000
+T: 1000 - 478 = 522.
+N: 1000 - 478 = 522.
+G: 522
+
+### english
+U: what is 25 x 16
+T: 25 x 16 = 400.
+N: 25 x 16 = 400.
+G: 400
+
+### english
+U: divide 625 by 25
+T: 25 x 25 = 625.
+N: 625 divided by 25 is 25.
+G: 25
+
+### english
+U: what's 11 x 11
+T: 11 x 11 = 121.
+N: 11 x 11 = 121.
+G: 121
+
+### english
+U: what is 1.2 + 3.45 + 0.35
+T: 1.2 + 3.45 = 4.65. 4.65 + 0.35 = 5.
+N: 1.2 + 3.45 + 0.35 = 5.
+G: 5
+
+### english
+U: what is 0.6 divided by 0.2
+T: 0.6 / 0.2 = 3.
+N: 0.6 divided by 0.2 is 3.
+G: 3
+
+### english
+U: what is 12.5% of 800
+T: 800 x 12.5 / 100 = 100.
+N: 12.5% of 800 is 100.
+G: 100
+
+### english
+U: what percent of 50 is 20?
+T: 20 x 100 / 50 = 40.
+N: 20 is 40% of 50.
+G: 40
+
+### english
+U: increase 400 by 25%
+T: 400 x 25 / 100 = 100. 400 + 100 = 500.
+N: 400 increased by 25% is 500.
+G: 500
+
+### english
+U: decrease 900 by 10 percent
+T: 900 x 10 / 100 = 90. 900 - 90 = 810.
+N: 900 decreased by 10% is 810.
+G: 810
+
+### english
+U: what is 2 hours 40 minutes in minutes?
+T: 2 x 60 = 120. 120 + 40 = 160.
+N: 2 hours 40 minutes is 160 minutes.
+G: 160
+
+### english
+U: how many hours is 300 minutes
+T: 300 / 60 = 5.
+N: 300 minutes is 5 hours.
+G: 5
+
+### english
+U: convert 4500 grams to kilograms
+T: 4500 / 1000 = 4.5.
+N: 4500 grams is 4.5 kilograms.
+G: 4.5
+
+### english
+U: how many meters is 2.4 km?
+T: 2.4 x 1000 = 2400.
+N: 2.4 km is 2400 meters.
+G: 2400
+
+### english
+U: convert 350 cm to meters
+T: 350 / 100 = 3.5.
+N: 350 cm is 3.5 meters.
+G: 3.5
+
+### english
+U: what is the area of a square with side 9 m?
+T: 9 x 9 = 81.
+N: The area is 81 square meters.
+G: 81
+
+### english
+U: A cuboid is 5 cm long, 4 cm wide and 3 cm high. Volume?
+T: 5 x 4 x 3 = 60.
+N: The volume is 60 cubic cm.
+G: 60
+
+### english
+U: two angles of a triangle are 50 and 60 degrees. what is the third?
+T: 50 + 60 = 110. 180 - 110 = 70.
+N: The third angle is 70 degrees.
+G: 70
+
+### english
+U: what is the next number: 3, 6, 12, 24, ?
+T: each number is doubled. 24 x 2 = 48.
+N: The next number is 48, because each number is double the one before.
+G: 48
+
+### english
+U: next in the pattern 5, 9, 13, 17?
+T: each time we add 4. 17 + 4 = 21.
+N: The next number is 21.
+G: 21
+
+### english
+U: what is the sum of the first 10 counting numbers?
+T: 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 = 55.
+N: The sum of 1 to 10 is 55.
+G: 55
+
+### english
+U: What is a thermometer used for?
+N: A thermometer measures temperature, for example how hot your body is or how cold the air is.
+
+### english
+U: what does a barometer measure?
+N: A barometer measures air pressure. Falling pressure often means bad weather may come.
+
+### english
+U: what is a microscope?
+N: A microscope is an instrument that makes very tiny things look bigger, so we can see cells, germs and small details.
+
+### english
+U: what is a telescope used for
+N: A telescope makes far-away things look closer. People use it to look at the moon, planets and stars.
+
+### english
+U: what does a compass do?
+N: A compass has a magnetic needle that points north. It helps people find directions when travelling.
+
+### english
+U: what is a stethoscope
+N: A stethoscope is a tool doctors use to listen to the heart, lungs and stomach.
+
+### english
+U: what is an ecosystem
+N: An ecosystem is a community of living things, like plants, animals and tiny organisms, together with their surroundings such as water, soil and air. A forest and a pond are ecosystems.
+
+### english
+U: what does "endangered" mean?
+N: An endangered animal or plant is at serious risk of disappearing forever. The red panda and the snow leopard are endangered.
+
+### english
+U: what is soil erosion
+N: Soil erosion is when the top layer of soil is washed or blown away by rain, rivers or wind. Planting trees and grass helps hold the soil.
+
+### english
+U: what is deforestation?
+N: Deforestation is cutting down forests on a large scale. It can cause landslides, floods and loss of animal homes.
+
+### english
+U: write a short paragraph on my school
+N: "My school is a place where I learn and grow. It has a big playground, a small library and kind teachers. I enjoy reading in the library and playing football with my friends. My school teaches me to be honest and work hard."
+
+### english
+U: write 3 sentences about a cow
+N: "The cow is a gentle domestic animal. It gives us milk, which we use to make curd, ghee and paneer. In Nepal, the cow is the national animal."
+
+### english
+U: Write two sentences about the rainy season.
+N: "The rainy season brings fresh water for our fields and makes the hills green. But heavy rain can also cause floods and landslides, so we must stay careful."
+
+### english
+U: help me describe Pokhara in 3 lines
+N: "Pokhara is a beautiful lake city in Gandaki Province. Phewa Lake reflects the snowy Annapurna mountains on clear days. Visitors enjoy boating, paragliding and the peaceful air."

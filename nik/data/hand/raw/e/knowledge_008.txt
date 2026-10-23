@@ -1,0 +1,595 @@
+### knowledge
+U: bidyut pravah (electric current) bhaneko k ho?
+N: bidyut pravah bhaneko taar bhitra electron ko bahav ho. yasko ekai ampere ho ra ammeter le naapinchha.
+
+### knowledge
+U: voltage bhaneko k ho?
+N: voltage bhaneko bijuli lai taar bhitra dhakelne "chap" ho. yasko ekai volt ho, jastai nepal ko ghar ko bijuli 230 volt ko hunchha.
+
+### knowledge
+U: nepal ma ghar ko bijuli kati volt ko hunchha?
+N: nepal ma ghar ko bijuli sadharan rup ma 230 volt ra 50 hertz ko hunchha. bideshi saman kinda yo milchha ki nai herna parchha.
+G: 230
+
+### knowledge
+U: bijuli ko bill ma 1 unit bhaneko k ho?
+N: bijuli ko 1 unit bhaneko 1 kilowatt-ghanta (kWh) ho. jastai 1000 watt ko heater 1 ghanta chalauda 1 unit bijuli khapat hunchha.
+
+### knowledge
+U: 100 watt ko bulb 10 ghanta balda kati unit lagchha?
+T: 100 watt = 0.1 kilowatt. 0.1 x 10 = 1.
+N: 100 watt ko bulb 10 ghanta balda 1 unit bijuli lagchha.
+G: 1
+
+### knowledge
+U: watt bhaneko k ho?
+N: watt bijuli ko shakti (power) naapne ekai ho. jati dherai watt, tyati dherai bijuli ek ghanta ma khapat hunchha.
+
+### knowledge
+U: chalak ra kuchalak bhaneko k ho?
+N: chalak (conductor) le bijuli sajilai bagna dinchha, jastai tama, aluminium ra falam. kuchalak (insulator) le bijuli rokchha, jastai rubber, plastic, kath ra kaanch.
+
+### knowledge
+U: bijuli ko taar tama ko kina banaunchhan?
+N: tama ma bijuli dherai sajilai bagchha ra yo chaandi bhanda sasto pani chha. tyasaile ghar ko taar dherai jaso tama ko hunchha ra mathi plastic le chhopiyeko hunchha.
+
+### knowledge
+U: sabai bhanda ramro bijuli chalak dhatu kun ho?
+N: sabai bhanda ramro bijuli chalak dhatu chaandi ho. tara mahango bhayeko le taar ma tama prayog garinchha.
+
+### knowledge
+U: bhijeko haat le switch kina chhunu hudaina?
+N: pani ma ghuleko nun ra fohor le bijuli bagna dinchha, ra bhijeko chhala le bijuli sajilai bhitra pasna dinchha. tyasaile bhijeko haat le switch chhuda current lagne khatara badhchha.
+
+### knowledge
+U: current lagyo bhane k garne?
+N: current lageko manchhe lai sidhai nachhunus. pahila main switch band garnus ya sukkha kath jasto kuchalak le bijuli ko taar hataunus, ani matra maddat garnus ra aspatal laijaanus.
+
+### knowledge
+U: fuse ra MCB ko kaam k ho?
+N: fuse ra MCB le taar ma dherai current bagda bijuli aafai kaatidinchha. yasle taar tatera aago lagne ra saman bigrine bata jogauchha.
+
+### knowledge
+U: earthing kina garinchha?
+N: earthing le saman ma chuhiyeko bijuli lai taar bata jamin samma lagchha. yasle saman chhunda current lagne khatara kam garchha.
+
+### knowledge
+U: AC ra DC bijuli ma k farak?
+N: AC (alternating current) ma bijuli ko disha barambar badalinchha, ghar ko bijuli AC ho. DC (direct current) ma bijuli eutai disha ma bagchha, battery ko bijuli DC ho.
+
+### knowledge
+U: battery le bijuli kasari dinchha?
+N: battery bhitra rasaayanik padartha hunchhan, jasko pratikriya le bijuli banchha. rasaayanik urja bijuli urja ma badalinchha.
+
+### knowledge
+U: circuit bhaneko k ho?
+N: circuit bhaneko bijuli bagne pura bato ho: battery ya srot, taar ra bulb jasta saman. bato kahi tuteko bhaye (open circuit) bijuli bagdaina.
+
+### knowledge
+U: ghar ma saman haru parallel circuit ma kina jodinchhan?
+N: parallel circuit ma harek saman le pura voltage paauchha ra eutai saman bigriye pani aru chaliraha hunchhan. tyasaile ghar ka bulb ra saman parallel ma jodinchhan.
+
+### knowledge
+U: ohm ko niyam k ho?
+N: ohm ko niyam anusar voltage barabar current gunda resistance hunchha (V = I x R). resistance badhe current ghatchha.
+
+### knowledge
+U: resistance bhaneko k ho?
+N: resistance bhaneko bijuli ko bahav lai rokne gun ho. yasko ekai ohm ho; patalo ra lamo taar ma resistance badhi hunchha.
+
+### knowledge
+U: LED bulb kina ramro?
+N: LED bulb le purano bulb bhanda dherai kam bijuli khanchha ra dherai barsa chalchha. yasle garmi pani kam nikalchha.
+
+### knowledge
+U: bijuli ko bulb kasle banaye?
+N: lamo samaya balne bijuli ko bulb thomas edison le 1879 ma banaye. unbhanda pahila pani kehi bigyan haru le bulb ma kaam gareka thiye.
+
+### knowledge
+U: static bijuli bhaneko k ho?
+N: static bijuli bhaneko chij haru ragadda jamma hune bijuli ho. balloon lai kapal ma ragadda balloon le kapal tanchha, yo static bijuli ko udaharan ho.
+
+### knowledge
+U: chatyang pani bijuli nai ho?
+N: ho, chatyang badal ma jamma bhayeko static bijuli ko ekdam thulo chingari ho. yo dherai shaktishali ra khatarnak hunchha.
+
+### knowledge
+U: solar panel le kasari bijuli banauchha?
+N: solar panel ma bhayeka silicon ka koshika ma ghaam ko prakash pardaa electron chalchhan ra bijuli banchha. yasma dhuwa ra aawaj hudaina.
+
+### knowledge
+U: generator le kasari bijuli banauchha?
+N: generator ma taar ko kundali chumbak ko bich ghumauda bijuli banchha. jalvidyut ma bagne pani le ra diesel generator ma engine le yo kundali ghumauchha.
+
+### knowledge
+U: chumbak le kun kun dhatu tanchha?
+N: chumbak le falam, nickel ra cobalt jasta dhatu tanchha, ra falam bata baneko steel lai pani. tama, aluminium, kaagaj ra plastic lai tandaina.
+
+### knowledge
+U: chumbak ka kati dhruva hunchhan?
+N: harek chumbak ka 2 dhruva hunchhan: uttari dhruva ra dakshini dhruva. ekai dhruva ek arka lai dhakelchhan ra farak dhruva tanchhan.
+G: 2
+
+### knowledge
+U: chumbak lai tukra parda k hunchha?
+N: chumbak lai tukra parda harek tukra afai euta saano pura chumbak banchha, jasma uttari ra dakshini dubai dhruva hunchhan. eutai dhruva matra bhayeko chumbak banna sakdaina.
+
+### knowledge
+U: compass ko suiro kina uttar tira farkinchha?
+N: prithvi aafai euta thulo chumbak jastai ho. compass ko saano chumbak ko suiro prithvi ko chumbakiya kshetra sanga milera uttar-dakshin disha ma rokinchha.
+
+### knowledge
+U: bidyut chumbak (electromagnet) bhaneko k ho?
+N: falam ko dulo waripari taar berera bijuli pathauda baneko chumbak lai bidyut chumbak bhaninchha. bijuli band garda yasko chumbakatwa harauchha, tyasaile yaslai crane, ghanti ra motor ma prayog garinchha.
+
+### knowledge
+U: chumbak lai tatauda k hunchha?
+N: chumbak lai dherai tatauda yasko chumbakiya shakti ghatchha ra harauna pani sakchha. chumbak lai pitne ya khasalne garda pani shakti kamjor hunchha.
+
+### knowledge
+U: gurutwakarshan bhaneko k ho?
+N: gurutwakarshan bhaneko sabai bastu le ek arka lai tanne shakti ho. prithvi ko gurutwakarshan le garda hamle khasaleko chij tala khaschha.
+
+### knowledge
+U: newton ka gati ka niyam kati wata chhan?
+N: newton ka gati ka 3 niyam chhan: (1) bahira bata bal nalage bastu ko awastha badaldaina, (2) bal = mass x acceleration, (3) harek kriya ko barabar ra ulto pratikriya hunchha.
+G: 3
+
+### knowledge
+U: bus achanak rokinda hami kina agadi dhalkinchhau?
+N: bus rokinda pani hamro sharir le gati ma rahirahane gun (jadatwa) le agadi jana khojchha. tyasaile achanak brake lagauda hami agadi dhalkinchhau.
+
+### knowledge
+U: rocket kasari mathi jaanchha?
+N: rocket le tala tira dherai chhito gyas phyakchha ra newton ko tesro niyam anusar gyas le rocket lai ulto disha, arthat mathi dhakelchha.
+
+### knowledge
+U: gharshan (friction) ko fayada k chha?
+N: gharshan le hamilai chiplana bata jogauchha, jasle hidna ra gadi ko tyre lai bato samatna maddat garchha. brake le pani gharshan le nai gadi rokchha.
+
+### knowledge
+U: chiplo bhui ma kina lada chhitai hunchha?
+N: chiplo bhui ma pani ya tel le gharshan ghataunchha. khutta le bhui lai ramrari samatna nasakda manchhe chiplera ladchha.
+
+### knowledge
+U: jahaj pani ma kina dubdaina?
+N: jahaj ko aakar le dherai pani hataunchha, ra hataieko pani le mathi dhakelne bal (uplavan bal) dinchha. jahaj ko tauil yo bal bhanda kam bhaye jahaj tairinchha.
+
+### knowledge
+U: falam ko kaanti pani ma dubchha tara falam ko jahaj kina tairinchha?
+N: kaanti saano ra thos hunchha, tyasaile kam pani hataunchha ra dubchha. jahaj bhitra khokro ra hawa le bhariyeko hunchha, tyasaile dherai pani hataayera tairinchha.
+
+### knowledge
+U: saral yantra kati wata chhan?
+N: saral yantra 6 wata chhan: lever, pulley, wheel and axle, bhiralo satah (ramp), wedge ra screw. yinle kaam garna sajilo banauchhan.
+G: 6
+
+### knowledge
+U: lever ko udaharan deu
+N: lever ko udaharan hun: dhiki-dhiki (see-saw), kainchi, nalchhuri ra dhunga uthauna prayog garne lamo dandi. yasma saano bal le thulo bhari uthauna sakinchha.
+
+### knowledge
+U: pulley kaha prayog hunchha?
+N: pulley ina bata pani tanna, jhanda uthauna ra crane ma prayog hunchha. yasle bhari tala tanera mathi uthauna sajilo banauchha.
+
+### knowledge
+U: aawaj kasari yatra garchha?
+N: aawaj kampan (vibration) ko rup ma hawa, pani ya thos bastu bata yatra garchha. madhyam bina aawaj jana sakdaina.
+
+### knowledge
+U: aawaj kun ma chhito jaanchha, hawa ki falam?
+N: aawaj hawa bhanda pani ma chhito ra pani bhanda thos falam ma jhan chhito jaanchha. hawa ma aawaj lagbhag 340 meter prati second ko gati ma jaanchha.
+
+### knowledge
+U: pratidhwani (echo) kasari sunninchha?
+N: aawaj kunai thulo kada satah, jastai pahad ya bhitta ma thokkiyera farkera aauda pratidhwani sunninchha. ghati ma karaauda yo spashta sunninchha.
+
+### knowledge
+U: prakash kun disha ma yatra garchha?
+N: prakash sidha rekha ma yatra garchha. yasaile kunai bastu le prakash rokda chhaya banchha.
+
+### knowledge
+U: aina (mirror) le kasari chhabi dekhauchha?
+N: aina ko chilo satah le prakash lai farkauchha (paravartan). farkeko prakash hamro aankha ma pugda aina ma hamro chhabi dekhinchha.
+
+### knowledge
+U: pani ma rakheko dandi bango kina dekhinchha?
+N: prakash pani bata hawa ma niskanda yasko disha ali badalinchha, yaslai apavartan bhaninchha. tyasaile pani ma rakheko dandi bhaachiye jasto bango dekhinchha.
+
+### knowledge
+U: seto prakash ma kati rang hunchhan?
+N: seto prakash ma 7 rang hunchhan. prism bata pathauda yo rato dekhi baijani samma ka rang ma chhuttinchha, yo kura newton le dekhayeka thiye.
+G: 7
+
+### knowledge
+U: garmi ma seto luga kina lagaune?
+N: seto rang le ghaam ko dherai prakash farkauchha, kalo rang le dherai sosera tatchha. tyasaile garmi ma seto ya halka rang ko luga chiso lagchha.
+
+### knowledge
+U: tatauda dhatu kina phailinchha?
+N: tatauda dhatu ka kan haru dherai halliyera ek arka bata tadha jaanchhan, tyasaile dhatu phailinchha. railway ko line ma yahi karan saano khali thau chhodinchha.
+
+### knowledge
+U: garmi kati tarika le sarchha?
+N: garmi 3 tarika le sarchha: sanchalan (conduction), sanbahan (convection) ra bikiran (radiation). taato bhaado ko haandi ko dandi tatnu sanchalan, umaleko pani ghumnu sanbahan ra ghaam ko garmi hamisamma aaunu bikiran ho.
+
+### knowledge
+U: taato hawa kina mathi jaanchha?
+N: taato hawa phailinchha ra chiso hawa bhanda halka (kam ghana) hunchha. halka bhayeko le taato hawa mathi uthchha, tyasaile hot air balloon udchha.
+
+### knowledge
+U: falam chhuda kath bhanda chiso kina lagchha?
+N: ekai tapkram ma bhaye pani falam le hamro haat ko garmi chhitai tanchha, kath le dhilo tanchha. haat bata garmi chhito jaane bhayeko le falam chiso lagchha.
+
+### knowledge
+U: urja nasta hunchha?
+N: urja nasta hudaina ra naya pani banna sakdaina, matra eutai rup bata arko rup ma badalinchha. jastai bulb ma bijuli urja prakash ra garmi ma badalinchha.
+
+### knowledge
+U: gati (speed) kasari nikalne?
+N: gati nikalna dura lai samaya le bhag garnus. jastai 120 km 2 ghanta ma pugyo bhane gati 120 / 2 = 60 km prati ghanta hunchha.
+G: 60
+
+### knowledge
+U: dhar bhayeko chakku le kina sajilai kaatchha?
+N: dhar bhayeko chakku ko dhar ko chhetrafal ekdam saano hunchha, tyasaile eutai bal le dherai chap (pressure) dinchha. chap badhi bhayeko le sajilai kaatchha.
+
+### knowledge
+U: bijuli ko taar ma basne charaa lai kina current lagdaina?
+N: charaa le eutai taar matra chhoeko hunchha, tyasaile usko sharir bata bijuli bagne bato bandaina. duita taar ya taar ra jamin dubai chhoyo bhane current lagchha.
+
+### knowledge
+U: pani ko rasaayanik sutra k ho?
+N: pani ko rasaayanik sutra H2O ho. yasma 2 wata hydrogen ra 1 wata oxygen ko anu hunchhan.
+
+### knowledge
+U: nun ko rasaayanik naam k ho?
+N: khane nun ko rasaayanik naam sodium chloride (NaCl) ho. yo sodium ra chlorine milera baneko hunchha.
+
+### knowledge
+U: carbon dioxide ko sutra k ho?
+N: carbon dioxide ko sutra CO2 ho, arthat 1 carbon ra 2 oxygen. hamle sas fera bahira falne gyas yahi ho.
+
+### knowledge
+U: tatva (element) bhaneko k ho?
+N: tatva bhaneko eutai kisim ko parmanu le baneko shuddha padartha ho, jastai oxygen, sun ra falam. aaja samma 118 wata tatva thaha bhayeka chhan.
+G: 118
+
+### knowledge
+U: parmanu (atom) ma k k hunchha?
+N: parmanu ko bich ma nucleus hunchha, jasma proton ra neutron hunchhan. nucleus ko waripari electron ghumchhan.
+
+### knowledge
+U: periodic table kasle banaye?
+N: periodic table ko aadhar rusi bigyan dmitri mendeleev le 1869 ma banaye. unle tatva haru lai gun anusar kram ma milaye.
+
+### knowledge
+U: brahmanda ma sabai bhanda dherai paine tatva kun ho?
+N: brahmanda ma sabai bhanda dherai paine tatva hydrogen ho. yo sabai bhanda halka tatva pani ho ra tara haru mukhya rup ma yahi le baneka hunchhan.
+
+### knowledge
+U: hawa ma sabai bhanda dherai kun gyas chha?
+N: hawa ma sabai bhanda dherai nitrogen gyas chha, lagbhag 78 pratishat. oxygen lagbhag 21 pratishat matra chha.
+
+### knowledge
+U: pareko kotha ko taapkram ma tarala rahane dhatu kun ho?
+N: kotha ko tapkram ma tarala rahane dhatu para (mercury) ho. pahile thermometer ma para prayog garinthyo, tara yo bishalu bhayeko le aajkal kam prayog hunchha.
+
+### knowledge
+U: hira ra pencil ko lead eutai kura bata baneko ho?
+N: ho, hira ra pencil ko "lead" (graphite) dubai shuddha carbon bata baneka hun. carbon ka parmanu farak tarika le milda hira kada ra graphite naram hunchha.
+
+### knowledge
+U: pencil ma lead dhatu hunchha?
+N: hudaina, pencil ma lead (shisa) dhatu hudaina. pencil ko kalo bhag graphite ra mato ko mishran ho.
+
+### knowledge
+U: falam ma khiya kina lagchha?
+N: falam lai pani ra hawa ko oxygen sanga lamo samaya rakhda rasaayanik pratikriya bhayera khiya (iron oxide) banchha. rang lagaune, tel lagaune ra sukkha rakhne garda khiya rokinchha.
+
+### knowledge
+U: sun ma khiya kina lagdaina?
+N: sun le hawa ra pani sanga sajilai pratikriya gardaina, tyasaile yasma khiya lagdaina ra chamak dherai samaya rahanchha. yahi karan sun lai bahumulya maninchha.
+
+### knowledge
+U: chaandi kina kalo hunchha?
+N: chaandi hawa ma bhayeko sulphur ka gyas sanga pratikriya garera kalo tah banauchha. yo tah lai chaandi sapha garne mal le hatauna sakinchha.
+
+### knowledge
+U: amla ra kshar ma k farak chha?
+N: amla (acid) ko swad amilo hunchha, jastai kagati ra sirka. kshar (base) ko swad tito ra chhuda chiplo hunchha, jastai saabun; dubai milda ek arka lai shanta (neutral) banauchha.
+
+### knowledge
+U: pH 7 bhaneko k ho?
+N: pH 7 bhaneko neutral, arthat na amla na kshar. shuddha pani ko pH lagbhag 7 hunchha; 7 bhanda kam amla ra badhi kshar ho.
+G: 7
+
+### knowledge
+U: baking soda ra sirka milauda k hunchha?
+N: baking soda (kshar) ra sirka (amla) milauda pratikriya bhayera carbon dioxide gyas ka fokaa niskinchhan. yo saral rasaayanik pratikriya ko ramro udaharan ho.
+
+### knowledge
+U: aago balna k k chahinchha?
+N: aago balna 3 kura chahinchha: indhan (daura, gas), oxygen ra garmi. yi madhye eutai hatayo bhane aago nibhchha.
+
+### knowledge
+U: mainbatti lai gilas le chhopda kina nibhchha?
+N: gilas le chhopda bhitra ko oxygen sakiyepachhi naya hawa aauna paudaina. oxygen bina aago balna sakdaina, tyasaile mainbatti nibhchha.
+
+### knowledge
+U: kapur kina harauchha?
+N: kapur thos bata tarala nabhai sidhai gyas ma badalinchha, yaslai udatpatan (sublimation) bhaninchha. tyasaile khulla thau ma rakheko kapur bistarai harauchha.
+
+### knowledge
+U: chini pani ma kasari harauchha?
+N: chini pani ma ghulda saana saana kan ma chhuttinchha ra pani ka kan bich phailinchha. chini nadekhine bhaye pani pani ko swad guliyo hunchha, tyasaile chini pani mai hunchha.
+
+### knowledge
+U: taato pani ma chini kina chhito ghulchha?
+N: taato pani ka kan chhito chalchhan ra chini ka kan lai chhitai chhuttyauchhan. tyasaile chiso pani bhanda taato pani ma chini chhito ghulchha.
+
+### knowledge
+U: tel ra pani kina mildaina?
+N: tel ra pani ka kan ko gun farak hunchha, pani ka kan ek arka lai badhi tanchhan ra tel lai bahira dhakelchhan. tel pani bhanda halka bhayeko le mathi tairinchha.
+
+### knowledge
+U: saabun le fohor kasari hataauchha?
+N: saabun ko kan ko eutai tira pani sanga ra arko tira tel-chillo sanga milchha. saabun le chillo fohor lai gherera pani sanga bagaidinchha.
+
+### knowledge
+U: padartha ka awastha kati chhan?
+N: padartha ka 3 mukhya awastha chhan: thos, tarala ra gyas. barf thos, pani tarala ra bafa gyas ho.
+G: 3
+
+### knowledge
+U: pani kati degree ma jamchha?
+N: pani 0 degree celsius ma jamchha ra 100 degree celsius ma umlinchha, samudri satah ma. fahrenheit ma yo 32 ra 212 degree hunchha.
+G: 0
+
+### knowledge
+U: celsius lai fahrenheit ma kasari badalne?
+T: F = C x 9 / 5 + 32. udaharan: 25 x 9 / 5 + 32 = 77.
+N: celsius lai 9 le gunera 5 le bhag garnus ani 32 jodnus. jastai 25 degree celsius = 77 degree fahrenheit.
+
+### knowledge
+U: kelvin ra celsius ko sambandha k ho?
+N: kelvin nikalna celsius ma 273.15 jodnus. jastai 0 degree celsius barabar 273.15 kelvin hunchha.
+
+### knowledge
+U: 1 kilometer ma kati meter hunchha?
+N: 1 kilometer ma 1000 meter hunchha. 1 meter ma 100 centimeter ra 1 centimeter ma 10 millimeter hunchha.
+G: 1000
+
+### knowledge
+U: 1 kilo ma kati gram hunchha?
+N: 1 kilogram ma 1000 gram hunchha. 1000 kilogram barabar 1 tonne hunchha.
+G: 1000
+
+### knowledge
+U: 1 quintal kati kilo ho?
+N: 1 quintal barabar 100 kilogram ho. dhan ra gahu jasta anna ko kinbech ma quintal prayog hunchha.
+G: 100
+
+### knowledge
+U: 1 liter ma kati milliliter?
+N: 1 liter ma 1000 milliliter hunchha. 1 ota saano chiya chamcha ma lagbhag 5 milliliter atauchha.
+G: 1000
+
+### knowledge
+U: 1 ropani ma kati aana hunchha?
+N: 1 ropani ma 16 aana hunchha. 1 aana ma 4 paisa ra 1 paisa ma 4 daam hunchha.
+G: 16
+
+### knowledge
+U: 1 bigha ma kati kattha?
+N: 1 bigha ma 20 kattha hunchha ra 1 kattha ma 20 dhur hunchha. terai ma jagga yahi ekai ma naapinchha.
+G: 20
+
+### knowledge
+U: 1 ropani kati square feet ho?
+N: 1 ropani barabar 5476 square feet hunchha, arthat 74 feet lamo ra 74 feet chaudai jagga. yo lagbhag 508.7 square meter ho.
+G: 5476
+
+### knowledge
+U: 1 aana kati square feet hunchha?
+T: 1 ropani = 5476 square feet ra 16 aana. 5476 / 16 = 342.25.
+N: 1 aana barabar 342.25 square feet hunchha.
+G: 342.25
+
+### knowledge
+U: 1 kattha ma kati square feet?
+N: 1 kattha barabar 3645 square feet hunchha. 1 bigha ma 20 kattha bhayeko le 1 bigha 72900 square feet hunchha.
+G: 3645
+
+### knowledge
+U: 1 bigha ma kati ropani hunchha?
+T: 1 bigha = 72900 square feet, 1 ropani = 5476 square feet. 72900 / 5476 is about 13.3.
+N: 1 bigha lagbhag 13.3 ropani barabar hunchha.
+
+### knowledge
+U: 1 muri ma kati pathi hunchha?
+N: 1 muri ma 20 pathi hunchha ra 1 pathi ma 8 mana hunchha. pahile anna naapna yahi ekai prayog hunthyo.
+G: 20
+
+### knowledge
+U: 1 mana ma kati muthi?
+N: 1 mana ma 10 muthi hunchha. 8 mana barabar 1 pathi hunchha.
+G: 10
+
+### knowledge
+U: 1 tola sun kati gram hunchha?
+N: 1 tola lagbhag 11.66 gram hunchha. nepal ma sun ra chaandi tola ma kinbech garinchha.
+G: 11.66
+
+### knowledge
+U: 1 inch ma kati centimeter?
+N: 1 inch barabar 2.54 centimeter hunchha. 12 inch barabar 1 foot hunchha.
+G: 2.54
+
+### knowledge
+U: 1 mile kati kilometer ho?
+N: 1 mile lagbhag 1.6 kilometer (1.609 km) hunchha. bharat ra nepal ma kilometer nai dherai chalchha.
+
+### knowledge
+U: 1 dozen ma kati wata?
+N: 1 dozen ma 12 wata hunchhan. kera ra anda dherai jaso dozen ma kinchhan.
+G: 12
+
+### knowledge
+U: 1 ghanta ma kati second hunchha?
+T: 60 minet x 60 second. 60 x 60 = 3600.
+N: 1 ghanta ma 3600 second hunchha.
+G: 3600
+
+### knowledge
+U: 1 barsa ma kati hapta hunchhan?
+T: 52 x 7 = 364, ra barsa ma 365 din hunchha.
+N: 1 barsa ma 52 hapta ra 1 din (leap year ma 2 din) hunchha.
+G: 52
+
+### knowledge
+U: leap year kati barsa ma aauchha?
+N: leap year dherai jaso harek 4 barsa ma aauchha ra tyo barsa february ma 29 din hunchha. 100 le bhag jaane barsa bhane 400 le pani bhag gaye matra leap year hunchha.
+G: 4
+
+### knowledge
+U: SI ekai pranali ma length ko ekai k ho?
+N: SI pranali ma lambai ko ekai meter, mass ko kilogram ra samaya ko second ho.
+
+### knowledge
+U: bal (force) ko ekai k ho?
+N: bal ko ekai newton ho, jun isaac newton ko naam bata rakhiyeko ho.
+
+### knowledge
+U: urja ko ekai k ho?
+N: urja ko ekai joule ho. khana ko urja dherai jaso calorie ma pani lekhinchha.
+
+### knowledge
+U: mass ra weight ma k farak?
+N: mass bhaneko bastu ma bhayeko padartha ko matra ho, jun kahi gaye pani badaldaina. weight bhaneko gurutwakarshan le tanne bal ho, tyasaile jun ma weight ghatchha tara mass ustai rahanchha.
+
+### knowledge
+U: 1 kilo kapas ra 1 kilo falam kun gahrungo?
+N: dubai barabar gahrungo hunchhan, kinabhane dubai 1 kilo nai ho. falam saano dekhinchha ra kapas thulo, tara tauil ustai hunchha.
+
+### knowledge
+U: barf pagalda kati tapkram hunchha?
+N: barf 0 degree celsius ma paglinchha. pagaldai garda pura barf pagalinjel tapkram 0 degree mai rahanchha.
+
+### knowledge
+U: nun le barf lai kina chhito paglauchha?
+N: nun le pani jamne tapkram lai 0 degree bhanda tala jharauchha. tyasaile nun haleko barf 0 degree mai pani bhayera chhito paglinchha.
+
+### knowledge
+U: dudh umaldaa kina poke ra bahira aauchha?
+N: dudh tatauda mathi protein ra chillo ko patalo tah (malai) banchha. tala baneko bafa tyo tah le roke pachhi fokaa thupriyera dudh bhaado bata bahira poikinchha.
+
+### knowledge
+U: kaatera rakheko syau kina khairo hunchha?
+N: syau kaatda bhitra ko enzyme hawa ko oxygen sanga pratikriya garchha ra khairo rang banchha. kagati ko ras lagaye yo dhilo hunchha.
+
+### knowledge
+U: roti/pauroti kina phulchha?
+N: pauroti ko pitho ma haleko yeast (khamir) le chini khayera carbon dioxide gyas banauchha. gyas ka fokaa pitho bhitra thunida pauroti phulera naram hunchha.
+
+### knowledge
+U: piyaj katda aankha bata kina aansu aauchha?
+N: piyaj katda yasko koshika futera aankha lai polne gyas niskinchha. aankha le tyo gyas pakhalna aansu nikalchha.
+
+### knowledge
+U: pani ma nun ghulyo bhane kasari nikalne?
+N: nun ghuleko pani lai tatayera bafa banayo bhane pani udchha ra nun bhaado ma rahanchha. samudra bata nun nikalne tarika pani yahi ho.
+
+### knowledge
+U: mishran ra yogik ma k farak?
+N: mishran ma padartha haru matra misiyeka hunchhan ra sajilai chhuttyauna sakinchha, jastai nun-pani. yogik ma tatva haru rasaayanik rup le jodiyeka hunchhan, jastai pani (H2O), jun sadharan tarika le chhuttindaina.
+
+### knowledge
+U: LPG ma k gyas hunchha?
+N: LPG ma mukhya rup ma propane ra butane gyas hunchha, jaslai chap dera tarala banaieko hunchha. cylinder bhitra tarala ra kholda gyas bhayera niskinchha.
+
+### knowledge
+U: CNG ra LPG ma farak k?
+N: LPG propane-butane ho, jun ghar ko chulo ma dherai prayog hunchha. CNG (compressed natural gas) mukhya rup ma methane ho ra kati desh ma gadi chalauna prayog hunchha.
+
+### knowledge
+U: petrol k bata banchha?
+N: petrol jamin muni bata nikaleko kachcha tel (crude oil) lai shuddha garera banaincha. yo sakine (non-renewable) indhan ho.
+
+### knowledge
+U: bijuli gadi kina pradushan kam garchha?
+N: bijuli gadi le petrol jalaundaina, tyasaile bato ma dhuwa niskindaina. nepal ma bijuli dherai jaso jalvidyut bata aaune bhayeko le yasle hawa sapha rakhna jhan maddat garchha.
+
+### knowledge
+U: what is the chemical formula of water?
+N: The chemical formula of water is H2O: 2 hydrogen atoms joined to 1 oxygen atom.
+
+### knowledge
+U: what voltage is household electricity in nepal
+N: Household electricity in Nepal is about 230 volts at 50 hertz.
+G: 230
+
+### knowledge
+U: How many aana make one ropani?
+N: 16 aana make one ropani. Also, 1 aana = 4 paisa and 1 paisa = 4 daam.
+G: 16
+
+### knowledge
+U: What does a magnet attract?
+N: A magnet attracts iron, nickel, cobalt and steel. It does not attract copper, aluminium, wood, paper or plastic.
+
+### knowledge
+U: Why does a ship float?
+N: A ship floats because its shape pushes aside a lot of water. The water pushes back up with a force (buoyancy) equal to the weight of that water, which can hold the ship's weight.
+
+### knowledge
+U: what are the three states of matter in nepali?
+N: The three states of matter are solid, liquid and gas, which in Nepali are thos, tarala and gyas.
+
+### knowledge
+U: what is 1 unit of electricity?
+N: One unit of electricity is 1 kilowatt-hour (kWh). For example, a 1000 watt heater running for 1 hour uses 1 unit.
+G: 1
+
+### knowledge
+U: tama ra aluminium ko taar ma farak?
+N: tama le aluminium bhanda ramro bijuli bagauchha, tara aluminium halka ra sasto hunchha. tyasaile ghar bhitra tama ko taar ra thula khamba ka line ma dherai jaso aluminium ko taar prayog hunchha.
+
+### knowledge
+U: bijuli bachauna k garne?
+N: kotha bata niskanda batti ra pankha band garnus, LED bulb prayog garnus ra chalaunu napareko saman ko plug nikalnus. ghaam ko ujyalo dherai prayog garda bijuli ra paisa dubai bachchha.
+
+### knowledge
+U: induction chulo kasari khana pakauchha?
+N: induction chulo ma bijuli ko chumbakiya kshetra le falam bhayeko bhaado lai sidhai tatauchha. chulo aafai kam tatchha, tyasaile tyasma induction milne bhaado chahinchha.
+
+### knowledge
+U: microwave le khana kasari tatauchha?
+N: microwave le khana bhitra ko pani ka kan lai chhito halliyauna tarang (microwave) pathauchha. kan halliyera garmi banchha ra khana tatchha.
+
+### knowledge
+U: freeze ma khana kina bigrindaina chhitai?
+N: chiso ma kitanu ra dhusi dherai dhilo badhchhan. tyasaile fridge ma rakheko khana dherai din samma ramro rahanchha, tara sadhai ko lagi haina.
+
+### knowledge
+U: thermos le pani kasari taato rakhchha?
+N: thermos ko duita bhitta ko bich ma hawa nikaleko khali thau (vacuum) hunchha. garmi yo khali thau bata sajilai sardaina, tyasaile pani dherai samaya taato ya chiso rahanchha.
+
+### knowledge
+U: hawa ma oxygen kati pratishat hunchha?
+N: hawa ma lagbhag 21 pratishat oxygen hunchha. baki dherai jaso nitrogen hunchha.
+G: 21
+
+### knowledge
+U: hamro sas bata kun gyas niskinchha?
+N: hamle sas bahira falda carbon dioxide niskinchha, sangai nitrogen, alikati oxygen ra pani ko bafa pani hunchha. hamle sas lida oxygen bhitra lagchhau.
+
+### knowledge
+U: aawaj ko gati bhanda chhito kun chiz chalchha?
+N: prakash aawaj bhanda dherai chhito chalchha. prakash ek second ma lagbhag 3 lakh km jaanchha bhane aawaj hawa ma lagbhag 340 meter matra.
+
+### knowledge
+U: chatyang parda 3 second pachhi garjan sunyo bhane kati tadha ho?
+T: aawaj 1 second ma lagbhag 340 meter jaanchha. 3 x 340 = 1020.
+N: chatyang lagbhag 1020 meter, arthat 1 kilometer jati tadha pareko ho.
+G: 1020
