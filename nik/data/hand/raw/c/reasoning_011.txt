@@ -1,0 +1,908 @@
+### reasoning
+U: amrit bhanda bishal aglo, bishal bhanda chetan aglo. amrit chetan bhanda aglo ho?
+T: chetan > bishal > amrit.
+N: haina.
+G: haina
+
+### reasoning
+U: dipa ki didi ekta, ekta ki didi fulmaya. sabai bhanda kanchhi ko?
+T: fulmaya > ekta > dipa (umer ma).
+N: dipa.
+G: dipa
+
+### reasoning
+U: gopal le 25 wata chara gane, hari le gopal bhanda 8 badhi, ishan le hari bhanda 10 kam. sabai bhanda kam kasle?
+T: hari: 25 + 8 = 33. ishan: 33 - 10 = 23. kram: hari 33, gopal 25, ishan 23.
+N: ishan, 23 wata.
+G: ishan
+
+### reasoning
+U: Janak is heavier than Kiran but lighter than Laxman. Who is the heaviest?
+T: Laxman > Janak > Kiran.
+N: Laxman.
+G: Laxman
+
+### reasoning
+U: tin wata pasal ko dudh: A 120, B A bhanda 10 sasto, C B bhanda 5 mahango. sabai bhanda sasto kun?
+T: B: 120 - 10 = 110. C: 110 + 5 = 115. kram: B 110, C 115, A 120.
+N: B, 110 rupiya.
+G: B
+
+### reasoning
+U: mina ko ghadi nisha ko bhanda mahango, nisha ko om ko bhanda mahango. sabai bhanda sasto kasko?
+T: mina > nisha > om.
+N: om ko.
+G: om
+
+### reasoning
+U: char jana ko umer ko jod: pooja 10, rabin pooja bhanda 2 jetho, sita rabin bhanda 1 kanchhi, tara sita bhanda 4 jethi. sabai bhanda jethi?
+T: rabin: 10 + 2 = 12. sita: 12 - 1 = 11. tara: 11 + 4 = 15. kram: tara 15, rabin 12, sita 11, pooja 10.
+N: tara, 15 barsha.
+G: tara
+
+### reasoning
+U: yadi aaja aaitabar ho bhane office khulchha. aaja office band chha. aaja aaitabar ho?
+T: aaitabar bhaye khulthyo. band chha, tyasaile aaitabar haina.
+N: haina.
+G: haina
+
+### reasoning
+U: yadi bijuli chamkyo bhane garjan pani sunchhau. hijo bijuli chamkyo. garjan sunyau?
+T: chamkyo bhane garjan.
+N: niyam anusar sunyau.
+G: sunyau
+
+### reasoning
+U: kunai pani samudra nepal ma chhaina. tyasaile nepal ma samudri jahaj ko bandargah chha?
+T: samudra nabhae samudri bandargah hudaina.
+N: chhaina.
+G: chhaina
+
+### reasoning
+U: sabai bhitra basne biralo le chara samatdaina bhanne niyam. kitty bhitra basne biralo ho. kitty le chara samatchha?
+T: niyam anusar bhitra basne biralo le samatdaina.
+N: niyam anusar samatdaina.
+G: samatdaina
+
+### reasoning
+U: If you are late, you miss the bus. You did not miss the bus. Were you late?
+T: Late would mean missing the bus. You did not miss it.
+N: No, you were not late.
+G: No
+
+### reasoning
+U: kehi chara gaauchhan. sabai gaaune chara sundar hunchhan bhanne niyam. kehi chara sundar hunchhan?
+T: gaaune chara sundar, ra kehi chara gaauchhan. tyasaile kehi chara sundar.
+N: ho.
+G: ho
+
+### reasoning
+U: 10, 15, 20, 25, ? arko
+T: 5 thapchha: 25 + 5 = 30.
+N: 30.
+G: 30
+
+### reasoning
+U: 1, 3, 9, 27, 81, 243, ? arko
+T: x3: 243 x 3 = 729.
+N: 729.
+G: 729
+
+### reasoning
+U: 50, 48, 44, 38, 30, ? arko
+T: ghatne farak 2, 4, 6, 8. arko 10: 30 - 10 = 20.
+N: 20.
+G: 20
+
+### reasoning
+U: 2, 3, 5, 9, 17, 33, ? arko
+T: farak 1, 2, 4, 8, 16. arko 32: 33 + 32 = 65.
+N: 65.
+G: 65
+
+### reasoning
+U: Y, V, S, P, ? arko
+T: 3 akshar pachhadi: Y (25), V (22), S (19), P (16), arko 13 = M.
+N: M.
+G: M
+
+### reasoning
+U: 6, 5, 10, 9, 18, 17, ? arko
+T: -1 ra x2: 17 x 2 = 34.
+N: 34.
+G: 34
+
+### reasoning
+U: 0, 1, 1, 2, 3, 5, 8, ? arko
+T: agadi ka dui ko jod: 5 + 8 = 13.
+N: 13.
+G: 13
+
+### reasoning
+U: What comes next: 2, 4, 6, 8, 10, ?
+T: Add 2: 10 + 2 = 12.
+N: 12.
+G: 12
+
+### reasoning
+U: 3, 5, 8, 12, 17, ? arko
+T: farak 2, 3, 4, 5. arko 6: 17 + 6 = 23.
+N: 23.
+G: 23
+
+### reasoning
+U: kauli, banda, brocauli, kera. kun tarkari haina?
+T: kauli, banda ra brocauli tarkari. kera fal.
+N: kera.
+G: kera
+
+### reasoning
+U: parsa, bara, rautahat, kaski. kun madhesh ma pardaina?
+T: parsa, bara ra rautahat madhesh ma. kaski gandaki ma.
+N: kaski.
+G: kaski
+
+### reasoning
+U: 4, 8, 12, 15, 20. kun 4 ko gunan haina?
+T: 4, 8, 12, 20 lai 4 le bhag lagchha. 15 lai 4 le bhag garda 3 aauchha baki 3.
+N: 15.
+G: 15
+
+### reasoning
+U: Odd one out: guitar, violin, sitar, drum
+T: Guitar, violin and sitar have strings. A drum does not.
+N: Drum.
+G: Drum
+
+### reasoning
+U: hiun chituwa, habre, danphe, bhaisi. kun himali jangali janawar haina?
+T: hiun chituwa, habre ra danphe himali jangali janawar ra chara. bhaisi ghar ma palinchha.
+N: bhaisi.
+G: bhaisi
+
+### reasoning
+U: aaja sombar. 18 din pachhi kun bar?
+T: 18 = 14 + 4. sombar + 4: mangalbar, budhabar, bihibar, shukrabar.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: aaja shanibar. 10 din agadi kun bar thiyo?
+T: 10 = 7 + 3. shanibar bata 3 pachhadi: shukrabar, bihibar, budhabar.
+N: budhabar.
+G: budhabar
+
+### reasoning
+U: If today is Thursday, what day was the day before yesterday?
+T: Yesterday Wednesday, day before yesterday Tuesday.
+N: Tuesday.
+G: Tuesday
+
+### reasoning
+U: mahina ko 5 gate aaitabar. 26 gate kun bar?
+T: 26 - 5 = 21 = 3 x 7. bar uhi.
+N: aaitabar.
+G: aaitabar
+
+### reasoning
+U: bholi shukrabar. asti kun bar thiyo?
+T: aaja bihibar. hijo budhabar, asti mangalbar.
+N: mangalbar.
+G: mangalbar
+
+### reasoning
+U: 7:20 dekhi 9:05 samma kati samaya?
+T: 7:20 bata 9:20 samma 2 ghanta, tara 9:05 ma 15 minet kam. 2 ghanta bata 15 minet ghatauda 1 ghanta 45 minet.
+N: 1 ghanta 45 minet.
+G: 1 ghanta 45 minet
+
+### reasoning
+U: 3:50 ma 25 minet thapda?
+T: 50 + 25 = 75 minet, arthat 1 ghanta 15 minet. tyasaile 4:15.
+N: 4:15.
+G: 4:15
+
+### reasoning
+U: 10:15 bhanda 30 minet agadi?
+T: 10:15 bata 15 ghatauda 10:00, ani 15 ghatauda 9:45.
+N: 9:45.
+G: 9:45
+
+### reasoning
+U: 17:00 lai 12 ghanta ko ghadi ma?
+T: 17 - 12 = 5. beluka 5 baje.
+N: beluka 5 baje.
+G: 5
+
+### reasoning
+U: How many hours are in a week?
+T: 7 x 24 = 168.
+N: 168 hours.
+G: 168
+
+### reasoning
+U: april 27 bata may 5 samma kati din?
+T: april ma 30 din. 27 bata 30 samma 3. may 5 samma 5. 3 + 5 = 8.
+N: 8 din.
+G: 8
+
+### reasoning
+U: 5 barsha ma kati mahina?
+T: 5 x 12 = 60.
+N: 60 mahina.
+G: 60
+
+### reasoning
+U: tin jana ka ghar: rato, seto, hariyo. dawa ko rato haina. pemba ko seto. dawa ko?
+T: pemba seto. dawa rato haina, seto pani haina, tyasaile hariyo.
+N: hariyo.
+G: hariyo
+
+### reasoning
+U: Three girls: one plays football, one cricket, one chess. Rita does not play a ball game. Sita plays football. What does Gita play?
+T: Rita plays chess (no ball). Sita football. Gita cricket.
+N: Cricket.
+G: cricket
+
+### reasoning
+U: tin jana ka seat: agadi, bich, pachhadi. ram pachhadi chhaina, agadi pani chhaina. shyam agadi chhaina. hari kaha?
+T: ram bich. shyam: agadi haina, bich ram ko, tyasaile pachhadi. hari agadi.
+N: hari agadi.
+G: agadi
+
+### reasoning
+U: sahi ki galat: 15 x 2 = 30.
+T: 15 x 2 = 30.
+N: sahi.
+G: sahi
+
+### reasoning
+U: sahi ki galat: machha pani bahira dherai din bachchha.
+T: machha pani bina sas ferna sakdaina, chhitai marchha.
+N: galat.
+G: galat
+
+### reasoning
+U: true or false: Half of 100 is 50.
+T: 100 / 2 = 50.
+N: True.
+G: True
+
+### reasoning
+U: sahi ki galat: 0.5 ra 50% barabar ho.
+T: 0.5 = 50/100, arthat 50 pratishat.
+N: sahi.
+G: sahi
+
+### reasoning
+U: mero sanga 600 rupiya. 2 wata 250 ko kitab kinda kati bachchha?
+T: 2 x 250 = 500. 600 - 500 = 100.
+N: 100 rupiya.
+G: 100
+
+### reasoning
+U: 96 wata kalam 8 kaksha ma barabar. euta kaksha lai kati?
+T: 96 / 8 = 12.
+N: 12 wata.
+G: 12
+
+### reasoning
+U: euta sankhya ma 15 jodda 40. sankhya?
+T: 40 - 15 = 25.
+N: 25.
+G: 25
+
+### reasoning
+U: kun badhi: 3/8 ki 1/2?
+T: barabar har 8: 1/2 = 4/8. 4/8 > 3/8.
+N: 1/2.
+G: 1/2
+
+### reasoning
+U: kun gahrungo: 1.5 kg ki 1400 gram?
+T: 1.5 kg = 1500 gram. 1500 > 1400.
+N: 1.5 kg, 100 gram le.
+G: 1.5 kg
+
+### reasoning
+U: Which is longer: 45 minutes or three quarters of an hour?
+T: Three quarters of an hour = 45 minutes.
+N: They are the same.
+G: same
+
+### reasoning
+U: ma uttar farkeko chhu, bayatira mode. kata?
+T: uttar farkida bayatira paschim.
+N: paschim.
+G: paschim
+
+### reasoning
+U: ghar bata 3 km paschim school, school bata 5 km purba bazar. ghar bata bazar kata ra kati?
+T: paschim 3, purba 5: 5 - 3 = 2 km purba.
+N: 2 km purba.
+G: 2
+
+### reasoning
+U: mero bahini ko srimaan lai k bhanchhu?
+T: bahini ko srimaan = jwain (bahini jwain).
+N: jwain.
+G: jwain
+
+### reasoning
+U: srimati ki aama lai k bhanchhan?
+T: srimati ki aama = sasu.
+N: sasu.
+G: sasu
+
+### reasoning
+U: euta pasal ma 200 kapi, 75 bikyo, 50 aayo. aba kati?
+T: 200 - 75 = 125. 125 + 50 = 175.
+N: 175 kapi.
+G: 175
+
+### reasoning
+U: 5 jana le 10 din ma euta ghar rangauchhan. 10 jana le kati din?
+T: kaam: 5 x 10 = 50 manchhe-din. 50 / 10 = 5.
+N: 5 din.
+G: 5
+
+### reasoning
+U: 1 dekhi 45 samma kati wata 9 le bhag lagne?
+T: 45 / 9 = 5.
+N: 5 wata.
+G: 5
+
+### reasoning
+U: 3 ank ko sabai bhanda sano bijor sankhya?
+T: 100 jor, 101 bijor.
+N: 101.
+G: 101
+
+### reasoning
+U: kaksha ma 50 jana, 40% keti. keti kati?
+T: 50 x 40 / 100 = 20.
+N: 20 jana.
+G: 20
+
+### reasoning
+U: euta sankhya ko 3 guna ma 6 ghatauda 24. sankhya?
+T: 24 + 6 = 30. 30 / 3 = 10. jaach: 10 x 3 - 6 = 24.
+N: 10.
+G: 10
+
+### reasoning
+U: sita bhanchhe "ma 12 barsha ki." usko jumlyaha bahini bhanchhe "ma 13 barsha ki." milchha?
+T: jumlyaha ekai din janmanchhan, umer barabar hunuparchha.
+N: milena; jumlyaha ko umer barabar hunchha.
+
+### reasoning
+U: kun dherai: 5 darjan ki 55?
+T: 5 darjan = 60. 60 > 55.
+N: 5 darjan (60) dherai, 5 le.
+G: 60
+
+### reasoning
+U: true or false: Water freezes at 0 degrees Celsius.
+T: Water freezes at 0 degrees Celsius.
+N: True.
+G: True
+
+### reasoning
+U: tapai sanga 25 rupiya, 10 ko kalam ra 8 ko rubber kinda kati bachchha?
+T: 10 + 8 = 18. 25 - 18 = 7.
+N: 7 rupiya.
+G: 7
+
+### reasoning
+U: euta gaadi 1 ghanta ma 50 km. 4 ghanta ma?
+T: 50 x 4 = 200.
+N: 200 km.
+G: 200
+
+### reasoning
+U: sahi ki galat: 6 x 6 = 36.
+T: 6 x 6 = 36.
+N: sahi.
+G: sahi
+
+### reasoning
+U: ma 1 dekhi 30 samma ko sankhya sochchhu. 7 le bhag lagchha ra jor ho. 20 bhanda sano. kun?
+T: 7 le bhag lagne: 7, 14, 21, 28. jor: 14, 28. 20 bhanda sano: 14.
+N: 14.
+G: 14
+
+### reasoning
+U: kaksha ko line ma tapai agadi bata 5 au, jamma 12 jana. pachhadi bata kati au?
+T: 12 - 5 + 1 = 8.
+N: 8 au.
+G: 8
+
+### reasoning
+U: 3 kilo syau 450 rupiya. 1 kilo kati?
+T: 450 / 3 = 150.
+N: 150 rupiya.
+G: 150
+
+### reasoning
+U: hapta ma 5 din school, 6 hapta ma kati din school?
+T: 5 x 6 = 30.
+N: 30 din.
+G: 30
+
+### reasoning
+U: euta varga ko paridhi 24 cm. euta bhuja kati?
+T: 24 / 4 = 6.
+N: 6 cm.
+G: 6
+
+### reasoning
+U: kun thulo: 999 ki 1000?
+T: 1000 = 999 + 1.
+N: 1000.
+G: 1000
+
+### reasoning
+U: euta pariwar ma aama, buwa, 2 chhora ra 1 chhori. pariwar ma kati jana?
+T: 1 + 1 + 2 + 1 = 5.
+N: 5 jana.
+G: 5
+
+### reasoning
+U: 2 jana ko jamma umer 40. 5 barsha pachhi jamma kati?
+T: har jana 5 barsha badhchha: 40 + 5 + 5 = 50.
+N: 50 barsha.
+G: 50
+
+### reasoning
+U: sahi ki galat: 1 ghanta ma 30 minet hunchha.
+T: 1 ghanta = 60 minet.
+N: galat, 60 minet hunchha.
+G: galat
+
+### reasoning
+U: If 2 pens cost 30 rupees, how much do 5 pens cost?
+T: One pen: 30 / 2 = 15. Five: 5 x 15 = 75.
+N: 75 rupees.
+G: 75
+
+### reasoning
+U: tin jana ka sathi: anu ko sathi binu, binu ko sathi chandra. anu ra chandra sathi hun pakka?
+T: sathi ko sathi pakka sathi hunchha bhanne niyam chhaina.
+N: pakka bhanna sakinna.
+
+### reasoning
+U: arjun bimal bhanda chhito, bimal chiran bhanda chhito. chiran arjun bhanda chhito ho?
+T: arjun > bimal > chiran.
+N: haina.
+G: haina
+
+### reasoning
+U: devi 11 barsha, eliza devi bhanda 2 kanchhi, fatima eliza bhanda 5 jethi. sabai bhanda jethi?
+T: eliza: 11 - 2 = 9. fatima: 9 + 5 = 14. kram: fatima 14, devi 11, eliza 9.
+N: fatima, 14 barsha.
+G: fatima
+
+### reasoning
+U: gaurav ko bari harish ko bhanda sano, harish ko indra ko bhanda sano. sabai bhanda thulo kasko?
+T: indra > harish > gaurav.
+N: indra ko.
+G: indra
+
+### reasoning
+U: Kabir is shorter than Leela. Leela is shorter than Manish. Who is in the middle?
+T: Manish > Leela > Kabir.
+N: Leela.
+G: Leela
+
+### reasoning
+U: yadi pasal khulla chha bhane batti baleko hunchha. batti baleko chhaina. pasal khulla chha?
+T: khulla bhaye batti balthyo. baleko chhaina.
+N: haina, pasal band chha (niyam anusar).
+G: haina
+
+### reasoning
+U: niyam: 16 barsha nabhai bike chalauna paudaina. rajan 15 barsha. paunchha?
+T: 15 < 16.
+N: paudaina.
+G: paudaina
+
+### reasoning
+U: sabai fal ma biu hunchha bhanne niyam anusar aanp ma biu hunchha?
+T: aanp fal ho.
+N: hunchha.
+G: hunchha
+
+### reasoning
+U: kunai pani gai le udna sakdaina. yo janawar udchha. yo gai ho?
+T: gai bhaye udna sakdainathyo.
+N: haina.
+G: haina
+
+### reasoning
+U: 9, 14, 19, 24, ? arko
+T: 5 thapchha: 24 + 5 = 29.
+N: 29.
+G: 29
+
+### reasoning
+U: 5, 10, 20, 40, 80, ? arko
+T: x2: 80 x 2 = 160.
+N: 160.
+G: 160
+
+### reasoning
+U: 80, 75, 70, 65, ? arko
+T: 5 ghatchha: 65 - 5 = 60.
+N: 60.
+G: 60
+
+### reasoning
+U: 1, 2, 5, 10, 17, ? arko
+T: farak 1, 3, 5, 7. arko 9: 17 + 9 = 26.
+N: 26.
+G: 26
+
+### reasoning
+U: D, G, J, M, ? arko
+T: 3 akshar agadi: D (4), G (7), J (10), M (13), arko 16 = P.
+N: P.
+G: P
+
+### reasoning
+U: 3, 6, 5, 10, 9, ? arko
+T: x2 ra -1: 9 x 2 = 18.
+N: 18.
+G: 18
+
+### reasoning
+U: Next number: 11, 22, 33, 44, ?
+T: Add 11: 44 + 11 = 55.
+N: 55.
+G: 55
+
+### reasoning
+U: suga, bhangera, kalij, kachhuwa. kun chara haina?
+T: suga, bhangera ra kalij chara. kachhuwa sarisrip.
+N: kachhuwa.
+G: kachhuwa
+
+### reasoning
+U: surkhet, jumla, dailekh, chitwan. kun karnali ma pardaina?
+T: surkhet, jumla ra dailekh karnali ma. chitwan bagmati ma.
+N: chitwan.
+G: chitwan
+
+### reasoning
+U: 16, 32, 48, 60, 64. kun 16 ko gunan haina?
+T: 16 x 1 = 16, 16 x 2 = 32, 16 x 3 = 48, 16 x 4 = 64. 60 lai 16 le bhag garda 3 aauchha baki 12.
+N: 60.
+G: 60
+
+### reasoning
+U: Odd one out: rice, bread, noodles, water
+T: Rice, bread and noodles are foods. Water is a drink.
+N: Water.
+G: Water
+
+### reasoning
+U: aaja bihibar. 15 din pachhi kun bar?
+T: 15 = 14 + 1. bihibar + 1 = shukrabar.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: aaja aaitabar. 9 din agadi kun bar thiyo?
+T: 9 = 7 + 2. aaitabar bata 2 pachhadi: shanibar, shukrabar.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: If yesterday was Tuesday, what is tomorrow?
+T: Today Wednesday, tomorrow Thursday.
+N: Thursday.
+G: Thursday
+
+### reasoning
+U: mahina ko 13 gate sombar. 27 gate kun bar?
+T: 27 - 13 = 14 = 2 x 7. bar uhi.
+N: sombar.
+G: sombar
+
+### reasoning
+U: 12:40 dekhi 2:00 samma kati samaya?
+T: 12:40 bata 1:00 samma 20 minet. 1:00 bata 2:00 samma 1 ghanta. jamma 1 ghanta 20 minet.
+N: 1 ghanta 20 minet.
+G: 1 ghanta 20 minet
+
+### reasoning
+U: 9:45 ma 45 minet thapda?
+T: 45 + 45 = 90 minet, arthat 1 ghanta 30 minet. tyasaile 10:30.
+N: 10:30.
+G: 10:30
+
+### reasoning
+U: 7:00 bhanda 1 ghanta 30 minet agadi?
+T: 7:00 bata 1 ghanta ghatauda 6:00, ani 30 minet ghatauda 5:30.
+N: 5:30.
+G: 5:30
+
+### reasoning
+U: 14:45 lai 12 ghanta ko ghadi ma?
+T: 14 - 12 = 2. diuso 2:45.
+N: diuso 2:45.
+G: 2:45
+
+### reasoning
+U: How many days are in 10 weeks?
+T: 10 x 7 = 70.
+N: 70 days.
+G: 70
+
+### reasoning
+U: september 27 bata october 4 samma kati din?
+T: september ma 30 din. 27 bata 30 samma 3. october 4 samma 4. 3 + 4 = 7.
+N: 7 din.
+G: 7
+
+### reasoning
+U: tin jana ka cycle: rato, nilo, kalo. sita ko rato haina, kalo pani haina. gita ko kalo haina. rita ko?
+T: sita nilo. gita: kalo haina, nilo sita ko, tyasaile rato. rita kalo.
+N: rita ko kalo.
+G: kalo
+
+### reasoning
+U: Three boxes: big, medium, small. The red box is not big. The blue box is small. What size is the red box?
+T: Blue is small. Red is not big and not small, so medium.
+N: Medium.
+G: medium
+
+### reasoning
+U: tin jana ka samaya: 6, 7, 8 baje uthchhan. ram 8 baje uthdaina. shyam 6 baje uthchha. ram kati baje?
+T: shyam 6. ram 8 haina, 6 pani haina, tyasaile 7.
+N: 7 baje.
+G: 7
+
+### reasoning
+U: sahi ki galat: 72 lai 8 le bhag garda 9 aauchha.
+T: 72 / 8 = 9.
+N: sahi.
+G: sahi
+
+### reasoning
+U: sahi ki galat: chandrama ma pani ko nadi bagchha.
+T: chandrama ma bagne nadi chhaina.
+N: galat.
+G: galat
+
+### reasoning
+U: true or false: A week has 5 days.
+T: A week has 7 days.
+N: False, a week has 7 days.
+G: False
+
+### reasoning
+U: mero sanga 350 rupiya. 4 wata 75 ko kitab kinda kati bachchha?
+T: 4 x 75 = 300. 350 - 300 = 50.
+N: 50 rupiya.
+G: 50
+
+### reasoning
+U: 54 jana 6 ota bus ma barabar. euta bus ma kati?
+T: 54 / 6 = 9.
+N: 9 jana.
+G: 9
+
+### reasoning
+U: euta sankhya lai 7 le gunda 63. sankhya?
+T: 63 / 7 = 9.
+N: 9.
+G: 9
+
+### reasoning
+U: kun badhi: 0.35 ki 1/3?
+T: barabar har ma: 0.35 = 35/100 = 7/20 = 21/60, ra 1/3 = 20/60. 21/60 > 20/60.
+N: 0.35 badhi.
+G: 0.35
+
+### reasoning
+U: kun lamo: 2 km ki 1900 m?
+T: 2 km = 2000 m. 2000 > 1900.
+N: 2 km, 100 m le.
+G: 2 km
+
+### reasoning
+U: Which is more: 20% of 200 or 50% of 70?
+T: 200 x 20 / 100 = 40. 70 x 50 / 100 = 35. 40 > 35.
+N: 20% of 200 (40) is more.
+G: 40
+
+### reasoning
+U: ma purba farkeko chhu. dayatira mode. kata?
+T: purba farkida dayatira dakshin.
+N: dakshin.
+G: dakshin
+
+### reasoning
+U: ghar bata 7 km uttar, ani 3 km dakshin. ghar bata kati?
+T: 7 - 3 = 4 km uttar.
+N: 4 km uttar.
+G: 4
+
+### reasoning
+U: mero buwa ko didi ko chhori mero k parchhe?
+T: phupu ki chhori, umer anusar didi ya bahini.
+N: umer anusar didi ya bahini.
+
+### reasoning
+U: srimaan ko dai lai k bhanchhan?
+T: srimaan ko dai lai jethaju bhanchhan.
+N: jethaju.
+G: jethaju
+
+### reasoning
+U: euta pasal ma 90 kg aalu, 35 kg bikyo, 20 kg aayo. aba kati?
+T: 90 - 35 = 55. 55 + 20 = 75.
+N: 75 kg.
+G: 75
+
+### reasoning
+U: 3 jana le 6 din ma euta kaam sakchhan. 9 jana le kati din?
+T: kaam: 3 x 6 = 18. 18 / 9 = 2.
+N: 2 din.
+G: 2
+
+### reasoning
+U: 1 dekhi 80 samma kati wata 8 le bhag lagne?
+T: 80 / 8 = 10.
+N: 10 wata.
+G: 10
+
+### reasoning
+U: sabai bhanda thulo 2 ank ko 4 le bhag lagne sankhya?
+T: 99, 98, 97 lai lagdaina. 96 = 4 x 24.
+N: 96.
+G: 96
+
+### reasoning
+U: kaksha ma 20 jana, 25% anupasthit. kati anupasthit?
+T: 20 x 25 / 100 = 5.
+N: 5 jana.
+G: 5
+
+### reasoning
+U: euta sankhya ko aadha ma 3 ghatauda 7. sankhya?
+T: 7 + 3 = 10. 10 x 2 = 20. jaach: 20 / 2 - 3 = 7.
+N: 20.
+G: 20
+
+### reasoning
+U: kun dherai: 1.5 ghanta ki 80 minet?
+T: 1.5 ghanta = 90 minet. 90 > 80.
+N: 1.5 ghanta (90 minet) dherai, 10 minet le.
+G: 90
+
+### reasoning
+U: true or false: Kathmandu is the capital of Nepal.
+T: Kathmandu is the capital.
+N: True.
+G: True
+
+### reasoning
+U: tapai sanga 18 chocolate, 6 khae, aadha bhai lai diye. kati baki?
+T: 18 - 6 = 12. 12 / 2 = 6 bhai lai. baki 6.
+N: 6 wata.
+G: 6
+
+### reasoning
+U: euta train 1 ghanta ma 80 km. 240 km jaana kati ghanta?
+T: 240 / 80 = 3.
+N: 3 ghanta.
+G: 3
+
+### reasoning
+U: sahi ki galat: 100 bhanda 99 sano.
+T: 99 < 100.
+N: sahi.
+G: sahi
+
+### reasoning
+U: ma 1 dekhi 12 samma ko sankhya sochchhu. 2, 3 ra 4 le bhag lagchha. kun?
+T: 2, 3 ra 4 le bhag lagne: 12.
+N: 12.
+G: 12
+
+### reasoning
+U: line ma 15 jana, tapai thik bich ma. agadi kati jana?
+T: bich sthan: (15 + 1) / 2 = 8. agadi 7 jana.
+N: 7 jana.
+G: 7
+
+### reasoning
+U: 4 kg chini 440 rupiya. 1 kg kati?
+T: 440 / 4 = 110.
+N: 110 rupiya.
+G: 110
+
+### reasoning
+U: euta tribhuj ka bhuja 5, 5 ra 5 cm. paridhi?
+T: 5 + 5 + 5 = 15.
+N: 15 cm.
+G: 15
+
+### reasoning
+U: kun thulo: 0.01 ki 0.1?
+T: 0.10 > 0.01.
+N: 0.1.
+G: 0.1
+
+### reasoning
+U: hari ka 2 jana chhora, har chhora ka 2 jana chhora. hari ka kati nati?
+T: 2 x 2 = 4.
+N: 4 jana nati.
+G: 4
+
+### reasoning
+U: euta ghadi har din 2 minet dhilo hunchha. 1 hapta ma kati minet dhilo?
+T: 7 x 2 = 14.
+N: 14 minet.
+G: 14
+
+### reasoning
+U: aaja mangalbar. 21 din pachhi kun bar?
+T: 21 = 3 x 7, bar uhi.
+N: mangalbar.
+G: mangalbar
+
+### reasoning
+U: 7, 10, 13, 16, ... 10 au sankhya?
+T: 7 + 9 x 3 = 7 + 27 = 34.
+N: 34.
+G: 34
+
+### reasoning
+U: kalam, kitab, jhola, gaai. kun school jaada boknu pardaina?
+T: kalam, kitab ra jhola school ma chahinchha. gaai janawar.
+N: gaai.
+G: gaai
+
+### reasoning
+U: sahi ki galat: 3 ghanta = 180 minet.
+T: 3 x 60 = 180.
+N: sahi.
+G: sahi
+
+### reasoning
+U: kun badhi: 5 x 5 ki 3 x 8?
+T: 5 x 5 = 25. 3 x 8 = 24.
+N: 5 x 5, 25.
+G: 25
+
+### reasoning
+U: mero kaka ki chhori ko buwa mero k parchhan?
+T: kaka ki chhori ko buwa kaka nai.
+N: kaka.
+G: kaka
+
+### reasoning
+U: euta seedhi ma 10 khudkila. 4 chadhe, 1 jhare, 3 chadhe. kati au ma?
+T: 4 - 1 = 3. 3 + 3 = 6.
+N: 6 au.
+G: 6
+
+### reasoning
+U: If 4 books cost 200 rupees, how much does 1 book cost?
+T: 200 / 4 = 50.
+N: 50 rupees.
+G: 50
+
+### reasoning
+U: tin jana: sita gita bhanda agli, rita sita bhanda agli. sabai bhanda hochi?
+T: rita > sita > gita.
+N: gita.
+G: gita
+
+### reasoning
+U: bihana 8 baje dekhi diuso 3 baje samma kati ghanta?
+T: 8 bata 12 samma 4, 12 bata 3 samma 3. 4 + 3 = 7.
+N: 7 ghanta.
+G: 7
