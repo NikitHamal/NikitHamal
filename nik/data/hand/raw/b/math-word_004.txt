@@ -335,7 +335,7 @@ G: 200
 ### math-word
 U: gaun ko dhara ko tanki 5000 litre, 40 ghar le baraabar line. ek ghar lai kati?
 T: 5000 / 40 = 125.
-N: ek ghar lai 125 litre pani paincha.
+N: ek ghar lai 125 litre pani painchha.
 G: 125
 
 ### math-word
@@ -425,7 +425,7 @@ G: 35
 ### math-word
 U: 30 minet ma 2.5 km hidiyo. 1 ghanta 30 minet ma kati?
 T: 1 ghanta 30 minet = 90 minet = 30 minet ko 3 guna. 2.5 x 3 = 7.5.
-N: 7.5 km hidincha.
+N: 7.5 km hidinchha.
 G: 7.5
 
 ### math-word

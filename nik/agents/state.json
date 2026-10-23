@@ -1,16 +1,24 @@
 {
- "updated": "2026-10-22T20:33:14Z",
+ "updated": "2026-10-23T10:01:44Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
  },
  "boxes": [
   {
-   "name": "box 1",
-   "gpu": "RTX Pro 6000 Blackwell \u00b7 owner notebook",
-   "job": "session ended ~20:55 UTC; all results on Kaggle",
+   "name": "sandbox (Claude)",
+   "gpu": "CPU only: data until the next box",
+   "job": "hand-written data: 18,801 / 100,000 examples",
+   "progress": 0.188,
+   "detail": "round 1 done (G reading 1,139; H multiturn 527 + honesty 344); round 2 next",
+   "eta": "-"
+  },
+  {
+   "name": "next box",
+   "gpu": "owner supplies",
+   "job": "waiting: build_mix_v2 + run_v2.sh (hand.jsonl at 6% of tokens), 3 seeds + soup, gates",
    "progress": null,
-   "detail": "best candidate s13 (confirmed on fresh items, smoke 4/4); owner deciding",
+   "detail": "box 1 ended 2026-10-22 ~20:55 UTC; results on Kaggle",
    "eta": "-"
   }
  ],
@@ -79,6 +87,15 @@
   ]
  },
  "runs": [
+  {
+   "tag": "hand-data",
+   "box": "sandbox",
+   "by": "Claude",
+   "status": "running",
+   "what": "hand-written teaching data toward 100k+ (reading, multiturn, honesty first; 2 writing helpers at a time)",
+   "progress": 0.188,
+   "result": "18,801 examples, 0 rejects (check.py): math-word 2,930, translate 2,627, reasoning 2,359, instructions 2,078, knowledge 1,758, reading 1,364, english 1,356, advice 1,227, write 1,124, chat 1,049, multiturn 585, honesty 344"
+  },
   {
    "tag": "s13",
    "box": "box 1",
@@ -224,8 +241,8 @@
   }
  ],
  "next": [
-  "p11 (Local-C) -> full_gate",
-  "RW-targeted data (Local-C, spec in #8)",
-  "ship only a zero-regression candidate"
+  "hand-written data to 100k+ (pushed per batch with the running total)",
+  "next box: nik/agents/molab/jobs/run_v2.sh (mix v2 in one pass, 3 seeds, gates, soup, confirm, upload)",
+  "ship gate vs live m50 (full_gate + confirm.sh + ship smoke); owner card ship-s13-1022 still open"
  ]
 }

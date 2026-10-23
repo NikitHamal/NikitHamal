@@ -26,7 +26,8 @@ NIK = os.path.dirname(os.path.dirname(HERE))
 sys.path[:0] = [NIK, os.path.join(NIK, 'data', 'teacher'), os.path.join(NIK, 'scripts')]
 from verify import check_equations  # noqa: E402
 
-NON_STYLE = re.compile(r'\b(xa|xu|xau|xan|xaina|hunxa|garxu|garxa|cha|chu|chau|chaina|tmro|tmi|vayo|vanne|k cha)\b')
+NON_STYLE = re.compile(r'\b(xa|xu|xau|xan|xaina|hunxa|garxu|garxa|cha|chu|chau|chaina|tmro|tmi|vayo|vanne|k cha'
+                       r'|(?!bagaincha\b|galaincha\b)[a-z]+incha|(?!pancha\b|dhancha\b)[a-z]+(?:unch|anch|ench|onch)a|huncha|garcha|lagcha)\b')   # -chha verbs
 WORD_REPEAT = re.compile(r'\b(\w+)( \1\b){2,}')
 PERSONA = re.compile(r'android|consica|full-?stack|lami nepal|nebians|astroweb|head of operations|sunya dekhi|kotlin|flutter|django')
 PERSONA_OK = ('persona', 'identity')
