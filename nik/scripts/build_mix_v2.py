@@ -47,6 +47,26 @@ def _render(line):
     return ids, mask
 
 
+def expand_hand(rows):
+    """One training row per trained Nik turn of a hand-written conversation, with the history the way /chat sends it
+    (chat/index.html passes {role, content} only): earlier Nik turns without their think and context only
+    ("train": false). Hand rows otherwise trained every Nik turn on a history that carried thinks, which /chat never
+    shows. Turns already marked "train": false (raw `C:` lines, e.g. a slip the user corrects) are never targets."""
+    out = []
+    for r in rows:
+        msgs = r['messages']
+        last = len(msgs) - 1
+        for i, m in enumerate(msgs):
+            if m['role'] != 'nik' or not m.get('train', True):
+                continue
+            hist = [dict(h) if h['role'] == 'user' else {'role': 'nik', 'content': h['content'], 'train': False} for h in msgs[:i]]
+            row = {'cat': r['cat'], 'messages': hist + [dict(m)]}
+            if i == last and r.get('gold'):
+                row['gold'] = r['gold']
+            out.append(row)
+    return out
+
+
 def fix(r):
     """fix_mix.py's repairs + lowercased user turns."""
     from format_ask import only_number_think
@@ -107,6 +127,9 @@ def main():
     for k, p in (('selfrows', a.selfrows), ('hand', a.hand)):
         if k in shares:
             files[k] = [json.loads(l) for l in open(p) if l.strip()]
+    if 'hand' in files:
+        n0 = len(files['hand']); files['hand'] = expand_hand(files['hand'])
+        print(f'hand: {n0:,} conversations -> {len(files["hand"]):,} rows (one per trained Nik turn)', flush=True)
     rows, manifest = [], {'base': a.base, 'base_tokens': int(len(base_tok)), 'shares': shares, 'sources': {}}
     for src, share in shares.items():
         want, got, n, uniq = share * total, 0, 0, set()

@@ -1,0 +1,1182 @@
+### reading
+U: "muna ra binu dubai dhaka ko shawl bunchhin. muna le hapta ma 3 wata shawl bunchhin ra binu le 2 wata. euta shawl 1500 rupiya ma bikchha." binu le hapta ma kati wata shawl bunchhin?
+T: path ma "binu le 2 wata" lekheko chha.
+N: binu le hapta ma 2 wata shawl bunchhin.
+G: 2
+
+### reading
+U: "muna ra binu dubai dhaka ko shawl bunchhin. muna le hapta ma 3 wata shawl bunchhin ra binu le 2 wata. euta shawl 1500 rupiya ma bikchha." muna le hapta ma kati wata shawl bunchhin?
+T: path ma "muna le hapta ma 3 wata shawl bunchhin" lekheko chha. herne matra ho, hisab chahindaina.
+N: muna le hapta ma 3 wata shawl bunchhin.
+G: 3
+
+### reading
+U: "muna ra binu dubai dhaka ko shawl bunchhin. muna le hapta ma 3 wata shawl bunchhin ra binu le 2 wata. euta shawl 1500 rupiya ma bikchha." binu ko hapta ko kamai kati hunchha?
+T: binu 2 wata, euta 1500. 2 x 1500 = 3000.
+N: binu ko hapta ko kamai 3000 rupiya hunchha.
+G: 3000
+
+### reading
+U: "muna ra binu dubai dhaka ko shawl bunchhin. muna le hapta ma 3 wata shawl bunchhin ra binu le 2 wata. euta shawl 1500 rupiya ma bikchha." muna ko hapta ko kamai kati hunchha?
+T: muna 3 wata, euta 1500. 3 x 1500 = 4500.
+N: muna ko hapta ko kamai 4500 rupiya hunchha.
+G: 4500
+
+### reading
+U: "muna ra binu dubai dhaka ko shawl bunchhin. muna le hapta ma 3 wata shawl bunchhin ra binu le 2 wata. euta shawl 1500 rupiya ma bikchha." 4 hapta ma muna le kati wata shawl bunchhin?
+T: hapta ma 3 wata. 4 x 3 = 12.
+N: 4 hapta ma muna le 12 wata shawl bunchhin.
+G: 12
+
+### reading
+U: "dhruba le 2 ghanta ma 10 km cycle chalayo. usko sathi dev le 3 ghanta ma 12 km hidyo." dev le kati km hidyo?
+T: path ma "dev le 3 ghanta ma 12 km hidyo" lekheko chha.
+N: dev 12 km hidyo.
+G: 12
+
+### reading
+U: "dhruba le 2 ghanta ma 10 km cycle chalayo. usko sathi dev le 3 ghanta ma 12 km hidyo." dhruba le kati km cycle chalayo?
+T: path ma "dhruba le 2 ghanta ma 10 km cycle chalayo" lekheko chha.
+N: dhruba le 10 km cycle chalayo.
+G: 10
+
+### reading
+U: "dhruba le 2 ghanta ma 10 km cycle chalayo. usko sathi dev le 3 ghanta ma 12 km hidyo." dhruba ghanta ma kati km gayo?
+T: 2 ghanta ma 10 km. 10 / 2 = 5.
+N: dhruba ghanta ma 5 km gayo.
+G: 5
+
+### reading
+U: "dhruba le 2 ghanta ma 10 km cycle chalayo. usko sathi dev le 3 ghanta ma 12 km hidyo." dev ghanta ma kati km hidyo?
+T: 3 ghanta ma 12 km. 12 / 3 = 4.
+N: dev ghanta ma 4 km hidyo.
+G: 4
+
+### reading
+U: "dhruba le 2 ghanta ma 10 km cycle chalayo. usko sathi dev le 3 ghanta ma 12 km hidyo." kasle badhi dura paar garyo?
+T: dhruba 10 km ra dev 12 km. 12 > 10.
+N: dev le badhi dura paar garyo, 12 km.
+G: dev
+
+### reading
+U: "Two sisters, Hima and Saru, grow vegetables in Burtibang. Hima sells cabbages for 60 rupees each, and Saru sells cauliflowers for 80 rupees each. Last market day Hima sold 15 cabbages and Saru sold 9 cauliflowers." How many cauliflowers did Saru sell?
+T: The text says "Saru sold 9 cauliflowers". This is a lookup, so no calculation is needed.
+N: Saru sold 9 cauliflowers.
+G: 9
+
+### reading
+U: "Two sisters, Hima and Saru, grow vegetables in Burtibang. Hima sells cabbages for 60 rupees each, and Saru sells cauliflowers for 80 rupees each. Last market day Hima sold 15 cabbages and Saru sold 9 cauliflowers." How much money did Hima earn?
+T: 15 cabbages at 60 rupees each. 15 x 60 = 900.
+N: Hima earned 900 rupees.
+G: 900
+
+### reading
+U: "Two sisters, Hima and Saru, grow vegetables in Burtibang. Hima sells cabbages for 60 rupees each, and Saru sells cauliflowers for 80 rupees each. Last market day Hima sold 15 cabbages and Saru sold 9 cauliflowers." How much money did Saru earn?
+T: 9 cauliflowers at 80 rupees each. 9 x 80 = 720.
+N: Saru earned 720 rupees.
+G: 720
+
+### reading
+U: "Two sisters, Hima and Saru, grow vegetables in Burtibang. Hima sells cabbages for 60 rupees each, and Saru sells cauliflowers for 80 rupees each. Last market day Hima sold 15 cabbages and Saru sold 9 cauliflowers." Who earned more?
+T: Hima 900 and Saru 720. 900 > 720.
+N: Hima earned more.
+G: Hima
+
+### reading
+U: "Two sisters, Hima and Saru, grow vegetables in Burtibang. Hima sells cabbages for 60 rupees each, and Saru sells cauliflowers for 80 rupees each. Last market day Hima sold 15 cabbages and Saru sold 9 cauliflowers." What does Saru sell?
+T: The text says "Saru sells cauliflowers".
+N: Saru sells cauliflowers.
+G: cauliflowers
+
+### reading
+U: "pariksha ma kapil le 450 madhye 380 ra chetan le 450 madhye 395 lyaye. tyasaile chetan kaksha ma pratham bhayo." chetan le kati lyayo?
+T: path ma "chetan le 450 madhye 395 lyaye" lekheko chha.
+N: chetan le 395 lyayo.
+G: 395
+
+### reading
+U: "pariksha ma kapil le 450 madhye 380 ra chetan le 450 madhye 395 lyaye. tyasaile chetan kaksha ma pratham bhayo." kapil le kati lyayo?
+T: path ma "kapil le 450 madhye 380" lekheko chha. 450 ta purnank ho.
+N: kapil le 380 lyayo.
+G: 380
+
+### reading
+U: "pariksha ma kapil le 450 madhye 380 ra chetan le 450 madhye 395 lyaye. tyasaile chetan kaksha ma pratham bhayo." chetan le kapil bhanda kati badhi lyayo?
+T: 395 - 380 = 15.
+N: chetan le kapil bhanda 15 number badhi lyayo.
+G: 15
+
+### reading
+U: "pariksha ma kapil le 450 madhye 380 ra chetan le 450 madhye 395 lyaye. tyasaile chetan kaksha ma pratham bhayo." kaksha ma pratham ko bhayo?
+T: path ma "tyasaile chetan kaksha ma pratham bhayo" lekheko chha.
+N: chetan kaksha ma pratham bhayo.
+G: chetan
+
+### reading
+U: "pariksha ma kapil le 450 madhye 380 ra chetan le 450 madhye 395 lyaye. tyasaile chetan kaksha ma pratham bhayo." kapil le 450 lyayo, haina?
+T: path ma "kapil le 450 madhye 380" lekheko chha; 450 purnank ho.
+N: haina, 450 ta purnank ho; kapil le 380 lyayo.
+G: 380
+
+### reading
+U: "rukumkot ko school ma kaksha 1 bahek sabai kaksha ma bench chha. kaksha 1 ka bachcha chakati ma baschhan." kaksha 1 ma bench chha?
+T: path ma "kaksha 1 bahek sabai kaksha ma bench chha" lekheko chha.
+N: chhaina, kaksha 1 ma bench chhaina.
+G: chhaina
+
+### reading
+U: "rukumkot ko school ma kaksha 1 bahek sabai kaksha ma bench chha. kaksha 1 ka bachcha chakati ma baschhan." kaksha 3 ma bench chha?
+T: path ma "kaksha 1 bahek sabai kaksha ma bench chha" lekheko chha; kaksha 3 kaksha 1 haina.
+N: chha, kaksha 3 ma bench chha.
+G: chha
+
+### reading
+U: "rukumkot ko school ma kaksha 1 bahek sabai kaksha ma bench chha. kaksha 1 ka bachcha chakati ma baschhan." kaksha 1 ka bachcha kasma baschhan?
+T: path ma "kaksha 1 ka bachcha chakati ma baschhan" lekheko chha.
+N: kaksha 1 ka bachcha chakati ma baschhan.
+G: chakati
+
+### reading
+U: "rukumkot ko school ma kaksha 1 bahek sabai kaksha ma bench chha. kaksha 1 ka bachcha chakati ma baschhan." school ma jamma kati kaksha chhan?
+T: path ma kaksha ko sankhya lekheko chhaina.
+N: school ma kati kaksha chhan bhanne path ma chhaina; kaksha 1 bahek sabai ma bench chha bhanne matra lekheko chha.
+
+### reading
+U: "aaja maiya ko pasal ma chamal, dal ra nun matra painchha; chini ra tel sakiyo." aaja maiya ko pasal ma chini painchha?
+T: path ma "chini ra tel sakiyo" lekheko chha.
+N: paidaina, chini sakiyo.
+G: paidaina
+
+### reading
+U: "aaja maiya ko pasal ma chamal, dal ra nun matra painchha; chini ra tel sakiyo." aaja maiya ko pasal ma dal painchha?
+T: path ma "chamal, dal ra nun matra painchha" lekheko chha.
+N: painchha, dal painchha.
+G: painchha
+
+### reading
+U: "aaja maiya ko pasal ma chamal, dal ra nun matra painchha; chini ra tel sakiyo." aaja pasal ma ke ke matra painchha?
+T: path ma "chamal, dal ra nun matra painchha" lekheko chha.
+N: aaja chamal, dal ra nun matra painchha.
+G: chamal, dal ra nun
+
+### reading
+U: "aaja maiya ko pasal ma chamal, dal ra nun matra painchha; chini ra tel sakiyo." tel kina paidaina?
+T: path ma "chini ra tel sakiyo" lekheko chha.
+N: kinabhane pasal ma tel sakiyo.
+G: sakiyo
+
+### reading
+U: "aaja maiya ko pasal ma chamal, dal ra nun matra painchha; chini ra tel sakiyo." chini pheri kahile aauchha?
+T: path ma chini aaune din lekheko chhaina.
+N: chini kahile aauchha bhanne path ma chhaina; aaja chini ra tel sakiyo bhanne matra lekheko chha.
+
+### reading
+U: "No one in Class 4 was late on Monday. On Tuesday, only Roshni came late, because her bus broke down near the bridge." How many students were late on Monday?
+T: The text says "No one in Class 4 was late on Monday".
+N: No student was late on Monday.
+G: No
+
+### reading
+U: "No one in Class 4 was late on Monday. On Tuesday, only Roshni came late, because her bus broke down near the bridge." Who was late on Tuesday?
+T: The text says "On Tuesday, only Roshni came late".
+N: Only Roshni was late on Tuesday.
+G: Roshni
+
+### reading
+U: "No one in Class 4 was late on Monday. On Tuesday, only Roshni came late, because her bus broke down near the bridge." Why was Roshni late?
+T: The text says "because her bus broke down near the bridge".
+N: Her bus broke down near the bridge.
+G: bus broke down
+
+### reading
+U: "No one in Class 4 was late on Monday. On Tuesday, only Roshni came late, because her bus broke down near the bridge." Was anyone late on Wednesday?
+T: The text only talks about Monday and Tuesday.
+N: The text does not say anything about Wednesday. It only talks about Monday and Tuesday.
+
+### reading
+U: "yogesh le sabai tarkari khanchha, tara karela khadaina ra bhanta pani khadaina." yogesh le karela khanchha?
+T: path ma "karela khadaina" lekheko chha.
+N: khadaina, yogesh le karela khadaina.
+G: khadaina
+
+### reading
+U: "yogesh le sabai tarkari khanchha, tara karela khadaina ra bhanta pani khadaina." yogesh le kauli khanchha?
+T: path ma "yogesh le sabai tarkari khanchha, tara karela khadaina ra bhanta pani khadaina" lekheko chha; kauli tyo suchi ma chhaina.
+N: khanchha, yogesh le kauli khanchha.
+G: khanchha
+
+### reading
+U: "yogesh le sabai tarkari khanchha, tara karela khadaina ra bhanta pani khadaina." yogesh le kun kun tarkari khadaina?
+T: path ma "karela khadaina ra bhanta pani khadaina" lekheko chha.
+N: yogesh le karela ra bhanta khadaina.
+G: karela ra bhanta
+
+### reading
+U: "yogesh le sabai tarkari khanchha, tara karela khadaina ra bhanta pani khadaina." yogesh le bhanta khanchha?
+T: path ma "bhanta pani khadaina" lekheko chha.
+N: khadaina, bhanta pani khadaina.
+G: khadaina
+
+### reading
+U: "jhalari ko haat bazar ma bihibar matra bakhra bikchha. aru din tarkari ra kapada matra bikchha." bakhra kun din bikchha?
+T: path ma "bihibar matra bakhra bikchha" lekheko chha.
+N: bakhra bihibar matra bikchha.
+G: bihibar
+
+### reading
+U: "jhalari ko haat bazar ma bihibar matra bakhra bikchha. aru din tarkari ra kapada matra bikchha." sombar bakhra bikchha?
+T: path ma "bihibar matra bakhra bikchha" lekheko chha.
+N: bikdaina, sombar bakhra bikdaina.
+G: bikdaina
+
+### reading
+U: "jhalari ko haat bazar ma bihibar matra bakhra bikchha. aru din tarkari ra kapada matra bikchha." sombar k k bikchha?
+T: path ma "aru din tarkari ra kapada matra bikchha" lekheko chha.
+N: sombar tarkari ra kapada bikchha.
+G: tarkari ra kapada
+
+### reading
+U: "jhalari ko haat bazar ma bihibar matra bakhra bikchha. aru din tarkari ra kapada matra bikchha." euta bakhra kati ma bikchha?
+T: path ma bakhra ko mol lekheko chhaina.
+N: bakhra ko mol path ma chhaina; bihibar matra bikchha bhanne matra lekheko chha.
+
+### reading
+U: "aaja mangsir 12 ho. hijo didi ko bihe ko mehendi thiyo, aaja bihe chha, ra bholi didi sasurali janchhin." mehendi kun gate thiyo?
+T: path ma "aaja mangsir 12 ho" ra "hijo didi ko bihe ko mehendi thiyo" lekheko chha. 12 - 1 = 11.
+N: mehendi mangsir 11 ma thiyo.
+G: mangsir 11
+
+### reading
+U: "aaja mangsir 12 ho. hijo didi ko bihe ko mehendi thiyo, aaja bihe chha, ra bholi didi sasurali janchhin." bihe kun gate ho?
+T: path ma "aaja mangsir 12 ho" ra "aaja bihe chha" lekheko chha.
+N: bihe mangsir 12 ma ho.
+G: mangsir 12
+
+### reading
+U: "aaja mangsir 12 ho. hijo didi ko bihe ko mehendi thiyo, aaja bihe chha, ra bholi didi sasurali janchhin." didi kun gate sasurali janchhin?
+T: path ma "bholi didi sasurali janchhin" lekheko chha. 12 + 1 = 13.
+N: didi mangsir 13 ma sasurali janchhin.
+G: mangsir 13
+
+### reading
+U: "aaja mangsir 12 ho. hijo didi ko bihe ko mehendi thiyo, aaja bihe chha, ra bholi didi sasurali janchhin." parsi k chha?
+T: path ma parsi ko kura lekheko chhaina.
+N: parsi k chha bhanne path ma chhaina; hijo mehendi, aaja bihe ra bholi sasurali jane kura matra chha.
+
+### reading
+U: diary: "asti ma 3 baje uthe ra 4 ghanta padhe. hijo 5 baje uthe ra 2 ghanta matra padhe. aaja 4 baje uthe." hijo kati baje uthe?
+T: diary ma "hijo 5 baje uthe" lekheko chha.
+N: hijo 5 baje uthe.
+G: 5 baje
+
+### reading
+U: diary: "asti ma 3 baje uthe ra 4 ghanta padhe. hijo 5 baje uthe ra 2 ghanta matra padhe. aaja 4 baje uthe." asti kati ghanta padhe?
+T: diary ma "asti ma 3 baje uthe ra 4 ghanta padhe" lekheko chha.
+N: asti 4 ghanta padhe.
+G: 4
+
+### reading
+U: diary: "asti ma 3 baje uthe ra 4 ghanta padhe. hijo 5 baje uthe ra 2 ghanta matra padhe. aaja 4 baje uthe." hijo kati ghanta padhe?
+T: diary ma "hijo 5 baje uthe ra 2 ghanta matra padhe" lekheko chha.
+N: hijo 2 ghanta matra padhe.
+G: 2
+
+### reading
+U: diary: "asti ma 3 baje uthe ra 4 ghanta padhe. hijo 5 baje uthe ra 2 ghanta matra padhe. aaja 4 baje uthe." kun din sabai bhanda chhito uthe?
+T: asti 3 baje, hijo 5 baje, aaja 4 baje. sabai bhanda chhito 3 baje: asti.
+N: asti sabai bhanda chhito uthe, 3 baje.
+G: asti
+
+### reading
+U: diary: "asti ma 3 baje uthe ra 4 ghanta padhe. hijo 5 baje uthe ra 2 ghanta matra padhe. aaja 4 baje uthe." aaja kati ghanta padhe?
+T: diary ma aaja padheko samaya lekheko chhaina.
+N: aaja kati ghanta padhe bhanne diary ma chhaina; aaja 4 baje uthe bhanne matra lekheko chha.
+
+### reading
+U: "aghillo hapta janak le 2 bora mal kinyo. yo hapta 3 bora kinyo, ra arko hapta feri 2 bora kinne bhanchha. bora ko 1800 rupiya." janak le yo hapta kati bora mal kinyo?
+T: path ma "yo hapta 3 bora kinyo" lekheko chha.
+N: janak le yo hapta 3 bora mal kinyo.
+G: 3
+
+### reading
+U: "aghillo hapta janak le 2 bora mal kinyo. yo hapta 3 bora kinyo, ra arko hapta feri 2 bora kinne bhanchha. bora ko 1800 rupiya." janak le aghillo hapta kati bora mal kinyo?
+T: path ma "aghillo hapta janak le 2 bora mal kinyo" lekheko chha.
+N: janak le aghillo hapta 2 bora mal kinyo.
+G: 2
+
+### reading
+U: "aghillo hapta janak le 2 bora mal kinyo. yo hapta 3 bora kinyo, ra arko hapta feri 2 bora kinne bhanchha. bora ko 1800 rupiya." yo hapta mal ma kati kharcha bhayo?
+T: yo hapta 3 bora, bora ko 1800. 3 x 1800 = 5400.
+N: yo hapta mal ma 5400 rupiya kharcha bhayo.
+G: 5400
+
+### reading
+U: "aghillo hapta janak le 2 bora mal kinyo. yo hapta 3 bora kinyo, ra arko hapta feri 2 bora kinne bhanchha. bora ko 1800 rupiya." tin hapta ma jamma kati bora hunchha?
+T: aghillo hapta 2, yo hapta 3, arko hapta 2. 2 + 3 + 2 = 7.
+N: tin hapta ma jamma 7 bora hunchha.
+G: 7
+
+### reading
+U: pawan ko SMS: "aama, ma parsi haina, bholi nai ghar aauchhu. bus beluka 5 baje chhutchha." pawan kahile ghar aauchha?
+T: SMS ma "ma parsi haina, bholi nai ghar aauchhu" lekheko chha.
+N: pawan bholi ghar aauchha.
+G: bholi
+
+### reading
+U: pawan ko SMS: "aama, ma parsi haina, bholi nai ghar aauchhu. bus beluka 5 baje chhutchha." pawan parsi ghar aauchha?
+T: SMS ma "ma parsi haina, bholi nai ghar aauchhu" lekheko chha.
+N: aaudaina, parsi haina; pawan bholi nai aauchha.
+G: bholi
+
+### reading
+U: pawan ko SMS: "aama, ma parsi haina, bholi nai ghar aauchhu. bus beluka 5 baje chhutchha." bus kati baje chhutchha?
+T: SMS ma "bus beluka 5 baje chhutchha" lekheko chha.
+N: bus beluka 5 baje chhutchha.
+G: 5 baje
+
+### reading
+U: pawan ko SMS: "aama, ma parsi haina, bholi nai ghar aauchhu. bus beluka 5 baje chhutchha." pawan le SMS kaslai pathayo?
+T: SMS "aama" bhanera suru hunchha.
+N: pawan le aama lai SMS pathayo.
+G: aama
+
+### reading
+U: pawan ko SMS: "aama, ma parsi haina, bholi nai ghar aauchhu. bus beluka 5 baje chhutchha." pawan kaha bata aaudai chha?
+T: SMS ma pawan kaha bata aaudai chha bhanne lekheko chhaina.
+N: pawan kaha bata aaudai chha bhanne SMS ma chhaina; bholi ghar aauchhu ra bus 5 baje chhutchha bhanne matra lekheko chha.
+
+### reading
+U: "Yesterday was the last day of school before the holidays. Today Arjun is packing his bag, and the day after tomorrow he will travel to his uncle's farm in Parasi." When will Arjun travel?
+T: The text says "the day after tomorrow he will travel".
+N: Arjun will travel the day after tomorrow.
+G: day after tomorrow
+
+### reading
+U: "Yesterday was the last day of school before the holidays. Today Arjun is packing his bag, and the day after tomorrow he will travel to his uncle's farm in Parasi." What is Arjun doing today?
+T: The text says "Today Arjun is packing his bag".
+N: Today he is packing his bag.
+G: packing
+
+### reading
+U: "Yesterday was the last day of school before the holidays. Today Arjun is packing his bag, and the day after tomorrow he will travel to his uncle's farm in Parasi." Where will Arjun go?
+T: The text says "to his uncle's farm in Parasi".
+N: He will go to his uncle's farm in Parasi.
+G: Parasi
+
+### reading
+U: "Yesterday was the last day of school before the holidays. Today Arjun is packing his bag, and the day after tomorrow he will travel to his uncle's farm in Parasi." What happened yesterday?
+T: The text says "Yesterday was the last day of school before the holidays".
+N: Yesterday was the last day of school before the holidays.
+G: last day of school
+
+### reading
+U: "sulichaur ko bato kachhi chha, tyasaile barsha ma bus chaldaina. barsha ma manchhe haru 3 ghanta hidera bazar janchhan." barsha ma bus kina chaldaina?
+T: path ma "bato kachhi chha, tyasaile barsha ma bus chaldaina" lekheko chha.
+N: kinabhane sulichaur ko bato kachhi chha.
+G: kachhi
+
+### reading
+U: "sulichaur ko bato kachhi chha, tyasaile barsha ma bus chaldaina. barsha ma manchhe haru 3 ghanta hidera bazar janchhan." barsha ma manchhe kasari bazar janchhan?
+T: path ma "barsha ma manchhe haru 3 ghanta hidera bazar janchhan" lekheko chha.
+N: barsha ma manchhe hidera bazar janchhan.
+G: hidera
+
+### reading
+U: "sulichaur ko bato kachhi chha, tyasaile barsha ma bus chaldaina. barsha ma manchhe haru 3 ghanta hidera bazar janchhan." bazar pugna kati ghanta hidnu parchha?
+T: path ma "3 ghanta hidera bazar janchhan" lekheko chha.
+N: bazar pugna 3 ghanta hidnu parchha.
+G: 3
+
+### reading
+U: "sulichaur ko bato kachhi chha, tyasaile barsha ma bus chaldaina. barsha ma manchhe haru 3 ghanta hidera bazar janchhan." bazar ma k k kinchhan?
+T: path ma bazar ma kinne saman ko kura lekheko chhaina.
+N: bazar ma k kinchhan bhanne path ma chhaina; barsha ma hidera janchhan bhanne matra lekheko chha.
+
+### reading
+U: "bishal ko mobile pani ko balti ma khasyo, tyasaile mobile chalena. mobile nachaleko le usle sathi ko phone bata aama lai phone garyo." bishal ko mobile kina chalena?
+T: path ma "mobile pani ko balti ma khasyo, tyasaile mobile chalena" lekheko chha.
+N: kinabhane mobile pani ko balti ma khasyo.
+G: pani
+
+### reading
+U: "bishal ko mobile pani ko balti ma khasyo, tyasaile mobile chalena. mobile nachaleko le usle sathi ko phone bata aama lai phone garyo." bishal le kasko phone bata phone garyo?
+T: path ma "usle sathi ko phone bata aama lai phone garyo" lekheko chha.
+N: bishal le sathi ko phone bata phone garyo.
+G: sathi
+
+### reading
+U: "bishal ko mobile pani ko balti ma khasyo, tyasaile mobile chalena. mobile nachaleko le usle sathi ko phone bata aama lai phone garyo." bishal le kaslai phone garyo?
+T: path ma "aama lai phone garyo" lekheko chha.
+N: bishal le aama lai phone garyo.
+G: aama
+
+### reading
+U: "bishal ko mobile pani ko balti ma khasyo, tyasaile mobile chalena. mobile nachaleko le usle sathi ko phone bata aama lai phone garyo." bishal ko mobile bhuin ma khasera futyo, haina?
+T: path ma "mobile pani ko balti ma khasyo" lekheko chha; futeko kura chhaina.
+N: haina, mobile bhuin ma haina, pani ko balti ma khasyo; tyasaile chalena.
+G: pani
+
+### reading
+U: "yo barsha suntala dherai phalyo, tyasaile bazar ma suntala ko mol ghatyo. pahila kilo ko 120 thiyo, aile 80 matra chha." suntala ko mol kina ghatyo?
+T: path ma "yo barsha suntala dherai phalyo, tyasaile bazar ma suntala ko mol ghatyo" lekheko chha.
+N: kinabhane yo barsha suntala dherai phalyo.
+G: dherai phalyo
+
+### reading
+U: "yo barsha suntala dherai phalyo, tyasaile bazar ma suntala ko mol ghatyo. pahila kilo ko 120 thiyo, aile 80 matra chha." aile suntala kilo ko kati chha?
+T: path ma "aile 80 matra chha" lekheko chha.
+N: aile suntala kilo ko 80 rupiya chha.
+G: 80
+
+### reading
+U: "yo barsha suntala dherai phalyo, tyasaile bazar ma suntala ko mol ghatyo. pahila kilo ko 120 thiyo, aile 80 matra chha." pahila suntala kilo ko kati thiyo?
+T: path ma "pahila kilo ko 120 thiyo" lekheko chha. herne matra ho, hisab chahindaina.
+N: pahila suntala kilo ko 120 rupiya thiyo.
+G: 120
+
+### reading
+U: "yo barsha suntala dherai phalyo, tyasaile bazar ma suntala ko mol ghatyo. pahila kilo ko 120 thiyo, aile 80 matra chha." aile 3 kilo suntala kinda kati parchha?
+T: aile kilo ko 80. 3 x 80 = 240.
+N: aile 3 kilo suntala ko 240 rupiya parchha.
+G: 240
+
+### reading
+U: "yo barsha suntala dherai phalyo, tyasaile bazar ma suntala ko mol ghatyo. pahila kilo ko 120 thiyo, aile 80 matra chha." suntala kilo ma kati le sasto bhayo?
+T: 120 - 80 = 40.
+N: suntala kilo ma 40 rupiya le sasto bhayo.
+G: 40
+
+### reading
+U: "The Pokhariya bridge is being repaired, so trucks must take the long road through Birgunj. The trip now takes 2 hours instead of 1 hour." Why must trucks take the long road?
+T: The text says "The Pokhariya bridge is being repaired, so trucks must take the long road".
+N: Because the Pokhariya bridge is being repaired.
+G: bridge
+
+### reading
+U: "The Pokhariya bridge is being repaired, so trucks must take the long road through Birgunj. The trip now takes 2 hours instead of 1 hour." How long does the trip take now?
+T: The text says "The trip now takes 2 hours".
+N: The trip now takes 2 hours.
+G: 2
+
+### reading
+U: "The Pokhariya bridge is being repaired, so trucks must take the long road through Birgunj. The trip now takes 2 hours instead of 1 hour." How long did the trip take before?
+T: The text says "2 hours instead of 1 hour".
+N: Before, the trip took 1 hour.
+G: 1
+
+### reading
+U: "The Pokhariya bridge is being repaired, so trucks must take the long road through Birgunj. The trip now takes 2 hours instead of 1 hour." Which town do the trucks now go through?
+T: The text says "take the long road through Birgunj".
+N: The trucks now go through Birgunj.
+G: Birgunj
+
+### reading
+U: "aaja amit ko kaksha ma ganit ka sir aaunubhaena, kinabhane unko chhora birami thiyo. tyasaile principal le ganit padhaunubhayo." ganit ka sir kina aaunubhaena?
+T: path ma "sir aaunubhaena, kinabhane unko chhora birami thiyo" lekheko chha.
+N: kinabhane unko chhora birami thiyo.
+G: chhora birami
+
+### reading
+U: "aaja amit ko kaksha ma ganit ka sir aaunubhaena, kinabhane unko chhora birami thiyo. tyasaile principal le ganit padhaunubhayo." aaja ganit kasle padhaunubhayo?
+T: path ma "tyasaile principal le ganit padhaunubhayo" lekheko chha.
+N: aaja principal le ganit padhaunubhayo.
+G: principal
+
+### reading
+U: "aaja amit ko kaksha ma ganit ka sir aaunubhaena, kinabhane unko chhora birami thiyo. tyasaile principal le ganit padhaunubhayo." principal le kun bishaya padhaunubhayo?
+T: path ma "principal le ganit padhaunubhayo" lekheko chha.
+N: principal le ganit padhaunubhayo.
+G: ganit
+
+### reading
+U: "aaja amit ko kaksha ma ganit ka sir aaunubhaena, kinabhane unko chhora birami thiyo. tyasaile principal le ganit padhaunubhayo." amit kun kaksha ma padhchha?
+T: path ma amit ko kaksha lekheko chhaina.
+N: amit kun kaksha ma padhchha bhanne path ma chhaina.
+
+### reading
+U: "sukhani ma rup bahadur ko 12 wata gai ra 5 wata bhaisi chhan. gai haru madhye 7 wata le dudh dinchhan." kati wata gai le dudh dinchhan?
+T: path ma "gai haru madhye 7 wata le dudh dinchhan" lekheko chha.
+N: 7 wata gai le dudh dinchhan.
+G: 7
+
+### reading
+U: "sukhani ma rup bahadur ko 12 wata gai ra 5 wata bhaisi chhan. gai haru madhye 7 wata le dudh dinchhan." kati wata gai le dudh didainan?
+T: gai 12 wata, dudh dine 7. 12 - 7 = 5.
+N: 5 wata gai le dudh didainan.
+G: 5
+
+### reading
+U: "sukhani ma rup bahadur ko 12 wata gai ra 5 wata bhaisi chhan. gai haru madhye 7 wata le dudh dinchhan." rup bahadur ko kati wata bhaisi chhan?
+T: path ma "5 wata bhaisi chhan" lekheko chha. herne matra ho, hisab chahindaina.
+N: rup bahadur ko 5 wata bhaisi chhan.
+G: 5
+
+### reading
+U: "sukhani ma rup bahadur ko 12 wata gai ra 5 wata bhaisi chhan. gai haru madhye 7 wata le dudh dinchhan." gai ra bhaisi jamma kati chhan?
+T: gai 12 ra bhaisi 5. 12 + 5 = 17.
+N: gai ra bhaisi jamma 17 wata chhan.
+G: 17
+
+### reading
+U: "sukhani ma rup bahadur ko 12 wata gai ra 5 wata bhaisi chhan. gai haru madhye 7 wata le dudh dinchhan." rup bahadur ko kati wata gai chhan?
+T: path ma "rup bahadur ko 12 wata gai" lekheko chha.
+N: rup bahadur ko 12 wata gai chhan.
+G: 12
+
+### reading
+U: school ko suchana: "pariksha shulka: kaksha 9 lai 500 rupiya, kaksha 10 lai 700 rupiya. eutai ghar ka dui jana sangai padhchhan bhane sano lai 100 rupiya chhut." aarju kaksha 10 ma ra uski bahini kaksha 9 ma padhchhin. kaksha 10 ko pariksha shulka kati?
+T: suchana ma "kaksha 10 lai 700 rupiya" lekheko chha.
+N: kaksha 10 ko pariksha shulka 700 rupiya.
+G: 700
+
+### reading
+U: school ko suchana: "pariksha shulka: kaksha 9 lai 500 rupiya, kaksha 10 lai 700 rupiya. eutai ghar ka dui jana sangai padhchhan bhane sano lai 100 rupiya chhut." aarju kaksha 10 ma ra uski bahini kaksha 9 ma padhchhin. aarju ki bahini le kati tirnu parchha?
+T: bahini kaksha 9 ma: 500. sano bhaeko le "sano lai 100 rupiya chhut". 500 - 100 = 400.
+N: aarju ki bahini le 400 rupiya tirnu parchha.
+G: 400
+
+### reading
+U: school ko suchana: "pariksha shulka: kaksha 9 lai 500 rupiya, kaksha 10 lai 700 rupiya. eutai ghar ka dui jana sangai padhchhan bhane sano lai 100 rupiya chhut." aarju kaksha 10 ma ra uski bahini kaksha 9 ma padhchhin. aarju le kati tirnu parchha?
+T: aarju kaksha 10 ma: 700. chhut sano lai matra, aarju jethi.
+N: aarju le 700 rupiya tirnu parchha.
+G: 700
+
+### reading
+U: school ko suchana: "pariksha shulka: kaksha 9 lai 500 rupiya, kaksha 10 lai 700 rupiya. eutai ghar ka dui jana sangai padhchhan bhane sano lai 100 rupiya chhut." aarju kaksha 10 ma ra uski bahini kaksha 9 ma padhchhin. dui didi bahini le jamma kati tirnu parchha?
+T: aarju 700 ra bahini 400. 700 + 400 = 1100.
+N: dui jana le jamma 1100 rupiya tirnu parchha.
+G: 1100
+
+### reading
+U: "chandranigahapur bata kathmandu jana bus ma 8 ghanta lagchha ra bhada 1100 rupiya. micro ma 6 ghanta matra lagchha, tara bhada 1400 rupiya." micro ko bhada kati?
+T: path ma "micro ma 6 ghanta matra lagchha, tara bhada 1400 rupiya" lekheko chha.
+N: micro ko bhada 1400 rupiya.
+G: 1400
+
+### reading
+U: "chandranigahapur bata kathmandu jana bus ma 8 ghanta lagchha ra bhada 1100 rupiya. micro ma 6 ghanta matra lagchha, tara bhada 1400 rupiya." bus ma kati ghanta lagchha?
+T: path ma "bus ma 8 ghanta lagchha" lekheko chha.
+N: bus ma 8 ghanta lagchha.
+G: 8
+
+### reading
+U: "chandranigahapur bata kathmandu jana bus ma 8 ghanta lagchha ra bhada 1100 rupiya. micro ma 6 ghanta matra lagchha, tara bhada 1400 rupiya." micro ma jaanda kati ghanta bachchha?
+T: bus 8 ghanta, micro 6 ghanta. 8 - 6 = 2.
+N: micro ma jaanda 2 ghanta bachchha.
+G: 2
+
+### reading
+U: "chandranigahapur bata kathmandu jana bus ma 8 ghanta lagchha ra bhada 1100 rupiya. micro ma 6 ghanta matra lagchha, tara bhada 1400 rupiya." bus ma jaanda kati rupiya bachchha?
+T: micro 1400, bus 1100. 1400 - 1100 = 300.
+N: bus ma jaanda 300 rupiya bachchha.
+G: 300
+
+### reading
+U: "golbazar ko school ma 320 bidyarthi ra 14 jana shikshak chhan. aaja 9 jana bidyarthi anupasthit thie." aaja kati jana bidyarthi upasthit thie?
+T: jamma 320, anupasthit 9. 320 - 9 = 311.
+N: aaja 311 jana bidyarthi upasthit thie.
+G: 311
+
+### reading
+U: "golbazar ko school ma 320 bidyarthi ra 14 jana shikshak chhan. aaja 9 jana bidyarthi anupasthit thie." aaja kati jana bidyarthi anupasthit thie?
+T: path ma "aaja 9 jana bidyarthi anupasthit thie" lekheko chha.
+N: aaja 9 jana bidyarthi anupasthit thie.
+G: 9
+
+### reading
+U: "golbazar ko school ma 320 bidyarthi ra 14 jana shikshak chhan. aaja 9 jana bidyarthi anupasthit thie." school ma kati jana shikshak chhan?
+T: path ma "14 jana shikshak chhan" lekheko chha.
+N: school ma 14 jana shikshak chhan.
+G: 14
+
+### reading
+U: "golbazar ko school ma 320 bidyarthi ra 14 jana shikshak chhan. aaja 9 jana bidyarthi anupasthit thie." school ma jamma kati bidyarthi chhan?
+T: path ma "320 bidyarthi" lekheko chha. herne matra ho, hisab chahindaina.
+N: school ma jamma 320 bidyarthi chhan.
+G: 320
+
+### reading
+U: "golbazar ko school ma 320 bidyarthi ra 14 jana shikshak chhan. aaja 9 jana bidyarthi anupasthit thie." aaja kati jana shikshak anupasthit thie?
+T: path ma shikshak ko anupasthiti lekheko chhaina.
+N: shikshak kati jana anupasthit thie bhanne path ma chhaina; 9 jana bidyarthi anupasthit thie bhanne matra lekheko chha.
+
+### reading
+U: "4 jana ko lagi khichadi: 2 cup chamal, 1 cup dal, 6 cup pani ra 1 chamcha nun." 4 jana ko lagi kati cup chamal chahinchha?
+T: path ma "2 cup chamal" lekheko chha. herne matra ho, hisab chahindaina.
+N: 4 jana ko lagi 2 cup chamal chahinchha.
+G: 2
+
+### reading
+U: "4 jana ko lagi khichadi: 2 cup chamal, 1 cup dal, 6 cup pani ra 1 chamcha nun." 8 jana ko lagi kati cup chamal chahinchha?
+T: 8 jana bhaneko 4 jana ko dobbar. 2 x 2 = 4.
+N: 8 jana ko lagi 4 cup chamal chahinchha.
+G: 4
+
+### reading
+U: "4 jana ko lagi khichadi: 2 cup chamal, 1 cup dal, 6 cup pani ra 1 chamcha nun." 8 jana ko lagi kati cup pani chahinchha?
+T: 4 jana lai 6 cup, 8 jana dobbar. 6 x 2 = 12.
+N: 8 jana ko lagi 12 cup pani chahinchha.
+G: 12
+
+### reading
+U: "4 jana ko lagi khichadi: 2 cup chamal, 1 cup dal, 6 cup pani ra 1 chamcha nun." 2 jana ko lagi kati cup dal chahinchha?
+T: 4 jana lai 1 cup, 2 jana aadha. 1 / 2 = 0.5.
+N: 2 jana ko lagi aadha cup dal chahinchha.
+G: aadha
+
+### reading
+U: kaksha safai ko palo: "aaitabar ishan, sombar kriti, mangalbar bipul, budhabar nabin, bihibar ojaswi, shukrabar sudip." mangalbar kasko palo ho?
+T: palo ma "mangalbar bipul" lekheko chha.
+N: mangalbar bipul ko palo ho.
+G: bipul
+
+### reading
+U: kaksha safai ko palo: "aaitabar ishan, sombar kriti, mangalbar bipul, budhabar nabin, bihibar ojaswi, shukrabar sudip." nabin ko palo kun din ho?
+T: palo ma "budhabar nabin" lekheko chha.
+N: nabin ko palo budhabar ho.
+G: budhabar
+
+### reading
+U: kaksha safai ko palo: "aaitabar ishan, sombar kriti, mangalbar bipul, budhabar nabin, bihibar ojaswi, shukrabar sudip." kriti pachhi kasko palo aauchha?
+T: palo ma "sombar kriti, mangalbar bipul" lekheko chha; kriti pachhi bipul.
+N: kriti pachhi bipul ko palo aauchha.
+G: bipul
+
+### reading
+U: kaksha safai ko palo: "aaitabar ishan, sombar kriti, mangalbar bipul, budhabar nabin, bihibar ojaswi, shukrabar sudip." shanibar kasko palo ho?
+T: palo ma shanibar ko naam lekheko chhaina.
+N: shanibar ko palo path ma chhaina; aaitabar dekhi shukrabar samma ko matra lekheko chha.
+
+### reading
+U: kaksha safai ko palo: "aaitabar ishan, sombar kriti, mangalbar bipul, budhabar nabin, bihibar ojaswi, shukrabar sudip." hapta ma kati jana ko palo chha?
+T: ishan, kriti, bipul, nabin, ojaswi ra sudip: 6 jana.
+N: hapta ma 6 jana ko palo chha.
+G: 6
+
+### reading
+U: "photo ma bich ma hajurba basnubhayeko chha. hajurba ko dayan tira hajurama ra bayan tira buwa basnubhayeko chha. buwa ko kakh ma sano bhai chha." photo ma bich ma ko hunuhunchha?
+T: path ma "photo ma bich ma hajurba basnubhayeko chha" lekheko chha.
+N: bich ma hajurba hunuhunchha.
+G: hajurba
+
+### reading
+U: "photo ma bich ma hajurba basnubhayeko chha. hajurba ko dayan tira hajurama ra bayan tira buwa basnubhayeko chha. buwa ko kakh ma sano bhai chha." hajurba ko dayan tira ko hunuhunchha?
+T: path ma "hajurba ko dayan tira hajurama" lekheko chha.
+N: hajurba ko dayan tira hajurama hunuhunchha.
+G: hajurama
+
+### reading
+U: "photo ma bich ma hajurba basnubhayeko chha. hajurba ko dayan tira hajurama ra bayan tira buwa basnubhayeko chha. buwa ko kakh ma sano bhai chha." hajurba ko bayan tira ko hunuhunchha?
+T: path ma "bayan tira buwa basnubhayeko chha" lekheko chha.
+N: hajurba ko bayan tira buwa hunuhunchha.
+G: buwa
+
+### reading
+U: "photo ma bich ma hajurba basnubhayeko chha. hajurba ko dayan tira hajurama ra bayan tira buwa basnubhayeko chha. buwa ko kakh ma sano bhai chha." sano bhai kaha chha?
+T: path ma "buwa ko kakh ma sano bhai chha" lekheko chha.
+N: sano bhai buwa ko kakh ma chha.
+G: buwa ko kakh
+
+### reading
+U: "photo ma bich ma hajurba basnubhayeko chha. hajurba ko dayan tira hajurama ra bayan tira buwa basnubhayeko chha. buwa ko kakh ma sano bhai chha." aama photo ma kaha hunuhunchha?
+T: path ma aama ko kura lekheko chhaina.
+N: aama photo ma kaha hunuhunchha bhanne path ma chhaina; hajurba, hajurama, buwa ra bhai ko matra kura chha.
+
+### reading
+U: futsal pratiyogita ko talika: "shukrabar rajapur ra gulariya, shanibar bhurigaun ra rajapur, aaitabar final." shanibar kun kun team ko match chha?
+T: talika ma "shanibar bhurigaun ra rajapur" lekheko chha.
+N: shanibar bhurigaun ra rajapur ko match chha.
+G: bhurigaun ra rajapur
+
+### reading
+U: futsal pratiyogita ko talika: "shukrabar rajapur ra gulariya, shanibar bhurigaun ra rajapur, aaitabar final." shukrabar kun kun team ko match chha?
+T: talika ma "shukrabar rajapur ra gulariya" lekheko chha.
+N: shukrabar rajapur ra gulariya ko match chha.
+G: rajapur ra gulariya
+
+### reading
+U: futsal pratiyogita ko talika: "shukrabar rajapur ra gulariya, shanibar bhurigaun ra rajapur, aaitabar final." final kahile chha?
+T: talika ma "aaitabar final" lekheko chha.
+N: final aaitabar chha.
+G: aaitabar
+
+### reading
+U: futsal pratiyogita ko talika: "shukrabar rajapur ra gulariya, shanibar bhurigaun ra rajapur, aaitabar final." rajapur le final agadi kati wata match khelchha?
+T: shukrabar "rajapur ra gulariya" ra shanibar "bhurigaun ra rajapur": rajapur 2 din khelchha.
+N: rajapur le final agadi 2 wata match khelchha.
+G: 2
+
+### reading
+U: futsal pratiyogita ko talika: "shukrabar rajapur ra gulariya, shanibar bhurigaun ra rajapur, aaitabar final." gulariya le shanibar khelchha, haina?
+T: talika ma "shukrabar rajapur ra gulariya" ra "shanibar bhurigaun ra rajapur" lekheko chha.
+N: haina, gulariya shukrabar khelchha; shanibar ta bhurigaun ra rajapur ko match ho.
+G: shukrabar
+
+### reading
+U: "hamro gaun ma baisakh ma makai ropinchha, asar ma dhan ra kartik ma gahu. makai shrawan ma ra dhan mangsir ma katinchha." dhan kahile ropinchha?
+T: path ma "asar ma dhan" lekheko chha.
+N: dhan asar ma ropinchha.
+G: asar
+
+### reading
+U: "hamro gaun ma baisakh ma makai ropinchha, asar ma dhan ra kartik ma gahu. makai shrawan ma ra dhan mangsir ma katinchha." dhan kahile katinchha?
+T: path ma "dhan mangsir ma katinchha" lekheko chha.
+N: dhan mangsir ma katinchha.
+G: mangsir
+
+### reading
+U: "hamro gaun ma baisakh ma makai ropinchha, asar ma dhan ra kartik ma gahu. makai shrawan ma ra dhan mangsir ma katinchha." gahu kahile ropinchha?
+T: path ma "kartik ma gahu" lekheko chha.
+N: gahu kartik ma ropinchha.
+G: kartik
+
+### reading
+U: "hamro gaun ma baisakh ma makai ropinchha, asar ma dhan ra kartik ma gahu. makai shrawan ma ra dhan mangsir ma katinchha." makai ropepachhi katna kati mahina lagchha?
+T: makai baisakh ma ropinchha ra shrawan ma katinchha. baisakh bata jestha 1, asar 2, shrawan 3 mahina.
+N: makai ropepachhi katna 3 mahina lagchha.
+G: 3
+
+### reading
+U: "nisha: bholi pokhara jane ho? pooja: ho, bihana 7 baje ko bus ma janchhu. nisha: ma ta 9 baje ko bus ma aauchhu, tyahi bhetaula." pooja kati baje ko bus ma janchhin?
+T: pooja le "bihana 7 baje ko bus ma janchhu" bhanin.
+N: pooja bihana 7 baje ko bus ma janchhin.
+G: 7
+
+### reading
+U: "nisha: bholi pokhara jane ho? pooja: ho, bihana 7 baje ko bus ma janchhu. nisha: ma ta 9 baje ko bus ma aauchhu, tyahi bhetaula." nisha kati baje ko bus ma janchhin?
+T: nisha le "ma ta 9 baje ko bus ma aauchhu" bhanin.
+N: nisha 9 baje ko bus ma janchhin.
+G: 9
+
+### reading
+U: "nisha: bholi pokhara jane ho? pooja: ho, bihana 7 baje ko bus ma janchhu. nisha: ma ta 9 baje ko bus ma aauchhu, tyahi bhetaula." duijana kaha bhetne?
+T: nisha le "bholi pokhara jane ho?" sodhin ra "tyahi bhetaula" bhanin.
+N: duijana pokhara ma bhetne.
+G: pokhara
+
+### reading
+U: "nisha: bholi pokhara jane ho? pooja: ho, bihana 7 baje ko bus ma janchhu. nisha: ma ta 9 baje ko bus ma aauchhu, tyahi bhetaula." duijana kahile pokhara janchhan?
+T: nisha le "bholi pokhara jane ho?" sodhin ra pooja le "ho" bhanin.
+N: duijana bholi pokhara janchhan.
+G: bholi
+
+### reading
+U: "nisha: bholi pokhara jane ho? pooja: ho, bihana 7 baje ko bus ma janchhu. nisha: ma ta 9 baje ko bus ma aauchhu, tyahi bhetaula." duijana sangai 7 baje ko bus ma janchhan, haina?
+T: pooja "7 baje ko bus ma" ra nisha "9 baje ko bus ma" janchhin.
+N: haina, pooja 7 baje ko bus ma ra nisha 9 baje ko bus ma janchhin; pokhara ma bhetchhan.
+G: 9
+
+### reading
+U: "kaksha 6 ma 30 jana bidyarthi chhan. sombar 2 jana ra mangalbar 5 jana anupasthit thie. budhabar koi pani anupasthit thiyena." mangalbar kati jana upasthit thie?
+T: jamma 30, mangalbar 5 jana anupasthit. 30 - 5 = 25.
+N: mangalbar 25 jana upasthit thie.
+G: 25
+
+### reading
+U: "kaksha 6 ma 30 jana bidyarthi chhan. sombar 2 jana ra mangalbar 5 jana anupasthit thie. budhabar koi pani anupasthit thiyena." sombar kati jana upasthit thie?
+T: jamma 30, sombar 2 jana anupasthit. 30 - 2 = 28.
+N: sombar 28 jana upasthit thie.
+G: 28
+
+### reading
+U: "kaksha 6 ma 30 jana bidyarthi chhan. sombar 2 jana ra mangalbar 5 jana anupasthit thie. budhabar koi pani anupasthit thiyena." budhabar kati jana anupasthit thie?
+T: path ma "budhabar koi pani anupasthit thiyena" lekheko chha.
+N: budhabar koi pani anupasthit thiyena; sabai 30 jana aaye.
+G: koi pani
+
+### reading
+U: "kaksha 6 ma 30 jana bidyarthi chhan. sombar 2 jana ra mangalbar 5 jana anupasthit thie. budhabar koi pani anupasthit thiyena." kun din sabai bhanda dherai anupasthit thie?
+T: sombar 2, mangalbar 5, budhabar 0. sabai bhanda dherai 5: mangalbar.
+N: mangalbar sabai bhanda dherai, 5 jana anupasthit thie.
+G: mangalbar
+
+### reading
+U: "khana pakaune pratiyogita ma sanjita pratham, sachin dwitiya ra rama tritiya bhae. pratham lai 5000, dwitiya lai 3000 ra tritiya lai 2000 rupiya puraskar." sachin le kati puraskar payo?
+T: path ma "sachin dwitiya" ra "dwitiya lai 3000" lekheko chha.
+N: sachin le 3000 rupiya puraskar payo.
+G: 3000
+
+### reading
+U: "khana pakaune pratiyogita ma sanjita pratham, sachin dwitiya ra rama tritiya bhae. pratham lai 5000, dwitiya lai 3000 ra tritiya lai 2000 rupiya puraskar." sanjita le kati puraskar pain?
+T: path ma "sanjita pratham" ra "pratham lai 5000" lekheko chha.
+N: sanjita le 5000 rupiya puraskar pain.
+G: 5000
+
+### reading
+U: "khana pakaune pratiyogita ma sanjita pratham, sachin dwitiya ra rama tritiya bhae. pratham lai 5000, dwitiya lai 3000 ra tritiya lai 2000 rupiya puraskar." rama kati aain?
+T: path ma "rama tritiya bhae" lekheko chha.
+N: rama tritiya aain.
+G: tritiya
+
+### reading
+U: "khana pakaune pratiyogita ma sanjita pratham, sachin dwitiya ra rama tritiya bhae. pratham lai 5000, dwitiya lai 3000 ra tritiya lai 2000 rupiya puraskar." jamma kati rupiya puraskar diyo?
+T: 5000 + 3000 + 2000 = 10000.
+N: jamma 10000 rupiya puraskar diyo.
+G: 10000
+
+### reading
+U: "khana pakaune pratiyogita ma sanjita pratham, sachin dwitiya ra rama tritiya bhae. pratham lai 5000, dwitiya lai 3000 ra tritiya lai 2000 rupiya puraskar." rama pratham bhain, haina?
+T: path ma "sanjita pratham" ra "rama tritiya" lekheko chha.
+N: haina, pratham sanjita bhain; rama tritiya bhain.
+G: sanjita
+
+### reading
+U: "mahendra sabai bhanda jetho hun; uni qatar ma kaam garchhan. mahila birendra gaun mai kheti garchhan. kanchha sudip kathmandu ma padhchha." gaun ma kheti kasle garchhan?
+T: path ma "mahila birendra gaun mai kheti garchhan" lekheko chha.
+N: gaun ma birendra le kheti garchhan.
+G: birendra
+
+### reading
+U: "mahendra sabai bhanda jetho hun; uni qatar ma kaam garchhan. mahila birendra gaun mai kheti garchhan. kanchha sudip kathmandu ma padhchha." mahendra kaha kaam garchhan?
+T: path ma "uni qatar ma kaam garchhan" lekheko chha, ra yo mahendra ko kura ho.
+N: mahendra qatar ma kaam garchhan.
+G: qatar
+
+### reading
+U: "mahendra sabai bhanda jetho hun; uni qatar ma kaam garchhan. mahila birendra gaun mai kheti garchhan. kanchha sudip kathmandu ma padhchha." sabai bhanda kanchha ko ho?
+T: path ma "kanchha sudip kathmandu ma padhchha" lekheko chha.
+N: sabai bhanda kanchha sudip ho.
+G: sudip
+
+### reading
+U: "mahendra sabai bhanda jetho hun; uni qatar ma kaam garchhan. mahila birendra gaun mai kheti garchhan. kanchha sudip kathmandu ma padhchha." sudip kaha padhchha?
+T: path ma "kanchha sudip kathmandu ma padhchha" lekheko chha.
+N: sudip kathmandu ma padhchha.
+G: kathmandu
+
+### reading
+U: "nikita le aaja 3 wata chitra banain, tara tinmadhye euta matra pradarshani ma rakhin. hamal sir le tyo chitra ko prashamsa garnubhayo." nikita le kati wata chitra banain?
+T: path ma "nikita le aaja 3 wata chitra banain" lekheko chha. herne matra ho, hisab chahindaina.
+N: nikita le 3 wata chitra banain.
+G: 3
+
+### reading
+U: "nikita le aaja 3 wata chitra banain, tara tinmadhye euta matra pradarshani ma rakhin. hamal sir le tyo chitra ko prashamsa garnubhayo." nikita le kati wata chitra pradarshani ma rakhin?
+T: path ma "tinmadhye euta matra pradarshani ma rakhin" lekheko chha.
+N: nikita le euta matra chitra pradarshani ma rakhin.
+G: euta
+
+### reading
+U: "nikita le aaja 3 wata chitra banain, tara tinmadhye euta matra pradarshani ma rakhin. hamal sir le tyo chitra ko prashamsa garnubhayo." kati wata chitra pradarshani ma rakhinan?
+T: 3 wata banain, euta rakhin. 3 - 1 = 2.
+N: 2 wata chitra pradarshani ma rakhinan.
+G: 2
+
+### reading
+U: "nikita le aaja 3 wata chitra banain, tara tinmadhye euta matra pradarshani ma rakhin. hamal sir le tyo chitra ko prashamsa garnubhayo." nikita le tinai wata chitra pradarshani ma rakhin, haina?
+T: path ma "tinmadhye euta matra pradarshani ma rakhin" lekheko chha.
+N: haina, nikita le euta matra pradarshani ma rakhin.
+G: euta
+
+### reading
+U: "nik ko sano bhai le 1 dekhi 100 samma ganna sikyo. nik le bhai lai english ma 20 samma ganna sikayo." bhai le kati samma ganna sikyo?
+T: path ma "1 dekhi 100 samma ganna sikyo" lekheko chha.
+N: bhai le 100 samma ganna sikyo.
+G: 100
+
+### reading
+U: "nik ko sano bhai le 1 dekhi 100 samma ganna sikyo. nik le bhai lai english ma 20 samma ganna sikayo." bhai le english ma kati samma ganna sikyo?
+T: path ma "english ma 20 samma ganna sikayo" lekheko chha.
+N: bhai le english ma 20 samma ganna sikyo.
+G: 20
+
+### reading
+U: "nik ko sano bhai le 1 dekhi 100 samma ganna sikyo. nik le bhai lai english ma 20 samma ganna sikayo." bhai lai english ma ganna kasle sikayo?
+T: path ma "nik le bhai lai english ma 20 samma ganna sikayo" lekheko chha.
+N: nik le bhai lai english ma ganna sikayo.
+G: nik
+
+### reading
+U: "nik ko sano bhai le 1 dekhi 100 samma ganna sikyo. nik le bhai lai english ma 20 samma ganna sikayo." bhai lai 100 samma ganna kasle sikayo?
+T: path ma 100 samma ganna kasle sikayo bhanne lekheko chhaina; nik le english ma 20 samma sikayeko matra lekheko chha.
+N: 100 samma kasle sikayo bhanne path ma chhaina; nik le english ma 20 samma sikayo bhanne matra lekheko chha.
+
+### reading
+U: "wami taksar ma gopi le 2 ropani ma aduwa lagayo. ek ropani bata 400 kilo aduwa phalyo. usle sabai aduwa kilo ko 60 rupiya ma bechyo." jamma kati kilo aduwa phalyo?
+T: ropani ma 400 kilo, 2 ropani. 2 x 400 = 800.
+N: jamma 800 kilo aduwa phalyo.
+G: 800
+
+### reading
+U: "wami taksar ma gopi le 2 ropani ma aduwa lagayo. ek ropani bata 400 kilo aduwa phalyo. usle sabai aduwa kilo ko 60 rupiya ma bechyo." ek ropani bata kati kilo aduwa phalyo?
+T: path ma "ek ropani bata 400 kilo aduwa phalyo" lekheko chha. herne matra ho, hisab chahindaina.
+N: ek ropani bata 400 kilo aduwa phalyo.
+G: 400
+
+### reading
+U: "wami taksar ma gopi le 2 ropani ma aduwa lagayo. ek ropani bata 400 kilo aduwa phalyo. usle sabai aduwa kilo ko 60 rupiya ma bechyo." sabai aduwa bechera kati rupiya aayo?
+T: 800 kilo, kilo ko 60. 800 x 60 = 48000.
+N: sabai aduwa bechera 48000 rupiya aayo.
+G: 48000
+
+### reading
+U: "wami taksar ma gopi le 2 ropani ma aduwa lagayo. ek ropani bata 400 kilo aduwa phalyo. usle sabai aduwa kilo ko 60 rupiya ma bechyo." gopi le aduwa kilo ko kati ma bechyo?
+T: path ma "kilo ko 60 rupiya ma bechyo" lekheko chha.
+N: gopi le aduwa kilo ko 60 rupiya ma bechyo.
+G: 60
+
+### reading
+U: "wami taksar ma gopi le 2 ropani ma aduwa lagayo. ek ropani bata 400 kilo aduwa phalyo. usle sabai aduwa kilo ko 60 rupiya ma bechyo." gopi le aduwa kaslai bechyo?
+T: path ma aduwa kinne ko naam lekheko chhaina.
+N: aduwa kaslai bechyo bhanne path ma chhaina; kilo ko 60 rupiya ma bechyo bhanne matra lekheko chha.
+
+### reading
+U: "Our group of 6 reached Dhorpatan on the third day. Two members had a cold, so they rested at the lodge while the other four walked to the lake." How many people walked to the lake?
+T: The text says "the other four walked to the lake".
+N: Four people walked to the lake.
+G: four
+
+### reading
+U: "Our group of 6 reached Dhorpatan on the third day. Two members had a cold, so they rested at the lodge while the other four walked to the lake." How many people rested at the lodge?
+T: The text says "Two members had a cold, so they rested at the lodge".
+N: Two people rested at the lodge.
+G: Two
+
+### reading
+U: "Our group of 6 reached Dhorpatan on the third day. Two members had a cold, so they rested at the lodge while the other four walked to the lake." Why did two members rest?
+T: The text says "Two members had a cold, so they rested".
+N: They rested because they had a cold.
+G: cold
+
+### reading
+U: "Our group of 6 reached Dhorpatan on the third day. Two members had a cold, so they rested at the lodge while the other four walked to the lake." On which day did the group reach Dhorpatan?
+T: The text says "reached Dhorpatan on the third day".
+N: The group reached Dhorpatan on the third day.
+G: third
+
+### reading
+U: "dumkibas ma dhan prasad ko homestay ma 5 wata kotha chhan. shukrabar 3 wata kotha bhariyo, ra shanibar sabai kotha bhariyo." shukrabar kati wata kotha khali thiyo?
+T: 5 kotha, shukrabar 3 bhariyo. 5 - 3 = 2.
+N: shukrabar 2 wata kotha khali thiyo.
+G: 2
+
+### reading
+U: "dumkibas ma dhan prasad ko homestay ma 5 wata kotha chhan. shukrabar 3 wata kotha bhariyo, ra shanibar sabai kotha bhariyo." shanibar kati wata kotha khali thiyo?
+T: path ma "shanibar sabai kotha bhariyo" lekheko chha.
+N: shanibar euta pani kotha khali thiyena.
+G: euta pani
+
+### reading
+U: "dumkibas ma dhan prasad ko homestay ma 5 wata kotha chhan. shukrabar 3 wata kotha bhariyo, ra shanibar sabai kotha bhariyo." shanibar kati wata kotha bhariyo?
+T: path ma "shanibar sabai kotha bhariyo" ra "5 wata kotha chhan" lekheko chha.
+N: shanibar 5 wata kotha bhariyo.
+G: 5
+
+### reading
+U: "dumkibas ma dhan prasad ko homestay ma 5 wata kotha chhan. shukrabar 3 wata kotha bhariyo, ra shanibar sabai kotha bhariyo." shukrabar kati wata kotha bhariyo?
+T: path ma "shukrabar 3 wata kotha bhariyo" lekheko chha.
+N: shukrabar 3 wata kotha bhariyo.
+G: 3
+
+### reading
+U: "dumkibas ma dhan prasad ko homestay ma 5 wata kotha chhan. shukrabar 3 wata kotha bhariyo, ra shanibar sabai kotha bhariyo." euta kotha ko bhada kati?
+T: path ma kotha ko bhada lekheko chhaina.
+N: kotha ko bhada path ma chhaina; kati kotha bhariyo bhanne matra lekheko chha.
+
+### reading
+U: "basanti le asti 4 kilo golbheda bechin. uski didi jamuna le hijo 6 kilo bechin. golbheda kilo ko 50 rupiya." hijo kasle golbheda bechin?
+T: path ma "uski didi jamuna le hijo 6 kilo bechin" lekheko chha.
+N: hijo jamuna le golbheda bechin.
+G: jamuna
+
+### reading
+U: "basanti le asti 4 kilo golbheda bechin. uski didi jamuna le hijo 6 kilo bechin. golbheda kilo ko 50 rupiya." basanti le kati kilo golbheda bechin?
+T: path ma "basanti le asti 4 kilo golbheda bechin" lekheko chha.
+N: basanti le 4 kilo golbheda bechin.
+G: 4
+
+### reading
+U: "basanti le asti 4 kilo golbheda bechin. uski didi jamuna le hijo 6 kilo bechin. golbheda kilo ko 50 rupiya." jamuna le golbheda bechera kati kamain?
+T: jamuna 6 kilo, kilo ko 50. 6 x 50 = 300.
+N: jamuna le 300 rupiya kamain.
+G: 300
+
+### reading
+U: "basanti le asti 4 kilo golbheda bechin. uski didi jamuna le hijo 6 kilo bechin. golbheda kilo ko 50 rupiya." dui didi bahini le jamma kati kilo bechin?
+T: basanti 4 ra jamuna 6. 4 + 6 = 10.
+N: dui jana le jamma 10 kilo bechin.
+G: 10
+
+### reading
+U: "Of the 10 houses on our lane, all have electricity, but only 6 have internet. None of the houses has a car." How many houses have internet?
+T: The text says "only 6 have internet". This is a lookup, so no calculation is needed.
+N: 6 houses have internet.
+G: 6
+
+### reading
+U: "Of the 10 houses on our lane, all have electricity, but only 6 have internet. None of the houses has a car." How many houses do not have internet?
+T: 10 houses, 6 have internet. 10 - 6 = 4.
+N: 4 houses do not have internet.
+G: 4
+
+### reading
+U: "Of the 10 houses on our lane, all have electricity, but only 6 have internet. None of the houses has a car." How many houses have a car?
+T: The text says "None of the houses has a car".
+N: None of the houses has a car.
+G: None
+
+### reading
+U: "Of the 10 houses on our lane, all have electricity, but only 6 have internet. None of the houses has a car." How many houses have electricity?
+T: The text says "Of the 10 houses on our lane, all have electricity".
+N: All 10 houses have electricity.
+G: 10
+
+### reading
+U: "manigram chowk ma 3 wata bank chhan, tara euta pani ATM chaldaina. tyasaile manchhe haru paisa jhikna butwal janchhan." manigram chowk ma kati wata bank chhan?
+T: path ma "manigram chowk ma 3 wata bank chhan" lekheko chha.
+N: manigram chowk ma 3 wata bank chhan.
+G: 3
+
+### reading
+U: "manigram chowk ma 3 wata bank chhan, tara euta pani ATM chaldaina. tyasaile manchhe haru paisa jhikna butwal janchhan." manigram ma kati wata ATM chalchhan?
+T: path ma "euta pani ATM chaldaina" lekheko chha.
+N: euta pani ATM chaldaina.
+G: euta pani
+
+### reading
+U: "manigram chowk ma 3 wata bank chhan, tara euta pani ATM chaldaina. tyasaile manchhe haru paisa jhikna butwal janchhan." manchhe haru kina butwal janchhan?
+T: path ma "euta pani ATM chaldaina. tyasaile manchhe haru paisa jhikna butwal janchhan" lekheko chha.
+N: kinabhane manigram ma euta pani ATM chaldaina, tyasaile paisa jhikna butwal janchhan.
+G: ATM
+
+### reading
+U: "manigram chowk ma 3 wata bank chhan, tara euta pani ATM chaldaina. tyasaile manchhe haru paisa jhikna butwal janchhan." manigram ma bank nai chhaina, haina?
+T: path ma "manigram chowk ma 3 wata bank chhan" lekheko chha.
+N: haina, manigram ma 3 wata bank chhan; ATM matra chaldaina.
+G: 3
+
+### reading
+U: "manigram chowk ma 3 wata bank chhan, tara euta pani ATM chaldaina. tyasaile manchhe haru paisa jhikna butwal janchhan." bank kati baje khulchha?
+T: path ma bank khulne samaya lekheko chhaina.
+N: bank kati baje khulchha bhanne path ma chhaina.
+
+### reading
+U: "pashupatinagar ko chiya kharkhana ma din ko 2000 kilo hariyo patti aauchha. tyo 2000 kilo bata 450 kilo sukeko chiya banchha." din ma kati kilo sukeko chiya banchha?
+T: path ma "2000 kilo bata 450 kilo sukeko chiya banchha" lekheko chha.
+N: din ma 450 kilo sukeko chiya banchha.
+G: 450
+
+### reading
+U: "pashupatinagar ko chiya kharkhana ma din ko 2000 kilo hariyo patti aauchha. tyo 2000 kilo bata 450 kilo sukeko chiya banchha." din ma kati kilo hariyo patti aauchha?
+T: path ma "din ko 2000 kilo hariyo patti aauchha" lekheko chha.
+N: din ma 2000 kilo hariyo patti aauchha.
+G: 2000
+
+### reading
+U: "pashupatinagar ko chiya kharkhana ma din ko 2000 kilo hariyo patti aauchha. tyo 2000 kilo bata 450 kilo sukeko chiya banchha." 2 din ma kati kilo sukeko chiya banchha?
+T: din ko 450. 2 x 450 = 900.
+N: 2 din ma 900 kilo sukeko chiya banchha.
+G: 900
+
+### reading
+U: "pashupatinagar ko chiya kharkhana ma din ko 2000 kilo hariyo patti aauchha. tyo 2000 kilo bata 450 kilo sukeko chiya banchha." 2 din ma kati kilo hariyo patti aauchha?
+T: din ko 2000. 2 x 2000 = 4000.
+N: 2 din ma 4000 kilo hariyo patti aauchha.
+G: 4000
+
+### reading
+U: "yasok ko school ma kaksha 1 dekhi 5 samma nepali ma padhai hunchha, tara kaksha 6 dekhi mathi english ma." kaksha 3 ma kun bhasa ma padhai hunchha?
+T: path ma "kaksha 1 dekhi 5 samma nepali ma padhai hunchha" lekheko chha; 3 tyas bhitra parchha.
+N: kaksha 3 ma nepali ma padhai hunchha.
+G: nepali
+
+### reading
+U: "yasok ko school ma kaksha 1 dekhi 5 samma nepali ma padhai hunchha, tara kaksha 6 dekhi mathi english ma." kaksha 7 ma kun bhasa ma padhai hunchha?
+T: path ma "kaksha 6 dekhi mathi english ma" lekheko chha; 7 tyas bhitra parchha.
+N: kaksha 7 ma english ma padhai hunchha.
+G: english
+
+### reading
+U: "yasok ko school ma kaksha 1 dekhi 5 samma nepali ma padhai hunchha, tara kaksha 6 dekhi mathi english ma." kaksha 5 ma kun bhasa ma padhai hunchha?
+T: path ma "kaksha 1 dekhi 5 samma nepali ma" lekheko chha.
+N: kaksha 5 ma nepali ma padhai hunchha.
+G: nepali
+
+### reading
+U: "yasok ko school ma kaksha 1 dekhi 5 samma nepali ma padhai hunchha, tara kaksha 6 dekhi mathi english ma." kaksha 6 ma kun bhasa ma padhai hunchha?
+T: path ma "kaksha 6 dekhi mathi english ma" lekheko chha.
+N: kaksha 6 ma english ma padhai hunchha.
+G: english
+
+### reading
+U: "rama 12 barsha ki chhin. sumitra rama bhanda 3 barsha jethi chhin, ra kusum sumitra bhanda 2 barsha kanchhi chhin." sumitra kati barsha ki chhin?
+T: rama 12, sumitra 3 barsha jethi. 12 + 3 = 15.
+N: sumitra 15 barsha ki chhin.
+G: 15
+
+### reading
+U: "rama 12 barsha ki chhin. sumitra rama bhanda 3 barsha jethi chhin, ra kusum sumitra bhanda 2 barsha kanchhi chhin." kusum kati barsha ki chhin?
+T: sumitra 15, kusum 2 barsha kanchhi. 15 - 2 = 13.
+N: kusum 13 barsha ki chhin.
+G: 13
+
+### reading
+U: "rama 12 barsha ki chhin. sumitra rama bhanda 3 barsha jethi chhin, ra kusum sumitra bhanda 2 barsha kanchhi chhin." sabai bhanda jethi ko hun?
+T: rama 12, sumitra 15, kusum 13. sabai bhanda badhi 15: sumitra.
+N: sabai bhanda jethi sumitra hun.
+G: sumitra
+
+### reading
+U: "rama 12 barsha ki chhin. sumitra rama bhanda 3 barsha jethi chhin, ra kusum sumitra bhanda 2 barsha kanchhi chhin." sabai bhanda kanchhi ko hun?
+T: rama 12, sumitra 15, kusum 13. sabai bhanda kam 12: rama.
+N: sabai bhanda kanchhi rama hun.
+G: rama
+
+### reading
+U: "rama 12 barsha ki chhin. sumitra rama bhanda 3 barsha jethi chhin, ra kusum sumitra bhanda 2 barsha kanchhi chhin." kusum sabai bhanda kanchhi chhin, haina?
+T: kusum 13 ra rama 12. rama kusum bhanda kanchhi.
+N: haina, sabai bhanda kanchhi rama hun (12 barsha); kusum 13 barsha ki chhin.
+G: rama
+
+### reading
+U: "barahachhetra ko mela ma hami 4 jana gayau. ma ra bhai jhula ma chadhyau, tara aama ra buwa chadhnubhaena." jhula ma kasle kasle chadhe?
+T: path ma "ma ra bhai jhula ma chadhyau" lekheko chha.
+N: jhula ma path lekhne manchhe ra usko bhai chadhe.
+G: bhai
+
+### reading
+U: "barahachhetra ko mela ma hami 4 jana gayau. ma ra bhai jhula ma chadhyau, tara aama ra buwa chadhnubhaena." aama jhula ma chadhnubhayo?
+T: path ma "aama ra buwa chadhnubhaena" lekheko chha.
+N: chadhnubhaena, aama jhula ma chadhnubhaena.
+G: chadhnubhaena
+
+### reading
+U: "barahachhetra ko mela ma hami 4 jana gayau. ma ra bhai jhula ma chadhyau, tara aama ra buwa chadhnubhaena." mela ma kati jana gaye?
+T: path ma "hami 4 jana gayau" lekheko chha.
+N: mela ma 4 jana gaye.
+G: 4
+
+### reading
+U: "barahachhetra ko mela ma hami 4 jana gayau. ma ra bhai jhula ma chadhyau, tara aama ra buwa chadhnubhaena." buwa pani jhula ma chadhnubhayo, haina?
+T: path ma "aama ra buwa chadhnubhaena" lekheko chha.
+N: haina, buwa jhula ma chadhnubhaena; ma ra bhai matra chadhyau.
+G: chadhnubhaena
+
+### reading
+U: "Bus timetable, Parasi to Bhairahawa: 7:15, 9:45 and 12:30. Each trip takes 1 hour 20 minutes." When does the first bus leave?
+T: The timetable lists "7:15, 9:45 and 12:30". The first is 7:15.
+N: The first bus leaves at 7:15.
+G: 7:15
+
+### reading
+U: "Bus timetable, Parasi to Bhairahawa: 7:15, 9:45 and 12:30. Each trip takes 1 hour 20 minutes." When does the last bus leave?
+T: The timetable lists "7:15, 9:45 and 12:30". The last is 12:30.
+N: The last bus leaves at 12:30.
+G: 12:30
+
+### reading
+U: "Bus timetable, Parasi to Bhairahawa: 7:15, 9:45 and 12:30. Each trip takes 1 hour 20 minutes." When does the 9:45 bus reach Bhairahawa?
+T: 9:45 plus 1 hour is 10:45, plus 20 minutes is 11:05.
+N: The 9:45 bus reaches Bhairahawa at 11:05.
+G: 11:05
+
+### reading
+U: "Bus timetable, Parasi to Bhairahawa: 7:15, 9:45 and 12:30. Each trip takes 1 hour 20 minutes." When does the 7:15 bus reach Bhairahawa?
+T: 7:15 plus 1 hour is 8:15, plus 20 minutes is 8:35.
+N: The 7:15 bus reaches Bhairahawa at 8:35.
+G: 8:35
+
+### reading
+U: "Bus timetable, Parasi to Bhairahawa: 7:15, 9:45 and 12:30. Each trip takes 1 hour 20 minutes." How much is the bus fare?
+T: The timetable does not give the fare.
+N: The timetable does not say the fare. It only gives the times and that each trip takes 1 hour 20 minutes.

@@ -6,6 +6,8 @@
 Writing format (STYLE.md): examples are blocks; a block starts with `### <category>`; then one line per turn:
     U: user text              N: Nik's reply             T: worked solution for the NEXT N (optional)
     G: the gold answer (optional; must appear in the last N)
+    C: a Nik turn shown as context only, never trained ("train": false; no T:, never the last turn), e.g. an
+       earlier slip that the user then corrects
 Every line is one turn (no line breaks inside a turn). Lines starting with `#` (not `###`) are comments.
 
 Rejected: bad structure (turns must alternate U/N and end with N), non-ASCII / Devanagari, chat spellings in Nik's turns
@@ -86,7 +88,7 @@ def forbidden():
 
 
 def parse(path):
-    """-> list of (line_no, cat, turns, gold) ; turns = [(role, content, think)]"""
+    """-> list of [line_no, cat, turns, gold, pending think, errors, context-only turn indexes]; turns = [role, content, think]"""
     out, cur = [], None
     for k, raw in enumerate(open(path, encoding='utf-8', errors='replace'), 1):
         line = raw.rstrip('\n').strip()
@@ -95,7 +97,7 @@ def parse(path):
         if line.startswith('###'):
             if cur:
                 out.append(cur)
-            cur = [k, line[3:].strip(), [], None, None, []]   # line, cat, turns, gold, pending think, errors
+            cur = [k, line[3:].strip(), [], None, None, [], set()]   # line, cat, turns, gold, pending think, errors, C: turns
             continue
         if line.startswith('#'):
             continue
@@ -107,6 +109,10 @@ def parse(path):
             cur[2].append(['user', text, None])
         elif tag == 'N':
             cur[2].append(['nik', text, cur[4]]); cur[4] = None
+        elif tag == 'C':   # Nik turn shown as context only (never trained)
+            if cur[4]:
+                cur[5].append('T: line before a C: line (context-only turns carry no working)')
+            cur[6].add(len(cur[2])); cur[2].append(['nik', text, None]); cur[4] = None
         elif tag == 'T':
             cur[4] = text
         elif tag == 'G':
@@ -119,8 +125,10 @@ def parse(path):
 
 
 def check(ex, forb):
-    k, cat, turns, gold, pending, errs = ex
+    k, cat, turns, gold, pending, errs = ex[:6]
     errs = list(errs)
+    if len(ex) > 6 and len(turns) - 1 in ex[6]:
+        errs.append('structure: the last turn cannot be a C: (context-only) turn')
     roles = [t[0] for t in turns]
     if not turns or roles != ['user', 'nik'] * (len(roles) // 2) or len(roles) % 2:
         errs.append('structure: turns must alternate U/N and end with N')
@@ -159,12 +167,15 @@ def check(ex, forb):
 
 
 def to_row(ex):
-    _, cat, turns, gold, _, _ = ex
+    _, cat, turns, gold = ex[:4]
+    ctx = ex[6] if len(ex) > 6 else set()
     msgs = []
-    for role, text, think in turns:
+    for i, (role, text, think) in enumerate(turns):
         m = {'role': role, 'content': text}
         if think:
             m['think'] = think
+        if i in ctx:
+            m['train'] = False
         msgs.append(m)
     row = {'cat': f'hand-{cat}', 'messages': msgs}
     if gold:

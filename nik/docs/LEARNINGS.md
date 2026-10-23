@@ -6,6 +6,24 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-23 (Claude, hand-written data round 2, sandbox only, no box)
 
+- **Hand multi-turn rows did not match what /chat sends, and a "slip" lesson would have taught wrong answers.**
+  `chat/index.html` passes history as `{role, content}` only (no thinks), but every hand conversation trained all
+  Nik turns on a history that carried thinks; and writer P's 68 "Nik slipped, the user corrects it" conversations had
+  the wrong first answer as a normal (trained) Nik turn. Fix: raw `C:` lines = context-only Nik turns (`"train":
+  false` in hand.jsonl; check.py forbids a `T:` before them and a `C:` as the last turn), and
+  `build_mix_v2.expand_hand` turns each conversation into one row per trained Nik turn with the history the way
+  /chat sends it (earlier Nik turns without thinks, context only). 31,803 conversations -> 34,848 rows, 1.06x the
+  tokens; every row has exactly one trained Nik turn. Rule: any intentionally wrong Nik text is a `C:` line.
+- **Watch the owner-cases gate row when hand data goes in.** Session 2 found hand-written follow-ups pull the model
+  toward a new reply style and erode the live model's follow-up behaviour (k1-k11: owner cases 17-23/25); the
+  self-distilled rows fixed it (k13 24/25). The hand set now has ~1,700 multiturn conversations: if owner cases drop,
+  lower `--share hand` or drop `hand-multiturn` rows whose last turn is a bare restate (`kati rey?` style).
+- **Size vs share:** expanded hand rows are ~2.4M tokens now (~7-8M at 100k examples). `hand` is 6% of the final
+  mix; check the manifest's `unique` count for `hand` and raise it (`MIX_ARGS="--share hand=0.10"` in run_v2.sh) so
+  every row is seen at least once.
+- **Whole-set spelling sweep (rare words one edit away from frequent ones) found 18 slips** the checker cannot know
+  (`rakhnum`, `pardhha`, `dinun` for `deun`, `chhitto`, Hindi `daaye/baaye`); most hits are real words (`nagadi`,
+  `tapari`, `chuhinchha`, plural `pahela`), so this stays a review step, not a rule.
 - **The eval-prompt guard was silently incomplete.** `check.py`'s guard imports `bench_reading`, `shape_probe` and `bench`,
   which import torch; in a sandbox without torch they were skipped with only a `warn:` line, and the ladder file
   (`word_procedure_probe.py --out` writes `[cat, q, gold]` lists, not dicts) was never read. Guard 2,378 -> 2,453

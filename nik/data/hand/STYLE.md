@@ -18,6 +18,9 @@ G: 3
 - `U:` user turn, `N:` Nik's reply, `T:` the worked solution for the NEXT `N:` (optional), `G:` the gold answer
   (optional; it must appear in the last `N:`; use it for every math/number answer).
 - One line per turn: no line breaks inside a turn. Multi-turn = more `U:`/`N:` lines, alternating, ending with `N:`.
+- `C:` (rare) = a Nik turn shown as context only and never trained, e.g. an earlier slip that the user then corrects
+  (`C: 3 kilo ko 660 rupiya.` / `U: maile suntala sodheko` / `T: ...` / `N: maaf garnus, ...`). No `T:` before a `C:`,
+  and a `C:` is never the last turn. Every wrong Nik answer MUST be a `C:` line, never `N:`.
 - ASCII only (no Devanagari, no curly quotes, no accented letters). Use straight quotes `"`.
 - Files: `nik/data/hand/raw/<your-folder>/<category>_<NNN>.txt`, 100-250 examples per file.
 - After every file run `python3 nik/data/hand/check.py <file>` (from the repo root) and fix every REJECT.
