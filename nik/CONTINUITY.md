@@ -72,6 +72,16 @@ No external or open-weight teacher models. The coding agent (Claude) is the teac
 `nik/data/gold/*.jsonl` (`{"cat","messages":[{role,content,steps?}]}`, `steps` = worked solution, mapped to think),
 plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md).
 
+## NEXT BOX: one command (Claude, 2026-10-23 night)
+1. Connect (pair URL + token from the owner), then in the kernel: `git clone https://github.com/NikitHamal/NikitHamal.git
+   /tmp/v2/repo`, write the Kaggle token to `~/.kaggle/access_token` (never into the repo).
+2. `setsid nohup bash /tmp/v2/repo/nik/agents/molab/jobs/run_v2.sh > /tmp/v2/run.log 2>&1 &` - downloads the data
+   (Kaggle nik-p8m-mix, replay, English, nik-selfdistill-1022), builds the v2 mix in ONE pass
+   (`nik/scripts/build_mix_v2.py`: k13's recipe + the hand-written data `nik/data/hand/hand.jsonl` at 6% of tokens),
+   trains 3 seeds (850 steps, KL 1.0 to m50), gates each, soups them, gates + confirms, uploads all to Kaggle
+   `nik-v2-run`. Progress: `/tmp/v2/progress.log`. ~1.5-2 h. Ship only by hand (`scripts/ship_model.py`).
+3. Hand-written data (owner's request, 2026-10-22 night): `nik/data/hand/` (STYLE.md, check.py, raw/, hand.jsonl).
+
 ## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~20:40 UTC (session 2, box 1 ended ~20:55)
 **Full handover prompt: `nik/agents/HANDOVER.md`.** Live model = **m50 (unchanged)**. Live /chat code improved today
 (main): pencil fixes (grouped numbers, signs, clock times), plain digits for `1,200`, consistency vote (m50 held-out chat
