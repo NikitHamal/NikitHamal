@@ -1,0 +1,690 @@
+### instructions
+U: ek shabda ma: chhath ma kasko puja garinchha?
+N: surya.
+G: surya
+
+### instructions
+U: ek shabda: pani bharne mato ko bhaado?
+N: gagri.
+G: gagri
+
+### instructions
+U: one word: what is the colour of grass?
+N: Green.
+G: Green
+
+### instructions
+U: yes ki no matra: euta hapta ma dui wata sombar hunchha?
+N: no.
+G: no
+
+### instructions
+U: ho ki haina matra: dhaka topi nepali paramparik topi ho?
+N: ho.
+G: ho
+
+### instructions
+U: yes or no: is a lemon sour?
+N: Yes.
+G: Yes
+
+### instructions
+U: number matra: 15 x 6
+T: 15 x 6 = 90.
+N: 90
+G: 90
+
+### instructions
+U: number matra: 1000 - 375
+T: 1000 - 375 = 625.
+N: 625
+G: 625
+
+### instructions
+U: just the number: 50% of 90
+T: 90 x 50 / 100 = 45.
+N: 45
+G: 45
+
+### instructions
+U: comma le 3 wata nepal ka shahar, aru kei nalekha
+N: hetauda, butwal, dhangadhi
+
+### instructions
+U: numbered list ma 3 wata kura jun bihe ma hunchha
+N: 1. janti 2. bhoj 3. naach gaan
+
+### instructions
+U: List exactly 3 musical instruments, comma separated.
+N: guitar, drum, flute
+
+### instructions
+U: ek vakya ma bhana: hamile kina pariwar sanga samaya bitaunu parchha?
+N: pariwar sanga samaya bitauda maya badhchha ra man khusi hunchha.
+
+### instructions
+U: euta vakya ma: chashma le k garchha?
+N: chashma le kamjor aankha bhayeka lai sapha dekhna maddat garchha.
+
+### instructions
+U: one sentence: what is a village?
+N: A village is a small place in the countryside where a few families live.
+
+### instructions
+U: 1-2-3 step ma bhana: aafno naam lekhne ramro tarika (kapi ma)
+N: 1. kapi ko mathi baya kuna ma lekhnus. 2. thulo ra spasta akshar ma lekhnus. 3. kaksha ra roll number pani thapnus.
+
+### instructions
+U: 3 step ma: email ko password kasari ferne?
+N: 1. setting ma jaanus. 2. purano password halnus. 3. naya password duipalta lekhera save garnus.
+
+### instructions
+U: three numbered steps: how to make rice pudding (kheer)
+N: 1. Boil milk in a pot. 2. Add washed rice and cook slowly, stirring often. 3. Add sugar and cardamom when the rice is soft.
+
+### instructions
+U: chhoto gara: "hamro gaun ko school ma yo barsha pahilo palta computer kaksha suru bhayo ra bidyarthi haru dherai khusi chhan."
+N: gaun ko school ma pahilo palta computer kaksha suru bhayo.
+
+### instructions
+U: yo vakya chhoto banau: "usle aafno purano kitab haru gaun ko pustakalaya lai daan garyo."
+N: usle purano kitab pustakalaya lai diyo.
+
+### instructions
+U: shorten: "The road between Kathmandu and Pokhara is very busy during the Dashain festival."
+N: The Kathmandu-Pokhara road is busy during Dashain.
+
+### instructions
+U: sajilo shabda ma: "uhaa ati bidwan byakti hunuhunchha"
+N: uhaa dherai jaanne manchhe hunuhunchha.
+
+### instructions
+U: saral nepali ma: "tapai ko upasthiti prarthaniya chha"
+N: kripaya tapai aaunus.
+
+### instructions
+U: easy words: "The child was frightened."
+N: The child was scared.
+
+### instructions
+U: ek vakya ma saransh: "rina le school ma bhashan pratiyogita ma bhag lii. usle batavaran ko barema boli. usle dosro puraskar jiti."
+N: rina le batavaran ko barema bolera bhashan pratiyogita ma dosro puraskar jiti.
+
+### instructions
+U: tala ko text ko ek vakya: "hari ko gaun ma pahiro gayo. bato band bhayo. sena aaera 2 din ma bato khulayo."
+N: hari ko gaun ma pahiro le band bhayeko bato sena le 2 din ma khulayo.
+
+### instructions
+U: summarize in one sentence: "Maya's grandmother was sick. Maya cooked soup for her every day. After a week, her grandmother felt better."
+N: Maya cooked soup for her sick grandmother every day, and after a week she felt better.
+
+### instructions
+U: sano dekhi thulo: 78, 87, 7.8, 870, 8.7
+T: 7.8 < 8.7 < 78 < 87 < 870.
+N: 7.8, 8.7, 78, 87, 870
+
+### instructions
+U: thulo dekhi sano: 1/3, 1/2, 1/4
+T: 1/2 > 1/3 > 1/4.
+N: 1/2, 1/3, 1/4
+
+### instructions
+U: alphabet kram ma: solukhumbu, okhaldhunga, khotang, bhojpur
+T: pahilo akshar: s, o, k, b. kram: b, k, o, s.
+N: bhojpur, khotang, okhaldhunga, solukhumbu
+
+### instructions
+U: alphabetical order: knife, fork, spoon, cup
+T: First letters: k, f, s, c. Order: c, f, k, s.
+N: cup, fork, knife, spoon
+
+### instructions
+U: kun farak, ek shabda: kaag, chil, gidh, machha
+N: machha.
+G: machha
+
+### instructions
+U: euta shabda ma, kun milena: chiya, coffee, dudh, chamal
+N: chamal.
+G: chamal
+
+### instructions
+U: odd one out, one word: Nepal, India, Bhutan, Pokhara
+N: Pokhara.
+G: Pokhara
+
+### instructions
+U: khali thau bhara: "nepal ma ____ wata jilla chhan." number ma
+N: 77
+G: 77
+
+### instructions
+U: khali thau ma ek shabda: "pani ____ degree celsius ma jamchha." number ma
+N: 0.
+G: 0
+
+### instructions
+U: fill in the blank: "A cow gives us ____."
+N: milk
+G: milk
+
+### instructions
+U: "imandari" shabda prayog garera vakya banau
+N: imandari sabai bhanda ramro guna ho.
+
+### instructions
+U: "dhairya" shabda bata ek vakya
+N: dhairya garyo bhane garho kaam pani sakinchha.
+
+### instructions
+U: use "library" and "book" in one sentence
+N: I borrowed a new book from the library today.
+
+### instructions
+U: "uttar" ko ulto disha?
+N: dakshin.
+G: dakshin
+
+### instructions
+U: ulto shabda lekha: "sukha"
+N: dukha.
+G: dukha
+
+### instructions
+U: opposite of "wet"?
+N: Dry.
+G: Dry
+
+### instructions
+U: ek shabda ma: hamile kun angga le sas ferchhau?
+N: naak.
+G: naak
+
+### instructions
+U: ek shabda: chandrama kun graha ko upagraha ho?
+N: prithvi.
+G: prithvi
+
+### instructions
+U: one word: what is the capital of Australia?
+N: Canberra.
+G: Canberra
+
+### instructions
+U: yes/no matra: hiun garmi ma pani himal ma rahanchha?
+N: yes.
+G: yes
+
+### instructions
+U: ho ki haina: 7 x 3 = 21?
+T: 7 x 3 = 21.
+N: ho.
+G: ho
+
+### instructions
+U: yes or no only: is the sun hot?
+N: Yes.
+G: Yes
+
+### instructions
+U: number matra: 35 x 3
+T: 35 x 3 = 105.
+N: 105
+G: 105
+
+### instructions
+U: number matra deu: 120 ko aadha
+T: 120 / 2 = 60.
+N: 60
+G: 60
+
+### instructions
+U: just the number: how many hours in half a day?
+T: 24 / 2 = 12.
+N: 12
+G: 12
+
+### instructions
+U: comma le 3 wata kura jun mela ma paincha
+N: ping, mithai, khelauna
+
+### instructions
+U: numbered list ma 3 wata nepali naach
+N: 1. sakela 2. maruni 3. lakhe
+
+### instructions
+U: list three things that are sweet, numbered
+N: 1. sugar 2. honey 3. mango
+
+### instructions
+U: euta vakya ma bhana: hamile kina juta safa rakhnu parchha?
+N: safa juta le khutta swastha rakhchha ra ramro dekhinchha.
+
+### instructions
+U: euta vakya ma: nepal ko jhanda ma kun kun chinha chhan?
+N: nepal ko jhanda ma jun ra surya ko chinha chhan.
+
+### instructions
+U: one sentence: what is a bridge?
+N: A bridge is a structure built over a river or road so people can cross it.
+
+### instructions
+U: 1-2-3 ma bhana: chiya kasari chhanne?
+N: 1. chiya umliepachhi aago nibhaunus. 2. kap mathi chhanni rakhnus. 3. bistarai chiya khanyaunus.
+
+### instructions
+U: 3 step ma bhana: baagh chal khel suru garne
+N: 1. board ma 4 wata bagh kuna ma rakhnus. 2. bakhra eutaeuta garera rakhdai jaanus. 3. palai palo chal chalnus.
+
+### instructions
+U: 3 numbered steps: how to fold a shirt
+N: 1. Lay the shirt flat with the front down. 2. Fold both sleeves to the middle. 3. Fold the shirt in half from the bottom.
+
+### instructions
+U: chhoto banau: "aaja bihana dekhi nai mero tauko dukhdai thiyo tyasaile maile ausadhi khaye ra aaram gare."
+N: tauko dukheko le ausadhi khaera aaram gare.
+
+### instructions
+U: sajilo shabda: "bidyut ko durupayog nagarau"
+N: bijuli khera nafalau.
+
+### instructions
+U: ek vakya ma saransh: "aaitabar hamro tol ma raktadan karyakram bhayo. 50 jana le ragat diye. sabai le pramanpatra paae."
+N: aaitabar tol ko raktadan karyakram ma 50 jana le ragat diera pramanpatra paae.
+
+### instructions
+U: sano dekhi thulo: 0.25, 0.5, 0.05, 2.5
+T: 0.05 < 0.25 < 0.50 < 2.5.
+N: 0.05, 0.25, 0.5, 2.5
+
+### instructions
+U: yi naam alphabet kram ma: lalit, kamal, jamuna, indira
+T: pahilo akshar: l, k, j, i. kram: i, j, k, l.
+N: indira, jamuna, kamal, lalit
+
+### instructions
+U: kun farak, ek shabda: kodo, makai, dhan, kera
+N: kera.
+G: kera
+
+### instructions
+U: khali thau bhara: "teej ma mahila haru ____ rang ko luga lagaunchhan."
+N: rato
+G: rato
+
+### instructions
+U: "himal" ra "paryatak" rakhera vakya
+N: dherai paryatak nepal ka himal hernu aauchhan.
+
+### instructions
+U: "baliyo" ra "kamjor" rakhera ek vakya
+N: kamjor bhae pani abhyas le baliyo banna sakinchha.
+
+### instructions
+U: ek shabda ma: mahabharat kasle lekhe bhanne manyata chha?
+N: byas.
+G: byas
+
+### instructions
+U: yes ki no matra: makura ka 8 khutta hunchhan?
+N: yes.
+G: yes
+
+### instructions
+U: number matra: 4 km 250 m = kati meter?
+T: 4 x 1000 = 4000. 4000 + 250 = 4250.
+N: 4250
+G: 4250
+
+### instructions
+U: comma le 3 wata kura jun kisan lai chahinchha
+N: biu, mal, pani
+
+### instructions
+U: numbered list ma 3 wata tarika jasle naya shabda yaad rahanchha
+N: 1. har din dohoryaune 2. vakya ma prayog garne 3. sathi lai sikaune
+
+### instructions
+U: euta vakya ma bhana: nepal ma gaadi bato ko kun tira chalaunu parchha?
+N: nepal ma gaadi bato ko bayatira chalaunu parchha.
+
+### instructions
+U: 1-2-3 ma: garmi ma lu bata bachne tarika
+N: 1. dherai pani piunus. 2. diuso ghaam ma nahidnus. 3. topi ra halka luga lagaunus.
+
+### instructions
+U: chhoto gara: "mero sathi le malai bholi bihana 7 baje bus park ma bhetna bhanyo."
+N: sathi le bholi 7 baje bus park ma bhetna bhanyo.
+
+### instructions
+U: sajilo shabda ma: "yo karyakram sthagit bhayo"
+N: yo karyakram pachhi sariyo.
+
+### instructions
+U: ek vakya ko saransh: "laxmi ko bari ma suntala ko bot chha. yo barsha 500 suntala falyo. usle chhimeki lai pani baadi."
+N: laxmi ko bari ma yo barsha 500 suntala falyo ra usle chhimeki lai pani baadi.
+
+### instructions
+U: thulo dekhi sano: 9, -9, 90, -90, 0
+T: 90 > 9 > 0 > -9 > -90.
+N: 90, 9, 0, -9, -90
+
+### instructions
+U: z dekhi a: mohan, gopal, suman
+T: pahilo akshar: m, g, s. z bata: s, m, g.
+N: suman, mohan, gopal
+
+### instructions
+U: kun milena, ek shabda: kapi, kalam, pencil, chulo
+N: chulo.
+G: chulo
+
+### instructions
+U: khali thau: "1 din = ____ ghanta." number ma
+N: 24
+G: 24
+
+### instructions
+U: "khola" ra "dunga" rakhera ek vakya
+N: khola tarna hami dunga chadhyau.
+
+### instructions
+U: ho ki haina matra: "ujyalo" ra "andhyaro" ulto shabda hun?
+N: ho.
+G: ho
+
+### instructions
+U: one word: what do we call the young one of a hen?
+N: Chick.
+G: Chick
+
+### instructions
+U: yes or no: does Nepal have seven provinces?
+N: Yes.
+G: Yes
+
+### instructions
+U: number only: 44 + 56
+T: 44 + 56 = 100.
+N: 100
+G: 100
+
+### instructions
+U: list exactly three things found in a forest, comma separated
+N: trees, birds, mushrooms
+
+### instructions
+U: one sentence: what is a holiday?
+N: A holiday is a day when people do not go to work or school.
+
+### instructions
+U: shorter: "My younger sister, who is only five years old, can already count up to one hundred."
+N: My five-year-old sister can count to one hundred.
+
+### instructions
+U: simpler words: "The view was magnificent."
+N: The view was very beautiful.
+
+### instructions
+U: one-line summary: "Sonam's yak got lost in the snow. He searched for two days. On the third day, the yak came back by itself."
+N: Sonam's lost yak came back by itself on the third day after he searched for two days.
+
+### instructions
+U: ek shabda ma: dashain ma jamara kun anna bata umarinchha?
+N: jau.
+G: jau
+
+### instructions
+U: yes ki no matra: kaag ra koili dubai chara hun?
+N: yes.
+G: yes
+
+### instructions
+U: number matra: 18 x 5
+T: 18 x 5 = 90.
+N: 90
+G: 90
+
+### instructions
+U: comma le 3 wata kura jun barsha ma chahinchha
+N: chhata, juta, barsadi
+
+### instructions
+U: numbered list ma 3 wata kura jun school ma sikinchha
+N: 1. padhna 2. lekhna 3. hisab
+
+### instructions
+U: euta vakya ma: hamile kina samaya mai school jaanu parchha?
+N: samaya mai jaada pura path sunna painchha.
+
+### instructions
+U: 1-2-3 ma: naya kitab ma cover halne
+N: 1. kagaj kitab bhanda ali thulo katnus. 2. chheu padkaera bhitra halnus. 3. tape le tasnus.
+
+### instructions
+U: chhoto gara: "aaja beluka hamro ghar ma kaka, kaki ra unka dui chhora chhori bhetna aaunubhayo."
+N: aaja beluka kaka ko pariwar bhetna aayo.
+
+### instructions
+U: sajilo shabda ma: "kripaya pratiksha kakshya ma basnuhos"
+N: kripaya parkhane kotha ma basnus.
+
+### instructions
+U: ek vakya ma saransh: "anil le gaun ma machha palan suru garyo. pokhari banayo. aba usle bajar ma machha bechchha."
+N: anil le gaun ma pokhari banaera machha palan suru garyo ra aba bajar ma bechchha.
+
+### instructions
+U: sano dekhi thulo: 66, 6, 606, 60
+T: 6 < 60 < 66 < 606.
+N: 6, 60, 66, 606
+
+### instructions
+U: alphabet kram ma: winter, autumn, summer, spring
+T: pahilo akshar: w, a, s, s. s duita: spring (p), summer (u), p pahila. kram: autumn, spring, summer, winter.
+N: autumn, spring, summer, winter
+
+### instructions
+U: kun farak, ek shabda: haat, khutta, tauko, topi
+N: topi.
+G: topi
+
+### instructions
+U: khali thau bhara: "kaag ko rang ____ hunchha."
+N: kalo
+G: kalo
+
+### instructions
+U: "bihe" ra "pariwar" rakhera vakya banau
+N: didi ko bihe ma pura pariwar jamma bhayo.
+
+### instructions
+U: "aglo" ra "hocho" rakhera ek vakya
+N: mero dai aglo ra ma hocho chhu.
+
+### instructions
+U: one word: what do we call the person who teaches in school?
+N: Teacher.
+G: Teacher
+
+### instructions
+U: yes or no: is a tiger a wild animal?
+N: Yes.
+G: Yes
+
+### instructions
+U: number only: 9 x 9
+T: 9 x 9 = 81.
+N: 81
+G: 81
+
+### instructions
+U: list three things that use electricity, numbered
+N: 1. fan 2. fridge 3. computer
+
+### instructions
+U: one sentence: what does a police officer do?
+N: A police officer keeps people safe and makes sure laws are followed.
+
+### instructions
+U: shorten: "I am going to the market to buy some vegetables, fruits and a kilo of rice for dinner."
+N: I am going to buy vegetables, fruit and rice for dinner.
+
+### instructions
+U: easy words: "He is very generous."
+N: He likes to give and share a lot.
+
+### instructions
+U: one-line summary: "Dipa's school had no playground. The students and parents cleared a field together. Now they play there every day."
+N: Students and parents cleared a field for Dipa's school, and now they play there daily.
+
+### instructions
+U: ek shabda: nepal ko rashtriya phul ko naam?
+N: laligurans.
+G: laligurans
+
+### instructions
+U: ho ki haina matra: lumbini rupandehi jilla ma parchha?
+N: ho.
+G: ho
+
+### instructions
+U: number matra: 2 hapta 6 din = kati din?
+T: 2 x 7 = 14. 14 + 6 = 20.
+N: 20
+G: 20
+
+### instructions
+U: comma le 3 wata kura jun hiud ma khanchhan
+N: sukuti, gundruk, tato suppa
+
+### instructions
+U: numbered list ma 3 wata kura jasle hami lai rog bata bachauchha
+N: 1. khop line 2. haat dhune 3. safa pani piune
+
+### instructions
+U: euta vakya ma: kina hami lai sathi chahinchha?
+N: sathi le dukha sukha ma sath dinchhan.
+
+### instructions
+U: 1-2-3 ma: ghar ma sano bagaincha banaune
+N: 1. ghaam laagne thau chhannus. 2. mato ma mal milaunus. 3. biruwa ropera har din pani halnus.
+
+### instructions
+U: chhoto banau: "aaja bihana sabai jana chhitai uthera mandir gae ra puja garera ghar farke."
+N: aaja bihana sabai mandir gaera puja gare.
+
+### instructions
+U: sajilo shabda: "yo pani piuna yogya chhaina"
+N: yo pani piunu hudaina.
+
+### instructions
+U: ek vakya ma saransh: "bimala ko chhora japan gayo. usle har mahina paisa pathauchha. bimala le tyo paisa le naya ghar banaun."
+N: japan gaeko bimala ko chhora le pathaeko paisa le bimala le naya ghar banain.
+
+### instructions
+U: thulo dekhi sano: 5/6, 1/6, 3/6
+T: ekai har: 5/6 > 3/6 > 1/6.
+N: 5/6, 3/6, 1/6
+
+### instructions
+U: alphabet kram ma: tea, coffee, milk, juice
+T: pahilo akshar: t, c, m, j. kram: c, j, m, t.
+N: coffee, juice, milk, tea
+
+### instructions
+U: kun milena, ek shabda: santra, suntala, kagati, kauli
+N: kauli.
+G: kauli
+
+### instructions
+U: khali thau bhara: "hami ____ ma sutchhau." (sutne thau)
+N: ochhyan
+G: ochhyan
+
+### instructions
+U: "pahad" ra "khola" rakhera ek vakya
+N: pahad bata khola bagdai aauchha.
+
+### instructions
+U: "dhilo" ko ulto shabda matra
+N: chhito.
+G: chhito
+
+### instructions
+U: one word: the opposite of "hot"
+N: Cold.
+G: Cold
+
+### instructions
+U: yes ki no matra: nepal ma ekai ota matra himal chha?
+N: no.
+G: no
+
+### instructions
+U: number matra: 200 ko 15%
+T: 200 x 15 / 100 = 30.
+N: 30
+G: 30
+
+### instructions
+U: comma le 3 wata kura jun bajar ma kinchhau
+N: tarkari, fal, chamal
+
+### instructions
+U: numbered list ma 3 wata kura jun ramro bidyarthi ko guna ho
+N: 1. samaya palan 2. mehnat 3. samman
+
+### instructions
+U: euta vakya ma bhana: hamile kina aafno bhasha bachaunu parchha?
+N: bhasha hamro sanskriti ra pahichan ho.
+
+### instructions
+U: 1-2-3 ma: kotha ko bhui puchhne
+N: 1. pahila kucho le badharnus. 2. bhijeko pochha le puchhnus. 3. sukna dinus.
+
+### instructions
+U: chhoto gara: "malai aaja ali jwaro aaeko jasto lageko le ma school jaana sakdina hola."
+N: jwaro jasto bhayeko le aaja school jaana sakdina.
+
+### instructions
+U: sajilo shabda ma: "bidyarthi haru le samuhik karya gare"
+N: bidyarthi haru le milera kaam gare.
+
+### instructions
+U: ek vakya ko saransh: "sujan ko kaksha ma naya smart board aayo. sir le video dekhaunubhayo. bidyarthi haru lai padhna ramailo bhayo."
+N: naya smart board ma sir le video dekhaera padhaunda sujan ko kaksha ramailo bhayo.
+
+### instructions
+U: sano dekhi thulo: -8, 8, -80, 80, 0
+T: -80 < -8 < 0 < 8 < 80.
+N: -80, -8, 0, 8, 80
+
+### instructions
+U: z dekhi a: chitwan, ilam, palpa
+T: pahilo akshar: c, i, p. z bata: p, i, c.
+N: palpa, ilam, chitwan
+
+### instructions
+U: kun farak, ek shabda: jutta, chappal, moja, chashma
+N: chashma.
+G: chashma
+
+### instructions
+U: khali thau: "1 kg = ____ gram, ra 2 kg = ____ gram." comma le
+N: 1000, 2000
+
+### instructions
+U: "baadal" ra "pani" rakhera ek vakya
+N: kalo baadal lagepachhi pani paryo.
+
+### instructions
+U: ho ki haina matra: "dherai" ra "thorai" ulto shabda hun?
+N: ho.
+G: ho
+
+### instructions
+U: garmi ma painne 3 wata fal bhana
+N: lichi, aanp, kera.
+U: aba tinlai alphabet kram ma
+T: pahilo akshar: l, a, k. kram: a, k, l.
+N: aanp, kera, lichi
