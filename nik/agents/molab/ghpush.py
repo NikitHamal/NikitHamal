@@ -10,7 +10,7 @@ import os
 from actl.api import ApiClient, config_from_env
 _C = ApiClient(config_from_env(os.environ))
 def gh(url, method='GET', body=None):
-    p = {'app': 'github', 'url': url, 'method': method, 'account': 'apn_GXhEjXK'}
+    p = {'app': 'github', 'url': url, 'method': method, 'account': os.environ.get('GH_ACCOUNT', 'apn_EOhAVVL')}
     if body is not None: p['body'] = json.dumps(body)
     d = json.loads(_C.request('POST', '/api/agent/connector', json_body=p, timeout=900).body.decode())
     if not d.get('ok'): sys.exit(f'API error {url}: {str(d)[:400]}')
