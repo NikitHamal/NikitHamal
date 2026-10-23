@@ -101,6 +101,132 @@
   euta/2 wata kauli, photo chahine/chha, badhi/kam GPA, books/computers, Saturday/Monday open, magyo/dinubhayo,
   kalo/seto mojaa, lyayo/pakayo machha, mangalbar/shukrabar haat). 35 English, 19 not-in-text, 9 wrong premise, 22 lookups.
 
+## reading_007.txt (200)
+- 45 texts; new kinds: kirana bill with jamma/firta (lamki), class routine with tiffin (theek agadi/theek pachhi), lost-and-found
+  nilo jhola (mahendranagar bus park), futsal line-up (dipayal: captain/goalkeeper/substitute), noodles packet steps, golbheda biu
+  packet, bharna form (aasmita rai, triyuga), sahakari khata form (khadga bahadur thapa, nominee), ilam travel plan (kanyam, antu
+  danda), bank token order, one-sentence family trees (sunmaya/dhanmaya/bikash; raju/kamala/bir bahadur/rojina), Hile Bakery
+  receipt (EN), Ward 7 water notice with A/B/C choice (EN).
+- Widened types: why chains + cause/effect pairs (rain -> kholo -> pul -> ratna ko chhora; pahiro -> bus dhilo -> pariksha 11 baje;
+  tyre pankchar -> bus; bijuli gayo -> solar batti; jado -> 2 sweater; jaro -> pranav ghar mai; Salleri rain EN), order, counting
+  (ghanti before tiffin, 5 on court, 4-day trip, 2 ahead in queue), which-is-true x4, 3-way comparisons (dhalkebar makai, sushma/
+  bimala/shova chain, pratiksha/sagun/samikshya marks, gaidakot phal, tilottama jhola shops).
+- Others: Pasang lodge Lukla (EN), sarita SMS hostel, gita scooter, Mina umbrella Putalibazar (EN), aalu/pyaj dialogue, tilak
+  kamalamai (5 sentences), bidur aankha shibir, puja manma, rita/hajurba topi-kalam, Asha Urlabari (EN), nikita/aayushma chitra,
+  bardibas-janakpur bus, dilip begnas, hari prasad bari, bipin diary, chhiring helambu, prerana SMS mandir, hamal didi mugling chiya,
+  Lamahi diary (EN), madan/kanchan roles, nik cake, rajani tihar. 34 English, 19 not-in-text, 10 wrong premise, ~13 lookup/compute pairs.
+
+## reading_008.txt (199)
+- 45 texts; new kinds: kirtipur stationery bill (prati wata, check the jamma), attariya petrol bill (bhuktani card), hotel pahuna
+  register (aayeko/jane din -> rat count), driver jagir form (jit bahadur gurung), kakarbhitta cricket batting order, kaksha 3 weekly
+  khel routine (day <-> activity reversal pair), radio karyakram times (minutes between), langtang trek plan, rice bag and chiya patti
+  packets (4 x 1/2 chamcha), trishuli harayeko mobile (inaam), photocopy line, sankhu pasal hours (bahek + matra), family tree with
+  sani aama (pemba lhamu/dolkar/nawang/temba), aunts tree (Mingmar/Pasang/Lhamu/Nima, Phaplu, EN).
+- Why chains: melamchi pipe -> dhara; ganga dhilo uthin -> bus; sharmila chhora jaro; ramita chhimeki ko kukur -> nindra; martadi hiun
+  -> truck -> tarkari mahango; Tara power cut (EN); Banepa wedding (EN, closed Wednesday too); Shreeya party moved (EN).
+- 3-way: kedar/narayan/anup speed chain, hari lal/ram lal/shyam lal chain (actual number not in text), belbari dudh 3 days, dunai menu,
+  basanta didi/bhai ages. Which-is-true x1 (tumlingtar-chainpur jeep). Others: kiran/sabin cycle-suntala arughat, chitra dullu
+  (5 sentences), kohalpur briksharopan, hari maya/sukmaya chini sapati, lemon water steps (EN), hamal sir bhugol, anjana/ritu mela,
+  Malangwa-Lalbandi fare (EN), pragya jhola count, rubina/nhuchhe filter, nikit golbheda 20-4, Myanglung grandmother (EN), monitor
+  rajman/punam, nik class 32/18, chhath jaleshwar. 32 English, 20 not-in-text, 10 wrong premise, ~12 lookup/compute pairs.
+
+## reading_009.txt (200)
+- 45 texts; new kinds: pathlaiya hardware bill with chhut (chhut kati / chhut pachhi kati), dumre chiya pasal bill, kaksha 9 clock
+  routine (minutes per period, tiffin agadi/pachhi), lost-and-found rato sweater / khairo tiffin box (rang pair), ramgram ward SMS
+  (janma darta, aaitabar-bihibar only), bhalubang volleyball jersey list (number <-> name), biskut packet (shrawan 10 + 6 mahina ->
+  magh 10), dudh ko dhulo packet, school bus darta form (buddhi, chapagaun), thimi school bus stops, devghat bhraman karyakram
+  (bihana 6 / beluka 6 pair), sel roti steps (6 ghanta / 1 ghanta), aitaman pariksha form (deadline poush 20), gaun mela (falgun 15 + 3 din).
+- Why chains: sudeep sinja hiun -> school banda (5 sentences), indira admit card, khalanga tanki safa -> dhara 8 ghanta banda,
+  khagendra pani kam -> dhan -> tarkari, aandhi -> khamba -> bijuli -> mill -> arko gaun, Bharat umbrella (EN), Shristi cousins
+  from Darchula (EN), Dev missed bus with the reason not given (EN).
+- 3-way: pradeep/ashok/manoj dakshina, swasthya chauki/school/mandir gajur chain (meters not in text), kabir/bindu/chandan 2-subject
+  table, abu khaireni fares, 3 hajurama ages. Others: Ajay/Phinjo football (EN), maili/til bahadur/man bahadur thulo buwa, dolalghat
+  ticket dialogue, sete makai 12 muri (5 sentences), sapna/rohit 500/200 chain, Jangbu yaks (EN), nikita/sarina table tennis, jhuma
+  matra/khainan, lakpa goth count, dilli diary malekhu, Homraj/Kaushila tree (EN), hamal sahu chini, Belauri 20 trees (EN), ambar/
+  keshari/padam roles, nik 150 per hapta, kaji bahek solar, katari kho kho final (5 sentences). 32 English, 20 not-in-text, 11 wrong premise.
+
+## reading_010.txt (199)
+- 45 texts; new kinds: kotha bhada bigyapan (bhimeshwar, 2 mahina advance), pasni nimta card (aarohi, sundar bazar lamjung), dudh
+  wala monthly hisab (2 liter x 30 din x 90), sahakari deposit SMS (before = 12500 - 5000), quiz team roles (sujal/kripa/yuna), cement
+  bora 1:4, cycle daud form (age inside samuha), hawai ticket (udan vs check-in), school result notice (pass/fail, %), tomato sauce
+  bottle, rupa tal dunga hours (gap 11-1, sombar banda), ghar dhani ko niyam (biralo not in text), mobile price list, bhada samjhauta
+  (dhito = 2 mahina), harayeki kalo bakhri, presentation order, tole sudhar samiti roles, Sunrise School fee receipt (Gaur, EN),
+  Jitpur computer class (EN), Chandrapur book fair with 20% (EN), bank token steps (EN).
+- Why chains: dharma solar (bijuli dherai jaanchha), phul kumari asina -> tori -> ward nibedan, kalanki truck -> jam -> biraj dhilo,
+  headsir baithak, kali gandaki pul marmat -> dunga (wrong premise: badhi), Nabina/Rozy lunch (EN), teachers' meeting (EN).
+- 3-way: padam/sher bahadur/lal bahadur aalu ropani, kalu/bina/roman jhola chain, tanahun rainfall, mobile models, ghar talla bhada.
+  Family trees: pramila/tulasi/shankar/girish (sasu, dewar), bina/tika/sarmila judwa (fupu). Others: pabina chainpur -> sanfebagar ->
+  silgadhi (5 sentences), anupama uphar with "bata", hamal bhauju fridge, hajurba masu khanubhaena, bhupal kinmel count, pratap
+  diary chaitra 30, nikita bank khata, Seti river fishing (EN), nik 3 km x 2, ropain mela asar 15 (5 sentences).
+  33 English, 19 not-in-text, 10 wrong premise.
+
+## reading_011.txt (199)
+- 45 texts; new kinds: kapada bill with "10% chhut 300" (check 3000 ko 10%), subject-teacher list (name <-> subject), gyas cylinder
+  SMS (dhulabari), 4 x 100 relay order, jhul packet, masu masala packet (2.5 x 2), badminton club form, bus ticket ratnanagar-hetauda
+  (arrival not in text), janti karyakram (theek agadi), hulak hours (shukrabar 3 baje, 4 baje sakindaina), assembly order, bijuli
+  meter nibedan (bhanu 4), jado bida notice (magh 10 inside bida), bakery list, Simara airport keys found (EN), Ward 2/3 power cut
+  (Ward 4 not listed, EN), football practice moved (EN), tree planting steps (EN), Charali hospital visit (EN).
+- Why chains: chhewang hilo -> jutta, mankumari khor jado -> anda (wrong premise: birami), hiun paglyo -> kholo -> ghatta -> makai,
+  naya sadak -> tarkari bazar -> aamdani, school computers from purano bidyarthi (wrong premise: sarkar), Grade 7 river clean-up (EN).
+- 3-way: nirajan/rojan/mukti km, syau/suntala/angur chain (mol not in text), rasila/sumi/kailash study hours, bakery, kanchhi maya/
+  didi (dobbar)/dai ages. Family trees: dristi mama/maiju, kishor/bandana/kabita/nabin (fupu). Others: Sujit/Bibash phone (EN),
+  aama/chhora phone call, village dhara (5 sentences), hajurama -> bhai -> chocolate -> didi -> aadha chain, nikit/bhai cricket 24/31,
+  pinki hajurama ping, tokari phal 16-2, shekhar diary naya kaam (8 ghanta), rajkumar mithai pasal which-is-true, hamal kaka kauli,
+  nirnayak roles, nik 14 of 20, lhamo english kitab bahek, ilam-panchthar match (5 sentences). 33 English, 22 not-in-text, 10 wrong premise.
+
+## reading_012.txt (199)
+- 45 texts; new kinds: mobile marmat bill (advance/baki), practical exam routine (3 ghanta, computer not in list), qatar parcel with
+  "bata", one-sentence tree (dil bahadur's 3 sons, yubin's father youngest -> 2 daju), harayeko khairo jhola with nagarikta, internet
+  bill SMS (line katinchha), nach team lines, uniform label, pravesh pariksha form, airport taxi bargaining (800/700/750), khelkud
+  darta notice, cycle yatra km plan, 3-match goal table (row sums, "har match ma ustai"), power bank box, TV schedule (2 ghanta 30
+  minet), nagarikta harayeko nibedan, bus crew roles, Hotel bill (EN), Grade 9 exam moved (EN), library painted (EN), Rupak SMS (EN).
+- Why chains: dherai pani -> khet ma pani jamyo -> ropai dhilo (question-first wrong premise), kanchha 2 ghanta + sir sanga sodhyo,
+  ban ma rukh katiyo -> pahiro, purano goth chuhinthyo -> naya goth -> jado lagdaina -> badhi dudh, nirmal chhata bina -> bhije,
+  buddhiman mamaghar, Sabnam pressure cooker (EN).
+- 3-way: maya/chandra/rina bachat (bich ma), aanp/kathar/mewa chain, golbheda/kankro/bhanta, dipika = gaurima > sabina (equal ages).
+  Others: dipa gai 4 liter -> 3 dairy x 80 (5 sentences), phurpa/jangmu sapati -> sal aama, Barsha before exam order (EN), nikita
+  chess 3/1/1, radha sari kinin / jutta kininan, abhibhawak baithak count 10, Pema/Tsewang/Kunga/Yangzi (EN), pooja cycle 9:45 + 10
+  minet, hamal dai bus 4 palta x 2 ghanta, dashain tika order, bachhi chandra, nik 75 of 120 paana, suntali bazar (5 sentences).
+  31 English, 25 not-in-text, 8 wrong premise.
+
+## reading_013.txt (200)
+- 45 texts; new kinds: furniture bill (advance/baki), tuition timetable (45 minet, 2 ghanta 30 minet), arjun/isha calculator +
+  chocolate, bhanja/bhanji tree (renu/aadarsha/anuja), bhetiyeko seto biralo (tek ward 9), mama SMS flight + taxi, school band roles
+  (madal/guitar/basuri/gaune, leader), oats packet (aadha cup -> 1 cup = dobbar), hostel form (khana sahit, 4 x 7000), pashu khop
+  notice (bakhra not in text), pokhara trip plan (7 ghanta bus), torch box (AA, + mathi), janakpur-jaynagar train, safai palo by day,
+  bus chadhne line, luga dhune steps, naya pasal udghatan nimta (5% of 400), Biratchowk grocery receipt (EN), Ward 11 tanker (EN),
+  Nisha picnic (EN), Bimal/Gopal/Ganga cousins (EN).
+- Why chains: gas sakiyo -> daura -> khana dhilo -> bhai dhilo, sushmita bhai chot (wrong premise: jaro), biralo dudh ghoptyayo ->
+  kalo chiya, santosh screen futyo -> sathi ko phone, saurav dahi man pardaina, ramesh juju dhau sakiyeko, Ilam bakery oven (EN),
+  Jumla landslide -> trucks -> rice price up (EN).
+- 3-way: srijal/abhaya/prasant minutes (less time = faster), motorcycle/bus/car chain, chowmein/fried rice/sel roti, tea pickers
+  man bahadur/dhan maya/pemba, sajina 4 subjects (ausat 84). Others: canteen 100 note firta, mausami baitadi patan (5 sentences),
+  didi -> bhai -> sathi -> kitab harayo chain, nikit/anmol 10 km, jyoti diary pahilo hiun, kotha saman count (thari vs wata), dhangadhi
+  khelkud order (5 sentences), hamal ji kukhura farm 500/320, Ramesh radio Gulmi (EN), nik 3 kalam x 15, chandani nurse.
+  34 English, 23 not-in-text, 11 wrong premise.
+
+## reading_014.txt (200)
+- 45 texts; new kinds: class captain chunab (votes + 2 anupasthit -> 36 in class), school canteen weekly menu (shanibar not in text),
+  pustakalaya card muna madan (14 din, magh 20 -> 15 rupiya jariwana vs magh 17 -> lagdaina), point table (jit 3 / barabari 1:
+  rumjatar 7, beltar 5, chatara 0), fruit juice packet (1 vs 4 packet), school fee bands by kaksha (boundary kaksha 5/6, kaksha 11
+  not listed), prangarik mal bora, chidiyakhana ticket (5 barsha muni nishulka), parking dar (rati 9 pachhi banda), weather by day
+  (bihibar not in text), janmadin nimta (uphar naliyaunus, letang), bijuli SMS 2% chhut on 1450 is 29 (kurintar), packing list
+  for Daman (pairs of socks, EN), Amargadhi library rule by age (EN), Arpan's thank-you letter Hetauda (EN).
+- Why chains: chituwa -> khor ko barbar (chitlang), kuhiro -> bus dhilo (palung; wrong premise: pani), ranjit bhid, library ->
+  tiffin ma padhne -> lekhai ramro, subash battery sakiyo, ek jana birami (pass count not computable).
+- 3-way / order: aakriti/saugat/subash votes, pramod dhan/makai/kodo ropani (3 guna), haat lekhai gyanendra/dilasha/saroja, kakani
+  syau/naspati/aaru (most trees vs most fruit), pahuna serving order. Family trees: chet bahadur/nar bahadur/
+  furba/sunkesari (thulo buwa, thuli aama), Ujeli/Bishnu/Hari/Kamala twins (EN). Others: fikkal chiya 30/25 after 6 baje, lalit SMS,
+  Ghandruk-Pokhara bus half fare (EN), trishna/sudha jutta-mojaa, kshitij sandhikharka -> palpa 3 days (5 sentences), yashoda
+  diary, dambar/ujeli/jeet tasks, rukmini/dinesh/mithila shops, kamal hajurama bhimphedi, nikit family cycle/scooter, mahima/aashma
+  12 + 3 minet, gita meals by day, galyang talim, Marpha apples 600/450 (EN), nik/bhai machha daana, naubise route, bhimdatta
+  matches. 30 English, 22 not-in-text, 7 wrong premise.
+
+## Round-2 revision (all of reading_007..014)
+- Strict minimal pairs measured as two questions on one text within 2 words of each other with different gold: 44% of blocks
+  (round-1 files measure 36%); explicit lookup notes ("herne matra ho, hisab chahindaina" / "This is a lookup") on 10% of blocks,
+  only where the same text also has a compute question; 26 which-is-true items; ~16% English blocks; 11% not in text.
+
 ## Gotchas for other writers (checker)
 - Do not write "25% of 1500 = 1500 x 25 / 100": the checker reads "1500 = 1500 x 25 / 100". Write "25% of 1500: 1500 x 25 / 100 = 375"
   (Nepali "1500 ko 25% = 1500 x 25 / 100 = 375" is fine because "%" breaks the chain). Never put "=" right after a time like 7:20.

@@ -4,6 +4,30 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-23 (Claude, hand-written data round 2, sandbox only, no box)
+
+- **The eval-prompt guard was silently incomplete.** `check.py`'s guard imports `bench_reading`, `shape_probe` and `bench`,
+  which import torch; in a sandbox without torch they were skipped with only a `warn:` line, and the ladder file
+  (`word_procedure_probe.py --out` writes `[cat, q, gold]` lists, not dicts) was never read. Guard 2,378 -> 2,453
+  prompts once torch is installed and the ladder is parsed (75377fb). The 16,791 existing rows still passed (no leak).
+  Rule: install CPU torch (`pip install torch --index-url https://download.pytorch.org/whl/cpu`) before any check,
+  and treat a `warn:` line from check.py as a failed check.
+- **Spelling slips survive a word-list check.** 21 Nik lines had `-cha` verbs (`paincha`, `runcha`, `chahincha`) that
+  the chat-spelling list did not know; check.py now rejects `-incha` / `-uncha` / `-ancha` / `-encha` verbs (with
+  `pancha`, `dhancha`, `bagaincha`, `galaincha` allowed). Grep the whole set for near-miss spellings after each round.
+- **Equation parser traps (writers found them):** words between numbers (`jaane 4.5 + aaune 4.5 = 9` is read as
+  `4.5 = 9`), `25% of 1500 = 1500 x 25 / 100` (read as `1500 = ...`), clock times next to `=` (`9:00 - 0:45 = 8:15`
+  is read as `45 = 8`). Written into BRIEF.md so writers keep equations bare.
+- **The safety classifier stops a writer on deceive-style requests in bulk.** Writer H's first honesty_004 attempt
+  (requests to invent or deceive, many in a row) was stopped before anything was saved; it was rewritten with
+  missing-fact, named-person's-mind and false-premise items instead. Keep refusal examples few and brief per file
+  (~10-15), spread out, and phrase briefs as finished teaching text (no think-aloud traces: that is what stopped the
+  previous session).
+- **Two helpers per round, 6-8 files each, ~60-85 min per round, ~2,000-2,700 examples per round.** Each helper gets
+  its own raw/ folder and the shared `nik/data/hand/BRIEF.md`; the lead runs the full check (cross-file duplicates),
+  audits every reading quote against its passage (`/tmp/tools/audit_reading.py`, 0 bad of 2,960), samples blocks by
+  eye, then pushes with the running total.
+
 ## 2026-10-22 afternoon (Claude, new session)
 
 - **The pencil had more wrong-number bugs, all silent:** `1,200 + 300 =` -> 500 (read "200 + 300"), `-5 + 3 =` -> 8

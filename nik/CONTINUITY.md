@@ -82,7 +82,22 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
    `nik-v2-run`. Progress: `/tmp/v2/progress.log`. ~1.5-2 h. Ship only by hand (`scripts/ship_model.py`).
 3. Hand-written data (owner's request, 2026-10-22 night): `nik/data/hand/` (STYLE.md, check.py, raw/, hand.jsonl).
 
-## HANDOVER (read first if you are the next Claude) - updated 2026-10-22 ~20:40 UTC (session 2, box 1 ended ~20:55)
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-23 ~11:35 UTC (session 3: data only, no box)
+**Now:** hand-writing teaching data toward 100k+ examples (owner's overnight goal), then build the v2 mix and train
+on the next box (`nik/agents/molab/jobs/run_v2.sh`), then the ship gate vs live m50. No box until the owner gives one.
+- `nik/data/hand/`: STYLE.md (house style), BRIEF.md (writing-helper brief + checker gotchas), check.py (compiler +
+  validator; needs CPU torch installed or the eval guard is incomplete), raw/<writer>/ (b c e f g h m), hand.jsonl.
+- Total **21,473 examples, 0 rejects** (2026-10-23 ~11:30 UTC): reading 2,960, math-word 2,930, translate 2,627,
+  reasoning 2,359, instructions 2,078, knowledge 1,758, english 1,356, advice 1,227, multiturn 1,196, write 1,124,
+  chat 1,049, honesty 809. Writers this session: G (reading, raw/g), H (multiturn + honesty, raw/h).
+- Loop: 2 helpers per round, each its own folder, 6-8 files; lead runs the full check, audits reading quotes,
+  samples by eye, pushes with the running total (`state.json` tracks progress on /agents).
+- Next categories: math-word (qty x price, change, unused/missing numbers, column working), translate (pronoun/tense/
+  aspect), instructions (exact formats: "number matra"), reasoning (weekdays/units in many shapes), persona (lead),
+  then chat/advice/write/knowledge/english.
+- Owner decisions still open from session 2: card `ship-s13-1022`, `gate-rule-1022b` (see below).
+
+## HANDOVER (session 2) - updated 2026-10-22 ~20:40 UTC (box 1 ended ~20:55)
 **Full handover prompt: `nik/agents/HANDOVER.md`.** Live model = **m50 (unchanged)**. Live /chat code improved today
 (main): pencil fixes (grouped numbers, signs, clock times), plain digits for `1,200`, consistency vote (m50 held-out chat
 71 -> 77), re-ask on empty replies. Box 1 is gone after ~20:55; everything is on private Kaggle (below).
