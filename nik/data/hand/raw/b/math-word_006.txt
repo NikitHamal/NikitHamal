@@ -1,0 +1,934 @@
+### math-word
+U: school canteen ma samosa 20, chiya 15. 6 jana sathi le 2-2 samosa ra 1-1 chiya khayau. jamma kati?
+T: samosa: 6 x 2 = 12, 12 x 20 = 240. chiya: 6 x 15 = 90. jamma: 240 + 90 = 330.
+N: jamma 330 rupiya bhayo.
+G: 330
+
+### math-word
+U: library ko kitab dhilo farkaye din ko 5 rupiya jarimana. 2 hapta dhilo bhayo bhane kati?
+T: 2 hapta = 14 din. 14 x 5 = 70.
+N: 70 rupiya jarimana tirnu parchha.
+G: 70
+
+### math-word
+U: aspatal ko ticket 50, aushadhi 1 chakki 8 rupiya, din ma 3 chakki, 5 din. jamma kharcha?
+T: chakki: 3 x 5 = 15, 15 x 8 = 120. jamma: 50 + 120 = 170.
+N: jamma 170 rupiya kharcha hunchha.
+G: 170
+
+### math-word
+U: bank khata ma 15000 thiyo. 4500 jamma gare, 7200 nikale. aba kati?
+T: 15000 + 4500 = 19500. 19500 - 7200 = 12300.
+N: aba khata ma 12300 rupiya chha.
+G: 12300
+
+### math-word
+U: darji le 1 shirt ma 1.75 m kapada lagauchha. 8 wata shirt ko lagi kati m?
+T: 8 x 1.75 = 14.
+N: 8 wata shirt ko lagi 14 m kapada chahinchha.
+G: 14
+
+### math-word
+U: sikarmi le 2.4 m ko phalyak bata 60 cm ka tukra katchha. kati tukra?
+T: 2.4 m = 240 cm. 240 / 60 = 4.
+N: 4 wata tukra banchha.
+G: 4
+
+### math-word
+U: printer le minet ma 25 pana print garchha. 600 pana kati minet ma?
+T: 600 / 25 = 24.
+N: 24 minet lagchha.
+G: 24
+
+### math-word
+U: marathon ko lagi ma hapta ma 3 din, din ko 8 km, ani aaitabar 15 km daudchhu. hapta ma kati?
+T: 3 x 8 = 24. 24 + 15 = 39.
+N: hapta ma 39 km daudnu hunchha.
+G: 39
+
+### math-word
+U: solar panel le 1 ghanta ma 200 watt dinchha, din ma 5 ghanta ghaam. din ma kati unit? 1000 watt-ghanta = 1 unit
+T: 200 x 5 = 1000 watt-ghanta, arthat 1 unit.
+N: din ma 1 unit bijuli banchha.
+G: 1
+
+### math-word
+U: rice cooker ma 1 cup chamal le 2 jana pugchha. 9 jana ko lagi kati cup?
+T: 9 / 2 = 4.5.
+N: 4.5 cup chamal chahinchha.
+G: 4.5
+
+### math-word
+U: bhanja ko bihe ma 350 jana bolaieko, 80% aaye. ek plate ko 550. khana ko kharcha?
+T: aayeka: 350 x 80 / 100 = 280. kharcha: 280 x 550 = 154000.
+N: khana ko kharcha 154000 rupiya.
+G: 154000
+
+### math-word
+U: bike le 1 km ma 3 rupiya ko petrol khanchha. mahina ma 600 km chalaye kati?
+T: 600 x 3 = 1800.
+N: mahina ma 1800 rupiya petrol kharcha.
+G: 1800
+
+### math-word
+U: bihana 11:40 dekhi diuso 2:15 samma meeting. kati samaya?
+T: 11:40 bata 12:00 samma 20 minet. 12:00 bata 2:00 samma 2 ghanta. 2:00 bata 2:15 samma 15 minet. jamma 2 ghanta 35 minet.
+N: meeting 2 ghanta 35 minet chalyo.
+G: 2 ghanta 35 minet
+
+### math-word
+U: raati 11:20 ma sute, bihana 6:50 ma uthe. kati sute?
+T: 11:20 bata 12:00 samma 40 minet. 12:00 bata 6:50 samma 6 ghanta 50 minet. jamma: 6 ghanta 90 minet, arthat 7 ghanta 30 minet.
+N: tapai 7 ghanta 30 minet sutnu bhayo.
+G: 7 ghanta 30 minet
+
+### math-word
+U: kamal 12 barsha ko, bimal kamal bhanda 5 barsha jetho, nirmal bimal bhanda 3 barsha kanchho. nirmal kati?
+T: bimal: 12 + 5 = 17. nirmal: 17 - 3 = 14.
+N: nirmal 14 barsha ko.
+G: 14
+
+### math-word
+U: 2 jana 400 m ko round ma ekai thau bata ulto disha daudchhan, 4 m/s ra 6 m/s. kati second ma bhetchhan?
+T: najik aaune gati: 4 + 6 = 10 m/s. samaya: 400 / 10 = 40 second.
+N: 40 second ma bhetchhan.
+G: 40
+
+### math-word
+U: suntala ko jus 1 litre banauna 12 wata suntala. 250 ml ko 6 gilas ko lagi kati?
+T: jamma: 6 x 250 = 1500 ml = 1.5 litre. suntala: 1.5 x 12 = 18.
+N: 18 wata suntala chahinchha.
+G: 18
+
+### math-word
+U: 3 jana ko lunch bill 1380, tip 120. sabai le baraabar tirda?
+T: jamma: 1380 + 120 = 1500. 1500 / 3 = 500.
+N: ek jana le 500 rupiya tirnu parchha.
+G: 500
+
+### math-word
+U: hamro ghar ko pani ko tanki 1500 litre, 5 jana, ek jana lai din ma 60 litre. kati din chalchha?
+T: din ma: 5 x 60 = 300. 1500 / 300 = 5.
+N: tanki 5 din chalchha.
+G: 5
+
+### math-word
+U: 1 kg aalu 50, 1 kg ma 8 wata. 1 wata ko kati?
+T: 50 / 8 = 6.25.
+N: 1 wata aalu ko 6 rupiya 25 paisa pareko.
+G: 6 rupiya 25 paisa
+
+### math-word
+U: pasal ma 1200 ko saman 2 kista ma: aaja 40%, baki arko mahina. arko mahina kati?
+T: aaja: 1200 x 40 / 100 = 480. baki: 1200 - 480 = 720.
+N: arko mahina 720 rupiya tirnu parchha.
+G: 720
+
+### math-word
+U: 5 wata sankhya ko ausat 20. ek sankhya 30 hataye baki ko ausat?
+T: jamma: 5 x 20 = 100. hatayepachhi: 100 - 30 = 70. 4 sankhya: 70 / 4 = 17.5.
+N: baki 4 sankhya ko ausat 17.5.
+G: 17.5
+
+### math-word
+U: hamro kaksha ko 8 jana le 50-50 ra 4 jana le 100-100 rupiya uthaye. jamma?
+T: 8 x 50 = 400. 4 x 100 = 400. jamma: 400 + 400 = 800.
+N: jamma 800 rupiya uthyo.
+U: tara hami 15 jana thiyau, aru 3 jana le kati diye thaha chhaina. jamma kati?
+T: 12 jana ko 800 matra thaha chha, baki 3 jana ko rakam diyeko chhaina.
+N: 12 jana bata 800 rupiya uthyo, tara baki 3 jana le kati diye bhanne thaha nabhai pura jamma bhanna sakdina. tiniharu ko rakam bhannus, 800 ma jodidinchhu.
+
+### math-word
+U: 1 kotha rangauna 4 litre, 1 litre 650. 5 kotha ko rang ko kharcha?
+T: rang: 5 x 4 = 20 litre. kharcha: 20 x 650 = 13000.
+N: 13000 rupiya lagchha.
+G: 13000
+
+### math-word
+U: ek jodi jutta 2200 ma kinera 20% nafa ma bechyo. bechne mol?
+T: 2200 x 20 / 100 = 440. 2200 + 440 = 2640.
+N: 2640 rupiya ma bechyo.
+G: 2640
+
+### math-word
+U: 1 hapta ma 4 din 2 ghanta, 3 din 3 ghanta guitar. hapta ma kati?
+T: 4 x 2 = 8. 3 x 3 = 9. 8 + 9 = 17.
+N: hapta ma 17 ghanta guitar bajaunu hunchha.
+G: 17
+
+### math-word
+U: hamro micro le 1 trip ma 45 minet, 8 trip ma bich ma 10-10 minet aaram (antim pachhi haina). jamma samaya?
+T: trip: 8 x 45 = 360 minet. aaram: 7 x 10 = 70 minet. jamma: 360 + 70 = 430 minet, arthat 7 ghanta 10 minet.
+N: jamma 7 ghanta 10 minet lagchha.
+G: 7 ghanta 10 minet
+
+### math-word
+U: suntala 1 kg ma 6 wata, 1 kg 120. 30 wata kinda kati?
+T: kg: 30 / 6 = 5. 5 x 120 = 600.
+N: 30 wata suntala ko 600 rupiya.
+G: 600
+
+### math-word
+U: aama ko umer ra mero umer ko farak 28. 4 barsha pachhi farak kati?
+T: umer ko farak sadhai ekai: 28.
+N: 4 barsha pachhi pani farak 28 barsha nai.
+G: 28
+
+### math-word
+U: mama ko kheti ma 3 jana le 4 din ma 6 ropani khanyau. 1 jana le 1 din ma kati?
+T: jamma kaam: 3 x 4 = 12 jana-din. 6 / 12 = 0.5 ropani.
+N: 1 jana le 1 din ma 0.5 ropani, arthat aadha ropani khanchha.
+G: 0.5
+
+### math-word
+U: tarkari ko mol: kauli 60, bhanta 50, golbheda 80 (kg). 0.5 kg kauli, 1 kg bhanta, 1.5 kg golbheda?
+T: kauli: 0.5 x 60 = 30. bhanta: 50. golbheda: 1.5 x 80 = 120. jamma: 30 + 50 + 120 = 200.
+N: jamma 200 rupiya.
+G: 200
+
+### math-word
+U: 18 karat gahana 20 gram, sudh sun 75%. sudh sun ko mol gram ko 10000 bhaye?
+T: sudh: 20 x 75 / 100 = 15 gram. mol: 15 x 10000 = 150000.
+N: sudh sun ko mol 150000 rupiya.
+G: 150000
+
+### math-word
+U: jhapa bata kathmandu bus 12 ghanta, ma raati 7 baje chadhe. bato ma 2 ghanta dhilo bhayo. kati baje pugye?
+T: jamma: 12 + 2 = 14 ghanta. raati 7 baje bata 5 ghanta pachhi raati 12 baje, baki 9 ghanta: bihana 9 baje.
+N: bholi pallo din bihana 9 baje pugnu bhayo.
+G: 9
+
+### math-word
+U: ek din ma 3 palta 200 ml dudh bachcha lai, 1 hapta ma kati litre?
+T: din: 3 x 200 = 600 ml. hapta: 600 x 7 = 4200 ml = 4.2 litre.
+N: 1 hapta ma 4.2 litre dudh.
+G: 4.2
+
+### math-word
+U: bhai ko class ma 42 jana, 1/6 anupasthit. upasthit kati?
+T: anupasthit: 42 / 6 = 7. upasthit: 42 - 7 = 35.
+N: 35 jana upasthit.
+G: 35
+
+### math-word
+U: momo ko pasal ma bihana 10 kg ra beluka 15 kg masu. 1 kg le 50 momo. jamma kati momo?
+T: masu: 10 + 15 = 25 kg. momo: 25 x 50 = 1250.
+N: jamma 1250 wata momo banchha.
+G: 1250
+
+### math-word
+U: hamro ghar dekhi mandir 1.8 km, ma 6 minet ma 1 km hidchhu. kati minet?
+T: 1.8 x 6 = 10.8 minet, arthat 10 minet 48 second.
+N: 10.8 minet, arthat 10 minet 48 second lagchha.
+G: 10.8
+
+### math-word
+U: A shop gives 1 free pen with every 4 pens bought. Hari wants 15 pens. How many must he buy?
+T: Every 5 pens = 4 bought + 1 free. 15 / 5 = 3 groups. Bought: 3 x 4 = 12.
+N: Hari must buy 12 pens to get 15.
+G: 12
+
+### math-word
+U: A tank has 800 litres. A family uses 120 litres a day. After 5 days, how much is left?
+T: Used: 5 x 120 = 600. Left: 800 - 600 = 200.
+N: 200 litres are left after 5 days.
+G: 200
+
+### math-word
+U: A bus leaves at 6:45 am and the trip takes 4 hours 30 minutes. When does it arrive?
+T: 6:45 + 4 hours = 10:45. 10:45 + 30 minutes = 11:15.
+N: It arrives at 11:15 am.
+G: 11:15
+
+### math-word
+U: hajurba le 5 jana nati natini lai 2400 rupiya umer anusar 1:1:2:2:2 ma baadnu bhayo. sano ko kati?
+T: jamma bhag: 1 + 1 + 2 + 2 + 2 = 8. ek bhag: 2400 / 8 = 300. sano dui jana ko 300-300.
+N: sano nati natini le 300-300 rupiya paye, thula le 600-600.
+G: 300
+
+### math-word
+U: 1 dozen kera 120, kera ko bunch ma 3 dozen. 2 bunch kati?
+T: 1 bunch: 3 x 120 = 360. 2 bunch: 360 x 2 = 720.
+N: 2 bunch ko 720 rupiya.
+G: 720
+
+### math-word
+U: kina ho, 1/2 + 1/3 = 2/5 ho?
+T: 1/2 = 3/6, 1/3 = 2/6. 3/6 + 2/6 = 5/6.
+N: haina, 1/2 + 1/3 = 5/6 hunchha. bhinna jodda pahila har ko ekai banaunu parchha, mathi ra tala sidhai jodne haina.
+G: 5/6
+
+### math-word
+U: pizza ko 1/2 bhai le, 1/3 maile khaye. kati baki?
+T: khayeko: 1/2 + 1/3 = 5/6. baki: 1 - 5/6 = 1/6.
+N: pizza ko 1/6 bhag baki chha.
+G: 1/6
+
+### math-word
+U: ma 6 barsha ma 1 inch le ... haina. bhai ko height har barsha 6 cm badhchha. ahile 120 cm. 3 barsha pachhi?
+T: 3 x 6 = 18. 120 + 18 = 138.
+N: 3 barsha pachhi bhai 138 cm hunchha, yahi gati le badhe.
+G: 138
+
+### math-word
+U: tapai le bhanna saknu hunchha mero bhai kati aglo hunchha 20 barsha ma?
+T: bhawishya ko uchai pakka thaha hudaina, bhai ko ahile ko uchai pani diyeko chhaina.
+N: bhai ko ahile ko uchai ra badhne gati thaha chhaina, ra uchai sadhai ekai gati ma badhdaina, tyasaile pakka bhanna sakdina.
+
+### math-word
+U: 1 ropani ma 500 wata dhan ko gaanja ... haina, 1 ropani bata 200 kg dhan. 1 kg dhan 35. 8 ropani ko kati?
+T: dhan: 8 x 200 = 1600 kg. paisa: 1600 x 35 = 56000.
+N: 8 ropani ko dhan bata 56000 rupiya.
+G: 56000
+
+### math-word
+U: 3 ghanta ma 210 km jaane bus 30 minet dhilo chhutyo, samaya mai pugna kati gati chahinchha?
+T: samaya: 3 ghanta - 30 minet = 2.5 ghanta. gati: 210 / 2.5 = 84 km/h.
+N: 84 km/h ma chalaunu parchha, tara bato surakshit nabhaye dhilo pugnu nai ramro.
+G: 84
+
+### math-word
+U: dherai sajilo: 20 rupiya ko 5 wata?
+T: 5 x 20 = 100.
+N: 100 rupiya.
+G: 100
+
+### math-word
+U: 3 jana le 1 ghanta ma 90 wata pamphlet baadchhan. 1 jana le 2 ghanta ma kati?
+T: 1 jana 1 ghanta: 90 / 3 = 30. 2 ghanta: 30 x 2 = 60.
+N: 1 jana le 2 ghanta ma 60 wata.
+G: 60
+
+### math-word
+U: 60 km/h ma 20 minet chalaye, ani 40 km/h ma 30 minet. jamma kati km?
+T: pahilo: 60 x 20 / 60 = 20 km. dosro: 40 x 30 / 60 = 20 km. jamma: 20 + 20 = 40 km.
+N: jamma 40 km.
+G: 40
+
+### math-word
+U: suntala bagan ko kaam ma 6 jana, 15 din, din ko 900. 2 jana le 5 din matra kaam gare. jamma jyala?
+T: 4 jana pura 15 din: 4 x 15 = 60 din. 2 jana 5 din: 2 x 5 = 10 din. jamma: 60 + 10 = 70 din. jyala: 70 x 900 = 63000.
+N: jamma 63000 rupiya jyala.
+G: 63000
+
+### math-word
+U: gaun ko mela ma 3 din ma 1500, 2100 ra 1800 jana aaye. ausat din ko?
+T: 1500 + 2100 + 1800 = 5400. 5400 / 3 = 1800.
+N: din ko ausat 1800 jana aaye.
+G: 1800
+
+### math-word
+U: 75 kg ko bora ko 4/5 matra bokna sakchhu. kati kg?
+T: 75 / 5 = 15. 15 x 4 = 60.
+N: tapai 60 kg bokna saknu hunchha.
+G: 60
+
+### math-word
+U: 100 m ko race ma 1st 12.5 second, 2nd 13.2 second. farak?
+T: 13.2 - 12.5 = 0.7.
+N: 0.7 second ko farak.
+G: 0.7
+
+### math-word
+U: hari le 1 din ma 4 ghanta padhchha, gita 2.5 ghanta. hapta ma kati badhi?
+T: din ma farak: 4 - 2.5 = 1.5. hapta: 1.5 x 7 = 10.5 ghanta.
+N: hari le hapta ma 10.5 ghanta, arthat 10 ghanta 30 minet badhi padhchha.
+G: 10.5
+
+### math-word
+U: ma sanga 100 ko 4 ra 50 ko 6 note chha, 650 ko saman kinda kati baki?
+T: jamma: 4 x 100 = 400, 6 x 50 = 300, 400 + 300 = 700. baki: 700 - 650 = 50.
+N: 50 rupiya baki rahanchha.
+G: 50
+
+### math-word
+U: 2 bahini ko umer jodda 30, farak 4. jethi kati?
+T: jethi: 30 + 4 = 34, 34 / 2 = 17. kanchhi: 30 - 17 = 13.
+N: jethi 17 ra kanchhi 13 barsha ki.
+G: 17
+
+### math-word
+U: 7 baje bihana dekhi 5 baje beluka samma kaam, 1 ghanta khana. 6 din. hapta ma kati ghanta?
+T: din: 7 bata 5 samma 10 ghanta, khana ghataera 9. hapta: 9 x 6 = 54.
+N: hapta ma 54 ghanta kaam.
+G: 54
+
+### math-word
+U: chiya factory ma 1 machine le 1 ghanta ma 50 kg patti sukauchha. 2 machine le 8 ghanta ma kati?
+T: 1 machine 8 ghanta: 50 x 8 = 400. 2 machine: 400 x 2 = 800.
+N: 800 kg patti sukinchha.
+G: 800
+
+### math-word
+U: 1500 ko 3/5 kati? ani tyasko 20%?
+T: 1500 / 5 = 300, 300 x 3 = 900. 900 x 20 / 100 = 180.
+N: 1500 ko 3/5 bhaneko 900, ra 900 ko 20% bhaneko 180.
+G: 180
+
+### math-word
+U: barsha ko 3 mahina chhutti, padhai 9 mahina. padhai kati pratishat?
+T: 9 x 100 / 12 = 75.
+N: barsha ko 75% padhai.
+G: 75
+
+### math-word
+U: 2 dozen ande ko 360, 5 wata phutyo. phuteko ko mol kati gumyo?
+T: ek wata: 360 / 24 = 15. 5 wata: 5 x 15 = 75.
+N: phuteko ande ko 75 rupiya gumyo.
+G: 75
+
+### math-word
+U: rojina le ghanta ma 120 shabda lekhchhin ... haina minet ma 30 shabda type. 1500 shabda?
+T: 1500 / 30 = 50 minet.
+N: 50 minet lagchha.
+G: 50
+
+### math-word
+U: 1 tola ko chandi 1500, 15 tola ko kati?
+T: 15 x 1500 = 22500.
+N: 15 tola chandi ko 22500 rupiya.
+G: 22500
+
+### math-word
+U: hamro team le 3 match ma 2, 5 ra 1 goal garyo, 4, 2 ra 1 goal khayo. goal farak?
+T: gareko: 2 + 5 + 1 = 8. khayeko: 4 + 2 + 1 = 7. farak: 8 - 7 = 1.
+N: goal farak +1.
+G: 1
+
+### math-word
+U: jamma 5 kg ko pasal ko jhola, 1.2 kg chini, 2.5 kg chamal ra baki tarkari. tarkari kati?
+T: 1.2 + 2.5 = 3.7. 5 - 3.7 = 1.3.
+N: tarkari 1.3 kg.
+U: tara jhola ko afnai taul 200 gram bhaye tarkari kati?
+T: jhola: 0.2 kg. tarkari: 1.3 - 0.2 = 1.1.
+N: jhola ko taul katda tarkari 1.1 kg.
+G: 1.1
+
+### math-word
+U: pahad ko gaun ma 1 ghanta ma 2.5 km ukalo hidiyo. 10 km kati ghanta?
+T: 10 / 2.5 = 4.
+N: 4 ghanta lagchha.
+G: 4
+
+### math-word
+U: gita le 600 ko 3 wata kitab kinin, 1 wata 250, arko 200. tesro kati?
+T: 600 - 250 - 200 = 150.
+N: tesro kitab 150 rupiya ko.
+G: 150
+
+### math-word
+U: tihar ko lagi ghar ma 5 wata malla, 1 malla ma 40 phool. 3 din, din din naya. kati phool?
+T: 1 din: 5 x 40 = 200. 3 din: 200 x 3 = 600.
+N: 600 wata phool chahinchha.
+G: 600
+
+### math-word
+U: 20% nafa ma 1800 ma bechyo. kineko kati?
+T: bechne mol kineko ko 120%. kineko: 1800 x 100 / 120 = 1500.
+N: kineko mol 1500 rupiya.
+G: 1500
+
+### math-word
+U: barsha ko 365 din ma 1 din 1 rupiya, ani har din 1 rupiya badhaudai (1, 2, 3 ...). 10 din ma kati?
+T: 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 = 55.
+N: 10 din ma 55 rupiya jamma hunchha.
+G: 55
+
+### math-word
+U: kheti ma 1 bigha ma 12 quintal gahu, quintal ko 3500. 1.5 bigha ma?
+T: 1.5 x 12 = 18 quintal. 18 x 3500 = 63000.
+N: 63000 rupiya.
+G: 63000
+
+### math-word
+U: aaja 9 baje office pugnu, ghar bata 1 ghanta 15 minet. bihana 7:20 ma nikale kati agadi pugchhu?
+T: pugne: 7:20 ma 1 ghanta 15 minet thapda 8:35. 8:35 bata 9:00 samma 25 minet, tyasaile 25 minet agadi.
+N: 8:35 ma pugnu hunchha, 25 minet agadi.
+G: 25
+
+### math-word
+U: 4 wata syau 180, 3 wata nashpati 105. 1 syau ra 1 nashpati farak?
+T: syau: 180 / 4 = 45. nashpati: 105 / 3 = 35. farak: 45 - 35 = 10.
+N: syau 10 rupiya mahango.
+G: 10
+
+### math-word
+U: hamro school ko 2 bus, ek bus le din ma 60 km. 1 litre ma 5 km. 1 hapta (6 din) ma kati litre?
+T: din ma 2 bus: 2 x 60 = 120 km. diesel: 120 / 5 = 24 litre. 6 din: 24 x 6 = 144.
+N: 1 hapta ma 144 litre diesel.
+G: 144
+
+### math-word
+U: jamma 64 wata chakleti 3 bhai bahini lai 2:3:3 ma. kanchhi le 2 bhag. kanchhi lai kati?
+T: jamma bhag: 2 + 3 + 3 = 8. ek bhag: 64 / 8 = 8. kanchhi: 2 x 8 = 16.
+N: kanchhi lai 16 wata chakleti.
+G: 16
+
+### math-word
+U: 3 litre ko jug bata 4 jana lai baraabar, ek jana ko kati ml?
+T: 3000 / 4 = 750.
+N: ek jana lai 750 ml.
+G: 750
+
+### math-word
+U: bajeko janmadin 2012 saal, aaja 2082. kati barsha?
+T: 2082 - 2012 = 70.
+N: 70 barsha (tyo saal ko janmadin aaisakeko bhaye).
+G: 70
+
+### math-word
+U: 5 jana ko pariwar ma ek jana lai mahina ko 3000 khana kharcha, ani ghar bhada 12000. mahina ma jamma?
+T: khana: 5 x 3000 = 15000. jamma: 15000 + 12000 = 27000.
+N: mahina ma 27000 rupiya kharcha.
+G: 27000
+
+### math-word
+U: ek bigha ma 13 ropani bhanchhan re. 2 bigha kati ropani?
+T: 2 x 13 = 26. tara bigha ra ropani ko pakka sambandha ma alikati farak hunasakchha, tapai le diyeko 13 nai maaneko.
+N: tapai le bhaneko anusar 2 bigha bhaneko 26 ropani.
+G: 26
+
+### math-word
+U: 3 ghanta ma 4 jana le 1200 chiura ko packet banaye. 1 jana le 1 ghanta ma kati?
+T: 4 jana 1 ghanta: 1200 / 3 = 400. 1 jana: 400 / 4 = 100.
+N: 1 jana le 1 ghanta ma 100 wata packet banaye.
+G: 100
+
+### math-word
+U: tapai mero exam ko marks bhannus ta
+T: marks ko barema kehi jankari chhaina.
+N: tapai ko exam ko marks malai thaha chhaina, tapai le bhannu bhayeko chhaina. marks bhannus bhane pratishat, ausat ki grade nikalna madat garchhu.
+
+### math-word
+U: marks 4 subject ma 82, 76, 91, 71. ausat ra pratishat?
+T: jamma: 82 + 76 = 158, 158 + 91 = 249, 249 + 71 = 320. ausat: 320 / 4 = 80. purnanka 400 maanda: 320 x 100 / 400 = 80.
+N: ausat 80 ra pratishat 80% (sabai subject 100 purnanka ko bhaye).
+G: 80
+
+### math-word
+U: hamro chiya bagan ma 250 jana, 3/5 mahila. purush ra mahila ko farak?
+T: mahila: 250 / 5 = 50, 50 x 3 = 150. purush: 250 - 150 = 100. farak: 150 - 100 = 50.
+N: mahila purush bhanda 50 jana badhi.
+G: 50
+
+### math-word
+U: ek hapta ko kharcha 3500, barsha ma kati? 52 hapta
+T: 3500 x 52 = 182000.
+N: barsha ma 182000 rupiya.
+G: 182000
+
+### math-word
+U: gas ko 1 cylinder 1960, 35 din chalchha. din ko kharcha?
+T: 1960 / 35 = 56. jaach: 35 x 56 = 1960, milyo.
+N: din ko 56 rupiya gas kharcha.
+G: 56
+
+### math-word
+U: sapana ko bachat: jan ma 2000, feb ma 2500, mar ma 3000. yahi kram ma june samma jamma?
+T: har mahina 500 badhchha: apr 3500, may 4000, jun 4500. jamma: 2000 + 2500 + 3000 + 3500 + 4000 + 4500 = 19500.
+N: june samma jamma 19500 rupiya bachat hunchha.
+G: 19500
+
+### math-word
+U: An item costs Rs 850. Hari pays with a Rs 1000 note. What is the change in fewest notes and coins (100, 50, 20, 10, 5)?
+T: Change: 1000 - 850 = 150. 100 x 1 = 100, left 50. 50 x 1 = 50, left 0.
+N: The change is Rs 150: one 100 note and one 50 note.
+G: 150
+
+### math-word
+U: A farmer sells 40 kg of tomatoes at Rs 55 per kg and pays Rs 300 for transport. How much does he keep?
+T: Sales: 40 x 55 = 2200. Keep: 2200 - 300 = 1900.
+N: He keeps Rs 1900.
+G: 1900
+
+### math-word
+U: A movie is 140 minutes long. How long is that in hours and minutes?
+T: 2 x 60 = 120. 140 - 120 = 20.
+N: 140 minutes is 2 hours 20 minutes.
+G: 2 hours 20 minutes
+
+### math-word
+U: hamro gaun dekhi sadarmukam ko bato 36 km, 1/3 pakki, baki kachchi. kachchi kati km?
+T: pakki: 36 / 3 = 12. kachchi: 36 - 12 = 24.
+N: 24 km kachchi bato.
+U: pakki bato ma 40 km/h, kachchi ma 20 km/h. jamma samaya?
+T: pakki: 12 / 40 = 0.3 ghanta, arthat 18 minet. kachchi: 24 / 20 = 1.2 ghanta, arthat 72 minet. jamma: 18 + 72 = 90 minet, arthat 1 ghanta 30 minet.
+N: jamma 1 ghanta 30 minet lagchha (12 km pakki ra 24 km kachchi bhaye).
+G: 1 ghanta 30 minet
+
+### math-word
+U: tihar ma 3 kg mithai: 1 kg laddu 600, 1 kg barfi 900, 1 kg jeri 300. ausat kg ko mol?
+T: jamma: 600 + 900 + 300 = 1800. ausat: 1800 / 3 = 600.
+N: ausat kg ko 600 rupiya pareko.
+G: 600
+
+### math-word
+U: kati wata 5 rupiya ko sikka ma 175 rupiya hunchha?
+T: 175 / 5 = 35.
+N: 35 wata sikka.
+G: 35
+
+### math-word
+U: barsha ma 3 palta bihe ma jaane, euta ma 2000 upahar ra 1500 lugaa. barsha ma kati?
+T: euta: 2000 + 1500 = 3500. 3 palta: 3500 x 3 = 10500.
+N: barsha ma 10500 rupiya.
+G: 10500
+
+### math-word
+U: 1 ghanta ma 8 km cycle. 1 ghanta 45 minet ma kati?
+T: 1.75 x 8 = 14.
+N: 14 km.
+G: 14
+
+### math-word
+U: aama ko 4 wata gai, 2 le din ma 8 litre, 2 le 5 litre. bihana aadha, beluka aadha. bihana kati?
+T: jamma: 2 x 8 = 16, 2 x 5 = 10, 16 + 10 = 26. bihana: 26 / 2 = 13.
+N: bihana 13 litre dudh.
+G: 13
+
+### math-word
+U: 1 kg ma 1000 gram, 1 gram ma 1000 mg. 1 kg ma kati mg?
+T: 1000 x 1000 = 1000000.
+N: 1 kg ma 1000000 (10 lakh) mg.
+G: 1000000
+
+### math-word
+U: 500 mg ko chakki din ma 2 palta 5 din. jamma kati gram?
+T: din: 2 x 500 = 1000 mg, arthat 1 gram. 5 din: 5 x 1 = 5 gram.
+N: jamma 5 gram aushadhi.
+G: 5
+
+### math-word
+U: bus ma 40 seat, 25 bhariyo, 1/3 baki seat ma pachhi bidyarthi. bidyarthi kati?
+T: baki: 40 - 25 = 15. bidyarthi: 15 / 3 = 5.
+N: 5 jana bidyarthi.
+G: 5
+
+### math-word
+U: pasal ma 45 ko 3 wata, 70 ko 2 wata ra 125 ko 1 wata kinyo. 500 diyo, firta?
+T: 3 x 45 = 135. 2 x 70 = 140. 135 + 140 + 125 = 400. firta: 500 - 400 = 100.
+N: 100 rupiya firta.
+G: 100
+
+### math-word
+U: dherai sajilo: ghadi ma 60 minet, aadha ghanta kati minet?
+T: 60 / 2 = 30.
+N: 30 minet.
+G: 30
+
+### math-word
+U: lamo yatra: 3 din, din ko 250 km. pahilo din 280, dosro 230. tesro din kati?
+T: jamma: 3 x 250 = 750. tesro: 750 - 280 - 230 = 240.
+N: tesro din 240 km.
+G: 240
+
+### math-word
+U: 15 jana sathi ko group photo ma 3 line, baraabar. ek line ma?
+T: 15 / 3 = 5.
+N: ek line ma 5 jana.
+G: 5
+
+### math-word
+U: hamro school ko football maidan 100 m x 64 m. chhetrafal?
+T: 100 x 64 = 6400.
+N: 6400 varga meter.
+G: 6400
+
+### math-word
+U: ek din ma 15 minet, 1 barsha ma kati ghanta? 365 din
+T: 15 x 365 = 5475 minet. 5475 / 60 = 91.25 ghanta.
+N: barsha ma 91.25 ghanta, arthat 91 ghanta 15 minet.
+G: 91.25
+
+### math-word
+U: sanu le 8 baje padhna suru garin, 3 subject 50-50 minet, bich ma 10-10 minet break. kati baje?
+T: padhai: 3 x 50 = 150. break: 2 x 10 = 20. jamma: 170 minet, arthat 2 ghanta 50 minet. 8:00 bata 10:50.
+N: sanu 10:50 ma sakin.
+G: 10:50
+
+### math-word
+U: hari ko bhada 9000, bijuli 800, pani 300, internet 1000. 3 jana le baraabar?
+T: jamma: 9000 + 800 + 300 + 1000 = 11100. 11100 / 3 = 3700.
+N: ek jana ko 3700 rupiya.
+G: 3700
+
+### math-word
+U: 2 litre ko bottle bata 400 ml ka gilas kati bharinchha?
+T: 2 litre = 2000 ml. 2000 / 400 = 5.
+N: 5 wata gilas bharinchha.
+G: 5
+
+### math-word
+U: aaja 1 kg masu 750 ma kinera, 4 jana ko pariwar. ek jana ko kati gram?
+T: 1000 / 4 = 250.
+N: ek jana ko 250 gram masu. mol ko kura yo prashna ma chahindaina.
+G: 250
+
+### math-word
+U: 1 dozen kapi ma 3 wata naramro niskiyo. ramro kati pratishat?
+T: ramro: 12 - 3 = 9. 9 x 100 / 12 = 75.
+N: 75% kapi ramro.
+G: 75
+
+### math-word
+U: suntala ko 1 bot le barsha ma 800 suntala dinchha, 40 bot. 1 peti ma 100. kati peti?
+T: suntala: 40 x 800 = 32000. peti: 32000 / 100 = 320.
+N: 320 peti suntala.
+G: 320
+
+### math-word
+U: hamro dhara ko pani din ma 2 palta 30 minet aauchha, minet ma 15 litre. din ma kati litre?
+T: din ma: 2 x 30 = 60 minet. 60 x 15 = 900.
+N: din ma 900 litre pani aauchha.
+G: 900
+
+### math-word
+U: 4 jana ko trek ma guide 1, porter 2. guide ko din ko 3000, porter 2000. 8 din ko kati?
+T: din ko: 3000 + 2 x 2000. 2 x 2000 = 4000, 3000 + 4000 = 7000. 8 din: 7000 x 8 = 56000.
+N: guide ra porter ko 8 din ko 56000 rupiya.
+U: ani 4 jana le baraabar tirda?
+T: 56000 / 4 = 14000.
+N: ek jana le 14000 rupiya tirnu parchha.
+G: 14000
+
+### math-word
+U: sabitri le 1 kg ghiu 1150 ma kinin ra 250 gram ka packet banayera euta 320 ma bechin. nafa kati?
+T: packet: 1000 / 250 = 4. bikri: 4 x 320 = 1280. nafa: 1280 - 1150 = 130.
+N: sabitri lai 130 rupiya nafa bhayo.
+G: 130
+
+### math-word
+U: dailekh ko gaun ma 1 ghar le mahina ma 2 bhari daura. 60 ghar le barsha ma kati bhari?
+T: mahina ma: 60 x 2 = 120. barsha: 120 x 12 = 1440.
+N: barsha ma 1440 bhari daura chahinchha.
+G: 1440
+
+### math-word
+U: bajura ko school ma 5 jana teacher, 140 bidyarthi. 2 jana naya teacher aaye. aba ek teacher ma kati bidyarthi?
+T: teacher: 5 + 2 = 7. 140 / 7 = 20.
+N: aba ek teacher ko bhag ma 20 jana bidyarthi.
+G: 20
+
+### math-word
+U: achham bata dhangadhi bus beluka 4 baje chhutchha, 11 ghanta. bich ma 1 ghanta khana. kati baje pugchha?
+T: jamma: 11 + 1 = 12 ghanta. beluka 4 baje bata 12 ghanta pachhi bihana 4 baje.
+N: bus bholi bihana 4 baje pugchha.
+G: 4
+
+### math-word
+U: hamro bhaisi le 1 barsha ma 1800 litre dudh, litre ko 80. dana ko kharcha barsha ko 60000. khud aamdani?
+T: dudh: 1800 x 80 = 144000. khud: 144000 - 60000 = 84000.
+N: barsha ko khud aamdani 84000 rupiya.
+G: 84000
+
+### math-word
+U: doti ko mela ma 4 wata ping, ek ping ma ghanta ma 30 jana. 5 ghanta ma kati jana?
+T: ghanta ma: 4 x 30 = 120. 5 ghanta: 120 x 5 = 600.
+N: 5 ghanta ma 600 jana le ping khelchhan.
+G: 600
+
+### math-word
+U: kalikot ko kisan ko 15 wata syau ko bot, euta bot ma 120 wata, 1/6 kira lageko. ramro kati?
+T: jamma: 15 x 120 = 1800. kira: 1800 / 6 = 300. ramro: 1800 - 300 = 1500.
+N: 1500 wata syau ramro chha.
+G: 1500
+
+### math-word
+U: ma 3 barsha ko hunda didi 9 ki thiin. didi 30 pugda ma kati?
+T: farak: 9 - 3 = 6. didi 30 hunda: 30 - 6 = 24.
+N: didi 30 pugda tapai 24 barsha ko hunuhunchha.
+G: 24
+
+### math-word
+U: salyan ko bazaar ma 1 kg ghiu 1200, 1 litre tori ko tel 320. 2 kg ghiu ra 3 litre tel ko kati?
+T: ghiu: 2 x 1200 = 2400. tel: 3 x 320 = 960. jamma: 2400 + 960 = 3360.
+N: jamma 3360 rupiya.
+G: 3360
+
+### math-word
+U: rukum ko trek ma 5 din ma 85 km hidiyo. din ko ausat?
+T: 85 / 5 = 17.
+N: din ko ausat 17 km hidiyo.
+G: 17
+
+### math-word
+U: 8 jana ko group le hotel ma 3 kotha liye, 2 kotha 1500 ra 1 kotha 2000. 2 raat. ek jana ko kati?
+T: ek raat: 2 x 1500 = 3000, 3000 + 2000 = 5000. 2 raat: 5000 x 2 = 10000. ek jana: 10000 / 8 = 1250.
+N: jamma 10000 rupiya, ek jana ko 1250 rupiya parchha.
+G: 1250
+
+### math-word
+U: momo ko 1 plate ma 10 wata, 12 jana le 1.5 plate khaye. jamma kati momo?
+T: plate: 12 x 1.5 = 18. momo: 18 x 10 = 180.
+N: jamma 180 wata momo khaye.
+G: 180
+
+### math-word
+U: dadeldhura ko school ko bus le 1 din ma 3 palta 14 km ko round garchha. din ma kati km?
+T: 3 x 14 = 42.
+N: din ma 42 km.
+G: 42
+
+### math-word
+U: 1 litre diesel 165, 42 km ma 7 litre lagchha. din ko diesel kharcha?
+T: 7 x 165 = 1155.
+N: din ko diesel kharcha 1155 rupiya.
+G: 1155
+
+### math-word
+U: dang ma pustakalaya ma 1200 kitab, 15% english ka. english kitab kati?
+T: 1200 x 15 / 100 = 180.
+N: 180 wata english kitab chhan.
+G: 180
+
+### math-word
+U: 3 hapta ko trek, din ko 1500 ko kharcha, tara 4 din homestay ma free khana. jamma kharcha?
+T: jamma din: 3 x 7 = 21. kharcha lagne din: 21 - 4 = 17. 17 x 1500 = 25500.
+N: jamma 25500 rupiya kharcha hunchha.
+G: 25500
+
+### math-word
+U: hamro dhara ko pipe 250 m, 1 m ko 45 rupiya. 3 wata dhara ko lagi kati?
+T: 1 dhara: 250 x 45 = 11250. 3 dhara: 11250 x 3 = 33750.
+N: 3 wata dhara ko pipe ma 33750 rupiya lagchha.
+G: 33750
+
+### math-word
+U: kheti ma 8 kattha ko gahu 24 quintal falyo. 1 kattha ma ausat kati?
+T: 24 / 8 = 3.
+N: 1 kattha ma ausat 3 quintal.
+G: 3
+
+### math-word
+U: gaun dekhi school ko ukalo 2 km 1 ghanta ma, oralo 2 km 30 minet ma. jaane aaune kati samaya?
+T: 1 ghanta + 30 minet = 1 ghanta 30 minet.
+N: jaane aaune gari 1 ghanta 30 minet lagchha.
+G: 1 ghanta 30 minet
+
+### math-word
+U: hari ko 2 chhora, 1 chhori. sabai lai 3 wata kapi, 2 wata kalam. kapi 30, kalam 15. kati?
+T: 3 jana: kapi 3 x 3 = 9, kalam 3 x 2 = 6. kapi: 9 x 30 = 270. kalam: 6 x 15 = 90. jamma: 270 + 90 = 360.
+N: jamma 360 rupiya.
+G: 360
+
+### math-word
+U: tapai lai thaha chha hamro gaun ko bato kati km?
+T: tapai ko gaun ra bato ko jankari diyeko chhaina.
+N: tapai ko gaun ko bato ko lambai malai thaha chhaina. naksa ko scale ki hidne samaya ra gati bhannus bhane anuman garna sakinchha.
+
+### math-word
+U: 4 km/h ma 2 ghanta 30 minet hidyau. bato kati lamo?
+T: 4 x 2.5 = 10.
+N: bato 10 km lamo.
+G: 10
+
+### math-word
+U: 15 jana ko pariwar ko bhoj, 1 jana 300 gram masu, 1 kg 800. kharcha?
+T: masu: 15 x 300 = 4500 gram = 4.5 kg. kharcha: 4.5 x 800 = 3600.
+N: 3600 rupiya masu ko kharcha.
+G: 3600
+
+### math-word
+U: ek din ma 9 ghanta bijuli jaanchha re, 1 hapta ma kati ghanta?
+T: 9 x 7 = 63.
+N: hapta ma 63 ghanta bijuli jaanchha, yahi kram rahe.
+G: 63
+
+### math-word
+U: An exam has 50 questions. Each correct answer gets 2 marks. Rina answers 42 correctly. What is her score out of 100?
+T: 42 x 2 = 84.
+N: Rina scores 84 out of 100.
+G: 84
+
+### math-word
+U: A shopkeeper buys 20 kg of sugar for Rs 1800 and sells it at Rs 100 per kg. What is his profit?
+T: Sales: 20 x 100 = 2000. Profit: 2000 - 1800 = 200.
+N: His profit is Rs 200.
+G: 200
+
+### math-word
+U: A train has 8 coaches with 72 seats each. How many seats in total?
+T: 8 x 72 = 576.
+N: There are 576 seats in total.
+G: 576
+
+### math-word
+U: If 6 workers build a wall in 10 days, how many days will 4 workers take?
+T: Total work: 6 x 10 = 60 worker-days. 4 workers: 60 / 4 = 15 days.
+N: 4 workers will take 15 days.
+G: 15
+
+### math-word
+U: chiso ko jacket 4500, 2 barsha chalyo. barsha ko kharcha kati pareko?
+T: 4500 / 2 = 2250.
+N: barsha ko 2250 rupiya pareko.
+G: 2250
+
+### math-word
+U: 3 dai bhai ko bhag ma 18 ropani khet, 2 bhai ko 5-5 ropani. jetho ko kati?
+T: 5 + 5 = 10. jetho: 18 - 10 = 8.
+N: jetho ko 8 ropani.
+G: 8
+
+### math-word
+U: dherai sajilo: 12 ko aadha ra 12 ko 1/3 jodda?
+T: 12 / 2 = 6. 12 / 3 = 4. 6 + 4 = 10.
+N: 10.
+G: 10
+
+### math-word
+U: barsha ma 2 palta bonus, euta talab ko aadha. talab 30000. barsha bhari ko jamma kamai (12 mahina talab sahit)?
+T: talab: 12 x 30000 = 360000. bonus: 2 x 15000 = 30000. jamma: 360000 + 30000 = 390000.
+N: barsha ko jamma kamai 390000 rupiya.
+G: 390000
+
+### math-word
+U: 1 m kapada ko 220, 2.5 m ko kurta ra 1.5 m ko suruwal. jamma kapada ko mol?
+T: kapada: 2.5 + 1.5 = 4 m. mol: 4 x 220 = 880.
+N: jamma 880 rupiya.
+U: ani silai 900 thapda?
+T: 880 + 900 = 1780.
+N: silai sahit 1780 rupiya.
+G: 1780
+
+### math-word
+U: 5 kg chamal ma 3 jana ko pariwar 5 din chalchha. 6 jana bhaye kati din?
+T: jamma: 3 x 5 = 15 jana-din. 6 jana: 15 / 6 = 2.5 din.
+N: 6 jana bhaye 2.5 din matra chalchha.
+G: 2.5
+
+### math-word
+U: suntala 12 rupiya ko 1, 100 rupiya ma kati, kati firta?
+T: 12 x 8 = 96, firta: 100 - 96 = 4.
+N: 8 wata suntala aauchha, 4 rupiya firta.
+G: 8
+
+### math-word
+U: bhai le 2 ghanta ma 6 wata chitra banayo. 9 wata banauna kati samaya?
+T: 1 chitra: 120 / 6 = 20 minet. 9 wata: 9 x 20 = 180 minet = 3 ghanta.
+N: 3 ghanta lagchha.
+G: 3
+
+### math-word
+U: hamro sahar ko jansankhya 50000, barsha ma 2% le badhchha. arko barsha kati?
+T: 50000 x 2 / 100 = 1000. 50000 + 1000 = 51000.
+N: arko barsha lagbhag 51000 hunchha.
+G: 51000
+
+### math-word
+U: aaja bihana 6:40 ma 34 km tadha ko gaun ma hidera jaane, 4 km/h. kati baje pugchhu?
+T: 34 / 4 = 8.5 ghanta, arthat 8 ghanta 30 minet. 6:40 ma 8 ghanta thapda 2:40, 30 minet thapda 3:10.
+N: aaram bina hide diuso 3:10 ma pugnu hunchha. bato lamo chha, bich ma aaram ra pani ko samaya pani rakhnus.
+G: 3:10
+
+### math-word
+U: 1 ghanta ko kaam ko 500, 30 minet ko kaam ko kati?
+T: 500 / 2 = 250.
+N: 30 minet ko 250 rupiya.
+G: 250
+
+### math-word
+U: ma sanga 20 ko 9 wata note, 5 ko 6 wata sikka. 200 ko kitab kinna pugchha?
+T: 20 x 9 = 180. 5 x 6 = 30. jamma: 180 + 30 = 210. 210 ta 200 bhanda 10 le badhi.
+N: pugchha, tapai sanga 210 rupiya chha, kitab kinepachhi 10 rupiya bachchha.
+G: 210
