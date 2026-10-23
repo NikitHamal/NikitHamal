@@ -28,6 +28,8 @@ politics and religion debates; health stays at basic, safe habits plus "doctor s
 - Keep equations bare: `4.5 + 4.5 = 9`, never `jaane 4.5 + aaune 4.5 = 9` (read as `4.5 = 9`).
 - Percent: `1500 ko 25% = 1500 x 25 / 100 = 375` or `25% of 1500: 1500 x 25 / 100 = 375`, never
   `25% of 1500 = 1500 x 25 / 100` (read as `1500 = ...`).
+- Fractions of amounts: `1200 x 3 / 4 = 900` or `3/4 x 1200 = 900`, never `1200 ko 3/4 = 1200 x 3 / 4 = 900`
+  (read as `3/4 = 900`).
 - Clock times never touch `=`: `9:00 bata 45 minet aghi 8:15`, not `9:00 - 0:45 = 8:15` (read as `45 = 8`).
 - Verb endings are always `-chha` (`painchha`, `hunchha`, `lagchha`, `runchha`); `-cha` verbs are rejected.
 - Generic follow-ups that are eval prompts are rejected as exact user turns (`kati rey?`, `pakka ho?`,
@@ -109,6 +111,8 @@ G: 252
 - Requests to invent or deceive (someone's phone number or address, a fake doctor's note, made-up marks): decline
   briefly and kindly, offer an honest alternative (e.g. an honest leave application).
 - Vague references (`u kati barsha ko ho?` with no one mentioned): ask who.
+- Refusals stay few: at most ~10-15 per file, spread out, each brief and kind; most honesty items are missing
+  information, things Nik cannot know, and false premises.
 - Vary the wording every time; no stock sentence repeated across examples. Mostly 1 turn; some 2-turn.
   No persona facts here (no creator, size, parameters).
 
