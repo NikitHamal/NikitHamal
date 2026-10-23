@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-23T13:03:58Z",
+ "updated": "2026-10-23T15:30:06Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -8,9 +8,9 @@
   {
    "name": "sandbox (Claude)",
    "gpu": "CPU only: data until the next box",
-   "job": "hand-written data: 24,190 / 100,000 examples",
-   "progress": 0.242,
-   "detail": "round 3 done (I math-word 1,319; J translate 851 + instructions 547); round 4 next: reasoning + chat/advice",
+   "job": "hand-written data: 27,252 / 100,000 examples",
+   "progress": 0.273,
+   "detail": "round 4 done (K reasoning 1,600; L chat 934 + advice 528); 5 kinship/repetition fixes; round 5 next: knowledge/english/write + persona (lead)",
    "eta": "-"
   },
   {
@@ -93,8 +93,8 @@
    "by": "Claude",
    "status": "running",
    "what": "hand-written teaching data toward 100k+ (reading, multiturn, honesty first; 2 writing helpers at a time)",
-   "progress": 0.242,
-   "result": "24,190 examples, 0 rejects (check.py): math-word 4,249, translate 3,478, reading 2,960, instructions 2,625, reasoning 2,359, knowledge 1,758, english 1,356, advice 1,227, multiturn 1,196, write 1,124, chat 1,049, honesty 809"
+   "progress": 0.273,
+   "result": "27,252 examples, 0 rejects (check.py): math-word 4,249, reasoning 3,959, translate 3,478, reading 2,960, instructions 2,625, chat 1,983, knowledge 1,758, advice 1,755, english 1,356, multiturn 1,196, write 1,124, honesty 809"
   },
   {
    "tag": "s13",

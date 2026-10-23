@@ -1,0 +1,1199 @@
+### reasoning
+U: aaja shukrabar. 1000 din pachhi kun bar?
+T: 1000 / 7 lai herda 142 hapta, baki 6 din. shukrabar bata 6: shanibar (1), aaitabar (2), sombar (3), mangalbar (4), budhabar (5), bihibar (6).
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: aaja sombar ho. 16 din pachhi kun din parcha?
+T: 16 = 14 + 2. sombar bata 2: mangalbar (1), budhabar (2).
+N: budhabar parcha.
+G: budhabar
+
+### reasoning
+U: aaja mangalbar. 25 din agadi kun bar thiyo?
+T: 25 = 21 + 4. 21 din agadi feri mangalbar. 4 din agadi: sombar (1), aaitabar (2), shanibar (3), shukrabar (4).
+N: shukrabar thiyo.
+G: shukrabar
+
+### reasoning
+U: 4 din pachhi aaitabar hunchha bhane aaja kun bar?
+T: aaitabar bata 4 din agadi: shanibar (1), shukrabar (2), bihibar (3), budhabar (4).
+N: aaja budhabar.
+G: budhabar
+
+### reasoning
+U: bholi bihibar ho bhane 5 din agadi kun bar thiyo?
+T: bholi bihibar, aaja budhabar. 5 din agadi: mangalbar (1), sombar (2), aaitabar (3), shanibar (4), shukrabar (5).
+N: shukrabar thiyo.
+G: shukrabar
+
+### reasoning
+U: aaja shanibar. 33 din pachhi kun bar?
+T: 33 = 28 + 5. 28 din pachhi feri shanibar. 5 din: aaitabar (1), sombar (2), mangalbar (3), budhabar (4), bihibar (5).
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: aaja aaitabar. 60 din agadi kun bar thiyo?
+T: 60 = 56 + 4. 56 = 8 x 7, tyasle feri aaitabar. 4 din agadi: shanibar (1), shukrabar (2), bihibar (3), budhabar (4).
+N: budhabar thiyo.
+G: budhabar
+
+### reasoning
+U: mero ghar ma har shukrabar ma puja hunchha. aaja mangalbar. aglo shukrabar kati din pachhi?
+T: mangalbar bata: budhabar (1), bihibar (2), shukrabar (3).
+N: 3 din pachhi.
+G: 3
+
+### reasoning
+U: school ko haptabar ko bida shanibar matra ho. aaja budhabar. arko bida aauna kati din?
+T: budhabar bata bihibar (1), shukrabar (2), shanibar (3).
+N: 3 din pachhi.
+G: 3
+
+### reasoning
+U: hapta ko kun bar ma 5 gate parchha? aaja mahina ko 1 gate aaitabar
+T: 5 - 1 = 4. aaitabar bata 4: sombar (1), mangalbar (2), budhabar (3), bihibar (4).
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: The first day of a month is Friday. What day is the 15th?
+T: 15 - 1 = 14 = 2 x 7.
+N: Friday.
+G: Friday
+
+### reasoning
+U: mahina ko 18 gate mangalbar chha. 4 gate kun bar thiyo?
+T: 18 - 4 = 14 = 2 x 7.
+N: mangalbar thiyo.
+G: mangalbar
+
+### reasoning
+U: aaja budhabar. 2 din pachhi mero janmadin. janmadin kun bar?
+T: bihibar (1), shukrabar (2).
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: mahina ko 24 gate bihibar. tyo mahina ko 31 gate kun bar? yo mahina 31 din ko
+T: 31 - 24 = 7.
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: aaja shukrabar ra mero bihe 9 din pachhi. kun bar ma bihe?
+T: 9 = 7 + 2. shukrabar bata 2: shanibar (1), aaitabar (2).
+N: aaitabar ma.
+G: aaitabar
+
+### reasoning
+U: mahina ko 6 gate sombar. 20 gate kun bar parcha?
+T: 20 - 6 = 14.
+N: sombar.
+G: sombar
+
+### reasoning
+U: aaja sombar. 45 din agadi kun bar thiyo?
+T: 45 = 42 + 3. 42 din agadi feri sombar. 3 din agadi: aaitabar (1), shanibar (2), shukrabar (3).
+N: shukrabar thiyo.
+G: shukrabar
+
+### reasoning
+U: mahina ko 2 gate shanibar. tyo mahina ko 30 gate kun bar? 30 din ko mahina
+T: 30 - 2 = 28 = 4 x 7.
+N: shanibar.
+G: shanibar
+
+### reasoning
+U: aaja bihibar. 50 din pachhi kun din?
+T: 50 = 49 + 1. 49 = 7 x 7, feri bihibar. 1 din: shukrabar.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: What day comes 3 days before Friday?
+T: Thursday (1), Wednesday (2), Tuesday (3).
+N: Tuesday.
+G: Tuesday
+
+### reasoning
+U: How many hours are in 2 days 5 hours?
+T: 2 x 24 = 48 ghanta. 48 + 5 = 53 ghanta.
+N: 53 hours.
+G: 53
+
+### reasoning
+U: If the day after tomorrow is Sunday, what day is today?
+T: Sunday is 2 days after today. 2 days before Sunday: Saturday (1), Friday (2).
+N: Friday.
+G: Friday
+
+### reasoning
+U: aaja aaitabar. 3 hapta 4 din pachhi kun bar?
+T: 3 hapta = 21 din, feri aaitabar. 4 din: sombar (1), mangalbar (2), budhabar (3), bihibar (4).
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: aaja shanibar. aaune budhabar samma kati din?
+T: aaitabar (1), sombar (2), mangalbar (3), budhabar (4).
+N: 4 din.
+G: 4
+
+### reasoning
+U: mero ghadi ko alarm sombar, budhabar ra shukrabar matra bajchha. 2 hapta ma kati palta bajchha?
+T: hapta ma 3 palta. 2 x 3 = 6 palta.
+N: 6 palta.
+G: 6
+
+### reasoning
+U: tihar 5 din ko hunchha. pahilo din budhabar bhaye tesro din kun bar?
+T: dosro bihibar, tesro shukrabar.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: aaja shukrabar. asti ko bholi kun bar thiyo?
+T: asti = 2 din agadi, tyasle budhabar. asti ko bholi = bihibar.
+N: bihibar thiyo.
+G: bihibar
+
+### reasoning
+U: aaja budhabar. parsi ko parsi kun bar hunchha?
+T: parsi = 2 din pachhi, tyasle shukrabar. parsi ko parsi = aaitabar.
+N: aaitabar hunchha.
+G: aaitabar
+
+### reasoning
+U: aaja sombar. hapta ko kun bar ma 8 gate parchha? mahina ko 1 gate sombar
+T: 8 - 1 = 7.
+N: sombar ma.
+G: sombar
+
+### reasoning
+U: mahina ko 1 gate budhabar. tyo mahina ko pahilo aaitabar kati gate?
+T: 1 gate budhabar. bihibar (2), shukrabar (3), shanibar (4), aaitabar (5).
+N: 5 gate.
+G: 5
+
+### reasoning
+U: mahina ko pahilo din sombar bhayo ra mahina 31 din ko. kati wata sombar parchhan?
+T: 1, 8, 15, 22, 29: 5 wata.
+N: 5 wata.
+G: 5
+
+### reasoning
+U: mahina ko 3 gate mangalbar. tyo mahina ko pahilo shanibar kati gate?
+T: 3 gate mangalbar. budhabar (4), bihibar (5), shukrabar (6), shanibar (7).
+N: 7 gate.
+G: 7
+
+### reasoning
+U: 30 din ko mahina shukrabar bata suru bhayo. tyo mahina ma kati wata shukrabar?
+T: 1, 8, 15, 22, 29: 5 wata.
+N: 5 wata.
+G: 5
+
+### reasoning
+U: mahina ko 2 gate aaitabar. tyo mahina ma kati wata aaitabar parchhan? mahina 30 din ko
+T: 2, 9, 16, 23, 30: 5 wata.
+N: 5 wata.
+G: 5
+
+### reasoning
+U: 28 din ko february budhabar bata suru bhayo. tyo mahina ma kati wata budhabar?
+T: 1, 8, 15, 22: 4 wata.
+N: 4 wata.
+G: 4
+
+### reasoning
+U: 1 barsha ma kati wata mahina 30 din ko hunchha?
+T: april, june, september, november: 4 wata.
+N: 4 wata.
+G: 4
+
+### reasoning
+U: 1 barsha 3 mahina bhaneko kati hapta jati? mahina 30 din ko mandau
+T: 15 mahina. 15 x 30 = 450 din. 450 / 7 lai herda 64 hapta, baki 2 din.
+N: 64 hapta jati.
+G: 64
+
+### reasoning
+U: 2068 sal ma janmeko bachcha 2075 sal ma kati barsha ko?
+T: 2075 - 2068 = 7.
+N: 7 barsha ko.
+G: 7
+
+### reasoning
+U: How many months are in 2 years 5 months?
+T: 2 x 12 = 24. 24 + 5 = 29 mahina.
+N: 29 months.
+G: 29
+
+### reasoning
+U: 2055 sal ma bihe gareko jodi 2080 ma kati barsha ko bihe manaauchha?
+T: 2080 - 2055 = 25.
+N: 25 barsha.
+G: 25
+
+### reasoning
+U: 2072 sal ko bhukampa dekhi 2080 samma kati barsha?
+T: 2080 - 2072 = 8.
+N: 8 barsha.
+G: 8
+
+### reasoning
+U: kun mahina ma 29 din hunchha? kahile kahile
+T: february ma leap year parchha bhane 29 din hunchha.
+N: february.
+G: february
+
+### reasoning
+U: 2024 was a leap year. When is the next leap year?
+T: 4 barsha ma ek palta. 2024 + 4 = 2028.
+N: 2028.
+G: 2028
+
+### reasoning
+U: 2026 ko january 31 pachhi kun tarik aauchha?
+T: january 31 pachhi february 1.
+N: february 1.
+G: 1
+
+### reasoning
+U: february 27 bata 3 din pachhi kun tarik? 2026 sal
+T: 2026 leap year hoina, february ma 28 din. 27 bata 1 din ma 28, ani march 1, march 2.
+N: march 2.
+G: 2
+
+### reasoning
+U: What date is 15 days after August 20?
+T: august 31 din ko. 31 - 20 = 11 din august ma. baki 4 din september. tyasle september 4.
+N: September 4.
+G: 4
+
+### reasoning
+U: november 10 bata 60 din pachhi?
+T: november 30 din: 20 din baki. december 31: 20 + 31 = 51. baki 9 din january ma. tyasle january 9.
+N: january 9.
+G: 9
+
+### reasoning
+U: april 5 dekhi may 5 samma kati din? april 30 din ko
+T: april 5 bata april 30 samma 25 din, ani may 5 din. 25 + 5 = 30.
+N: 30 din.
+G: 30
+
+### reasoning
+U: july 1 dekhi september 1 samma kati din?
+T: july 31 din, august 31 din. 31 + 31 = 62 din.
+N: 62 din.
+G: 62
+
+### reasoning
+U: dashain asoj ma parchha. asoj bhanda 4 mahina pachhi kun mahina?
+T: asoj bata: kartik (1), mangsir (2), poush (3), magh (4).
+N: magh.
+G: magh
+
+### reasoning
+U: chaitra pachhi kun mahina aauchha?
+T: chaitra barsha ko antim mahina. pachhi feri baisakh.
+N: baisakh.
+G: baisakh
+
+### reasoning
+U: kartik, mangsir, poush, sanibar. kun mahina hoina?
+T: kartik, mangsir ra poush mahina hun. sanibar hapta ko bar ho.
+N: sanibar.
+G: sanibar
+
+### reasoning
+U: shrawan mahina ma kun chad parchha?
+T: shrawan 15 gate ma dhan diye ko din (dhan diwas) parchha, ra janai purnima pani.
+N: shrawan 15 (dhan diwas).
+G: shrawan
+
+### reasoning
+U: maghe sankranti kun mahina ko pahilo din ma parchha?
+T: maghe sankranti magh 1 gate parchha.
+N: magh 1 gate.
+G: magh
+
+### reasoning
+U: In which season does it rain the most?
+T: barsha ritu (shrawan ra bhadau) ma dherai pani parchha.
+N: The monsoon season (Barsha ritu).
+G: Barsha
+
+### reasoning
+U: hiud ritu kun mahina ma parchha?
+T: hiud (shishir) ritu magh ra falgun ma parchha.
+N: magh ra falgun.
+G: magh
+
+### reasoning
+U: 3 mahina ma kati din jati? 30 din ko mahina mandau
+T: 3 x 30 = 90 din jati.
+N: 90 din jati.
+G: 90
+
+### reasoning
+U: paanch barsha bhaneko kati mahina hunchha?
+T: 5 x 12 = 60 mahina.
+N: 60 mahina.
+G: 60
+
+### reasoning
+U: 1 barsha ma kati din? leap year hoina
+T: 365 din.
+N: 365 din.
+G: 365
+
+### reasoning
+U: 2020 sal ma kati din thiyo?
+T: 2020 / 4 = 505, leap year. 366 din.
+N: 366 din.
+G: 366
+
+### reasoning
+U: What time is 1 hour 40 minutes after 10:25?
+T: 10:25 bata 1 ghanta pachhi 11:25, ani 40 minet: 12:05.
+N: 12:05.
+G: 12:05
+
+### reasoning
+U: aaja bihibar. 365 din pachhi kun bar?
+T: 365 = 364 + 1. 364 = 52 x 7. bihibar bata 1: shukrabar.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: What time was it 55 minutes before 4:10?
+T: 4:10 bata 10 minet agadi 4:00, ani 45 minet agadi 3:15.
+N: 3:15.
+G: 3:15
+
+### reasoning
+U: What time is 25 minutes after 12:50?
+T: 12:50 bata 10 minet ma 1:00, baki 15 minet, 1:15.
+N: 1:15.
+G: 1:15
+
+### reasoning
+U: 1:05 bhanda 2 ghanta 30 minet agadi kati bajeko thiyo?
+T: 1:05 bata 1 ghanta agadi 12:05, ani 1 ghanta 30 minet agadi 10:35.
+N: 10:35.
+G: 10:35
+
+### reasoning
+U: 8:45 bata 2 ghanta 20 minet pachhi kati baje?
+T: 8:45 bata 2 ghanta pachhi 10:45, ani 20 minet: 11:05.
+N: 11:05.
+G: 11:05
+
+### reasoning
+U: How long is the gap from 9:15 to 12:40?
+T: 9:15 bata 12:15 samma 3 ghanta, ani 25 minet.
+N: 3 hours 25 minutes.
+G: 3 hours 25 minutes
+
+### reasoning
+U: What time is 45 minutes after 7:35?
+T: 7:35 bata 25 minet ma 8:00, baki 20 minet, 8:20.
+N: 8:20.
+G: 8:20
+
+### reasoning
+U: How much time is there from 6:40 to 8:10?
+T: 6:40 bata 7:40 samma 1 ghanta, 7:40 bata 8:10 samma 30 minet.
+N: 1 hour 30 minutes.
+G: 1 hour 30 minutes
+
+### reasoning
+U: bihana 7:20 dekhi diuso 12:50 samma kati samaya?
+T: 7:20 bata 12:20 samma 5 ghanta, ani 30 minet.
+N: 5 ghanta 30 minet.
+G: 5 ghanta 30 minet
+
+### reasoning
+U: How many minutes are in 3 hours 15 minutes?
+T: 3 x 60 = 180 minet. 180 + 15 = 195 minet.
+N: 195 minutes.
+G: 195
+
+### reasoning
+U: 11:15 dekhi 2:05 samma kati samaya?
+T: 11:15 bata 1:15 samma 2 ghanta, 1:15 bata 2:05 samma 50 minet.
+N: 2 ghanta 50 minet.
+G: 2 ghanta 50 minet
+
+### reasoning
+U: 215 minutes is how many hours and minutes?
+T: 215 / 60 lai herda 3 ghanta, baki 215 - 180 = 35 minet.
+N: 3 hours 35 minutes.
+G: 3
+
+### reasoning
+U: How many minutes are 2.5 hours?
+T: 2.5 x 60 = 150 minet.
+N: 150 minutes.
+G: 150
+
+### reasoning
+U: 1 minet ko 1/6 bhag bhaneko kati second?
+T: 60 / 6 = 10 second.
+N: 10 second.
+G: 10
+
+### reasoning
+U: How many minutes is 3/4 of an hour?
+T: 60 x 3 / 4 = 45 minet.
+N: 45 minutes.
+G: 45
+
+### reasoning
+U: 150 second lai minet ra second ma bhana
+T: 150 / 60 lai herda 2 minet, baki 30 second.
+N: 2 minet 30 second.
+G: 2
+
+### reasoning
+U: The bus was to leave at 8:50 but left 20 minutes late. When did it leave?
+T: 8:50 bata 20 minet pachhi 9:10.
+N: 9:10.
+G: 9:10
+
+### reasoning
+U: train 6:35 ma aaunu thiyo tara 1 ghanta 25 minet dhilo aayo. kati baje aayo?
+T: 6:35 bata 1 ghanta pachhi 7:35, ani 25 minet: 8:00.
+N: 8:00 baje aayo.
+G: 8:00
+
+### reasoning
+U: ma 9:10 ma pugnu thiyo tara 8:45 ma puginchhu. kati minet agadi puginchhu?
+T: 8:45 bata 9:10 samma 25 minet.
+N: 25 minet agadi.
+G: 25
+
+### reasoning
+U: school 9:30 ma suru hunchha ra 3:15 ma sakinchha. bich ma kati samaya?
+T: 9:30 bata 3:15 samma: 9:30 bata 12:30 samma 3 ghanta, ani 12:30 bata 3:15 samma 2 ghanta 45 minet. jamma 5 ghanta 45 minet.
+N: 5 ghanta 45 minet.
+G: 5 ghanta 45 minet
+
+### reasoning
+U: exam 10:00 bata 1 ghanta 30 minet ko. kati baje sakinchha?
+T: 10:00 bata 1 ghanta pachhi 11:00, ani 30 minet: 11:30.
+N: 11:30.
+G: 11:30
+
+### reasoning
+U: euta kaksha 45 minet ko. 11:10 ma suru bhayo bhane kati baje sakinchha?
+T: 11:10 bata 45 minet: 11:55.
+N: 11:55.
+G: 11:55
+
+### reasoning
+U: How much time do 3 periods take if one period is 40 minutes?
+T: 3 x 40 = 120 minet = 2 ghanta.
+N: 2 hours.
+G: 2
+
+### reasoning
+U: 15:35 bata 25 minet pachhi kati hunchha? 24 ghanta ko ghadi ma
+T: 15:35 bata 25 minet: 16:00.
+N: 16:00.
+G: 16:00
+
+### reasoning
+U: 13:05 lai diuso kati baje bhanchhan?
+T: 13 - 12 = 1.
+N: diuso 1:05.
+G: 1:05
+
+### reasoning
+U: 22:40 bata 1 ghanta 30 minet pachhi?
+T: 22:40 bata 1 ghanta pachhi 23:40, ani 30 minet: 00:10.
+N: 00:10.
+G: 00:10
+
+### reasoning
+U: 19:20 lai beluka kati baje bhanne? 12 ghanta ko ghadi ma
+T: 19 - 12 = 7.
+N: beluka 7:20.
+G: 7:20
+
+### reasoning
+U: 12:30 raati lai 24 ghanta ko ghadi ma kasari lekhnu?
+T: 12:30 raati = madhyaraat pachhi ko 00:30.
+N: 00:30.
+G: 00:30
+
+### reasoning
+U: bihana 5:40 lai 24 ghanta ko ghadi ma?
+T: 5:40 bihana nai ho, 24 ghanta ma pani 05:40.
+N: 05:40.
+G: 05:40
+
+### reasoning
+U: 6:00 bata 18:00 samma kati ghanta?
+T: 18 - 6 = 12 ghanta.
+N: 12 ghanta.
+G: 12
+
+### reasoning
+U: Which is longer: 2 hours 10 minutes or 125 minutes?
+T: 2 ghanta 10 minet lai minet ma: 2 x 60 = 120, 120 + 10 = 130 minet. 130 - 125 = 5.
+N: 2 hours 10 minutes, by 5 minutes.
+G: 5
+
+### reasoning
+U: Which is smaller: 100 minutes or 1 hour 40 minutes?
+T: 1 ghanta 40 minet = 60 + 40 = 100 minet.
+N: Both are equal.
+G: equal
+
+### reasoning
+U: Change 1 hour 5 minutes into minutes.
+T: 60 + 5 = 65 minet.
+N: 65 minutes.
+G: 65
+
+### reasoning
+U: How many hours are 480 minutes?
+T: 480 / 60 = 8 ghanta.
+N: 8 hours.
+G: 8
+
+### reasoning
+U: 36 hours is how many days and hours?
+T: 36 / 24 lai herda 1 din, baki 12 ghanta.
+N: 1 day 12 hours.
+G: 1
+
+### reasoning
+U: How many minutes are in 3 hours 20 minutes?
+T: 3 x 60 = 180, 180 + 20 = 200.
+N: 200 minutes.
+G: 200
+
+### reasoning
+U: It is quarter past 9. What time will it be after 50 minutes?
+T: 9:15 bata 45 minet ma 10:00, baki 5 minet: 10:05.
+N: 10:05.
+G: 10:05
+
+### reasoning
+U: How long is it from 7:55 to 8:35?
+T: 7:55 to 8:00 is 5 minutes, then 35 more. 5 + 35 = 40.
+N: 40 minutes.
+G: 40
+
+### reasoning
+U: bus har 1 ghanta 15 minet ma chhutchha. pahilo 6:20 ma gayo. dosro kati baje?
+T: 6:20 bata 1 ghanta pachhi 7:20, ani 15 minet: 7:35.
+N: 7:35.
+G: 7:35
+
+### reasoning
+U: 4:05 bata 35 minet pachhi kati bajchha?
+T: 4:05 bata 35 minet: 4:40.
+N: 4:40.
+G: 4:40
+
+### reasoning
+U: 11:30 bhanda 40 minet agadi kati thiyo?
+T: 11:30 bata 30 minet agadi 11:00, ani 10 minet agadi 10:50.
+N: 10:50.
+G: 10:50
+
+### reasoning
+U: 2:55 bata 10 minet pachhi?
+T: 2:55 bata 5 minet ma 3:00, baki 5 minet: 3:05.
+N: 3:05.
+G: 3:05
+
+### reasoning
+U: mero ghadi 12 minet dhilo chha. ghadi ma 6:40 chha bhane sahi samaya kati?
+T: dhilo ghadi le kam dekhauchha, tyasle 12 minet thapne. 6:40 bata 12 minet pachhi 6:52.
+N: sahi samaya 6:52.
+G: 6:52
+
+### reasoning
+U: raati 11:40 ma sute ra bihana 5:20 ma uthe. kati ghanta kati minet sute?
+T: 11:40 bata 12:00 samma 20 minet. 12:00 bata 5:20 samma 5 ghanta 20 minet. jamma 5 ghanta 40 minet.
+N: 5 ghanta 40 minet.
+G: 5 ghanta 40 minet
+
+### reasoning
+U: mero ghadi 8 minet chhito chalchha. ghadi ma 2:30 chha. sahi samaya kati?
+T: chhito ghadi bata 8 minet ghataune. 2:30 bata 8 minet agadi 2:22.
+N: sahi samaya 2:22.
+G: 2:22
+
+### reasoning
+U: bihana 4:50 bata 6:30 samma kati samaya?
+T: 4:50 bata 5:50 samma 1 ghanta, ani 40 minet.
+N: 1 ghanta 40 minet.
+G: 1 ghanta 40 minet
+
+### reasoning
+U: ghadi ma 3:20 chha. 4 ghanta 50 minet pachhi kati hunchha?
+T: 3:20 bata 4 ghanta pachhi 7:20, ani 50 minet: 8:10.
+N: 8:10.
+G: 8:10
+
+### reasoning
+U: 12:40 raati bata bihana 4:10 samma kati samaya?
+T: 12:40 bata 4:40 samma 4 ghanta, tara 4:10 samma matra, tyasle 3 ghanta 30 minet.
+N: 3 ghanta 30 minet.
+G: 3 ghanta 30 minet
+
+### reasoning
+U: euta gadi 9:45 ma niskiyo ra 11:25 ma pugyo. bato ma kati samaya?
+T: 9:45 bata 11:25 samma: 9:45 bata 10:45 samma 1 ghanta, ani 40 minet.
+N: 1 ghanta 40 minet.
+G: 1 ghanta 40 minet
+
+### reasoning
+U: 1 ghanta 30 minet ko film 3:50 ma suru bhayo. kati baje sakinchha?
+T: 3:50 bata 1 ghanta pachhi 4:50, ani 30 minet: 5:20.
+N: 5:20 ma.
+G: 5:20
+
+### reasoning
+U: beluka 7:15 bata 9:00 samma kati samaya?
+T: 7:15 bata 9:00 samma: 7:15 bata 8:15 samma 1 ghanta, ani 45 minet.
+N: 1 ghanta 45 minet.
+G: 1 ghanta 45 minet
+
+### reasoning
+U: ghanta ko sui le 3 ghanta ma kati degree ghunchha?
+T: 1 ghanta ma 30 degree. 3 x 30 = 90 degree.
+N: 90 degree.
+G: 90
+
+### reasoning
+U: 4:00 baje ghanta ko sui ra minet ko sui bich kati degree?
+T: 4 baje ma ghanta ko sui 4 ma, minet ko sui 12 ma. 4 x 30 = 120 degree.
+N: 120 degree.
+G: 120
+
+### reasoning
+U: minet ko sui le 1 ghanta ma kati degree ghunchha?
+T: 1 chakkar = 360 degree.
+N: 360 degree.
+G: 360
+
+### reasoning
+U: 30 minet ma minet ko sui kati degree ghunchha?
+T: 360 / 2 = 180 degree.
+N: 180 degree.
+G: 180
+
+### reasoning
+U: 10:10 ma minet ko sui kun ank ma hunchha?
+T: 10 / 5 = 2. ank 2 ma.
+N: ank 2.
+G: 2
+
+### reasoning
+U: ghadi ma 12:00 baje dubai sui kaha hunchha?
+T: 12:00 baje dubai sui 12 ma milchha.
+N: dubai 12 ma.
+G: 12
+
+### reasoning
+U: 7:45 ma minet ko sui kun ank ma?
+T: 45 / 5 = 9. ank 9 ma.
+N: ank 9.
+G: 9
+
+### reasoning
+U: 2.5 kg ko 800 rupiya. 1 kg ko kati? 4 kg kinda kati parchha?
+T: 800 / 2.5 = 320. 4 x 320 = 1280.
+N: 1 kg ko 320 rupiya, 4 kg ko 1280 rupiya.
+G: 320
+
+### reasoning
+U: 1 km ma kati meter? ani 3 km 250 m kati meter?
+T: 1000 m. 3 x 1000 = 3000. 3000 + 250 = 3250 m.
+N: 3250 meter.
+G: 3250
+
+### reasoning
+U: 6.5 liter doodh lai 500 ml ko botal ma halda kati botal chahinchha?
+T: 6.5 liter = 6500 ml. 6500 / 500 = 13.
+N: 13 botal.
+G: 13
+
+### reasoning
+U: 2 darjan 6 wata bhaneko kati wata?
+T: 2 darjan = 24. 24 + 6 = 30 wata.
+N: 30 wata.
+G: 30
+
+### reasoning
+U: 1/4 km bhaneko kati meter?
+T: 1000 x 1 / 4 = 250 m.
+N: 250 meter.
+G: 250
+
+### reasoning
+U: 3 hajar 5 saya 7 das lai ank ma lekhnus
+T: 3000 + 500 + 70 = 3570.
+N: 3570.
+G: 3570
+
+### reasoning
+U: 1 crore 25 lakh lai ank ma?
+T: 10000000 + 2500000 = 12500000.
+N: 12500000.
+G: 12500000
+
+### reasoning
+U: 980000 lai lakh ra hajar ma bhana
+T: 980000 bhaneko 9 lakh ra 80000, arthat 9 lakh 80 hajar.
+N: 9 lakh 80 hajar.
+G: 9
+
+### reasoning
+U: 48 wata andaa lai 6 ko dara ma rakhda kati dara?
+T: 48 / 6 = 8.
+N: 8 dara.
+G: 8
+
+### reasoning
+U: kun gahro: 3/4 kg ki 700 g?
+T: 3/4 kg lai gram ma: 1000 x 3 / 4 = 750 g. 750 - 700 = 50.
+N: 3/4 kg gahro, 50 g le.
+G: 3/4
+
+### reasoning
+U: 500 g ko 12 paki jamma kati kg?
+T: 500 x 12 = 6000 g. 6000 / 1000 = 6 kg.
+N: 6 kg.
+G: 6
+
+### reasoning
+U: 1 rupiya ma kati paisa?
+T: 1 rupiya = 100 paisa.
+N: 100 paisa.
+G: 100
+
+### reasoning
+U: 250 paisa ra 2 rupiya 25 paisa kun dherai?
+T: 2 rupiya 25 paisa = 225 paisa. 250 > 225.
+N: 250 paisa, 25 paisa le.
+G: 250
+
+### reasoning
+U: 8 aana jagga ko mol 1 aana ko 2 lakh. jamma kati?
+T: 8 x 200000 = 1600000, arthat 16 lakh.
+N: 16 lakh rupiya.
+G: 16
+
+### reasoning
+U: 1 bigha ma kati kattha? 20 kattha hunchha bhane 1 kattha ma kati dhur? 1 kattha = 20 dhur
+T: 1 bigha = 20 kattha. 1 kattha = 20 dhur.
+N: 20 kattha, ra 400 dhur.
+G: 20
+
+### reasoning
+U: 2 hapta 3 din bhaneko kati din?
+T: 2 x 7 = 14. 14 + 3 = 17 din.
+N: 17 din.
+G: 17
+
+### reasoning
+U: 90 din bhaneko kati mahina jati?
+T: 90 / 30 = 3 mahina jati.
+N: 3 mahina jati.
+G: 3
+
+### reasoning
+U: 1 ghanta ma kati minet? ani 1 minet ma kati second?
+T: 60 minet, 60 second.
+N: 60 minet, 60 second.
+G: 60
+
+### reasoning
+U: 2 meter 45 cm lai cm ma?
+T: 2 x 100 = 200 cm. 200 + 45 = 245 cm.
+N: 245 cm.
+G: 245
+
+### reasoning
+U: 890 cm bhaneko kati meter kati cm?
+T: 890 / 100 lai herda 8 meter, baki 90 cm.
+N: 8 meter 90 cm.
+G: 8
+
+### reasoning
+U: 1.75 meter lai cm ma lekhnus
+T: 1.75 x 100 = 175 cm.
+N: 175 cm.
+G: 175
+
+### reasoning
+U: 1 kg 250 g ra 1.5 kg kun gahro?
+T: 1 kg 250 g = 1250 g. 1.5 kg = 1500 g. 1500 > 1250.
+N: 1.5 kg, 250 g le.
+G: 1.5
+
+### reasoning
+U: 12 wata 1 liter ko botal ma jamma kati ml?
+T: 12 x 1000 = 12000 ml.
+N: 12000 ml.
+G: 12000
+
+### reasoning
+U: 3 sayakada 4 das lai ank ma?
+T: 3 x 100 = 300, 4 x 10 = 40. 300 + 40 = 340.
+N: 340.
+G: 340
+
+### reasoning
+U: 5064 ma 0 kun thau ma chha?
+T: 5064: 5 hajar, 0 saya, 6 das, 4 ek. 0 saya ko thau ma.
+N: saya ko thau ma.
+G: saya
+
+### reasoning
+U: 1 lakh ma kati sayakada hunchha?
+T: 100000 / 100 = 1000 sayakada.
+N: 1000 sayakada.
+G: 1000
+
+### reasoning
+U: 25 paisa ko sikka 12 wata kati rupiya?
+T: 25 x 12 = 300 paisa. 300 / 100 = 3 rupiya.
+N: 3 rupiya.
+G: 3
+
+### reasoning
+U: How many millimeters are in 4.5 cm?
+T: 1 cm = 10 mm. 4.5 x 10 = 45 mm.
+N: 45 millimeters.
+G: 45
+
+### reasoning
+U: How many meters in 750 centimeters?
+T: 750 / 100 = 7.5 m.
+N: 7.5 meters.
+G: 7.5
+
+### reasoning
+U: 2 ropani 12 aana ra 3 ropani 4 aana jodda kati?
+T: 2 ropani 12 aana = 44 aana. 3 ropani 4 aana = 52 aana. 44 + 52 = 96 aana.
+N: 96 aana, arthat 6 ropani.
+G: 96
+
+### reasoning
+U: 1 darjan kalam ko 144 rupiya parchha. euta kalam ko kati?
+T: 144 / 12 = 12.
+N: euta kalam 12 rupiya.
+G: 12
+
+### reasoning
+U: 4.8 km lai meter ma?
+T: 4.8 x 1000 = 4800 m.
+N: 4800 meter.
+G: 4800
+
+### reasoning
+U: 3000 gram ra 2.8 kg kun halka?
+T: 3000 g = 3 kg. 2.8 kg halka.
+N: 2.8 kg halka, 200 g le.
+G: 2.8
+
+### reasoning
+U: 1 hajar ko note 3 wata ra 500 ko 4 wata jamma kati?
+T: 1000 x 3 = 3000. 500 x 4 = 2000. 3000 + 2000 = 5000.
+N: 5000 rupiya.
+G: 5000
+
+### reasoning
+U: 3 hapta ra 2 din jodda kati din hunchha?
+T: 3 x 7 = 21. 21 + 2 = 23 din.
+N: 23 din.
+G: 23
+
+### reasoning
+U: 100 second lai minet ra second ma?
+T: 100 / 60 lai herda 1 minet, baki 40 second.
+N: 1 minet 40 second.
+G: 1
+
+### reasoning
+U: 2000 ml ko 1.5 liter kun badhi?
+T: 2000 ml = 2 liter. 2 > 1.5.
+N: 2000 ml badhi, 500 ml le.
+G: 2000
+
+### reasoning
+U: 5 km 400 m lai meter ma?
+T: 5 x 1000 = 5000. 5000 + 400 = 5400 m.
+N: 5400 meter.
+G: 5400
+
+### reasoning
+U: 1.2 liter lai ml ma?
+T: 1.2 x 1000 = 1200 ml.
+N: 1200 ml.
+G: 1200
+
+### reasoning
+U: 4600 gram lai kg ra gram ma?
+T: 4600 / 1000 lai herda 4 kg, baki 600 g.
+N: 4 kg 600 gram.
+G: 4
+
+### reasoning
+U: 27 wata kitab lai 3 ko dara ma rakhda kati dara?
+T: 27 / 3 = 9.
+N: 9 dara.
+G: 9
+
+### reasoning
+U: 700 page ko kitab ma 1 din ma 35 page padhe. kati din lagchha?
+T: 700 / 35 = 20.
+N: 20 din.
+G: 20
+
+### reasoning
+U: 2 sayakada 5 das 3 ek lai ank ma?
+T: 200 + 50 + 3 = 253.
+N: 253.
+G: 253
+
+### reasoning
+U: 3.75 kg lai gram ma?
+T: 3.75 x 1000 = 3750 g.
+N: 3750 gram.
+G: 3750
+
+### reasoning
+U: aaja bihibar. mero sathi 11 din pachhi aaune chha. kun bar?
+T: 11 = 7 + 4. bihibar bata: shukrabar (1), shanibar (2), aaitabar (3), sombar (4).
+N: sombar.
+G: sombar
+
+### reasoning
+U: aaja shukrabar. 62 din pachhi kun bar parchha?
+T: 62 = 56 + 6. 56 din pachhi feri shukrabar. 6 din: shanibar (1), aaitabar (2), sombar (3), mangalbar (4), budhabar (5), bihibar (6).
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: aaja budhabar. 3 hapta pachhi kun bar?
+T: 3 hapta = 21 din = 3 x 7. bar uhi rahanchha.
+N: budhabar nai.
+G: budhabar
+
+### reasoning
+U: aaja aaitabar. 18 din agadi kun bar?
+T: 18 = 14 + 4. 14 din agadi feri aaitabar. 4 din agadi: shanibar (1), shukrabar (2), bihibar (3), budhabar (4).
+N: budhabar thiyo.
+G: budhabar
+
+### reasoning
+U: mahina ko 10 gate shukrabar. 24 gate kun bar?
+T: 24 - 10 = 14 = 2 x 7.
+N: shukrabar.
+G: shukrabar
+
+### reasoning
+U: In 5 days it will be Tuesday. What day is today?
+T: mangalbar bata 5 din agadi: sombar (1), aaitabar (2), shanibar (3), shukrabar (4), bihibar (5).
+N: Today is Thursday.
+G: Thursday
+
+### reasoning
+U: mahina ko 8 gate budhabar. 1 gate kun bar thiyo?
+T: 8 - 1 = 7.
+N: budhabar thiyo.
+G: budhabar
+
+### reasoning
+U: aaja sombar. mero didi ko bihe 13 din pachhi. kun bar?
+T: 13 = 7 + 6. sombar bata 6: mangalbar (1), budhabar (2), bihibar (3), shukrabar (4), shanibar (5), aaitabar (6).
+N: aaitabar.
+G: aaitabar
+
+### reasoning
+U: aaja shanibar ho. arko shanibar samma kati din baki?
+T: aaitabar (1), sombar (2), mangalbar (3), budhabar (4), bihibar (5), shukrabar (6), shanibar (7).
+N: 7 din.
+G: 7
+
+### reasoning
+U: aaja mangalbar. hapta ko kun bar ma 20 gate parchha? mahina ko 15 gate mangalbar
+T: 20 - 15 = 5. mangalbar bata 5: budhabar (1), bihibar (2), shukrabar (3), shanibar (4), aaitabar (5).
+N: aaitabar.
+G: aaitabar
+
+### reasoning
+U: 12 din pachhi shukrabar hunchha bhane aaja kun bar?
+T: shukrabar bata 12 din agadi: 12 = 7 + 5. 7 din agadi feri shukrabar. baki 5: bihibar (1), budhabar (2), mangalbar (3), sombar (4), aaitabar (5).
+N: aaja aaitabar.
+G: aaitabar
+
+### reasoning
+U: aaja sombar. 84 din pachhi kun bar?
+T: 84 = 12 x 7. bar uhi.
+N: sombar.
+G: sombar
+
+### reasoning
+U: 1 barsha ma kati wata shanibar hunchhan? 365 din ko barsha
+T: 365 / 7 lai herda 52 hapta, baki 1 din. tyasle 52 wata shanibar, kati sal 53.
+N: 52 wata.
+G: 52
+
+### reasoning
+U: mero janmadin 2026 ko march 8 ma parchha. aaja march 1, aaitabar. janmadin kun bar?
+T: 8 - 1 = 7. bar uhi.
+N: aaitabar.
+G: aaitabar
+
+### reasoning
+U: bihe ko din 10 gate shanibar thiyo. bouju aaune din 25 gate. kun bar?
+T: 25 - 10 = 15 = 14 + 1. shanibar bata 1: aaitabar.
+N: aaitabar.
+G: aaitabar
+
+### reasoning
+U: mahina ko 28 gate aaitabar. arko mahina ko 2 gate kun bar? yo mahina 30 din ko
+T: mahina 30 din ko. 28 bata 30 samma 2 din, ani 2 din. jamma 4 din. aaitabar bata 4: sombar (1), mangalbar (2), budhabar (3), bihibar (4).
+N: bihibar.
+G: bihibar
+
+### reasoning
+U: hijo december 31 thiyo. parsi kun tarik?
+T: hijo december 31, aaja january 1, parsi january 3.
+N: january 3.
+G: 3
+
+### reasoning
+U: mahina ko 29 gate budhabar. arko mahina ko 5 gate kun bar? yo mahina 31 din ko
+T: 31 - 29 = 2 din, ani 5 din. jamma 7 din.
+N: budhabar.
+G: budhabar
+
+### reasoning
+U: march 30 bata 3 din pachhi?
+T: march 31, april 1, april 2.
+N: april 2.
+G: 2
+
+### reasoning
+U: mahina ko 26 gate shukrabar. arko mahina ko 1 gate kun bar? yo mahina 30 din ko
+T: 30 - 26 = 4 din, ani 1 din. jamma 5 din. shukrabar bata 5: shanibar (1), aaitabar (2), sombar (3), mangalbar (4), budhabar (5).
+N: budhabar.
+G: budhabar
+
+### reasoning
+U: kun mahina ma 31 din hunchha ra kun ma 30? dui wata bhana
+T: march ra april: march ma 31, april ma 30.
+N: march 31, april 30.
+G: march
+
+### reasoning
+U: 1 barsha ma kati wata ritu hunchha?
+T: basanta, grishma, barsha, sharad, hemanta, shishir: 6 ritu.
+N: 6 ritu.
+G: 6
+
+### reasoning
+U: euta ritu kati mahina ko hunchha?
+T: 12 mahina lai 6 ritu le bhag garda 2 mahina.
+N: 2 mahina.
+G: 2
+
+### reasoning
+U: basanta ritu pachhi kun ritu aauchha?
+T: kram: basanta, grishma, barsha. basanta pachhi grishma.
+N: grishma.
+G: grishma
+
+### reasoning
+U: hemanta ritu pachhi kun ritu?
+T: kram: sharad, hemanta, shishir. hemanta pachhi shishir.
+N: shishir.
+G: shishir
+
+### reasoning
+U: 2075 sal ko 4 barsha agadi kun sal thiyo?
+T: 2075 - 4 = 2071.
+N: 2071 sal.
+G: 2071
+
+### reasoning
+U: 2050 sal ma 10 barsha ko thiye. 2070 sal ma kati barsha ko hunchhu?
+T: 2070 - 2050 = 20 barsha pachhi. 10 + 20 = 30.
+N: 30 barsha ko.
+G: 30
+
+### reasoning
+U: ekai mahina ko 9 gate ra 20 gate bich ma kati din farak chha?
+T: 20 - 9 = 11 din.
+N: 11 din farak.
+G: 11
+
+### reasoning
+U: 2035 sal ma bihe gare. 2060 sal ma kati barsha bhayo?
+T: 2060 - 2035 = 25.
+N: 25 barsha.
+G: 25
+
+### reasoning
+U: ek mahina ko pahilo din dekhi antim din samma kati din hunchha? january mahina
+T: january ma 31 din hunchha.
+N: 31 din.
+G: 31
+
+### reasoning
+U: february 10 dekhi march 10 samma kati din? 2026 sal
+T: 2026 ma february 28 din. 28 - 10 = 18 din february ma, ani 10 din march. 18 + 10 = 28.
+N: 28 din.
+G: 28
+
+### reasoning
+U: mahina ko 7 gate shanibar thiyo. aaja pani shanibar chha ra 7 gate bhanda pachhi ko ho. aaja kati gate? yo mahina 30 din ko
+T: 7 gate shanibar, arko shanibar 14, ani 21, ani 28. 28 pachhi 30 gate samma arko shanibar pardaina, tyasle aaja 28 gate.
+N: 28 gate.
+G: 28
+
+### reasoning
+U: sombar dekhi shukrabar samma din ganda kati din hunchha?
+T: sombar (1), mangalbar (2), budhabar (3), bihibar (4), shukrabar (5).
+N: 5 din.
+G: 5
+
+### reasoning
+U: aaitabar dekhi shanibar samma kati din?
+T: aaitabar, sombar, mangalbar, budhabar, bihibar, shukrabar, shanibar: 7 din.
+N: 7 din.
+G: 7
+
+### reasoning
+U: kartik 15 gate dekhi mangsir 5 gate samma kati din? kartik 30 din ko
+T: 30 - 15 = 15 din kartik ma, ani 5 din mangsir. 15 + 5 = 20.
+N: 20 din.
+G: 20
+
+### reasoning
+U: aaja budhabar. 100 din agadi kun bar thiyo?
+T: 100 = 98 + 2. 98 = 14 x 7. budhabar bata 2 din agadi: mangalbar (1), sombar (2).
+N: sombar thiyo.
+G: sombar
+
+### reasoning
+U: aaja sombar. 250 din pachhi kun bar?
+T: 250 = 245 + 5. 245 = 35 x 7. sombar bata 5: mangalbar (1), budhabar (2), bihibar (3), shukrabar (4), shanibar (5).
+N: shanibar.
+G: shanibar
