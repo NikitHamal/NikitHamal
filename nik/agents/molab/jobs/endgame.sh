@@ -13,6 +13,9 @@ while true; do
   for v in /tmp/gate_*/verdict.txt; do
     t=${v#/tmp/gate_}; t=${t%/verdict.txt}
     case $t in live*|m50*) continue;; esac
+    # only verdicts computed against the current live model (v8g) count: older gates were vs m50
+    grep -q "live" $v || continue
+    [ "$(cat /tmp/gate_$t.live_dir 2> /dev/null)" = "/tmp/gate_live_ec36dd35c469" ] || [ $v -nt /tmp/nik_runs/v8g/nik-0.1.v8g.bin.shipped ] || continue
     read p m <<< "$(score $v)"
     s=$((p - 2 * m))
     [ $s -gt $bs ] && { bs=$s; best="$t (+$p / -$m)"; }
