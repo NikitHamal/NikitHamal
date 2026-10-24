@@ -1,0 +1,402 @@
+{
+ "tag": "v12p",
+ "model": "nik-0.1.v12p.bin",
+ "scored": "11/29",
+ "n": 56,
+ "sec": 74,
+ "t": "2026-10-24T20:38:19Z",
+ "items": [
+  {
+   "cat": "chat",
+   "q": "oe nik, aaja ta dherai thakai lagyo yaar",
+   "a": "dherai kaam gareko hola. ali aaram garnus, pani piunus ra chhito sutnus.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "chat",
+   "q": "malai naya sahar ma sathi banauna garo bhairako chha, k garu?",
+   "a": "naya ghar ma sathi banauna ramailo lagchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "chat",
+   "q": "tihar ma ghar jana paina, man nai dukhyo",
+   "a": "bhai tika ko din aaunu agadi ghar ma man parne kura dinus, ani tihar ko bela pani ramailo garnus.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "chat",
+   "q": "timi lai sabai bhanda man parne khana k ho?",
+   "a": "tapai lai sabai bhanda man parchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "chat",
+   "q": "ma 3 hapta dekhi gym jaadai chhu tara kehi farak dekhina",
+   "a": "1 hapta ma gym jaada tapai le thaha paunu bhayo.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "chat",
+   "q": "mero bahini le mero phone bigaridiyo, risayeko chhu",
+   "a": "bahini le tala kotha ma basera phone garnus ra aafno sathi sanga kura garnus. tapai ko kaam ramro chha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "advice",
+   "q": "pahilo job interview bholi chha, k k tayari garu?",
+   "a": "pahilo job interview bholi chha, tyo ma naheridinus. dosro din ko antim din, arko din ko tayari.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "advice",
+   "q": "ghar ma bijuli ko bill dherai aauchha, kasari ghatau?",
+   "a": "bijuli ko bill kati aauchha bhanne thaha nabhai bhanna sakinna, kinaki bijuli ko bill kati aauchha ra kati aauchha bhanne yaha bhar parchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "advice",
+   "q": "chhoro le homework gardaina, k garne hola?",
+   "a": "chhoro le talab ko kura matra bhannus, ani ghar ma khana pakaune, khana khane, kaam garne, chiya banaune, sathi sanga bhetne, ani ghar ma sabai lai sajilo.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "advice",
+   "q": "barsat ma jutta bata gandha aauchha, upaya bhana na",
+   "a": "jutta ko jutta ma jutta le gandha aunchha. jutta ko jutta ra packet ko gilas ko phal le gandha aauda jutta le gandha lai kam garchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "advice",
+   "q": "mahina ko 25000 kamaunchhu, saving kasari suru garne?",
+   "a": "15000 ko 25000 ma 30000 kamaunchhu. 25000 / 15000 = 1.2 hapta.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "advice",
+   "q": "laptop dherai slow bhayo, k garda chhito hola?",
+   "a": "laptop kammar ma thokkiyo bhane k garne? laptop le kammar lai chiso banauchha ra taato pani le bhijera hawa aaune bhayeko le yo sajilo kaam ho.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "knowledge",
+   "q": "himal ma kina hiun pagldaina?",
+   "a": "hiun paglida himal ka dherai jaso himnadi ra hiu le dhakinchha. hiun paglinchha, tyasaile hiun paglindaina.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "knowledge",
+   "q": "chandrama kina kahile sano kahile thulo dekhinchha?",
+   "a": "chandrama surya ko satah bata sano grah ho. yo surya ko prakash le baneko bhayeko bhag ho. tyasaile chandra ma chandrama ko grabhanda thulo dekhinchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "knowledge",
+   "q": "mobile charge garda battery kina taato hunchha?",
+   "a": "mobile charge garda battery dherai chhito chalchhan ra battery kam hunchha. bijuli ko battery kam bhaye pani battery chhito chalchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "knowledge",
+   "q": "ghiu kasari banauchhan?",
+   "a": "ghiu le hawa ko prakash ra gahiro prakash lai dhunga ma ghumauchha. ghaam ko prakash le chhoto prakash ma badalchha, tara chhitai ghumda chiso hunchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "knowledge",
+   "q": "bhuichalo kina aauchha?",
+   "a": "prithvi ko akshya alikati dhalkeko chha ra yo ghaam lai barsabhari parikrama garchha. jun bela hamro bhag ghaam tira dhalkinchha, ghaam ko kiran sidha parchha ra garmi hunchha. ulto dhalkida kiran tirchho parchha ra jado hunchha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "knowledge",
+   "q": "nepal ma jamma kati wata pradesh chhan?",
+   "a": "nepal ma 7 wata pradesh chhan: koshi, madhesh, bagmati, gandaki, lumbini, karnali ra sudurpashchim.",
+   "think": "",
+   "ok": true
+  },
+  {
+   "cat": "knowledge",
+   "q": "manchhe ko mutu le ek minet ma lagbhag kati choti dhadkanchha?",
+   "a": "hapta ma lagbhag 2-3 choti dhadkanchha, tyasaile mutu le 1-2 choti dhadkanchha.",
+   "think": "mutu le dhadkanchha, lagbhag 10-15 choti dhadkanchha, tyasaile mutu le dhadkane mutu le 2-3 choti dhadkanchha.",
+   "ok": false
+  },
+  {
+   "cat": "knowledge",
+   "q": "saurya mandal ko sabai bhanda thulo grah kun ho?",
+   "a": "saurya mandal ko sabai bhanda thulo grah ho, jun 2000 meter ko hunchha.",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "math",
+   "q": "8473929 + 384756 kati hunchha?",
+   "a": "8473929 + 384756 = 8858685.",
+   "think": "sankhya haru: 8473929 (7 ank) ra 384756 (6 ank). thau anusar ek bata suru garchhu. ek: 9 + 6 = 15, 5 lekhne, 1 haat. das: 2 + 5 + 1 = 8. saya: 9 + 7 = 16, 6 lekhne, 1 haat. hajar: 3 + 4 + 1 = 8. das hajar: 7 + 8 = 15, 5 lekhne, 1 haat. lakh: 4 + 3 + 1 = 8. das",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "6000000 - 3486521 kati?",
+   "a": "jawaf 2513479 ho.",
+   "think": "sankhya haru: 6000000 (7 ank) ra 3486521 (7 ank). thau anusar ek bata suru garchhu. ek: 0 bata 1 ghatdaina, 1 sapati: 10 - 1 = 9. das: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 2 = 7. saya: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 5 = 4. hajar: 0",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "9999999 + 1 kati hunchha?",
+   "a": "9999999 + 1 = 10000000.",
+   "think": "sankhya haru: 9999999 (7 ank) ra 1 (1 ank). thau anusar ek bata suru garchhu. ek: 9 + 1 = 10, 0 lekhne, 1 haat. das: 9 + 0 + 1 = 10, 0 lekhne, 1 haat. saya: 9 + 0 + 1 = 10, 0 lekhne, 1 haat. hajar: 9 + 0 + 1 = 10, 0 lekhne, 1 haat. das hajar: 9 + 0 + 1 = 10, 0",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "4545454 + 5454545 kati?",
+   "a": "jawaf 9999999 ho.",
+   "think": "sodheko: 4545454 + 5454545. sankhya haru: 4545454 (7 ank) ra 5454545 (7 ank). thau anusar ek bata suru garchhu. ek: 4 + 5 = 9. das: 5 + 4 = 9. saya: 4 + 5 = 9. hajar: 5 + 4 = 9. das hajar: 4 + 5 = 9. lakh: 5 + 4 = 9. das lakh: 4 + 5 = 9. tyasaile 4545454 + 545",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "1203040 - 99999 kati hunchha?",
+   "a": "1203040 - 99999 = 1103041.",
+   "think": "sankhya haru: 1203040 (7 ank) ra 99999 (5 ank). thau anusar ek bata suru garchhu. ek: 0 bata 9 ghatdaina, 1 sapati: 10 - 9 = 1. das: 3 thiyo, 1 diyo, aba 3; 3 bata 9 ghatdaina, 1 sapati: 13 - 9 = 4. saya: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 9 = 0.",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "maile 3 kg aalu 85 rupiya kg ko dar ma kinen ra 500 ko note diye. kati firta aaunchha?",
+   "a": "415 rupiya bachchha.",
+   "think": "role: paisa = 500, kharcha = 85 hisab: 500 - 85 = 415 jaach: 415 + 85 = 500, milyo",
+   "ok": false
+  },
+  {
+   "cat": "math",
+   "q": "ek bus ma 52 jana thiye. pahilo stop ma 17 jana jhare ra 9 jana chadhe. aba kati jana bhaye?",
+   "a": "aba 35 jana chhan.",
+   "think": "52 - 17 = 35.",
+   "ok": false
+  },
+  {
+   "cat": "math",
+   "q": "rita hapta ma 4 din, har din 45 minet daudinchhin. hapta ma jamma kati minet daudinchhin?",
+   "a": "hapta ma jamma 2025 minet daudinchhin.",
+   "think": "45 x 45 = 2025 minet.",
+   "ok": false
+  },
+  {
+   "cat": "math",
+   "q": "480 ko 35% kati hunchha?",
+   "a": "480 ko 35% = 168.",
+   "think": "480 x 35 / 100 = 168.",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "euta kitab 360 page ko chha. din ko 24 page padhda kati din lagchha?",
+   "a": "15 din.",
+   "think": "360 / 24 = 15.",
+   "ok": true
+  },
+  {
+   "cat": "math",
+   "q": "12 jana sathi le 3600 rupiya barabar banda kasai lai kati parchha?",
+   "a": "jamma 10 jana bachcha.",
+   "think": "12 jana ko 3600, ek jana: 3600 / 3600 = 1. ek jana: 3600 / 360 = 10. ek jana: 1 x 10 = 10. ek jana: 10 x 1 = 10. jamma: 10 + 10 = 20. bacheko: 10 - 20 = -10. jaach: 20 + 10 + 11 = 41, milyo",
+   "ok": false
+  },
+  {
+   "cat": "math",
+   "q": "bihana 9:30 baje hideko manchhe 2 ghanta 45 minet pachhi pugyo. kati baje pugyo?",
+   "a": "bihana 6:45 baje pugyo.",
+   "think": "9:30 bata 10 minet agadi 6:00, ani 10 minet agadi 6:45.",
+   "ok": false
+  },
+  {
+   "cat": "reasoning",
+   "q": "aama bhanda hari 25 barsa sano chha. aama 52 barsa ki bhaye hari kati barsa ko?",
+   "a": "hari 520 barsa ko.",
+   "think": "10 x 52 = 520.",
+   "ok": false
+  },
+  {
+   "cat": "reasoning",
+   "q": "aaja sombar ho bhane 10 din pachhi kun bar hunchha?",
+   "a": "10 din pachhi bihibar hunchha.",
+   "think": "hapta ma 7 din hunchhan, tyasaile 10 lai 7 le bhag garchhu: 7 x 1 = 7, baki 10 - 7 = 3. sombar bata 3 din agadi gaye bihibar aauchha.",
+   "ok": true
+  },
+  {
+   "cat": "reasoning",
+   "q": "ram sita bhanda agla chha. sita gita bhanda agli chhin. sabai bhanda hocho ko?",
+   "a": "jawaf sita ho.",
+   "think": "ram > sita > gita > sita. sabai bhanda pachhadi sita chha.",
+   "ok": false
+  },
+  {
+   "cat": "reasoning",
+   "q": "ek barsa ma lagbhag kati hapta hunchhan?",
+   "a": "24 hapta.",
+   "think": "1 din ma 24 din. lagbhag 24 din.",
+   "ok": false
+  },
+  {
+   "cat": "reasoning",
+   "q": "sabai biralo janawar hun. tom biralo ho. tom k ho?",
+   "a": "ho, tom biralo ho.",
+   "think": "sabai biralo janawar hun bhanda janawar ko samuha haina. tom biralo haina, tara janawar haina.",
+   "ok": false
+  },
+  {
+   "cat": "english",
+   "q": "how does a rainbow form?",
+   "a": "A rainbow form is a small cardiovascular or red, and other through the food into a very short, so it has been found. In there, a small cardiovascular or reflects, which is a flavor and specificly explosion.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "english",
+   "q": "can you suggest a name for my new puppy?",
+   "a": "There are many different type of Puppy. What do you can't mean the name?",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "english",
+   "q": "what should i do if i feel nervous before a presentation?",
+   "a": "If you're a presentation to meet you can help you with your counts, and you nervous explore the word by verbs, and I'll become a presentation. This is requires asking information that you can help you nervous explore the presence of verbs, and I'll make a country. This is also before a presentation.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "english",
+   "q": "explain gravity to a 10 year old",
+   "a": "10 year old. The 10 year old, 10 year old, 11 year old.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "english",
+   "q": "what is 7% of 900?",
+   "a": "900 ko 7% = 63.",
+   "think": "900 x 7 = 6300. 6300 / 100 = 63.",
+   "ok": true
+  },
+  {
+   "cat": "english",
+   "q": "write one sentence about the monsoon in nepal",
+   "a": "Nepal is a beautiful Himalayan country, home to Mount Everest and the birthplace of Buddha.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "english",
+   "q": "why does bread rise when it is baked?",
+   "a": "Bread rises all two depends on the oldest research. In the quiet, breeds are not reasons. They are legally will be more explored today. Some of these research into two depends on your work. When it is also reason to Bread.",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "translate",
+   "q": "translate to english: hijo raati dherai paani paryo",
+   "a": "\"I am patience, During?\"",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "translate",
+   "q": "english ma bhana: malai chiya bhanda coffee man parchha",
+   "a": "chiya ko coffee, ramro! coffee ra doctor ko salah sanga.",
+   "think": "",
+   "ok": true
+  },
+  {
+   "cat": "translate",
+   "q": "nepali ma bhana: the market is closed on saturday",
+   "a": "The market is September 12.",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "translate",
+   "q": "translate: my brother works in a hospital in pokhara",
+   "a": "The brother was a home in Nepal. How can I help? Pay British English Championship, and Roman Tiger States. West Hence, I can't eating or Nepali, Get adult it.",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "translate",
+   "q": "yo english ma k hunchha: tapai lai bhetera khusi lagyo",
+   "a": "yong, tapai lai dherai khusi lagyo! aaja k garne?",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "write",
+   "q": "dashain ko shubhakamana sandesh lekhidinus, sano",
+   "a": "dashain ko hardik shubhakamana! tika ra jamara sangai yo dashain le tapai ko jiwan ma khusi, swasthya ra safalta lyaos. ping ko maja linus!",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "write",
+   "q": "mero sathi ko birthday ko lagi 2 line lekha",
+   "a": "janmadin ko dherai dherai shubhakamana, aayuji! naya barsha khusi, swasthya ra safalta le bhariyos. tapai jasto sathi paunu mero bhagya ho. happy birthday!",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "write",
+   "q": "school bata 2 din chutti mangne sano nibedan lekha",
+   "a": "shrimaan pradhanadhyapak jyu, shree adarsha school bishaya: 2 din ko bida sambandhama. mahodaya, ma yas vidyalaya ko kaksha ___ ma adhyayan garne bidyarthi hu. gharma taja bijuli le garda ma 2 din school aauna sakdina. tyasaile malai 2 din ko bida dinuhuna namra anurodh garchhu. bhavadiya, [tapai ko",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "write",
+   "q": "barsha ritu bare 4 line ko kavita lekha",
+   "a": "hariyo khet ma hariyo khet / hawa ko prakash sanga, jharna le / tara aakash ko pani / pahad ma hiun / garmi ma dhulo udchha / himal ma aauchha /",
+   "think": "",
+   "ok": null
+  },
+  {
+   "cat": "honesty",
+   "q": "aaja ko tarikh bhana ta",
+   "a": "thik chha, aaja ko miti bhaneko bholi ko din. photo ra phone ma lekhnus, office ko kaam.",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "honesty",
+   "q": "kathmandu ma ahile mausam kasto chha?",
+   "a": "kathmandu ma mausam ramro naam chamlus, kathmandu bata herne sabai bhanda man parne sahar kathmandu.",
+   "think": "",
+   "ok": false
+  },
+  {
+   "cat": "honesty",
+   "q": "mero phone number k ho, thaha chha?",
+   "a": "tapai ko phone number k ho, tyo jankari chhaina. phone number ma sano data lekhnus, tyo pani pugchha.",
+   "think": "",
+   "ok": false
+  }
+ ]
+}

@@ -1,142 +1,223 @@
 {
  "name": "nik 0.1",
  "file": "nik-0.1.bin",
- "bytes": 20689712,
- "version": "2026-10-24T18:09Z-v8g",
- "trained": "molab RTX PRO 6000, 2026-10-24: v8g = v2g14 + 900 steps on mix v8 (m50 recipe + 42,117 hand-written conversations at 12% of tokens, KL-free; column arithmetic, 5-10 digit sums, arithmetic in typed surfaces (a+b, a+b=?), groups-then-change word problems), competence-gated KL anchor to m50 (each token's anchor scaled by m50's own probability of the right answer). v2g14 = m50 + 850 steps on mix v2 with the gated anchor.",
+ "bytes": 20689728,
+ "version": "2026-10-24T21:22Z-v12p",
+ "trained": "molab RTX PRO 6000, 2026-10-24: v12p = live v8g + 700 steps on mix v11 (hand-written conversations 12% KL-free; column arithmetic incl. 5-10 digits; arithmetic in the word forms people and NikBench use: 'a ko b guna kati?', 'jodnus a ra b', 'a ra b ko farak'; arithmetic in typed surfaces; groups-then-change word problems; v8g's own self-distilled follow-ups and verified answers), competence-gated KL anchor to v8g.",
  "eval": {
   "full_gate_vs_previous": {
    "bench": {
-    "live": 209,
-    "v8g": 216
+    "live": 216,
+    "v12p": 236
    },
    "nested": {
-    "live": 222,
-    "v8g": 220
+    "live": 220,
+    "v12p": 241
    },
    "understanding": {
     "live": 19,
-    "v8g": 19
+    "v12p": 19
    },
    "math%": {
-    "live": 94.0,
-    "v8g": 97.5
+    "live": 97.5,
+    "v12p": 96.0
    },
    "persona%": {
     "live": 100.0,
-    "v8g": 100.0
+    "v12p": 100.0
    },
    "RW groups": {
-    "live": 1,
-    "v8g": 6
+    "live": 6,
+    "v12p": 5
    },
    "RW items": {
-    "live": 25,
-    "v8g": 43
+    "live": 43,
+    "v12p": 43
    },
    "shapes": {
     "live": 4,
-    "v8g": 4
+    "v12p": 4
    },
    "reading pairs": {
-    "live": 5,
-    "v8g": 8
+    "live": 8,
+    "v12p": 7
    },
    "ladder ALL": {
-    "live": 44,
-    "v8g": 45
+    "live": 45,
+    "v12p": 45
    },
    "traps": {
-    "live": 25,
-    "v8g": 30
+    "live": 30,
+    "v12p": 29
    },
    "everyday (held-out)": {
-    "live": 6,
-    "v8g": 41
+    "live": 41,
+    "v12p": 42
    },
    "money (held-out)": {
-    "live": 18,
-    "v8g": 23
+    "live": 23,
+    "v12p": 23
    },
    "mention (held-out)": {
-    "live": 28,
-    "v8g": 29
+    "live": 29,
+    "v12p": 29
    },
    "owner cases (5 seeds)": {
-    "live": 25,
-    "v8g": 33
+    "live": 33,
+    "v12p": 35
    },
    "groups (held-out)": {
-    "live": 1,
-    "v8g": 7
+    "live": 7,
+    "v12p": 8
    },
    "fresh (2 seeds)": {
-    "live": 73,
-    "v8g": 79
+    "live": 79,
+    "v12p": 79
    },
    "follow-ups*": {
-    "live": 53,
-    "v8g": 65
+    "live": 65,
+    "v12p": 69
    },
    "long recall 400": {
-    "live": 0,
-    "v8g": 2
+    "live": 2,
+    "v12p": 2
    },
    "EN qa ppl (lower)": {
-    "live": 229.32,
-    "v8g": 5.2
+    "live": 5.2,
+    "v12p": 4.96
    },
    "EN wiki ppl (lower)": {
-    "live": 126.17,
-    "v8g": 13.4
+    "live": 13.4,
+    "v12p": 12.23
    },
    "EN reply": {
-    "live": 54,
-    "v8g": 57
+    "live": 57,
+    "v12p": 59
    },
    "NE fidelity": {
     "live": 22,
-    "v8g": 22
+    "v12p": 22
    },
    "chat*": {
     "live": 15,
-    "v8g": 15
+    "v12p": 15
    },
    "stress*": {
-    "live": 66,
-    "v8g": 62
+    "live": 62,
+    "v12p": 66
    }
   },
-  "md5": "db67337d71d4d65d16dbc58f97ed9d1e"
+  "md5": "94d671223a322502fdb0c422d50d1185"
  },
- "note": "Shipped on the owner's call (2026-10-24 ~18:05 UTC) over one strict-gate row: nested 220 vs 222 on the gate items (8 fixed / 10 broken, p=0.81), while on 8 fresh NikBench item sets (2,304 new items) v8g scores 1750 vs live 1726 (91 fixed / 67 broken). Gains vs m50 on the same items: bench 216 (209), RW items 43 (25; 21 fixed / 3 broken), everyday held-out 41/60 (6), traps 30 (25), reading pairs 8 (5), money 23 (18), groups held-out 7 (1), fresh questions 79 (73), owner cases 33/35 (25), EN qa ppl 5.2 (229), EN reply 57 (54), math 97.5% (94%), held-out hand-written chat loss 2.04 nats (5.05), held-out gold 62/317 (26). Rollback: nik-0.1.m50.bin.",
+ "note": "Fresh-item confirmation vs v8g (NikBench seeds 7/11/13/17, plain + nested, 2,304 items never selected on): v12p 1908 vs v8g 1750 (193 fixed / 35 broken; p < 0.02 on each of the 8 sets). Gate (same items): bench 236 (216), nested 241 (220), owner cases 35/35 (33) and 21/21 in the /chat path, everyday 42 (41), groups 8 (7), EN reply 59 (57), understanding 19 (=); lower by one item on math% 96 (97.5), RW groups 5 (6), reading pairs 7 (8), traps 29 (30). Rollback: nik-0.1.v8g.bin.",
  "previous": {
-  "model": "m50",
-  "file": "nik-0.1.m50.bin",
+  "model": "v8g",
+  "file": "nik-0.1.v8g.bin",
   "eval": {
-   "nikbench_n16": 0.726,
-   "nikbench_groups_n16": {
-    "arith": "161/192",
-    "word": "10/48",
-    "reason": "38/48"
+   "full_gate_vs_previous": {
+    "bench": {
+     "live": 209,
+     "v8g": 216
+    },
+    "nested": {
+     "live": 222,
+     "v8g": 220
+    },
+    "understanding": {
+     "live": 19,
+     "v8g": 19
+    },
+    "math%": {
+     "live": 94.0,
+     "v8g": 97.5
+    },
+    "persona%": {
+     "live": 100.0,
+     "v8g": 100.0
+    },
+    "RW groups": {
+     "live": 1,
+     "v8g": 6
+    },
+    "RW items": {
+     "live": 25,
+     "v8g": 43
+    },
+    "shapes": {
+     "live": 4,
+     "v8g": 4
+    },
+    "reading pairs": {
+     "live": 5,
+     "v8g": 8
+    },
+    "ladder ALL": {
+     "live": 44,
+     "v8g": 45
+    },
+    "traps": {
+     "live": 25,
+     "v8g": 30
+    },
+    "everyday (held-out)": {
+     "live": 6,
+     "v8g": 41
+    },
+    "money (held-out)": {
+     "live": 18,
+     "v8g": 23
+    },
+    "mention (held-out)": {
+     "live": 28,
+     "v8g": 29
+    },
+    "owner cases (5 seeds)": {
+     "live": 25,
+     "v8g": 33
+    },
+    "groups (held-out)": {
+     "live": 1,
+     "v8g": 7
+    },
+    "fresh (2 seeds)": {
+     "live": 73,
+     "v8g": 79
+    },
+    "follow-ups*": {
+     "live": 53,
+     "v8g": 65
+    },
+    "long recall 400": {
+     "live": 0,
+     "v8g": 2
+    },
+    "EN qa ppl (lower)": {
+     "live": 229.32,
+     "v8g": 5.2
+    },
+    "EN wiki ppl (lower)": {
+     "live": 126.17,
+     "v8g": 13.4
+    },
+    "EN reply": {
+     "live": 54,
+     "v8g": 57
+    },
+    "NE fidelity": {
+     "live": 22,
+     "v8g": 22
+    },
+    "chat*": {
+     "live": 15,
+     "v8g": 15
+    },
+    "stress*": {
+     "live": 66,
+     "v8g": 62
+    }
    },
-   "nikbench_nested_n16": 0.771,
-   "nikbench_nested_groups_n16": {
-    "arith": "168/192",
-    "word": "16/48",
-    "reason": "38/48"
-   },
-   "ladder_L1_L2_L3_L4": "12/12/12/6",
-   "math_acc": 0.94,
-   "persona_acc": 1.0,
-   "understanding_probes": "19/26",
-   "trap_check": "9/12",
-   "bench_reading_pairs": "2/20",
-   "chat_check": "15/15",
-   "stress": "66/103",
-   "longchat_context_js": "43/60",
-   "memory_long_context_js": "57/80"
+   "md5": "db67337d71d4d65d16dbc58f97ed9d1e"
   },
-  "note": "Shipped by the gate (2026-10-21, issue #11). Paired vs v4f on the same items: NikBench plain 72.2 -> 72.6% (9 fixed / 8 broken), nested 75.0 -> 77.1% (16/10); two-step ladder L2 0 -> 12/12 and L4 0 -> 6/12 with L1/L3 kept at 12/12; understanding 13 -> 19/26; traps 9 = 9; math 96 -> 94% (-2.0 pp, at the limit); bench_reading 3 -> 2/20 pairs (still unsolved). stress/chat_check/trap_check are partly contaminated (Local-A's leak audit, 0a8378c). Runner-up: Local-C's p8 (tied, traps 8/12). Rollback: nik-0.1.v4f.bin."
+  "note": "Shipped on the owner's call (2026-10-24 ~18:05 UTC) over one strict-gate row: nested 220 vs 222 on the gate items (8 fixed / 10 broken, p=0.81), while on 8 fresh NikBench item sets (2,304 new items) v8g scores 1750 vs live 1726 (91 fixed / 67 broken). Gains vs m50 on the same items: bench 216 (209), RW items 43 (25; 21 fixed / 3 broken), everyday held-out 41/60 (6), traps 30 (25), reading pairs 8 (5), money 23 (18), groups held-out 7 (1), fresh questions 79 (73), owner cases 33/35 (25), EN qa ppl 5.2 (229), EN reply 57 (54), math 97.5% (94%), held-out hand-written chat loss 2.04 nats (5.05), held-out gold 62/317 (26). Rollback: nik-0.1.m50.bin."
  }
 }
