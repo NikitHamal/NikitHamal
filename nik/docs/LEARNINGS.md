@@ -5,6 +5,17 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-24 night (Claude, same box): v8g shipped
+- **Rewording a procedure the parent already knows breaks it.** The math% drop shared by r1g, v10p, v11g, v12p (97.5
+  -> 94.5-96) is subtraction with borrows: 6 of the 7 items newly wrong vs v8g are `962 - 288` -> `das: 6 bata 8
+  ghatdaina` (the borrow from the ones column forgotten) -> 684, plus 3 one-step word problems read as two-step. Cause:
+  at 16:40 I reworded colmath's borrow lines (`6 thiyo, 1 diyo, aba 5; ...`) to avoid `-1 bata` for a lending 0. The
+  live models learned the old format; the new rows taught a second one, and the model now mixes them and drops the
+  decrement. Reverted (3aa5aec): consistency with the parent's procedure beats cosmetic wording. v13p = v12p's recipe
+  on the reverted data.
+- **v12p (v10p's recipe on the repaired mix, from v8g): bench 236 (216), nested 241 (220), owner 35/35, EN reply 59,
+  understanding 19 (=, the persona leaks are gone with the repaired lookup rows); still loses math 96, RW groups 5,
+  reading 7, traps 29** - one row each, three of them likely the borrow format above.
+
 - **Candidates vs the live v8g (20:30), all NO SHIP, each a different trade:**
   r1g (RFT on v8g's own 6,522 verified answers): bench 221, nested 224, understanding 21 (+2), shapes 6, money 25, EN
   reply 58; loses math 94.5 (97.5), traps 28, ladder 44, everyday 40. d2g (Nik-deep v2): fresh 85 (79), groups 10
