@@ -15,7 +15,10 @@ cd $REPO
 ev() { echo "$(date -u +%FT%T) $*" >> /tmp/nik_dash/events.log; }
 B=$O/nik-0.1.$TAG.bin
 if [ ! -f $B ]; then
-  # one GPU, two training slots: wait until fewer than 2 trainings run and >= 30 GB are free (v3d OOMed at 13:47)
+  # one GPU, two training slots: wait until fewer than 2 trainings run and >= 30 GB are free (v3d OOMed at 13:47).
+  # The slot lock is held until the new training has allocated its memory, so two waiting arms never both start.
+  exec 9> /tmp/gpu_slot.lock
+  flock 9
   while [ "$(pgrep -fc '[n]ik/train.py')" -ge 2 ] || [ "$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1)" -lt 30000 ]; do sleep 60; done
   ev "$TAG: training ($STEPS steps on $MIX, seed $SEED${EXTRA:+, $EXTRA})"
   if [[ $INIT == *.bin ]]; then
@@ -23,7 +26,10 @@ if [ ! -f $B ]; then
     INIT=$O/init.pt
   fi
   TR="$PY nik/train.py --stage sft --init $INIT --data data_v3 --sft-name $MIX --out $O/run --steps $STEPS --minutes 150 --bs $BS --accum $ACC --lr $LR --warmup 50 --eval-every 500 --mix 0.2 --diff-weight 0.3 --diff-frac 0.25 --opt muon --ema 0.998 --ref $REF --kl $KL --seed $SEED $EXTRA"
-  $TR --compile > $O/train.log 2>&1 || $TR > $O/train.log 2>&1
+  ( exec 9>&-; $TR --compile > $O/train.log 2>&1 || $TR > $O/train.log 2>&1 ) &
+  TRPID=$!
+  sleep 150; flock -u 9; exec 9>&-
+  wait $TRPID
   $PY nik/export.py --ckpt $O/run/ckpt.pt --out $B && rm -rf $O/run || { ev "$TAG: FAILED (tail $O/train.log)"; exit 1; }
   ev "$TAG: trained ($(grep -o '^step [0-9]*' $O/train.log | tail -1)), md5 $(md5sum < $B | cut -c1-8)"
 fi
