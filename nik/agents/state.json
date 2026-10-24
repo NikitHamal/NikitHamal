@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-24T05:25:49Z",
+ "updated": "2026-10-24T08:03:45Z",
  "live": {
   "model": "m50",
   "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
@@ -8,9 +8,9 @@
   {
    "name": "sandbox (Claude)",
    "gpu": "CPU only: data until the next box",
-   "job": "hand-written data: 41,375 / 100,000 examples",
-   "progress": 0.414,
-   "detail": "round 10: W chat 960 + advice 640 (chunked writes fixed the timeouts), X multiturn 550 (3-4 user turns) + english 862; T: scan: 0 think-aloud lines",
+   "job": "hand-written data: 42,944 / 100,000 examples",
+   "progress": 0.429,
+   "detail": "round 11: Y knowledge 952 + write 617; Z timed out before saving (3rd hung request): retrying as Z2 with 30-example chunks",
    "eta": "-"
   },
   {
@@ -93,8 +93,8 @@
    "by": "Claude",
    "status": "running",
    "what": "hand-written teaching data toward 100k+ (reading, multiturn, honesty first; 2 writing helpers at a time)",
-   "progress": 0.414,
-   "result": "41,375 examples, 0 rejects (check.py): math-word 5,763, reading 4,939, reasoning 4,779, translate 4,558, instructions 3,282, english 3,131, knowledge 3,062, chat 2,943, multiturn 2,592, advice 2,395, write 2,164, honesty 1,624, persona 143"
+   "progress": 0.429,
+   "result": "42,944 examples, 0 rejects (check.py): math-word 5,763, reading 4,939, reasoning 4,779, translate 4,558, knowledge 4,014, instructions 3,282, english 3,131, chat 2,943, write 2,781, multiturn 2,592, advice 2,395, honesty 1,624, persona 143"
   },
   {
    "tag": "s13",
