@@ -19,6 +19,8 @@ if [ ! -f $B ]; then
   $PY nik/export.py --ckpt $O/run/ckpt.pt --out $B && rm -rf $O/run || { ev "$TAG: FAILED (tail $O/train.log)"; exit 1; }
   ev "$TAG: trained ($(grep -o '^step [0-9]*' $O/train.log | tail -1)), md5 $(md5sum < $B | cut -c1-8)"
 fi
+[ -f /tmp/nik_dash/fresh_m50.json ] || $PY nik/scripts/fresh_answers.py --model nik/web/model/nik-0.1.bin --tag m50 > /dev/null 2>&1
+[ -f /tmp/nik_dash/fresh_$TAG.json ] || { $PY nik/scripts/fresh_answers.py --model $B --tag $TAG > $O/fresh.txt 2>&1; ev "$TAG fresh questions: $(cut -d: -f2- $O/fresh.txt | cut -c1-80) (live m50: $(python3 -c "import json;print(json.load(open('/tmp/nik_dash/fresh_m50.json'))['scored'])" 2>/dev/null))"; }
 if [ ! -f $O/hand_eval.json ]; then
   $PY nik/scripts/hand_eval.py --model nik/web/model/nik-0.1.bin $B --heldout data_v3/hand_heldout.jsonl --out $O/hand_eval.json > $O/hand_eval.txt 2>&1
   ev "$TAG held-out hand: $(grep -h "^nik-0.1.$TAG" $O/hand_eval.txt | cut -d'|' -f1-2) (live: $(grep -h '^nik-0.1.bin' $O/hand_eval.txt | cut -d'|' -f1-2 | cut -d: -f2))"
