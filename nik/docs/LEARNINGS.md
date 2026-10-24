@@ -4,6 +4,25 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-24 evening (Claude, same box)
+
+- **Nik-deep (v3d: the same 12 shared blocks run 3x = 36 layers, warm-started from m50, v3's mix, 1500 steps):
+  not worth it at this budget.** vs v3s14 (same mix and steps at 24 layers): held-out hand chat 2.20 (=) and gold
+  57/317 (51), fresh 78 vs 80 (2 seeds), but bench 206, nested 214, understanding 18, shapes 2, ladder 43, groups 0;
+  and browser decode drops from ~155 to ~105 tok/s (36 instead of 24 layer passes). The extra depth gives no gain a
+  warm start can collect in 1500 steps; the weights were tuned for 2 passes. Parked: re-test only with a from-scratch
+  or long (10k+ step) run.
+- **More steps (v7L learning curve, surface-robust mix, KL-free hand rows):** step 750 -> 1500: held-out chat loss
+  2.18 -> 2.03, fresh 11 -> 13/29, typed sums 28/27/29 -> 29/29/30 of 30 (live m50: 22/7/1); nested flat at 212.
+  v7Lm (= step 1500) gate: owner cases 33/35 (live 25 of the then 25: the row grew to 35 with today's cases), groups
+  5/36 (1), fresh 80 (73), EN qa ppl 5.5 (229); blocked by bench 205, nested 212, shapes 2.
+- **Plain-arithmetic drift has a second source: hand rows with one-line thinks.** v7Lm's lost plain items are
+  `jodnus 25 ra 50` -> `25 + 50 = 75. ... aba 75 + 50 baki chha` and `957 ko 2 guna` -> `957 x 2 = 1914. 1914 x 2 =
+  3828.`: 2,440 hand thinks are a single bare equation; KL-free, they teach "bare question -> one-line think", where m50
+  always works in columns. `build_mix_v2 --hand-colthink` gives the 47 hand rows that are a bare operation the column
+  think. Also fixed: colmath.sub_steps wrote `-1 bata 2 ghatdaina` for every borrow through a 0 (now `0 thiyo, 1 sapati
+  diyo, aba 1 sapati liyera 9 - 2 = 7`; 0 bad of 20,000).
+
 ## 2026-10-24 afternoon (Claude, same box)
 
 - **The nested-gate block is one template the live model never understood.** Every candidate today (v2s14-16, v3s14,
