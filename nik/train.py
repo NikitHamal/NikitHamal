@@ -199,6 +199,7 @@ def main():
     ap.add_argument('--set-ctx', type=int, default=0, help='long context: set the model cfg.ctx (saved in the ckpt/.bin)')
     ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
     ap.add_argument('--set-repeat', type=int, default=0, help='depth: run each shared block this many times (same parameters, more layers)')
+    ap.add_argument('--save-every', type=int, default=0, help='also keep a snapshot (EMA weights) every N steps: snap_<step>.pt (learning curves)')
     ap.add_argument('--lr', type=float, default=3e-3)
     ap.add_argument('--warmup', type=int, default=500)
     ap.add_argument('--sched', choices=['cosine', 'wsd'], default='cosine')
@@ -384,6 +385,8 @@ def main():
             print(samples(ema or model, tok, a.stage, use_ssbd=a.diff_weight > 0), flush=True)
             log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': float(tot), 'min': el / 60}) + '\n'); log.flush()
             save()
+        if a.save_every and step % a.save_every == 0 and step < a.steps and main_proc:
+            torch.save({'model': (ema or model).state_dict(), 'cfg': cfg.to_dict(), 'step': step}, os.path.join(a.out, f'snap_{step}.pt'))
         stop = bool(a.minutes and el > a.minutes * 60)
         if world > 1:                                   # all ranks stop together
             flag = torch.tensor([float(stop)], device=device)

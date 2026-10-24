@@ -2,7 +2,7 @@
 import { NikModel, renderChat, generate, TOK } from './nik.js';
 import { romanize, hasDevanagari } from './romanize.js';
 import { contextFor, plainNumbers } from './context.js';
-import { vote as pickVote, finalNumber } from './vote.js';
+import { vote as pickVote, finalNumber, longNumbers, faithful } from './vote.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
 let base = new URL('./model/', import.meta.url);
@@ -31,14 +31,15 @@ function countParams(m) {
 
 // Keep the prompt inside the context window, and choose what history it carries (context.js: a standalone problem gets its
 // single-turn prompt, a question about the user gets the turn that answers it moved next to it, the rest is packed).
+const normUser = (t) => plainNumbers(hasDevanagari(t) ? romanize(t) : t);
+
 function buildPrompt(messages) {
   // 512-ctx models: 55% of the window for the prompt (unchanged). Long-context models (16k): up to 8k input per turn,
   // leaving >= 8k for the reply (owner: 8k in / 8k out).
   const budget = model.cfg.ctx > 512 ? Math.min(8192, model.cfg.ctx - 8192) : Math.floor(model.cfg.ctx * 0.55);
   // Nik reads romanized Nepali: transliterate Devanagari the user types (input only)
   // and plain digits for grouped numbers (`1,200` -> `1200`), which it never saw in training
-  const msgs = messages.map((m) => (m.role !== 'user' ? m
-    : { ...m, content: plainNumbers(hasDevanagari(m.content) ? romanize(m.content) : m.content) }));
+  const msgs = messages.map((m) => (m.role !== 'user' ? m : { ...m, content: normUser(m.content) }));
   return contextFor(model.tok, msgs, budget);
 }
 
@@ -94,9 +95,19 @@ async function run(id, messages, opts) {
       tokens += p.stats.tokens; passes += p.stats.passes;
       paths.push(p);
     }
+    // no path copied the question's long numbers digit for digit (vote.js faithful): ask the model up to 3 more times
+    const question = normUser(messages.filter((m) => m.role === 'user').slice(-1)[0]?.content || '');
+    const nums = longNumbers(question);
+    for (let i = 0; i < 3 && !stopFlag && nums.length && !paths.some((p) => faithful(p, nums)); i++) {
+      postMessage({ type: 'vote', id, i: K + i + 1, k: K + 3 });
+      const p = await sampleOnce(id, prompt, { ...sopts, temperature: 0.9 }, false);
+      tokens += p.stats.tokens; passes += p.stats.passes;
+      paths.push(p);
+    }
     // confidence-weighted vote (each path votes with the model's own mean token probability) over the paths whose answer
-    // agrees with their own working (vote.js); the shown reply is replaced when another path wins
-    const v = pickVote(paths);
+    // agrees with their own working and that copied the question's numbers (vote.js); the shown reply is replaced when
+    // another path wins
+    const v = pickVote(paths, question);
     if (v) {
       vote = { agree: v.agree, k: v.k, answer: v.answer };
       if (v.path !== first) { shown = v.path; postMessage({ type: 'replace', id, think: v.path.think, answer: v.path.answer }); }
