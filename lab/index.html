@@ -140,7 +140,7 @@ function render() {
     const ks = Object.keys(c).sort((a, b) => (a === 'final') - (b === 'final') || (+a) - (+b));
     let tb = '<tr><th>step</th><th>hand chat loss (lower)</th><th>held-out gold</th><th>fresh</th><th>nested /288</th><th>a + b /30</th><th>a+b /30</th><th>a+b=? /30</th></tr>';
     for (const k of ks) { const r = c[k], sf = r.surface || {}; tb += `<tr><td class="mono">${esc(k)}</td>` + [r.hand_loss, r.hand_gold, r.fresh, r.nested, sf.plain, sf.nospace, sf['tight-q']].map((v) => `<td class="mono">${esc(v ?? '')}</td>`).join('') + '</tr>'; }
-    h += `<div class="card"><h3>learning curve: ${esc(tag)}</h3><div class="sub" style="margin-bottom:6px">do more steps help? live m50: hand loss 5.05, gold 26/317, fresh 10/29, nested 222, sums 22 / 7 / 1 of 30</div><div style="overflow-x:auto"><table>${tb}</table></div></div>`;
+    h += `<div class="card"><h3>learning curve: ${esc(tag)}</h3><div class="sub" style="margin-bottom:6px">do more steps help? old live m50: hand loss 5.05, gold 26/317, fresh 10/29, nested 222, sums 22 / 7 / 1 of 30; live v8g: hand loss 2.04, gold 62/317</div><div style="overflow-x:auto"><table>${tb}</table></div></div>`;
   }
   const fr = d.fresh || {}, ft = Object.keys(fr);
   if (ft.length) {
