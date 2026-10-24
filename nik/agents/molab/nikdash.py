@@ -24,7 +24,7 @@ STEP_RE = re.compile(r'^step (\d+) \| loss ([\d.]+) \(ar ([\d.]+) diff ([\d.]+)(
 VAL_RE = re.compile(r'^== (?:eval|final) step (\d+): val ar ([\d.]+) \(ppl ([\d.]+)\)')
 GATE_JSON = ('bench', 'nbench', 'und', 'eval', 'rw', 'shape', 'reading', 'ladder', 'stress', 'long', 'en')
 GATE_TXT = (('trap', r'trap check:'), ('chat', r'chat sanity:'), ('everyday', r'(?m)^score'), ('followups', r'(?m)^score'),
-            ('money', r'(?m)^score'), ('mention', r'(?m)^score'), ('owner', r'(?m)^score'))
+            ('money', r'(?m)^score'), ('mention', r'(?m)^score'), ('owner', r'(?m)^score'), ('groups', r'(?m)^score'), ('fresh', r'(?m)^score'))
 
 
 def _now():
