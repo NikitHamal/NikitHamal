@@ -31,16 +31,28 @@ def add_steps(a, b):
 
 
 def sub_steps(a, b):
+    """Column subtraction with borrows. A column that lent 1 is written as its digit after lending (`0 le 1 diyo, 9`),
+    never as `-1` (the old `saya: -1 bata 2 ghatdaina` came from subtracting the borrow from a 0 digit; fixed
+    2026-10-24): a borrow through zeros reads `das: 0 thiyo, 1 sapati diyo, aba 9`. The last (leading) column never
+    shows a 0 - 0 = 0 step."""
     da, db = str(a)[::-1], str(b)[::-1]
     steps, borrow = [], 0
     for i in range(len(da)):
-        x = int(da[i]) - borrow
+        d = int(da[i])
         y = int(db[i]) if i < len(db) else 0
+        x = d - borrow
+        if x < 0:                           # a 0 that lent to the column on its right: it borrows in turn, becomes 9
+            steps.append(f'{PLACE[i]}: {d} thiyo, 1 sapati diyo, aba 1 sapati liyera {x + 10} - {y} = {x + 10 - y}')
+            borrow = 1
+            continue
+        lent = f'{d} thiyo, 1 diyo, aba {x}; ' if borrow else ''
         if x < y:
-            steps.append(f'{PLACE[i]}: {x} bata {y} ghatdaina, 1 sapati: {x + 10} - {y} = {x + 10 - y}')
+            steps.append(f'{PLACE[i]}: {lent}{x} bata {y} ghatdaina, 1 sapati: {x + 10} - {y} = {x + 10 - y}')
             borrow = 1
         else:
-            steps.append(f'{PLACE[i]}: {x} - {y} = {x - y}')
+            if i == len(da) - 1 and x == 0 and y == 0 and i > 0:
+                break                       # a leading 0 left after lending: nothing to write
+            steps.append(f'{PLACE[i]}: {lent}{x} - {y} = {x - y}')
             borrow = 0
     return '. '.join(steps)
 
