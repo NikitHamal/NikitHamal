@@ -15,6 +15,8 @@ cd $REPO
 ev() { echo "$(date -u +%FT%T) $*" >> /tmp/nik_dash/events.log; }
 B=$O/nik-0.1.$TAG.bin
 if [ ! -f $B ]; then
+  # one GPU, two training slots: wait until fewer than 2 trainings run and >= 30 GB are free (v3d OOMed at 13:47)
+  while [ "$(pgrep -fc '[n]ik/train.py')" -ge 2 ] || [ "$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1)" -lt 30000 ]; do sleep 60; done
   ev "$TAG: training ($STEPS steps on $MIX, seed $SEED${EXTRA:+, $EXTRA})"
   if [[ $INIT == *.bin ]]; then
     $PY -c "import json,struct,sys,torch; sys.path.insert(0,'nik'); from export import load_exported; s=sys.argv[1]; r=open(s,'rb').read(); h=struct.unpack('<I',r[4:8])[0]; torch.save({'model':load_exported(s).state_dict(),'cfg':json.loads(r[8:8+h])['config']}, sys.argv[2])" $INIT $O/init.pt
