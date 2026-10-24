@@ -56,6 +56,11 @@ class NikConfig:
     # {-1, 0, +1} x one scale per matrix, activations to int8 per token (straight-through gradients). 1.58 bits/weight
     # (packed 2 bits) lets ~4x more parameters fit the same 25 MB budget, and the browser matmul becomes add/subtract.
     ternary: bool = False
+    # Gated repeats (Claude, 2026-10-24): each block has a learned residual gate per repeat (rg, length n_repeat).
+    # Growing 2 -> 3 repeats with rg = [1, 1, 0] is function-preserving: the 36-layer model starts as exactly the
+    # 24-layer one and training opens the third pass only as far as it helps (Nik-deep v1 without gates lost
+    # bench / nested / shapes: the weights were tuned for 2 passes and the 3rd hit them at full strength).
+    rgate: bool = False
 
     @property
     def head_dim(self) -> int:
@@ -145,10 +150,13 @@ class Block(nn.Module):
         self.n2 = RMSNorm(cfg.d, cfg.eps)
         self.up = Lin(cfg.d, 2 * cfg.ffn, bias=False)    # [gate ; up] fused
         self.down = Lin(cfg.ffn, cfg.d, bias=False)
+        if cfg.rgate:
+            self.rg = nn.Parameter(torch.ones(cfg.n_repeat))
 
-    def forward(self, x, cos, sin, mask, cache=None):
+    def forward(self, x, cos, sin, mask, cache=None, r=0):
         cfg = self.cfg
         N, T, _ = x.shape
+        g = self.rg[r] if cfg.rgate else None          # residual gate of repeat r (gated repeats)
         hd = cfg.head_dim
         h = self.n1(x)
         q = self.q(h).view(N, T, cfg.heads, hd).transpose(1, 2)
@@ -168,9 +176,11 @@ class Block(nn.Module):
             a = F.scaled_dot_product_attention(q, k, v, is_causal=True)
         else:
             a = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
-        x = x + self.o(a.transpose(1, 2).reshape(N, T, -1))
-        g, u = self.up(self.n2(x)).chunk(2, dim=-1)
-        return x + self.down(F.silu(g) * u)
+        y = self.o(a.transpose(1, 2).reshape(N, T, -1))
+        x = x + (y if g is None else g * y)
+        gt, u = self.up(self.n2(x)).chunk(2, dim=-1)
+        y = self.down(F.silu(gt) * u)
+        return x + (y if g is None else g * y)
 
 
 class NikLM(nn.Module):
@@ -241,11 +251,11 @@ class NikLM(nn.Module):
         if self.cfg.abacus:
             x = x + self.abacus(self.digit_index(idx) if digits is None else digits)
         for b in self.blocks:
-            for _ in range(self.cfg.n_repeat):
+            for r in range(self.cfg.n_repeat):
                 if self.grad_ckpt and self.training:
-                    x = torch.utils.checkpoint.checkpoint(b, x, cos, sin, mask, use_reentrant=False)
+                    x = torch.utils.checkpoint.checkpoint(b, x, cos, sin, mask, None, r, use_reentrant=False)
                 else:
-                    x = b(x, cos, sin, mask)
+                    x = b(x, cos, sin, mask, r=r)
         return F.linear(self.norm(x), self.emb.weight)
 
 
@@ -267,8 +277,8 @@ def forward_cached(model, idx, pos, mask, caches, digits=None):
         x = x + model.abacus(digits)
     li = 0
     for b in model.blocks:
-        for _ in range(cfg.n_repeat):
-            x = b(x, cos, sin, m, cache=caches[li]); li += 1
+        for r in range(cfg.n_repeat):
+            x = b(x, cos, sin, m, cache=caches[li], r=r); li += 1
     return F.linear(model.norm(x), model.emb.weight)
 
 
