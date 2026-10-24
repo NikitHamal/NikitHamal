@@ -50,7 +50,12 @@ run() {  # tag bin outdir
     [ -f $o/en.json ]    || $PY nik/bench_en.py --model $b --data ${EN_DATA:-data/english} --out $o/en.json > $o/en.txt 2>&1 &
   fi
 }
-LD=${LIVE_DIR:-/tmp/gate_live}
+# the live cache is keyed by the chat-code stamp: two lanes running different /chat code side by side must not rewrite the
+# same cached live rows (2026-10-24: lane v2 ran the old vote.js while lane v3 ran the faithful vote); a new stamp starts
+# from a copy of the plain cache, and the stamp check below reruns only the stale chat rows
+LD=${LIVE_DIR:-/tmp/gate_live_$CHAT_V}
+[ -d $LD ] || { [ -d /tmp/gate_live ] && cp -r /tmp/gate_live $LD; mkdir -p $LD; }
+echo $LD > /tmp/gate_$T.live_dir
 run live $LB $LD
 run $T $B /tmp/gate_$T
 wait
