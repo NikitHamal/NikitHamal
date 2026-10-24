@@ -128,7 +128,9 @@ class Batches:
             xs.append(self.tok[i:i + L + 1])
             ms.append(self.mask[i:i + L + 1] if self.mask is not None else np.ones(L + 1, np.uint8))
         x = torch.from_numpy(np.stack(xs).astype(np.int64)).to(device)
-        m = torch.from_numpy(np.stack(ms).astype(np.bool_)).to(device)
+        # mask values: 0 context, 1 target (+ KL anchor), 2 target without the KL anchor, 3 context without KL
+        # (hand-written rows are free to move away from the reference: build_mix_v2 --hand-nokl)
+        m = torch.from_numpy(np.stack(ms).astype(np.uint8)).to(device)
         return x, m
 
 
