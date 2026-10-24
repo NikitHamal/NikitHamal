@@ -5,6 +5,11 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-24 night (Claude, same box): v8g shipped
+- **v12p shipped at 21:22 UTC (owner approved)**: on 8 fresh NikBench item sets (2,304 items) 1908 vs v8g 1750
+  (193 fixed / 35 broken, p < 0.02 on every set); bench 236, nested 241, owner cases 35/35 (21/21 through /chat).
+  Two ships in one session: m50 -> v8g (18:11) -> v12p (21:22). The biggest single lever of the day was teaching the
+  arithmetic skill in the surfaces people use (word forms + typed forms) with the column method kept intact.
+
 - **Rewording a procedure the parent already knows breaks it.** The math% drop shared by r1g, v10p, v11g, v12p (97.5
   -> 94.5-96) is subtraction with borrows: 6 of the 7 items newly wrong vs v8g are `962 - 288` -> `das: 6 bata 8
   ghatdaina` (the borrow from the ones column forgotten) -> 684, plus 3 one-step word problems read as two-step. Cause:
