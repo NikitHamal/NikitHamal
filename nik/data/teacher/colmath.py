@@ -31,28 +31,21 @@ def add_steps(a, b):
 
 
 def sub_steps(a, b):
-    """Column subtraction with borrows. A column that lent 1 is written as its digit after lending (`0 le 1 diyo, 9`),
-    never as `-1` (the old `saya: -1 bata 2 ghatdaina` came from subtracting the borrow from a 0 digit; fixed
-    2026-10-24): a borrow through zeros reads `das: 0 thiyo, 1 sapati diyo, aba 9`. The last (leading) column never
-    shows a 0 - 0 = 0 step."""
+    """Column subtraction with borrows, in the format every live model learned (m50 -> v8g): a column that lent writes
+    its decremented digit directly (`5 bata 8 ghatdaina, 1 sapati: 15 - 8 = 7`); a 0 that lends shows `-1 bata`.
+    Reverted on 2026-10-24 (evening) after a reworded version (`6 thiyo, 1 diyo, aba 5; ...`) made the trained models
+    mix the two formats and drop the borrow (`962 - 288` -> `das: 6 bata 8 ghatdaina` -> 684): 6 of the 7 math items
+    r1g / v10p newly failed were exactly that. Consistency with the parent's procedure beats cosmetic wording."""
     da, db = str(a)[::-1], str(b)[::-1]
     steps, borrow = [], 0
     for i in range(len(da)):
-        d = int(da[i])
+        x = int(da[i]) - borrow
         y = int(db[i]) if i < len(db) else 0
-        x = d - borrow
-        if x < 0:                           # a 0 that lent to the column on its right: it borrows in turn, becomes 9
-            steps.append(f'{PLACE[i]}: {d} thiyo, 1 sapati diyo, aba 1 sapati liyera {x + 10} - {y} = {x + 10 - y}')
-            borrow = 1
-            continue
-        lent = f'{d} thiyo, 1 diyo, aba {x}; ' if borrow else ''
         if x < y:
-            steps.append(f'{PLACE[i]}: {lent}{x} bata {y} ghatdaina, 1 sapati: {x + 10} - {y} = {x + 10 - y}')
+            steps.append(f'{PLACE[i]}: {x} bata {y} ghatdaina, 1 sapati: {x + 10} - {y} = {x + 10 - y}')
             borrow = 1
         else:
-            if i == len(da) - 1 and x == 0 and y == 0 and i > 0:
-                break                       # a leading 0 left after lending: nothing to write
-            steps.append(f'{PLACE[i]}: {lent}{x} - {y} = {x - y}')
+            steps.append(f'{PLACE[i]}: {x} - {y} = {x - y}')
             borrow = 0
     return '. '.join(steps)
 
