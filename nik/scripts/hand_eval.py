@@ -107,7 +107,7 @@ def main():
                 ids, _ = render_chat(tok, [{'role': 'user', 'content': q.lower()}])
                 todo.append((cat, q, next(m['content'] for m in c['messages'] if m['role'] == 'nik'), ids[:-1] + [NIK]))
         outs = []
-        for i in range(0, len(todo), 64):
+        for i in range(0, len(todo) if a.gen > 0 else 0, 64):
             outs += [r[0][0] for r in generate_multi(model, [t[3] for t in todo[i:i + 64]], n_per_prompt=1, max_new=a.max_new, temperature=0.0)]
         for (cat, q, ref, _), o in zip(todo, outs):
             samples.setdefault(cat, []).append({'q': q, 'nik': tok.decode(o), 'ref': ref})
