@@ -5,6 +5,17 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-24 night (Claude, same box): v8g shipped
+- **Candidates vs the live v8g (20:30), all NO SHIP, each a different trade:**
+  r1g (RFT on v8g's own 6,522 verified answers): bench 221, nested 224, understanding 21 (+2), shapes 6, money 25, EN
+  reply 58; loses math 94.5 (97.5), traps 28, ladder 44, everyday 40. d2g (Nik-deep v2): fresh 85 (79), groups 10
+  (7), understanding 20, math 98, held-out chat 71/317 (62); loses bench 214, reading 7, shapes 3, ladder 43, EN
+  reply 54. b10p70 (70% v10p + 30% v8g): bench 228, nested 230, reading 11, fresh 84, owner 35/35; loses
+  understanding 17, math 95.5, traps 29, everyday 37. The arithmetic gains (bench / nested) and the reading /
+  persona-trap rows trade against each other in every recipe; v12p (v10p's recipe on the repaired mix) tests whether
+  the trade came from the damaged mix.
+- **eval.py math% is decided by a handful of items (200 items: 97.5 -> 94.5 = 6 items).** r1g and v10p both drop it
+  by 6 items while gaining 5-19 bench items; checking which items flip before trading on it.
+
 - **v10p (v8g + 700 steps of word-surface arithmetic) moved NikBench more than anything today: bench 216 -> 231
   (20 fixed / 5 broken, p<0.01), nested 220 -> 239 (25 / 6, p<0.01), reading pairs 8 -> 13, shapes 4 -> 7, money
   23 -> 28, groups 7 -> 10, owner 35/35** - teaching the benchmark's own question surfaces (`a ko b guna kati?`,
