@@ -4,6 +4,36 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-24 (Claude, box session: hand data on the GPU)
+
+- **The first box was reclaimed after ~10 minutes** (the owner got a new pair URL; all of /tmp, the data download and
+  the first arm were gone). Nothing may live only in /tmp: `jobs/saver.sh` pushes every new candidate .bin, gate dir
+  and log to the private Kaggle dataset `nik-v2-run` within ~3 min, `jobs/restore.sh` brings them back on a new box.
+  (Its first version never saved: an unmatched glob in `ls a* b*` makes ls exit 2 even when `a*` matched.)
+- **The live model is almost blind to natural chat.** m50's answer-token loss on held-out hand-written replies:
+  chat 5.6-6.3, advice 6.7, knowledge 6.4, translate 5.5, english 5.3, math-word 3.1-4.0 nats/token, vs 0.008 on its
+  own column-math rows (colrows) and 0.6 on multiturn rows. Greedy replies to held-out advice / chat questions are
+  incoherent ("group study garda gaff matra hunchha" -> "yog le sarir lai santulit ... online shopping ..."). The
+  template data taught skills, not language; the 42,944 hand conversations are a new distribution. With the KL
+  anchor on every target (v2 recipe), the hand rows are pulled back toward m50's distribution, so v3 trains hand rows
+  **KL-free** (mask 2/3 in the token mask: `build_mix_v2 --hand-nokl`; mask 1 rows keep the anchor).
+- **Held-out real-chat metric:** `build_mix_v2 --hand-holdout 0.02` keeps 827 hand conversations (split by a hash of
+  the first user turn) out of training; `scripts/hand_eval.py` reports loss per category, gold accuracy (raw and
+  with the pencil) and greedy replies side by side with the reference. v2 arms saw all hand data: not comparable.
+- **v2s14** (m50 + 850 steps, k13 recipe + hand 6% with KL everywhere): bench 210 (+1), nested 218 (-4: 5 fixed / 9
+  broken, p=0.42), **understanding 21 (+2)**, math 98% (+4), **RW items 37 (+12; 16/4, p=0.01)**, reading 7 (+2),
+  traps 29 (+4), **everyday 18/60 (+12)**, money 19 (+1), mention 28 (=), owner cases 24/25 (-1), follow-ups 56 (+3),
+  EN qa ppl 229 -> 14, EN reply 53 (-1). NO SHIP on nested / owner cases / EN reply. Likely cause of the nested drop:
+  hand `T:` lines do multi-digit arithmetic in one line (`1500 - 1300 = 200`), fine with /chat's pencil, wrong
+  without it, and the bench runs without the pencil (same think-style drift as 2026-10-22).
+- **Depth probe (no training):** m50 run with each shared block 1/3/4 times instead of 2: colrows loss 1.34 / 0.78 /
+  3.57 (r=2: 0.008), multiturn 1.96 / 0.91 / 3.47 (0.65), money1 3.01 / 1.11 / 2.80 (1.16). Precise skills are tied to
+  the trained depth, but r=3 is only a moderate shock, so a 36-layer warm start (`train.py --set-repeat 3`, same 20M
+  parameters, browser engine already reads n_repeat) is cheap to test: arm v3d.
+- **Two trainings share the Blackwell well:** 2 x ~65k tok/s side by side vs ~119k alone (38 GB VRAM each at bs 128);
+  a third does not fit. Gates (19 small eval processes) run beside trainings. `queue_v3.sh` pipelines arms: the next
+  training starts as soon as the previous .bin exists; its evals and gate run in the background.
+
 ## 2026-10-23 (Claude, hand-written data round 2, sandbox only, no box)
 
 - **A whole file in one tool call can time out and lose everything.** Writers S and U (chat + advice) each ran ~1 h
