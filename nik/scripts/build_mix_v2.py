@@ -106,12 +106,14 @@ def main():
     ap.add_argument('--seed', type=int, default=71); ap.add_argument('--workers', type=int, default=os.cpu_count() or 2)
     ap.add_argument('--no-replay', action='store_true')
     ap.add_argument('--hand-nokl', action='store_true', help='hand rows train without the KL anchor (mask 2/3)')
+    ap.add_argument('--hand-kl-cats', default='', help='with --hand-nokl: these hand categories keep the anchor (e.g. math-word,reasoning)')
     ap.add_argument('--hand-holdout', type=float, default=0.0, help='fraction of hand conversations kept out -> <out>/hand_heldout.jsonl')
     a = ap.parse_args()
     shares = dict(SHARES)
     for s in a.share:
         k, v = s.split('='); shares[k] = float(v)
     shares = {k: v for k, v in shares.items() if v > 0}
+    kl_cats = {c.strip() for c in a.hand_kl_cats.split(',') if c.strip()}
     R = random.Random(a.seed)
     os.makedirs(a.out, exist_ok=True)
     for f in os.listdir(a.data):
@@ -165,7 +167,7 @@ def main():
                     if src == 'english' and R.random() < 0.10:
                         import english_basic
                         r = english_basic.sample(R)
-                    if src == 'hand' and a.hand_nokl:
+                    if src == 'hand' and a.hand_nokl and r['cat'].replace('hand-', '') not in kl_cats:
                         r['nokl'] = True
                     rows.append(json.dumps(fix(r), ensure_ascii=False)); got += ntok(r); n += 1
                     if got >= want:
