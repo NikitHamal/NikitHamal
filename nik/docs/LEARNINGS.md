@@ -6,6 +6,13 @@ persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-23 (Claude, hand-written data round 2, sandbox only, no box)
 
+- **A whole file in one tool call can time out and lose everything.** Writers S and U (chat + advice) each ran ~1 h
+  and ended with "Request timed out (server_error)" right before their first file, nothing saved; U had been told to
+  "start writing right away" and made only 5 tool calls. Writers that saved in 2-3 chunks never hit it. BRIEF now
+  requires chunks of at most ~40 examples per tool call (Write, then `cat >> file <<'EOF'`).
+- **Translations must not add facts the source lacks.** Writer V rendered every unspecified "cousin" as `kaka ko
+  chhora` (father's brother's son: adds side and gender); 6 fixed to `cousin`, as Nepali speakers say it. BRIEF rule.
+
 - **Hand multi-turn rows did not match what /chat sends, and a "slip" lesson would have taught wrong answers.**
   `chat/index.html` passes history as `{role, content}` only (no thinks), but every hand conversation trained all
   Nik turns on a history that carried thinks; and writer P's 68 "Nik slipped, the user corrects it" conversations had
