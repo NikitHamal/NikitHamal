@@ -9,7 +9,7 @@ export KAGGLE_API_TOKEN="${KAGGLE_API_TOKEN:-$(cat ~/.kaggle/access_token 2> /de
 last=""
 while true; do
   sig=$(ls -l --time-style=+%s $W/*/nik-0.1.*.bin /tmp/nik_runs/*/nik-0.1.*.bin /tmp/gate_*/verdict.txt /tmp/confirm_*.txt 2> /dev/null | md5sum)
-  if [ "$sig" != "$last" ] && ls $W/*/nik-0.1.*.bin /tmp/nik_runs/*/nik-0.1.*.bin > /dev/null 2>&1; then
+  if [ "$sig" != "$last" ] && [ -n "$(ls $W/*/nik-0.1.*.bin /tmp/nik_runs/*/nik-0.1.*.bin 2> /dev/null)" ]; then
     rm -rf $P; mkdir -p $P
     cp $W/*/nik-0.1.*.bin /tmp/nik_runs/*/nik-0.1.*.bin $P/ 2> /dev/null
     cp $W/progress.log $W/mix.log /tmp/nik_dash/events.log $P/ 2> /dev/null
