@@ -8,7 +8,7 @@ import random
 
 from math_gen import pick, ex
 
-PLACE = ['ek', 'das', 'saya', 'hajar', 'das hajar', 'lakh', 'das lakh', 'karod']
+PLACE = ['ek', 'das', 'saya', 'hajar', 'das hajar', 'lakh', 'das lakh', 'karod', 'das karod', 'arab', 'das arab', 'kharab']
 
 
 def ndigit(R, lo, hi):
