@@ -442,6 +442,35 @@ def sec_fresh():
                 f'<div style="overflow:auto;max-height:520px"><table>{th}{"".join(rows)}</table></div>')
 
 
+def curves():
+    out = {}
+    for f in glob.glob('/tmp/nik_runs/*/curve.json'):
+        try:
+            out[f.split('/')[-2]] = json.load(open(f))
+        except Exception:
+            pass
+    return out
+
+
+def sec_curves():
+    cs = curves()
+    if not cs:
+        return ''
+    html_ = []
+    for tag, c in sorted(cs.items()):
+        keys = sorted(c, key=lambda k: (k == 'final', int(k) if k.isdigit() else 10 ** 9))
+        cols = ['hand chat loss (lower)', 'held-out gold', 'fresh', 'nested /288', 'a + b /30', 'a+b /30', 'a+b=? /30']
+        rows = []
+        for k in keys:
+            r = c[k]; sf = r.get('surface', {})
+            vals = [r.get('hand_loss'), r.get('hand_gold'), r.get('fresh'), r.get('nested'), sf.get('plain'), sf.get('nospace'), sf.get('tight-q')]
+            rows.append(f'<tr><td class="mono">{_esc(k)}</td>' + ''.join(f'<td class="mono">{_esc("" if v is None else v)}</td>' for v in vals) + '</tr>')
+        th = '<tr><th>step</th>' + ''.join(f'<th>{_esc(x)}</th>' for x in cols) + '</tr>'
+        html_.append(f'<div class="sub" style="margin:4px 0">{_esc(tag)} (live m50: hand loss 5.05, gold 26/317, fresh 10/29, nested 222, sums 22 / 7 / 1 of 30)</div>'
+                     f'<div style="overflow-x:auto"><table>{th}{"".join(rows)}</table></div>')
+    return _box('learning curves: do more steps help?', ''.join(html_))
+
+
 def sec_notes(plan):
     notes = plan.get('notes') or []
     if not notes:
@@ -480,7 +509,7 @@ def status(now=None):
             'gpu': None if not g else {k: (round(v, 2) if isinstance(v, float) else v) for k, v in g.items() if k != 'hist'} | {'hist': [h[1] for h in g.get('hist', [])][-120:]},
             'host': hst, 'scores': {'cols': cols, 'rows': rows, 'verdicts': verdicts}, 'events': sorted(set(ev))[-16:],
             'tail_src': tail_src, 'tail': tail,
-            'fresh': _fresh_brief()}
+            'fresh': _fresh_brief(), 'curves': curves()}
 
 
 def _fresh_brief():
@@ -500,6 +529,6 @@ def render(mo=None):
     cur = next((s for s in states if s['status'] in ('running', 'starting') and s.get('steps')), None)
     parts = [CSS, '<div class="nd">', _safe(sec_header, plan, now), _safe(sec_tiles, gpu(), host(), cur),
              _safe(sec_now, plan, states, now), _safe(sec_plan, plan, states, now), _safe(sec_scores),
-             _safe(sec_fresh), _safe(sec_notes, plan), _safe(sec_logs, plan, states), '</div>']
+             _safe(sec_curves), _safe(sec_fresh), _safe(sec_notes, plan), _safe(sec_logs, plan, states), '</div>']
     out = ''.join(parts)
     return mo.Html(out) if mo is not None else out
