@@ -43,8 +43,18 @@ def _init():
 
 def _render(line):
     from prepare import render_chat
-    ids, mask = render_chat(TOK, json.loads(line)['messages'])
+    r = json.loads(line)
+    ids, mask = render_chat(TOK, r['messages'])
+    if r.get('nokl'):          # KL-free row (train.py mask values): targets 1 -> 2, context 0 -> 3
+        mask = [2 if v else 3 for v in mask]
     return ids, mask
+
+
+def holdout_key(conv):
+    """stable per-conversation key (first user turn), so every expanded row of a held-out conversation stays out"""
+    import hashlib
+    first = next((m['content'] for m in conv['messages'] if m['role'] == 'user'), '')
+    return int(hashlib.md5(' '.join(first.lower().split()).encode()).hexdigest()[:8], 16) % 10000
 
 
 def expand_hand(rows):
@@ -95,6 +105,8 @@ def main():
     ap.add_argument('--share', action='append', default=[], help='source=share, overrides SHARES (share of final tokens)')
     ap.add_argument('--seed', type=int, default=71); ap.add_argument('--workers', type=int, default=os.cpu_count() or 2)
     ap.add_argument('--no-replay', action='store_true')
+    ap.add_argument('--hand-nokl', action='store_true', help='hand rows train without the KL anchor (mask 2/3)')
+    ap.add_argument('--hand-holdout', type=float, default=0.0, help='fraction of hand conversations kept out -> <out>/hand_heldout.jsonl')
     a = ap.parse_args()
     shares = dict(SHARES)
     for s in a.share:
@@ -127,6 +139,13 @@ def main():
     for k, p in (('selfrows', a.selfrows), ('hand', a.hand)):
         if k in shares:
             files[k] = [json.loads(l) for l in open(p) if l.strip()]
+    if 'hand' in files and a.hand_holdout > 0:
+        held = [r for r in files['hand'] if holdout_key(r) < a.hand_holdout * 10000]
+        files['hand'] = [r for r in files['hand'] if holdout_key(r) >= a.hand_holdout * 10000]
+        with open(os.path.join(a.out, 'hand_heldout.jsonl'), 'w') as f:
+            for r in held:
+                f.write(json.dumps(r, ensure_ascii=False) + '\n')
+        print(f'hand: {len(held):,} conversations held out -> {a.out}/hand_heldout.jsonl', flush=True)
     if 'hand' in files:
         n0 = len(files['hand']); files['hand'] = expand_hand(files['hand'])
         print(f'hand: {n0:,} conversations -> {len(files["hand"]):,} rows (one per trained Nik turn)', flush=True)
@@ -146,6 +165,8 @@ def main():
                     if src == 'english' and R.random() < 0.10:
                         import english_basic
                         r = english_basic.sample(R)
+                    if src == 'hand' and a.hand_nokl:
+                        r['nokl'] = True
                     rows.append(json.dumps(fix(r), ensure_ascii=False)); got += ntok(r); n += 1
                     if got >= want:
                         break
