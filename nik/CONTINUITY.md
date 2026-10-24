@@ -82,21 +82,26 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
    `nik-v2-run`. Progress: `/tmp/v2/progress.log`. ~1.5-2 h. Ship only by hand (`scripts/ship_model.py`).
 3. Hand-written data (owner's request, 2026-10-22 night): `nik/data/hand/` (STYLE.md, check.py, raw/, hand.jsonl).
 
-## HANDOVER (read first if you are the next Claude) - updated 2026-10-24 ~13:00 UTC (session 4: box, live)
-**Now:** owner's molab box (RTX PRO 6000, ~11h50 from 12:04 UTC; the first box of the day was reclaimed after 10 min).
-Two GPU lanes run side by side; everything is visible live: the notebook dashboard (`nik/agents/molab/nikdash.py`,
-one cell + `mo.ui.refresh`), the public page https://nikit.is-a.dev/lab/ (fed by `nik/agents/molab/live_pusher.py`
-from the driving sandbox into the body of issue #12), and new candidates on https://nikit.is-a.dev/chat/?model=preview
-(`scripts/preview_model.py`; the default model is still m50).
-- **Lane v2** (`jobs/run_v2.sh`, /tmp/v2): last session's plan, hand data 6% with the KL anchor everywhere, 3 seeds +
-  soup + gates. v2s14: understanding 21, math 98, RW items 37, everyday 18/60, EN ppl 14, but NO SHIP (nested 218,
-  owner 24/25, EN reply 53); on fresh chat prompts it answers word-for-word like m50 (the anchor held it in place).
-- **Lane v3** (`jobs/setup_v3.sh` + `jobs/arm.sh` + `jobs/after.sh`, /tmp/v3, outputs /tmp/nik_runs/<tag>): hand rows
-  KL-free (`build_mix_v2 --hand-nokl`, mask 2/3), 2% of hand conversations held out (`--hand-holdout 0.02`,
-  `scripts/hand_eval.py`). v3s14 (hand 10%, 1500 steps), then v4s14 (hand math/reasoning keep the anchor +
-  column rows 8%: the nested-drift fix), v3d (Nik-deep: `--set-repeat 3`, 36 layers from the same 20M params).
-- Bins + gate dirs + logs go to private Kaggle `nik-v2-run` every ~3 min (`jobs/saver.sh`; `jobs/restore.sh`).
-- Open: English rows are still KL-anchored to m50 (which writes no usable English): `--nokl-src english` is ready.
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-24 ~16:55 UTC (session 4: box, live)
+**Now:** owner's molab box (RTX PRO 6000, ~11h50 from 12:04 UTC, ends ~23:53 UTC). Live model is still **m50**; no
+candidate has passed the strict gate yet. Watch: notebook dashboard (`nik/agents/molab/nikdash.py`), public
+https://nikit.is-a.dev/lab/ (`live_pusher.py` in the sandbox -> issue #12), candidates at /chat/?model=preview
+(`scripts/preview_model.py`; now v3s14).
+- **Jobs** (all detached; /tmp/v3/repo; outputs /tmp/nik_runs/<tag>, gates /tmp/gate_<tag>, events /tmp/nik_dash/events.log):
+  `jobs/arm.sh TAG MIX STEPS SEED [train args]` (train from m50 or INIT=..., export, fresh questions, held-out hand
+  eval, full gate; waits for a free GPU slot), `jobs/after.sh FILE ...` (start when a file exists), `jobs/setup_v3.sh`
+  (MIXNAME / MIXARGS: build a mix), `jobs/rft_round.sh` + `after_rft.sh` (verified self-training round),
+  `jobs/curve_watch.sh TAG` (learning curve of a --save-every run), `jobs/saver.sh` (everything to Kaggle nik-v2-run).
+- **Findings today** (details in LEARNINGS): m50 is blind to natural chat (5.05 nats on held-out hand replies; KL-free
+  hand rows -> 2.0-2.2); the nested gate block is ONE NikBench template m50 had memorised (`groups.py` teaches the
+  skill; groups_heldout gate row); arithmetic was tied to the spaced `a + b` surface (`surfmath.py`, augment math
+  surfaces; v7L: `a+b` 7 -> 29/30); one-line hand thinks erode the column method (`--hand-colthink`); the
+  competence-gated anchor (`--kl-gate`, v2g14) gave the biggest broad gains (everyday 41/60, traps 30, shapes 6);
+  Nik-deep (36 layers) parked.
+- **In flight at 16:55:** v7L (3000 steps, curve at 750/1500/2250), v8g (v2g14 + groups + surfmath, gated) then RFT
+  round r1g on it, v9g (v9 mix = column thinks + borrow fix, gated, 2000 steps) waiting for a slot.
+- **Ship rule:** >= m50 on every gate row (`full_gate.sh`; new rows today: groups, fresh, 2 owner 7-digit cases).
+  To ship: `scripts/ship_model.py` (see the session-2 handover below), push, DECISION in #11.
 
 ## HANDOVER (read first if you are the next Claude) - updated 2026-10-24 ~01:30 UTC (session 3: data only, no box)
 **Now:** hand-writing teaching data toward 100k+ examples (owner's overnight goal), then build the v2 mix and train
