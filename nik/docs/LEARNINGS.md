@@ -5,6 +5,17 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-24 night (Claude, same box): v8g shipped
+- **v10p (v8g + 700 steps of word-surface arithmetic) moved NikBench more than anything today: bench 216 -> 231
+  (20 fixed / 5 broken, p<0.01), nested 220 -> 239 (25 / 6, p<0.01), reading pairs 8 -> 13, shapes 4 -> 7, money
+  23 -> 28, groups 7 -> 10, owner 35/35** - teaching the benchmark's own question surfaces (`a ko b guna kati?`,
+  `jodnus a ra b`) with the column method (problem-level bench guard on). Losses: understanding 17 (19: `sunita ko
+  bahini` -> "nikit hamal" persona leak; "kathmandu" letters 6), math 94.5 (97.5), ladder 41 (45), traps 27 (30:
+  "nikit kaha janchha?" persona leak), EN reply 54 (57). Its mix was the damaged v10 (guard dropped 21% of lookup /
+  everyday rows, mention rows untouched) - the persona leaks fit fewer lookup rows. Next: blends v8g + a(v10p - v8g)
+  and v12p = the same recipe on the repaired mix.
+- **Soup s89 = (v8g + v9g)/2:** nested 222, owner 35/35, reading 10, fresh 81, but bench 215, traps 27, shapes 3,
+  groups 5: the halves average their skills away. Same-parent blends (v8g with its own child) are the safer kind.
+
 - **A contamination guard can silently remove a skill.** The first bench_guard keyed problems by their numbers;
   8 NikBench items carry ONE number (`... 7 din pachhi ...`), so every row mentioning one small number was dropped:
   156,263 rows of v10 and 180,439 of rft_r1g, i.e. ~21% of everyday (weekday / unit) and lookup rows and ~5% of
