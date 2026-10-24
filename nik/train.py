@@ -200,6 +200,8 @@ def main():
     ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
     ap.add_argument('--set-repeat', type=int, default=0, help='depth: run each shared block this many times (same parameters, more layers)')
     ap.add_argument('--save-every', type=int, default=0, help='also keep a snapshot (EMA weights) every N steps: snap_<step>.pt (learning curves)')
+    ap.add_argument('--kl-gate', action='store_true', help='competence-gated anchor: KL weight x p_ref(gold token) (model.py _kl_to_ref)')
+    ap.add_argument('--rep-choices', default='', help='elastic depth: each step runs the shared blocks a random number of times from this list (e.g. 2,3); saved with the largest')
     ap.add_argument('--lr', type=float, default=3e-3)
     ap.add_argument('--warmup', type=int, default=500)
     ap.add_argument('--sched', choices=['cosine', 'wsd'], default='cosine')
@@ -311,6 +313,7 @@ def main():
     ema = None
     if a.ema:
         ema = copy.deepcopy(model).eval()
+        ema.cfg = cfg       # one config: elastic depth (--rep-choices) evaluates and saves the EMA at the chosen depth
         for p in ema.parameters():
             p.requires_grad_(False)
 
@@ -332,7 +335,8 @@ def main():
         ref_model = ref_model.to(device).eval()
         for p_ in ref_model.parameters():
             p_.requires_grad_(False)
-        print(f'KL anchor: {a.ref} (weight {a.kl})', flush=True)
+        print(f'KL anchor: {a.ref} (weight {a.kl}{", competence-gated" if a.kl_gate else ""})', flush=True)
+        hybrid_loss.kl_gate = a.kl_gate
     fwd_model = torch.compile(model) if a.compile else model
     if world > 1:
         fwd_model = torch.nn.parallel.DistributedDataParallel(
@@ -340,9 +344,13 @@ def main():
     log = open(os.path.join(a.out, 'log.jsonl'), 'a')
     t0, tok_seen = time.time(), 0
 
+    reps = [int(r) for r in a.rep_choices.split(',') if r.strip()]
+
     def save(tag='ckpt'):
         if not main_proc:
             return
+        if reps:
+            cfg.n_repeat = max(reps)
         d = {'model': (ema or model).state_dict(), 'cfg': cfg.to_dict(), 'opt': opt.state_dict(), 'step': step, 'stage': a.stage}
         if ema is not None:
             d['model_raw'] = model.state_dict()     # resume continues from the raw weights
@@ -354,6 +362,8 @@ def main():
         for g in opt.param_groups:
             g['lr'] = lr
         tot = ar = df = klsum = 0.0
+        if reps:
+            cfg.n_repeat = reps[int(np.random.default_rng(step * 7919 + a.seed).integers(len(reps)))]
         for _ in range(a.accum):
             x, m = train_b.get(a.bs, L, device)
             with amp():
@@ -376,10 +386,12 @@ def main():
         el = time.time() - t0
         if step % 25 == 0 or step == 1:
             tot, ar, df = float(tot), float(ar), float(df)
-            klp = f' kl {float(klsum):.4f}' if ref_model is not None else ''
+            klp = (f' kl {float(klsum):.4f}' + (f' gate {float(hybrid_loss.last_gate):.3f}' if a.kl_gate else '')) if ref_model is not None else ''
             print(f'step {step} | loss {tot:.3f} (ar {ar:.3f} diff {df:.3f}{klp}) | lr {lr:.2e} | gn {float(gn):.2f} | '
                   f'{tok_seen / el:,.0f} tok/s | {el / 60:.1f} min', flush=True)
         if (step % a.eval_every == 0 or step == a.steps) and main_proc:
+            if reps:
+                cfg.n_repeat = max(reps)
             v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
             print(samples(ema or model, tok, a.stage, use_ssbd=a.diff_weight > 0), flush=True)
