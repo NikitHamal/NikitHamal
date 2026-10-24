@@ -74,7 +74,7 @@ def col_add(R):
         a, b = 10 ** R.randint(3, 7) * R.randint(1, 9), R.randint(1, 999)
     c = a + b
     q = pick(R, [f'{a} + {b} kati hunchha?', f'{a} ra {b} jodda kati?', f'{a} ma {b} thapda kati hunchha?', f'jod: {a} + {b}', f'{a} plus {b}?',
-                 f'what is {a} + {b}?'])
+                 f'what is {a} + {b}?', f'{a} ra {b} ko jod kati?', f'jodnus {a} ra {b}', f'{a} ra {b} ko yogfal?', f'{a} ra {b} jod garda kati aauchha?'])
     think = f'thau anusar ek bata suru garchhu. {add_steps(a, b)}. tyasaile {a} + {b} = {c}.'
     return ex(q, think, pick(R, [f'{a} + {b} = {c}.', f'jawaf {c} ho.']), c, 'add')
 
@@ -87,7 +87,8 @@ def col_sub(R):
                  f'{a} - {b} = {a - b}, tyasaile {b} - {a} = -{a - b}.')
         return ex(q, think, pick(R, [f'{b} - {a} = -{a - b}.', f'jawaf -{a - b} ho.']), -(a - b), 'sub')
     c = a - b
-    q = pick(R, [f'{a} - {b} kati hunchha?', f'{a} bata {b} ghataunda kati?', f'ghatau: {a} - {b}', f'what is {a} - {b}?', f'{a} minus {b}?'])
+    q = pick(R, [f'{a} - {b} kati hunchha?', f'{a} bata {b} ghataunda kati?', f'ghatau: {a} - {b}', f'what is {a} - {b}?', f'{a} minus {b}?',
+                 f'{a} bata {b} ghatau', f'{a} ra {b} ko farak kati?', f'{a} ma {b} ghatayo bhane kati?'])
     think = f'thau anusar ek bata suru garchhu. {sub_steps(a, b)}. tyasaile {a} - {b} = {c}. jaach: {c} + {b} = {a}.'
     return ex(q, think, pick(R, [f'{a} - {b} = {c}.', f'jawaf {c} ho.']), c, 'sub')
 
@@ -100,7 +101,8 @@ def col_mul(R):
     a = ndigit(R, 2, 4)
     b = ndigit(R, 1, 2) if R.random() < 0.6 else R.randint(2, 9)
     b = max(b, 2)
-    q = pick(R, [f'{a} x {b} kati hunchha?', f'{a} lai {b} le gunda kati?', f'gun: {a} x {b}', f'what is {a} x {b}?', f'{a} * {b} = ?'])
+    q = pick(R, [f'{a} x {b} kati hunchha?', f'{a} lai {b} le gunda kati?', f'gun: {a} x {b}', f'what is {a} x {b}?', f'{a} * {b} = ?',
+                 f'{a} ko {b} guna kati?', f'gunan garnus {a} x {b}', f'{a} ko {b} guna kati hunchha?', f'{b} choti {a} kati?'])
     if b < 10:
         think = f'{a} lai {b} le ank ank gari gunchhu (ek bata): {mul1_steps(a, b)}. tyasaile {a} x {b} = {a * b}.'
     else:
@@ -112,7 +114,10 @@ def col_mul(R):
         total = f'{a * o} + {a * t * 10}' if o else f'{a * t * 10}'
         think = (f'{b} ma {t} das ra {o} ek chhan. ' + '. '.join(parts) + '. ' +
                  (f'aba jodchhu: {add_steps(a * o, a * t * 10)}. ' if o else '') + f'tyasaile {a} x {b} = {total} = {a * b}.')
-    return ex(q, think.replace(', so ', ', tyasaile '), pick(R, [f'{a} x {b} = {a * b}.', f'jawaf {a * b} ho.']), a * b, 'mul')
+    ans = pick(R, [f'{a} x {b} = {a * b}.', f'jawaf {a * b} ho.'])
+    if ' guna' in q:
+        ans = pick(R, [f'{a} ko {b} guna {a * b} hunchha.', f'{a} x {b} = {a * b} hunchha.'])
+    return ex(q, think.replace(', so ', ', tyasaile '), ans, a * b, 'mul')
 
 
 def col_div(R):

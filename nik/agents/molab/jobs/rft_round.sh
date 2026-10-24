@@ -20,7 +20,7 @@ M=rft_$NEW
 if [ ! -f data_v3/${M}_tok.bin ]; then
   $PY nik/scripts/build_mix_v2.py --data data --out data_v3 --name $M --en data/english \
     --selfrows data/selfdistill/followup_self_m50.jsonl --hand nik/data/hand/hand.jsonl --rft $R \
-    --share hand=0.12 --share colrows=0.06 --share colbig=0.02 --share surfmath=0.03 --share groups=0.03 --share rft=0.06 --hand-nokl --nokl-src english,colbig,surfmath,rft --hand-holdout 0.02 \
+    --share hand=0.12 --share colrows=0.06 --share colbig=0.02 --share surfmath=0.03 --share groups=0.03 --share rft=0.06 --hand-nokl --hand-colthink --nokl-src english,colbig,surfmath,rft --hand-holdout 0.02 \
     > /tmp/nik_runs/$NEW/mix.log 2>&1 || { ev "$NEW: mix FAILED"; exit 1; }
 fi
 INIT=$SB REF=$SB bash nik/agents/molab/jobs/arm.sh $NEW $M $STEPS 21
