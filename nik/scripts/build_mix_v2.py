@@ -57,6 +57,34 @@ def holdout_key(conv):
     return int(hashlib.md5(' '.join(first.lower().split()).encode()).hexdigest()[:8], 16) % 10000
 
 
+PLAIN_Q = None
+
+
+def colthink(q, think):
+    """Column-method think for a plain arithmetic question (`48 x 7 kati?`, `jodnus 25 ra 50`): v7Lm (hand rows KL-free)
+    lost plain NikBench items by writing one-line thinks (`957 x 2 = 1914. 1914 x 2 = 3828.`); 2,440 hand thinks are one
+    bare equation, fine inside word problems (m50 does that too) but not for a bare sum, where m50 always works in
+    columns. Returns the new think, or None when the question is not a plain two-number operation colmath covers."""
+    import re
+    from colmath import add_steps, sub_steps, mul1_steps
+    global PLAIN_Q
+    if PLAIN_Q is None:
+        PLAIN_Q = re.compile(r'^[a-z ,:]{0,25}?(\d+)\s*([-+x*/])\s*(\d+)\s*(?:=\s*\?|kati[a-z ]{0,20}|ho\??)?\s*\??$')
+    m = PLAIN_Q.match(q.lower().strip())
+    if not m:
+        return None
+    a, op, b = int(m.group(1)), m.group(2), int(m.group(3))
+    if max(a, b) < 10:
+        return None
+    if op == '+':
+        return f'thau anusar ek bata suru garchhu. {add_steps(a, b)}. tyasaile {a} + {b} = {a + b}.'
+    if op == '-' and a >= b:
+        return f'thau anusar ek bata suru garchhu. {sub_steps(a, b)}. tyasaile {a} - {b} = {a - b}. jaach: {a - b} + {b} = {a}.'
+    if op in 'x*' and 2 <= b <= 9:
+        return f'{a} lai {b} le ank ank gari gunchhu (ek bata): {mul1_steps(a, b)}. tyasaile {a} x {b} = {a * b}.'
+    return None
+
+
 def expand_hand(rows):
     """One training row per trained Nik turn of a hand-written conversation, with the history the way /chat sends it
     (chat/index.html passes {role, content} only): earlier Nik turns without their think and context only
@@ -109,6 +137,7 @@ def main():
     ap.add_argument('--hand-kl-cats', default='', help='with --hand-nokl: these hand categories keep the anchor (e.g. math-word,reasoning)')
     ap.add_argument('--nokl-src', default='', help='other sources trained without the KL anchor (e.g. english: m50 cannot write English, so anchoring to it holds English back)')
     ap.add_argument('--hand-holdout', type=float, default=0.0, help='fraction of hand conversations kept out -> <out>/hand_heldout.jsonl')
+    ap.add_argument('--hand-colthink', action='store_true', help='hand rows that are a plain arithmetic question get the column-method think (colmath), like every generator row')
     ap.add_argument('--rft', default='', help='jsonl of verified self-generated rows (scripts/rft_collect.py), used as source "rft" (set --share rft=...)')
     a = ap.parse_args()
     shares = dict(SHARES)
@@ -151,6 +180,15 @@ def main():
             for r in held:
                 f.write(json.dumps(r, ensure_ascii=False) + '\n')
         print(f'hand: {len(held):,} conversations held out -> {a.out}/hand_heldout.jsonl', flush=True)
+    if 'hand' in files and a.hand_colthink:
+        nc = 0
+        for r in files['hand']:
+            msgs = r['messages']
+            if len(msgs) == 2 and msgs[1].get('think'):
+                t = colthink(msgs[0]['content'], msgs[1]['think'])
+                if t:
+                    msgs[1]['think'] = t; nc += 1
+        print(f'hand: {nc} plain-arithmetic rows get the column-method think', flush=True)
     if 'hand' in files:
         n0 = len(files['hand']); files['hand'] = expand_hand(files['hand'])
         print(f'hand: {n0:,} conversations -> {len(files["hand"]):,} rows (one per trained Nik turn)', flush=True)
