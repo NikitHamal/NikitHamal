@@ -11,7 +11,7 @@ N=${MIXNAME:-v3}
 if [ ! -f data_v3/${N}_tok.bin ]; then
   echo "$(date -u +%FT%T) mix $N: building" >> /tmp/nik_dash/events.log
   $PY nik/scripts/build_mix_v2.py --data data --out data_v3 --name $N --en data/english \
-    --selfrows data/selfdistill/followup_self_m50.jsonl --hand nik/data/hand/hand.jsonl \
+    --selfrows ${SELFROWS:-data/selfdistill/followup_self_m50.jsonl} --hand nik/data/hand/hand.jsonl \
     ${MIXARGS:---share hand=0.10 --hand-nokl --hand-holdout 0.02} > $W/mix_$N.log 2>&1 || { echo "mix failed"; exit 1; }
   echo "$(date -u +%FT%T) mix $N: $(grep -E '^hand|^'$N':' $W/mix_$N.log | tr '\n' ' ' | cut -c1-300)" >> /tmp/nik_dash/events.log
 fi
