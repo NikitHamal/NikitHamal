@@ -9,12 +9,18 @@ TAG=$1; MIX=$2; STEPS=$3; SEED=$4; shift 4; EXTRA="$*"
 REPO=/tmp/v3/repo; O=/tmp/nik_runs/$TAG; mkdir -p $O /tmp/nik_dash
 PY=${PY:-/tmp/uv-venv/bin/python}
 BS=${BS:-128}; ACC=${ACC:-2}; LR=${LR:-1e-4}; KL=${KL:-1.0}
+# INIT / REF: train on top of a candidate instead of m50 (RFT rounds); a .bin INIT is converted to a training init
+INIT=${INIT:-/tmp/v2/init_live.pt}; REF=${REF:-nik/web/model/nik-0.1.bin}
 cd $REPO
 ev() { echo "$(date -u +%FT%T) $*" >> /tmp/nik_dash/events.log; }
 B=$O/nik-0.1.$TAG.bin
 if [ ! -f $B ]; then
   ev "$TAG: training ($STEPS steps on $MIX, seed $SEED${EXTRA:+, $EXTRA})"
-  TR="$PY nik/train.py --stage sft --init /tmp/v2/init_live.pt --data data_v3 --sft-name $MIX --out $O/run --steps $STEPS --minutes 150 --bs $BS --accum $ACC --lr $LR --warmup 50 --eval-every 500 --mix 0.2 --diff-weight 0.3 --diff-frac 0.25 --opt muon --ema 0.998 --ref nik/web/model/nik-0.1.bin --kl $KL --seed $SEED $EXTRA"
+  if [[ $INIT == *.bin ]]; then
+    $PY -c "import json,struct,sys,torch; sys.path.insert(0,'nik'); from export import load_exported; s=sys.argv[1]; r=open(s,'rb').read(); h=struct.unpack('<I',r[4:8])[0]; torch.save({'model':load_exported(s).state_dict(),'cfg':json.loads(r[8:8+h])['config']}, sys.argv[2])" $INIT $O/init.pt
+    INIT=$O/init.pt
+  fi
+  TR="$PY nik/train.py --stage sft --init $INIT --data data_v3 --sft-name $MIX --out $O/run --steps $STEPS --minutes 150 --bs $BS --accum $ACC --lr $LR --warmup 50 --eval-every 500 --mix 0.2 --diff-weight 0.3 --diff-frac 0.25 --opt muon --ema 0.998 --ref $REF --kl $KL --seed $SEED $EXTRA"
   $TR --compile > $O/train.log 2>&1 || $TR > $O/train.log 2>&1
   $PY nik/export.py --ckpt $O/run/ckpt.pt --out $B && rm -rf $O/run || { ev "$TAG: FAILED (tail $O/train.log)"; exit 1; }
   ev "$TAG: trained ($(grep -o '^step [0-9]*' $O/train.log | tail -1)), md5 $(md5sum < $B | cut -c1-8)"
