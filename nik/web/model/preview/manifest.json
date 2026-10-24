@@ -1,14 +1,14 @@
 {
  "name": "nik 0.1",
- "tag": "v10p",
- "file": "nik-0.1.v10p.bin",
+ "tag": "v12p",
+ "file": "nik-0.1.v12p.bin",
  "bytes": 20689728,
- "md5": "bc78bdfe51d20f5b1f7b78d69408cfff",
- "version": "2026-10-24T20:00Z-v10p",
- "trained": "preview v10p (candidate under test, not shipped)",
- "note": "v8g (live) + 700 steps of arithmetic in the word forms people use ('a ko b guna kati?', 'jodnus a ra b'), column method, gated anchor to the old live model. Much better on NikBench (231 vs 216, nested 239 vs 220) but a few persona slips and -3 on trick questions: being fixed in v12p.",
+ "md5": "94d671223a322502fdb0c422d50d1185",
+ "version": "2026-10-24T21:07Z-v12p",
+ "trained": "preview v12p (candidate under test, not shipped)",
+ "note": "live v8g + 700 steps: arithmetic in the word forms people use ('a ko b guna kati?', 'jodnus a ra b') on the repaired data mix, gated anchor to v8g. NikBench 236 vs 216, nested 241 vs 220; small slips on math% / reading / traps being fixed in v13p.",
  "eval": {
-  "gate_vs_live_v8g": "bench 231 (216), nested 239 (220), reading pairs 13 (8), shapes 7 (4), money 28 (23), groups 10 (7), everyday 43 (41), owner cases 35/35 (33), RW items 48 (43), EN qa ppl 4.8 (5.2); worse: understanding 17 (19), math 94.5% (97.5%), ladder 41 (45), traps 27 (30), EN reply 54 (57)",
-  "verdict": "NO SHIP yet: candidate under test (preview only)"
+  "gate_vs_live_v8g": "bench 236 (216), nested 241 (220), owner cases 35/35 (33), everyday 42 (41), groups 8 (7), EN reply 59 (57), EN qa ppl 5.0 (5.2), understanding 19 (=); worse: math 96% (97.5%), RW groups 5 (6), reading pairs 7 (8), traps 29 (30)",
+  "verdict": "candidate under test (preview only)"
  }
 }
