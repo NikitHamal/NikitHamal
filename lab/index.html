@@ -111,17 +111,20 @@ function render() {
   if (!run.length) { const nx = (d.phases || []).find((p) => p.status === 'queued'); nr = `<div class="sub">nothing running right now${nx ? ' · next: ' + esc(nx.name) : ''}</div>`; }
   h += `<div class="card"><h3>now running</h3>${nr}</div>`;
   // plan
-  let tt = now, total = 0, rows = '';
+  const clocks = {}, lanes = new Set((d.phases || []).map((p) => p.lane || 'main'));
+  let rows = '';
   for (const p of d.phases || []) {
-    let tm;
+    let tm; const ln = p.lane || 'main'; let tt = clocks[ln] ?? now;
     if (p.status === 'done') tm = 'done' + (p.elapsed_s ? ' · ' + dur(p.elapsed_s) : '');
-    else if (['running', 'starting', 'stalled'].includes(p.status)) { const r = p.eta_s != null ? Math.max(0, p.eta_s - since) : (p.est_min || 0) * 60; tt += r * 1000; total += r; tm = `ends ≈ ${hhmm(tt)} UTC`; }
-    else { const r = (p.est_min || 0) * 60; tt += r * 1000; total += r; tm = `~${dur(r)} · ends ≈ ${hhmm(tt)}`; }
+    else if (['running', 'starting', 'stalled'].includes(p.status)) { const r = p.eta_s != null ? Math.max(0, p.eta_s - since) : (p.est_min || 0) * 60; tt += r * 1000; tm = `ends ≈ ${hhmm(tt)} UTC`; }
+    else { const r = (p.est_min || 0) * 60; tt += r * 1000; tm = `~${dur(r)} · ends ≈ ${hhmm(tt)}`; }
+    clocks[ln] = tt;
+    if (lanes.size > 1) tm = `<span class="sub">${esc(ln)}</span> · ` + tm;
     rows += `<div class="ph"><div><span class="pill ${p.status}">${p.status}</span></div><div><div class="nm">${esc(p.name)}</div><div class="dt">${esc(p.detail)}</div>
       ${['running', 'starting'].includes(p.status) ? pixbar(p.progress, 50, true) : ''}</div><div class="tm mono">${tm}</div></div>`;
   }
-  const nd = (d.phases || []).filter((p) => p.status === 'done').length;
-  h += `<div class="card"><h3>plan & timeline</h3><div class="sub" style="margin-bottom:6px">${nd}/${(d.phases || []).length} steps done · plan finishes ≈ <b class="mono">${clock(tt)}</b> (in ${dur(total)})</div>${rows}</div>`;
+  const nd = (d.phases || []).filter((p) => p.status === 'done').length, tt = Math.max(now, ...Object.values(clocks));
+  h += `<div class="card"><h3>plan & timeline</h3><div class="sub" style="margin-bottom:6px">${nd}/${(d.phases || []).length} steps done · plan finishes ≈ <b class="mono">${clock(tt)}</b> (in ${dur((tt - now) / 1000)})${lanes.size > 1 ? ` · ${lanes.size} lanes run side by side on the GPU` : ''}</div>${rows}</div>`;
   // scores
   const sc = d.scores || {};
   if (sc.cols && sc.cols.length) {

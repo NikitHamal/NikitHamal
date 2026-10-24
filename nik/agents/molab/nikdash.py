@@ -22,7 +22,9 @@ PLAN = f'{D}/plan.json'
 NPT = _dt.timedelta(hours=5, minutes=45)
 STEP_RE = re.compile(r'^step (\d+) \| loss ([\d.]+) \(ar ([\d.]+) diff ([\d.]+)(?: kl ([\d.]+))?\) \| lr ([\d.e+-]+) \| gn ([\d.]+) \| ([\d,]+) tok/s \| ([\d.]+) min')
 VAL_RE = re.compile(r'^== (?:eval|final) step (\d+): val ar ([\d.]+) \(ppl ([\d.]+)\)')
-GATE_FILES = 19
+GATE_JSON = ('bench', 'nbench', 'und', 'eval', 'rw', 'shape', 'reading', 'ladder', 'stress', 'long', 'en')
+GATE_TXT = (('trap', r'trap check:'), ('chat', r'chat sanity:'), ('everyday', r'(?m)^score'), ('followups', r'(?m)^score'),
+            ('money', r'(?m)^score'), ('mention', r'(?m)^score'), ('owner', r'(?m)^score'))
 
 
 def _now():
@@ -150,8 +152,10 @@ def phase_state(p, now):
             v = re.findall(r'VERDICT: (.*)', _read(f'{d}/verdict.txt'))
             st['detail'] = v[-1][:160] if v else ''
         elif os.path.isdir(d):
-            n = len([f for f in os.listdir(d) if not f.startswith('.')])
-            st['status'] = 'running'; st['progress'] = min(0.97, n / GATE_FILES)
+            n = sum(os.path.exists(f'{d}/{j}.json') for j in GATE_JSON)
+            n += sum(bool(re.search(pat, _read(f'{d}/{t}.txt'))) for t, pat in GATE_TXT)
+            st['status'] = 'running'; st['progress'] = min(0.97, n / (len(GATE_JSON) + len(GATE_TXT)))
+            st['detail'] = f'{n}/{len(GATE_JSON) + len(GATE_TXT)} eval rows finished'
             st['elapsed_s'] = now.timestamp() - os.path.getctime(d)
             st['eta_s'] = max(60, p.get('est_min', 20) * 60 - st['elapsed_s'])
     else:
@@ -332,27 +336,33 @@ def sec_now(plan, states, now):
 
 
 def sec_plan(plan, states, now):
-    rows, t = [], now
-    left_total = 0
+    rows, clocks = [], {}
     for p, s in zip(plan['phases'], states):
         est = p.get('est_min', 0) * 60
+        lane = p.get('lane', 'main')
+        t = clocks.get(lane, now)
         if s['status'] == 'done':
             tm = f'done{" · " + _dur(s["elapsed_s"]) if s.get("elapsed_s") else ""}'
         elif s['status'] in ('running', 'starting', 'stalled'):
             rem = s.get('eta_s') if s.get('eta_s') is not None else est
-            t = t + _dt.timedelta(seconds=rem); left_total += rem
+            t = t + _dt.timedelta(seconds=rem)
             tm = f'ends ≈ {t:%H:%M} UTC'
         else:
-            t = t + _dt.timedelta(seconds=est); left_total += est
+            t = t + _dt.timedelta(seconds=est)
             tm = f'~{_dur(est)} · ends ≈ {t:%H:%M}'
+        clocks[lane] = t
+        if len({q.get('lane', 'main') for q in plan['phases']}) > 1:
+            tm = f'<span class="sub">{_esc(lane)}</span> · ' + tm
         det = s.get('detail') or p.get('desc', '')
         rows.append(f'<div class="ph"><div><span class="pill {s["status"]}">{s["status"]}</span></div>'
                     f'<div><div class="nm">{_esc(p["name"])}</div><div class="dt">{_esc(det)[:220]}</div>'
                     f'{pixbar(s.get("progress"), 50, s["status"] == "running") if s["status"] in ("running", "starting") else ""}</div>'
                     f'<div class="tm mono">{tm}</div></div>')
     n_done = sum(s['status'] == 'done' for s in states)
+    t = max(clocks.values()) if clocks else now
     head = (f'<div class="sub" style="margin-bottom:6px">{n_done}/{len(states)} steps done · plan finishes ≈ '
-            f'<b class="mono">{_clock(t)}</b> (in {_dur(left_total)})</div>')
+            f'<b class="mono">{_clock(t)}</b> (in {_dur((t - now).total_seconds())})'
+            + (f' · {len(clocks)} lanes run side by side on the GPU' if len(clocks) > 1 else '') + '</div>')
     return _box('plan & timeline', head + ''.join(rows))
 
 
@@ -424,7 +434,7 @@ def status(now=None):
     phases = []
     for p, s in zip(plan.get('phases', []), states):
         st = s.get('steps') or []
-        phases.append({'name': p['name'], 'kind': p.get('kind', 'task'), 'status': s['status'], 'progress': r4(s.get('progress')),
+        phases.append({'name': p['name'], 'lane': p.get('lane', 'main'), 'kind': p.get('kind', 'task'), 'status': s['status'], 'progress': r4(s.get('progress')),
                        'eta_s': None if s.get('eta_s') is None else int(s['eta_s']), 'elapsed_s': None if s.get('elapsed_s') is None else int(s['elapsed_s']),
                        'est_min': p.get('est_min'), 'steps': p.get('steps'), 'detail': (s.get('detail') or p.get('desc', ''))[:240],
                        'last': st[-1] if st else None, 'val': (s.get('vals') or [None])[-1],
