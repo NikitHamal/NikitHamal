@@ -10,7 +10,7 @@
 // prompts.jsonl: {"first": "...", "gold": "632", "follow": "kati rey?"}
 import { readFileSync, writeFileSync } from 'node:fs';
 import { NikModel, Tokenizer, generate, parseBin, TOK } from './nik.js';
-import { contextFor, plainNumbers } from './context.js';
+import { contextFor, normalizeNumbers } from './context.js';
 
 const args = process.argv.slice(2);
 let modelPath = null, inPath = null, outPath = null, shard = [0, 1], seed = 1;
@@ -30,7 +30,7 @@ const model = new NikModel(parseBin(buf.buffer.slice(buf.byteOffset, buf.byteOff
 const opts = { temperature: 0.6, topP: 0.95, minP: 0.08, maxNew: 440, mode: 'ar', calc: true };   // chat/index.html
 
 function once(msgs) {
-  const prompt = contextFor(tok, msgs.map((m) => (m.role === 'user' ? { ...m, content: plainNumbers(m.content) } : m)),
+  const prompt = contextFor(tok, msgs.map((m) => (m.role === 'user' ? { ...m, content: normalizeNumbers(m.content) } : m)),
     Math.floor(model.cfg.ctx * 0.55));
   model.reset();
   let phase = 'answer', first = true;
@@ -60,6 +60,9 @@ for (let i = shard[0]; i < lines.length; i += shard[1]) {
   const u2 = { role: 'user', content: p.follow };
   const a2 = once([u1, h1, u2]);
   if (!a2.answer || !has(a2.answer, p.gold)) continue;
+  // the reply's think may restate or re-check the answer, but its last result must be the gold itself
+  const res = [...(a2.think || '').replace(/,/g, '').matchAll(/=\s*(-?\d+(?:\.\d+)?)/g)].map((m) => m[1]);
+  if (res.length && res[res.length - 1] !== p.gold.replace(/,/g, '')) continue;
   const reply = { role: 'nik', content: a2.answer };
   if (a2.think) reply.think = a2.think;
   out.push(JSON.stringify({ cat: 'followup-self', gold: p.gold, messages: [u1, { ...h1, train: false }, u2, reply] }));
