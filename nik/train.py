@@ -198,6 +198,7 @@ def main():
     ap.add_argument('--kl-all', action='store_true', help='KL on every position (user text too): no conflict with any target')
     ap.add_argument('--set-ctx', type=int, default=0, help='long context: set the model cfg.ctx (saved in the ckpt/.bin)')
     ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
+    ap.add_argument('--set-repeat', type=int, default=0, help='depth: run each shared block this many times (same parameters, more layers)')
     ap.add_argument('--lr', type=float, default=3e-3)
     ap.add_argument('--warmup', type=int, default=500)
     ap.add_argument('--sched', choices=['cosine', 'wsd'], default='cosine')
@@ -265,6 +266,8 @@ def main():
         cfg.ctx = a.set_ctx
     if a.rope_base:
         cfg.rope_base = a.rope_base
+    if a.set_repeat:
+        cfg.n_repeat = a.set_repeat
     model = NikLM(cfg).to(device)
     if ck:
         missing, unexpected = model.load_state_dict(ck['model'], strict=False)
