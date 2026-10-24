@@ -5,6 +5,13 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
 ## 2026-10-24 night (Claude, same box): v8g shipped
+- **A contamination guard can silently remove a skill.** The first bench_guard keyed problems by their numbers;
+  8 NikBench items carry ONE number (`... 7 din pachhi ...`), so every row mentioning one small number was dropped:
+  156,263 rows of v10 and 180,439 of rft_r1g, i.e. ~21% of everyday (weekday / unit) and lookup rows and ~5% of
+  abstain / format / multiturn rows. Caught from the mix log's drop count; fixed (2+ numbers only: ~1% dropped). v10p
+  trained on the damaged v10 (watch its everyday / traps rows); rft_r1g was rebuilt. Rule (again): read every guard's
+  drop count before training.
+
 
 - **v8g shipped to /chat at 18:11 UTC on the owner's call** over one strict-gate row: nested 220 vs 222 on the gate
   items (8 fixed / 10 broken, p=0.81); on 8 fresh NikBench item sets (seeds 7/11/13/17, plain + nested, 2,304 items)
