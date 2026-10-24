@@ -407,6 +407,41 @@ def sec_logs(plan, states):
     return ('<div class="row2">' + _box('milestones', f'<pre>{_esc(chr(10).join(ev)) or "—"}</pre>') + _box('live log', tail or '—') + '</div>')
 
 
+def fresh():
+    """fresh questions (nik/tests/chat/fresh_heldout.json) answered through the /chat path by each model"""
+    out = {}
+    for f in sorted(glob.glob(f'{D}/fresh_*.json'), key=os.path.getmtime):
+        try:
+            d = json.load(open(f)); out[d['tag']] = d
+        except Exception:
+            pass
+    return out
+
+
+def sec_fresh():
+    fr = fresh()
+    if not fr:
+        return ''
+    tags = list(fr)
+    if 'm50' in tags:
+        tags = ['m50'] + [t for t in tags if t != 'm50']
+    tags = tags[:1] + tags[1:][-3:]             # live + the 3 newest candidates
+    head = ' · '.join(f'<b>{_esc(t)}</b> {_esc(fr[t]["scored"])}' for t in tags)
+    rows = []
+    items = fr[tags[0]]['items']
+    for i, it in enumerate(items):
+        cells = []
+        for t in tags:
+            x = fr[t]['items'][i] if i < len(fr[t]['items']) else {'a': '', 'ok': None}
+            mark = '' if x.get('ok') is None else ('<span class="up">✓</span> ' if x['ok'] else '<span class="dn">✗</span> ')
+            cells.append(f'<td style="white-space:normal;min-width:180px;vertical-align:top">{mark}{_esc(x.get("a", ""))[:260]}</td>')
+        rows.append(f'<tr><td style="white-space:normal;min-width:160px;vertical-align:top"><span class="sub">{_esc(it["cat"])}</span><br>{_esc(it["q"])}</td>{"".join(cells)}</tr>')
+    th = '<tr><th>fresh question (never trained)</th>' + ''.join(f'<th>{_esc(t)}{" (live)" if t == "m50" else ""}</th>' for t in tags) + '</tr>'
+    return _box('fresh questions: what a user would see', f'<div class="sub" style="margin-bottom:6px">56 new questions written today, none in any training data; '
+                f'answered through the real /chat path (pencil + vote). ✓/✗ only where there is one right answer: {head}</div>'
+                f'<div style="overflow:auto;max-height:520px"><table>{th}{"".join(rows)}</table></div>')
+
+
 def sec_notes(plan):
     notes = plan.get('notes') or []
     if not notes:
@@ -444,7 +479,15 @@ def status(now=None):
             'notes': plan.get('notes', []), 'phases': phases,
             'gpu': None if not g else {k: (round(v, 2) if isinstance(v, float) else v) for k, v in g.items() if k != 'hist'} | {'hist': [h[1] for h in g.get('hist', [])][-120:]},
             'host': hst, 'scores': {'cols': cols, 'rows': rows, 'verdicts': verdicts}, 'events': sorted(set(ev))[-16:],
-            'tail_src': tail_src, 'tail': tail}
+            'tail_src': tail_src, 'tail': tail,
+            'fresh': _fresh_brief()}
+
+
+def _fresh_brief():
+    fr = fresh()
+    tags = (['m50'] if 'm50' in fr else []) + [t for t in fr if t != 'm50'][-2:]
+    return {t: {'scored': fr[t]['scored'], 't': fr[t].get('t'),
+                'items': [{'cat': x['cat'], 'q': x['q'], 'a': x['a'][:140], 'ok': x['ok']} for x in fr[t]['items']]} for t in tags}
 
 
 def render(mo=None):
@@ -457,6 +500,6 @@ def render(mo=None):
     cur = next((s for s in states if s['status'] in ('running', 'starting') and s.get('steps')), None)
     parts = [CSS, '<div class="nd">', _safe(sec_header, plan, now), _safe(sec_tiles, gpu(), host(), cur),
              _safe(sec_now, plan, states, now), _safe(sec_plan, plan, states, now), _safe(sec_scores),
-             _safe(sec_notes, plan), _safe(sec_logs, plan, states), '</div>']
+             _safe(sec_fresh), _safe(sec_notes, plan), _safe(sec_logs, plan, states), '</div>']
     out = ''.join(parts)
     return mo.Html(out) if mo is not None else out

@@ -135,6 +135,17 @@ function render() {
     const vr = Object.entries(sc.verdicts || {}).map(([c, v]) => `<div class="mono" style="font-size:12px;margin-top:4px"><b>${esc(c)}</b>: <span class="${v.startsWith('SHIP') ? 'up' : 'dn'}">${esc(v)}</span></div>`).join('');
     h += `<div class="card"><h3>ship gate scoreboard</h3><div style="overflow-x:auto"><table>${tb}</table></div>${vr}<div class="sub" style="margin-top:6px">green = better than the live model, red = worse (blocks shipping); * = sanity rows</div></div>`;
   } else h += `<div class="card"><h3>ship gate scoreboard</h3><div class="sub">no gate finished yet. Every candidate is scored against the live model (m50) on the same items; it ships only if it is ≥ live on every row.</div></div>`;
+  const fr = d.fresh || {}, ft = Object.keys(fr);
+  if (ft.length) {
+    const its = fr[ft[0]].items || [];
+    let tb = `<tr><th>fresh question (never trained)</th>${ft.map((t) => `<th>${esc(t)}${t === 'm50' ? ' (live)' : ''} · ${esc(fr[t].scored)}</th>`).join('')}</tr>`;
+    its.forEach((it, i) => {
+      tb += `<tr><td style="white-space:normal;min-width:150px;vertical-align:top"><span class="sub">${esc(it.cat)}</span><br>${esc(it.q)}</td>` + ft.map((t) => {
+        const x = (fr[t].items || [])[i] || {}; const mk = x.ok == null ? '' : x.ok ? '<span class="up">✓</span> ' : '<span class="dn">✗</span> ';
+        return `<td style="white-space:normal;min-width:170px;vertical-align:top">${mk}${esc(x.a || '')}</td>`; }).join('') + '</tr>';
+    });
+    h += `<div class="card"><h3>fresh questions: what a user would see</h3><div class="sub" style="margin-bottom:6px">56 new questions written today, in no training data, answered through the real /chat path. ✓/✗ only where there is one right answer.</div><div style="overflow:auto;max-height:560px"><table>${tb}</table></div></div>`;
+  }
   if (d.notes && d.notes.length) h += `<div class="card"><h3>what we are testing</h3><ul style="margin:0;padding-left:18px">${d.notes.map((n) => `<li style="margin:3px 0">${esc(n)}</li>`).join('')}</ul></div>`;
   h += `<div class="row2"><div class="card"><h3>milestones</h3><pre>${esc((d.events || []).join('\n')) || '-'}</pre></div>
         <div class="card"><h3>live log</h3><div class="sub mono">${esc(d.tail_src || '')}</div><pre>${esc((d.tail || []).join('\n')) || '-'}</pre></div></div>`;
