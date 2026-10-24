@@ -1,0 +1,27 @@
+gate      live    v8g
+bench               209     216  +
+nested              222     220  REGRESSION
+understanding        19      19  
+math%              94.0    97.5  +
+persona%          100.0   100.0  
+RW groups             1       6  +
+RW items             25      43  +
+shapes                4       4  
+reading pairs         5       8  +
+ladder ALL           44      45  +
+traps                25      30  +
+everyday (held-out)       6      41  +
+money (held-out)      18      23  +
+mention (held-out)      28      29  +
+owner cases (5 seeds)      25      33  +
+groups (held-out)       1       7  +
+fresh (2 seeds)      73      79  +
+follow-ups*          53      65  +
+long recall 400       0       2  +
+EN qa ppl (lower)  229.32     5.2  +
+EN wiki ppl (lower)  126.17    13.4  +
+EN reply             54      57  +
+NE fidelity          22      22  
+chat*                15      15  
+stress*              66      62  (sanity)
+VERDICT: NO SHIP - nested  (* = contaminated sanity check, not gating)
