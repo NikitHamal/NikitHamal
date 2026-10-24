@@ -82,6 +82,22 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
    `nik-v2-run`. Progress: `/tmp/v2/progress.log`. ~1.5-2 h. Ship only by hand (`scripts/ship_model.py`).
 3. Hand-written data (owner's request, 2026-10-22 night): `nik/data/hand/` (STYLE.md, check.py, raw/, hand.jsonl).
 
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-24 ~13:00 UTC (session 4: box, live)
+**Now:** owner's molab box (RTX PRO 6000, ~11h50 from 12:04 UTC; the first box of the day was reclaimed after 10 min).
+Two GPU lanes run side by side; everything is visible live: the notebook dashboard (`nik/agents/molab/nikdash.py`,
+one cell + `mo.ui.refresh`), the public page https://nikit.is-a.dev/lab/ (fed by `nik/agents/molab/live_pusher.py`
+from the driving sandbox into the body of issue #12), and new candidates on https://nikit.is-a.dev/chat/?model=preview
+(`scripts/preview_model.py`; the default model is still m50).
+- **Lane v2** (`jobs/run_v2.sh`, /tmp/v2): last session's plan, hand data 6% with the KL anchor everywhere, 3 seeds +
+  soup + gates. v2s14: understanding 21, math 98, RW items 37, everyday 18/60, EN ppl 14, but NO SHIP (nested 218,
+  owner 24/25, EN reply 53); on fresh chat prompts it answers word-for-word like m50 (the anchor held it in place).
+- **Lane v3** (`jobs/setup_v3.sh` + `jobs/arm.sh` + `jobs/after.sh`, /tmp/v3, outputs /tmp/nik_runs/<tag>): hand rows
+  KL-free (`build_mix_v2 --hand-nokl`, mask 2/3), 2% of hand conversations held out (`--hand-holdout 0.02`,
+  `scripts/hand_eval.py`). v3s14 (hand 10%, 1500 steps), then v4s14 (hand math/reasoning keep the anchor +
+  column rows 8%: the nested-drift fix), v3d (Nik-deep: `--set-repeat 3`, 36 layers from the same 20M params).
+- Bins + gate dirs + logs go to private Kaggle `nik-v2-run` every ~3 min (`jobs/saver.sh`; `jobs/restore.sh`).
+- Open: English rows are still KL-anchored to m50 (which writes no usable English): `--nokl-src english` is ready.
+
 ## HANDOVER (read first if you are the next Claude) - updated 2026-10-24 ~01:30 UTC (session 3: data only, no box)
 **Now:** hand-writing teaching data toward 100k+ examples (owner's overnight goal), then build the v2 mix and train
 on the next box (`nik/agents/molab/jobs/run_v2.sh`), then the ship gate vs live m50. No box until the owner gives one.
