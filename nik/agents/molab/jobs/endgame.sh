@@ -15,7 +15,8 @@ while true; do
     case $t in live*|m50*) continue;; esac
     # only verdicts computed against the current live model (v8g) count: older gates were vs m50
     grep -q "live" $v || continue
-    [ "$(cat /tmp/gate_$t.live_dir 2> /dev/null)" = "/tmp/gate_live_ec36dd35c469" ] || [ $v -nt /tmp/nik_runs/v8g/nik-0.1.v8g.bin.shipped ] || continue
+    # (the live caches were moved away at the ship, 18:13, so every verdict written after it is against v8g)
+    [ $v -nt /tmp/nik_runs/v8g/nik-0.1.v8g.bin.shipped ] || continue
     read p m <<< "$(score $v)"
     s=$((p - 2 * m))
     [ $s -gt $bs ] && { bs=$s; best="$t (+$p / -$m)"; }
