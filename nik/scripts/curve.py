@@ -58,7 +58,7 @@ def main():
             r['fresh'] = m.group(1)
         sm = sh(f'{PY} nik/scripts/surface_math.py --model {b} --n 30')
         r['surface'] = {k: int(v) for k, v in re.findall(r'(\w[\w-]*) (\d+)/30', sm)}
-        nb = sh(f'{PY} nik/bench.py --model {b} --n 16 --nested-items --out {b}.nbench.json')
+        nb = sh(f'{PY} nik/bench.py --model {b} --n 16 --nested-items --fast --out {b}.nbench.json')
         m = re.search(r'NikBench overall: (\d+)/288', nb)
         if m:
             r['nested'] = int(m.group(1))

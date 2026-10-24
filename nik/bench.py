@@ -155,6 +155,7 @@ def main():
     ap.add_argument('--out', default='')
     ap.add_argument('--dump', default='', help='write the items as JSON (for web/test_engine.mjs) and exit')
     ap.add_argument('--seed', type=int, default=2026, help='item seed (2026 = the historical items; another seed = a fresh confirmation set)')
+    ap.add_argument('--fast', action='store_true', help='batched greedy (generate_multi; greedy-identical to generate_ar without --calc): ~20x faster, for learning curves')
     ap.add_argument('--nested-items', action='store_true', help='one rng stream per category, so --n 4 is a subset of --n 8 is a subset of --n 16 (changes the item set: the historical scores are then a different benchmark)')
     a = ap.parse_args()
     if a.dump:
@@ -166,9 +167,20 @@ def main():
     calc = Calc(tok) if a.calc else None
     model = load_any(a.model)
     res, rows = {}, []
-    for cat, q, g in items(a.n, seed=a.seed, nested=a.nested_items):
-        ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
-        text = tok.decode(generate_ar(model, ids[:-1] + [6], 320, temperature=0.0, calc=calc))
+    its = items(a.n, seed=a.seed, nested=a.nested_items)
+    texts = None
+    if a.fast and calc is None:
+        from model import generate_multi
+        ps = [render_chat(tok, [{'role': 'user', 'content': q}])[0][:-1] + [6] for _, q, _ in its]
+        texts = []
+        for i in range(0, len(ps), 96):
+            texts += [tok.decode(r[0][0]) for r in generate_multi(model, ps[i:i + 96], n_per_prompt=1, max_new=320, temperature=0.0)]
+    for i, (cat, q, g) in enumerate(its):
+        if texts is not None:
+            text = texts[i]
+        else:
+            ids, _ = render_chat(tok, [{'role': 'user', 'content': q}])
+            text = tok.decode(generate_ar(model, ids[:-1] + [6], 320, temperature=0.0, calc=calc))
         ans = text.split('<|/think|>')[-1]
         ok = final_number(ans) == str(g)
         c = res.setdefault(cat, [0, 0]); c[0] += ok; c[1] += 1
