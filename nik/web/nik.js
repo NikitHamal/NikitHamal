@@ -339,6 +339,8 @@ export class NikModel {
     const lastKey = pos0 + T - 1;
     for (let l = 0; l < this.L; l++) {
       const p = `blocks.${Math.floor(l / c.n_repeat)}.`;
+      // gated repeats (cfg.rgate): repeat r of a block scales its two residual updates by rg[r] (model.py Block)
+      const g = c.rgate ? W[p + 'rg'][l % c.n_repeat] : 1;
       rmsnorm(B.x, T, d, W[p + 'n1.weight'], c.eps, B.h);
       this._mm(p + 'q.weight', B.h, T, d, H * hd, B.q);
       this._mm(p + 'kv.weight', B.h, T, d, 2 * kvw, B.kv);
@@ -379,7 +381,7 @@ export class NikModel {
         }
       }
       this._mm(p + 'o.weight', B.att, T, H * hd, d, B.o);
-      for (let i = 0; i < T * d; i++) B.x[i] += B.o[i];
+      for (let i = 0; i < T * d; i++) B.x[i] += g * B.o[i];
       rmsnorm(B.x, T, d, W[p + 'n2.weight'], c.eps, B.h);
       this._mm(p + 'up.weight', B.h, T, d, 2 * c.ffn, B.gu);
       const F = c.ffn;
@@ -390,7 +392,7 @@ export class NikModel {
         }
       }
       this._mm(p + 'down.weight', B.act, T, F, d, B.o);
-      for (let i = 0; i < T * d; i++) B.x[i] += B.o[i];
+      for (let i = 0; i < T * d; i++) B.x[i] += g * B.o[i];
     }
     rmsnorm(B.x, T, d, W['norm.weight'], c.eps, B.h);
     return B.h;

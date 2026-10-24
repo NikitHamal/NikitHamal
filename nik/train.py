@@ -200,6 +200,8 @@ def main():
     ap.add_argument('--rope-base', type=float, default=0.0, help='long context: set cfg.rope_base (NTK-style scaling)')
     ap.add_argument('--set-repeat', type=int, default=0, help='depth: run each shared block this many times (same parameters, more layers)')
     ap.add_argument('--save-every', type=int, default=0, help='also keep a snapshot (EMA weights) every N steps: snap_<step>.pt (learning curves)')
+    ap.add_argument('--rgate-init', default='', help='gated repeats: per-repeat residual gates, e.g. 1,1,0 with --set-repeat 3 (function-preserving depth growth)')
+    ap.add_argument('--rgate-lr-mult', type=float, default=20.0, help='LR multiplier for the repeat gates (scalars move ~lr per step under Adam)')
     ap.add_argument('--kl-gate', action='store_true', help='competence-gated anchor: KL weight x p_ref(gold token) (model.py _kl_to_ref)')
     ap.add_argument('--rep-choices', default='', help='elastic depth: each step runs the shared blocks a random number of times from this list (e.g. 2,3); saved with the largest')
     ap.add_argument('--lr', type=float, default=3e-3)
@@ -271,10 +273,19 @@ def main():
         cfg.rope_base = a.rope_base
     if a.set_repeat:
         cfg.n_repeat = a.set_repeat
+    rg_init = [float(v) for v in a.rgate_init.split(',') if v.strip()]
+    if rg_init:
+        assert len(rg_init) == cfg.n_repeat, (rg_init, cfg.n_repeat)
+        cfg.rgate = True
     model = NikLM(cfg).to(device)
     if ck:
         missing, unexpected = model.load_state_dict(ck['model'], strict=False)
-        assert not unexpected and all(k.startswith('abacus') for k in missing), (missing, unexpected)
+        assert not unexpected and all(k.startswith('abacus') or k.endswith('.rg') for k in missing), (missing, unexpected)
+        if rg_init and any(k.endswith('.rg') for k in missing):
+            with torch.no_grad():
+                for b in model.blocks:
+                    b.rg.copy_(torch.tensor(rg_init))
+            print(f'gated repeats: rg initialised to {rg_init} (function-preserving growth)', flush=True)
     L = a.ctx or cfg.ctx
     model.grad_ckpt = a.grad_ckpt
     assert tok.vocab_size == cfg.vocab, (tok.vocab_size, cfg.vocab)
@@ -290,16 +301,18 @@ def main():
         val_b = Batches(os.path.join(D, f'{a.sft_name}_tok.bin'), os.path.join(D, f'{a.sft_name}_mask.bin'), seed=1, split='val')
 
     decay = [p for n, p in model.named_parameters() if p.dim() >= 2]
-    no_decay = [p for n, p in model.named_parameters() if p.dim() < 2]
+    rg_params = [p for n, p in model.named_parameters() if n.endswith('.rg')]
+    no_decay = [p for n, p in model.named_parameters() if p.dim() < 2 and not n.endswith('.rg')]
+    rg_group = [{'params': rg_params, 'weight_decay': 0.0, 'lr_mult': a.rgate_lr_mult}] if rg_params else []
     if a.opt == 'muon':
         hidden = [p for n, p in model.named_parameters() if p.dim() == 2 and n.startswith('blocks.')]
         hid = {id(p) for p in hidden}
         decay = [p for p in decay if id(p) not in hid]
         opt = MultiOpt([Muon(hidden, lr=a.lr, wd=a.wd),
-                        torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}],
+                        torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}] + rg_group,
                                           lr=a.lr, betas=(0.9, 0.95), eps=1e-8)])
     else:
-        opt = torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}],
+        opt = torch.optim.AdamW([{'params': decay, 'weight_decay': a.wd}, {'params': no_decay, 'weight_decay': 0.0}] + rg_group,
                                 lr=a.lr, betas=(0.9, 0.95), eps=1e-8, fused=(device == 'cuda'))
     step = 0
     if a.resume and ck and 'opt' in ck:
@@ -360,7 +373,7 @@ def main():
         lr = lr_at(step, a.steps, a.lr, a.warmup, floor=a.lr_floor, p_time=(time.time() - t0) / (a.minutes * 60) if a.minutes else 0.0,
                    sched=a.sched, decay_frac=a.decay_frac)
         for g in opt.param_groups:
-            g['lr'] = lr
+            g['lr'] = lr * g.get('lr_mult', 1.0)
         tot = ar = df = klsum = 0.0
         if reps:
             cfg.n_repeat = reps[int(np.random.default_rng(step * 7919 + a.seed).integers(len(reps)))]
@@ -394,6 +407,8 @@ def main():
                 cfg.n_repeat = max(reps)
             v_ar, v_df = evaluate(ema or model, val_b, L, device, amp=amp)
             print(f'== eval step {step}: val ar {v_ar:.3f} (ppl {math.exp(v_ar):.1f}) | val diff {v_df:.3f}', flush=True)
+            if rg_params:
+                print('repeat gates: ' + ' '.join('[' + ','.join(f'{v:.2f}' for v in b.rg.tolist()) + ']' for b in (ema or model).blocks), flush=True)
             print(samples(ema or model, tok, a.stage, use_ssbd=a.diff_weight > 0), flush=True)
             log.write(json.dumps({'step': step, 'val_ar': v_ar, 'val_diff': v_df, 'loss': float(tot), 'min': el / 60}) + '\n'); log.flush()
             save()
