@@ -4,6 +4,24 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-24 night (Claude, same box): v8g shipped
+
+- **v8g shipped to /chat at 18:11 UTC on the owner's call** over one strict-gate row: nested 220 vs 222 on the gate
+  items (8 fixed / 10 broken, p=0.81); on 8 fresh NikBench item sets (seeds 7/11/13/17, plain + nested, 2,304 items)
+  1750 vs 1726 (91 fixed / 67 broken). Gains vs m50: bench 216 (209), RW items 43 (25, 21/3), everyday 41/60 (6),
+  traps 30 (25), reading 8 (5), money 23 (18), groups 7 (1), fresh 79 (73), owner cases 33/35, EN qa ppl 5.2 (229),
+  held-out hand chat 2.04 (5.05). Rollback file nik-0.1.m50.bin; logs nik/web/model/logs/v8g/. Lesson for the
+  gate rule: with ~25 rows, a 2-item move on one row is noise; a fresh-item confirmation over several seeds is the
+  better tie-breaker than a strict ">= on every row" on fixed items.
+- **Gated repeats work as intended (Nik-deep v2, d2g).** At step 1500 the learned third-pass gates are 0.0-0.01 for
+  the first and last block and 0.06-0.22 in the middle (blocks 5-9 open most): the model adds depth where it helps
+  and keeps the input/output blocks two-pass. Function-preserving growth (rg = [1, 1, 0]) avoided v1's collapse.
+- **Confirmation runs beside two trainings OOM** (3 of 16 bench runs hit CUDA OOM at 95 GB used): run them in
+  sequence (fast mode) or after a training frees its slot.
+- **v8g's remaining owner-case misses are follow-ups answered with a fresh calculation** (`pakka ho?` -> `role: a =
+  48, b = 5 ... 48 - 35 = 13`). selfdistill.mjs now rejects a follow-up reply whose think ends on anything but the
+  gold; self-distilled follow-ups from v8g itself (12,000 conversations) go into the next mix.
+
 ## 2026-10-24 evening (Claude, same box)
 
 - **Nik-deep (v3d: the same 12 shared blocks run 3x = 36 layers, warm-started from m50, v3's mix, 1500 steps):
