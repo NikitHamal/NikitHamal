@@ -1,5 +1,51 @@
 [
- {"name": "owner report 2026-10-22: kati rey", "turns": ["347 + 285 kati hunchha?", "kati rey?"], "want": ["\\b632\\b", "\\b632\\b"]},
- {"name": "pakka ho", "turns": ["48 x 7 kati?", "pakka ho?"], "want": ["\\b336\\b", "\\b336\\b"]},
- {"name": "grouped number", "turns": ["1,200 + 300 kati hunchha?"], "want": ["\\b1,?500\\b"]}
+ {
+  "name": "owner report 2026-10-22: kati rey",
+  "turns": [
+   "347 + 285 kati hunchha?",
+   "kati rey?"
+  ],
+  "want": [
+   "\\b632\\b",
+   "\\b632\\b"
+  ]
+ },
+ {
+  "name": "pakka ho",
+  "turns": [
+   "48 x 7 kati?",
+   "pakka ho?"
+  ],
+  "want": [
+   "\\b336\\b",
+   "\\b336\\b"
+  ]
+ },
+ {
+  "name": "grouped number",
+  "turns": [
+   "1,200 + 300 kati hunchha?"
+  ],
+  "want": [
+   "\\b1,?500\\b"
+  ]
+ },
+ {
+  "name": "owner 2026-10-24b: no-space 7-digit sum",
+  "turns": [
+   "5674674+3644849 kati hunxa?"
+  ],
+  "want": [
+   "\\b9,?319,?523\\b"
+  ]
+ },
+ {
+  "name": "owner 2026-10-24a: 7-digit sum, repeated digits",
+  "turns": [
+   "5746673 + 574673 kati hunxa?"
+  ],
+  "want": [
+   "\\b6,?321,?346\\b"
+  ]
+ }
 ]

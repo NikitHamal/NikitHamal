@@ -1,7 +1,7 @@
 // Web Worker host for Nik: loads the model off the main thread and streams tokens.
 import { NikModel, renderChat, generate, TOK } from './nik.js';
 import { romanize, hasDevanagari } from './romanize.js';
-import { contextFor, plainNumbers } from './context.js';
+import { contextFor, normalizeNumbers } from './context.js';
 import { vote as pickVote, finalNumber, longNumbers, faithful } from './vote.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
@@ -31,7 +31,7 @@ function countParams(m) {
 
 // Keep the prompt inside the context window, and choose what history it carries (context.js: a standalone problem gets its
 // single-turn prompt, a question about the user gets the turn that answers it moved next to it, the rest is packed).
-const normUser = (t) => plainNumbers(hasDevanagari(t) ? romanize(t) : t);
+const normUser = (t) => normalizeNumbers(hasDevanagari(t) ? romanize(t) : t);
 
 function buildPrompt(messages) {
   // 512-ctx models: 55% of the window for the prompt (unchanged). Long-context models (16k): up to 8k input per turn,

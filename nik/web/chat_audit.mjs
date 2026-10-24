@@ -5,7 +5,7 @@
 // convs.json: [{"name": "...", "turns": ["user turn 1", "user turn 2", ...], "want": [null, "regex for turn 2", ...]}]
 import { readFileSync } from 'node:fs';
 import { NikModel, Tokenizer, generate, parseBin, TOK } from './nik.js';
-import { contextFor, plainNumbers } from './context.js';
+import { contextFor, normalizeNumbers } from './context.js';
 import { vote, finalNumber, longNumbers, faithful } from './vote.js';
 
 const args = process.argv.slice(2);
@@ -55,7 +55,7 @@ function retryEmpty(r, prompt) {
 }
 
 function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confidence-weighted vote
-  const prompt = contextFor(tok, msgs.map((m) => (m.role === 'user' ? { ...m, content: plainNumbers(m.content) } : m)), Math.floor(model.cfg.ctx * 0.55));
+  const prompt = contextFor(tok, msgs.map((m) => (m.role === 'user' ? { ...m, content: normalizeNumbers(m.content) } : m)), Math.floor(model.cfg.ctx * 0.55));
   const first = once(prompt, opts);
   if (K > 1 && first.thought && finalNumber(first.answer) !== null) {
     const paths = [first];
@@ -66,7 +66,7 @@ function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confid
       const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
       return { ...paths.find((p) => finalNumber(p.answer) === best), promptLen: prompt.length };
     }
-    const q = plainNumbers(msgs.filter((m) => m.role === 'user').slice(-1)[0]?.content || ''), nums = longNumbers(q);
+    const q = normalizeNumbers(msgs.filter((m) => m.role === 'user').slice(-1)[0]?.content || ''), nums = longNumbers(q);
     for (let i = 0; i < 3 && nums.length && !paths.some((p) => faithful(p, nums)); i++) paths.push(once(prompt, { ...opts, temperature: 0.9 }));
     const v = vote(paths, q);
     return retryEmpty({ ...(v ? v.path : first), promptLen: prompt.length }, prompt);
