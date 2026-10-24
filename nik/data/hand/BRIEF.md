@@ -26,6 +26,7 @@ politics and religion debates; health stays at basic, safe habits plus "doctor s
 
 ## Checker gotchas (from earlier writers)
 - Keep equations bare: `4.5 + 4.5 = 9`, never `jaane 4.5 + aaune 4.5 = 9` (read as `4.5 = 9`).
+  The same for unit words: `6 x 2 = 12`, never `6 jana x 2 = 12` (read as `2 = 12`).
 - Percent: `1500 ko 25% = 1500 x 25 / 100 = 375` or `25% of 1500: 1500 x 25 / 100 = 375`, never
   `25% of 1500 = 1500 x 25 / 100` (read as `1500 = ...`).
 - Fractions of amounts: `1200 x 3 / 4 = 900` or `3/4 x 1200 = 900`, never `1200 ko 3/4 = 1200 x 3 / 4 = 900`
