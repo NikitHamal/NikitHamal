@@ -12,9 +12,12 @@ cd "$(dirname "$0")/../.."
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-2} MKL_NUM_THREADS=${MKL_NUM_THREADS:-2}
 run() {  # bin dir seed
   mkdir -p $2
-  [ -f $2/bench.json ]  || $PY nik/bench.py --model $1 --n 16 --seed $3 --out $2/bench.json > $2/bench.txt 2>&1 &
-  [ -f $2/nbench.json ] || $PY nik/bench.py --model $1 --n 16 --seed $3 --nested-items --out $2/nbench.json > $2/nbench.txt 2>&1 &
+  [ -f $2/bench.json ]  || $PY nik/bench.py --model $1 --n 16 --seed $3 ${FAST:+--fast} --out $2/bench.json > $2/bench.txt 2>&1 &
+  [ -f $2/nbench.json ] || $PY nik/bench.py --model $1 --n 16 --seed $3 --nested-items ${FAST:+--fast} --out $2/nbench.json > $2/nbench.txt 2>&1 &
 }
-for S in 7 11; do run $LB /tmp/confirm_live_s$S $S; run $B /tmp/confirm_${T}_s$S $S; done
+# SEEDS: fresh item sets (default 7 11; 13 17 are fresh for any candidate selected on 7/11). FAST=1: batched greedy
+# (bench.py --fast, same answers without --calc), for a quick read while trainings share the GPU.
+SEEDS=${SEEDS:-7 11}
+for S in $SEEDS; do run $LB /tmp/confirm_live_s$S $S; run $B /tmp/confirm_${T}_s$S $S; done
 wait
-for S in 7 11; do $PY nik/scripts/gate_flips.py /tmp/confirm_live_s$S /tmp/confirm_${T}_s$S | grep -E '^==|^row|^bench|^nested'; done | tee /tmp/confirm_$T.txt
+for S in $SEEDS; do $PY nik/scripts/gate_flips.py /tmp/confirm_live_s$S /tmp/confirm_${T}_s$S | grep -E '^==|^row|^bench|^nested'; done | tee /tmp/confirm_$T.txt
