@@ -5,9 +5,11 @@ import { contextFor, plainNumbers } from './context.js';
 import { vote as pickVote, finalNumber } from './vote.js';
 
 let model = null, meta = null, stopFlag = false, busy = false;
-const base = new URL('./model/', import.meta.url);
+let base = new URL('./model/', import.meta.url);
 
-async function load() {
+// channel 'preview' (chat/?model=preview): the newest candidate under test, not the shipped model (Claude, 2026-10-24)
+async function load(channel) {
+  if (channel === 'preview') base = new URL('./model/preview/', import.meta.url);
   const r = await fetch(new URL('manifest.json', base), { cache: 'no-cache' });
   const ct = r.headers.get('content-type') || '';
   if (!r.ok || !ct.includes('json')) {
@@ -114,7 +116,7 @@ async function run(id, messages, opts) {
 onmessage = async (e) => {
   const m = e.data;
   try {
-    if (m.type === 'load') await load();
+    if (m.type === 'load') await load(m.channel);
     else if (m.type === 'generate') { if (!busy) await run(m.id, m.messages, m.opts || {}); }
     else if (m.type === 'stop') stopFlag = true;
   } catch (err) {
