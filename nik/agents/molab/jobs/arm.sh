@@ -26,5 +26,5 @@ if [ ! -f $O/hand_eval.json ]; then
   ev "$TAG held-out hand: $(grep -h "^nik-0.1.$TAG" $O/hand_eval.txt | cut -d'|' -f1-2) (live: $(grep -h '^nik-0.1.bin' $O/hand_eval.txt | cut -d'|' -f1-2 | cut -d: -f2))"
 fi
 [ -f /tmp/gate_$TAG/verdict.txt ] || EN_DATA=data/english bash nik/scripts/full_gate.sh $B $TAG > $O/gate.log 2>&1
-$PY nik/scripts/gate_flips.py /tmp/gate_live /tmp/gate_$TAG > /tmp/gate_$TAG/flips.txt 2>&1
+$PY nik/scripts/gate_flips.py $(cat /tmp/gate_$TAG.live_dir 2> /dev/null || echo /tmp/gate_live) /tmp/gate_$TAG > /tmp/gate_$TAG/flips.txt 2>&1
 ev "$TAG: $(grep VERDICT /tmp/gate_$TAG/verdict.txt)"
