@@ -20,11 +20,12 @@ if [ ! -f $B ]; then
   ev "$TAG: trained ($(grep -o '^step [0-9]*' $O/train.log | tail -1)), md5 $(md5sum < $B | cut -c1-8)"
 fi
 [ -f /tmp/nik_dash/fresh_m50.json ] || $PY nik/scripts/fresh_answers.py --model nik/web/model/nik-0.1.bin --tag m50 > /dev/null 2>&1
-[ -f /tmp/nik_dash/fresh_$TAG.json ] || { $PY nik/scripts/fresh_answers.py --model $B --tag $TAG > $O/fresh.txt 2>&1; ev "$TAG fresh questions: $(cut -d: -f2- $O/fresh.txt | cut -c1-80) (live m50: $(python3 -c "import json;print(json.load(open('/tmp/nik_dash/fresh_m50.json'))['scored'])" 2>/dev/null))"; }
+[ -f /tmp/nik_dash/fresh_$TAG.json ] || { nice -n 10 $PY nik/scripts/fresh_answers.py --model $B --tag $TAG > $O/fresh.txt 2>&1; ev "$TAG fresh questions: $(cut -d: -f2- $O/fresh.txt | cut -c1-80) (live m50: $(python3 -c "import json;print(json.load(open('/tmp/nik_dash/fresh_m50.json'))['scored'])" 2>/dev/null))"; }
 if [ ! -f $O/hand_eval.json ]; then
-  $PY nik/scripts/hand_eval.py --model nik/web/model/nik-0.1.bin $B --heldout data_v3/hand_heldout.jsonl --out $O/hand_eval.json > $O/hand_eval.txt 2>&1
+  nice -n 15 $PY nik/scripts/hand_eval.py --model nik/web/model/nik-0.1.bin $B --heldout data_v3/hand_heldout.jsonl --out $O/hand_eval.json > $O/hand_eval.txt 2>&1
   ev "$TAG held-out hand: $(grep -h "^nik-0.1.$TAG" $O/hand_eval.txt | cut -d'|' -f1-2) (live: $(grep -h '^nik-0.1.bin' $O/hand_eval.txt | cut -d'|' -f1-2 | cut -d: -f2))"
 fi
-[ -f /tmp/gate_$TAG/verdict.txt ] || EN_DATA=data/english bash nik/scripts/full_gate.sh $B $TAG > $O/gate.log 2>&1
+# evals at low CPU priority: ~20 eval processes per gate otherwise starve the trainings sharing the box
+[ -f /tmp/gate_$TAG/verdict.txt ] || EN_DATA=data/english nice -n 15 bash nik/scripts/full_gate.sh $B $TAG > $O/gate.log 2>&1
 $PY nik/scripts/gate_flips.py $(cat /tmp/gate_$TAG.live_dir 2> /dev/null || echo /tmp/gate_live) /tmp/gate_$TAG > /tmp/gate_$TAG/flips.txt 2>&1
 ev "$TAG: $(grep VERDICT /tmp/gate_$TAG/verdict.txt)"
