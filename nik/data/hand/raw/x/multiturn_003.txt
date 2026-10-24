@@ -1,0 +1,1296 @@
+### multiturn
+U: sauraha ma jeep safari: jeep ko 9000, hami 6 jana.
+T: 9000 / 6 = 1500.
+N: euta lai 1500 rupiya.
+U: park ko pravesh shulka euta ko 150 pani lagchha
+T: 1500 + 150 = 1650.
+N: euta lai 1650 rupiya.
+U: aru 2 jana thapiye bhane euta ko kati?
+T: 6 + 2 = 8 jana. jeep 9000 / 8 = 1125. 1125 + 150 = 1275.
+N: 8 jana bhaye euta lai 1275 rupiya.
+G: 1275
+
+### multiturn
+U: kitchen ko saman kinna lageko: 2 ota steel plate, euta 180.
+T: 2 x 180 = 360.
+N: 2 plate ko 360 rupiya.
+U: 6 ota gilas euta 45, ra euta kadhai 950
+T: gilas 6 x 45 = 270. 360 + 270 + 950 = 1580.
+N: aba jamma 1580 rupiya.
+U: mero sanga 1500 matra chha, 80 pugena. k garne?
+T: 1580 - 1500 = 80. gilas euta 45: 2 ota kam garda 2 x 45 = 90 ghatchha. 1580 - 90 = 1490.
+N: 2 ota gilas kam kinnus: 4 gilas linda jamma 1490 hunchha, ra 10 rupiya firta aauchha.
+G: 1490
+
+### multiturn
+U: 4 jana ko aalu dum ma 500 gram aalu ra 3 chamcha tel halchhu.
+N: thik chha, 4 jana lai 500 gram aalu ra 3 chamcha tel.
+U: 20 jana ko lagi kati aalu?
+T: 20 / 4 = 5 guna. 500 x 5 = 2500 gram, arthat 2.5 kilo.
+N: 20 jana lai 2.5 kilo aalu.
+U: tel kati chamcha?
+T: 3 x 5 = 15.
+N: tel 15 chamcha.
+U: aalu kilo ko 70 bhaye aalu ko kharcha kati?
+T: 2.5 x 70 = 175.
+N: aalu ma 175 rupiya.
+G: 175
+
+### multiturn
+U: 450 ko 12% kati hunchha?
+T: 450 x 12 / 100 = 54.
+N: 450 ko 12% bhaneko 54.
+U: yo step kasari aayo? 1% bata garne tarika sikaidinus
+N: pahila 1% nikalne: 450 / 100 = 4.5. ani 12% ko lagi 12 le gunne: 4.5 x 12 = 54.
+U: tei tarika le 450 ko 7% ni?
+T: 1% bhaneko 4.5. 4.5 x 7 = 31.5.
+N: 450 ko 7% bhaneko 31.5.
+G: 31.5
+
+### multiturn
+U: postpaid plan mahina ko 999, call unlimited ra 10 GB data. prepaid ma call minet ko 1 rupiya ra 10 GB data 600 ma.
+N: thik chha, duita plan tipe.
+U: ma mahina ma 300 minet call garchhu. kun sasto?
+T: prepaid: 300 x 1 = 300. 300 + 600 = 900. postpaid 999. 999 - 900 = 99.
+N: prepaid sasto: 900 rupiya, postpaid bhanda 99 rupiya kam.
+U: haina, 300 hoina 450 minet jati garchhu hola
+T: prepaid: 450 x 1 = 450. 450 + 600 = 1050. 1050 - 999 = 51.
+N: 450 minet bhaye postpaid sasto: 999, prepaid ma 1050 parchha, 51 rupiya badhi.
+G: 999
+
+### multiturn
+U: school ko abhibhawak diwas ma 45 pariwar aaune, pariwar bata ausat 2 jana.
+T: 45 x 2 = 90.
+N: lagbhag 90 jana aaune.
+U: sabai lai euta cup chiya. 1 liter dudh le 8 cup banchha bhane kati liter dudh?
+T: 8 x 11 = 88, baki 90 - 88 = 2 cup, tyasaile 11 + 1 = 12 liter.
+N: 12 liter dudh chahinchha; 11 liter le 88 cup matra banchha.
+U: dudh liter ko 105 bhaye kati paisa?
+T: 12 x 105 = 1260.
+N: dudh ma 1260 rupiya.
+G: 1260
+
+### multiturn
+U: hapta ko kharcha: sombar 420, mangalbar 160, budhabar 890.
+N: thik chha, tin din ko kharcha tipe.
+U: bihibar 230, sukrabar 1250, sanibar 310
+T: 420 + 160 + 890 + 230 + 1250 + 310 = 3260.
+N: 6 din ko jamma 3260 rupiya.
+U: kun din sabai bhanda badhi kharcha bhayo ra kati?
+T: 420, 160, 890, 230, 1250, 310 madhye sabai bhanda thulo 1250, sukrabar.
+N: sukrabar sabai bhanda badhi kharcha bhayo, 1250 rupiya.
+G: 1250
+
+### multiturn
+U: mero 8 ropani khet ma ropai garnu chha. ropani lai 6 jana 1 din lagchha.
+T: 8 x 6 = 48.
+N: jamma 48 jana-din kaam chahinchha.
+U: euta lai jyala 700 ra khaja 150
+T: 700 + 150 = 850. 48 x 850 = 40800.
+N: ropai ko kharcha 40800 rupiya.
+U: parma ma gaun ka 12 jana-din sahayog aauchha, jyala nalagne, khaja matra. aba kati?
+T: jyala tirne: 48 - 12 = 36. 36 x 850 = 30600. parma lai khaja: 12 x 150 = 1800. 30600 + 1800 = 32400.
+N: parma ko sahayog le kharcha 32400 rupiya hunchha.
+G: 32400
+
+### multiturn
+U: bihana 6:00 bata padhne: 3 bishaya, euta 50 minet, bich ma 10 minet aaram.
+N: thik chha, 50 minet ka 3 bishaya, bich ma 10 minet aaram.
+U: tesro bishaya kati baje sakinchha?
+T: pahilo 6:00 bata 6:50. aaram 7:00 samma. dosro 7:00 bata 7:50. aaram 8:00 samma. tesro 8:00 bata 8:50.
+N: tesro bishaya 8:50 ma sakinchha.
+U: school 9:30 ma pugnu chha, bato 25 minet. khana khana kati samaya bachchha?
+T: 9:30 bhanda 25 minet agadi 9:05 ma niskane. 8:50 bata 9:05 samma 15 minet.
+N: khana ra tayar huna 15 minet matra bachchha.
+G: 15
+
+### multiturn
+U: kotha ma carpet bichhyaune: lambai 12 feet, chaudai 10 feet.
+T: 12 x 10 = 120.
+N: 120 varga feet.
+U: haina, lambai 12 hoina 21 feet, ulto lekhe
+T: sachyaeko lambai 21. 21 x 10 = 210.
+N: lambai 21 feet bhaye 210 varga feet.
+U: varga feet ko 45 rupiya bhaye carpet kati?
+T: 210 x 45 = 9450.
+N: carpet ko 9450 rupiya.
+G: 9450
+
+### multiturn
+U: mero bhai korea ma kaam garchha. korea ko samaya nepal bhanda 3 ghanta 15 minet agadi hunchha.
+N: thik chha, korea nepal bhanda 3 ghanta 15 minet agadi.
+U: nepal ma beluka 7 baje phone garda korea ma kati baje?
+T: 7:00 bata 3 ghanta pachhi 10:00, ani 15 minet pachhi 10:15.
+N: korea ma rati 10:15 baje hunchha.
+U: he sleeps at 11 pm Korea time. what is the latest Nepal time to call? answer in English
+T: 11:00 bata 3 ghanta agadi 8:00, ani 15 minet agadi 7:45.
+N: The latest is 7:45 pm in Nepal.
+U: ok, aba nepali ma feri bhannus
+N: nepal ma beluka 7:45 samma phone garnus; tyo bela korea ma rati 11 baje hunchha.
+G: 7:45
+
+### multiturn
+U: tihar ko lagi 100 ota diyo, euta 5 rupiya.
+T: 100 x 5 = 500.
+N: diyo ko 500 rupiya.
+U: tel 2 liter, liter ko 300
+T: 2 x 300 = 600.
+N: tel ko 600 rupiya.
+U: sayapatri ko mala 10 ota, euta 60, ra mithai 1500 ko
+T: mala 10 x 60 = 600. 600 + 1500 = 2100.
+N: mala ra mithai 2100 rupiya.
+U: sabai jodera ek choti bhannus ta
+T: 500 + 600 + 2100 = 3200.
+N: diyo 500, tel 600, mala 600 ra mithai 1500; tihar ko jamma kharcha 3200 rupiya.
+G: 3200
+
+### multiturn
+U: ghar farkida ma 9 number tempo chadhchhu ra gaushala ma orlinchhu.
+N: thik chha, 9 number tempo, gaushala ma orlinne.
+U: rati dhilo bhayo bhane surakshit kasari ghar pugne?
+N: sakdo ujyalo ra manchhe dherai hune bato bata hidnus. ghar ma pugne samaya bhanidinus ra phone charge rakhnus. dherai dhilo bhaye registered taxi linus.
+U: maile kun thau ma orlinchhu bhaneko thiye?
+N: tapai gaushala ma orlinchhu bhannubhayeko thiyo, 9 number tempo bata.
+G: gaushala
+
+### multiturn
+U: 45 minet ka 3 ota class kati samaya bhayo?
+T: 45 x 3 = 135 minet. 135 bhaneko 120 ra 15: 2 ghanta 15 minet.
+N: 135 minet, arthat 2 ghanta 15 minet.
+U: 2 ghanta matra hoina?
+T: 2 ghanta bhaneko 120 minet. 135 - 120 = 15.
+N: 2 ghanta bhaneko 120 minet matra. 3 class ko 135 minet hunchha, tyasaile 15 minet badhi: 2 ghanta 15 minet.
+U: 10 baje suru bhaye kati baje sakinchha?
+T: 10:00 bata 2 ghanta pachhi 12:00, ani 15 minet pachhi 12:15.
+N: 12:15 ma sakinchha.
+G: 12:15
+
+### multiturn
+U: pokhara bata kathmandu bus ticket euta ko 1000. 3 jana ko jaana-aauna kati?
+C: 3 jana ko 3000 rupiya.
+U: 3000 ta ek tarfi matra bhayo ni, maile jaana-aauna sodheko
+T: ek tarfi 3 x 1000 = 3000. jaana-aauna 3000 x 2 = 6000.
+N: maaf garnus, maile ek tarfi matra gane. jaana-aauna garda 3 jana ko 6000 rupiya.
+U: bato ma khana euta ko 300, jaada ra aauda
+T: 3 x 300 = 900. 900 x 2 = 1800. 6000 + 1800 = 7800.
+N: ticket ra khana jodda 7800 rupiya.
+G: 7800
+
+### multiturn
+U: jamma kati paisa jutaunu parla?
+N: k ko lagi paisa jutaune ho? kun kun kharcha chha ra kati kati bhannus, ma jodidinchhu.
+U: chhori ko school bharna: bharna 5000, mahina ko fee 2500, 3 mahina ko advance
+T: 2500 x 3 = 7500. 5000 + 7500 = 12500.
+N: bharna ra 3 mahina ko fee jodda 12500 rupiya.
+U: dress ra kitab ko 4500 pani chha
+T: 12500 + 4500 = 17000.
+N: jamma 17000 rupiya jutaunu parchha.
+G: 17000
+
+### multiturn
+U: hamro bagaicha 20 meter lamo ra 12 meter chaudai chha. ghero lagaune.
+N: thik chha, 20 meter x 12 meter.
+U: chara tira ko jamma lambai kati?
+T: 20 + 12 = 32. 32 x 2 = 64.
+N: ghero ko jamma lambai 64 meter.
+U: har 2 meter ma khamba gadne bhaye kati khamba?
+T: 64 / 2 = 32. ghero ghumera suru kai khamba ma milchha, tyasaile thap khamba chahidaina.
+N: 32 ota khamba chahinchha.
+G: 32
+
+### multiturn
+U: euta pasal ma "2 kinda 1 free", arko ma 30% chhut. euta saman 600 ko.
+N: thik chha, saman 600 ko.
+U: 3 ota chahiyo bhane kun ma sasto?
+T: pahilo: 3 ota ma 2 ko matra paisa: 2 x 600 = 1200. dosro: 3 x 600 = 1800, 1800 x 30 / 100 = 540, 1800 - 540 = 1260.
+N: pahilo pasal sasto: 1200, dosro ma 1260.
+U: 2 ota matra chahiyo bhane?
+T: pahilo: 2 x 600 = 1200. dosro: 1200 x 30 / 100 = 360, 1200 - 360 = 840.
+N: 2 ota matra bhaye dosro sasto: 840, pahilo ma 1200.
+G: 840
+
+### multiturn
+U: bhoj ma 150 jana aaune, euta lai 150 gram masu.
+T: 150 x 150 = 22500 gram, arthat 22.5 kilo.
+N: 22.5 kilo masu chahinchha.
+U: chamal euta lai 120 gram
+T: 150 x 120 = 18000 gram, arthat 18 kilo.
+N: 18 kilo chamal chahinchha.
+U: masu kilo ko 700 ra chamal kilo ko 90, jamma kati?
+T: masu 22.5 x 700 = 15750. chamal 18 x 90 = 1620. 15750 + 1620 = 17370.
+N: masu ra chamal jodda 17370 rupiya.
+G: 17370
+
+### multiturn
+U: yo hapta cycle: sombar 12 km, mangalbar 8, budhabar 15, bihibar 10.
+T: 12 + 8 + 15 + 10 = 45.
+N: 4 din ma 45 km.
+U: lakshya hapta ma 70 km. sukrabar ra sanibar barabar kudaye kati?
+T: 70 - 45 = 25. 25 / 2 = 12.5.
+N: sukrabar ra sanibar 12.5 km kudaunus.
+U: 12.5 km lai ghanta ko 10 km gati ma kati minet?
+T: 12.5 / 10 = 1.25 ghanta. 1.25 x 60 = 75.
+N: 75 minet, arthat 1 ghanta 15 minet lagchha.
+G: 75
+
+### multiturn
+U: mero 6 ghar maurichaka chha, euta ghar bata barsha ma 8 kilo maha nikalchhu.
+T: 6 x 8 = 48.
+N: barsha ma 48 kilo maha.
+U: kilo ko 1200 ma bechda kati?
+T: 48 x 1200 = 57600.
+N: 57600 rupiya.
+U: 4 ghar thapda kati kilo badhi?
+T: 4 x 8 = 32.
+N: 32 kilo badhi, jamma 80 kilo hunchha.
+G: 32
+
+### multiturn
+U: I have 18 days of leave this year and I have used 7. how many are left?
+T: 18 - 7 = 11.
+N: You have 11 days of leave left.
+U: and if I take 4 days for Dashain?
+T: 11 - 4 = 7.
+N: Then you will have 7 days left.
+U: nepali ma bhannus, tyo baki bida le kati hapta jati hunchha?
+T: baki 7 din. 7 din bhaneko 1 hapta.
+N: baki 7 din bida chha, thik 1 hapta jati.
+G: 7
+
+### multiturn
+U: hami 2 jana rara jaane: nepalgunj bata talcha flight euta ko 7500.
+T: 2 x 7500 = 15000.
+N: 2 jana ko flight 15000 rupiya, ek tarfi.
+U: talcha bata rara hidera 3 ghanta. flight 8:40 ma land garchha, 30 minet khaja khayera hidne. kati baje pugchhau?
+T: 8:40 bata 30 minet pachhi 9:10 ma hidne. 9:10 bata 3 ghanta pachhi 12:10.
+N: 12:10 tira rara pugnu hunchha.
+U: farkine flight pani tei bhada, ani lodge ma 2 rat, kotha ko rat ko 1500. jamma kati?
+T: flight jaana-aauna 15000 x 2 = 30000. lodge 2 x 1500 = 3000. 30000 + 3000 = 33000.
+N: jaana-aauna flight 30000 ra lodge 3000; jamma 33000 rupiya.
+G: 33000
+
+### multiturn
+U: dashain ko luga: 2 ota kurta euta 1800, 1 jodi jutta 2400.
+T: 2 x 1800 = 3600. 3600 + 2400 = 6000.
+N: aile samma 6000 rupiya.
+U: 3 ota t-shirt pani, euta 550
+T: 3 x 550 = 1650. 6000 + 1650 = 7650.
+N: jamma 7650 rupiya.
+U: pasal le 5% chhut diyo, ani 10000 diye kati firta?
+T: 7650 x 5 / 100 = 382.5. 7650 - 382.5 = 7267.5. 10000 - 7267.5 = 2732.5.
+N: chhut pachhi 7267.5 tirne, 10000 bata 2732.5 rupiya firta aauchha.
+G: 2732.5
+
+### multiturn
+U: 4 jana lai chana ko tarkari ma 1 cup chana bhijauchhu.
+N: thik chha, 4 jana lai 1 cup chana.
+U: bholi 14 jana khane. kati cup?
+T: 14 / 4 = 3.5.
+N: 14 jana lai 3.5 cup chana.
+U: 1 cup chana 200 gram jati hunchha bhane kati gram?
+T: 3.5 x 200 = 700.
+N: 700 gram chana chahinchha.
+U: chana kilo ko 160 bhaye kati paisa?
+T: 700 gram bhaneko 0.7 kilo. 0.7 x 160 = 112.
+N: chana ko 112 rupiya.
+G: 112
+
+### multiturn
+U: dui sankhya ko jod 50 ra farak 10. ti sankhya k k hun?
+T: thulo: 50 + 10 = 60, 60 / 2 = 30. sano: 30 - 10 = 20.
+N: sankhya 30 ra 20.
+U: yo step kasari aayo? jod ma farak kina jodeko?
+N: thulo sankhya sano bhanda 10 le badhi chha. jod ma farak 10 jodda thulo sankhya dui choti aauchha: 50 + 10 = 60. tyasaile thulo 60 / 2 = 30, ani sano 30 - 10 = 20.
+U: jaach garera dekhaunus
+T: 30 + 20 = 50. 30 - 20 = 10.
+N: jod 30 + 20 = 50 ra farak 30 - 20 = 10, dubai milyo.
+G: 30
+
+### multiturn
+U: bazar ma golbheda kilo ko 80, haat ma 60. haat jaana-aauna bus 40 lagchha.
+N: thik chha, bazar 80, haat 60 ra bus 40.
+U: 3 kilo kinne bhaye kaha sasto?
+T: bazar: 3 x 80 = 240. haat: 3 x 60 = 180, 180 + 40 = 220. 240 - 220 = 20.
+N: haat sasto: 220, bazar ma 240.
+U: 2 kilo matra kinne bhaye?
+T: bazar: 2 x 80 = 160. haat: 2 x 60 = 120, 120 + 40 = 160.
+N: 2 kilo ma dubai barabar, 160 rupiya.
+G: 160
+
+### multiturn
+U: school ko sathi haru ko reunion: 25 jana aaune, hall bhada 8000.
+N: ramro! 25 jana, hall 8000.
+U: khana euta ko 650 ra cake 3000
+T: khana 25 x 650 = 16250. 8000 + 16250 + 3000 = 27250.
+N: jamma 27250 rupiya.
+U: euta le kati halne?
+T: 27250 / 25 = 1090.
+N: euta le 1090 rupiya halne.
+U: 5 jana le aaunna bhane, khana matra ghatchha. aba euta ko kati?
+T: 25 - 5 = 20 jana. khana 20 x 650 = 13000. 8000 + 13000 + 3000 = 24000. 24000 / 20 = 1200.
+N: 20 jana bhaye jamma 24000, euta ko 1200 rupiya.
+G: 1200
+
+### multiturn
+U: hamro gas cylinder 1950 ko, 30 din chalchha.
+T: 1950 / 30 = 65.
+N: din ko 65 rupiya gas.
+U: pahuna aaye 25 din matra chalchha. tyo bela din ko kati?
+T: 1950 / 25 = 78.
+N: din ko 78 rupiya.
+U: 30 din chalne hisab le barsha ma kati cylinder?
+T: 30 x 12 = 360, baki 365 - 360 = 5 din. tyo 5 din ko lagi arko: 12 + 1 = 13.
+N: barsha ma 13 cylinder chahinchha; 12 le 360 din matra pugchha.
+G: 13
+
+### multiturn
+U: mero bari 20 meter lamo ra 15 meter chaudai chha. kauli lagaune.
+N: thik chha, 20 meter x 15 meter.
+U: biruwa 50 cm ko duri ma lagaune. lambai tira euta line ma kati biruwa?
+T: 20 meter bhaneko 2000 cm. 2000 / 50 = 40.
+N: lambai tira euta line ma 40 biruwa.
+U: chaudai tira kati line? ani jamma kati biruwa?
+T: 15 meter bhaneko 1500 cm. 1500 / 50 = 30 line. 40 x 30 = 1200.
+N: 30 line, jamma 1200 biruwa.
+G: 1200
+
+### multiturn
+U: mero exam mangsir 3 gate ganit ra mangsir 7 gate bigyan.
+N: thik chha, mangsir 3 ganit ra mangsir 7 bigyan.
+U: ganit pachhi bigyan ko tayari kati din?
+T: mangsir 3 ra 7 ko bich ma 4, 5 ra 6 gate: 3 din.
+N: bich ma 3 din, mangsir 4, 5 ra 6, tayari ko lagi chha.
+U: tyo 3 din ma 9 path padhne bhaye din ko kati?
+T: 9 / 3 = 3.
+N: din ko 3 path.
+U: bigyan kun gate bhaneko thiye?
+N: bigyan mangsir 7 gate.
+G: 7
+
+### multiturn
+U: 5 kilo chamal 650 ma kine, dal 1 kilo 170 ma.
+T: 650 + 170 = 820.
+N: jamma 820 rupiya.
+U: oho, chamal 650 hoina 560 ma pako rahechha
+T: sachyaeko 560. 560 + 170 = 730.
+N: chamal 560 bhaye jamma 730 rupiya.
+U: chamal kilo ko kati paryo?
+T: 560 / 5 = 112.
+N: chamal kilo ko 112 rupiya paryo.
+G: 112
+
+### multiturn
+U: hamro pasal ma euta tourist couple aaunu bhayo. pashmina sal euta 4500, unle 2 ota rojnu bhayo.
+T: 2 x 4500 = 9000.
+N: 2 ota ko 9000 rupiya.
+U: english ma bhanidinus: "2 ota linu bhaye 10% chhut dinchhu"
+N: "If you take two, I will give you a 10% discount."
+U: chhut pachhi kati, nepali ma?
+T: 9000 x 10 / 100 = 900. 9000 - 900 = 8100.
+N: chhut pachhi 8100 rupiya.
+G: 8100
+
+### multiturn
+U: dashain ma 6 jana pahuna aaunuhunchha.
+N: ramro! 6 jana pahuna.
+U: hamro 2 kotha ma 2 ota khat chha, euta khat ma 2 jana sutna milchha.
+T: 2 x 2 = 4.
+N: khat ma 4 jana sutna milchha.
+U: baki lai gadda chahinchha, euta gadda ma 1 jana. kati gadda?
+T: 6 - 4 = 2.
+N: 2 ota gadda chahinchha.
+U: sabai milayera bhannus ta
+N: 6 jana pahuna: 2 khat ma 4 jana ra 2 jana gadda ma. tyasaile 2 ota gadda tayar rakhnus.
+G: 2
+
+### multiturn
+U: sombar bhai ko school ma bhela, mangalbar aankha jachauna jaane, budhabar bank.
+N: thik chha, sombar bhela, mangalbar aankha jachauna, budhabar bank.
+U: aankha jachauna jada k k lagnu ramro?
+N: aghillo chashma bhaye lagnus, ra aankha ko samasya lekhera lagnus. jachaune bela aankha dhamilo huna sakchha, tyasaile aafai gadi nachalaunus, sath ma kohi lagnus.
+U: aankha jachaune kun bar bhaneko thiye?
+N: aankha jachaune mangalbar.
+G: mangalbar
+
+### multiturn
+U: 1000 ko saman ma 10% chhut ra pachhi 10% kar lagyo. kati tirne?
+T: chhut: 1000 x 10 / 100 = 100, 1000 - 100 = 900. kar: 900 x 10 / 100 = 90, 900 + 90 = 990.
+N: 990 rupiya tirne.
+U: 10% ghatayera 10% thapda ta 1000 nai hunu parne hoina?
+T: chhut 1000 x 10 / 100 = 100. kar 900 x 10 / 100 = 90.
+N: haina, chhut 1000 ko 10% (100) ho tara kar 900 ko 10% (90) matra. ghatayeko 100, thapeko 90, tyasaile 10 rupiya kam: 990.
+U: 2000 ko saman ma tei hisab garda?
+T: 2000 x 10 / 100 = 200. 2000 - 200 = 1800. 1800 x 10 / 100 = 180. 1800 + 180 = 1980.
+N: 1980 rupiya tirne.
+G: 1980
+
+### multiturn
+U: mero sahakari ma 12000 ra bank ma 8500 chha. bank ma 3000 thapda bank ma kati hunchha?
+C: 15000 rupiya hunchha.
+U: 15000 ta sahakari ma jodeko jasto bhayo, maile bank ko sodheko
+T: bank ma 8500. 8500 + 3000 = 11500.
+N: maaf garnus, maile sahakari ko rakam ma jode. bank ma 8500 + 3000 = 11500 rupiya hunchha.
+U: dubai jodda jamma kati?
+T: 12000 + 11500 = 23500.
+N: sahakari ra bank jodda 23500 rupiya.
+G: 23500
+
+### multiturn
+U: kun chai ramro hola?
+N: kun kun kura bich tulana garna khojnu bhayeko? duita bikalpa ra tapai lai k chahiyeko bhannus.
+U: duita cycle: gear wala 18000 ko, sadharan 12000 ko. ma danda ko bato ma school jaanchhu
+T: 18000 - 12000 = 6000.
+N: danda ko bato ma gear wala ramro, ukalo ma sajilo hunchha. 6000 rupiya badhi lagchha, tara roj chalaune bhaye yo kharcha thik chha.
+U: 6000 bachat garna mahina ko 1500 chhuttyaye kati mahina?
+T: 6000 / 1500 = 4.
+N: 4 mahina ma 6000 jamma hunchha.
+G: 4
+
+### multiturn
+U: aayat ko paridhi 30 cm ra lambai 9 cm. chaudai kati?
+T: paridhi ko aadha: 30 / 2 = 15. 15 - 9 = 6.
+N: chaudai 6 cm.
+U: paridhi lai 2 le kina bhag gareko?
+N: paridhi ma lambai 2 choti ra chaudai 2 choti aauchha. aadha garda euta lambai ra euta chaudai matra rahanchha: 30 / 2 = 15. tyas bata lambai 9 ghatauda chaudai 6.
+U: kshetrafal kati?
+T: 9 x 6 = 54.
+N: kshetrafal 54 varga cm.
+G: 54
+
+### multiturn
+U: TV ko channel package mahina ko 350, ki barsha ko ekai choti 3600.
+N: thik chha, mahina ko 350 ki barsha ko 3600.
+U: barsha ko lida kati bachchha?
+T: 350 x 12 = 4200. 4200 - 3600 = 600.
+N: barsha ko lida 600 rupiya bachchha.
+U: tyo hisab le mahina ko kati sasto paryo?
+T: 3600 / 12 = 300. 350 - 300 = 50.
+N: mahina ko 300 jasto paryo, arthat 50 rupiya sasto.
+G: 50
+
+### multiturn
+U: cricket match ma 22 khelaadi ra 2 umpire chhan.
+T: 22 + 2 = 24.
+N: jamma 24 jana.
+U: sabai lai 2 ota kera ra 1 bottle pani dine
+T: kera 24 x 2 = 48. pani 24 bottle.
+N: 48 ota kera ra 24 bottle pani chahinchha.
+U: kera dozen ko 120 ra pani bottle ko 25. jamma kati?
+T: 48 kera bhaneko 4 dozen: 4 x 120 = 480. pani 24 x 25 = 600. 480 + 600 = 1080.
+N: kera 480 ra pani 600, jamma 1080 rupiya.
+G: 1080
+
+### multiturn
+U: school canteen ma ma din ma 40 plate chana 50 ma ra 60 cup chiya 20 ma bechchhu.
+T: chana 40 x 50 = 2000. chiya 60 x 20 = 1200. 2000 + 1200 = 3200.
+N: din ko bikri 3200 rupiya.
+U: saman ko kharcha din ko 1800
+T: 3200 - 1800 = 1400.
+N: din ko nafa 1400 rupiya.
+U: hapta ma 6 din kholda nafa kati?
+T: 1400 x 6 = 8400.
+N: hapta ko nafa 8400 rupiya.
+G: 8400
+
+### multiturn
+U: bhaisi lai din ko 2 kilo pina dinchhu, kilo ko 60.
+T: 2 x 60 = 120.
+N: din ko 120 rupiya.
+U: 30 din ko kati?
+T: 120 x 30 = 3600.
+N: mahina ko 3600 rupiya pina ma.
+U: dudh badhauna din ko 2.5 kilo dine bhaye mahina ko kati badhi?
+T: 2.5 x 60 = 150 din ko. 150 x 30 = 4500. 4500 - 3600 = 900.
+N: mahina ko 4500 parchha, 900 rupiya badhi.
+G: 900
+
+### multiturn
+U: is 15% of 80 equal to 12?
+T: 80 x 15 / 100 = 12.
+N: Yes. 80 x 15 / 100 = 12, so 15% of 80 is 12.
+U: and 15% of 120?
+T: 120 x 15 / 100 = 18.
+N: 15% of 120 is 18.
+U: nepali ma sajilo tarika bhannus na
+N: 10% ra 5% chhuttai nikalera jodne: 120 ko 10% bhaneko 12, 5% tyasko aadha 6. 12 + 6 = 18.
+G: 18
+
+### multiturn
+U: kalinchowk jaana micro reserve garyau, 18900 ma, hami 7 jana.
+T: 18900 / 7 = 2700.
+N: euta lai 2700 rupiya.
+U: 2 jana le jaana sakena bhane baki le kati?
+T: 7 - 2 = 5 jana. 18900 / 5 = 3780.
+N: 5 jana bhaye euta lai 3780 rupiya.
+U: hotel ma 3 kotha, kotha ko rat ko 2000, 2 rat. 5 jana lai euta ko jamma kati?
+T: hotel: 3 x 2000 = 6000 rat ko. 6000 x 2 = 12000. 12000 / 5 = 2400. micro 3780. 3780 + 2400 = 6180.
+N: micro 3780 ra hotel 2400, euta lai jamma 6180 rupiya.
+G: 6180
+
+### multiturn
+U: chhora ko janmadin ko saman: 3 packet balloon, packet ko 120.
+T: 3 x 120 = 360.
+N: balloon ko 360 rupiya.
+U: cake 1800 ra 2 packet candle, packet ko 50
+T: candle 2 x 50 = 100. 360 + 1800 + 100 = 2260.
+N: jamma 2260 rupiya.
+U: 3000 diye kati firta?
+T: 3000 - 2260 = 740.
+N: 3000 dida 740 rupiya firta aauchha.
+G: 740
+
+### multiturn
+U: 1 kilo golbheda ko achar ma 10 ota khursani ra 1 chamcha nun halchhu.
+N: thik chha, kilo ma 10 khursani ra 1 chamcha nun.
+U: 2.5 kilo golbheda chha. khursani kati?
+T: 10 x 2.5 = 25.
+N: 25 ota khursani.
+U: nun kati?
+T: 1 x 2.5 = 2.5.
+N: 2.5 chamcha nun, arthat 2 chamcha ra aadha chamcha.
+U: piro kam chahiyo bhane khursani aadha garda kati?
+T: 25 / 2 = 12.5.
+N: aadha garda 12.5 aauchha, tyasaile 12 ki 13 ota khursani halnus.
+G: 12.5
+
+### multiturn
+U: jhola ma 3 ota rato ra 5 ota nilo ball chhan. aankha chimlera euta jhikda rato aaune sambhavana kati?
+T: jamma ball 3 + 5 = 8. rato 3. sambhavana 3/8.
+N: rato aaune sambhavana 3/8.
+U: yo 8 kaha bata aayo?
+N: sambhavana ma tala jamma kati ota sambhav nateeja chhan tyo rakhinchha. jhola ma jamma 3 + 5 = 8 ball chhan, tyasaile tala 8 ra mathi rato ko sankhya 3.
+U: nilo aaune sambhavana ni?
+T: nilo 5, jamma 8: 5/8.
+N: nilo aaune sambhavana 5/8. jaach: 3/8 + 5/8 = 1.
+G: 5/8
+
+### multiturn
+U: flat A ko bhada 15000, pani sahit. flat B ko 13500, tara pani 800 ra parking 500 chhuttai.
+T: B: 13500 + 800 + 500 = 14800. 15000 - 14800 = 200.
+N: B ko jamma 14800, A bhanda 200 rupiya sasto.
+U: malai parking chahindaina, ma bike rakhdina
+T: B: 13500 + 800 = 14300. 15000 - 14300 = 700.
+N: parking bina B 14300 parchha, A bhanda 700 rupiya sasto.
+U: barsha ma kati bachchha?
+T: 700 x 12 = 8400.
+N: barsha ma 8400 rupiya bachchha.
+G: 8400
+
+### multiturn
+U: aama samuha ko talim ma 30 jana sahabhagi chhan, 1 din ko.
+N: ramro, 30 jana ko 1 din talim.
+U: khana euta ko 300 ra chiya 2 choti, cup ko 30
+T: khana 30 x 300 = 9000. chiya 30 x 2 = 60 cup, 60 x 30 = 1800. 9000 + 1800 = 10800.
+N: khana ra chiya 10800 rupiya.
+U: prashikshak ko 5000 pani jodnus
+T: 10800 + 5000 = 15800.
+N: jamma 15800 rupiya.
+U: ward le 10000 dinchha. baki kati jutaunu?
+T: 15800 - 10000 = 5800.
+N: baki 5800 rupiya jutaunu parchha.
+G: 5800
+
+### multiturn
+U: college jaana din ko 2 choti micro chadhchhu, euta ko 25.
+T: 2 x 25 = 50.
+N: din ko 50 rupiya.
+U: mahina ma 24 din jaanchhu
+T: 50 x 24 = 1200.
+N: mahina ko 1200 rupiya.
+U: bidyarthi pass mahina ko 1000 chha. kati bachchha?
+T: 1200 - 1000 = 200.
+N: pass le mahina ko 200 rupiya bachchha.
+G: 200
+
+### multiturn
+U: ropani ma 10 doko mal halne, euta doko ma 25 kilo.
+T: 10 x 25 = 250.
+N: ropani ma 250 kilo mal.
+U: mero 3 ropani bari chha
+T: 250 x 3 = 750.
+N: 3 ropani ma 750 kilo mal chahinchha.
+U: ghar ko mal 500 kilo matra chha. baki kilo ko 8 ma kinda kati?
+T: 750 - 500 = 250. 250 x 8 = 2000.
+N: 250 kilo kinnu parchha, 2000 rupiya lagchha.
+G: 2000
+
+### multiturn
+U: chhori ko sombar dance 4 dekhi 5, budhabar swimming 4:30 dekhi 5:30, sukrabar art 3:30 dekhi 5.
+N: thik chha, tin din ko class tipe.
+U: kun din ko class sabai bhanda lamo?
+T: dance 1 ghanta, swimming 1 ghanta, art 3:30 dekhi 5 samma 1 ghanta 30 minet.
+N: sukrabar ko art sabai bhanda lamo, 1 ghanta 30 minet.
+U: hapta ma jamma kati samaya?
+T: 1 + 1 + 1.5 = 3.5.
+N: hapta ma 3.5 ghanta, arthat 3 ghanta 30 minet.
+U: mangalbar kehi class chha ki?
+N: chhaina. tapai le sombar, budhabar ra sukrabar ko class matra bhannubhayo, mangalbar khali chha.
+
+### multiturn
+U: mero pasal ko bhada mahina ko 18000, 6 mahina ko advance dinu parchha.
+T: 18000 x 6 = 108000.
+N: 6 mahina ko 108000 rupiya.
+U: haina, 18000 hoina 16000 ho, maile milaena
+T: sachyaeko 16000. 16000 x 6 = 96000.
+N: 16000 bhaye 6 mahina ko 96000 rupiya.
+U: dharauti 2 mahina ko pani chhuttai
+T: 16000 x 2 = 32000. 96000 + 32000 = 128000.
+N: advance ra dharauti jodda 128000 rupiya.
+G: 128000
+
+### multiturn
+U: 3 plate momo 160 ko ra 1 coke 80 khayau.
+T: 3 x 160 = 480. 480 + 80 = 560.
+N: jamma 560 rupiya.
+U: mero american sathi lai english ma bujhaidinus
+N: "We had 3 plates of momo at 160 rupees each and one Coke for 80 rupees, so the total is 560 rupees."
+U: he wants to pay half. how much is that?
+T: 560 / 2 = 280.
+N: Half is 280 rupees.
+U: thank you! aba nepali ma: usle 500 diyo bhane kati firta dinu?
+T: 500 - 280 = 220.
+N: 500 bata 220 rupiya firta dinus.
+G: 220
+
+### multiturn
+U: ghar sarda truck bhada 6000 lagchha.
+N: thik chha, truck 6000.
+U: 4 jana majdur, euta ko 800
+T: 4 x 800 = 3200.
+N: majdur ko 3200 rupiya.
+U: packing saman 1200
+N: thik chha, packing 1200.
+U: aba sabai milayera bhannus, jamma kati?
+T: 6000 + 3200 + 1200 = 10400.
+N: truck 6000, majdur 3200 ra packing 1200; ghar sarna jamma 10400 rupiya lagchha.
+G: 10400
+
+### multiturn
+U: bahini ko bihe baglung ma mangsir 18 gate ho. hami 2 din agadi nai jaane.
+N: badhai chha! mangsir 18, ra 2 din agadi jaane.
+U: bihe ma k uphar dinu ramro?
+N: kaam lagne saman ramro hunchha: bhada-kuda, rice cooker, ki naya ghar ko lagi saman. paisa ko lifafa pani dherai le rojchhan.
+U: hami kun gate jaane hunchhau?
+T: bihe mangsir 18. 2 din agadi: 18 - 2 = 16.
+N: mangsir 16 gate jaane.
+G: 16
+
+### multiturn
+U: 45 minet lai ghanta ma kati?
+T: 45 / 60 = 0.75.
+N: 45 minet bhaneko 0.75 ghanta.
+U: 0.45 ghanta hoina ra?
+T: 0.45 x 60 = 27.
+N: haina, ghanta ma 60 minet hunchha, 100 haina. 45 / 60 = 0.75. 0.45 ghanta bhaneko ta 27 minet matra hunchha.
+U: ani 1 ghanta 45 minet?
+T: 1 + 0.75 = 1.75.
+N: 1 ghanta 45 minet bhaneko 1.75 ghanta.
+G: 1.75
+
+### multiturn
+U: mangsir 5 dekhi 9 gate samma bida linchhu. kati din bida bhayo?
+C: 4 din bida.
+U: 5 gate ra 9 gate dubai bida ho ni
+T: 5, 6, 7, 8 ra 9 gate: 9 - 5 + 1 = 5.
+N: maaf garnus, maile suru ko din gane. 5 dekhi 9 gate samma dubai din gani 5 din bida.
+U: 12 din ko bida baki thiyo bhane aba kati?
+T: 12 - 5 = 7.
+N: aba 7 din ko bida baki rahanchha.
+G: 7
+
+### multiturn
+U: ghar samma kati lagchha hola?
+N: samaya sodhnu bhayeko ki bhada? duri ra kasari jaane bhannus.
+U: samaya. 12 km chha, bus ghanta ko 30 km gudchha
+T: 12 / 30 = 0.4 ghanta. 0.4 x 60 = 24.
+N: 24 minet lagchha.
+U: hidera ghanta ko 4 km bhaye?
+T: 12 / 4 = 3.
+N: hidera 3 ghanta lagchha.
+G: 3
+
+### multiturn
+U: kunai sankhya lai 3 le gunera 5 jodda 20 hunchha. sankhya kati?
+T: 5 jodnu agadi: 20 - 5 = 15. 3 le gunnu agadi: 15 / 3 = 5.
+N: sankhya 5 ho.
+U: pahila 5 kina ghataune?
+N: ulto kram ma farkanu parchha. antim ma 5 jodiyeko thiyo, tyasaile pahila 5 ghataune: 20 - 5 = 15. tyasbhanda agadi 3 le guneko thiyo, tyasaile 3 le bhag: 15 / 3 = 5.
+U: jaach garidinus
+T: 5 x 3 = 15. 15 + 5 = 20.
+N: 5 x 3 = 15, ani 15 + 5 = 20, milyo.
+G: 5
+
+### multiturn
+U: hamro ghar ma 4 jana le aafno aafno SIM ma mahina ko 600 ko pack halchhau.
+T: 4 x 600 = 2400.
+N: 4 jana ko mahina ko 2400 rupiya.
+U: family plan ma 4 SIM ekai 2000 ma aauchha rey
+T: 2400 - 2000 = 400.
+N: family plan le mahina ko 400 rupiya bachauchha.
+U: barsha ma kati?
+T: 400 x 12 = 4800.
+N: barsha ma 4800 rupiya bachchha.
+G: 4800
+
+### multiturn
+U: tole ko holi ma 40 jana chhau, euta lai 100 gram abir.
+T: 40 x 100 = 4000 gram, arthat 4 kilo.
+N: 4 kilo abir chahinchha.
+U: 500 gram ko packet 150 ma painchha
+T: 4000 / 500 = 8 packet. 8 x 150 = 1200.
+N: 8 packet, 1200 rupiya lagchha.
+U: 40 jana le barabar halda euta ko kati?
+T: 1200 / 40 = 30.
+N: euta le 30 rupiya halne.
+G: 30
+
+### multiturn
+U: mero electric scooter ek choti pura charge garda 4 unit bijuli khanchha.
+N: thik chha, pura charge ma 4 unit.
+U: hapta ma 3 choti charge garchhu, unit ko 10 rupiya
+T: 4 x 3 = 12 unit. 12 x 10 = 120.
+N: hapta ko 120 rupiya.
+U: petrol scooter ma hapta ko 600 lagthyo. kati bachchha?
+T: 600 - 120 = 480.
+N: hapta ma 480 rupiya bachchha.
+G: 480
+
+### multiturn
+U: mero suntala bagan ma 120 bot chhan, bot bata ausat 60 kilo suntala.
+T: 120 x 60 = 7200.
+N: jamma 7200 kilo.
+U: 10% kuhinchha bhane bechna kati?
+T: 7200 x 10 / 100 = 720. 7200 - 720 = 6480.
+N: 6480 kilo bechna milchha.
+U: kilo ko 45 ma bechda?
+T: 6480 x 45 = 291600.
+N: 291600 rupiya aamdani hunchha.
+G: 291600
+
+### multiturn
+U: My library book is 6 days late. The fine is 10 rupees a day.
+T: 6 x 10 = 60.
+N: Your fine is 60 rupees.
+U: I have two books, both 6 days late.
+T: 60 x 2 = 120.
+N: For two books, the fine is 120 rupees.
+U: mero sanga 100 ko note matra chha, pugchha? nepali ma bhannus
+T: 120 - 100 = 20.
+N: pugdaina, 20 rupiya ajhai chahinchha.
+G: 20
+
+### multiturn
+U: dhunche bata gosaikunda trek: pahilo din 9 km, dosro din 7 km, tesro din 5 km.
+T: 9 + 7 + 5 = 21.
+N: jamma 21 km hidne.
+U: din ko ausat kati km?
+T: 21 / 3 = 7.
+N: din ko ausat 7 km.
+U: farkida ekai bato 2 din ma farkine bhaye din ko kati km?
+T: 21 / 2 = 10.5.
+N: farkida din ko 10.5 km hidnu parchha.
+G: 10.5
+
+### multiturn
+U: 3 jana bachcha lai school dress: euta lai 2 ota shirt, shirt 650 ko.
+T: 3 x 2 = 6 shirt. 6 x 650 = 3900.
+N: 6 ota shirt ko 3900 rupiya.
+U: euta lai 1 ota pant pani, pant 900 ko
+T: 3 x 900 = 2700. 3900 + 2700 = 6600.
+N: shirt ra pant jodda 6600 rupiya.
+U: 1000 ko 7 ota note diye kati firta?
+T: 7 x 1000 = 7000. 7000 - 6600 = 400.
+N: 7000 bata 400 rupiya firta aauchha.
+G: 400
+
+### multiturn
+U: 4 jana ko halwa ma 1 cup suji, 1 cup chini, 2 cup pani ra 4 chamcha ghiu halchhu.
+N: thik chha, 4 jana ko naap tipe.
+U: 10 jana lai banaune bhaye suji kati?
+T: 10 / 4 = 2.5 guna. 1 x 2.5 = 2.5.
+N: 2.5 cup suji.
+U: pani ra ghiu kati?
+T: pani 2 x 2.5 = 5 cup. ghiu 4 x 2.5 = 10 chamcha.
+N: 5 cup pani ra 10 chamcha ghiu.
+U: chini chai ali kam, aadha cup ghataune bhaye?
+T: chini 1 x 2.5 = 2.5 cup. 2.5 - 0.5 = 2.
+N: 2 cup chini halnus.
+G: 2
+
+### multiturn
+U: 10000 ma 10% barshik sadharan byaj le 3000 byaj aauna kati barsha lagchha?
+T: ek barsha ko byaj 10000 x 10 / 100 = 1000. 3000 / 1000 = 3.
+N: 3 barsha lagchha.
+U: yo step kasari aayo? 3000 lai 1000 le kina bhag?
+N: pahila ek barsha ma kati byaj aauchha nikaleko: 1000. 3000 byaj jamma garna kati barsha chahinchha bhanne herna 3000 lai 1000 le bhag garnu parchha: 3 barsha. jaach: 1000 x 3 = 3000.
+U: 5000 byaj aauna ni?
+T: 5000 / 1000 = 5.
+N: 5000 byaj ko lagi 5 barsha.
+G: 5
+
+### multiturn
+U: euta pasal ma 30 anda ko tray 420 ma, arko ma anda euta 15 ma.
+N: thik chha, tray 420 ma 30 anda, ki euta 15 ma.
+U: tray ma euta anda kati paryo?
+T: 420 / 30 = 14.
+N: tray ma euta anda 14 rupiya paryo.
+U: 30 ota kinda kati bachchha?
+T: 30 x 15 = 450. 450 - 420 = 30.
+N: tray kinda 30 rupiya bachchha.
+G: 30
+
+### multiturn
+U: school ma quiz pratiyogita: 6 team, team ma 4 jana.
+T: 6 x 4 = 24.
+N: 24 jana sahabhagi.
+U: sabai lai certificate, euta 30 ko
+T: 24 x 30 = 720.
+N: certificate ma 720 rupiya.
+U: pahilo team ka sabai lai 500 ko kitab uphar. jamma kharcha kati?
+T: pahilo team 4 jana: 4 x 500 = 2000. 720 + 2000 = 2720.
+N: jamma 2720 rupiya.
+G: 2720
+
+### multiturn
+U: hamro ghar ma hapta ma 3 jar khane pani lagchha, jar ko 60.
+T: 3 x 60 = 180.
+N: hapta ko 180 rupiya.
+U: mahina ma 4 hapta bhaye?
+T: 180 x 4 = 720.
+N: mahina ko 720 rupiya.
+U: 6000 ko water filter halda kati mahina ma paisa uthchha?
+T: 720 x 8 = 5760, 6000 bhanda kam. 720 x 9 = 6480, 6000 bhanda badhi.
+N: 9 mahina bhitra filter ko paisa uthchha; 8 mahina ma 5760 matra bachchha.
+G: 9
+
+### multiturn
+U: mangsir ma aalu ko bora 1200 ma kineko, chaitra ma 1800 ma bechye.
+T: 1800 - 1200 = 600.
+N: bora ko 600 rupiya nafa.
+U: 15 bora thiyo
+T: 600 x 15 = 9000.
+N: 15 bora ma 9000 rupiya nafa.
+U: cold store ko kharcha bora ko 150 lagyo bhane khud nafa?
+T: 150 x 15 = 2250. 9000 - 2250 = 6750.
+N: khud nafa 6750 rupiya.
+G: 6750
+
+### multiturn
+U: college 7:45 ma suru bhayera 1:15 ma sakinchha.
+T: 7:45 bata 12:45 samma 5 ghanta, 12:45 bata 1:15 samma 30 minet.
+N: 5 ghanta 30 minet college ma.
+U: bich ma 30 minet break chha. padhai kati?
+T: 5 ghanta 30 minet bata 30 minet ghatauda 5 ghanta.
+N: padhai 5 ghanta.
+U: 5 ota period barabar bhaye euta kati minet?
+T: 5 ghanta bhaneko 300 minet. 300 / 5 = 60.
+N: euta period 60 minet.
+G: 60
+
+### multiturn
+U: hamro tole bata 8 jana bachcha school bus chadhchhan, euta ko mahina ko 1500.
+T: 8 x 1500 = 12000.
+N: mahina ko 12000 rupiya.
+U: galti, 8 hoina 6 jana matra
+T: sachyaeko 6 jana. 6 x 1500 = 9000.
+N: 6 jana bhaye mahina ko 9000 rupiya.
+U: 10 mahina school chalchha bhane barsha ko kati?
+T: 9000 x 10 = 90000.
+N: 10 mahina ko 90000 rupiya.
+G: 90000
+
+### multiturn
+U: hamro gaun ko school ma japan bata volunteer aaunu bhayo. uhan nepali bujhnu hunna.
+N: thik chha, ma english ma bhanna sahayog garchhu.
+U: english ma bhanidinus: "hamro school ma 120 bidyarthi ra 8 shikshak chhan"
+N: "Our school has 120 students and 8 teachers."
+U: uhan sodhnu hunchha: how many students per teacher?
+T: 120 / 8 = 15.
+N: You can say: "There are 15 students for each teacher."
+U: thik chha, nepali ma pani bhannus
+N: euta shikshak lai 15 jana bidyarthi parchhan.
+G: 15
+
+### multiturn
+U: 60000 ko laptop kinne lakshya chha.
+N: ramro lakshya! 60000.
+U: aile 18000 bachat chha
+T: 60000 - 18000 = 42000.
+N: 42000 rupiya baki.
+U: mahina ko 6000 bachaye kati mahina?
+T: 42000 / 6000 = 7.
+N: 7 mahina lagchha.
+U: aba sabai kura milayera bhannus
+N: lakshya 60000, aile 18000 chha, 42000 baki. mahina ko 6000 bachaye 7 mahina ma laptop kinna sakinchha.
+G: 7
+
+### multiturn
+U: pokhara ko hotel ma mero kotha 305 ho, tesro talla ma. bihana ko khaja 7 dekhi 10 baje samma.
+N: thik chha, kotha 305, tesro talla, khaja 7 dekhi 10.
+U: lakeside ma bihana hidna kun samaya ramro?
+N: bihana 6 dekhi 7 baje samma shanta ra sital hunchha, bato pani khali hunchha.
+U: khaja kati baje samma painchha bhaneko thiye?
+N: bihana ko khaja 10 baje samma painchha.
+G: 10
+
+### multiturn
+U: 3 quintal dhan bhaneko kati kilo?
+T: 1 quintal ma 100 kilo. 3 x 100 = 300.
+N: 3 quintal bhaneko 300 kilo.
+U: 1 quintal ma 1000 kilo hunchha hola ni
+N: haina, 1 quintal ma 100 kilo hunchha. 1000 kilo lai 1 ton bhaninchha. tyasaile 3 quintal bhaneko 300 kilo.
+U: 300 kilo lai 50 kilo ko bora ma kati bora?
+T: 300 / 50 = 6.
+N: 6 bora.
+G: 6
+
+### multiturn
+U: pasale le blanket 2500 bhanyo, molmolai garda 2200 ma dine bhayo. 3 ota ko kati?
+C: 3 ota ko 7500 rupiya.
+U: 2200 ma dine bhayeko ho ni
+T: 3 x 2200 = 6600.
+N: maaf garnus, maile pahilo mol lie. 2200 ma 3 ota ko 6600 rupiya.
+U: molmolai le kati bachyo?
+T: pahilo mol ma 3 x 2500 = 7500. 7500 - 6600 = 900.
+N: molmolai le 900 rupiya bachyo.
+G: 900
+
+### multiturn
+U: kati choti bokna parla?
+N: k boknu parne ho, kati chha ra ek choti ma kati bokna sakinchha bhannus.
+U: 1000 liter ko tanki bharnu chha, mero balti 20 liter ko
+T: 1000 / 20 = 50.
+N: 50 choti bokna parchha.
+U: 2 ota balti ekai choti bokda?
+T: ek choti ma 2 x 20 = 40 liter. 1000 / 40 = 25.
+N: 25 choti bokda pugchha.
+G: 25
+
+### multiturn
+U: 3, 7, 11, 15 ... yo kram ko 10au sankhya kati?
+T: har pad ma 4 badhchha. 10au pad samma 9 choti 4 jodinchha: 9 x 4 = 36. 3 + 36 = 39.
+N: 10au sankhya 39.
+U: 9 choti kina? 10 choti hoina?
+N: pahilo sankhya 3 aafai ho, tyasma 4 jodna pardaina. dosro ma 1 choti, tesro ma 2 choti, tyasai gari 10au ma 9 choti 4 jodinchha: 9 x 4 = 36 ra 3 + 36 = 39.
+U: 20au sankhya ni?
+T: 19 x 4 = 76. 3 + 76 = 79.
+N: 20au sankhya 79.
+G: 79
+
+### multiturn
+U: gym ko fee: mahina ko 2500, 3 mahina ko 6600, barsha ko 24000.
+N: thik chha, tin ota package tipe.
+U: 3 mahina ko package ma mahina ko kati paryo?
+T: 6600 / 3 = 2200.
+N: mahina ko 2200 paryo.
+U: barsha ko ma mahina ko kati? kun sabai bhanda sasto?
+T: 24000 / 12 = 2000. 2500, 2200 ra 2000 madhye 2000 sasto.
+N: barsha ko package ma mahina ko 2000, sabai bhanda sasto.
+G: 2000
+
+### multiturn
+U: office ma 18 jana le sathi ko bidai ko lagi euta ko 300 uthaune.
+T: 18 x 300 = 5400.
+N: 5400 rupiya uthchha.
+U: uphar 4500 ra card 200
+T: 4500 + 200 = 4700. 5400 - 4700 = 700.
+N: uphar ra card pachhi 700 rupiya baki.
+U: baki le samosa kinne, euta 25 ko. kati ota aauchha?
+T: 700 / 25 = 28.
+N: 28 ota samosa aauchha.
+G: 28
+
+### multiturn
+U: aaitabar bijuli meter 2350 thiyo, aaja sanibar 2392.
+T: 2392 - 2350 = 42.
+N: 6 din ma 42 unit kharcha bhayo.
+U: din ko ausat kati unit?
+T: 42 / 6 = 7.
+N: din ko ausat 7 unit.
+U: yo dar le 30 din ma kati unit?
+T: 7 x 30 = 210.
+N: 30 din ma 210 unit.
+G: 210
+
+### multiturn
+U: mero 200 ota anda dine kukhura chhan, din ma 80% le anda dinchhan.
+T: 200 x 80 / 100 = 160.
+N: din ma 160 anda.
+U: tray ma 30 anda. din ko kati tray?
+T: 30 x 5 = 150, baki 160 - 150 = 10.
+N: din ko 5 tray pura ra 10 anda baki.
+U: tray ko 420 ma 5 tray bechda kati?
+T: 5 x 420 = 2100.
+N: 5 tray ko 2100 rupiya.
+G: 2100
+
+### multiturn
+U: my friend asked how much water I drink. I drink 6 glasses of 250 ml a day.
+T: 6 x 250 = 1500 ml, which is 1.5 litres.
+N: That is 1500 ml, or 1.5 litres a day.
+U: she says 2 litres is better. how many glasses is that?
+T: 2 litres is 2000 ml. 2000 / 250 = 8.
+N: 2 litres is 8 glasses of 250 ml.
+U: nepali ma: kati gilas badhaunu paryo?
+T: 8 - 6 = 2.
+N: din ko 2 gilas badhaunu paryo.
+G: 2
+
+### multiturn
+U: butwal bata kathmandu jaana bus 6:30 ki 9:00 ma chha, dubai lai 8 ghanta lagchha.
+N: thik chha, 6:30 ra 9:00 ko bus, 8 ghanta.
+U: beluka 4 baje kathmandu ma kaam chha. 1 ghanta agadi pugnu paryo bhane kun bus?
+T: 6:30 bata 8 ghanta pachhi 2:30. 9:00 bata 8 ghanta pachhi 5:00. 3 baje bhitra pugne 6:30 ko bus matra.
+N: 6:30 ko bus chadhnus; tyo 2:30 ma pugchha. 9:00 ko bus 5:00 ma matra pugchha.
+U: 6:30 ko bus 1 ghanta dhilo bhaye pani pugchha?
+T: 2:30 bata 1 ghanta pachhi 3:30. kaam 4 baje.
+N: 3:30 ma pugchha, kaam bhanda 30 minet agadi, tyasaile pugchha.
+G: 3:30
+
+### multiturn
+U: kotha ka 4 bhitta ma rang lagaune, jamma 48 varga meter.
+N: thik chha, 48 varga meter.
+U: 1 liter rang le 12 varga meter dhakchha. kati liter?
+T: 48 / 12 = 4.
+N: 4 liter rang.
+U: 2 coat lagaune bhaye?
+T: 4 x 2 = 8.
+N: 2 coat ko lagi 8 liter.
+U: 4 liter ko dabba 2200 ma. kati paisa?
+T: 8 / 4 = 2 dabba. 2 x 2200 = 4400.
+N: 2 dabba chahinchha, 4400 rupiya.
+G: 4400
+
+### multiturn
+U: euta gilas lassi ma 150 ml dahi, 50 ml pani ra 1 chamcha chini halchhu.
+N: thik chha, gilas pichhe 150 ml dahi, 50 ml pani ra 1 chamcha chini.
+U: 12 gilas banaune bhaye dahi kati?
+T: 12 x 150 = 1800 ml, arthat 1.8 liter.
+N: 1.8 liter dahi.
+U: chini ra pani kati?
+T: pani 12 x 50 = 600 ml. chini 12 x 1 = 12 chamcha.
+N: 600 ml pani ra 12 chamcha chini.
+U: dahi liter ko 160 bhaye dahi ma kati?
+T: 1.8 x 160 = 288.
+N: dahi ma 288 rupiya.
+G: 288
+
+### multiturn
+U: kaksha ma 18 jana keta ra 24 jana keti. anupat kati?
+T: dubai lai 6 le bhag: 18 / 6 = 3, 24 / 6 = 4. anupat 3:4.
+N: keta ra keti ko anupat 3:4.
+U: 6 le kina bhag gareko?
+N: 6 chai 18 ra 24 dubai lai pura bhag garne sabai bhanda thulo sankhya ho. dubai lai 6 le bhag garda saral anupat 3:4 aauchha.
+U: 7 jana keta thapiye anupat kati hunchha?
+T: 18 + 7 = 25 keta. 25 ra 24 lai pura bhag garne sajha sankhya 1 matra.
+N: anupat 25:24 hunchha; yo bhanda saral hudaina.
+G: 25:24
+
+### multiturn
+U: euta jutta online ma 2450 ra delivery 150. bazar ma 2650.
+T: online: 2450 + 150 = 2600. 2650 - 2600 = 50.
+N: online 2600 parchha, bazar bhanda 50 rupiya sasto.
+U: bazar jaana-aauna 60 rupiya bus lagchha bhane?
+T: bazar: 2650 + 60 = 2710. 2710 - 2600 = 110.
+N: bus jodda bazar 2710, online 110 rupiya sasto.
+U: online ma size milena bhane farkauna 100 lagchha. tyo pare?
+T: online: 2600 + 100 = 2700. bazar 2710. 2710 - 2700 = 10.
+N: farkaunu pare online 2700, bazar 2710; farak 10 rupiya matra. size ko dar chha bhane bazar ma lagaera kinnu ramro.
+G: 2700
+
+### multiturn
+U: bachcha ko chitrakala pratiyogita ma 3 umer samuha chhan, harek ma 1, 2 ra 3 sthan.
+T: 3 x 3 = 9.
+N: jamma 9 ota puraskar.
+U: pahilo 1000, dosro 700, tesro 500
+T: euta samuha: 1000 + 700 + 500 = 2200. 3 samuha: 2200 x 3 = 6600.
+N: puraskar ma 6600 rupiya.
+U: 45 jana sahabhagi lai crayon, euta 120 ko
+T: 45 x 120 = 5400. 6600 + 5400 = 12000.
+N: puraskar ra crayon jodda 12000 rupiya.
+G: 12000
+
+### multiturn
+U: ma tuition padhauchhu: 3 jana bata mahina ko 3000 ra 2 jana bata 2500.
+T: 3 x 3000 = 9000. 2 x 2500 = 5000. 9000 + 5000 = 14000.
+N: mahina ko 14000 rupiya.
+U: euta naya bidyarthi 2800 ma thapiyo
+T: 14000 + 2800 = 16800.
+N: aba mahina ko 16800 rupiya.
+U: 10% bachat garne bhaye kati?
+T: 16800 x 10 / 100 = 1680.
+N: mahina ko 1680 rupiya bachat.
+G: 1680
+
+### multiturn
+U: mero 3 bigha khet ma gahu chharne. bigha ma 20 kattha hunchha.
+T: 3 x 20 = 60.
+N: 60 kattha.
+U: kattha ma 4 kilo biu chahinchha
+T: 60 x 4 = 240.
+N: 240 kilo biu.
+U: biu kilo ko 60 bhaye kati?
+T: 240 x 60 = 14400.
+N: biu ma 14400 rupiya.
+G: 14400
+
+### multiturn
+U: SEE ko exam 10 baje suru hunchha, 3 ghanta ko.
+T: 10 baje bata 3 ghanta pachhi 1 baje.
+N: exam 1 baje sakinchha.
+U: kendra ma 15 minet agadi pugnu parchha, ghar bata 40 minet lagchha. kati baje niskane?
+T: 10:00 bhanda 15 minet agadi 9:45. 9:45 bhanda 40 minet agadi 9:05.
+N: 9:05 ma ghar bata niskanus.
+U: exam pachhi ghar pugda kati baje hunchha?
+T: 1:00 bata 40 minet pachhi 1:40.
+N: 1:40 tira ghar pugnu hunchha.
+G: 1:40
+
+### multiturn
+U: tihar ma bhai tika ko lagi mama ghar bata 8 jana ra sasurali bata 5 jana aaune.
+T: 8 + 5 = 13.
+N: jamma 13 jana.
+U: haina, mama ghar bata 8 hoina 6 jana
+T: 6 + 5 = 11.
+N: 11 jana aaune.
+U: hamro ghar ka 4 jana pani khana khane. kati plate?
+T: 11 + 4 = 15.
+N: 15 plate khana banaunus.
+G: 15
+
+### multiturn
+U: mero ghar ma euta videshi bhadawal basnuhunchha. bhada 12000, pani 500.
+N: thik chha, bhada 12000 ra pani 500.
+U: bijuli 64 unit, unit ko 12. jamma bill kati?
+T: 64 x 12 = 768. 12000 + 500 + 768 = 13268.
+N: jamma 13268 rupiya.
+U: please write the bill in simple English for him
+N: "Rent: 12000. Water: 500. Electricity (64 units at 12 rupees): 768. Total: 13268 rupees."
+U: unle 14000 diye bhane kati firta, nepali ma?
+T: 14000 - 13268 = 732.
+N: 732 rupiya firta dinus.
+G: 732
+
+### multiturn
+U: yo barsha makai ko lagi biu 2400 ko kine.
+N: thik chha, biu 2400.
+U: mal 3 bora, bora ko 1700
+T: 3 x 1700 = 5100.
+N: mal ko 5100 rupiya.
+U: jyami 5 jana 2 din, din ko 800
+T: 5 x 800 = 4000. 4000 x 2 = 8000.
+N: jyami ko 8000 rupiya.
+U: aba sabai milayera bhana ta, jamma kharcha?
+T: 2400 + 5100 + 8000 = 15500.
+N: biu 2400, mal 5100 ra jyami 8000; makai ko jamma kharcha 15500 rupiya.
+G: 15500
+
+### multiturn
+U: ma birgunj ko euta chini mill ma accountant chhu, mero manager ko naam dilip ho.
+N: ramro! birgunj ma accountant, manager dilip.
+U: hisab kitab ma galti kam garna k garnu?
+N: har din ko hisab tyai din milaunus, ra antim jod dui choti jaanchnus. bill ra receipt kram ma rakhnus, thulo rakam ma aru lai pani hernu lagaunus.
+U: in English: what is my manager's name?
+N: Your manager's name is Dilip.
+G: Dilip
+
+### multiturn
+U: hamro school ko pass dar 60% bata 75% pugyo. kati badhyo?
+T: 75 - 60 = 15 percent bindu. 15 / 60 = 0.25, arthat 25%.
+N: 15 percent bindu le badhyo; purano 60% ko tulana ma yo 25% ko badhot ho.
+U: 15% badhyo bhanda hudaina?
+T: 60 x 15 / 100 = 9. 60 + 9 = 69.
+N: "15 percent bindu" bhanda sahi hunchha. 60 ma 15% badhda 69% matra hunthyo. 75% pugna 15 bindu thapieko ho, jun 60 ko 25% ho.
+U: 100 jana ma kati jana badhi pass bhaye?
+T: 100 x 60 / 100 = 60. 100 x 75 / 100 = 75. 75 - 60 = 15.
+N: 100 jana ma 15 jana badhi pass bhaye.
+G: 15
+
+### multiturn
+U: jhola ma 3 ota kalam, 2 ota pencil ra 5 ota kapi chha. lekhne saman kati ota?
+C: 10 ota.
+U: kapi ta lekhne saman hoina ni, kalam ra pencil matra
+T: 3 + 2 = 5.
+N: maaf garnus, maile kapi pani gane. kalam ra pencil matra 3 + 2 = 5 ota.
+U: 2 ota kalam harayo bhane?
+T: 5 - 2 = 3.
+N: 3 ota lekhne saman baki: 1 kalam ra 2 pencil.
+G: 3
+
+### multiturn
+U: kati percent chhut diyo hola?
+N: saman ko suru ko mol ra tirne mol bhannus, ma percent nikalchhu.
+U: 1200 ko saman 960 ma diyo
+T: chhut 1200 - 960 = 240. 240 / 1200 = 0.2. 0.2 x 100 = 20.
+N: 20 percent chhut diyo.
+U: 25% diyeko bhaye kati tirnu parthyo?
+T: 1200 x 25 / 100 = 300. 1200 - 300 = 900.
+N: 25% chhut ma 900 rupiya tirnu parthyo.
+G: 900
+
+### multiturn
+U: hari ra sita bich 12 km duri chha. hari ghanta ko 4 km ra sita 2 km hidchhan, ek arka tira. kati samaya ma bhetchhan?
+T: duri ghatne dar 4 + 2 = 6 km ghanta ko. 12 / 6 = 2.
+N: 2 ghanta ma bhetchhan.
+U: gati kina jodeko?
+N: dubai ek arka tira hidda, harek ghanta ma hari le 4 km ra sita le 2 km ghataunchhan, tyasaile bich ko duri ghanta ma 4 + 2 = 6 km le ghatchha. 12 km sakna 12 / 6 = 2 ghanta.
+U: bhetda hari kati km hidisakeko hunchha?
+T: 4 x 2 = 8.
+N: hari 8 km hidisakeko hunchha, ra sita 4 km.
+G: 8
+
+### multiturn
+U: euta phone 25000 ma, 2 barsha warranty. arko 22000 ma, 1 barsha warranty.
+N: thik chha, 25000 ma 2 barsha, 22000 ma 1 barsha.
+U: dosro ma 1 barsha thap warranty 3500 ma kinna milchha. kun sasto?
+T: dosro: 22000 + 3500 = 25500. pahilo 25000. 25500 - 25000 = 500.
+N: thap warranty sahit dosro 25500, tyasaile pahilo 500 rupiya sasto.
+U: thap warranty nalinchhu bhane farak kati?
+T: 25000 - 22000 = 3000.
+N: warranty bina dosro 3000 rupiya sasto.
+G: 3000
+
+### multiturn
+U: khelkud ma 37 jana bidyarthi le tin khutte daud khelne, 2 jana ko jodi.
+T: 2 x 18 = 36, baki 37 - 36 = 1.
+N: 18 jodi banchha, 1 jana baki rahanchha.
+U: baki 1 jana lai k garne?
+N: tyo bidyarthi lai sahayak ki nirnayak banauna sakinchha, ki arko khel ma pahilo mauka dina sakinchha.
+U: euta jodi lai 1 ota dori, dori ko 15 rupiya. kati?
+T: 18 x 15 = 270.
+N: 18 dori ko 270 rupiya.
+G: 270
+
+### multiturn
+U: chhora ra chhori ko tiffin ma din ko euta lai 2 ota anda ra 1 ota syau.
+N: thik chha, euta lai 2 anda ra 1 syau.
+U: anda 17 ko, syau 40 ko. dubai ko din ko kati?
+T: euta ko: anda 2 x 17 = 34, syau 40. 34 + 40 = 74. dubai: 74 x 2 = 148.
+N: dubai ko din ko 148 rupiya.
+U: hapta ma 6 din school
+T: 148 x 6 = 888.
+N: hapta ma 888 rupiya.
+G: 888
+
+### multiturn
+U: 5 ota khasi bechne, ausat 28 kilo ko.
+T: 5 x 28 = 140.
+N: jamma 140 kilo.
+U: kilo ko 900 ma bechda kati?
+T: 140 x 900 = 126000.
+N: 126000 rupiya.
+U: euta khasi ghar ko lagi rakhne bhaye kati aauchha?
+T: 4 x 28 = 112. 112 x 900 = 100800.
+N: 4 ota bechda 100800 rupiya aauchha.
+G: 100800
+
+### multiturn
+U: How many minutes are in 2.5 hours?
+T: 2.5 x 60 = 150.
+N: There are 150 minutes in 2.5 hours.
+U: and how many seconds is that?
+T: 150 x 60 = 9000.
+N: That is 9000 seconds.
+U: nepali ma bhannus: 2.5 ghanta ma kati sekend?
+N: 2.5 ghanta ma 150 minet, ra 9000 sekend hunchha.
+G: 9000
