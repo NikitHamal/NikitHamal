@@ -64,9 +64,11 @@ def main():
     ap.add_argument('--out', required=True)
     a = ap.parse_args()
     cb = cfg_of(a.base)
+    # fields added after a file was written (rgate, 2026-10-24) default to off: compare the architecture, not the header
+    defaults = {'rgate': False, 'ternary': False}
+    norm = lambda c: {k: v for k, v in {**defaults, **c}.items() if k not in ('ctx', 'rope_base')}
     for m in a.models:
-        cm = {k: v for k, v in cfg_of(m).items() if k not in ('ctx', 'rope_base')}
-        assert cm == {k: v for k, v in cb.items() if k not in ('ctx', 'rope_base')}, f'{m}: architecture differs from base'
+        assert norm(cfg_of(m)) == norm(cb), f'{m}: architecture differs from base'
     base = load_exported(a.base).state_dict()
     kids = [load_exported(m).state_dict() for m in a.models]
     if a.method == 'ties':
