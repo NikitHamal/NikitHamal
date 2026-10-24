@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-24T18:55:00Z",
+ "updated": "2026-10-24T21:30:00Z",
  "live": {
-  "model": "v8g",
-  "note": "shipped 2026-10-24 18:11 UTC: bench 216 (m50 209), RW items 43 (25), everyday 41/60 (6), traps 30 (25), held-out chat 2.04 nats (5.05), EN ppl 5.2 (229); 8 fresh item sets 1750 vs 1726 (rollback: m50)"
+  "model": "v12p",
+  "note": "shipped 2026-10-24 21:22 UTC: 2,304 fresh NikBench items 1908 vs v8g 1750 (193 fixed / 35 broken); bench 236, nested 241, owner cases 21/21 in /chat (rollback: v8g)"
  },
  "boxes": [
   {
