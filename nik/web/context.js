@@ -129,6 +129,25 @@ export function dropNumberTurns(msgs) {
 const GROUPED = /(?<![\d.,])(?:\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})+,\d{3})(?!,?\d)/g;
 export const plainNumbers = (s) => s.replace(GROUPED, (m) => m.replace(/,/g, ''));
 
+// Every sum in training is written `a + b`, but people type `5674674+3644849`: digits around a bare `+` tokenize as one
+// run the model never saw, and it read the owner's sum as a story ("ek ek wakya padhchhu. (1) suru ma kitab 6 ...",
+// 2026-10-24). Operators between numbers get spaces (`*`, `×` -> x, `÷` -> /). A `-` between numbers too, except in dates
+// (2081-05-12) and ranges before a unit (`2-3 din`, `5-10 minet`). `/` is left alone: `1/3` is a fraction in training.
+const RANGE_UNIT = /^\s*(din|dina|ghanta|ghante|minet|minute|min|second|sekend|barsa|barsha|bars|mahina|hapta|jana|wata|ota|km|kg|kilo|liter|litre|meter|baje|rupiya|rs|year|years|day|days|hour|hours|minutes|times|pataka|choti)\b/i;
+export function spaceOps(s) {
+  let t = s.replace(/(\d)\s*([+*×÷])\s*(?=-?\d)/g, (_, a, op) => `${a} ${op === '×' ? 'x' : op === '÷' ? '/' : op} `)
+    .replace(/(\d)x(?=\d)/g, '$1 x ');
+  t = t.replace(/(?<![\d-])(\d+)-(\d+)(?![\d-])/g, (m, a, b, off, all) => {
+    if (a.length === 4 && /^-\d{1,2}\b/.test(all.slice(off + m.length))) return m;     // 2081-05-12 (first pair)
+    if (RANGE_UNIT.test(all.slice(off + m.length))) return m;                           // 2-3 din
+    return `${a} - ${b}`;
+  });
+  return t;
+}
+
+// what the worker (and chat_audit.mjs) hand the model: plain digits + spaced operators
+export const normalizeNumbers = (s) => spaceOps(plainNumbers(s));
+
 // The one entry point the worker uses.
 // A standalone problem gets exactly its single-turn prompt: ANY earlier exchange costs the live model accuracy
 // (long chat 60 bench items: single 46, number turns dropped 38, only `mero naam rojina ho` before it 39, old 6).

@@ -53,6 +53,8 @@ def augment(text, R, strength=0.7):
         return seg
     xa_all = R.random() < 0.3
     t = _outside_quotes(text, fn)
+    if R.random() < 0.12:                             # people type `5674674+3644849`: no spaces around operators
+        t = re.sub(r'(\d) ([-+x*/]) (?=\d)', r'\1\2', t)
     if R.random() < 0.15:
         t = t.replace('"', '')                        # people often skip quotes
     if R.random() < 0.25:
