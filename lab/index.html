@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nik live lab</title>
+<meta name="description" content="Live training status of Nik, a from-scratch tiny language model for romanized Nepali.">
+<style>
+:root{--bg:#0d0f14;--card:#151923;--line:#232838;--mut:#8b93a7;--fg:#e6e8ee;--ok:#7ee787;--run:#f2cc60;--bad:#ff7b72;--blue:#58a6ff;--vio:#d2a8ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+main{max-width:1100px;margin:0 auto;padding:18px 14px 40px}
+.hdr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 18px;margin-bottom:12px}
+.ttl{font-size:21px;font-weight:700}
+.ttl .px{display:inline-block;width:10px;height:10px;background:var(--ok);box-shadow:10px 0 var(--blue),20px 0 var(--run);margin-right:30px;vertical-align:middle}
+.sub{color:var(--mut);font-size:12.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:12.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.tile .k{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+.tile .v{font-size:22px;font-weight:700;margin-top:2px}
+.tile .s{color:var(--mut);font-size:11.5px}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600}
+.running{background:#3a2f0b;color:var(--run)}.done{background:#0f2e1a;color:var(--ok)}.queued{background:#1c2130;color:var(--mut)}
+.stalled,.failed{background:#3b1219;color:var(--bad)}.starting{background:#12263f;color:#79c0ff}
+.bar{display:flex;gap:2px;height:12px;margin:6px 0}.bar i{flex:1;background:var(--line);border-radius:1px}
+.bar i.on{background:var(--ok)}.bar i.run{background:var(--run);animation:bl 1.2s infinite}
+@keyframes bl{50%{opacity:.35}}
+.ph{display:grid;grid-template-columns:84px 1fr auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #1d2230}
+.ph:last-child{border-bottom:none}.ph .nm{font-weight:600}.ph .dt{color:var(--mut);font-size:11.5px}
+.ph .tm{text-align:right;font-size:11.5px;white-space:nowrap}
+table{border-collapse:collapse;width:100%;font-size:12.5px}td,th{padding:5px 8px;border-bottom:1px solid #1f2433;text-align:left;white-space:nowrap}
+th{color:var(--mut);font-weight:600;font-size:11.5px}.up{color:var(--ok);font-weight:700}.dn{color:var(--bad);font-weight:700}
+pre{background:#0a0c10;border:1px solid #1f2433;border-radius:8px;padding:10px;font-size:11.5px;color:#c9d1d9;overflow-x:auto;white-space:pre-wrap;max-height:280px;margin:0}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.warn{background:#3b1219;border:1px solid #5c1d27;color:#ffb3ad;border-radius:10px;padding:10px 12px;margin-bottom:12px;display:none}
+a{color:var(--blue)}
+@media (max-width:600px){.ph{grid-template-columns:70px 1fr}.ph .tm{grid-column:2;text-align:left}}
+</style>
+</head>
+<body>
+<main>
+  <div class="hdr">
+    <div class="ttl"><span class="px"></span>Nik live lab</div>
+    <div class="sub mono" id="fresh">loading...</div>
+  </div>
+  <div class="warn" id="warn"></div>
+  <div id="app"><div class="card sub">Fetching the latest status of the training box...</div></div>
+  <p class="sub">Nik is a ~20M-parameter language model built from scratch for romanized Nepali and English, running fully in the browser at
+  <a href="/chat/">/chat</a>. This page mirrors the GPU box's dashboard; Claude's sandbox writes it every ~90 seconds into
+  <a href="https://github.com/NikitHamal/NikitHamal/issues/12" target="_blank">issue #12</a>. Team channel: <a href="/agents/">/agents</a>.</p>
+</main>
+<script>
+const API = 'https://api.github.com/repos/NikitHamal/NikitHamal/issues/12';
+const NPT = (5 * 60 + 45) * 60e3;
+let etag = null, data = null, lastFetch = 0;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const hhmm = (t) => new Date(t).toISOString().slice(11, 16);
+const clock = (t) => `${hhmm(t)} UTC · ${hhmm(t + NPT)} NPT`;
+function dur(s) { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? `${h}h ${String(m).padStart(2, '0')}m` : m < 10 ? `${m}m ${String(s % 60).padStart(2, '0')}s` : `${m}m`; }
+function pixbar(p, n = 40, run = false) { const k = Math.round((p || 0) * n); let h = ''; for (let i = 0; i < n; i++) h += i < k ? '<i class="on"></i>' : (run && i === k ? '<i class="run"></i>' : '<i></i>'); return `<div class="bar">${h}</div>`; }
+function spark(v, w = 380, h = 64, color = '#7ee787') {
+  v = (v || []).filter((x) => x !== null && x !== undefined); if (v.length < 2) return `<svg width="100%" height="${h}"></svg>`;
+  const lo = Math.min(...v), hi = Math.max(...v), r = (hi - lo) || 1;
+  const pts = v.map((x, i) => `${(i * (w - 4) / (v.length - 1) + 2).toFixed(1)},${(h - 3 - (x - lo) / r * (h - 8)).toFixed(1)}`).join(' ');
+  return `<svg width="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polygon points="2,${h - 2} ${pts} ${w - 2},${h - 2}" fill="${color}" opacity=".1"/><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.8"/></svg>`;
+}
+const tile = (k, v, s = '') => `<div class="tile"><div class="k">${esc(k)}</div><div class="v mono">${v}</div><div class="s">${s}</div></div>`;
+
+function render() {
+  if (!data) return;
+  const d = data, now = Date.now(), age = (now - Date.parse(d.pushed || d.t)) / 1000;
+  // ETAs were computed when the box answered; age them by the time since
+  const since = Math.max(0, (now - Date.parse(d.t)) / 1000);
+  $('fresh').textContent = `box clock ${clock(Date.parse(d.t))} · updated ${dur(age)} ago`;
+  const w = [];
+  if (d.box_ok === false) w.push(esc(d.box_err || 'box unreachable'));
+  if (age > 240) w.push(`no update for ${dur(age)}: the driving session may be between turns`);
+  $('warn').style.display = w.length ? 'block' : 'none'; $('warn').innerHTML = w.join('<br>');
+  let h = '';
+  // box time
+  const st = Date.parse(d.box_start), hrs = d.box_hours || 12, end = st + hrs * 3600e3, left = (end - now) / 1000;
+  h += `<div class="card" style="padding:10px 14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12.5px">
+        <span>GPU box time used <b class="mono">${dur((now - st) / 1000)}</b> of ${hrs} h</span>
+        <span>box ends ≈ <b class="mono">${clock(end)}</b> · <b class="mono" style="color:${left > 3600 ? 'var(--ok)' : 'var(--bad)'}">${dur(left)} left</b></span></div>
+        ${pixbar(Math.min(1, (now - st) / (hrs * 3600e3)), 60, true)}</div>`;
+  // tiles
+  const run = (d.phases || []).filter((p) => ['running', 'starting', 'stalled'].includes(p.status));
+  const cur = run.find((p) => p.last);
+  let t = '';
+  if (d.gpu) { t += tile('GPU util', `${d.gpu.util}%`, esc((d.gpu.name || '').replace('NVIDIA ', '').slice(0, 30))); t += tile('VRAM', `${d.gpu.mem.toFixed(1)}<span style="font-size:13px"> / ${Math.round(d.gpu.memt)} GB</span>`, `${Math.round(d.gpu.pw)} W · ${d.gpu.temp}°C`); }
+  if (cur) { t += tile('throughput', `${Math.round(cur.last.tps / 1000)}k`, 'tokens / s'); t += tile('train loss', cur.last.loss.toFixed(3), `ar ${cur.last.ar.toFixed(3)}${cur.last.kl != null ? ' · kl ' + cur.last.kl.toFixed(4) : ''}`); }
+  if (d.gpu && d.gpu.hist && d.gpu.hist.length > 1) t += `<div class="tile"><div class="k">GPU util history</div>${spark(d.gpu.hist, 300, 40, '#58a6ff')}</div>`;
+  h += `<div class="grid">${t}</div>`;
+  // now running
+  let nr = '';
+  for (const p of run) {
+    const eta = p.eta_s != null ? Math.max(0, p.eta_s - since) : null;
+    nr += `<div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px">
+      <div><span class="pill ${p.status}">${p.status.toUpperCase()}</span> <b style="font-size:15px">${esc(p.name)}</b></div>
+      <div class="mono" style="font-size:12.5px">${p.progress != null ? Math.round(100 * p.progress) + '%' : ''}${eta != null ? ` · ETA ${dur(eta)} · ≈ ${clock(now + eta * 1000)}` : ''}</div></div>
+      ${pixbar(p.progress, 60, true)}`;
+    if (p.last) nr += `<div class="sub mono">step ${p.last.step.toLocaleString()}${p.steps ? ' / ' + p.steps.toLocaleString() : ''} · ${p.last.min.toFixed(1)} min · lr ${p.last.lr.toExponential(1)} · grad-norm ${p.last.gn.toFixed(2)} · ${p.last.tps.toLocaleString()} tok/s</div>
+      <div class="row2" style="margin-top:8px"><div><div class="sub">train loss</div>${spark(p.loss)}</div>${p.kl && p.kl.length ? `<div><div class="sub">KL to the live model (anchor)</div>${spark(p.kl, 380, 64, '#d2a8ff')}</div>` : ''}</div>`;
+    if (p.samples && p.samples.length) nr += `<div class="sub" style="margin-top:8px">latest samples</div><pre>${esc(p.samples.join('\n'))}</pre>`;
+    if (p.detail) nr += `<div class="sub" style="margin-top:6px">${esc(p.detail)}</div>`;
+  }
+  if (!run.length) { const nx = (d.phases || []).find((p) => p.status === 'queued'); nr = `<div class="sub">nothing running right now${nx ? ' · next: ' + esc(nx.name) : ''}</div>`; }
+  h += `<div class="card"><h3>now running</h3>${nr}</div>`;
+  // plan
+  let tt = now, total = 0, rows = '';
+  for (const p of d.phases || []) {
+    let tm;
+    if (p.status === 'done') tm = 'done' + (p.elapsed_s ? ' · ' + dur(p.elapsed_s) : '');
+    else if (['running', 'starting', 'stalled'].includes(p.status)) { const r = p.eta_s != null ? Math.max(0, p.eta_s - since) : (p.est_min || 0) * 60; tt += r * 1000; total += r; tm = `ends ≈ ${hhmm(tt)} UTC`; }
+    else { const r = (p.est_min || 0) * 60; tt += r * 1000; total += r; tm = `~${dur(r)} · ends ≈ ${hhmm(tt)}`; }
+    rows += `<div class="ph"><div><span class="pill ${p.status}">${p.status}</span></div><div><div class="nm">${esc(p.name)}</div><div class="dt">${esc(p.detail)}</div>
+      ${['running', 'starting'].includes(p.status) ? pixbar(p.progress, 50, true) : ''}</div><div class="tm mono">${tm}</div></div>`;
+  }
+  const nd = (d.phases || []).filter((p) => p.status === 'done').length;
+  h += `<div class="card"><h3>plan & timeline</h3><div class="sub" style="margin-bottom:6px">${nd}/${(d.phases || []).length} steps done · plan finishes ≈ <b class="mono">${clock(tt)}</b> (in ${dur(total)})</div>${rows}</div>`;
+  // scores
+  const sc = d.scores || {};
+  if (sc.cols && sc.cols.length) {
+    let tb = `<tr><th>gate row</th><th>live m50</th>${sc.cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr>`;
+    for (const [k, r] of Object.entries(sc.rows || {})) {
+      tb += `<tr><td>${esc(k)}</td><td class="mono">${esc(r.live)}</td>` + sc.cols.map((c) => { if (!r[c]) return '<td></td>'; const [b, f] = r[c]; return `<td class="mono ${f.startsWith('+') ? 'up' : f.startsWith('REGRESSION') ? 'dn' : ''}">${esc(b)}</td>`; }).join('') + '</tr>';
+    }
+    const vr = Object.entries(sc.verdicts || {}).map(([c, v]) => `<div class="mono" style="font-size:12px;margin-top:4px"><b>${esc(c)}</b>: <span class="${v.startsWith('SHIP') ? 'up' : 'dn'}">${esc(v)}</span></div>`).join('');
+    h += `<div class="card"><h3>ship gate scoreboard</h3><div style="overflow-x:auto"><table>${tb}</table></div>${vr}<div class="sub" style="margin-top:6px">green = better than the live model, red = worse (blocks shipping); * = sanity rows</div></div>`;
+  } else h += `<div class="card"><h3>ship gate scoreboard</h3><div class="sub">no gate finished yet. Every candidate is scored against the live model (m50) on the same items; it ships only if it is ≥ live on every row.</div></div>`;
+  if (d.notes && d.notes.length) h += `<div class="card"><h3>what we are testing</h3><ul style="margin:0;padding-left:18px">${d.notes.map((n) => `<li style="margin:3px 0">${esc(n)}</li>`).join('')}</ul></div>`;
+  h += `<div class="row2"><div class="card"><h3>milestones</h3><pre>${esc((d.events || []).join('\n')) || '-'}</pre></div>
+        <div class="card"><h3>live log</h3><div class="sub mono">${esc(d.tail_src || '')}</div><pre>${esc((d.tail || []).join('\n')) || '-'}</pre></div></div>`;
+  $('app').innerHTML = h;
+}
+
+async function poll() {
+  try {
+    const hd = { Accept: 'application/vnd.github+json' };
+    const tok = localStorage.getItem('ag-token'); if (tok) hd.Authorization = 'Bearer ' + tok;   // same token as /agents, if set
+    if (etag) hd['If-None-Match'] = etag;
+    const r = await fetch(API, { headers: hd, cache: 'no-store' });
+    lastFetch = Date.now();
+    if (r.status === 200) {
+      etag = r.headers.get('etag');
+      const j = await r.json(), m = (j.body || '').match(/```json\n([\s\S]*?)\n```/);
+      if (m) { data = JSON.parse(m[1]); render(); }
+    } else if (r.status !== 304) {
+      $('fresh').textContent = r.status === 403 ? 'GitHub rate limit reached: retrying in a minute' : 'GitHub error ' + r.status;
+    }
+  } catch (e) { $('fresh').textContent = 'offline? ' + e.message; }
+  setTimeout(poll, document.hidden ? 120000 : 45000);
+}
+setInterval(render, 1000);   // tick clocks and ETAs between fetches
+document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - lastFetch > 40000) poll(); });
+poll();
+</script>
+</body>
+</html>

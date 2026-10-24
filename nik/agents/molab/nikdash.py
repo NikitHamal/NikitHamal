@@ -404,6 +404,39 @@ def sec_notes(plan):
     return _box('what we are testing', '<ul style="margin:0;padding-left:18px;font-size:13px">' + ''.join(f'<li style="margin:3px 0">{_esc(n)}</li>' for n in notes) + '</ul>')
 
 
+def status(now=None):
+    """everything the dashboard shows, as plain JSON (the sandbox pusher mirrors it to the public /lab page)."""
+    now = now or _now()
+    try:
+        plan = json.load(open(PLAN))
+    except Exception:
+        plan = {'title': 'Nik live lab', 'phases': []}
+    states = [phase_state(p, now) for p in plan.get('phases', [])]
+    g, hst = gpu(), host()
+    cols, rows, verdicts = scoreboard()
+    ev = []
+    for f in (f'{D}/events.log', '/tmp/v2/progress.log'):
+        ev += [l for l in _read(f).splitlines() if l.strip()]
+    tail_src = next((p.get('tail') or p.get('log') for p, s in zip(plan.get('phases', []), states)
+                     if s['status'] in ('running', 'starting', 'stalled') and (p.get('tail') or p.get('log'))), None)
+    tail = [l for l in _read(tail_src, 20000).splitlines() if l.strip() and not l.startswith('+ ')][-12:] if tail_src else []
+    r4 = lambda x: None if x is None else round(x, 4)
+    phases = []
+    for p, s in zip(plan.get('phases', []), states):
+        st = s.get('steps') or []
+        phases.append({'name': p['name'], 'kind': p.get('kind', 'task'), 'status': s['status'], 'progress': r4(s.get('progress')),
+                       'eta_s': None if s.get('eta_s') is None else int(s['eta_s']), 'elapsed_s': None if s.get('elapsed_s') is None else int(s['elapsed_s']),
+                       'est_min': p.get('est_min'), 'steps': p.get('steps'), 'detail': (s.get('detail') or p.get('desc', ''))[:240],
+                       'last': st[-1] if st else None, 'val': (s.get('vals') or [None])[-1],
+                       'loss': [round(x['loss'], 4) for x in st][-150:], 'kl': [r4(x['kl']) for x in st][-150:] if st and st[-1]['kl'] is not None else [],
+                       'samples': (s.get('samples') or [])[:6]})
+    return {'t': now.isoformat(timespec='seconds'), 'title': plan.get('title'), 'box_start': plan.get('box_start'), 'box_hours': plan.get('box_hours'),
+            'notes': plan.get('notes', []), 'phases': phases,
+            'gpu': None if not g else {k: (round(v, 2) if isinstance(v, float) else v) for k, v in g.items() if k != 'hist'} | {'hist': [h[1] for h in g.get('hist', [])][-120:]},
+            'host': hst, 'scores': {'cols': cols, 'rows': rows, 'verdicts': verdicts}, 'events': sorted(set(ev))[-16:],
+            'tail_src': tail_src, 'tail': tail}
+
+
 def render(mo=None):
     now = _now()
     try:
@@ -416,13 +449,4 @@ def render(mo=None):
              _safe(sec_now, plan, states, now), _safe(sec_plan, plan, states, now), _safe(sec_scores),
              _safe(sec_notes, plan), _safe(sec_logs, plan, states), '</div>']
     out = ''.join(parts)
-    try:   # a compact machine-readable snapshot for the public page pusher (sandbox side)
-        snap = {'t': now.isoformat(), 'title': plan.get('title'), 'box_start': plan.get('box_start'), 'box_hours': plan.get('box_hours'),
-                'phases': [{'name': p['name'], 'status': s['status'], 'progress': s.get('progress'), 'eta_s': s.get('eta_s'),
-                            'elapsed_s': s.get('elapsed_s'), 'est_min': p.get('est_min'), 'detail': (s.get('detail') or p.get('desc', ''))[:200],
-                            'last': (s.get('steps') or [None])[-1], 'loss_hist': [x['loss'] for x in (s.get('steps') or [])][-120:]}
-                           for p, s in zip(plan.get('phases', []), states)]}
-        json.dump(snap, open(f'{D}/snapshot.json', 'w'))
-    except Exception:
-        pass
     return mo.Html(out) if mo is not None else out
