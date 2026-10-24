@@ -1,25 +1,17 @@
 {
- "updated": "2026-10-24T08:03:45Z",
+ "updated": "2026-10-24T18:55:00Z",
  "live": {
-  "model": "m50",
-  "note": "NikBench 72.6% (nested 77.1%) \u00b7 ladder L2 12/12 \u00b7 understanding 19/26 \u00b7 traps 9/12 \u00b7 math 94% (rollback: v4f)"
+  "model": "v8g",
+  "note": "shipped 2026-10-24 18:11 UTC: bench 216 (m50 209), RW items 43 (25), everyday 41/60 (6), traps 30 (25), held-out chat 2.04 nats (5.05), EN ppl 5.2 (229); 8 fresh item sets 1750 vs 1726 (rollback: m50)"
  },
  "boxes": [
   {
-   "name": "sandbox (Claude)",
-   "gpu": "CPU only: data until the next box",
-   "job": "hand-written data: 42,944 / 100,000 examples",
-   "progress": 0.429,
-   "detail": "round 11: Y knowledge 952 + write 617; Z timed out before saving (3rd hung request): retrying as Z2 with 30-example chunks",
-   "eta": "-"
-  },
-  {
-   "name": "next box",
-   "gpu": "owner supplies",
-   "job": "waiting: build_mix_v2 + run_v2.sh (hand.jsonl at 6% of tokens), 3 seeds + soup, gates",
+   "name": "molab box (Claude)",
+   "gpu": "RTX PRO 6000 Blackwell, until ~23:53 UTC",
+   "job": "Nik-deep v2 (d2g, gated 36 layers), v10p (v8g + word-surface math), RFT round r1g, self-distilled follow-ups from v8g",
    "progress": null,
-   "detail": "box 1 ended 2026-10-22 ~20:55 UTC; results on Kaggle",
-   "eta": "-"
+   "detail": "live status: nikit.is-a.dev/lab",
+   "eta": "23:53 UTC"
   }
  ],
  "scoreboard": {
