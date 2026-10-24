@@ -109,6 +109,7 @@ def main():
     ap.add_argument('--hand-kl-cats', default='', help='with --hand-nokl: these hand categories keep the anchor (e.g. math-word,reasoning)')
     ap.add_argument('--nokl-src', default='', help='other sources trained without the KL anchor (e.g. english: m50 cannot write English, so anchoring to it holds English back)')
     ap.add_argument('--hand-holdout', type=float, default=0.0, help='fraction of hand conversations kept out -> <out>/hand_heldout.jsonl')
+    ap.add_argument('--rft', default='', help='jsonl of verified self-generated rows (scripts/rft_collect.py), used as source "rft" (set --share rft=...)')
     a = ap.parse_args()
     shares = dict(SHARES)
     for s in a.share:
@@ -140,7 +141,7 @@ def main():
     files = {}
     if 'english' in shares:
         files['english'] = [json.loads(l) for l in open(os.path.join(a.en, 'en_sft.jsonl')) if l.strip()]
-    for k, p in (('selfrows', a.selfrows), ('hand', a.hand)):
+    for k, p in (('selfrows', a.selfrows), ('hand', a.hand), ('rft', a.rft)):
         if k in shares:
             files[k] = [json.loads(l) for l in open(p) if l.strip()]
     if 'hand' in files and a.hand_holdout > 0:
