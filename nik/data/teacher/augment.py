@@ -25,6 +25,8 @@ SWAPS = [
     (r'\bramro\b', ['ramro', 'ramro', 'raamro']),
 ]
 CASUAL = [(r'chh', ['chh', 'chh', 'chh', 'ch', 'x']), (r'\bbh', ['bh', 'bh', 'v']), (r'aa', ['aa', 'aa', 'a'])]
+# the owner (2026-10-24): "most of us, including me, use xa instead of chha": a whole message in xa spelling, consistently
+XA = [(r'chh', 'x'), (r'\bch(?=a\b)', 'x'), (r'\bchaina\b', 'xaina')]
 PREFIX = ['', '', '', '', 'hey nik, ', 'nik, ', 'ekchin, ', 'plz ', 'ali help gara: ', 'ok ', 'dai, ', 'sun na, ', 'hello, ']
 SUFFIX = ['', '', '', '', ' plz', ' hai', ' ta', ' la', ' na', ' hola']
 
@@ -45,7 +47,11 @@ def augment(text, R, strength=0.7):
         if R.random() < 0.3:
             for pat, alts in CASUAL:
                 seg = re.sub(pat, lambda m: R.choice(alts), seg)
+        elif xa_all:
+            for pat, rep in XA:
+                seg = re.sub(pat, rep, seg)
         return seg
+    xa_all = R.random() < 0.3
     t = _outside_quotes(text, fn)
     if R.random() < 0.15:
         t = t.replace('"', '')                        # people often skip quotes

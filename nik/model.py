@@ -307,12 +307,22 @@ def two_stream_mask_seg(L: int, B: int, offset: int, s: int, Ln: int, device) ->
     return torch.cat([top, bot], dim=0)
 
 
-def _kl_to_ref(ref, clean, logits, w, kl):
+def _kl_to_ref(ref, clean, logits, w, kl, tgt=None):
     """Self-distillation anchor (Claude, 2026-10-22): KL(ref || student) on the target positions, ref = the frozen
     live model. With kl <= 1 the gold token still wins the argmax wherever CE supervises it (optimal p(y) >=
-    (1 + kl * p_ref(y)) / (1 + kl)), while every unsupervised direction stays near the reference: new skills without drift."""
+    (1 + kl * p_ref(y)) / (1 + kl)), while every unsupervised direction stays near the reference: new skills without drift.
+
+    Competence-gated anchor (Claude, 2026-10-24; hybrid_loss.kl_gate): each position's KL weight is multiplied by the
+    reference's own probability of the gold token, p_ref(y). Where the parent already knows the answer the anchor is
+    full (its skills are protected); where it is clueless or confidently wrong (p_ref(y) ~ 0: natural chat the template
+    model never saw, a 7-digit column it never wrote) the anchor fades and the student learns the new distribution
+    freely. No per-source labels: the parent's own competence decides, token by token."""
     with torch.no_grad():
         lr = F.log_softmax(ref(clean).float(), -1)
+        if tgt is not None and hybrid_loss.kl_gate:
+            g = lr.gather(-1, tgt.unsqueeze(-1)).squeeze(-1).exp()
+            hybrid_loss.last_gate = (g * w).sum() / w.sum().clamp(min=1)
+            w = w * g
     lp = F.log_softmax(logits.float(), -1)
     v = (lr.exp() * (lr - lp)).sum(-1)
     t = (v * w).sum() / w.sum().clamp(min=1)
@@ -346,7 +356,7 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
         if user_w > 0:     # also learn the user's side a little: models the *questions*, not just the answers
             ar_w = ar_w + user_w * (~lm[:, 1:]).float()
         ar = (F.cross_entropy(logits.reshape(-1, cfg.vocab).float(), tgt.reshape(-1), reduction='none') * ar_w.reshape(-1)).sum() / ar_w.sum().clamp(min=1)
-        total = ar + (_kl_to_ref(ref, clean, logits, klw, kl) if ref is not None and kl > 0 else 0)
+        total = ar + (_kl_to_ref(ref, clean, logits, klw, kl, tgt) if ref is not None and kl > 0 else 0)
         return total, ar.detach(), torch.zeros((), device=x.device)
     B = cfg.block
     offset = int(torch.randint(0, B, (1,)))
@@ -374,11 +384,13 @@ def hybrid_loss(model, x: torch.Tensor, loss_mask: torch.Tensor | None = None,
     df = (F.cross_entropy(ln.reshape(-1, cfg.vocab).float(), seg.reshape(-1), reduction='none') * mf.reshape(-1)).sum() / mf.sum().clamp(min=1)
     total = ar + diff_weight * df
     if ref is not None and kl > 0:
-        total = total + _kl_to_ref(ref, clean, lc, klw, kl)
+        total = total + _kl_to_ref(ref, clean, lc, klw, kl, tgt)
     return total, ar.detach(), df.detach()
 
 
 hybrid_loss.last_kl = torch.zeros(())
+hybrid_loss.kl_gate = False
+hybrid_loss.last_gate = torch.zeros(())
 
 
 # --------------------------------------------------------------------------
