@@ -85,6 +85,32 @@ def colthink(q, think):
     return None
 
 
+def bench_guard(rows, root):
+    """NikBench stays held out by PROBLEM, not by surface (Claude, 2026-10-24): generators now ask arithmetic in the
+    benchmark's own phrasings ('a ra b ko jod kati?', 'a ko b guna kati?'), and an exact benchmark problem could appear
+    in training by chance. Drop any row whose first user turn is short and carries exactly the numbers of a NikBench
+    item (plain + nested sets, n=16, and the confirm.sh seeds) in the same order."""
+    import re
+    import bench
+    keys = set()
+    for nested in (False, True):
+        for seed in (2026, 7, 11, 13, 17):
+            for _, q, _ in bench.items(16, seed=seed, nested=nested):
+                nums = tuple(re.findall(r'\d+', q))
+                if nums:
+                    keys.add(nums)
+    out, dropped = [], 0
+    for line in rows:
+        r = json.loads(line)
+        u = next((m['content'] for m in r['messages'] if m['role'] == 'user'), '')
+        if len(u) < 140 and tuple(re.findall(r'\d+', u)) in keys:
+            dropped += 1
+            continue
+        out.append(line)
+    print(f'bench guard: dropped {dropped} rows carrying a NikBench problem ({len(keys)} problems held out)', flush=True)
+    return out
+
+
 def expand_hand(rows):
     """One training row per trained Nik turn of a hand-written conversation, with the history the way /chat sends it
     (chat/index.html passes {role, content} only): earlier Nik turns without their think and context only
@@ -226,6 +252,7 @@ def main():
         print(f'{src:11s} {n:9,} rows {got / 1e6:7.1f}M tokens (target {share:.1%})', flush=True)
     rows = [l + '\n' for l in rows]
     rows = make_sft2._drop_eval_prompts(rows, os.path.join(ROOT, 'nik'))
+    rows = bench_guard(rows, os.path.join(ROOT, 'nik'))
     R.shuffle(rows)
     with Pool(a.workers, initializer=_init) as pool:
         parts = pool.map(_render, rows, chunksize=2000)
