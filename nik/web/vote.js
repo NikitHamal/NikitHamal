@@ -25,9 +25,23 @@ export function consistent(p) {
   return n !== null && r.has(Number(n));
 }
 
-// paths: [{think, answer, conf}] -> {answer: the winning final number, path: a path with it, agree, k, filtered}
-export function vote(paths) {
-  const ok = paths.filter(consistent);
+// Faithfulness filter (Claude, 2026-10-24): a path that copied a number from the question wrong computes something else.
+// Owner's case `5746673 + 574673 kati hunxa?`: every column step right, but the think adds `574667 + 574673` (a dropped
+// repeated digit), and the pencil cannot see it (574667 + 574673 = 1149340 is a true equation). When the question has
+// long numbers (4+ digits), a path counts only if its think contains each of them, digit for digit.
+export const longNumbers = (q) => (q || '').replace(/,/g, '').match(/\d{4,}/g) || [];
+export function faithful(p, nums) {
+  if (!nums || !nums.length || !p.think) return true;
+  const t = p.think.replace(/,/g, '');
+  return nums.every((n) => t.includes(n));
+}
+
+// paths: [{think, answer, conf}], question: the user's last message (optional)
+//   -> {answer: the winning final number, path: a path with it, agree, k, filtered, unfaithful}
+export function vote(paths, question) {
+  const nums = longNumbers(question);
+  const okF = paths.filter((p) => consistent(p) && faithful(p, nums));
+  const ok = okF.length ? okF : paths.filter(consistent);
   const pool = ok.length ? ok : paths;
   const score = new Map(), count = new Map();
   for (const p of pool) {
@@ -40,5 +54,6 @@ export function vote(paths) {
   if (!score.size) return null;
   const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
   const path = pool.find((p) => finalNumber(p.answer) !== null && String(Number(finalNumber(p.answer))) === best);
-  return { answer: best, path, agree: count.get(best), k: paths.length, filtered: paths.length - ok.length };
+  return { answer: best, path, agree: count.get(best), k: paths.length, filtered: paths.length - ok.length,
+           unfaithful: paths.filter((p) => !faithful(p, nums)).length };
 }

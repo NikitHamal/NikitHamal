@@ -15,3 +15,18 @@ t('consistent paths outvote louder inconsistent ones', () => {
 t('falls back to all paths when none is consistent', () => assert.equal(vote([P('2 x 3 = 6.', 'jawaf 5.'), P('2 x 3 = 6.', 'jawaf 5.')]).answer, '5'));
 t('5.0 and 5 are the same number', () => assert.equal(vote([P('5000 / 1000 = 5.0.', '5 kilo ho.')]).answer, '5'));
 console.log(`${n} tests OK`);
+
+// faithfulness (2026-10-24): a path whose think dropped a digit of the question's number does not vote
+{
+  const { vote: v2, faithful: f2, longNumbers: ln } = await import('./vote.js');
+  const q = '5746673 + 574673 kati hunxa?';
+  const bad = { think: 'ek: 7 + 3 = 10 ... tyasaile 574667 + 574673 = 1149340.', answer: 'jawaf 1149340 ho.', conf: 0.9 };
+  const good = { think: 'sankhya haru: 5746673 (7 ank) ra 574673 (6 ank). ... tyasaile 5746673 + 574673 = 6321346.', answer: 'jawaf 6321346 ho.', conf: 0.5 };
+  if (JSON.stringify(ln(q)) !== '["5746673","574673"]') throw new Error('longNumbers');
+  if (f2(bad, ln(q)) || !f2(good, ln(q))) throw new Error('faithful');
+  const r = v2([bad, bad, good], q);
+  if (r.answer !== '6321346' || r.unfaithful !== 2) throw new Error('faithful vote ' + JSON.stringify(r));
+  const r0 = v2([bad, bad, good]);   // no question: old behaviour (confidence wins)
+  if (r0.answer !== '1149340') throw new Error('no-question vote');
+  console.log('ok a path that mis-copied the question\'s number does not vote');
+}

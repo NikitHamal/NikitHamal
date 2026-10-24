@@ -6,7 +6,7 @@
 import { readFileSync } from 'node:fs';
 import { NikModel, Tokenizer, generate, parseBin, TOK } from './nik.js';
 import { contextFor, plainNumbers } from './context.js';
-import { vote, finalNumber } from './vote.js';
+import { vote, finalNumber, longNumbers, faithful } from './vote.js';
 
 const args = process.argv.slice(2);
 let modelPath = new URL('./model/nik-0.1.bin', import.meta.url).pathname, seeds = [1], K = 5, file = null, verbose = true, oldVote = false;
@@ -66,7 +66,9 @@ function reply(msgs) {   // worker.js run(): buildPrompt + first sample + confid
       const best = [...score.entries()].sort((a, b) => b[1] - a[1])[0][0];
       return { ...paths.find((p) => finalNumber(p.answer) === best), promptLen: prompt.length };
     }
-    const v = vote(paths);
+    const q = plainNumbers(msgs.filter((m) => m.role === 'user').slice(-1)[0]?.content || ''), nums = longNumbers(q);
+    for (let i = 0; i < 3 && nums.length && !paths.some((p) => faithful(p, nums)); i++) paths.push(once(prompt, { ...opts, temperature: 0.9 }));
+    const v = vote(paths, q);
     return retryEmpty({ ...(v ? v.path : first), promptLen: prompt.length }, prompt);
   }
   return retryEmpty({ ...first, promptLen: prompt.length }, prompt);
