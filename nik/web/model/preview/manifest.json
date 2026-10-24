@@ -1,14 +1,15 @@
 {
  "name": "nik 0.1",
- "tag": "v2s14",
- "file": "nik-0.1.v2s14.bin",
+ "tag": "v3s14",
+ "file": "nik-0.1.v3s14.bin",
  "bytes": 20689712,
- "md5": "70671cbf9c639610b8ede129cd0516ff",
- "version": "2026-10-24T12:48Z-v2s14",
- "trained": "preview v2s14 (candidate under test, not shipped)",
- "note": "m50 + 850 steps on the k13 recipe + 42,944 hand-written conversations (6% of tokens), KL-anchored to m50. First candidate of 2026-10-24.",
+ "md5": "60bc88dd3a399221ac38bef8cb0bfa00",
+ "version": "2026-10-24T14:08Z-v3s14",
+ "trained": "preview v3s14 (candidate under test, not shipped)",
+ "note": "m50 + 1500 steps: k13 recipe + 42,117 hand-written conversations at 10% of tokens, FREE of the KL anchor (chat may leave m50's style). Best so far on real chat; misses the strict gate only on nested (-8) and shapes (-1).",
  "eval": {
-  "gate_vs_live_m50": "bench 210 (209), nested 218 (222), understanding 21 (19), math 98% (94%), RW items 37 (25), reading 7 (5), traps 29 (25), everyday 18/60 (6), money 19 (18), owner cases 24/25 (25), EN qa ppl 14 (229), EN reply 53 (54)",
-  "verdict": "NO SHIP (strict rule): nested, owner cases, EN reply"
+  "gate_vs_live_m50": "bench 209 (=), nested 214 (222), understanding 19 (=), math 97.5% (94%), RW items 35 (25), reading pairs 9 (5), ladder 45 (44), traps 26 (25), everyday 21/60 (6), money 25/30 (18), mention 29 (28), owner cases 25/25 (=), EN qa ppl 13 (229), EN reply 56 (54), shapes 3 (4)",
+  "held_out_hand_chat": "loss 2.20 nats/token (live 5.05), gold answers 51/317 (live 26)",
+  "verdict": "NO SHIP (strict rule): nested 214 < 222, shapes 3 < 4"
  }
 }
