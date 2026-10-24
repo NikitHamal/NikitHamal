@@ -1,0 +1,1012 @@
+### math-word
+U: kathmandu bata ilam jaane raati bus beluka 4:30 ma chhutyo ra 14 ghanta 15 minet pachhi pugyo. bus kati baje pugyo?
+T: beluka 4:30 bata 12 ghanta pachhi bihana 4:30. aru 2 ghanta 15 minet thapda bihana 6:45.
+N: bus bholipalta bihana 6:45 ma ilam pugyo.
+G: 6:45
+
+### math-word
+U: karkhana ma mero shift bihana 6:00 dekhi diuso 2:00 samma chha. bich ma 15 minet ka 2 chiya break ra 30 minet khana break hunchha. kaam kati ghanta hunchha?
+T: shift: 6:00 bata 2:00 samma 8 ghanta. break: 15 + 15 + 30 = 60 minet, arthat 1 ghanta. kaam: 8 - 1 = 7 ghanta.
+N: shift ma 7 ghanta kaam hunchha.
+G: 7
+
+### math-word
+U: My flight from Kathmandu to Doha takes 4 hours 30 minutes, and the next flight leaves 2 hours 50 minutes after landing. If the first flight leaves at 10:40 am Nepal time, when does the second flight leave, in Nepal time?
+T: 4 hours 30 minutes plus 2 hours 50 minutes is 7 hours 20 minutes. 10:40 am plus 7 hours is 5:40 pm, and 20 more minutes is 6:00 pm.
+N: The second flight leaves at 6:00 pm Nepal time.
+G: 6:00
+
+### math-word
+U: trek ma hami bihana 8:50 ma tadapani bata hidyau. ghandruk samma 3 ghanta 20 minet ko bato thiyo ra bich ma 40 minet khana khayau. kati baje ghandruk pugyau?
+T: jamma: 3 ghanta 20 minet + 40 minet, arthat 4 ghanta. 8:50 bata 4 ghanta pachhi 12:50.
+N: tapai haru diuso 12:50 ma ghandruk pugnubhayo.
+G: 12:50
+
+### math-word
+U: mero office ma 30 jana kaam garchhan. office bihana 10:00 dekhi beluka 5:00 samma hunchha, hapta ma 6 din. ma hapta ma jamma kati ghanta office ma bitauchhu?
+T: din ma: 10:00 bata 5:00 samma 7 ghanta. hapta ma: 7 x 6 = 42 ghanta. office ka 30 jana yo hisab ma chahindaina.
+N: tapai hapta ma 42 ghanta office ma bitaunuhunchha.
+G: 42
+
+### math-word
+U: 180 km ko yatra ma bus le ghanta ko 45 km ko gati rakhyo ra 2 thau ma 15 minet ka dar le rokiyo. yatra ma jamma kati samaya lagyo?
+T: gudne samaya: 180 / 45 = 4 ghanta. rokiyeko: 2 x 15 = 30 minet. jamma: 4 ghanta 30 minet.
+N: yatra ma jamma 4 ghanta 30 minet lagyo.
+G: 4 ghanta 30 minet
+
+### math-word
+U: truck bihana 8:00 ma ghanta ko 40 km ko gati ma niskyo. car 9:00 ma tyahi thau bata ghanta ko 60 km ko gati ma pachhi lagyo. car le truck lai kati baje bhetchha?
+T: 9:00 samma truck 40 km agadi pugyo. car ko gati badhi: 60 - 40 = 20 km/ghanta. 40 km ko farak: 40 / 20 = 2 ghanta. 9:00 bata 2 ghanta pachhi 11:00.
+N: car le truck lai 11:00 baje bhetchha.
+G: 11:00
+
+### math-word
+U: 50 seat ko bus highway ma ghanta ko 54 km gudchha. second ma kati meter gudchha?
+T: 54 km bhaneko 54000 meter, 1 ghanta bhaneko 3600 second. 54000 / 3600 = 15. seat 50 wata bhanne kura yo hisab ma chahindaina.
+N: bus second ma 15 meter gudchha.
+G: 15
+
+### math-word
+U: A small plane flies 600 km in 1 hour 15 minutes. What is its speed in km per hour?
+T: 1 hour 15 minutes is 1.25 hours. Speed: 600 / 1.25 = 480 km per hour.
+N: The plane's speed is 480 km per hour.
+G: 480
+
+### math-word
+U: trek ma hami din ma 6 ghanta hidchhau ra ghanta ko 2.5 km jaanchhau. 75 km ko trek sakna kati din lagchha?
+T: din ma: 6 x 2.5 = 15 km. 75 / 15 = 5 din.
+N: 75 km ko trek 5 din ma sakinchha.
+G: 5
+
+### math-word
+U: hari sir 23 barsha ko umer ma 2045 saal ma jagir suru garnubhayo. 58 barsha ma awakash hune bhaye kun saal ma awakash hunuhunchha?
+T: 58 - 23 = 35 barsha jagir. 2045 + 35 = 2080.
+N: hari sir 2080 saal ma awakash hunuhunchha.
+G: 2080
+
+### math-word
+U: bus driver dai le 19 barsha ko umer ma licence liye. aile 47 barsha ka bhae. kati barsha dekhi gadi chalaudai chhan?
+T: 47 - 19 = 28.
+N: driver dai 28 barsha dekhi gadi chalaudai chhan.
+G: 28
+
+### math-word
+U: An engineer was 30 when the bridge she designed was built. She is 52 now, and the bridge has 6 spans. How old is the bridge?
+T: 52 - 30 = 22 years. The 6 spans are not needed.
+N: The bridge is 22 years old.
+G: 22
+
+### math-word
+U: ma 25 barsha ko hu. mero ek jana sathi ma bhanda 2 barsha jetho ra arko 3 barsha kanchho. hami tin jana ko umer jodda kati?
+T: jetho sathi: 25 + 2 = 27. kanchho sathi: 25 - 3 = 22. jamma: 25 + 27 + 22 = 74.
+N: tin jana ko umer jodda 74 barsha hunchha.
+G: 74
+
+### math-word
+U: 27 jana yatri lai 12 seat ko hiace ma pathaunu chha. kati wata hiace chahinchha, ani antim hiace ma kati jana?
+T: 27 lai 12 le bhag garda 2 aauchha, baki 3. 2 hiace ma 24 jana, baki 3 jana lai arko: 2 + 1 = 3.
+N: 3 wata hiace chahinchha; antim hiace ma 3 jana matra hunchhan.
+G: 3
+
+### math-word
+U: 50 meter lamo dori bata 3.5 meter ka tukra katda kati tukra banchha, ani kati meter bachchha?
+T: 14 tukra: 14 x 3.5 = 49 meter. 15 tukra lai 15 x 3.5 = 52.5 meter chahinchha, jun 50 bhanda badhi ho. baki: 50 - 49 = 1 meter.
+N: 14 wata tukra banchha ra 1 meter dori bachchha.
+G: 14
+
+### math-word
+U: 5000 wata itta tractor le bokna chha. ek palta ma 1200 wata aatchha. kati palta bokna parchha?
+T: 5000 lai 1200 le bhag garda 4 aauchha, baki 200. 4 palta ma 4800, baki 200 lai arko palta: 4 + 1 = 5.
+N: 5 palta bokna parchha; antim palta 200 wata matra hunchha.
+G: 5
+
+### math-word
+U: A factory splits 95 workers into 3 shifts as equally as possible, and any extra workers go to the night shift. How many workers are on the night shift?
+T: 95 divided by 3 is 31, remainder 2. Each shift gets 31, and the 2 extra go to the night shift: 31 + 2 = 33.
+N: The night shift has 33 workers; the other two shifts have 31 each.
+G: 33
+
+### math-word
+U: 300 km ko yatra ma hami 3/5 bato pugisakyau. aba kati km baki chha?
+T: pugeko: 300 x 3 / 5 = 180 km. baki: 300 - 180 = 120 km.
+N: aba 120 km baki chha.
+G: 120
+
+### math-word
+U: gaun jaane 18 km sadak madhye 65% kalopatre bhaisakyo. kati km kalopatre bhayo?
+T: 18 x 65 / 100 = 11.7.
+N: 11.7 km sadak kalopatre bhaisakyo.
+G: 11.7
+
+### math-word
+U: mero 150 cc ko motorbike ko tank 12 liter ko ho. aile 25% matra petrol chha. tank bharna kati liter halnu parchha?
+T: aile: 12 x 25 / 100 = 3 liter. bharna: 12 - 3 = 9 liter. 150 cc bhanne kura yo hisab ma chahindaina.
+N: tank bharna 9 liter petrol halnu parchha.
+G: 9
+
+### math-word
+U: A bus has 40 seats, and 85% of them are taken. How many seats are empty?
+T: Taken: 40 x 85 / 100 = 34. Empty: 40 - 34 = 6.
+N: 6 seats are empty.
+G: 6
+
+### math-word
+U: mistri le 3 din ma parkhal ko 2/5 bhag lagaye. tyahi dar ma pura parkhal lagauna jamma kati din lagchha?
+T: 2/5 bhag 3 din ma, tyasaile 1/5 bhag 3 / 2 = 1.5 din ma. pura 5/5 bhag: 5 x 1.5 = 7.5 din.
+N: pura parkhal lagauna jamma 7.5 din lagchha.
+G: 7.5
+
+### math-word
+U: plaster ko masala cement ra baluwa 1:4 ko anupat ma banaune. jamma 1.5 ghan meter masala chahiyo bhane baluwa kati ghan meter?
+T: jamma bhag: 1 + 4 = 5. ek bhag: 1.5 / 5 = 0.3 ghan meter. baluwa: 4 x 0.3 = 1.2 ghan meter.
+N: 1.2 ghan meter baluwa ra 0.3 ghan meter cement chahinchha.
+G: 1.2
+
+### math-word
+U: dhalan ko lagi cement, baluwa ra gitti 1:2:4 ko anupat ma milaune. jamma 14 doko masala banaune ho bhane gitti kati doko?
+T: jamma bhag: 1 + 2 + 4 = 7. ek bhag: 14 / 7 = 2 doko. gitti: 4 x 2 = 8 doko.
+N: 8 doko gitti chahinchha; cement 2 doko ra baluwa 4 doko.
+G: 8
+
+### math-word
+U: bhitta ko rang ma rang ra pani 4:1 ko anupat ma milaune. 10 liter rang ma kati liter pani halne?
+T: 4 bhag rang bhaneko 10 liter, tyasaile 1 bhag: 10 / 4 = 2.5 liter.
+N: 10 liter rang ma 2.5 liter pani halnus.
+G: 2.5
+
+### math-word
+U: At a construction site, the ratio of men to women workers is 7:3. There are 21 men. How many women work there?
+T: 7 parts are 21 workers, so 1 part is 21 / 7 = 3. Women: 3 x 3 = 9.
+N: 9 women work there.
+G: 9
+
+### math-word
+U: taxi driver dai le 5 din ma 120, 95, 140, 110 ra 135 km gadi chalaye. din ko ausat kati km?
+T: jamma: 120 + 95 + 140 + 110 + 135 = 600. ausat: 600 / 5 = 120.
+N: din ko ausat 120 km.
+G: 120
+
+### math-word
+U: mistri le 4 din ma ausat 450 wata itta jode. 5 din ko ausat 480 puryauna paanchau din kati itta jodnu parchha?
+T: 4 din ko jamma: 4 x 450 = 1800. 5 din ma chahine: 5 x 480 = 2400. paanchau din: 2400 - 1800 = 600.
+N: paanchau din 600 wata itta jodnu parchha.
+G: 600
+
+### math-word
+U: 12 ton saman boki truck pahilo 3 ghanta ma 150 km ra pachhi ko 2 ghanta ma pahadi bato ma 50 km matra gudyo. pura yatra ko ausat gati kati?
+T: jamma duri: 150 + 50 = 200 km. jamma samaya: 3 + 2 = 5 ghanta. ausat: 200 / 5 = 40 km/ghanta. saman 12 ton bhanne kura yo hisab ma chahindaina.
+N: pura yatra ko ausat gati 40 km/ghanta.
+G: 40
+
+### math-word
+U: naya hall 9 meter lamo ra 6 meter chaudai chha. 60 cm x 60 cm ko tile lagauda kati tile chahinchha?
+T: lambai 900 cm: 900 / 60 = 15. chaudai 600 cm: 600 / 60 = 10. jamma: 15 x 10 = 150.
+N: hall ma 150 wata tile chahinchha.
+G: 150
+
+### math-word
+U: 20 meter lamo ra 1.5 meter aglo parkhal ko dubai tira plaster garnu chha. kati varga meter plaster hunchha?
+T: euta tira: 20 x 1.5 = 30 varga meter. dubai tira: 30 x 2 = 60 varga meter.
+N: 60 varga meter plaster hunchha.
+G: 60
+
+### math-word
+U: goth ko chhana 8 meter lamo ra 6 meter chaudai chha. 2 meter x 1 meter ko jasta le chhopda, jasta ekarka mathi chadeko nagani, kati jasta chahinchha?
+T: chhana: 8 x 6 = 48 varga meter. euta jasta: 2 x 1 = 2 varga meter. 48 / 2 = 24.
+N: 24 wata jasta chahinchha.
+G: 24
+
+### math-word
+U: 25 meter lamo ra 18 meter chaudai jagga ko charaitira parkhal lagaune, 3 meter ko gate chhodera. parkhal kati meter lamo hunchha?
+T: paridhi: 2 x (25 + 18) = 86 meter. gate chhodera: 86 - 3 = 83 meter.
+N: parkhal 83 meter lamo hunchha.
+G: 83
+
+### math-word
+U: An office floor is 12 m by 8 m. A storeroom of 3 m by 2 m is walled off in one corner. How much floor area is left for desks?
+T: Whole floor: 12 x 8 = 96 square meters. Storeroom: 3 x 2 = 6 square meters. Left: 96 - 6 = 90 square meters.
+N: 90 square meters are left for desks.
+G: 90
+
+### math-word
+U: ghar ko chhat ko dhalan 5 meter lamo, 4 meter chaudai ra 10 cm moto hunchha. kati ghan meter dhalan chahinchha?
+T: 10 cm bhaneko 0.1 meter. 5 x 4 x 0.1 = 2 ghan meter.
+N: 2 ghan meter dhalan chahinchha.
+G: 2
+
+### math-word
+U: bhawan ko tank 2.5 meter lamo, 2 meter chaudai ra 1.8 meter aglo chha. 6000 liter ko tanker le kati palta pani lyaunu parchha?
+T: tank: 2.5 x 2 x 1.8 = 9 ghan meter, arthat 9000 liter. 9000 / 6000 = 1.5, tyasaile 1 palta le pugdaina; 2 palta lyaunu parchha.
+N: 2 palta pani lyaunu parchha; dosro palta 3000 liter matra chahinchha.
+G: 2
+
+### math-word
+U: petrol pump ma 6 wata nozzle chhan. 12000 liter ko tanker khali garda minet ma 400 liter jharchha. tanker khali huna kati minet lagchha?
+T: 12000 / 400 = 30. nozzle 6 wata bhanne kura yo hisab ma chahindaina.
+N: tanker khali huna 30 minet lagchha.
+G: 30
+
+### math-word
+U: euta ghar rangauna painter A lai eklai 6 din ra painter B lai eklai 12 din lagchha. dubai sangai lage kati din ma sakinchha?
+T: A le din ma 1/6, B le 1/12. sangai: 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4. din ma 1/4 kaam, tyasaile 4 din.
+N: dubai sangai lage 4 din ma sakinchha.
+G: 4
+
+### math-word
+U: 4 jana mistri le euta ghar ko gaaro 15 din ma lagauchhan. 10 din mai sakna kati jana mistri chahinchha?
+T: kaam: 4 x 15 = 60 mistri-din. 10 din ma: 60 / 10 = 6 jana.
+N: 10 din ma sakna 6 jana mistri chahinchha.
+G: 6
+
+### math-word
+U: One printing machine prints 1200 posters in 4 hours. How many posters can two such machines print in 6 hours?
+T: One machine per hour: 1200 / 4 = 300. Two machines per hour: 2 x 300 = 600. In 6 hours: 600 x 6 = 3600.
+N: Two machines can print 3600 posters in 6 hours.
+G: 3600
+
+### math-word
+U: site ma 3.5 ton rod aayo. ek bundle 50 kilo ko hunchha bhane kati bundle aayo?
+T: 3.5 ton bhaneko 3.5 x 1000 = 3500 kilo. 3500 / 50 = 70.
+N: 70 bundle rod aayo.
+G: 70
+
+### math-word
+U: sahar ko cycle daud ma 200 jana sahabhagi chhan. daud 42.5 km ko chha ra euta round 2.5 km ko. kati round lagaunu parchha?
+T: 42.5 / 2.5 = 17. sahabhagi 200 jana bhanne kura yo hisab ma chahindaina.
+N: 17 round lagaunu parchha.
+G: 17
+
+### math-word
+U: thulo bus le 1 liter diesel ma 4 km gudchha. 280 km ko yatra ma kati liter diesel lagchha?
+T: 280 / 4 = 70.
+N: 280 km ko lagi 70 liter diesel lagchha.
+G: 70
+
+### math-word
+U: hamro office ko bus le ghanta ko 40 km gudchha. office pugna kati minet lagchha?
+T: ghar dekhi office kati km chha bhanne diyeko chhaina.
+N: office kati km tadha chha? duri bhannus, 40 le bhag garera minet ma bhanidinchhu.
+
+### math-word
+U: A tile covers 0.25 square meters. How many tiles do I need for my kitchen floor?
+T: The size of the kitchen floor is not given.
+N: How long and how wide is your kitchen floor? Tell me both, and I will find the area and divide it by 0.25.
+
+### math-word
+U: chaukidar dai ko duty raati 9:30 dekhi bihana 6:15 samma hunchha. duty kati samaya ko hunchha?
+T: raati 9:30 bata 12:00 samma 2 ghanta 30 minet. 12:00 bata bihana 6:15 samma 6 ghanta 15 minet. jamma: 2 ghanta 30 minet ra 6 ghanta 15 minet jodda 8 ghanta 45 minet.
+N: duty 8 ghanta 45 minet ko hunchha.
+G: 8 ghanta 45 minet
+
+### math-word
+U: bus park bata pahilo micro bihana 6:10 ma ra tyaspachhi har 35 minet ma chhutchha. bihana 9:00 bhanda agadi kati wata micro chhutchhan?
+T: chhutne samaya: 6:10, 6:45, 7:20, 7:55 ra 8:30. arko micro 9:05 ma, jun 9:00 pachhi parchha. jamma 5 wata.
+N: 9:00 bhanda agadi 5 wata micro chhutchhan.
+G: 5
+
+### math-word
+U: A courier van leaves the depot at 1:35 pm with 48 parcels and spends 3 hours 40 minutes on deliveries. When does it finish?
+T: 1:35 plus 3 hours is 4:35. 25 more minutes is 5:00, and the last 15 minutes give 5:15. The 48 parcels are not needed.
+N: The van finishes at 5:15 pm.
+G: 5:15
+
+### math-word
+U: maile yo hapta 5 din, din ko 1 ghanta 45 minet overtime gare. hapta ma jamma kati overtime bhayo?
+T: ghanta: 5 x 1 = 5. minet: 5 x 45 = 225, arthat 3 ghanta 45 minet. jamma: 5 ghanta ra 3 ghanta 45 minet jodda 8 ghanta 45 minet.
+N: hapta ma jamma 8 ghanta 45 minet overtime bhayo.
+G: 8 ghanta 45 minet
+
+### math-word
+U: office ko baithak diuso 2:15 ma suru hunchha. tyo bhanda agadi projector milauna 25 minet ra chiya tayar garna 15 minet chahinchha. kaam kati baje suru garnu parchha?
+T: jamma: 25 + 15 = 40 minet. 2:15 bata 15 minet agadi 2:00, ani 25 minet agadi 1:35.
+N: diuso 1:35 ma kaam suru garnu parchha.
+G: 1:35
+
+### math-word
+U: ma office ma 9 baje pugnu parchha. ma ghanta ko 5 km ko gati ma hidchhu ra office 4.5 km tadha chha. hidda kati minet lagchha?
+T: 1 km lai 60 / 5 = 12 minet. 4.5 km: 4.5 x 12 = 54 minet. pugnu parne samaya 9 baje yo prashna ma chahindaina.
+N: office pugna 54 minet lagchha.
+G: 54
+
+### math-word
+U: rail le 52 km ko duri 1 ghanta 20 minet ma pura garyo. rail ko gati kati km/ghanta?
+T: 1 ghanta 20 minet bhaneko 80 minet, arthat 80 / 60 = 4/3 ghanta. gati: 52 / (4/3) = 52 x 3 / 4 = 39 km/ghanta.
+N: rail ko gati 39 km/ghanta thiyo.
+G: 39
+
+### math-word
+U: 330 km tadha ka dui sahar bata dui wata bus ekai samaya ekarka tira chhute. euta ko gati 50 km/ghanta ra arko ko 60 km/ghanta. kati ghanta ma bhetchhan?
+T: najik aaune gati: 50 + 60 = 110 km/ghanta. 330 / 110 = 3 ghanta.
+N: dui bus 3 ghanta ma bhetchhan.
+G: 3
+
+### math-word
+U: A delivery rider covers 36 km in 45 minutes. What is his speed in km per hour?
+T: 45 minutes is 0.75 hours. Speed: 36 / 0.75 = 48 km per hour.
+N: His speed is 48 km per hour.
+G: 48
+
+### math-word
+U: 12 talle bhawan ma har talla 3 meter aglo chha. lift second ma 1.5 meter chadhchha. bhuin talla bata 10 au talla pugna kati second lagchha?
+T: chadhnu parne: 10 x 3 = 30 meter. 30 / 1.5 = 20 second. bhawan 12 talle bhanne kura yo hisab ma chahindaina.
+N: 10 au talla pugna 20 second lagchha.
+G: 20
+
+### math-word
+U: hamro company 2060 saal ma khuleko ho. ma 22 barsha ko umer ma 2075 saal ma join gare. company khulda ma kati barsha ko thiye?
+T: janmeko saal: 2075 - 22 = 2053. company khulda: 2060 - 2053 = 7.
+N: company khulda tapai 7 barsha ko hunuhunthyo.
+G: 7
+
+### math-word
+U: manager ko umer assistant ko 2 guna chha. 10 barsha agadi manager ko umer assistant ko 3 guna thiyo. assistant aile kati barsha ko?
+T: aile 2 guna bhayekale umer ko farak assistant ko aile ko umer jattikai chha. 10 barsha agadi 3 guna thiyo, tyasaile tyo bela farak assistant ko tyo bela ko umer ko 2 guna thiyo. farak nabadalne bhayekale assistant ko aile ko umer tyo bela ko umer ko 2 guna ho, ra dui umer bich 10 barsha farak chha: tyo bela 10, aile 20. manager: 2 x 20 = 40. jaach: 10 barsha agadi 30 ra 10, 30 = 3 x 10, milyo.
+N: assistant aile 20 barsha ko ra manager 40 ko.
+G: 20
+
+### math-word
+U: A company has 85 workers. The oldest is 61 and the youngest is 19. What is the age gap between them?
+T: 61 - 19 = 42. The 85 workers are not needed.
+N: The age gap is 42 years.
+G: 42
+
+### math-word
+U: 1000 wata pamphlet 6 jana sathi le baraabar baadne, baki raheko office mai rakhne. ek jana le kati paunchha, office ma kati rahanchha?
+T: 1000 lai 6 le bhag garda 166 aauchha, baki 4. jaach: 6 x 166 = 996, 996 + 4 = 1000.
+N: ek jana le 166 wata paunchha ra office ma 4 wata rahanchha.
+G: 166
+
+### math-word
+U: godam bata 250 bori cement site ma lanu chha. euta truck ma 60 bori aatchha. kati truck chahinchha?
+T: 250 lai 60 le bhag garda 4 aauchha, baki 10. 4 truck ma 240 bori, baki 10 bori lai arko truck: 4 + 1 = 5.
+N: 5 wata truck chahinchha; antim truck ma 10 bori matra hunchha.
+G: 5
+
+### math-word
+U: A road crew of 23 workers is split into teams of 4. Workers who do not fit in a full team help the supervisor. How many teams are there, and how many help the supervisor?
+T: 23 divided by 4 is 5, remainder 3. Check: 4 x 5 = 20, 20 + 3 = 23.
+N: There are 5 teams, and 3 workers help the supervisor.
+G: 5
+
+### math-word
+U: 8 ghanta ko data entry kaam 3 jana le baraabar baadne. ek jana le kati samaya kaam garnu parchha?
+T: 8 ghanta bhaneko 480 minet. 480 / 3 = 160 minet, arthat 2 ghanta 40 minet.
+N: ek jana le 2 ghanta 40 minet kaam garnu parchha.
+G: 2 ghanta 40 minet
+
+### math-word
+U: 300 page ko report ko 1/3 maile ra 2/5 mero sathi le lekhyo. aba kati page lekhna baki chha?
+T: maile: 300 / 3 = 100. sathi le: 300 x 2 / 5 = 120. lekheko: 100 + 120 = 220. baki: 300 - 220 = 80.
+N: aba 80 page lekhna baki chha.
+G: 80
+
+### math-word
+U: bijuli scooter 100% charge ma 80 km gudchha. aile 35% charge chha bhane kati km gudla?
+T: 80 x 35 / 100 = 28.
+N: aile ko charge le lagbhag 28 km gudchha.
+G: 28
+
+### math-word
+U: karkhana ma 200 jana kaamdar chhan. aaja 6% bida ma chhan. kati jana kaam ma chhan?
+T: bida ma: 200 x 6 / 100 = 12. kaam ma: 200 - 12 = 188.
+N: aaja 188 jana kaam ma chhan.
+G: 188
+
+### math-word
+U: hamro karkhana ma pahila din ma 400 jhola banthyo. naya machine pachhi utpadan 15% le badhyo. aba din ma kati jhola banchha?
+T: badhi: 400 x 15 / 100 = 60. aba: 400 + 60 = 460.
+N: aba din ma 460 jhola banchha.
+G: 460
+
+### math-word
+U: After a new bypass road opened, the bus trip got 20% shorter and now takes 48 minutes. How long did it take before?
+T: 48 minutes is 80% of the old time. 1% is 48 / 80 = 0.6 minutes, so 100% is 0.6 x 100 = 60 minutes.
+N: The trip used to take 60 minutes.
+G: 60
+
+### math-word
+U: karkhana ma din ra raati ko shift ma kaamdar 5:3 ko anupat ma chhan. jamma 64 jana chhan bhane raati ko shift ma kati?
+T: jamma bhag: 5 + 3 = 8. ek bhag: 64 / 8 = 8. raati: 3 x 8 = 24.
+N: raati ko shift ma 24 jana chhan.
+G: 24
+
+### math-word
+U: trekking map ko scale 1:50000 chha. map ma 6 cm duri sachikai kati km hunchha?
+T: 6 x 50000 = 300000 cm. 300000 / 100 = 3000 meter, arthat 3 km.
+N: sachikai 3 km duri hunchha.
+G: 3
+
+### math-word
+U: kotha ko lambai ra chaudai 4:3 ko anupat ma chha. chaudai 3.6 meter chha bhane lambai kati?
+T: 3 bhag bhaneko 3.6 meter, tyasaile 1 bhag: 3.6 / 3 = 1.2 meter. lambai 4 bhag: 4 x 1.2 = 4.8 meter.
+N: kotha ko lambai 4.8 meter chha.
+G: 4.8
+
+### math-word
+U: sadak ko aadhar ma gitti ra baluwa 2:1 ko anupat ma milaune. 9 ton masala ma kati ton gitti hunchha?
+T: jamma bhag: 2 + 1 = 3. ek bhag: 9 / 3 = 3 ton. gitti: 2 x 3 = 6 ton.
+N: 9 ton masala ma 6 ton gitti hunchha.
+G: 6
+
+### math-word
+U: hapta ka 6 din ma mero overtime 2, 1.5, 0, 3, 2.5 ra 3 ghanta bhayo. din ko ausat kati ghanta?
+T: jamma: 2 + 1.5 + 0 + 3 + 2.5 + 3 = 12. ausat: 12 / 6 = 2.
+N: din ko ausat 2 ghanta overtime bhayo.
+G: 2
+
+### math-word
+U: bihana ko shift ka 8 jana le ausat 50 wata ra beluka ko shift ka 12 jana le ausat 40 wata jhola banae. 20 jana ko ausat kati?
+T: bihana: 8 x 50 = 400. beluka: 12 x 40 = 480. jamma: 400 + 480 = 880. ausat: 880 / 20 = 44.
+N: 20 jana ko ausat 44 wata jhola.
+G: 44
+
+### math-word
+U: 5 din ko trek ma hami 6, 7, 5, 8 ra 4 ghanta hidyau. din ko ausat kati ghanta hidyau?
+T: jamma: 6 + 7 + 5 + 8 + 4 = 30 ghanta. ausat: 30 / 5 = 6 ghanta.
+N: tapai haru din ko ausat 6 ghanta hidnubhayo.
+G: 6
+
+### math-word
+U: 5 meter lamo, 4 meter chaudai ra 3 meter aglo kotha ka charai bhitta ma 2 coat rang lagaune. 1 liter rang le 9 varga meter ek coat chhopchha. kati liter rang chahinchha?
+T: charai bhitta: 2 x (5 + 4) x 3 = 54 varga meter. 2 coat: 54 x 2 = 108 varga meter. rang: 108 / 9 = 12 liter.
+N: 12 liter rang chahinchha.
+G: 12
+
+### math-word
+U: 15 barsha purano 1.2 km lamo ra 6 meter chaudai sadak feri kalopatre garna kati varga meter ma pitch halnu parchha?
+T: 1.2 km bhaneko 1200 meter. 1200 x 6 = 7200 varga meter. sadak 15 barsha purano bhanne kura yo hisab ma chahindaina.
+N: 7200 varga meter ma pitch halnu parchha.
+G: 7200
+
+### math-word
+U: nagarpalika ko niyam anusar jagga ko 60% samma ma matra ghar banauna paainchha. 5 aana jagga ma kati aana samma ghar banauna paainchha?
+T: 5 x 60 / 100 = 3.
+N: 5 aana jagga ma 3 aana samma ghar banauna paainchha.
+G: 3
+
+### math-word
+U: A rectangular car park is 45 m by 30 m. Lamp posts stand every 15 m around its edge, with one at each corner. How many lamp posts are there?
+T: Perimeter: 2 x (45 + 30) = 150 m. Around a closed edge the first and last posts are the same post, so 150 / 15 = 10 posts. Each 45 m side has 3 gaps and each 30 m side 2 gaps, so the corners do fall on posts.
+N: There are 10 lamp posts.
+G: 10
+
+### math-word
+U: hamro 2 talle ghar ma 4 wata pillar chhan, har pillar 0.3 meter x 0.3 meter moto ra 3 meter aglo. jamma kati ghan meter dhalan chahinchha?
+T: euta pillar: 0.3 x 0.3 x 3 = 0.27 ghan meter. 4 wata: 0.27 x 4 = 1.08 ghan meter. ghar 2 talle bhanne kura yo hisab ma chahindaina.
+N: jamma 1.08 ghan meter dhalan chahinchha.
+G: 1.08
+
+### math-word
+U: car ko 40 liter ko tank ma 1/4 matra petrol chha. car le liter ma 12 km gudchha. 360 km jaana kamti ma kati liter thapnu parchha?
+T: aile: 40 / 4 = 10 liter. chahine: 360 / 12 = 30 liter. thapnu parne: 30 - 10 = 20 liter.
+N: kamti ma 20 liter petrol thapnu parchha.
+G: 20
+
+### math-word
+U: euta machine le 3 ghanta ma 900 bottle bharchha ra arko le 2 ghanta ma 800. dubai sangai chalaye 3500 bottle bharna kati ghanta lagchha?
+T: pahilo: 900 / 3 = 300 prati ghanta. dosro: 800 / 2 = 400 prati ghanta. sangai: 300 + 400 = 700. 3500 / 700 = 5.
+N: dubai sangai 5 ghanta ma 3500 bottle bharchhan.
+G: 5
+
+### math-word
+U: euta kaam kaka eklai 9 din ma ra kanchha eklai 18 din ma sakchhan. dubai sangai 3 din kaam garepachhi kati bhag kaam baki rahanchha?
+T: din ma sangai: 1/9 + 1/18 = 2/18 + 1/18 = 3/18 = 1/6. 3 din ma: 3 x 1/6 = 1/2. baki: 1 - 1/2 = 1/2.
+N: 3 din pachhi aadha, arthat 1/2 kaam baki rahanchha.
+G: 1/2
+
+### math-word
+U: Six workers lay 1800 bricks in a day. The site has 2 cement mixers. How many bricks would 9 workers lay in a day at the same rate?
+T: One worker: 1800 / 6 = 300 bricks. Nine workers: 9 x 300 = 2700 bricks. The 2 mixers are not needed.
+N: Nine workers would lay 2700 bricks a day.
+G: 2700
+
+### math-word
+U: bijuli mistri sanga 90 meter ka 2 roll tar chha. ghar ko wiring ma 145 meter lagyo. kati meter tar bachyo?
+T: jamma: 2 x 90 = 180 meter. bachyo: 180 - 145 = 35 meter.
+N: 35 meter tar bachyo.
+G: 35
+
+### math-word
+U: kharab mausam le garda flight 195 minet dhilo bhayo. kati ghanta kati minet dhilo bhayo?
+T: 195 lai 60 le bhag garda 3 aauchha, baki 15. tyasaile 3 ghanta 15 minet.
+N: flight 3 ghanta 15 minet dhilo bhayo.
+G: 3 ghanta 15 minet
+
+### math-word
+U: 10 wata pangra bhayeko truck ma 8 ton saman bokna milchha. 50 kilo ka bori kati wata samma lodna milchha?
+T: 8 ton bhaneko 8000 kilo. 8000 / 50 = 160. pangra 10 wata bhanne kura yo hisab ma chahindaina.
+N: 160 wata bori samma lodna milchha.
+G: 160
+
+### math-word
+U: data entry garda ek form bharna 4 minet lagchha. 3 ghanta ma kati form bharinchha?
+T: 3 ghanta bhaneko 180 minet. 180 / 4 = 45.
+N: 3 ghanta ma 45 wata form bharinchha.
+G: 45
+
+### math-word
+U: JCB le ghanta ma 25 meter nali khanchha ra din ma 8 ghanta kaam garchha. 400 meter nali khanna kati din lagchha?
+T: din ma: 25 x 8 = 200 meter. 400 / 200 = 2 din.
+N: 400 meter nali khanna 2 din lagchha.
+G: 2
+
+### math-word
+U: A water tanker uses 1 liter of diesel for every 5 km. Each delivery trip is 35 km out and 35 km back. How much diesel does one trip use?
+T: Round trip: 35 + 35 = 70 km. Diesel: 70 / 5 = 14 liters.
+N: One trip uses 14 liters of diesel.
+G: 14
+
+### math-word
+U: site ko kaam 3 gate suru bhayo ra lagatar 21 din chalyo. kaam kun gate sakiyo?
+T: 3 gate pahilo din: 3 + 21 - 1 = 23.
+N: kaam 23 gate sakiyo.
+G: 23
+
+### math-word
+U: maile 11 gate dekhi 16 gate samma bida liye, dubai din sahit, ra 17 gate office pharke. kati din bida liye?
+T: 16 - 11 = 5. suru ko din pani ganda: 5 + 1 = 6.
+N: tapai le 6 din bida linubhayo.
+G: 6
+
+### math-word
+U: hamro team le din ma kehi meter sadak banauchha. 2 km sadak kati din ma sakinchha?
+T: din ma kati meter sadak banchha bhanne diyeko chhaina.
+N: tapai ko team le din ma kati meter sadak banauchha? tyo bhannus, 2000 meter lai tyasle bhag garera din bhanidinchhu.
+
+### math-word
+U: trek ma hami ghanta ko 3 km hidchhau. kati baje lodge pugchhau?
+T: lodge kati km tadha chha ra kati baje hidna suru gareko bhanne diyeko chhaina.
+N: lodge kati km tadha chha, ra tapai haru kati baje hidnu bhayo? yi duita bhannus, pugne samaya nikalidinchhu.
+
+### math-word
+U: hami namche ma pahilo din diuso 2:40 ma pugyau ra tesro din bihana 8:15 ma hidyau. namche ma jamma kati samaya basyau?
+T: pahilo din 2:40 bata dosro din 2:40 samma 24 ghanta. dosro din 2:40 bata tesro din raati 2:40 samma aru 12 ghanta, jamma 36 ghanta. raati 2:40 bata bihana 8:15 samma 5 ghanta 35 minet. jamma: 36 ghanta ra 5 ghanta 35 minet jodda 41 ghanta 35 minet.
+N: tapai haru namche ma 41 ghanta 35 minet basnubhayo.
+G: 41 ghanta 35 minet
+
+### math-word
+U: hotel ko bhanchhe dai bihana 6:30 dekhi 10:00 samma ra beluka 4:00 dekhi 9:30 samma kaam garchhan. din ma jamma kati ghanta kaam garchhan?
+T: bihana: 6:30 bata 10:00 samma 3 ghanta 30 minet. beluka: 4:00 bata 9:30 samma 5 ghanta 30 minet. jamma: 3 ghanta 30 minet ra 5 ghanta 30 minet jodda 9 ghanta.
+N: din ma jamma 9 ghanta kaam garchhan.
+G: 9
+
+### math-word
+U: A bike repair shop opens at 9:45 am and stays open for 8 hours 30 minutes. It has 4 mechanics. When does it close?
+T: 9:45 plus 8 hours is 5:45 pm. 15 more minutes is 6:00, and the last 15 minutes give 6:15 pm. The 4 mechanics are not needed.
+N: The shop closes at 6:15 pm.
+G: 6:15
+
+### math-word
+U: bus bihana 7:40 ma chhutnu parne thiyo tara 25 minet dhilo chhutyo. yatra 5 ghanta 50 minet ko ho bhane bus kati baje pugchha?
+T: chhuteko samaya: 7:40 bata 20 minet ma 8:00, ani 5 minet thapda 8:05. 8:05 bata 5 ghanta pachhi 1:05, ani 50 minet pachhi 1:55.
+N: bus diuso 1:55 ma pugchha.
+G: 1:55
+
+### math-word
+U: car le pahilo 120 km ghanta ko 40 km ra arko 120 km ghanta ko 60 km ko gati ma gudyo. pura bato ko ausat gati kati?
+T: pahilo bhag: 120 / 40 = 3 ghanta. dosro bhag: 120 / 60 = 2 ghanta. jamma duri: 120 + 120 = 240 km. jamma samaya: 3 + 2 = 5 ghanta. ausat: 240 / 5 = 48 km/ghanta.
+N: ausat gati 48 km/ghanta ho; 40 ra 60 ko bich ko 50 haina, kinabhane dhilo gati ma badhi samaya bityo.
+G: 48
+
+### math-word
+U: sano plane ghanta ko 450 km ko gati ma 40 minet udyo. plane le kati km duri pura garyo?
+T: 40 minet bhaneko 40 / 60 = 2/3 ghanta. duri: 450 x 2 / 3 = 300 km.
+N: plane le 300 km duri pura garyo.
+G: 300
+
+### math-word
+U: ghar bata 65 km tadha ko office motorbike ma ghanta ko 50 km ra bus ma ghanta ko 26 km ko gati ma puginchha. motorbike le kati samaya bachauchha?
+T: motorbike: 65 / 50 = 1.3 ghanta. bus: 65 / 26 = 2.5 ghanta. farak: 2.5 - 1.3 = 1.2 ghanta. 0.2 ghanta bhaneko 0.2 x 60 = 12 minet, tyasaile 1 ghanta 12 minet.
+N: motorbike le 1 ghanta 12 minet bachauchha.
+G: 1 ghanta 12 minet
+
+### math-word
+U: A cyclist and a runner start a 12 km course together. The cyclist rides at 24 km per hour and the runner runs at 8 km per hour. How long does the cyclist wait at the finish for the runner?
+T: Cyclist: 12 / 24 = 0.5 hours. Runner: 12 / 8 = 1.5 hours. Wait: 1.5 - 0.5 = 1 hour.
+N: The cyclist waits 1 hour for the runner.
+G: 1
+
+### math-word
+U: ma 2055 saal ma janmeko ho ra 2081 saal ma pahilo jagir paye. pahilo jagir paunda ma kati barsha ko thiye?
+T: 2081 - 2055 = 26.
+N: pahilo jagir paunda tapai 26 barsha ko hunuhunthyo.
+G: 26
+
+### math-word
+U: hamro 4 jana ko team ko umer jodda 120 barsha hunchha. 3 barsha pachhi team ko ausat umer kati hunchha?
+T: 3 barsha pachhi jamma: 120 + 4 x 3 = 132. ausat: 132 / 4 = 33.
+N: 3 barsha pachhi team ko ausat umer 33 barsha hunchha.
+G: 33
+
+### math-word
+U: A bus driver began driving at 21 and has now driven for 22 years. His bus is 9 years old. How old is the driver?
+T: 21 + 22 = 43. The bus's age, 9 years, is not needed.
+N: The driver is 43 years old.
+G: 43
+
+### math-word
+U: trek ma 13 jana chhau ra euta tent ma 3 jana sutna milchha. kamti ma kati tent chahinchha?
+T: 13 lai 3 le bhag garda 4 aauchha, baki 1. 4 tent ma 12 jana, baki 1 jana lai arko tent: 4 + 1 = 5.
+N: kamti ma 5 wata tent chahinchha; euta tent ma 1 jana matra hunchha.
+G: 5
+
+### math-word
+U: 25 meter lamo pipe lai 4 baraabar tukra ma katda euta tukra kati meter hunchha?
+T: 25 / 4 = 6.25.
+N: euta tukra 6.25 meter hunchha.
+G: 6.25
+
+### math-word
+U: 260 kilo trek ko saman bokna bhariya chahiyo. euta bhariya le 30 kilo samma bokchha. kamti ma kati bhariya chahinchha?
+T: 260 lai 30 le bhag garda 8 aauchha, baki 20. 8 jana le 240 kilo, baki 20 kilo lai arko bhariya: 8 + 1 = 9.
+N: kamti ma 9 jana bhariya chahinchha.
+G: 9
+
+### math-word
+U: A hardware shop packs 1250 nails into boxes of 200. How many full boxes are there, and how many nails are left loose?
+T: 1250 divided by 200 is 6, remainder 50. Check: 6 x 200 = 1200, 1200 + 50 = 1250.
+N: There are 6 full boxes and 50 loose nails.
+G: 6
+
+### math-word
+U: 12000 liter pani ko tanker bata 3/8 hotel lai ra 1/4 school lai diyo. tanker ma kati liter baki rahyo?
+T: hotel: 12000 x 3 / 8 = 4500. school: 12000 / 4 = 3000. baki: 12000 - 4500 - 3000 = 4500 liter.
+N: tanker ma 4500 liter baki rahyo.
+G: 4500
+
+### math-word
+U: 240 ghar ma wiring garnu thiyo. aba samma 45% sakiyo. kati ghar baki chha?
+T: sakeko: 240 x 45 / 100 = 108. baki: 240 - 108 = 132.
+N: aba 132 ghar baki chha.
+G: 132
+
+### math-word
+U: barsha ma bato chiplo bhayekale driver le gati 20% le ghatayo. pahila ghanta ko 60 km thiyo. aba 144 km jaana kati ghanta lagchha?
+T: ghatyo: 60 x 20 / 100 = 12. naya gati: 60 - 12 = 48 km/ghanta. samaya: 144 / 48 = 3 ghanta.
+N: aba 144 km jaana 3 ghanta lagchha.
+G: 3
+
+### math-word
+U: A factory makes 2500 bottles a day, and 4% fail the quality check. How many good bottles does it make in a day?
+T: Rejected: 2500 x 4 / 100 = 100. Good: 2500 - 100 = 2400.
+N: It makes 2400 good bottles a day.
+G: 2400
+
+### math-word
+U: 1 ghan meter itta ko gaaro ma 500 wata itta ra 2 bori cement lagchha. 3.5 ghan meter gaaro ma kati itta ra kati bori cement?
+T: itta: 3.5 x 500 = 1750. cement: 3.5 x 2 = 7 bori.
+N: 1750 wata itta ra 7 bori cement chahinchha.
+G: 1750
+
+### math-word
+U: 600 km ko lamo yatra ma dui driver le 3:2 ko anupat ma palo palo gadi chalaune. dosro driver le kati km chalauchhan?
+T: jamma bhag: 3 + 2 = 5. ek bhag: 600 / 5 = 120 km. dosro: 2 x 120 = 240 km.
+N: dosro driver le 240 km chalauchhan, pahilo le 360 km.
+G: 240
+
+### math-word
+U: aaja 14 jana painter kaam ma chhan. hall ko lagi seto ra khairo rang 5:2 ko anupat ma milayera 21 liter banaune. kati liter khairo rang chahinchha?
+T: jamma bhag: 5 + 2 = 7. ek bhag: 21 / 7 = 3 liter. khairo: 2 x 3 = 6 liter. painter 14 jana bhanne kura yo hisab ma chahindaina.
+N: 6 liter khairo rang chahinchha, ani seto 15 liter.
+G: 6
+
+### math-word
+U: pahilo hapta maile 30 liter petrol le 360 km ra dosro hapta 30 liter le 420 km gadi chalaye. dui hapta ko ausat kati km prati liter?
+T: jamma km: 360 + 420 = 780. jamma liter: 30 + 30 = 60. ausat: 780 / 60 = 13 km prati liter.
+N: dui hapta ko ausat 13 km prati liter.
+G: 13
+
+### math-word
+U: bus stop ma char din maile 12, 8, 15 ra 5 minet bus parkhe. ausat kati minet parkhe?
+T: jamma: 12 + 8 + 15 + 5 = 40. ausat: 40 / 4 = 10.
+N: tapai le ausat 10 minet bus parkhanubhayo.
+G: 10
+
+### math-word
+U: naya office ma 3 wata kotha chhan: 4 x 3, 5 x 4 ra 6 x 3 meter ka. jamma bhuin kati varga meter?
+T: 4 x 3 = 12. 5 x 4 = 20. 6 x 3 = 18. jamma: 12 + 20 + 18 = 50 varga meter.
+N: jamma bhuin 50 varga meter chha.
+G: 50
+
+### math-word
+U: 500 meter lamo sadak 4 meter bata 7 meter chaudai banaune bhayo. kati varga meter thap jagga chahinchha?
+T: thap chaudai: 7 - 4 = 3 meter. thap jagga: 500 x 3 = 1500 varga meter.
+N: 1500 varga meter thap jagga chahinchha.
+G: 1500
+
+### math-word
+U: A bathroom wall is 6 m long and 2.5 m high. One box of tiles covers 1.5 square meters. How many boxes are needed to tile the whole wall?
+T: Wall area: 6 x 2.5 = 15 square meters. Boxes: 15 / 1.5 = 10.
+N: 10 boxes of tiles are needed.
+G: 10
+
+### math-word
+U: tribhuj aakar ko jagga ka tin kinara 30, 40 ra 50 meter chhan. charaitira bar lagauna kati meter jali chahinchha?
+T: paridhi: 30 + 40 + 50 = 120 meter.
+N: 120 meter jali chahinchha.
+G: 120
+
+### math-word
+U: jag ko lagi 20 meter lamo, 0.6 meter chaudai ra 1 meter gahiro khaldo khaniyo. niskeko mato 4 ghan meter aatne tipper le kati palta bokchha?
+T: mato: 20 x 0.6 x 1 = 12 ghan meter. tipper: 12 / 4 = 3 palta.
+N: tipper le 3 palta mato bokchha.
+G: 3
+
+### math-word
+U: hotel ma 20 wata kotha chhan ra euta kotha lai din ma 150 liter pani chahinchha. 9000 liter ko tank kati din chalchha?
+T: din ma: 20 x 150 = 3000 liter. 9000 / 3000 = 3.
+N: tank 3 din chalchha.
+G: 3
+
+### math-word
+U: A cement mixer makes 0.25 cubic meters of concrete per batch. How many batches are needed for 3 cubic meters?
+T: 3 / 0.25 = 12.
+N: 12 batches are needed.
+G: 12
+
+### math-word
+U: 3 jana painter le euta kotha 5 ghanta ma rangauchhan. 2 wata tyastai kotha 5 jana painter le kati ghanta ma rangauchhan?
+T: euta kotha: 3 x 5 = 15 jana-ghanta. 2 kotha: 15 x 2 = 30 jana-ghanta. 5 jana: 30 / 5 = 6 ghanta.
+N: 5 jana le 6 ghanta ma 2 kotha rangauchhan.
+G: 6
+
+### math-word
+U: euta sadak ko khanda team A eklai 12 din ma ra team B eklai 4 din ma sakchha. dubai team sangai lage kati din lagchha?
+T: A le din ma 1/12, B le 1/4. sangai: 1/12 + 1/4 = 1/12 + 3/12 = 4/12 = 1/3. din ma 1/3 bhag, tyasaile 3 din.
+N: dubai team sangai lage 3 din lagchha.
+G: 3
+
+### math-word
+U: itta banaune euta machine le ghanta ma 80 wata itta banauchha. 6 wata machine 7 ghanta chalda kati itta banchha?
+T: 6 machine le ghanta ma: 6 x 80 = 480. 7 ghanta: 480 x 7 = 3360.
+N: 3360 wata itta banchha.
+G: 3360
+
+### math-word
+U: euta tile 8 mm moto chha. 25 wata tile ekmathi arko thuparda kati cm aglo hunchha?
+T: 25 x 8 = 200 mm. 10 mm ko 1 cm: 200 / 10 = 20 cm.
+N: 25 wata tile ko thupro 20 cm aglo hunchha.
+G: 20
+
+### math-word
+U: 20 liter rang lai 500 ml ka sana dabba ma bharda kati dabba hunchha?
+T: 20 liter bhaneko 20000 ml. 20000 / 500 = 40.
+N: 40 wata dabba hunchha.
+G: 40
+
+### math-word
+U: euta mistri le din ma 8 varga meter tile lagauchha. 72 varga meter tile 3 jana mistri le lagauda kati din lagchha?
+T: 3 jana le din ma: 3 x 8 = 24 varga meter. 72 / 24 = 3 din.
+N: 3 jana mistri le 3 din ma sakchhan.
+G: 3
+
+### math-word
+U: 2 HP ko pump le minet ma 30 liter pani tanchha. 4500 liter ko tank bharna kati samaya lagchha?
+T: 4500 / 30 = 150 minet, arthat 2 ghanta 30 minet. pump 2 HP bhanne kura yo hisab ma chahindaina.
+N: tank bharna 2 ghanta 30 minet lagchha.
+G: 2 ghanta 30 minet
+
+### math-word
+U: engineer sahab har 3 din ma site herna aaunuhunchha. yo mahina ko pahilo palta 2 gate aaunubhayo ra mahina 30 din ko chha. yo mahina ma jamma kati palta aaunuhunchha?
+T: aaune gate: 2, 5, 8, 11, 14, 17, 20, 23, 26 ra 29. arko palo 32 gate parchha, jun mahina ma chhaina. jamma 10 palta.
+N: yo mahina ma 10 palta aaunuhunchha.
+G: 10
+
+### math-word
+U: A shipment of tiles left the factory on the 4th and reached the site on the 19th of the same month. How many days was it on the way?
+T: 19 - 4 = 15.
+N: It was on the way for 15 days.
+G: 15
+
+### math-word
+U: tanker le minet ma 500 liter pani khali garchha. tanker khali huna kati minet lagchha?
+T: tanker ma kati liter pani chha bhanne diyeko chhaina.
+N: tanker ma kati liter pani chha? tyo bhannus, 500 le bhag garera minet bhanidinchhu.
+
+### math-word
+U: hamro office ko kotha 6 meter lamo ra 4 meter chaudai chha. kati tile chahinchha?
+T: euta tile ko naap diyeko chhaina.
+N: euta tile kati cm x kati cm ko ho? tile ko naap bhannus, kotha ko 24 varga meter lai tile ko kshetrafal le bhag garera bhanidinchhu.
+
+### math-word
+U: 60 km ko trek ma pahilo 3 din ma 14, 18 ra 16 km hidyau. chautho din sakna kati km hidnu parchha?
+T: 3 din ma: 14 + 18 + 16 = 48 km. baki: 60 - 48 = 12 km.
+N: chautho din 12 km hidnu parchha.
+G: 12
+
+### math-word
+U: ghar banauna 12000 itta chahinchha. truck ek palta ma 3000 itta lyauchha ra ek palta jaana-aauna 2 ghanta lagchha. sabai itta lyauna kati ghanta lagchha?
+T: palta: 12000 / 3000 = 4. samaya: 4 x 2 = 8 ghanta.
+N: sabai itta lyauna 8 ghanta lagchha.
+G: 8
+
+### math-word
+U: office bhawan ma 4 talla chhan, har talla ma 6 kotha, har kotha ma 2 jhyal ra har jhyal ma 2 sisa. jamma kati sisa chhan?
+T: kotha: 4 x 6 = 24. jhyal: 24 x 2 = 48. sisa: 48 x 2 = 96.
+N: jamma 96 wata sisa chhan.
+G: 96
+
+### math-word
+U: truck ek palta ma 6 ton gitti bokchha ra din ma 3 palta garchha. 90 ton gitti sarna kati din lagchha?
+T: din ma: 6 x 3 = 18 ton. din: 90 / 18 = 5.
+N: 90 ton gitti sarna 5 din lagchha.
+G: 5
+
+### math-word
+U: talim ma 1 ghanta 15 minet ka 3 session ra bich ma 20 minet ka 2 break chhan. bihana 9:30 ma suru bhaye kati baje sakinchha?
+T: 1 ghanta 15 minet bhaneko 75 minet. session: 3 x 75 = 225 minet. break: 2 x 20 = 40 minet. jamma: 225 + 40 = 265 minet, arthat 4 ghanta 25 minet. 9:30 bata 4 ghanta pachhi 1:30, ani 25 minet pachhi 1:55.
+N: talim diuso 1:55 ma sakinchha.
+G: 1:55
+
+### math-word
+U: hamro bank ma 18 jana karmachari chhan. bank bihana 10:00 dekhi diuso 3:00 samma, hapta ma 5 din khulchha. hapta ma bank kati ghanta khulchha?
+T: din ma: 10:00 bata 3:00 samma 5 ghanta. hapta ma: 5 x 5 = 25 ghanta. karmachari 18 jana bhanne kura yo hisab ma chahindaina.
+N: hapta ma bank 25 ghanta khulchha.
+G: 25
+
+### math-word
+U: bus bihana 10:50 ma pugyo. yatra 3 ghanta 35 minet ko thiyo. bus kati baje chhuteko thiyo?
+T: 10:50 bata 3 ghanta agadi 7:50. 7:50 bata 35 minet agadi 7:15.
+N: bus bihana 7:15 ma chhuteko thiyo.
+G: 7:15
+
+### math-word
+U: 7 jana yatri boki jeep ghanta ko 36 km ko gati ma 3 ghanta 30 minet gudyo. jeep kati km pugyo?
+T: 3 ghanta 30 minet bhaneko 3.5 ghanta. 36 x 3.5 = 126 km. yatri 7 jana bhanne kura yo hisab ma chahindaina.
+N: jeep 126 km pugyo.
+G: 126
+
+### math-word
+U: 10 ghan meter baluwa bokne tipper ghanta ko 30 km ko gati ma 15 km tadha ko site samma jaanchha. kati minet lagchha?
+T: 15 / 30 = 0.5 ghanta, arthat 30 minet. tipper ko 10 ghan meter yo hisab ma chahindaina.
+N: site pugna 30 minet lagchha.
+G: 30
+
+### math-word
+U: aile 2082 saal ho ra mero buwa 47 barsha ko hunuhunchha. 60 barsha ma awakash hune niyam chha. buwa kun saal ma awakash hunuhunchha?
+T: baki barsha: 60 - 47 = 13. 2082 + 13 = 2095.
+N: buwa 2095 saal ma awakash hunuhunchha.
+G: 2095
+
+### math-word
+U: 3 barsha pachhi dai 30 barsha ko hunchhan. bhai dai bhanda 4 barsha kanchho chha. bhai aile kati barsha ko?
+T: dai aile: 30 - 3 = 27. bhai: 27 - 4 = 23.
+N: bhai aile 23 barsha ko chha.
+G: 23
+
+### math-word
+U: company ma 70 wata helmet aayo. 9 wata site ma baraabar pathaera baki store ma rakhne. har site le kati paunchha, store ma kati rahanchha?
+T: 70 lai 9 le bhag garda 7 aauchha, baki 7. jaach: 9 x 7 = 63, 63 + 7 = 70.
+N: har site le 7 wata helmet paunchha ra store ma 7 wata rahanchha.
+G: 7
+
+### math-word
+U: karkhana ma 125 kilo chiya patti 2 kilo ka packet ma bharne. kati packet banchha, ani kati kilo bachchha?
+T: 125 lai 2 le bhag garda 62 aauchha, baki 1. jaach: 2 x 62 = 124, 124 + 1 = 125.
+N: 62 wata packet banchha ra 1 kilo chiya patti bachchha.
+G: 62
+
+### math-word
+U: truck ko 60 liter ko tank 3/4 bhari thiyo. yatra ma tyo petrol ko 2/5 kharcha bhayo. aba tank ma kati liter chha?
+T: suru ma: 60 x 3 / 4 = 45 liter. kharcha: 45 x 2 / 5 = 18 liter. baki: 45 - 18 = 27 liter.
+N: aba tank ma 27 liter chha.
+G: 27
+
+### math-word
+U: 6 talle naya mall ko jamma 1800 varga meter bhuin madhye 30% parking ko lagi chha. parking kati varga meter?
+T: 1800 x 30 / 100 = 540. mall 6 talle bhanne kura yo hisab ma chahindaina.
+N: parking 540 varga meter ma chha.
+G: 540
+
+### math-word
+U: bridge ko kaam 3 hapta ma 60% sakiyo. tyahi gati ma baki kaam sakna aru kati hapta lagchha?
+T: hapta ma: 60 / 3 = 20%. baki: 100 - 60 = 40%. 40 / 20 = 2 hapta.
+N: baki kaam sakna aru 2 hapta lagchha.
+G: 2
+
+### math-word
+U: pilot ra copilot le yo barsha 5:3 ko anupat ma udan gareka chhan, jamma 640 ghanta. pilot ko kati ghanta?
+T: jamma bhag: 5 + 3 = 8. ek bhag: 640 / 8 = 80. pilot: 5 x 80 = 400 ghanta.
+N: pilot ko 400 ghanta udan bhayo.
+G: 400
+
+### math-word
+U: ghar ko naksa 1:100 ko scale ma chha. naksa ma bhanchha kotha 4.5 cm lamo chha. sachikai kati meter lamo?
+T: 4.5 x 100 = 450 cm. 450 / 100 = 4.5 meter.
+N: bhanchha kotha sachikai 4.5 meter lamo chha.
+G: 4.5
+
+### math-word
+U: team ka 6 jana ko ausat umer 32 barsha thiyo. 50 barsha ka ek jana gaye ra 26 barsha ka naya sathi aae. aba ausat umer kati?
+T: pahila ko jamma: 6 x 32 = 192. aba ko jamma: 192 - 50 + 26 = 168. ausat: 168 / 6 = 28.
+N: aba ausat umer 28 barsha bhayo.
+G: 28
+
+### math-word
+U: truck le 3 din ma 8 ghanta ma 400 km, 6 ghanta ma 300 km ra 10 ghanta ma 500 km gudyo. 3 din ko ausat gati kati?
+T: jamma duri: 400 + 300 + 500 = 1200 km. jamma samaya: 8 + 6 + 10 = 24 ghanta. ausat: 1200 / 24 = 50 km/ghanta.
+N: 3 din ko ausat gati 50 km/ghanta.
+G: 50
+
+### math-word
+U: chhat 8 meter lamo ra 6 meter chaudai chha. tesko 75% bhag ma matra solar panel rakhna milchha. euta panel 1.6 meter x 1 meter ko bhaye kati wata pura panel aatchhan?
+T: chhat: 8 x 6 = 48 varga meter. prayog garna milne: 48 x 75 / 100 = 36 varga meter. euta panel: 1.6 x 1 = 1.6 varga meter. 36 / 1.6 = 22.5, tyasaile pura panel 22 wata.
+N: 22 wata pura panel aatchhan.
+G: 22
+
+### math-word
+U: A rectangular warehouse is 40 m long and 25 m wide and has 3 doors. How many meters is it all the way around the outside?
+T: Perimeter: 2 x (40 + 25) = 130 m. The 3 doors are not needed.
+N: It is 130 meters around the outside.
+G: 130
+
+### math-word
+U: 8000 liter ko tanker le 2 meter lamo, 2 meter chaudai ra 1.5 meter aglo khali tank bharyo. tanker ma kati liter pani bachyo?
+T: tank: 2 x 2 x 1.5 = 6 ghan meter, arthat 6000 liter. bachyo: 8000 - 6000 = 2000 liter.
+N: tanker ma 2000 liter pani bachyo.
+G: 2000
+
+### math-word
+U: site ko generator le din ma 12 liter diesel khanchha. 20 liter ka 6 wata jerkin diesel chha. kati din pugchha?
+T: jamma diesel: 6 x 20 = 120 liter. din: 120 / 12 = 10.
+N: diesel 10 din pugchha.
+G: 10
+
+### math-word
+U: 2 jana engineer le euta report 6 din ma tayar garchhan. 3 jana le tyahi report kati din ma tayar garchhan?
+T: kaam: 2 x 6 = 12 jana-din. 3 jana: 12 / 3 = 4 din.
+N: 3 jana le 4 din ma tayar garchhan.
+G: 4
+
+### math-word
+U: 300 wata kursi rangaunu chha. ek jana le ghanta ma 6 wata rangauchha. 4 jana le 5 ghanta kaam garepachhi kati kursi baki rahanchha?
+T: 4 jana le ghanta ma: 4 x 6 = 24. 5 ghanta: 24 x 5 = 120. baki: 300 - 120 = 180.
+N: 180 wata kursi baki rahanchha.
+G: 180
+
+### math-word
+U: 3.6 km lamo sadak ko ek chheu dekhi arko chheu samma har 40 meter ma bijuli ko khamba gadne, dubai chheu ma pani. kati khamba chahinchha?
+T: 3.6 km bhaneko 3600 meter. 3600 / 40 = 90 wata khali thau. dubai chheu ma pani khamba hune bhayekale: 90 + 1 = 91.
+N: 91 wata khamba chahinchha.
+G: 91
+
+### math-word
+U: hapta ma 6 din kaam garchhu ra mero shift 6 ghanta 45 minet ko hunchha. euta shift minet ma kati bhayo?
+T: 6 x 60 = 360. 360 + 45 = 405 minet. hapta ko 6 din yo prashna ma chahindaina.
+N: euta shift 405 minet ko hunchha.
+G: 405
+
+### math-word
+U: courier dai le din ma 35 wata parcel puryauchhan. 2 hapta ma 12 din kaam garchhan bhane kati parcel puryauchhan?
+T: 12 x 35 = 420.
+N: 2 hapta ma 420 wata parcel puryauchhan.
+G: 420
+
+### math-word
+U: office ko lift ma ek palta 8 jana aatchhan ra ek palta mathi gaera aauna 1.5 minet lagchha. bihana 60 jana mathi jaanu chha. sabai lai kamti ma kati minet lagchha?
+T: 60 lai 8 le bhag garda 7 aauchha, baki 4, tyasaile 7 + 1 = 8 palta. samaya: 8 x 1.5 = 12 minet.
+N: sabai lai mathi puryauna kamti ma 12 minet lagchha.
+G: 12
+
+### math-word
+U: thekka ko kaam 28 gate bhitra sakaunu parchha. aaja 9 gate ho ra kaam suru garda 15 din lagchha. aaja suru gare samay mai sakinchha?
+T: aaja lai pahilo din ganda antim din: 9 + 15 - 1 = 23 gate. 23 gate 28 gate bhanda agadi parchha. bachne din: 28 - 23 = 5.
+N: sakinchha: kaam 23 gate sakinchha, 28 gate bhanda 5 din agadi.
+G: 23
+
+### math-word
+U: A trekking permit is valid from the 5th to the 26th of the month, both days included. For how many days is it valid?
+T: 26 - 5 = 21, and counting the first day too: 21 + 1 = 22.
+N: The permit is valid for 22 days.
+G: 22
+
+### math-word
+U: ghar ko charai bhitta ma rang lagaunu chha. kotha 4 meter lamo ra 3 meter chaudai chha. kati varga meter ma rang lagchha?
+T: bhitta ko uchai diyeko chhaina.
+N: bhitta kati meter aglo chha? uchai bhannus, 2 x (4 + 3) x uchai garera bhanidinchhu.
+
+### math-word
+U: hamro bus ma kehi jana yatri thiye. aadha jana pokhara ma orle. pokhara ma kati jana orle?
+T: bus ma jamma kati yatri thiye bhanne diyeko chhaina.
+N: bus ma jamma kati jana yatri thiye? jamma bhannus, aadha garera pokhara ma orleko sankhya bhanidinchhu.
+
