@@ -97,7 +97,9 @@ def bench_guard(rows, root):
         for seed in (2026, 7, 11, 13, 17):
             for _, q, _ in bench.items(16, seed=seed, nested=nested):
                 nums = tuple(re.findall(r'\d+', q))
-                if nums:
+                # a single small number ('2') is not a problem identity: it dropped every row asking about one
+                # number (180,439 rows in the first build that used this guard); keep tuples of 2+ numbers
+                if len(nums) >= 2:
                     keys.add(nums)
     out, dropped = [], 0
     for line in rows:
