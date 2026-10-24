@@ -1,0 +1,14 @@
+{
+ "name": "nik 0.1",
+ "tag": "v2s14",
+ "file": "nik-0.1.v2s14.bin",
+ "bytes": 20689712,
+ "md5": "70671cbf9c639610b8ede129cd0516ff",
+ "version": "2026-10-24T12:48Z-v2s14",
+ "trained": "preview v2s14 (candidate under test, not shipped)",
+ "note": "m50 + 850 steps on the k13 recipe + 42,944 hand-written conversations (6% of tokens), KL-anchored to m50. First candidate of 2026-10-24.",
+ "eval": {
+  "gate_vs_live_m50": "bench 210 (209), nested 218 (222), understanding 21 (19), math 98% (94%), RW items 37 (25), reading 7 (5), traps 29 (25), everyday 18/60 (6), money 19 (18), owner cases 24/25 (25), EN qa ppl 14 (229), EN reply 53 (54)",
+  "verdict": "NO SHIP (strict rule): nested, owner cases, EN reply"
+ }
+}
