@@ -466,7 +466,7 @@ def sec_curves():
             vals = [r.get('hand_loss'), r.get('hand_gold'), r.get('fresh'), r.get('nested'), sf.get('plain'), sf.get('nospace'), sf.get('tight-q')]
             rows.append(f'<tr><td class="mono">{_esc(k)}</td>' + ''.join(f'<td class="mono">{_esc("" if v is None else v)}</td>' for v in vals) + '</tr>')
         th = '<tr><th>step</th>' + ''.join(f'<th>{_esc(x)}</th>' for x in cols) + '</tr>'
-        html_.append(f'<div class="sub" style="margin:4px 0">{_esc(tag)} (live m50: hand loss 5.05, gold 26/317, fresh 10/29, nested 222, sums 22 / 7 / 1 of 30)</div>'
+        html_.append(f'<div class="sub" style="margin:4px 0">{_esc(tag)} (old live m50: hand loss 5.05, gold 26/317, fresh 10/29, nested 222, sums 22 / 7 / 1 of 30; live v8g: hand loss 2.04, gold 62/317)</div>'
                      f'<div style="overflow-x:auto"><table>{th}{"".join(rows)}</table></div>')
     return _box('learning curves: do more steps help?', ''.join(html_))
 
