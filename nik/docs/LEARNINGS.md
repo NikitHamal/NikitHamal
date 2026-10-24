@@ -4,6 +4,35 @@ Each entry: what we tried, the evidence (numbers, commit, run), and what we conc
 288 NikBench items (`--n 16`) vs the live model unless noted. Gates: understanding probes, stress (strict), chat_check,
 persona, trap_check, NikBench/math within 2 pp, strictly better somewhere.
 
+## 2026-10-24 afternoon (Claude, same box)
+
+- **The nested-gate block is one template the live model never understood.** Every candidate today (v2s14-16, v3s14,
+  v4s14, v2g14, soups) loses 5-7 of the 10 NikBench `euta bagaincha ma A wata line chhan ra har line ma B wata rukh. 7
+  wata rukh dhale bhane kati rukh baki?` items (`jamma: 6 x 4 = 24. rukh: 24 x 4 = 96`); the rest of nested is flat.
+  Probing m50: change `dhale` to `kaate`, or trees to apples / students / glasses, or ask `7 wata thape bhane jamma?`,
+  and m50 answers 96 too: it had memorised the benchmark sentence's shape (frame.py's basket scene is the nearest
+  training row), and any polish erodes that memory. `groups.py` teaches the skill (12 scenes, removal and addition
+  verbs, 7 question kinds incl. lookup / starting total / inverse); `tests/chat/groups_heldout.json` gates it on new
+  scenes. Lesson: before chasing a gate regression, check whether the live model's "skill" survives one word change.
+- **Arithmetic was tied to the training surface, not understood.** surface_math.py, raw models, 30 fresh 3-7 digit
+  sums: `a + b kati hunchha?` 22/30 for m50, v2s14 and v3s14 alike, but `a+b kati hunxa?` 4-7/30 and `a+b=?` 0-1/30
+  (words, English, xa spelling, question-first all stay at 21-22). Without spaces the tokenizer gives no number-start
+  token (` 3`), the digits of both numbers form one run, and the model reads a story (owner: `5674674+3644849` ->
+  "(1) suru ma kitab 6 ..."). /chat now spaces operators (context.js normalizeNumbers) as a safety net; the real fix
+  is data: `surfmath.py` (column work under 15 typed surfaces, think restates `sodheko: a + b.`) + augment.py's math
+  surfaces (35% of user turns). Every generator wrote `a + b` with spaces: a blind spot from one formatting habit.
+- **Competence-gated KL anchor (new, `train.py --kl-gate`): v2g14** = v2's mix and steps with each target token's KL
+  weight scaled by p_ref(gold). Mean gate 0.65 on the mix (the parent is confident on most template tokens, ~0.2 on
+  hand rows at step 1). Result vs v2s14 (same mix, seed, steps, plain anchor): traps 30 (29), shapes 6 (4), everyday
+  41/60 (18), RW items 38 (37), held-out hand chat 2.32 (v2s14 saw all hand data: n/a); bench 206 (210), nested 216
+  (218). The everyday jump (18 -> 41 of 60) is the largest single-row gain of the session.
+- **v3s14 vs v4s14 (hand math anchored + column rows 8%)**: v4s14 did not fix nested (212 vs 214) because the lost
+  items are the groups template above, not column arithmetic. Fresh questions 13/29 (v3s14 11, m50 10).
+- **Nik-deep needs memory:** `--set-repeat 3` at bs 128 OOMed beside another training (94.8 GB); bs 64 x accum 4
+  fits (~30 GB) at ~31k tok/s next to a second run.
+- **Eval processes starve trainings:** two gates beside two trainings cut a training from 65k to 33-45k tok/s;
+  arm.sh now runs gates / hand evals at nice 15.
+
 ## 2026-10-24 (Claude, box session: hand data on the GPU)
 
 - **The first box was reclaimed after ~10 minutes** (the owner got a new pair URL; all of /tmp, the data download and
