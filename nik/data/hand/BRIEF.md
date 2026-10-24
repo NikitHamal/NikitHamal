@@ -15,7 +15,9 @@ politics and religion debates; health stays at basic, safe habits plus "doctor s
 2. Before each category, read the other writers' `raw/*/NOTES.md` sections for that category and skim one of their
    files, then write NEW situations, names, places, numbers and question wordings. Do not copy the examples below.
 3. One file = one category, `<category>_<NNN>.txt` (`reading_001.txt`, ...), 120-200 examples (multi-turn: 100-150).
-   Write a file in 2-3 chunks if that is easier (Write the first part, then append with Edit or a heredoc).
+   **Write every file in chunks of at most ~40 examples per tool call** (Write the first chunk, then append each next
+   chunk with Bash `cat >> <file> <<'EOF'` ... `EOF`). A whole file in one tool call is a very long generation that can
+   time out and lose everything (two writers lost an hour each that way).
 4. After every file: `python3 nik/data/hand/check.py nik/data/hand/raw/<letter>/<file>` and fix every REJECT
    (fix, do not delete; a "duplicate first user turn" means another file already asks that: reword yours).
    Never run check.py without a file argument (that rewrites hand.jsonl, the lead does it).
@@ -31,6 +33,8 @@ politics and religion debates; health stays at basic, safe habits plus "doctor s
   `25% of 1500 = 1500 x 25 / 100` (read as `1500 = ...`).
 - Fractions of amounts: `1200 x 3 / 4 = 900` or `3/4 x 1200 = 900`, never `1200 ko 3/4 = 1200 x 3 / 4 = 900`
   (read as `3/4 = 900`).
+- Translate only what the source says: an unspecified "cousin" is `cousin` (not `kaka ko chhora`), "teacher"
+  stays gender-neutral where the source is (`shikshak`), "they" stays plural.
 - Clock times never touch `=`: `9:00 bata 45 minet aghi 8:15`, not `9:00 - 0:45 = 8:15` (read as `45 = 8`).
 - Verb endings are always `-chha` (`painchha`, `hunchha`, `lagchha`, `runchha`); `-cha` verbs are rejected.
 - Generic follow-ups that are eval prompts are rejected as exact user turns (`kati rey?`, `pakka ho?`,

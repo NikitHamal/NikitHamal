@@ -82,16 +82,17 @@ plus hand-written generators in `nik/data/teacher/`. No subagents (see AGENTS.md
    `nik-v2-run`. Progress: `/tmp/v2/progress.log`. ~1.5-2 h. Ship only by hand (`scripts/ship_model.py`).
 3. Hand-written data (owner's request, 2026-10-22 night): `nik/data/hand/` (STYLE.md, check.py, raw/, hand.jsonl).
 
-## HANDOVER (read first if you are the next Claude) - updated 2026-10-23 ~19:00 UTC (session 3: data only, no box)
+## HANDOVER (read first if you are the next Claude) - updated 2026-10-24 ~01:30 UTC (session 3: data only, no box)
 **Now:** hand-writing teaching data toward 100k+ examples (owner's overnight goal), then build the v2 mix and train
 on the next box (`nik/agents/molab/jobs/run_v2.sh`), then the ship gate vs live m50. No box until the owner gives one.
 - `nik/data/hand/`: STYLE.md (house style), BRIEF.md (writing-helper brief + checker gotchas), check.py (compiler +
   validator; needs CPU torch installed or the eval guard is incomplete), raw/<writer>/, hand.jsonl.
-- Total **31,803 examples, 0 rejects**: math-word 4,249, reasoning 3,959, reading 3,760, translate 3,478, knowledge
-  3,062, instructions 2,625, english 2,269, write 2,164, chat 1,983, advice 1,755, multiturn 1,690, honesty 809.
-  Writers this session: G reading, H multiturn + honesty, I math-word, J translate + instructions, K reasoning,
-  L chat + advice, M (folder m2) knowledge, N english (+55 write; stopped by an API error), O write, P reading +
-  multiturn. Persona is still empty (lead writes it).
+- Total **36,104 examples, 0 rejects** (b267b7a): math-word 5,763, reasoning 4,779, reading 3,760, translate 3,478,
+  instructions 3,282, knowledge 3,062, english 2,269, write 2,164, multiturn 2,042, chat 1,983, advice 1,755,
+  honesty 1,624, persona 143 (lead). Writers this session: G reading, H multiturn + honesty, I math-word, J translate
+  + instructions, K reasoning, L chat + advice, M (folder m2) knowledge, N english (stopped by an API error), O write,
+  P reading + multiturn, Q honesty + memory, R formats + money, T math-word + reasoning (S: API timeout, nothing saved).
+  Near-duplicate first turns (3-gram Jaccard >= 0.8, same category): 33 pairs, ~10 real (0.03%).
 - **Raw `C:` lines** = context-only Nik turns (never trained), for slips the user corrects. **build_mix_v2 now
   expands hand conversations** into one row per trained Nik turn, history as /chat sends it (no thinks, context only).
   On the box: check `mix.log` for the `hand: N conversations -> M rows` line and the manifest `unique` count; raise
