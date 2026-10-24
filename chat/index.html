@@ -322,6 +322,8 @@
 
     // ---------- model (Web Worker)
     const worker = new Worker('/nik/web/worker.js', { type: 'module' });
+    // ?model=preview loads the newest candidate under test (nik/web/model/preview/), never the default
+    const CHANNEL = new URLSearchParams(location.search).get('model') === 'preview' ? 'preview' : '';
     let pending = null;
     worker.onmessage = (e) => {
       const m = e.data;
@@ -332,10 +334,10 @@
       } else if (m.type === 'ready') {
         state.ready = true; setBar(1); $('load').style.display = 'none';
         const M = m.meta;
-        $('ver').textContent = (M.name || 'nik 0.1').replace(/^nik\s*/, '');
+        $('ver').textContent = (M.name || 'nik 0.1').replace(/^nik\s*/, '') + (CHANNEL ? ' · preview' : '');
         $('trained').textContent = M.trained || 'ready';
         if (M.ctx > 512) { $('sMax').max = 8192; $('sMax').step = 64; }   // long-context model: up to 8k output tokens
-        setStatus(`ready · ${(M.params / 1e6).toFixed(1)}m params · ${(M.bytes / 1e6).toFixed(1)} mb · on-device`, 'ready');
+        setStatus(`ready · ${(M.params / 1e6).toFixed(1)}m params · ${(M.bytes / 1e6).toFixed(1)} mb · on-device${CHANNEL ? ' · preview: ' + (M.tag || 'candidate') + ', not shipped' : ''}`, 'ready');
         updateSend();
         if (pending) { pending = null; startGeneration(); }
       } else if (m.type === 'delta' && state.cur && m.id === state.id) {
@@ -373,7 +375,7 @@
         state.busy = false; updateSend();
       }
     };
-    worker.postMessage({ type: 'load' });
+    worker.postMessage({ type: 'load', channel: CHANNEL });
 
     // ---------- composer
     const input = $('input');
