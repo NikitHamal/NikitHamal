@@ -1,51 +1,142 @@
 {
-  "name": "nik 0.1",
-  "file": "nik-0.1.bin",
-  "bytes": 20689712,
-  "version": "2026-10-21T16:45Z",
-  "trained": "molab RTX PRO 6000 · m50 = 0.5·v4r2 + 0.5·v4r3, a same-parent weight blend of two children of v4f: v4r2 = v4f + 20 min SFT lr 2e-4 with Sky's reduce.py at 25% of rows; v4r3 = v4f + 15 min lr 1.5e-4, reduce 30%",
-  "eval": {
-    "nikbench_n16": 0.726,
-    "nikbench_groups_n16": {
-      "arith": "161/192",
-      "word": "10/48",
-      "reason": "38/48"
-    },
-    "nikbench_nested_n16": 0.771,
-    "nikbench_nested_groups_n16": {
-      "arith": "168/192",
-      "word": "16/48",
-      "reason": "38/48"
-    },
-    "ladder_L1_L2_L3_L4": "12/12/12/6",
-    "math_acc": 0.94,
-    "persona_acc": 1.0,
-    "understanding_probes": "19/26",
-    "trap_check": "9/12",
-    "bench_reading_pairs": "2/20",
-    "chat_check": "15/15",
-    "stress": "66/103",
-    "longchat_context_js": "43/60",
-    "memory_long_context_js": "57/80"
+ "name": "nik 0.1",
+ "file": "nik-0.1.bin",
+ "bytes": 20689712,
+ "version": "2026-10-24T18:09Z-v8g",
+ "trained": "molab RTX PRO 6000, 2026-10-24: v8g = v2g14 + 900 steps on mix v8 (m50 recipe + 42,117 hand-written conversations at 12% of tokens, KL-free; column arithmetic, 5-10 digit sums, arithmetic in typed surfaces (a+b, a+b=?), groups-then-change word problems), competence-gated KL anchor to m50 (each token's anchor scaled by m50's own probability of the right answer). v2g14 = m50 + 850 steps on mix v2 with the gated anchor.",
+ "eval": {
+  "full_gate_vs_previous": {
+   "bench": {
+    "live": 209,
+    "v8g": 216
+   },
+   "nested": {
+    "live": 222,
+    "v8g": 220
+   },
+   "understanding": {
+    "live": 19,
+    "v8g": 19
+   },
+   "math%": {
+    "live": 94.0,
+    "v8g": 97.5
+   },
+   "persona%": {
+    "live": 100.0,
+    "v8g": 100.0
+   },
+   "RW groups": {
+    "live": 1,
+    "v8g": 6
+   },
+   "RW items": {
+    "live": 25,
+    "v8g": 43
+   },
+   "shapes": {
+    "live": 4,
+    "v8g": 4
+   },
+   "reading pairs": {
+    "live": 5,
+    "v8g": 8
+   },
+   "ladder ALL": {
+    "live": 44,
+    "v8g": 45
+   },
+   "traps": {
+    "live": 25,
+    "v8g": 30
+   },
+   "everyday (held-out)": {
+    "live": 6,
+    "v8g": 41
+   },
+   "money (held-out)": {
+    "live": 18,
+    "v8g": 23
+   },
+   "mention (held-out)": {
+    "live": 28,
+    "v8g": 29
+   },
+   "owner cases (5 seeds)": {
+    "live": 25,
+    "v8g": 33
+   },
+   "groups (held-out)": {
+    "live": 1,
+    "v8g": 7
+   },
+   "fresh (2 seeds)": {
+    "live": 73,
+    "v8g": 79
+   },
+   "follow-ups*": {
+    "live": 53,
+    "v8g": 65
+   },
+   "long recall 400": {
+    "live": 0,
+    "v8g": 2
+   },
+   "EN qa ppl (lower)": {
+    "live": 229.32,
+    "v8g": 5.2
+   },
+   "EN wiki ppl (lower)": {
+    "live": 126.17,
+    "v8g": 13.4
+   },
+   "EN reply": {
+    "live": 54,
+    "v8g": 57
+   },
+   "NE fidelity": {
+    "live": 22,
+    "v8g": 22
+   },
+   "chat*": {
+    "live": 15,
+    "v8g": 15
+   },
+   "stress*": {
+    "live": 66,
+    "v8g": 62
+   }
   },
-  "note": "Shipped by the gate (2026-10-21, issue #11). Paired vs v4f on the same items: NikBench plain 72.2 -> 72.6% (9 fixed / 8 broken), nested 75.0 -> 77.1% (16/10); two-step ladder L2 0 -> 12/12 and L4 0 -> 6/12 with L1/L3 kept at 12/12; understanding 13 -> 19/26; traps 9 = 9; math 96 -> 94% (-2.0 pp, at the limit); bench_reading 3 -> 2/20 pairs (still unsolved). stress/chat_check/trap_check are partly contaminated (Local-A's leak audit, 0a8378c). Runner-up: Local-C's p8 (tied, traps 8/12). Rollback: nik-0.1.v4f.bin.",
-  "previous": {
-    "model": "v4f",
-    "file": "nik-0.1.v4f.bin",
-    "eval": {
-      "nikbench_n16": 0.722,
-      "nikbench_groups_n16": {
-        "arith": "163/192",
-        "word": "6/48",
-        "reason": "39/48"
-      },
-      "math_acc": 0.96,
-      "persona_acc": 1.0,
-      "understanding_probes": "13/26",
-      "chat_check": "15/15",
-      "stress": "63/103",
-      "trap_check": "9/12"
-    },
-    "note": "Shipped on the owner's call (2026-10-21) over the understanding gate: NikBench +9.7 pp vs v4c (reason 27->39/48, word 0->6/48), traps 5->9/12 (\"mero naam nikit ho\" no longer returns the biography); understanding probes 19->13/26 and stress 64->63. Rollback: nik-0.1.v4c.bin."
-  }
+  "md5": "db67337d71d4d65d16dbc58f97ed9d1e"
+ },
+ "note": "Shipped on the owner's call (2026-10-24 ~18:05 UTC) over one strict-gate row: nested 220 vs 222 on the gate items (8 fixed / 10 broken, p=0.81), while on 8 fresh NikBench item sets (2,304 new items) v8g scores 1750 vs live 1726 (91 fixed / 67 broken). Gains vs m50 on the same items: bench 216 (209), RW items 43 (25; 21 fixed / 3 broken), everyday held-out 41/60 (6), traps 30 (25), reading pairs 8 (5), money 23 (18), groups held-out 7 (1), fresh questions 79 (73), owner cases 33/35 (25), EN qa ppl 5.2 (229), EN reply 57 (54), math 97.5% (94%), held-out hand-written chat loss 2.04 nats (5.05), held-out gold 62/317 (26). Rollback: nik-0.1.m50.bin.",
+ "previous": {
+  "model": "m50",
+  "file": "nik-0.1.m50.bin",
+  "eval": {
+   "nikbench_n16": 0.726,
+   "nikbench_groups_n16": {
+    "arith": "161/192",
+    "word": "10/48",
+    "reason": "38/48"
+   },
+   "nikbench_nested_n16": 0.771,
+   "nikbench_nested_groups_n16": {
+    "arith": "168/192",
+    "word": "16/48",
+    "reason": "38/48"
+   },
+   "ladder_L1_L2_L3_L4": "12/12/12/6",
+   "math_acc": 0.94,
+   "persona_acc": 1.0,
+   "understanding_probes": "19/26",
+   "trap_check": "9/12",
+   "bench_reading_pairs": "2/20",
+   "chat_check": "15/15",
+   "stress": "66/103",
+   "longchat_context_js": "43/60",
+   "memory_long_context_js": "57/80"
+  },
+  "note": "Shipped by the gate (2026-10-21, issue #11). Paired vs v4f on the same items: NikBench plain 72.2 -> 72.6% (9 fixed / 8 broken), nested 75.0 -> 77.1% (16/10); two-step ladder L2 0 -> 12/12 and L4 0 -> 6/12 with L1/L3 kept at 12/12; understanding 13 -> 19/26; traps 9 = 9; math 96 -> 94% (-2.0 pp, at the limit); bench_reading 3 -> 2/20 pairs (still unsolved). stress/chat_check/trap_check are partly contaminated (Local-A's leak audit, 0a8378c). Runner-up: Local-C's p8 (tied, traps 8/12). Rollback: nik-0.1.v4f.bin."
+ }
 }

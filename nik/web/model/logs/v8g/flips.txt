@@ -1,0 +1,10 @@
+== gate_v8g vs gate_live_6cd6886dfa02
+row              live  cand  fixed  broke      p
+bench             209   216     14      7   0.19  
+nested            222   220      8     10   0.81  
+understanding      19    19      5      5   1.00  
+RW items           25    43     21      3   0.00  real gain?
+shapes              4     4      2      2   1.00  
+reading pairs       5     8      5      2   0.45  
+ladder             44    45      2      1   1.00  
+traps              25    30      6      1   0.12  

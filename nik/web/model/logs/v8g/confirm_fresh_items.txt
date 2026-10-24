@@ -1,0 +1,16 @@
+== confirm_v8g_s7 vs confirm_live_s7
+row              live  cand  fixed  broke      p
+bench             215   213      6      8   0.79  
+nested            217   226     16      7   0.09  real gain?
+== confirm_v8g_s11 vs confirm_live_s11
+row              live  cand  fixed  broke      p
+bench             210   213     13     10   0.68  
+nested            213   220     16      9   0.23  
+== confirm_v8g_s13 vs confirm_live_s13
+row              live  cand  fixed  broke      p
+bench             218   223     11      6   0.33  
+nested            214   212      6      8   0.79  
+== confirm_v8g_s17 vs confirm_live_s17
+row              live  cand  fixed  broke      p
+bench             212   220     16      8   0.15  
+nested            227   223      7     11   0.48  
