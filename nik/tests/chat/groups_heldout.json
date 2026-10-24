@@ -1,0 +1,110 @@
+[
+ {
+  "name": "groups-heldout-00",
+  "turns": [
+   "ban ma 6 line ma 4 wata rukh chhan. aandhi le 7 wata rukh bhatkayo. aba kati rukh ubhiyeko chha?"
+  ],
+  "want": [
+   "\\b17\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-01",
+  "turns": [
+   "8 wata ghara ma 6/6 wata phool chhan. 5 wata phool oilaye. kati phool taja chhan?"
+  ],
+  "want": [
+   "\\b43\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-02",
+  "turns": [
+   "9 wata bas ma 40 jana chadhna milchha. sabai bhari bhayo, pachhi 25 jana jhare. kati jana bas ma chhan?"
+  ],
+  "want": [
+   "\\b335\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-03",
+  "turns": [
+   "ek dabba ma 12 wata chocolate, mosanga 5 dabba chha. maile 9 wata sathi lai diye. kati baki?"
+  ],
+  "want": [
+   "\\b51\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-04",
+  "turns": [
+   "hotel ma 7 tala chhan, har tala ma 10 kotha. 18 kotha ma manchhe chhan. kati kotha khali chhan?"
+  ],
+  "want": [
+   "\\b52\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-05",
+  "turns": [
+   "4 wata gaadi ma 8/8 jana thiye. 3 jana bato ma jhare. kati jana pugey?"
+  ],
+  "want": [
+   "\\b29\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-06",
+  "turns": [
+   "There are 7 shelves with 9 jars on each. 11 jars fell and broke. How many jars are still fine?"
+  ],
+  "want": [
+   "\\b52\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-07",
+  "turns": [
+   "kheti ma 5 wata line ma 20/20 wata makai ko bot chha. 14 wata bot lai kira lagyo. kati bot swastha chhan?"
+  ],
+  "want": [
+   "\\b86\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-08",
+  "turns": [
+   "12 wata tray ma 6/6 wata cupcake chhan. party ma 50 wata khaiyo. kati cupcake bachyo?"
+  ],
+  "want": [
+   "\\b22\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-09",
+  "turns": [
+   "3 wata thaila ma 15/15 kilo chamal chha. 8 kilo pakaiyo. kati kilo chamal baki chha?"
+  ],
+  "want": [
+   "\\b37\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-10",
+  "turns": [
+   "10 wata line ma 10/10 jana ubhiyeka chhan. 13 jana bimar bhaera gaye. kati jana baki chhan?"
+  ],
+  "want": [
+   "\\b87\\b"
+  ]
+ },
+ {
+  "name": "groups-heldout-11",
+  "turns": [
+   "euta orchard ma 9 line, har line ma 7 wata suntala ko bot. 6 wata bot sukera gaye ani 4 wata naya ropiye. aba kati bot?"
+  ],
+  "want": [
+   "\\b61\\b"
+  ]
+ }
+]
