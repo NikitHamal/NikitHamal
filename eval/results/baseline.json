@@ -1,0 +1,2000 @@
+{
+  "model": "/tmp/repo/nik/web/model/nik-0.1.bin",
+  "mode": "raw",
+  "seed": 42,
+  "timestamp": "2026-11-02T21:22:04Z",
+  "overall": {
+    "correct": 76,
+    "total": 125,
+    "accuracy": 0.608,
+    "elapsed_sec": 71.24,
+    "total_tokens": 5786,
+    "tokens_per_sec": 81.2
+  },
+  "categories": {
+    "short_chat": {
+      "correct": 19,
+      "total": 25,
+      "accuracy": 0.76
+    },
+    "multiturn_chat": {
+      "correct": 10,
+      "total": 20,
+      "accuracy": 0.5
+    },
+    "arithmetic": {
+      "correct": 16,
+      "total": 30,
+      "accuracy": 0.5333
+    },
+    "nepali_comprehension": {
+      "correct": 17,
+      "total": 25,
+      "accuracy": 0.68
+    },
+    "english_comprehension": {
+      "correct": 14,
+      "total": 25,
+      "accuracy": 0.56
+    }
+  },
+  "arithmetic_breakdown": {
+    "exact": {
+      "correct": 12,
+      "total": 15,
+      "accuracy": 0.8
+    },
+    "word_problems": {
+      "correct": 4,
+      "total": 15,
+      "accuracy": 0.2667
+    }
+  },
+  "subcategories": {
+    "arithmetic.exact_add_3d": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_add_5d": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_add_7d": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_div_2d": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_div_exact": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_mul_2x1": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_mul_3x1": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_mul_3x2": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_percent": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.exact_sub_7d_zero": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.exact_sub_borrow": {
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "arithmetic.exact_sub_zero_borrow": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "arithmetic.word_add_sub": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.word_age_diff": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_bus_stops": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_class_present": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_discount": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_en_boxes": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_en_rate": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_grid_sub": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.word_half_sub": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_mul": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_mul_add": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_mul_sub": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.word_share_div": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "arithmetic.word_shop_change": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "arithmetic.word_weekly_rate": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "english_comprehension.factual": {
+      "correct": 2,
+      "total": 4,
+      "accuracy": 0.5
+    },
+    "english_comprehension.grammar": {
+      "correct": 3,
+      "total": 4,
+      "accuracy": 0.75
+    },
+    "english_comprehension.quant": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6667
+    },
+    "english_comprehension.reading": {
+      "correct": 0,
+      "total": 6,
+      "accuracy": 0.0
+    },
+    "english_comprehension.translate": {
+      "correct": 5,
+      "total": 5,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.english_multiturn": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.entity_pronoun": {
+      "correct": 1,
+      "total": 4,
+      "accuracy": 0.25
+    },
+    "multiturn_chat.honest_multiturn": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "multiturn_chat.memory_age": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.memory_city": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "multiturn_chat.memory_food": {
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    "multiturn_chat.memory_name": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.memory_pet": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.memory_profession": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.memory_residence": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "multiturn_chat.state_math": {
+      "correct": 2,
+      "total": 6,
+      "accuracy": 0.3333
+    },
+    "nepali_comprehension.calendar": {
+      "correct": 1,
+      "total": 2,
+      "accuracy": 0.5
+    },
+    "nepali_comprehension.grammar": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "nepali_comprehension.honesty": {
+      "correct": 0,
+      "total": 2,
+      "accuracy": 0.0
+    },
+    "nepali_comprehension.knowledge": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "nepali_comprehension.list_ops": {
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "nepali_comprehension.logic": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "nepali_comprehension.reading": {
+      "correct": 3,
+      "total": 7,
+      "accuracy": 0.4286
+    },
+    "nepali_comprehension.relational": {
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    "nepali_comprehension.vocab": {
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    "nepali_comprehension.yesno": {
+      "correct": 3,
+      "total": 3,
+      "accuracy": 1.0
+    },
+    "short_chat.advice_no_math_trap": {
+      "correct": 4,
+      "total": 5,
+      "accuracy": 0.8
+    },
+    "short_chat.empathy": {
+      "correct": 5,
+      "total": 5,
+      "accuracy": 1.0
+    },
+    "short_chat.greeting": {
+      "correct": 3,
+      "total": 5,
+      "accuracy": 0.6
+    },
+    "short_chat.persona": {
+      "correct": 4,
+      "total": 5,
+      "accuracy": 0.8
+    },
+    "short_chat.trap_guard": {
+      "correct": 3,
+      "total": 5,
+      "accuracy": 0.6
+    }
+  },
+  "items": [
+    {
+      "id": "sc_01",
+      "category": "short_chat",
+      "subcategory": "greeting",
+      "prompt": "namaste! timi ko hau?",
+      "think": "",
+      "answer": "ma nik 0.1 hu. nikit hamal le banayeko nepal ko sano ra chhito AI. tapai sanga romanized nepali ma gaff garna paauda khusi lagyo.",
+      "tokens": 29,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_02",
+      "category": "short_chat",
+      "subcategory": "greeting",
+      "prompt": "kasto chha timro haalkhabar?",
+      "think": "",
+      "answer": "ma thik chhu, dhanyabad sodhnu bhayo! tapai ni?",
+      "tokens": 12,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_03",
+      "category": "short_chat",
+      "subcategory": "greeting",
+      "prompt": "hello! can we talk in romanized nepali?",
+      "think": "",
+      "answer": "Kombodia",
+      "tokens": 5,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "sc_04",
+      "category": "short_chat",
+      "subcategory": "greeting",
+      "prompt": "dhanyabad hai nik, dherai sahayog bhayo!",
+      "think": "",
+      "answer": "hajur, ramro kaam! tapai lai dherai maya ra mehnat ko phal paunu bhayo?",
+      "tokens": 24,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "sc_05",
+      "category": "short_chat",
+      "subcategory": "greeting",
+      "prompt": "subha bihani! aaja ko din kasto rahos?",
+      "think": "",
+      "answer": "aaja ko din ekdam ramailo! aaja ko din kasto bhayo?",
+      "tokens": 15,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_06",
+      "category": "short_chat",
+      "subcategory": "persona",
+      "prompt": "timilai kasle banayeko ho?",
+      "think": "",
+      "answer": "malai nikit hamal le banaunubhayo. uha nepal ka android ra full-stack developer hunuhunchha.",
+      "tokens": 18,
+      "ok": true,
+      "score_detail": "must_all=['nikit']"
+    },
+    {
+      "id": "sc_07",
+      "category": "short_chat",
+      "subcategory": "persona",
+      "prompt": "nikit hamal ko hun?",
+      "think": "",
+      "answer": "nikit hamal nepal ka android app developer ra full-stack engineer hunuhunchha. uha consica labs ma head of operations hunuhunchha ra philosophy ma essays pani lekhnuhunchha.",
+      "tokens": 30,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_08",
+      "category": "short_chat",
+      "subcategory": "persona",
+      "prompt": "timi kun bhasha ma kura garna sakchhau?",
+      "think": "",
+      "answer": "ma romanized nepali ma kura garna, sano hisab sochera sodhchhu, tara nikit hamal ko barema sodhnus. kunai kura ma ajhai jankari chhaina.",
+      "tokens": 28,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_09",
+      "category": "short_chat",
+      "subcategory": "persona",
+      "prompt": "nikit ko email address ke ho?",
+      "think": "",
+      "answer": "ma kasaiko kaam, email, email, jawaf, tapai ko email, email, email, photo, news, insuline, home, website, fon, torch, bureau, list, video, email, bhidiyo.",
+      "tokens": 55,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "sc_10",
+      "category": "short_chat",
+      "subcategory": "persona",
+      "prompt": "ke timi internet bina browser mai chalchhau?",
+      "think": "",
+      "answer": "ho, ma internet bina manchhe ko kaam garnu pardaina. tapai ko browser mai OTP,porls hernus, ani server le taato khabar ko kura ali chhopnus.",
+      "tokens": 42,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_11",
+      "category": "short_chat",
+      "subcategory": "trap_guard",
+      "prompt": "sunita ko bahini ko naam sita ho. sunita ko bahini ko ho?",
+      "think": "\"bahini ko bahini ko naam sita ho\" bhaneko sunita ko bahini ko naam sita ho.",
+      "answer": "sita ko bahini ko naam sita ho.",
+      "tokens": 34,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_12",
+      "category": "short_chat",
+      "subcategory": "trap_guard",
+      "prompt": "ramesh pokhara ma baschha ra u vakil ho. ramesh ke kaam garchha?",
+      "think": "\"kehi chhaina\" bhaneko ramesh pokhara ma baschha ra usle kaam garchha.",
+      "answer": "hoina, ramesh pokhara ma baschha.",
+      "tokens": 28,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "sc_13",
+      "category": "short_chat",
+      "subcategory": "trap_guard",
+      "prompt": "mero sathi anil le naya cycle kinyo. anil le ke kinyo?",
+      "think": "",
+      "answer": "anil le naya cycle kinyo.",
+      "tokens": 12,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_14",
+      "category": "short_chat",
+      "subcategory": "trap_guard",
+      "prompt": "kiran ko ghar biratnagar ma chha. kiran ko ghar kaha chha?",
+      "think": "\"kiran ko ghar biratnagar ma chha\" lekheko chha.",
+      "answer": "kiran biratnagar ko ho.",
+      "tokens": 21,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_15",
+      "category": "short_chat",
+      "subcategory": "trap_guard",
+      "prompt": "maya le aaja dal bhat pakayin. maya le ke pakayin?",
+      "think": "",
+      "answer": "maya le aaja ko pakayo. k lai chinyo?",
+      "tokens": 14,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "sc_16",
+      "category": "short_chat",
+      "subcategory": "empathy",
+      "prompt": "aaja mero exam naramro bhayo, ekdam dukhi chhu.",
+      "think": "user ko bhawana dukhi chha, tyasai anusar jawaf dine.",
+      "answer": "sunera dukha lagyo. chinta nagarnus, bistarai thik hunchha. ma sanga kura garna sakinchha.",
+      "tokens": 36,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_17",
+      "category": "short_chat",
+      "subcategory": "empathy",
+      "prompt": "oe nik, aaja ta dherai thakai lagyo yaar",
+      "think": "",
+      "answer": "dherai kaam gareko hola. ali aaram garnus, pani piunus ra chhito sutnus.",
+      "tokens": 18,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_18",
+      "category": "short_chat",
+      "subcategory": "empathy",
+      "prompt": "malai naya sahar ma sathi banauna garo bhairako chha, k garu?",
+      "think": "",
+      "answer": "naya sahar ma naya sathi banauna garo bhaiyeko chha, tara ghar ko sabai bhanda ramro tarika ho.",
+      "tokens": 23,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_19",
+      "category": "short_chat",
+      "subcategory": "empathy",
+      "prompt": "tihar ma ghar jana paina, man nai dukhyo",
+      "think": "",
+      "answer": "ghar ma man ko kura, man bhari hunchha. ghar ma sabai lai dherai maya ra aashirbad dinus.",
+      "tokens": 24,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_20",
+      "category": "short_chat",
+      "subcategory": "empathy",
+      "prompt": "mero tauko dukhirako chha, ke garne hola?",
+      "think": "",
+      "answer": "tauko dukhai badhyo bhane doctor dekhaunus. tauko dukhne, pet dukhne, ringata lagne, aankha dukhne, tauko dukhne, aankha chilaune, mukh dukhema doctor dekhaunus.",
+      "tokens": 52,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_21",
+      "category": "short_chat",
+      "subcategory": "advice_no_math_trap",
+      "prompt": "mahina ko 25000 kamaunchhu, saving kasari suru garne?",
+      "think": "",
+      "answer": "25000 ko 25000 ma 10000 kamaunchhu. 25000 bhanda 10000 lai 10000 ma 1000, saving 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 100",
+      "tokens": 140,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_22",
+      "category": "short_chat",
+      "subcategory": "advice_no_math_trap",
+      "prompt": "ma 3 hapta dekhi gym jaadai chhu tara kehi farak dekhina",
+      "think": "",
+      "answer": "1 hapta samma gym jaada ramro hunchha. tara dherai jaso gym jaadai hunuhunchha bhane tyo pani ramro lagchha.",
+      "tokens": 30,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_23",
+      "category": "short_chat",
+      "subcategory": "advice_no_math_trap",
+      "prompt": "pahilo job interview bholi chha, k k tayari garu?",
+      "think": "",
+      "answer": "pahilo job interview bholi chha, tyo din ma tapai ko kaam ramro hunchha. aaja kun kura garne?",
+      "tokens": 26,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "sc_24",
+      "category": "short_chat",
+      "subcategory": "advice_no_math_trap",
+      "prompt": "राति छिटो निद्रा नलागे के गर्ने?",
+      "think": "",
+      "answer": "bhaya, Vishnu                                                     He was the first song with a South Way Chicago League.  The British Open Art King France,  New York House, Sales",
+      "tokens": 140,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "sc_25",
+      "category": "short_chat",
+      "subcategory": "advice_no_math_trap",
+      "prompt": "timi lai sabai bhanda man parne khana k ho?",
+      "think": "",
+      "answer": "tapai lai sabai bhanda man parne khana k ho?",
+      "tokens": 11,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_01",
+      "category": "multiturn_chat",
+      "subcategory": "memory_city",
+      "turns": [
+        {
+          "user": "namaste, mero naam aarati ho ra ma pokhara bata hu.",
+          "think": "",
+          "answer": "namaste aaarati! pokhara ta ramro thau ho. aaja k ma sahayog garu?",
+          "tokens": 20
+        },
+        {
+          "user": "mero bhai 12 barsha ko chha.",
+          "think": "",
+          "answer": "thik chha, yaad rakhe.",
+          "tokens": 7
+        },
+        {
+          "user": "ma kun thau bata hu?",
+          "think": "",
+          "answer": "tapai le malai tyo kura bhannubhayeko chhaina.",
+          "tokens": 11
+        }
+      ],
+      "think": "",
+      "answer": "tapai le malai tyo kura bhannubhayeko chhaina.",
+      "tokens": 11,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "mt_02",
+      "category": "multiturn_chat",
+      "subcategory": "memory_age",
+      "turns": [
+        {
+          "user": "namaste, mero naam aarati ho ra ma pokhara bata hu.",
+          "think": "",
+          "answer": "namaste aaarati! pokhara ta ramro thau ho. aaja k ma sahayog garu?",
+          "tokens": 20
+        },
+        {
+          "user": "mero bhai 12 barsha ko chha.",
+          "think": "",
+          "answer": "thik chha, yaad rakhe.",
+          "tokens": 7
+        },
+        {
+          "user": "bhai kati barsha ko bhayo?",
+          "think": "",
+          "answer": "tapai ko bhai 12 barsha ko hunuhunchha.",
+          "tokens": 10
+        }
+      ],
+      "think": "",
+      "answer": "tapai ko bhai 12 barsha ko hunuhunchha.",
+      "tokens": 10,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_03",
+      "category": "multiturn_chat",
+      "subcategory": "memory_food",
+      "turns": [
+        {
+          "user": "malai selroti sabai bhanda man parchha.",
+          "think": "",
+          "answer": "sel roti mitho hunchha, malai pani ramro lagchha.",
+          "tokens": 12
+        },
+        {
+          "user": "aaja pani parirako chha.",
+          "think": "",
+          "answer": "pariwar ko parivar sanga kura garnus, ani din ma ek palta ramro kura sunnus.",
+          "tokens": 21
+        },
+        {
+          "user": "maile kun kura dherai man parchha bhaneko?",
+          "think": "",
+          "answer": "tapai le malai tyo kura bhannubhayeko chhaina.",
+          "tokens": 11
+        }
+      ],
+      "think": "",
+      "answer": "tapai le malai tyo kura bhannubhayeko chhaina.",
+      "tokens": 11,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "mt_04",
+      "category": "multiturn_chat",
+      "subcategory": "memory_residence",
+      "turns": [
+        {
+          "user": "ma pahile dharan ma basthe, tara aile lalitpur ma baschhu.",
+          "think": "",
+          "answer": "thik chha, yaad rakhe.",
+          "tokens": 7
+        },
+        {
+          "user": "ma aile kaha baschhu?",
+          "think": "",
+          "answer": "tapai aile lalitpur ma basnuhunchha.",
+          "tokens": 11
+        }
+      ],
+      "think": "",
+      "answer": "tapai aile lalitpur ma basnuhunchha.",
+      "tokens": 11,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_05",
+      "category": "multiturn_chat",
+      "subcategory": "memory_name",
+      "turns": [
+        {
+          "user": "mero naam dipesh ho ra ma shikshak hu.",
+          "think": "",
+          "answer": "bujhe.",
+          "tokens": 4
+        },
+        {
+          "user": "mero naam ke ho?",
+          "think": "",
+          "answer": "tapai ko naam dipesh ho.",
+          "tokens": 9
+        }
+      ],
+      "think": "",
+      "answer": "tapai ko naam dipesh ho.",
+      "tokens": 9,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_06",
+      "category": "multiturn_chat",
+      "subcategory": "memory_profession",
+      "turns": [
+        {
+          "user": "mero naam dipesh ho ra ma shikshak hu.",
+          "think": "",
+          "answer": "bujhe.",
+          "tokens": 4
+        },
+        {
+          "user": "ma ke kaam garchhu?",
+          "think": "",
+          "answer": "tapai shikshak hunuhunchha.",
+          "tokens": 5
+        }
+      ],
+      "think": "",
+      "answer": "tapai shikshak hunuhunchha.",
+      "tokens": 5,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_07",
+      "category": "multiturn_chat",
+      "subcategory": "memory_pet",
+      "turns": [
+        {
+          "user": "mero ghar ma kale naam ko kukur chha.",
+          "think": "",
+          "answer": "la, ramro kura.",
+          "tokens": 6
+        },
+        {
+          "user": "mero kukur ko naam ke ho?",
+          "think": "",
+          "answer": "tapai ko kukur ko naam kale ho.",
+          "tokens": 9
+        }
+      ],
+      "think": "",
+      "answer": "tapai ko kukur ko naam kale ho.",
+      "tokens": 9,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_08",
+      "category": "multiturn_chat",
+      "subcategory": "state_math",
+      "turns": [
+        {
+          "user": "mero sanga 200 rupiya chha.",
+          "think": "",
+          "answer": "thik chha.",
+          "tokens": 4
+        },
+        {
+          "user": "maile 75 rupiya ko kitab kinen. aba kati rupiya baki chha?",
+          "think": "paisa: 200. kharcha: 75. hisab: 200 - 75 = 125. jaach: 125 + 75 = 200, milyo",
+          "answer": "aba 125 rupiya baki chha.",
+          "tokens": 53
+        }
+      ],
+      "think": "paisa: 200. kharcha: 75. hisab: 200 - 75 = 125. jaach: 125 + 75 = 200, milyo",
+      "answer": "aba 125 rupiya baki chha.",
+      "tokens": 53,
+      "ok": true,
+      "score_detail": "pred=125, gold=125"
+    },
+    {
+      "id": "mt_09",
+      "category": "multiturn_chat",
+      "subcategory": "state_math",
+      "turns": [
+        {
+          "user": "jhola ma 15 wata syau chhan.",
+          "think": "",
+          "answer": "thik chha, 15.",
+          "tokens": 7
+        },
+        {
+          "user": "aama le 8 wata syau thap dinubhayo. aba jamma kati wata syau bhaye?",
+          "think": "jamma: 8 x 15 = 120. thapepachhi: 120 + 8 = 128. jaach: 128 - 8 = 120, milyo",
+          "answer": "aba jamma 128 wata syau chha.",
+          "tokens": 53
+        }
+      ],
+      "think": "jamma: 8 x 15 = 120. thapepachhi: 120 + 8 = 128. jaach: 128 - 8 = 120, milyo",
+      "answer": "aba jamma 128 wata syau chha.",
+      "tokens": 53,
+      "ok": false,
+      "score_detail": "pred=128, gold=23"
+    },
+    {
+      "id": "mt_10",
+      "category": "multiturn_chat",
+      "subcategory": "state_math",
+      "turns": [
+        {
+          "user": "125 + 75 kati hunchha?",
+          "think": "thau anusar ek bata suru garchhu. ek: 5 + 5 = 10, 0 lekhne, 1 haat. das: 2 + 7 + 1 = 10, 0 lekhne, 1 haat. saya: 1 + 0 + 1 = 2. tyasaile 125 + 75 = 200.",
+          "answer": "125 + 75 = 200.",
+          "tokens": 83
+        },
+        {
+          "user": "tyasma 50 thapda kati hunchha?",
+          "think": "thau anusar ek bata suru garchhu. ek: 5 + 5 = 10, 0 lekhne, 1 haat. das: 2 + 7 + 1 = 10, 0 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 50 + 75 = 105.",
+          "answer": "125 + 75 = 105.",
+          "tokens": 82
+        }
+      ],
+      "think": "thau anusar ek bata suru garchhu. ek: 5 + 5 = 10, 0 lekhne, 1 haat. das: 2 + 7 + 1 = 10, 0 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 50 + 75 = 105.",
+      "answer": "125 + 75 = 105.",
+      "tokens": 82,
+      "ok": false,
+      "score_detail": "pred=105, gold=250"
+    },
+    {
+      "id": "mt_11",
+      "category": "multiturn_chat",
+      "subcategory": "state_math",
+      "turns": [
+        {
+          "user": "40 x 6 kati hunchha?",
+          "think": "40 lai 6 le ank ank gari gunchhu (ek bata): 0 x 6 = 0; 4 x 6 = 24. tyasaile 40 x 6 = 240.",
+          "answer": "40 x 6 = 240.",
+          "tokens": 52
+        },
+        {
+          "user": "aba tyo uttar bata 40 ghatauda kati hunchha?",
+          "think": "40 x 6 = 240.",
+          "answer": "40",
+          "tokens": 14
+        }
+      ],
+      "think": "40 x 6 = 240.",
+      "answer": "40",
+      "tokens": 14,
+      "ok": false,
+      "score_detail": "pred=40, gold=200"
+    },
+    {
+      "id": "mt_12",
+      "category": "multiturn_chat",
+      "subcategory": "state_math",
+      "turns": [
+        {
+          "user": "euta kalam ko 30 rupiya parchha. 4 wata kalam ko kati parchha?",
+          "think": "30 x 30 = 900.",
+          "answer": "4 wata kalam ko 900 rupiya parchha.",
+          "tokens": 23
+        },
+        {
+          "user": "pakka 120 nai hunchha?",
+          "think": "aghi ko jawaf 120. 120 - 120 = 0.",
+          "answer": "120 rupiya.",
+          "tokens": 25
+        }
+      ],
+      "think": "aghi ko jawaf 120. 120 - 120 = 0.",
+      "answer": "120 rupiya.",
+      "tokens": 25,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_13",
+      "category": "multiturn_chat",
+      "subcategory": "state_math",
+      "turns": [
+        {
+          "user": "350 - 125 kati hunchha?",
+          "think": "thau anusar ek bata suru garchhu. ek: 0 bata 5 ghatdaina, 1 sapati: 10 - 5 = 5. das: 4 - 2 = 2. saya: 3 - 1 = 2. tyasaile 350 - 125 = 225. jaach: 225 + 125 = 350.",
+          "answer": "350 - 125 = 225.",
+          "tokens": 88
+        },
+        {
+          "user": "jaach garera bhana ta, kati thiyo uttar?",
+          "think": "role: suru = 350, diyo = 35\nhisab: 350 - 35 = 315\njaach: 315 + 35 = 350, milyo",
+          "answer": "315 rupiya baki hunchha.",
+          "tokens": 54
+        }
+      ],
+      "think": "role: suru = 350, diyo = 35\nhisab: 350 - 35 = 315\njaach: 315 + 35 = 350, milyo",
+      "answer": "315 rupiya baki hunchha.",
+      "tokens": 54,
+      "ok": false,
+      "score_detail": "pred=315, gold=225"
+    },
+    {
+      "id": "mt_14",
+      "category": "multiturn_chat",
+      "subcategory": "entity_pronoun",
+      "turns": [
+        {
+          "user": "sita bholi chitwan jadai chhin.",
+          "think": "die patrakar = means, as, ma sanga.",
+          "answer": "\"sita aaja chitwan jadai chhin\".",
+          "tokens": 23
+        },
+        {
+          "user": "u kaha jadai chhin?",
+          "think": "",
+          "answer": "u bihana 6 baje gain.\"",
+          "tokens": 9
+        }
+      ],
+      "think": "",
+      "answer": "u bihana 6 baje gain.\"",
+      "tokens": 9,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "mt_15",
+      "category": "multiturn_chat",
+      "subcategory": "entity_pronoun",
+      "turns": [
+        {
+          "user": "bikash le 3 wata kitab ra 2 wata kapi kinyo.",
+          "think": "",
+          "answer": "ramro, sune.",
+          "tokens": 6
+        },
+        {
+          "user": "usle kati wata kitab kinyo?",
+          "think": "prashna: kati wata kitab kinyo. path ma \"2 wata kitab kinyo\" lekheko chha. yo sidhai lekheko chha, hisab garnu pardaina.",
+          "answer": "2 wata.",
+          "tokens": 38
+        }
+      ],
+      "think": "prashna: kati wata kitab kinyo. path ma \"2 wata kitab kinyo\" lekheko chha. yo sidhai lekheko chha, hisab garnu pardaina.",
+      "answer": "2 wata.",
+      "tokens": 38,
+      "ok": false,
+      "score_detail": "pred=2, gold=3"
+    },
+    {
+      "id": "mt_16",
+      "category": "multiturn_chat",
+      "subcategory": "entity_pronoun",
+      "turns": [
+        {
+          "user": "hamro school bihan 9 baje suru hunchha ra 4 baje chhutti hunchha.",
+          "think": "",
+          "answer": "thik chha, bihan 9 baje.",
+          "tokens": 9
+        },
+        {
+          "user": "school kati baje suru hunchha?",
+          "think": "6 baje bata 4 baje samma 9 baje (11 baje) ra 4 baje (21 baje) samma 9 baje (11 baje) ra 4 baje (21 baje) samma 9 baje (11 baje) ra 9 baje (21 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (12 baje) ra 9 baje (12 baje) samma 9 baje (12",
+          "answer": "",
+          "tokens": 140
+        }
+      ],
+      "think": "6 baje bata 4 baje samma 9 baje (11 baje) ra 4 baje (21 baje) samma 9 baje (11 baje) ra 4 baje (21 baje) samma 9 baje (11 baje) ra 9 baje (21 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (11 baje) ra 9 baje (12 baje) samma 9 baje (12 baje) ra 9 baje (12 baje) samma 9 baje (12",
+      "answer": "",
+      "tokens": 140,
+      "ok": false,
+      "score_detail": "empty_answer"
+    },
+    {
+      "id": "mt_17",
+      "category": "multiturn_chat",
+      "subcategory": "entity_pronoun",
+      "turns": [
+        {
+          "user": "nepal ko sabai bhanda thulo taal rara taal ho.",
+          "think": "",
+          "answer": "thik chha, rara taal.",
+          "tokens": 9
+        },
+        {
+          "user": "tyo taal kun jilla ma parchha ki naam ke ho?",
+          "think": "",
+          "answer": "tyo taal rara ho.",
+          "tokens": 9
+        }
+      ],
+      "think": "",
+      "answer": "tyo taal rara ho.",
+      "tokens": 9,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_18",
+      "category": "multiturn_chat",
+      "subcategory": "english_multiturn",
+      "turns": [
+        {
+          "user": "My sister Maya lives in Butwal.",
+          "think": "",
+          "answer": "Because you live in Butwal. Historically, it is a small card, and I will be more than the world.",
+          "tokens": 49
+        },
+        {
+          "user": "Where does Maya live?",
+          "think": "",
+          "answer": "Asso I am Butwal, Power Nepali, Chinese, Time, December, Start.",
+          "tokens": 43
+        }
+      ],
+      "think": "",
+      "answer": "Asso I am Butwal, Power Nepali, Chinese, Time, December, Start.",
+      "tokens": 43,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "mt_19",
+      "category": "multiturn_chat",
+      "subcategory": "english_multiturn",
+      "turns": [
+        {
+          "user": "I bought 14 mangoes and gave 6 to my neighbor.",
+          "think": "14 - 6 = 8.",
+          "answer": "8 mangoes are left.",
+          "tokens": 18
+        },
+        {
+          "user": "How many mangoes do I have left?",
+          "think": "14 mangoes: 14 - 6 = 8.",
+          "answer": "8 mangoes are left.",
+          "tokens": 24
+        }
+      ],
+      "think": "14 mangoes: 14 - 6 = 8.",
+      "answer": "8 mangoes are left.",
+      "tokens": 24,
+      "ok": true,
+      "score_detail": "pred=8, gold=8"
+    },
+    {
+      "id": "mt_20",
+      "category": "multiturn_chat",
+      "subcategory": "honest_multiturn",
+      "turns": [
+        {
+          "user": "mero naam binod ho ra ma kathmandu ma baschhu.",
+          "think": "",
+          "answer": "ramro!",
+          "tokens": 3
+        },
+        {
+          "user": "mero buwa ko naam k ho?",
+          "think": "",
+          "answer": "tapai ko buwa ko naam binod ho.",
+          "tokens": 11
+        }
+      ],
+      "think": "",
+      "answer": "tapai ko buwa ko naam binod ho.",
+      "tokens": 11,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=True"
+    },
+    {
+      "id": "ar_01",
+      "category": "arithmetic",
+      "subcategory": "exact_add_3d",
+      "prompt": "485 + 379 kati hunchha?",
+      "think": "thau anusar ek bata suru garchhu. ek: 5 + 9 = 14, 4 lekhne, 1 haat. das: 8 + 7 + 1 = 16, 6 lekhne, 1 haat. saya: 4 + 3 + 1 = 8. tyasaile 485 + 379 = 864.",
+      "answer": "485 + 379 = 864.",
+      "tokens": 85,
+      "ok": true,
+      "score_detail": "pred=864, gold=864"
+    },
+    {
+      "id": "ar_02",
+      "category": "arithmetic",
+      "subcategory": "exact_add_5d",
+      "prompt": "46825 + 39487 kati hunchha?",
+      "think": "thau anusar ek bata suru garchhu. ek: 5 + 7 = 12, 2 lekhne, 1 haat. das: 2 + 8 + 1 = 11, 1 lekhne, 1 haat. saya: 8 + 4 + 1 = 13, 3 lekhne, 1 haat. hajar: 6 + 9 + 1 = 16, 6 lekhne, 1 haat. das hajar: 4 + 3 + 1 = 8. tyasaile 46825 + 39487 = 86312.",
+      "answer": "46825 + 39487 = 86312.",
+      "tokens": 139,
+      "ok": true,
+      "score_detail": "pred=86312, gold=86312"
+    },
+    {
+      "id": "ar_03",
+      "category": "arithmetic",
+      "subcategory": "exact_add_7d",
+      "prompt": "8473929 + 384756 kati hunchha?",
+      "think": "sankhya haru: 8473929 (7 ank) ra 384756 (6 ank). thau anusar ek bata suru garchhu. ek: 9 + 6 = 15, 5 lekhne, 1 haat. das: 2 + 5 + 1 = 8. saya: 9 + 7 = 16, 6 lekhne, 1 haat. hajar: 3 + 4 + 1 = 8. das hajar: 7 + 8 = 15, 5 lekhne, 1 haat. lakh: 4 + 3 + 1 = 8. das lakh: 8 + 0 = 8. tyasaile 8473929 + 384756 = 8858685.",
+      "answer": "jawaf 8858685 ho.",
+      "tokens": 170,
+      "ok": true,
+      "score_detail": "pred=8858685, gold=8858685"
+    },
+    {
+      "id": "ar_04",
+      "category": "arithmetic",
+      "subcategory": "exact_sub_borrow",
+      "prompt": "962 - 288 kati hunchha?",
+      "think": "thau anusar ek bata suru garchhu. ek: 2 bata 8 ghatdaina, 1 sapati: 12 - 8 = 4. das: 6 thiyo, 1 diyo, aba 5; 5 bata 8 ghatdaina, 1 sapati: 15 - 8 = 7. saya: 9 thiyo, 1 diyo, aba 8; 8 - 2 = 6. tyasaile 962 - 288 = 674. jaach: 674 + 288 = 962.",
+      "answer": "962 - 288 = 674.",
+      "tokens": 117,
+      "ok": true,
+      "score_detail": "pred=674, gold=674"
+    },
+    {
+      "id": "ar_05",
+      "category": "arithmetic",
+      "subcategory": "exact_sub_borrow",
+      "prompt": "813 - 467 kati hunchha?",
+      "think": "thau anusar ek bata suru garchhu. ek: 3 bata 7 ghatdaina, 1 sapati: 13 - 7 = 6. das: 1 thiyo, 1 diyo, aba 0; 0 bata 6 ghatdaina, 1 sapati: 10 - 6 = 4. saya: 8 thiyo, 1 diyo, aba 7; 7 - 4 = 3. tyasaile 813 - 467 = 346. jaach: 346 + 467 = 813.",
+      "answer": "813 - 467 = 346.",
+      "tokens": 117,
+      "ok": true,
+      "score_detail": "pred=346, gold=346"
+    },
+    {
+      "id": "ar_06",
+      "category": "arithmetic",
+      "subcategory": "exact_sub_borrow",
+      "prompt": "642 - 278 = ?",
+      "think": "thau anusar ek bata suru garchhu. ek: 2 bata 8 ghatdaina, 1 sapati: 12 - 8 = 4. das: 4 thiyo, 1 diyo, aba 3; 3 bata 7 ghatdaina, 1 sapati: 13 - 7 = 6. saya: 6 thiyo, 1 diyo, aba 5; 5 - 2 = 3. tyasaile 642 - 278 = 364. jaach: 364 + 278 = 642.",
+      "answer": "642 - 278 = 364.",
+      "tokens": 117,
+      "ok": true,
+      "score_detail": "pred=364, gold=364"
+    },
+    {
+      "id": "ar_07",
+      "category": "arithmetic",
+      "subcategory": "exact_sub_zero_borrow",
+      "prompt": "704 - 358 kati hunchha?",
+      "think": "thau anusar ek bata suru garchhu. ek: 4 bata 8 ghatdaina, 1 sapati: 14 - 8 = 6. das: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 5 = 4. saya: 7 thiyo, 1 diyo, aba 6; 6 - 3 = 3. tyasaile 704 - 358 = 246. jaach: 246 + 358 = 704.",
+      "answer": "704 - 358 = 246.",
+      "tokens": 111,
+      "ok": false,
+      "score_detail": "pred=246, gold=346"
+    },
+    {
+      "id": "ar_08",
+      "category": "arithmetic",
+      "subcategory": "exact_sub_zero_borrow",
+      "prompt": "5002 - 1847 kati hunchha?",
+      "think": "thau anusar ek bata suru garchhu. ek: 2 bata 7 ghatdaina, 1 sapati: 12 - 7 = 5. das: -1 bata 4 ghatdaina, 1 sapati: 9 - 4 = 5. saya: -1 bata 8 ghatdaina, 1 sapati: 9 - 8 = 1. hajar: 4 - 1 = 3. tyasaile 5002 - 1847 = 3155. jaach: 3155 + 1847 = 5002.",
+      "answer": "5002 - 1847 = 3155.",
+      "tokens": 127,
+      "ok": true,
+      "score_detail": "pred=3155, gold=3155"
+    },
+    {
+      "id": "ar_09",
+      "category": "arithmetic",
+      "subcategory": "exact_sub_7d_zero",
+      "prompt": "6000000 - 3486521 kati?",
+      "think": "sodheko: 6000000 - 3486521. sankhya haru: 6000000 (7 ank) ra 3486521 (7 ank). thau anusar ek bata suru garchhu. ek: 0 bata 1 ghatdaina, 1 sapati: 10 - 1 = 9. das: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 2 = 7. saya: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 5 = 4. hajar: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 6 = 3. das hajar: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 8 = 1. lakh: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 3 = 6. das lakh: 6 thiyo, 1 diyo, aba 5; 5 - 0 = 5. tyasaile 6000000 - 3486521 = 5613479. jaach: 5613479 + 3486521 = 6000000.",
+      "answer": "6000000 - 3486521 = 56",
+      "tokens": 280,
+      "ok": false,
+      "score_detail": "pred=56, gold=2513479"
+    },
+    {
+      "id": "ar_10",
+      "category": "arithmetic",
+      "subcategory": "exact_mul_2x1",
+      "prompt": "87 x 6 kati hunchha?",
+      "think": "87 lai 6 le ank ank gari gunchhu (ek bata): 7 x 6 = 42, 2 lekhne, 4 haat; 8 x 6 + 4 = 52. tyasaile 87 x 6 = 522.",
+      "answer": "87 x 6 = 522.",
+      "tokens": 64,
+      "ok": true,
+      "score_detail": "pred=522, gold=522"
+    },
+    {
+      "id": "ar_11",
+      "category": "arithmetic",
+      "subcategory": "exact_mul_3x1",
+      "prompt": "957 ko 2 guna kati?",
+      "think": "957 lai 2 le ank ank gari gunchhu (ek bata): 7 x 2 = 14, 4 lekhne, 1 haat; 5 x 2 + 1 = 11, 1 lekhne, 1 haat; 9 x 2 + 1 = 19. tyasaile 957 x 2 = 1914.",
+      "answer": "957 x 2 = 1914.",
+      "tokens": 87,
+      "ok": true,
+      "score_detail": "pred=1914, gold=1914"
+    },
+    {
+      "id": "ar_12",
+      "category": "arithmetic",
+      "subcategory": "exact_mul_3x2",
+      "prompt": "125 x 16 = ?",
+      "think": "16 ma 1 das ra 6 ek chhan. 125 x 6: 5 x 6 = 30, 0 lekhne, 3 haat; 2 x 6 + 3 = 15, 5 lekhne, 1 haat; 1 x 6 + 1 = 7, tyasaile 125 x 6 = 750. 125 x 1: 5 x 1 = 5; 2 x 1 = 2; 1 x 1 = 1, tyasaile 125 x 1 = 125, das ko thau ma bhayeko le 125 x 10 = 1250. aba jodchhu: ek: 0 + 0 = 0. das: 5 + 5 = 10, 0 lekhne, 1 haat. saya: 7 + 2 + 1 = 10, 0 lekhne, 1 haat. hajar: 0 + 1 + 1 = 2. tyasaile 125 x 16 = 750 + 1250 = 2000.",
+      "answer": "125 x 16 = 2000.",
+      "tokens": 223,
+      "ok": true,
+      "score_detail": "pred=2000, gold=2000"
+    },
+    {
+      "id": "ar_13",
+      "category": "arithmetic",
+      "subcategory": "exact_div_exact",
+      "prompt": "864 / 8 = ?",
+      "think": "lamo bhag, baya bata: 8 ma 8 1 palta: 8 x 1 = 8, baki 8 - 8 = 0. 6 ma 8 0 palta: 8 x 0 = 0, baki 6 - 0 = 6. 64 ma 8 8 palta: 8 x 8 = 64, baki 64 - 64 = 0. bhagfal 108. jaach: 8 x 108 = 864.",
+      "answer": "jawaf 108 ho.",
+      "tokens": 98,
+      "ok": true,
+      "score_detail": "pred=108, gold=108"
+    },
+    {
+      "id": "ar_14",
+      "category": "arithmetic",
+      "subcategory": "exact_div_2d",
+      "prompt": "360 / 24 kati hunchha?",
+      "think": "24 le 360 ma kati palta pugchha bhanera hernu parchha. 24 x 15 = 360. tyasaile 360 / 24 = 15, kei baki rahadaina. jaach: 24 x 15 = 360, milyo.",
+      "answer": "360 / 24 = 15 hunchha.",
+      "tokens": 73,
+      "ok": true,
+      "score_detail": "pred=15, gold=15"
+    },
+    {
+      "id": "ar_15",
+      "category": "arithmetic",
+      "subcategory": "exact_percent",
+      "prompt": "480 ko 35% kati hunchha?",
+      "think": "480 x 35 = 17800. 17800 / 100 = 178.",
+      "answer": "480 ko 35% = 178.",
+      "tokens": 42,
+      "ok": false,
+      "score_detail": "pred=178, gold=168"
+    },
+    {
+      "id": "aw_01",
+      "category": "arithmetic",
+      "subcategory": "word_add_sub",
+      "prompt": "mero sanga 500 rupiya thiyo. 180 rupiya kharcha bhayo. aba kati rupiya baki?",
+      "think": "paisa: 500. kharcha: 180. hisab: 500 - 180 = 320. jaach: 320 + 180 = 500, milyo",
+      "answer": "aba 320 rupiya baki chha.",
+      "tokens": 56,
+      "ok": true,
+      "score_detail": "pred=320, gold=320"
+    },
+    {
+      "id": "aw_02",
+      "category": "arithmetic",
+      "subcategory": "word_mul",
+      "prompt": "euta kitab 250 rupiya ko chha. 4 wata kitab ko kati parchha?",
+      "think": "250 / 4 = 62.",
+      "answer": "6 wata kitab ko 62 rupiya.",
+      "tokens": 20,
+      "ok": false,
+      "score_detail": "pred=62, gold=1000"
+    },
+    {
+      "id": "aw_03",
+      "category": "arithmetic",
+      "subcategory": "word_mul_sub",
+      "prompt": "aarati sanga 90 rupiya chha. usle 4 wata chakleti kinyo, ek ko 12 rupiya. aba kati rupiya bachyo?",
+      "think": "role: paisa = 90, wata = 4, ek ko = 12\nhisab: 4 x 12 = 48; 90 - 48 = 42\njaach: 42 + 48 = 90, milyo",
+      "answer": "aba 42 rupiya baki chha.",
+      "tokens": 62,
+      "ok": true,
+      "score_detail": "pred=42, gold=42"
+    },
+    {
+      "id": "aw_04",
+      "category": "arithmetic",
+      "subcategory": "word_grid_sub",
+      "prompt": "euta bagaincha ma 8 wata line chhan ra har line ma 6 wata rukh. 7 wata rukh dhale bhane kati rukh baki?",
+      "think": "jamma: 8 x 6 = 48. bacheko: 48 - 7 = 41. jaach: 41 + 7 = 48, milyo",
+      "answer": "baki 41 wata rukh chha.",
+      "tokens": 46,
+      "ok": true,
+      "score_detail": "pred=41, gold=41"
+    },
+    {
+      "id": "aw_05",
+      "category": "arithmetic",
+      "subcategory": "word_mul_add",
+      "prompt": "ek kilo aalu 40 rupiya. 3 kilo aalu ra 25 rupiya ko dhaniya kinda jamma kati lagchha?",
+      "think": "3 kilo: 3 x 12 = 36. 2 kilo: 36 x 2 = 72.",
+      "answer": "35 rupiya.",
+      "tokens": 29,
+      "ok": false,
+      "score_detail": "pred=35, gold=145"
+    },
+    {
+      "id": "aw_06",
+      "category": "arithmetic",
+      "subcategory": "word_half_sub",
+      "prompt": "ganesh 50 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+      "think": "50 - 5 = 45.",
+      "answer": "chhori ko umer 45 barsha ko.",
+      "tokens": 20,
+      "ok": false,
+      "score_detail": "pred=45, gold=20"
+    },
+    {
+      "id": "aw_07",
+      "category": "arithmetic",
+      "subcategory": "word_bus_stops",
+      "prompt": "ek bus ma 52 jana thiye. pahilo stop ma 17 jana jhare ra 9 jana chadhe. aba kati jana bhaye?",
+      "think": "52 - 17 = 35.",
+      "answer": "aba 35 jana chhan.",
+      "tokens": 18,
+      "ok": false,
+      "score_detail": "pred=35, gold=44"
+    },
+    {
+      "id": "aw_08",
+      "category": "arithmetic",
+      "subcategory": "word_shop_change",
+      "prompt": "maile 3 kg aalu 60 rupiya kg ko dar ma kinen ra 500 ko note diye. kati firta aaunchha?",
+      "think": "packet: 3 x 60 = 180. firta: 500 - 180 = 320.",
+      "answer": "320 rupiya firta aauchha.",
+      "tokens": 36,
+      "ok": true,
+      "score_detail": "pred=320, gold=320"
+    },
+    {
+      "id": "aw_09",
+      "category": "arithmetic",
+      "subcategory": "word_weekly_rate",
+      "prompt": "rita hapta ma 4 din, har din 45 minet daudinchhin. hapta ma jamma kati minet daudinchhin?",
+      "think": "45 x 45 = 2025 minet.",
+      "answer": "hapta ma jamma daudinchhin.",
+      "tokens": 24,
+      "ok": false,
+      "score_detail": "pred=None, gold=180"
+    },
+    {
+      "id": "aw_10",
+      "category": "arithmetic",
+      "subcategory": "word_share_div",
+      "prompt": "12 jana sathi le 3600 rupiya barabar banda ek jana lai kati parchha?",
+      "think": "12 jana ko 3600. 3600 / 12 = 300.",
+      "answer": "12 jana lai 360 rupiya ma banda hunchha.",
+      "tokens": 36,
+      "ok": false,
+      "score_detail": "pred=360, gold=300"
+    },
+    {
+      "id": "aw_11",
+      "category": "arithmetic",
+      "subcategory": "word_age_diff",
+      "prompt": "aama bhanda hari 25 barsa sano chha. aama 52 barsa ki bhaye hari kati barsa ko?",
+      "think": "aama 52 barsa. 52 > 25.",
+      "answer": "hari 52 barsha ko.",
+      "tokens": 24,
+      "ok": false,
+      "score_detail": "pred=52, gold=27"
+    },
+    {
+      "id": "aw_12",
+      "category": "arithmetic",
+      "subcategory": "word_class_present",
+      "prompt": "kaksha ma 28 keta ra 32 keti chhan. 6 jana anupasthit chhan. kati jana upasthit?",
+      "think": "28 - 32 = 6.",
+      "answer": "6 jana upasthit.",
+      "tokens": 16,
+      "ok": false,
+      "score_detail": "pred=6, gold=54"
+    },
+    {
+      "id": "aw_13",
+      "category": "arithmetic",
+      "subcategory": "word_en_rate",
+      "prompt": "A bus travels at 60 km per hour for 3 hours, then 15 km more. How far did it travel in total?",
+      "think": "60 / 3 = 20.",
+      "answer": "The travel is 20 km per hour.",
+      "tokens": 24,
+      "ok": false,
+      "score_detail": "pred=20, gold=195"
+    },
+    {
+      "id": "aw_14",
+      "category": "arithmetic",
+      "subcategory": "word_en_boxes",
+      "prompt": "There are 7 boxes with 8 apples each. 5 apples are rotten. How many good apples?",
+      "think": "7 x 8 = 56. rotte: 56 x 8 = 448.",
+      "answer": "56 apples are roti.",
+      "tokens": 32,
+      "ok": false,
+      "score_detail": "pred=56, gold=51"
+    },
+    {
+      "id": "aw_15",
+      "category": "arithmetic",
+      "subcategory": "word_discount",
+      "prompt": "euta kitab ko mol 400 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+      "think": "kineko: 400 x 10 / 100 = 40. kitab: 2 x 400 = 800. tirne: 400 - 800 = -40.",
+      "answer": "140 rupiya baki hunchha.",
+      "tokens": 55,
+      "ok": false,
+      "score_detail": "pred=140, gold=720"
+    },
+    {
+      "id": "nc_01",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo pyaj kinyo?",
+      "think": "role: kina 1 = 3, kina 2 = 2\nhisab: 3 kilo aalu = 3; 2 kilo pyaj\njaach: 3 + 2 = 5, milyo",
+      "answer": "3 kilo kinyo.",
+      "tokens": 48,
+      "ok": false,
+      "score_detail": "pred=3, gold=2"
+    },
+    {
+      "id": "nc_02",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"gopal le bazaar bata 3 kilo aalu ra 2 kilo pyaj kinyo.\" gopal le kati kilo aalu kinyo?",
+      "think": "role: kina 1 = 3, kina 2 = 2\nhisab: 3 kilo aalu = 3; 2 kilo pyaj\njaach: 3 + 2 = 5, milyo",
+      "answer": "2 kilo kinyo.",
+      "tokens": 48,
+      "ok": false,
+      "score_detail": "pred=2, gold=3"
+    },
+    {
+      "id": "nc_03",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"sunita doctor ho ra uski bahini engineer.\" sunita ko bahini ke kaam garchhin?",
+      "think": "",
+      "answer": "sunita ko bahini engineer.",
+      "tokens": 9,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_04",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"sunita doctor ho ra uski bahini engineer.\" sunita ke kaam garchhin?",
+      "think": "",
+      "answer": "sunita engineer haina, doctor ho.",
+      "tokens": 10,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_05",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"hari le bibek lai 150 rupiya rin diyo.\" kasle rin payo?",
+      "think": "\"hari le bibek lai ... diyo\": \"le\" lagne hari dine ho, \"lai\" lagne bibek paune ho.",
+      "answer": "bibek le rin payo.",
+      "tokens": 41,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_06",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"table ma रातो kitab, निलो kalam ra हरियो jhola chha.\" kalam kun ranga ko chha?",
+      "think": "pahilo akshar: b, c, k, p. kram: p, k, d, k.",
+      "answer": "kalam Vatks, K kalam, B, K.",
+      "tokens": 46,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "nc_07",
+      "category": "nepali_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"bus bihan 7 baje pokhara bata chutyo ra 2 baje kathmandu pugyo.\" bus kati baje kathmandu pugyo?",
+      "think": "7 baje kathmandu pugyo.",
+      "answer": "bus 7 baje kathmandu pugyo.",
+      "tokens": 17,
+      "ok": false,
+      "score_detail": "pred=7, gold=2"
+    },
+    {
+      "id": "nc_08",
+      "category": "nepali_comprehension",
+      "subcategory": "yesno",
+      "prompt": "\"ram ghar gayo tara shyam school mai basyo.\" ke shyam ghar gayo?",
+      "think": "role: sodhda = shyam ghar gayo chaina\nhisab: prashna ma shyam ko ghar gayo chaina bhane hoina\njaach: kura milyo, milyo",
+      "answer": "hoina.",
+      "tokens": 43,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_09",
+      "category": "nepali_comprehension",
+      "subcategory": "yesno",
+      "prompt": "\"ram ghar gayo tara shyam school mai basyo.\" ke ram ghar gayo?",
+      "think": "role: sodhda = shyam school gayo chaina\nhisab: prashna ma shyam ko ghar gayo chaina bhane hoina\njaach: kura milyo, milyo",
+      "answer": "hoina, shyam school gayo chaina.",
+      "tokens": 50,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_10",
+      "category": "nepali_comprehension",
+      "subcategory": "yesno",
+      "prompt": "\"aaja sukrabar ho, bank khula chha tara bholi sanibar bandha hunchha.\" ke aaja bank khula chha?",
+      "think": "\"aaja bank banda chha, tara bholi sanibar bank khula chha\": aja sanibar bank khula chha.",
+      "answer": "haina, aja bank khula chhaina; bank khula chha.",
+      "tokens": 42,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_11",
+      "category": "nepali_comprehension",
+      "subcategory": "honesty",
+      "prompt": "mero naam binod ho. mero buwa ko naam k ho?",
+      "think": "diyeko: binod, buwa ko naam. sodheko: binod.",
+      "answer": "tapai ko buwa ko naam binod ho.",
+      "tokens": 30,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=True"
+    },
+    {
+      "id": "nc_12",
+      "category": "nepali_comprehension",
+      "subcategory": "honesty",
+      "prompt": "sita le bazaar bata falful kinin. sita ko umer kati barsha ho?",
+      "think": "\"dui baajja\" lekheko chha.",
+      "answer": "sita ko umer 2 barsha ho.",
+      "tokens": 21,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "nc_13",
+      "category": "nepali_comprehension",
+      "subcategory": "relational",
+      "prompt": "ram sita bhanda agla chha. sita gita bhanda agli chhin. sabai bhanda hocho ko?",
+      "think": "ram > sita > sita > gita. sabai bhanda pachhadi gita chha.",
+      "answer": "jawaf gita ho.",
+      "tokens": 26,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_14",
+      "category": "nepali_comprehension",
+      "subcategory": "relational",
+      "prompt": "ram sita bhanda agla chha. sita gita bhanda agli chhin. sabai bhanda aglo ko?",
+      "think": "ram > sita > sita > gita. sabai bhanda agadi ram chha.",
+      "answer": "jawaf ram ho.",
+      "tokens": 24,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_15",
+      "category": "nepali_comprehension",
+      "subcategory": "relational",
+      "prompt": "kaksha ma 14 keta ra 17 keti chhan. keti kati le badhi chhan?",
+      "think": "14 - 17 = -1.",
+      "answer": "kaksha ma 14 jana badhi chhan.",
+      "tokens": 21,
+      "ok": false,
+      "score_detail": "pred=14, gold=3"
+    },
+    {
+      "id": "nc_16",
+      "category": "nepali_comprehension",
+      "subcategory": "list_ops",
+      "prompt": "7, 42, 19, 3 madhye sabai bhanda sano kun?",
+      "think": "suru: 7. 42 > 7. 19 > 7. 3 < 7 -> 3.",
+      "answer": "sabai bhanda sano 3 ho.",
+      "tokens": 35,
+      "ok": true,
+      "score_detail": "pred=3, gold=3"
+    },
+    {
+      "id": "nc_17",
+      "category": "nepali_comprehension",
+      "subcategory": "list_ops",
+      "prompt": "7, 42, 19, 3 madhye sabai bhanda thulo kun?",
+      "think": "suru: 7. 42 > 7 -> 42. 19 < 42. 3 < 42.",
+      "answer": "sabai bhanda thulo 42 ho.",
+      "tokens": 39,
+      "ok": true,
+      "score_detail": "pred=42, gold=42"
+    },
+    {
+      "id": "nc_18",
+      "category": "nepali_comprehension",
+      "subcategory": "list_ops",
+      "prompt": "5, 9, 2 lai thulo bata sano kram ma lekha.",
+      "think": "thulo: 9. thulo: 5. thulo: 2.",
+      "answer": "9, 5, 2",
+      "tokens": 22,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_19",
+      "category": "nepali_comprehension",
+      "subcategory": "calendar",
+      "prompt": "aaja sombar ho bhane 10 din pachhi kun bar hunchha?",
+      "think": "hapta ma 7 din hunchhan, tyasaile 10 lai 7 le bhag garchhu: 7 x 1 = 7, baki 10 - 7 = 3. sombar bata 3 din agadi gaye bihibar aauchha.",
+      "answer": "10 din pachhi bihibar hunchha.",
+      "tokens": 50,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_20",
+      "category": "nepali_comprehension",
+      "subcategory": "calendar",
+      "prompt": "ek barsa ma lagbhag kati hapta hunchhan?",
+      "think": "1 din ma 24 ghanta.",
+      "answer": "1 din ma 24 hapta.",
+      "tokens": 17,
+      "ok": false,
+      "score_detail": "pred=24, gold=52"
+    },
+    {
+      "id": "nc_21",
+      "category": "nepali_comprehension",
+      "subcategory": "knowledge",
+      "prompt": "nepal ma jamma kati wata pradesh chhan?",
+      "think": "",
+      "answer": "nepal ma 7 wata pradesh chhan: koshi, madhesh, bagmati, gandaki, lumbini, karnali ra sudurpashchim.",
+      "tokens": 22,
+      "ok": true,
+      "score_detail": "pred=7, gold=7"
+    },
+    {
+      "id": "nc_22",
+      "category": "nepali_comprehension",
+      "subcategory": "logic",
+      "prompt": "sabai biralo janawar hun. tom biralo ho. tom k ho?",
+      "think": "sabai biralo janawar hun bhanda janawar ko samuha haina. tom biralo haina, tara janawar haina.",
+      "answer": "sabai biralo janawar hun, aru pani hunasakchhan.",
+      "tokens": 41,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_23",
+      "category": "nepali_comprehension",
+      "subcategory": "grammar",
+      "prompt": "\"u kheldai chha\" lai negative banau.",
+      "think": "\"chha\" lai \"chhaina\" banaune.",
+      "answer": "\"u kheldai chhaina\"",
+      "tokens": 19,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_24",
+      "category": "nepali_comprehension",
+      "subcategory": "grammar",
+      "prompt": "\"kalam\" ko plural (bahubachan) ke hunchha?",
+      "think": "",
+      "answer": "\"kalam\" ko plural \"kalamharu\" ho.",
+      "tokens": 17,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "nc_25",
+      "category": "nepali_comprehension",
+      "subcategory": "vocab",
+      "prompt": "\"river\" lai nepali ma k bhanchha?",
+      "think": "",
+      "answer": "\"river\" lai nepali ma \"nadi\" bhanchha.",
+      "tokens": 14,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_01",
+      "category": "english_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"Maya put 4 red books and 6 blue books on the shelf.\" How many blue books are on the shelf?",
+      "think": "4 x 6 = 24.",
+      "answer": "24 blue books are on the shelf.",
+      "tokens": 26,
+      "ok": false,
+      "score_detail": "pred=24, gold=6"
+    },
+    {
+      "id": "ec_02",
+      "category": "english_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"Maya put 4 red books and 6 blue books on the shelf.\" How many books are on the shelf in total?",
+      "think": "4 x 6 = 24.",
+      "answer": "24 books are on the shelf in total.",
+      "tokens": 26,
+      "ok": false,
+      "score_detail": "pred=24, gold=10"
+    },
+    {
+      "id": "ec_03",
+      "category": "english_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"David took the train from Pokhara to Kathmandu on Tuesday.\" Which city did David travel to?",
+      "think": "The text says \"david took the train from pokhara to kathmandu on tuesday\".",
+      "answer": "It was city for it.",
+      "tokens": 43,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "ec_04",
+      "category": "english_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"David took the train from Pokhara to Kathmandu on Tuesday.\" On what day did David travel?",
+      "think": "The text says \"david took the train from pokhara to kathmandu on tuesday\".",
+      "answer": "He won't tells.",
+      "tokens": 44,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "ec_05",
+      "category": "english_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"Sara is a teacher and her brother Leo is a pilot.\" What is Leo's job?",
+      "think": "Sara is a teacher.",
+      "answer": "Mother is a job.",
+      "tokens": 20,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "ec_06",
+      "category": "english_comprehension",
+      "subcategory": "reading",
+      "prompt": "\"The library opens at 9 AM and closes at 5 PM.\" At what time does the library open?",
+      "think": "The text says \"The library opens at 5 am and closes at 5 pm\".",
+      "answer": "The library is the library open.",
+      "tokens": 54,
+      "ok": false,
+      "score_detail": "pred=None, gold=9"
+    },
+    {
+      "id": "ec_07",
+      "category": "english_comprehension",
+      "subcategory": "quant",
+      "prompt": "Asha had 12 balloons and 5 flew away. How many does she have left?",
+      "think": "12 - 5 = 7.",
+      "answer": "She has 7 balloons.",
+      "tokens": 20,
+      "ok": true,
+      "score_detail": "pred=7, gold=7"
+    },
+    {
+      "id": "ec_08",
+      "category": "english_comprehension",
+      "subcategory": "quant",
+      "prompt": "What is 7% of 900?",
+      "think": "900 x 7 = 6300. 6300 / 100 = 63.",
+      "answer": "900 ko 7% = 63.",
+      "tokens": 36,
+      "ok": true,
+      "score_detail": "pred=63, gold=63"
+    },
+    {
+      "id": "ec_09",
+      "category": "english_comprehension",
+      "subcategory": "quant",
+      "prompt": "If one notebook costs 45 rupees, how much do 3 notebooks cost?",
+      "think": "45 / 3 = 15.",
+      "answer": "15 rupees.",
+      "tokens": 17,
+      "ok": false,
+      "score_detail": "pred=15, gold=135"
+    },
+    {
+      "id": "ec_10",
+      "category": "english_comprehension",
+      "subcategory": "quant",
+      "prompt": "A box holds 24 eggs. If 6 eggs break, how many whole eggs remain?",
+      "think": "24 / 6 = 4.",
+      "answer": "4 eggs Remain.",
+      "tokens": 20,
+      "ok": false,
+      "score_detail": "pred=4, gold=18"
+    },
+    {
+      "id": "ec_11",
+      "category": "english_comprehension",
+      "subcategory": "quant",
+      "prompt": "How many minutes are there in 3 hours?",
+      "think": "3 x 60 = 180.",
+      "answer": "180 minutes.",
+      "tokens": 21,
+      "ok": true,
+      "score_detail": "pred=180, gold=180"
+    },
+    {
+      "id": "ec_12",
+      "category": "english_comprehension",
+      "subcategory": "quant",
+      "prompt": "How many meters are in 5 kilometers?",
+      "think": "1 kilometer = 1000 meter. 5 x 1000 = 5000.",
+      "answer": "5000 meters.",
+      "tokens": 32,
+      "ok": true,
+      "score_detail": "pred=5000, gold=5000"
+    },
+    {
+      "id": "ec_13",
+      "category": "english_comprehension",
+      "subcategory": "factual",
+      "prompt": "What is the capital of Nepal? Answer in English.",
+      "think": "",
+      "answer": "The capital of Nepal is Kathmandu.",
+      "tokens": 17,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_14",
+      "category": "english_comprehension",
+      "subcategory": "factual",
+      "prompt": "What is the highest mountain in the world?",
+      "think": "",
+      "answer": "Mount Everest is the highest mountain in the world. It is in Nepal.",
+      "tokens": 35,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_15",
+      "category": "english_comprehension",
+      "subcategory": "factual",
+      "prompt": "How many days are there in one week?",
+      "think": "",
+      "answer": "There are many days in one week can be used today. It is a small exercise of the United States. They are now, it was released in Nepal.",
+      "tokens": 73,
+      "ok": false,
+      "score_detail": "pred=None, gold=7"
+    },
+    {
+      "id": "ec_16",
+      "category": "english_comprehension",
+      "subcategory": "factual",
+      "prompt": "Which planet is closest to the Sun?",
+      "think": "",
+      "answer": "The sun is closest to the sun.",
+      "tokens": 13,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "ec_17",
+      "category": "english_comprehension",
+      "subcategory": "translate",
+      "prompt": "\"we are reading\" nepali ma bhana.",
+      "think": "kartaa: hami, kriya: read, kaal: aahile gardai gareko (continuous).",
+      "answer": "\"hami padhdai chhau\"",
+      "tokens": 33,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_18",
+      "category": "english_comprehension",
+      "subcategory": "translate",
+      "prompt": "\"ma khana khadai chhu\" english ma k ho?",
+      "think": "kartaa: ma, kriya: eat, kaal: aahile gardai gareko (continuous).",
+      "answer": "\"I am eating food.\"",
+      "tokens": 39,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_19",
+      "category": "english_comprehension",
+      "subcategory": "translate",
+      "prompt": "translate to english: \"mero ghar kathmandu ma chha\"",
+      "think": "",
+      "answer": "\"My house is in Kathmandu.\"",
+      "tokens": 15,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_20",
+      "category": "english_comprehension",
+      "subcategory": "translate",
+      "prompt": "nepali ma bhana: \"what is your name?\"",
+      "think": "",
+      "answer": "\"tapai ko naam k ho?\"",
+      "tokens": 8,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_21",
+      "category": "english_comprehension",
+      "subcategory": "translate",
+      "prompt": "\"water\" lai nepali ma k bhanchha?",
+      "think": "",
+      "answer": "\"water\" lai nepali ma \"pani\", kriya \"pani\" bhanchha.",
+      "tokens": 17,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_22",
+      "category": "english_comprehension",
+      "subcategory": "grammar",
+      "prompt": "\"children\" ko singular k ho?",
+      "think": "",
+      "answer": "\"children\" ko singular \"child\" ho.",
+      "tokens": 19,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_23",
+      "category": "english_comprehension",
+      "subcategory": "grammar",
+      "prompt": "correct this: \"he go to market.\"",
+      "think": "\"he\" ekbachan third person ho, tyasaile \"go\" haina \"goes\".",
+      "answer": "sahi: \"he goes to market.\"",
+      "tokens": 38,
+      "ok": true,
+      "score_detail": "has_any=True, has_forbid=False"
+    },
+    {
+      "id": "ec_24",
+      "category": "english_comprehension",
+      "subcategory": "grammar",
+      "prompt": "What is the opposite of \"cold\"?",
+      "think": "",
+      "answer": "The opposite of \"cold\" is \"Cold\".",
+      "tokens": 20,
+      "ok": false,
+      "score_detail": "has_any=False, has_forbid=False"
+    },
+    {
+      "id": "ec_25",
+      "category": "english_comprehension",
+      "subcategory": "grammar",
+      "prompt": "Which number is smallest: 18, 4, 29, 11?",
+      "think": "A small third: 18 / 4 = 4. One 4. Start.",
+      "answer": "4.",
+      "tokens": 30,
+      "ok": true,
+      "score_detail": "pred=4, gold=4"
+    }
+  ]
+}

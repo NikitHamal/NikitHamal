@@ -40,8 +40,9 @@ if not rsi:
     print('$', teach, flush=True)
     subprocess.run(teach, shell=True, check=True)
     init = 'nik/runs/teach/ckpt.pt'
+rsi_budget = int(os.environ.get('RSI_BUDGET', '150'))
 cmd = (f'RSI_BUDGET=150 python nik/rsi.py --init {init} --data data --out nik/runs/rsi --generations 12 --problems 1400 --k 8 '
-       f'--collect-min 25 --train-min 15 --bs 16 --heldout-n 6 --budget-min {int(os.environ.get('RSI_BUDGET', '150'))} --launch "{launch}"')
+       f'--collect-min 25 --train-min 15 --bs 16 --heldout-n 6 --budget-min {rsi_budget} --launch "{launch}"')
 print('$', cmd, flush=True)
 with open(f'{OUT}/rsi.log', 'w') as lf:
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
