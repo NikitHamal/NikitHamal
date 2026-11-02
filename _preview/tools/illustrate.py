@@ -53,9 +53,13 @@ def hexc(c): c = np.clip(c, 0, 255).astype(int); return '#%02x%02x%02x' % tuple(
 class Drawing:
     def __init__(s, W, H): s.W, s.H = W, H; s.fill = []; s.shade = []; s.ink = []; s.detail = []; s.soft = []
     def line(s, d, w=2.4, col=INK, layer='ink', op=1, cls=''):
-        getattr(s, layer).append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="{w:.2f}" stroke-linecap="round" stroke-linejoin="round"{f" opacity=\"{op}\"" if op < 1 else ""}{f" class=\"{cls}\"" if cls else ""}/>')
+        op_attr = f' opacity="{op}"' if op < 1 else ''
+        cls_attr = f' class="{cls}"' if cls else ''
+        getattr(s, layer).append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="{w:.2f}" stroke-linecap="round" stroke-linejoin="round"{op_attr}{cls_attr}/>')
     def shape(s, d, col, layer='fill', op=1, cls=''):
-        getattr(s, layer).append(f'<path d="{d}" fill="{col}"{f" opacity=\"{op:.2f}\"" if op < 1 else ""}{f" class=\"{cls}\"" if cls else ""}/>')
+        op_attr = f' opacity="{op:.2f}"' if op < 1 else ''
+        cls_attr = f' class="{cls}"' if cls else ''
+        getattr(s, layer).append(f'<path d="{d}" fill="{col}"{op_attr}{cls_attr}/>')
     soft = []; skinclip = ''; hatch = ''
     def backdrop(s, seed):
         return f'<rect class="bgfill" width="{s.W}" height="{s.H}" fill="#f6f1e9"/>'

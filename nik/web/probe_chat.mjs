@@ -19,9 +19,13 @@ for (const q of prompts) {
     out.push(ev.id);
     if (ev.id === TOK.END || ev.id === TOK.EOS) break;
   }
-  const text = tok.decode(out);
-  const think = (text.match(/<\|think\|>([\s\S]*?)<\|<\/think\|>/) || [])[1] || '';
-  const answer = text.replace(/<\|think\|>[\s\S]*?(<\|<\/think\|>|$)/, '').replace(/<\|[^|]*\|>/g, ' ').trim();
+  const text = tok.decode([
+    ...out.map((id) => (id === TOK.THINK || id === TOK.ETHINK ? id : id))
+  ]);
+  const ti = out.indexOf(TOK.THINK), ei = out.indexOf(TOK.ETHINK);
+  const think = ti >= 0 && ei > ti ? tok.decode(out.slice(ti + 1, ei)).trim() : '';
+  const ansIds = ei >= 0 ? out.slice(ei + 1) : (ti >= 0 ? [] : out);
+  const answer = tok.decode(ansIds).replace(/<\|[^|]*\|>/g, ' ').trim();
   console.log('Q:', q);
   if (think) console.log('  [think]', think.replace(/\n/g, ' ').slice(0, 240));
   console.log('  [answer]', answer.slice(0, 300));
