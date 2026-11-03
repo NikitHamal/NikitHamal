@@ -59,7 +59,9 @@ function parseBin(ab) {
 }
 
 const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-const model = new NikModel(parseBin(ab), tok);
+// NIK_BACKEND=js forces the float-activation JS path (weights dequantised, activations NOT int8-quantised) so the
+// cost of the browser's int8 activation quantisation can be measured against it.
+const model = new NikModel(parseBin(ab), tok, { backend: process.env.NIK_BACKEND || 'auto' });
 
 function decodeOnce(promptIds, opts) {
   model.reset();
@@ -90,19 +92,27 @@ function decodeOnce(promptIds, opts) {
 let btModule = null;
 try {
   btModule = await import('../nik/web/breakthrough.js');
-} catch (_) {
+} catch (e) {
   btModule = null;
+  if (/^(greedy_calc|sc_adaptive|pe_greedy|pe_hybrid|breakthrough)$/.test(mode)) {
+    throw new Error(`mode ${mode} needs nik/web/breakthrough.js: ${e.message}`);   // never silently fall back to chat mode
+  }
 }
+// "breakthrough" = the configuration selected in research/inference-time-log.md
+const BT_DEFAULT = 'pe_hybrid';
 
-function runTurn(messages, itemIdx, category) {
+async function runTurn(messages, itemIdx, category) {
   reseed(seed * 10007 + itemIdx * 97 + messages.length * 13);
   const maxNew = category === 'arithmetic' ? 280 : 140;
   if (mode === 'raw') {
     const promptIds = renderChat(tok, messages);
     return decodeOnce(promptIds, { temperature: 0, maxNew, mode: 'ar', calc: false });
   }
-  if (mode === 'breakthrough' && btModule && btModule.generateBreakthrough) {
-    return btModule.generateBreakthrough(model, tok, messages, decodeOnce, { maxNew, category });
+  if (btModule && /^(greedy_calc|sc_adaptive|pe_greedy|pe_hybrid|breakthrough)$/.test(mode)) {
+    const normMsgs = messages.map((m) => (m.role === 'user' ? { ...m, content: normalizeNumbers(m.content) } : m));
+    const buildPrompt = (ms) => contextFor(tok, ms, Math.floor(model.cfg.ctx * 0.55));
+    return await btModule.generateBreakthrough({ messages: normMsgs, decodeOnce, buildPrompt, maxNew, category,
+      technique: mode === 'breakthrough' ? BT_DEFAULT : mode });
   }
   // mode === 'chat' (standard worker.js behavior with K=3 paths for fast reproducible benchmarking)
   const normMsgs = messages.map((m) => (m.role === 'user' ? { ...m, content: normalizeNumbers(m.content) } : m));
@@ -135,14 +145,14 @@ const t0 = performance.now();
 const results = [];
 let totalTokens = 0;
 
-items.forEach((item, idx) => {
+for (const [idx, item] of items.entries()) {
   if (item.turns) {
     const msgs = [];
     const turnOutputs = [];
     for (let ti = 0; ti < item.turns.length; ti++) {
       msgs.push({ role: 'user', content: item.turns[ti] });
-      const r = runTurn(msgs, idx * 10 + ti, item.category);
-      totalTokens += r.tokens || 0;
+      const r = await runTurn(msgs, idx * 10 + ti, item.category);
+      totalTokens += r.totalTokens || r.tokens || 0;
       msgs.push({ role: 'assistant', content: r.answer });
       turnOutputs.push({ user: item.turns[ti], think: r.think, answer: r.answer, tokens: r.tokens });
     }
@@ -158,8 +168,8 @@ items.forEach((item, idx) => {
     });
   } else {
     const msgs = item.messages || [{ role: 'user', content: item.prompt }];
-    const r = runTurn(msgs, idx, item.category);
-    totalTokens += r.tokens || 0;
+    const r = await runTurn(msgs, idx, item.category);
+    totalTokens += r.totalTokens || r.tokens || 0;
     results.push({
       id: item.id,
       category: item.category,
@@ -170,7 +180,7 @@ items.forEach((item, idx) => {
       tokens: r.tokens
     });
   }
-});
+}
 
 const elapsedSec = (performance.now() - t0) / 1000;
 process.stdout.write(JSON.stringify({

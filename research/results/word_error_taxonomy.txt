@@ -1,0 +1,6 @@
+word problems (dev+test, live model, greedy, no calc): 15/72 correct; 57 wrong:
+  no_think                           0  ( 0.0% of errors)
+  ungrounded_operand                10  (17.5% of errors)
+  grounded_ops_wrong_structure      22  (38.6% of errors)
+  arith_slip(eq false)              24  (42.1% of errors)
+  answer!=last_result                1  ( 1.8% of errors)

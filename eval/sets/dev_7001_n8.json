@@ -1,0 +1,1442 @@
+[
+ {
+  "id": "s7001_000",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "jodnus 75 ra 35",
+  "rule": {
+   "type": "final_number",
+   "gold": 110
+  }
+ },
+ {
+  "id": "s7001_001",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "76 ra 87 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 163
+  }
+ },
+ {
+  "id": "s7001_002",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "77 + 41 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 118
+  }
+ },
+ {
+  "id": "s7001_003",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "19 ra 15 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 34
+  }
+ },
+ {
+  "id": "s7001_004",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "60 + 74 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 134
+  }
+ },
+ {
+  "id": "s7001_005",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "20 ra 43 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 63
+  }
+ },
+ {
+  "id": "s7001_006",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "51 + 20 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 71
+  }
+ },
+ {
+  "id": "s7001_007",
+  "category": "arithmetic",
+  "subcategory": "arith-add2",
+  "prompt": "jodnus 17 ra 67",
+  "rule": {
+   "type": "final_number",
+   "gold": 84
+  }
+ },
+ {
+  "id": "s7001_008",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "jodnus 790 ra 651",
+  "rule": {
+   "type": "final_number",
+   "gold": 1441
+  }
+ },
+ {
+  "id": "s7001_009",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "jodnus 919 ra 936",
+  "rule": {
+   "type": "final_number",
+   "gold": 1855
+  }
+ },
+ {
+  "id": "s7001_010",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "jodnus 336 ra 558",
+  "rule": {
+   "type": "final_number",
+   "gold": 894
+  }
+ },
+ {
+  "id": "s7001_011",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "521 ra 211 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 732
+  }
+ },
+ {
+  "id": "s7001_012",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "879 + 111 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 990
+  }
+ },
+ {
+  "id": "s7001_013",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "207 + 708 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 915
+  }
+ },
+ {
+  "id": "s7001_014",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "jodnus 603 ra 571",
+  "rule": {
+   "type": "final_number",
+   "gold": 1174
+  }
+ },
+ {
+  "id": "s7001_015",
+  "category": "arithmetic",
+  "subcategory": "arith-add3",
+  "prompt": "jodnus 171 ra 636",
+  "rule": {
+   "type": "final_number",
+   "gold": 807
+  }
+ },
+ {
+  "id": "s7001_016",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "2464 ra 4853 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 7317
+  }
+ },
+ {
+  "id": "s7001_017",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "6718 + 3526 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 10244
+  }
+ },
+ {
+  "id": "s7001_018",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "1625 ra 8218 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 9843
+  }
+ },
+ {
+  "id": "s7001_019",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "6260 ra 5815 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 12075
+  }
+ },
+ {
+  "id": "s7001_020",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "jodnus 1699 ra 4597",
+  "rule": {
+   "type": "final_number",
+   "gold": 6296
+  }
+ },
+ {
+  "id": "s7001_021",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "6725 + 1845 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 8570
+  }
+ },
+ {
+  "id": "s7001_022",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "jodnus 8378 ra 5244",
+  "rule": {
+   "type": "final_number",
+   "gold": 13622
+  }
+ },
+ {
+  "id": "s7001_023",
+  "category": "arithmetic",
+  "subcategory": "arith-add4",
+  "prompt": "jodnus 8654 ra 8826",
+  "rule": {
+   "type": "final_number",
+   "gold": 17480
+  }
+ },
+ {
+  "id": "s7001_024",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "12001 ra 90002 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 102003
+  }
+ },
+ {
+  "id": "s7001_025",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "jodnus 40517 ra 70126",
+  "rule": {
+   "type": "final_number",
+   "gold": 110643
+  }
+ },
+ {
+  "id": "s7001_026",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "jodnus 68313 ra 67183",
+  "rule": {
+   "type": "final_number",
+   "gold": 135496
+  }
+ },
+ {
+  "id": "s7001_027",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "69406 + 17356 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 86762
+  }
+ },
+ {
+  "id": "s7001_028",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "33204 + 78546 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 111750
+  }
+ },
+ {
+  "id": "s7001_029",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "83079 + 13981 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 97060
+  }
+ },
+ {
+  "id": "s7001_030",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "29118 ra 18841 ko jod kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 47959
+  }
+ },
+ {
+  "id": "s7001_031",
+  "category": "arithmetic",
+  "subcategory": "arith-add5",
+  "prompt": "70283 + 72899 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 143182
+  }
+ },
+ {
+  "id": "s7001_032",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "495 ra 139 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 356
+  }
+ },
+ {
+  "id": "s7001_033",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "616 ra 568 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 48
+  }
+ },
+ {
+  "id": "s7001_034",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "572 ra 212 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 360
+  }
+ },
+ {
+  "id": "s7001_035",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "887 ra 830 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 57
+  }
+ },
+ {
+  "id": "s7001_036",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "927 ra 821 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 106
+  }
+ },
+ {
+  "id": "s7001_037",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "404 ra 337 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 67
+  }
+ },
+ {
+  "id": "s7001_038",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "979 bata 836 ghatau",
+  "rule": {
+   "type": "final_number",
+   "gold": 143
+  }
+ },
+ {
+  "id": "s7001_039",
+  "category": "arithmetic",
+  "subcategory": "arith-sub3",
+  "prompt": "727 - 127 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 600
+  }
+ },
+ {
+  "id": "s7001_040",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "7522 bata 3997 ghatau",
+  "rule": {
+   "type": "final_number",
+   "gold": 3525
+  }
+ },
+ {
+  "id": "s7001_041",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "6274 - 3168 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3106
+  }
+ },
+ {
+  "id": "s7001_042",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "9855 - 6136 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3719
+  }
+ },
+ {
+  "id": "s7001_043",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "9730 ra 7255 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2475
+  }
+ },
+ {
+  "id": "s7001_044",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "9530 bata 2029 ghatau",
+  "rule": {
+   "type": "final_number",
+   "gold": 7501
+  }
+ },
+ {
+  "id": "s7001_045",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "9758 - 4351 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 5407
+  }
+ },
+ {
+  "id": "s7001_046",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "7803 ra 6573 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 1230
+  }
+ },
+ {
+  "id": "s7001_047",
+  "category": "arithmetic",
+  "subcategory": "arith-sub4",
+  "prompt": "5161 ra 3383 ko farak kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 1778
+  }
+ },
+ {
+  "id": "s7001_048",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "77 ko 6 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 462
+  }
+ },
+ {
+  "id": "s7001_049",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "gunan garnus 11 x 7",
+  "rule": {
+   "type": "final_number",
+   "gold": 77
+  }
+ },
+ {
+  "id": "s7001_050",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "gunan garnus 69 x 2",
+  "rule": {
+   "type": "final_number",
+   "gold": 138
+  }
+ },
+ {
+  "id": "s7001_051",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "99 ko 2 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 198
+  }
+ },
+ {
+  "id": "s7001_052",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "86 x 6 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 516
+  }
+ },
+ {
+  "id": "s7001_053",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "53 ko 7 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 371
+  }
+ },
+ {
+  "id": "s7001_054",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "75 ko 9 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 675
+  }
+ },
+ {
+  "id": "s7001_055",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x1",
+  "prompt": "70 ko 2 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 140
+  }
+ },
+ {
+  "id": "s7001_056",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "247 x 4 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 988
+  }
+ },
+ {
+  "id": "s7001_057",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "546 ko 2 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 1092
+  }
+ },
+ {
+  "id": "s7001_058",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "552 ko 4 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2208
+  }
+ },
+ {
+  "id": "s7001_059",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "gunan garnus 768 x 7",
+  "rule": {
+   "type": "final_number",
+   "gold": 5376
+  }
+ },
+ {
+  "id": "s7001_060",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "gunan garnus 369 x 6",
+  "rule": {
+   "type": "final_number",
+   "gold": 2214
+  }
+ },
+ {
+  "id": "s7001_061",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "109 x 5 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 545
+  }
+ },
+ {
+  "id": "s7001_062",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "481 x 8 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3848
+  }
+ },
+ {
+  "id": "s7001_063",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x1",
+  "prompt": "270 x 9 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2430
+  }
+ },
+ {
+  "id": "s7001_064",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "gunan garnus 40 x 92",
+  "rule": {
+   "type": "final_number",
+   "gold": 3680
+  }
+ },
+ {
+  "id": "s7001_065",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "38 ko 84 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3192
+  }
+ },
+ {
+  "id": "s7001_066",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "24 ko 16 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 384
+  }
+ },
+ {
+  "id": "s7001_067",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "49 ko 70 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3430
+  }
+ },
+ {
+  "id": "s7001_068",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "33 x 19 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 627
+  }
+ },
+ {
+  "id": "s7001_069",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "63 ko 59 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3717
+  }
+ },
+ {
+  "id": "s7001_070",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "gunan garnus 60 x 24",
+  "rule": {
+   "type": "final_number",
+   "gold": 1440
+  }
+ },
+ {
+  "id": "s7001_071",
+  "category": "arithmetic",
+  "subcategory": "arith-mul2x2",
+  "prompt": "gunan garnus 87 x 57",
+  "rule": {
+   "type": "final_number",
+   "gold": 4959
+  }
+ },
+ {
+  "id": "s7001_072",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "gunan garnus 911 x 30",
+  "rule": {
+   "type": "final_number",
+   "gold": 27330
+  }
+ },
+ {
+  "id": "s7001_073",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "355 ko 45 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 15975
+  }
+ },
+ {
+  "id": "s7001_074",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "gunan garnus 476 x 23",
+  "rule": {
+   "type": "final_number",
+   "gold": 10948
+  }
+ },
+ {
+  "id": "s7001_075",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "574 ko 48 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 27552
+  }
+ },
+ {
+  "id": "s7001_076",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "350 x 38 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 13300
+  }
+ },
+ {
+  "id": "s7001_077",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "406 ko 97 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 39382
+  }
+ },
+ {
+  "id": "s7001_078",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "460 x 72 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 33120
+  }
+ },
+ {
+  "id": "s7001_079",
+  "category": "arithmetic",
+  "subcategory": "arith-mul3x2",
+  "prompt": "964 ko 49 guna kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 47236
+  }
+ },
+ {
+  "id": "s7001_080",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "894 / 3 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 298
+  }
+ },
+ {
+  "id": "s7001_081",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "176 / 8 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 22
+  }
+ },
+ {
+  "id": "s7001_082",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "561 lai 3 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 187
+  }
+ },
+ {
+  "id": "s7001_083",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "40 / 2 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 20
+  }
+ },
+ {
+  "id": "s7001_084",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "76 lai 4 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 19
+  }
+ },
+ {
+  "id": "s7001_085",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "973 lai 7 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 139
+  }
+ },
+ {
+  "id": "s7001_086",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "144 lai 8 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 18
+  }
+ },
+ {
+  "id": "s7001_087",
+  "category": "arithmetic",
+  "subcategory": "arith-div3",
+  "prompt": "888 lai 8 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 111
+  }
+ },
+ {
+  "id": "s7001_088",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "1375 lai 5 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 275
+  }
+ },
+ {
+  "id": "s7001_089",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "3006 / 9 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 334
+  }
+ },
+ {
+  "id": "s7001_090",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "570 lai 5 barabar bhag ma bandda ek bhag kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 114
+  }
+ },
+ {
+  "id": "s7001_091",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "2290 / 5 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 458
+  }
+ },
+ {
+  "id": "s7001_092",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "9748 / 4 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2437
+  }
+ },
+ {
+  "id": "s7001_093",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "6986 / 7 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 998
+  }
+ },
+ {
+  "id": "s7001_094",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "4188 / 6 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 698
+  }
+ },
+ {
+  "id": "s7001_095",
+  "category": "arithmetic",
+  "subcategory": "arith-div4",
+  "prompt": "1715 / 5 = ?",
+  "rule": {
+   "type": "final_number",
+   "gold": 343
+  }
+ },
+ {
+  "id": "s7001_096",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta bagaincha ma 5 wata line chhan ra har line ma 12 wata rukh. 7 wata rukh dhale bhane kati rukh baki?",
+  "rule": {
+   "type": "final_number",
+   "gold": 53
+  }
+ },
+ {
+  "id": "s7001_097",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta kitab ko mol 300 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+  "rule": {
+   "type": "final_number",
+   "gold": 540
+  }
+ },
+ {
+  "id": "s7001_098",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "aarati 46 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+  "rule": {
+   "type": "final_number",
+   "gold": 18
+  }
+ },
+ {
+  "id": "s7001_099",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "A bus travels at 40 km per hour for 3 hours, then 15 km more. How far did it travel in total?",
+  "rule": {
+   "type": "final_number",
+   "gold": 135
+  }
+ },
+ {
+  "id": "s7001_100",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "There are 6 boxes with 7 apples each. 5 apples are rotten. How many good apples?",
+  "rule": {
+   "type": "final_number",
+   "gold": 37
+  }
+ },
+ {
+  "id": "s7001_101",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "kaksha ma 36 keta ra 30 keti chhan. 6 jana anupasthit chhan. kati jana upasthit?",
+  "rule": {
+   "type": "final_number",
+   "gold": 60
+  }
+ },
+ {
+  "id": "s7001_102",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta kitab ko mol 800 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+  "rule": {
+   "type": "final_number",
+   "gold": 1440
+  }
+ },
+ {
+  "id": "s7001_103",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta bagaincha ma 6 wata line chhan ra har line ma 3 wata rukh. 7 wata rukh dhale bhane kati rukh baki?",
+  "rule": {
+   "type": "final_number",
+   "gold": 11
+  }
+ },
+ {
+  "id": "s7001_104",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "kaksha ma 17 keta ra 49 keti chhan. 6 jana anupasthit chhan. kati jana upasthit?",
+  "rule": {
+   "type": "final_number",
+   "gold": 60
+  }
+ },
+ {
+  "id": "s7001_105",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "janak ko masik talab 8950 rupiya ho. usle 1000 rupiya bachat garchha. 3 mahina ma kati bachat?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3000
+  }
+ },
+ {
+  "id": "s7001_106",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "ganesh sanga 6 wata kalam thiyo. sathi le 10 wata diyo, ani usle aadha bahini lai diyo. aba usko sanga kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 8
+  }
+ },
+ {
+  "id": "s7001_107",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta kitab ko mol 600 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+  "rule": {
+   "type": "final_number",
+   "gold": 1080
+  }
+ },
+ {
+  "id": "s7001_108",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "chandra 74 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+  "rule": {
+   "type": "final_number",
+   "gold": 32
+  }
+ },
+ {
+  "id": "s7001_109",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "A bus travels at 70 km per hour for 3 hours, then 15 km more. How far did it travel in total?",
+  "rule": {
+   "type": "final_number",
+   "gold": 225
+  }
+ },
+ {
+  "id": "s7001_110",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "deepa ko masik talab 5690 rupiya ho. usle 1000 rupiya bachat garchha. 3 mahina ma kati bachat?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3000
+  }
+ },
+ {
+  "id": "s7001_111",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "aarati ko masik talab 5660 rupiya ho. usle 1000 rupiya bachat garchha. 3 mahina ma kati bachat?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3000
+  }
+ },
+ {
+  "id": "s7001_112",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "aarati sanga 17 wata kalam thiyo. sathi le 19 wata diyo, ani usle aadha bahini lai diyo. aba usko sanga kati?",
+  "rule": {
+   "type": "final_number",
+   "gold": 18
+  }
+ },
+ {
+  "id": "s7001_113",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta bagaincha ma 4 wata line chhan ra har line ma 8 wata rukh. 7 wata rukh dhale bhane kati rukh baki?",
+  "rule": {
+   "type": "final_number",
+   "gold": 25
+  }
+ },
+ {
+  "id": "s7001_114",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "janak 50 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+  "rule": {
+   "type": "final_number",
+   "gold": 20
+  }
+ },
+ {
+  "id": "s7001_115",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta kitab ko mol 700 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+  "rule": {
+   "type": "final_number",
+   "gold": 1260
+  }
+ },
+ {
+  "id": "s7001_116",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "euta kitab ko mol 300 rupiya. 10% chhut pachhi 2 wata kitab ko kati tirne?",
+  "rule": {
+   "type": "final_number",
+   "gold": 540
+  }
+ },
+ {
+  "id": "s7001_117",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "A bus travels at 90 km per hour for 5 hours, then 15 km more. How far did it travel in total?",
+  "rule": {
+   "type": "final_number",
+   "gold": 465
+  }
+ },
+ {
+  "id": "s7001_118",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "indira 42 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+  "rule": {
+   "type": "final_number",
+   "gold": 16
+  }
+ },
+ {
+  "id": "s7001_119",
+  "category": "arithmetic",
+  "subcategory": "word",
+  "prompt": "janak 50 barsha ko chha. usko chhora usko umer ko aadha bhanda 5 barsha kam chha. chhora kati barsha ko?",
+  "rule": {
+   "type": "final_number",
+   "gold": 20
+  }
+ },
+ {
+  "id": "s7001_120",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "shrinkhala: 11, 18, 25, 32, ... arko number?",
+  "rule": {
+   "type": "final_number",
+   "gold": 39
+  }
+ },
+ {
+  "id": "s7001_121",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "ram shyam bhanda 4 barsha jetho chha. shyam 6 barsha ko. 5 barsha pachhi ram kati barsha ko hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 15
+  }
+ },
+ {
+  "id": "s7001_122",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "ram shyam bhanda 7 barsha jetho chha. shyam 9 barsha ko. 5 barsha pachhi ram kati barsha ko hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 21
+  }
+ },
+ {
+  "id": "s7001_123",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "pattern: 6, 24, 96, ... aba aaune?",
+  "rule": {
+   "type": "final_number",
+   "gold": 384
+  }
+ },
+ {
+  "id": "s7001_124",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "7 kilometer ma kati meter hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 7000
+  }
+ },
+ {
+  "id": "s7001_125",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "2 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 120
+  }
+ },
+ {
+  "id": "s7001_126",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "pattern: 9, 36, 144, ... aba aaune?",
+  "rule": {
+   "type": "final_number",
+   "gold": 576
+  }
+ },
+ {
+  "id": "s7001_127",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "7 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 420
+  }
+ },
+ {
+  "id": "s7001_128",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "3 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 180
+  }
+ },
+ {
+  "id": "s7001_129",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "ram shyam bhanda 3 barsha jetho chha. shyam 12 barsha ko. 5 barsha pachhi ram kati barsha ko hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 20
+  }
+ },
+ {
+  "id": "s7001_130",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "pattern: 17, 85, 425, ... aba aaune?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2125
+  }
+ },
+ {
+  "id": "s7001_131",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "ram shyam bhanda 7 barsha jetho chha. shyam 12 barsha ko. 5 barsha pachhi ram kati barsha ko hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 24
+  }
+ },
+ {
+  "id": "s7001_132",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "5 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 300
+  }
+ },
+ {
+  "id": "s7001_133",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "ram shyam bhanda 5 barsha jetho chha. shyam 15 barsha ko. 5 barsha pachhi ram kati barsha ko hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 25
+  }
+ },
+ {
+  "id": "s7001_134",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "4 kilometer ma kati meter hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 4000
+  }
+ },
+ {
+  "id": "s7001_135",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "pattern: 21, 42, 84, ... aba aaune?",
+  "rule": {
+   "type": "final_number",
+   "gold": 168
+  }
+ },
+ {
+  "id": "s7001_136",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "3 kilometer ma kati meter hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 3000
+  }
+ },
+ {
+  "id": "s7001_137",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "7 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 420
+  }
+ },
+ {
+  "id": "s7001_138",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "4 kilometer ma kati meter hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 4000
+  }
+ },
+ {
+  "id": "s7001_139",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "pattern: 10, 60, 360, ... aba aaune?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2160
+  }
+ },
+ {
+  "id": "s7001_140",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "2 kilometer ma kati meter hunchha?",
+  "rule": {
+   "type": "final_number",
+   "gold": 2000
+  }
+ },
+ {
+  "id": "s7001_141",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "7 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 420
+  }
+ },
+ {
+  "id": "s7001_142",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "7 ghanta ma kati minute?",
+  "rule": {
+   "type": "final_number",
+   "gold": 420
+  }
+ },
+ {
+  "id": "s7001_143",
+  "category": "arithmetic",
+  "subcategory": "reason",
+  "prompt": "shrinkhala: 17, 25, 33, 41, ... arko number?",
+  "rule": {
+   "type": "final_number",
+   "gold": 49
+  }
+ }
+]

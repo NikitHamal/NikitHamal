@@ -1,0 +1,69 @@
+{"tag": "base", "edits": [], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "n1_b0_x4", "edits": [["n1", 0, 4]], "word": 0, "reason": 0, "arith_guard": 0, "hard": 0}
+{"tag": "n1_b0_x10", "edits": [["n1", 0, 10]], "word": 0, "reason": 0, "arith_guard": 0, "hard": 0}
+{"tag": "head_b10h3_x0.0", "edits": [["head", 10, 3, 0.0]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b10h3_x0.5", "edits": [["head", 10, 3, 0.5]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b9h9_x0.0", "edits": [["head", 9, 9, 0.0]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b9h9_x0.5", "edits": [["head", 9, 9, 0.5]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b10h4_x0.0", "edits": [["head", 10, 4, 0.0]], "word": 5, "reason": 17, "arith_guard": 23, "hard": 22}
+{"tag": "head_b10h4_x0.5", "edits": [["head", 10, 4, 0.5]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b9h8_x0.0", "edits": [["head", 9, 8, 0.0]], "word": 5, "reason": 18, "arith_guard": 23, "hard": 23}
+{"tag": "head_b9h8_x0.5", "edits": [["head", 9, 8, 0.5]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b9h2_x0.0", "edits": [["head", 9, 2, 0.0]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "head_b9h2_x0.5", "edits": [["head", 9, 2, 0.5]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b0r0_x0.8", "edits": [["rg", 0, 0, 0.8]], "word": 5, "reason": 17, "arith_guard": 21, "hard": 22}
+{"tag": "rg_b0r0_x1.25", "edits": [["rg", 0, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b0r1_x0.8", "edits": [["rg", 0, 1, 0.8]], "word": 4, "reason": 20, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b0r1_x1.25", "edits": [["rg", 0, 1, 1.25]], "word": 5, "reason": 17, "arith_guard": 15, "hard": 22}
+{"tag": "rg_b1r0_x0.8", "edits": [["rg", 1, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 22, "hard": 24}
+{"tag": "rg_b1r0_x1.25", "edits": [["rg", 1, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b1r1_x0.8", "edits": [["rg", 1, 1, 0.8]], "word": 5, "reason": 18, "arith_guard": 22, "hard": 23}
+{"tag": "rg_b1r1_x1.25", "edits": [["rg", 1, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b2r0_x0.8", "edits": [["rg", 2, 0, 0.8]], "word": 5, "reason": 20, "arith_guard": 23, "hard": 25}
+{"tag": "rg_b2r0_x1.25", "edits": [["rg", 2, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b2r1_x0.8", "edits": [["rg", 2, 1, 0.8]], "word": 5, "reason": 20, "arith_guard": 24, "hard": 25}
+{"tag": "rg_b2r1_x1.25", "edits": [["rg", 2, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b3r0_x0.8", "edits": [["rg", 3, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b3r0_x1.25", "edits": [["rg", 3, 0, 1.25]], "word": 5, "reason": 18, "arith_guard": 23, "hard": 23}
+{"tag": "rg_b3r1_x0.8", "edits": [["rg", 3, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b3r1_x1.25", "edits": [["rg", 3, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b4r0_x0.8", "edits": [["rg", 4, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b4r0_x1.25", "edits": [["rg", 4, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b4r1_x0.8", "edits": [["rg", 4, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b4r1_x1.25", "edits": [["rg", 4, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b5r0_x0.8", "edits": [["rg", 5, 0, 0.8]], "word": 6, "reason": 19, "arith_guard": 23, "hard": 25}
+{"tag": "rg_b5r0_x1.25", "edits": [["rg", 5, 0, 1.25]], "word": 5, "reason": 20, "arith_guard": 23, "hard": 25}
+{"tag": "rg_b5r1_x0.8", "edits": [["rg", 5, 1, 0.8]], "word": 6, "reason": 19, "arith_guard": 23, "hard": 25}
+{"tag": "rg_b5r1_x1.25", "edits": [["rg", 5, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b6r0_x0.8", "edits": [["rg", 6, 0, 0.8]], "word": 7, "reason": 19, "arith_guard": 23, "hard": 26}
+{"tag": "rg_b6r0_x1.25", "edits": [["rg", 6, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b6r1_x0.8", "edits": [["rg", 6, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b6r1_x1.25", "edits": [["rg", 6, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b7r0_x0.8", "edits": [["rg", 7, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b7r0_x1.25", "edits": [["rg", 7, 0, 1.25]], "word": 5, "reason": 18, "arith_guard": 24, "hard": 23}
+{"tag": "rg_b7r1_x0.8", "edits": [["rg", 7, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b7r1_x1.25", "edits": [["rg", 7, 1, 1.25]], "word": 5, "reason": 18, "arith_guard": 23, "hard": 23}
+{"tag": "rg_b8r0_x0.8", "edits": [["rg", 8, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b8r0_x1.25", "edits": [["rg", 8, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b8r1_x0.8", "edits": [["rg", 8, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b8r1_x1.25", "edits": [["rg", 8, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b9r0_x0.8", "edits": [["rg", 9, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b9r0_x1.25", "edits": [["rg", 9, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 22, "hard": 24}
+{"tag": "rg_b9r1_x0.8", "edits": [["rg", 9, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b9r1_x1.25", "edits": [["rg", 9, 1, 1.25]], "word": 5, "reason": 18, "arith_guard": 22, "hard": 23}
+{"tag": "rg_b10r0_x0.8", "edits": [["rg", 10, 0, 0.8]], "word": 5, "reason": 20, "arith_guard": 23, "hard": 25}
+{"tag": "rg_b10r0_x1.25", "edits": [["rg", 10, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b10r1_x0.8", "edits": [["rg", 10, 1, 0.8]], "word": 5, "reason": 20, "arith_guard": 23, "hard": 25}
+{"tag": "rg_b10r1_x1.25", "edits": [["rg", 10, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 24, "hard": 24}
+{"tag": "rg_b11r0_x0.8", "edits": [["rg", 11, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b11r0_x1.25", "edits": [["rg", 11, 0, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b11r1_x0.8", "edits": [["rg", 11, 1, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "rg_b11r1_x1.25", "edits": [["rg", 11, 1, 1.25]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "compose1_rg_b6r0_x0.8", "edits": [["rg", 6, 0, 0.8]], "word": 7, "reason": 19, "arith_guard": 23, "hard": 26}
+{"tag": "compose2_rg_b2r0_x0.8", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 0, 0.8]], "word": 5, "reason": 19, "arith_guard": 23, "hard": 24}
+{"tag": "compose2_rg_b2r1_x0.8", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 1, 0.8]], "word": 7, "reason": 20, "arith_guard": 23, "hard": 27}
+{"tag": "compose3_rg_b5r0_x0.8", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 1, 0.8], ["rg", 5, 0, 0.8]], "word": 7, "reason": 18, "arith_guard": 22, "hard": 25}
+{"tag": "compose3_rg_b5r0_x1.25", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 1, 0.8], ["rg", 5, 0, 1.25]], "word": 6, "reason": 20, "arith_guard": 24, "hard": 26}
+{"tag": "compose3_rg_b5r1_x0.8", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 1, 0.8], ["rg", 5, 1, 0.8]], "word": 7, "reason": 17, "arith_guard": 22, "hard": 24}
+{"tag": "compose3_rg_b10r0_x0.8", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 1, 0.8], ["rg", 10, 0, 0.8]], "word": 6, "reason": 19, "arith_guard": 23, "hard": 25}
+{"tag": "compose3_rg_b10r1_x0.8", "edits": [["rg", 6, 0, 0.8], ["rg", 2, 1, 0.8], ["rg", 10, 1, 0.8]], "word": 6, "reason": 19, "arith_guard": 23, "hard": 25}
