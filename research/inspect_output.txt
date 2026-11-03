@@ -1,0 +1,116 @@
+config: {'vocab': 4096, 'd': 384, 'n_unique': 12, 'n_repeat': 2, 'heads': 12, 'kv_heads': 4, 'ffn': 1024, 'ctx': 512, 'block': 8, 'rope_base': 10000.0, 'eps': 1e-05, 'mask_id': 3, 'abacus': 20, 'ternary': False, 'rgate': False}
+
+tensor                              shape   absmax     std    kurt  sat127% rowN max/med
+emb.weight                    [4096, 384]    0.640  0.0786     3.9    0.269         1.72
+abacus.weight                   [21, 384]    0.246  0.0567     3.5    0.248         1.51
+blocks.0.q.weight              [384, 384]    0.480  0.0646     3.7    0.265         1.67
+blocks.0.kv.weight             [256, 384]    0.388  0.0574     3.8    0.275         1.61
+blocks.0.o.weight              [384, 384]    0.501  0.0502     3.8    0.267         2.95
+blocks.0.up.weight            [2048, 384]    0.403  0.0743     3.1    0.269         1.24
+blocks.0.down.weight          [384, 1024]    0.891  0.0670     3.4    0.103         2.24
+blocks.1.q.weight              [384, 384]    0.339  0.0671     3.2    0.269         1.53
+blocks.1.kv.weight             [256, 384]    0.277  0.0609     3.1    0.269         1.29
+blocks.1.o.weight              [384, 384]    0.326  0.0621     3.2    0.267         1.96
+blocks.1.up.weight            [2048, 384]    0.390  0.0764     3.0    0.273         1.37
+blocks.1.down.weight          [384, 1024]    1.006  0.0736     3.6    0.101         2.56
+blocks.2.q.weight              [384, 384]    0.301  0.0653     3.1    0.267         1.21
+blocks.2.kv.weight             [256, 384]    0.301  0.0647     3.1    0.268         1.10
+blocks.2.o.weight              [384, 384]    0.296  0.0641     3.0    0.271         1.61
+blocks.2.up.weight            [2048, 384]    0.570  0.0788     3.1    0.269         2.18
+blocks.2.down.weight          [384, 1024]    0.954  0.0724     3.4    0.100         2.31
+blocks.3.q.weight              [384, 384]    0.687  0.0649     3.4    0.269         2.17
+blocks.3.kv.weight             [256, 384]    0.357  0.0634     3.1    0.270         1.22
+blocks.3.o.weight              [384, 384]    0.331  0.0634     3.1    0.271         1.50
+blocks.3.up.weight            [2048, 384]    0.577  0.0797     3.0    0.268         1.75
+blocks.3.down.weight          [384, 1024]    1.946  0.0726     4.7    0.102         2.31
+blocks.4.q.weight              [384, 384]    0.370  0.0640     3.2    0.267         1.45
+blocks.4.kv.weight             [256, 384]    0.336  0.0640     3.2    0.270         1.31
+blocks.4.o.weight              [384, 384]    0.342  0.0646     3.1    0.271         1.54
+blocks.4.up.weight            [2048, 384]    0.631  0.0797     3.1    0.270         1.77
+blocks.4.down.weight          [384, 1024]    1.889  0.0725     4.3    0.105         2.09
+blocks.5.q.weight              [384, 384]    0.431  0.0632     3.3    0.268         1.80
+blocks.5.kv.weight             [256, 384]    0.296  0.0627     3.2    0.263         1.26
+blocks.5.o.weight              [384, 384]    0.415  0.0630     3.1    0.269         1.71
+blocks.5.up.weight            [2048, 384]    0.855  0.0789     3.1    0.272         1.76
+blocks.5.down.weight          [384, 1024]    2.083  0.0741     4.8    0.102         2.04
+blocks.6.q.weight              [384, 384]    0.328  0.0615     3.2    0.270         1.37
+blocks.6.kv.weight             [256, 384]    0.288  0.0637     3.2    0.270         1.36
+blocks.6.o.weight              [384, 384]    0.320  0.0622     3.1    0.267         1.46
+blocks.6.up.weight            [2048, 384]    0.963  0.0790     3.1    0.269         1.68
+blocks.6.down.weight          [384, 1024]    2.398  0.0753     5.8    0.104         1.95
+blocks.7.q.weight              [384, 384]    0.321  0.0618     3.2    0.273         1.52
+blocks.7.kv.weight             [256, 384]    0.330  0.0671     3.2    0.274         1.32
+blocks.7.o.weight              [384, 384]    0.324  0.0656     3.1    0.269         1.68
+blocks.7.up.weight            [2048, 384]    0.463  0.0784     3.0    0.272         1.52
+blocks.7.down.weight          [384, 1024]    0.853  0.0757     3.2    0.101         1.77
+blocks.8.q.weight              [384, 384]    0.372  0.0616     3.3    0.267         1.61
+blocks.8.kv.weight             [256, 384]    0.316  0.0676     3.4    0.271         1.23
+blocks.8.o.weight              [384, 384]    0.398  0.0667     3.2    0.268         1.84
+blocks.8.up.weight            [2048, 384]    1.101  0.0798     3.1    0.270         1.83
+blocks.8.down.weight          [384, 1024]    1.802  0.0775     3.8    0.104         1.82
+blocks.9.q.weight              [384, 384]    0.780  0.0657     5.4    0.266         3.04
+blocks.9.kv.weight             [256, 384]    0.457  0.0743     3.6    0.275         1.52
+blocks.9.o.weight              [384, 384]    0.492  0.0701     3.3    0.270         1.74
+blocks.9.up.weight            [2048, 384]    0.648  0.0802     3.0    0.270         1.81
+blocks.9.down.weight          [384, 1024]    0.780  0.0797     3.1    0.102         1.76
+blocks.10.q.weight             [384, 384]    0.509  0.0615     4.5    0.265         2.51
+blocks.10.kv.weight            [256, 384]    0.436  0.0752     3.9    0.271         1.67
+blocks.10.o.weight             [384, 384]    0.531  0.0709     3.4    0.273         1.60
+blocks.10.up.weight           [2048, 384]    0.725  0.0801     3.0    0.271         1.61
+blocks.10.down.weight         [384, 1024]    1.184  0.0808     3.3    0.102         1.58
+blocks.11.q.weight             [384, 384]    0.496  0.0702     4.8    0.268         2.31
+blocks.11.kv.weight            [256, 384]    0.414  0.0756     3.3    0.270         1.17
+blocks.11.o.weight             [384, 384]    0.471  0.0679     3.1    0.269         1.56
+blocks.11.up.weight           [2048, 384]    1.666  0.0787     3.8    0.271         1.93
+blocks.11.down.weight         [384, 1024]    1.738  0.0799     6.1    0.102         2.38
+
+-- kurtosis outliers per matrix type (|z|>1.8 across the 12 blocks) --
+  blocks.9.q.weight: kurtosis 5.4 (z=+2.30, type mean 3.7)
+  blocks.10.kv.weight: kurtosis 3.9 (z=+2.12, type mean 3.3)
+  blocks.0.o.weight: kurtosis 3.8 (z=+2.87, type mean 3.2)
+  blocks.11.up.weight: kurtosis 3.8 (z=+3.29, type mean 3.1)
+  blocks.11.down.weight: kurtosis 6.1 (z=+2.03, type mean 4.1)
+
+-- RMSNorm gains --
+  blocks.0.n1.weight     mean 0.033 std 0.017 min -0.038 max 0.193
+  blocks.0.n2.weight     mean 0.331 std 0.051 min 0.041 max 0.823
+  blocks.1.n1.weight     mean 0.397 std 0.063 min 0.064 max 0.649
+  blocks.1.n2.weight     mean 0.433 std 0.058 min 0.033 max 0.671
+  blocks.2.n1.weight     mean 0.287 std 0.044 min 0.043 max 0.555
+  blocks.2.n2.weight     mean 0.464 std 0.040 min 0.041 max 0.579
+  blocks.3.n1.weight     mean 0.456 std 0.077 min 0.075 max 1.074
+  blocks.3.n2.weight     mean 0.505 std 0.040 min 0.043 max 0.638
+  blocks.4.n1.weight     mean 0.585 std 0.086 min 0.089 max 1.224
+  blocks.4.n2.weight     mean 0.558 std 0.044 min 0.057 max 0.715
+  blocks.5.n1.weight     mean 0.637 std 0.109 min 0.137 max 1.337
+  blocks.5.n2.weight     mean 0.605 std 0.045 min 0.092 max 0.767
+  blocks.6.n1.weight     mean 0.863 std 0.125 min 0.247 max 1.533
+  blocks.6.n2.weight     mean 0.633 std 0.045 min 0.153 max 0.779
+  blocks.7.n1.weight     mean 1.090 std 0.151 min 0.291 max 1.814
+  blocks.7.n2.weight     mean 0.675 std 0.045 min 0.196 max 0.821
+  blocks.8.n1.weight     mean 1.278 std 0.172 min 0.357 max 2.412
+  blocks.8.n2.weight     mean 0.731 std 0.049 min 0.244 max 0.835
+  blocks.9.n1.weight     mean 2.064 std 0.217 min 0.774 max 3.306
+  blocks.9.n2.weight     mean 0.807 std 0.056 min 0.224 max 0.942
+  blocks.10.n1.weight    mean 2.367 std 0.245 min 0.781 max 3.736
+  blocks.10.n2.weight    mean 0.897 std 0.064 min 0.221 max 1.019
+  blocks.11.n1.weight    mean 2.717 std 0.259 min 1.464 max 4.010
+  blocks.11.n2.weight    mean 1.089 std 0.075 min 0.279 max 1.333
+  norm.weight            mean 2.345 std 0.240 min -0.008 max 4.848
+
+-- attention o-proj Frobenius norm per head, block: [h0..h11] --
+  b 0:  4.87  5.08  4.61  4.59  4.70  5.39  5.90  6.15  5.49  6.34  6.23  6.85
+  b 1:  6.40  6.76  6.81  7.40  8.12  7.39  7.38  7.61  6.02  6.16  6.01  6.14
+  b 2:  7.30  7.21  7.08  6.80  6.67  7.17  7.10  7.29  7.12  6.97  7.09  7.49
+  b 3:  7.27  7.23  7.09  6.60  6.39  6.03  7.07  7.28  6.91  7.34  6.82  8.04
+  b 4:  7.08  7.05  6.95  6.67  6.80  6.78  7.13  7.41  7.30  8.06  7.15  7.44
+  b 5:  6.79  6.98  7.55  7.11  6.91  6.66  6.61  7.16  6.29  7.58  6.93  7.11
+  b 6:  7.25  6.85  7.88  6.72  6.63  6.54  6.85  6.48  6.54  7.51  6.87  6.51
+  b 7:  7.30  7.49  7.13  7.44  7.61  7.02  6.94  6.74  7.12  7.88  8.26  6.18
+  b 8:  7.08  7.49  7.42  7.63  6.99  7.02  6.88  7.54  8.51  7.51  7.38  7.09
+  b 9:  7.12  7.10  8.50  7.72  6.90  6.68  8.04  7.28  8.61 10.32  7.24  6.94
+  b10:  7.14  7.17  6.22 10.81  9.30  8.14  7.26  7.23  8.18  7.49  7.48  6.87
+  b11:  8.15  7.65  7.13  7.22  7.25  8.05  6.81  7.16  8.14  7.48  8.12  6.95
+
+embedding row-norm: median 1.455 max 2.498 (token 3429); tied with the output head
+total stored parameters: 20.47M; 12 unique blocks x 2 repeats = 24 effective layers

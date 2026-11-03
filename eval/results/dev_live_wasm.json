@@ -1,0 +1,866 @@
+{
+ "s7001_000": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "75 + 35 = 110.",
+  "think": "thau anusar ek bata suru garchhu. ek: 5 + 5 = 10, 0 lekhne, 1 haat. das: 7 + 3 + 1 = 11, 1 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 75 + 35 = 110."
+ },
+ "s7001_004": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "60 + 74 = 134.",
+  "think": "thau anusar ek bata suru garchhu. ek: 0 + 4 = 4. das: 6 + 7 = 13, 3 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 60 + 74 = 134."
+ },
+ "s7001_008": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "790 + 651 = 1441.",
+  "think": "thau anusar ek bata suru garchhu. ek: 0 + 1 = 1. das: 9 + 5 = 14, 4 lekhne, 1 haat. saya: 7 + 6 + 1 = 14, 4 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 790 + 651 = 1441."
+ },
+ "s7001_012": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "879 + 111 = 990.",
+  "think": "thau anusar ek bata suru garchhu. ek: 9 + 1 = 10, 0 lekhne, 1 haat. das: 7 + 1 + 1 = 9. saya: 8 + 1 = 9. tyasaile 879 + 111 = 990."
+ },
+ "s7001_016": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "2464 + 4853 = 7317.",
+  "think": "thau anusar ek bata suru garchhu. ek: 4 + 3 = 7. das: 6 + 5 = 11, 1 lekhne, 1 haat. saya: 4 + 8 + 1 = 13, 3 lekhne, 1 haat. hajar: 2 + 4 + 1 = 7. tyasaile 2464 + 4853 = 7317."
+ },
+ "s7001_020": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "jawaf 6296 ho.",
+  "think": "thau anusar ek bata suru garchhu. ek: 9 + 7 = 16, 6 lekhne, 1 haat. das: 9 + 9 + 1 = 19, 9 lekhne, 1 haat. saya: 6 + 5 + 1 = 12, 2 lekhne, 1 haat. hajar: 1 + 4 + 1 = 6. tyasaile 1699 + 4597 = 6296."
+ },
+ "s7001_024": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "12001 + 90002 = 102003.",
+  "think": "thau anusar ek bata suru garchhu. ek: 1 + 2 = 3. das: 0 + 0 = 0. saya: 0 + 0 = 0. hajar: 2 + 0 = 2. das hajar: 1 + 9 = 10, 0 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 12001 + 90002 = 102003."
+ },
+ "s7001_028": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "33204 + 78546 = 111750.",
+  "think": "thau anusar ek bata suru garchhu. ek: 4 + 6 = 10, 0 lekhne, 1 haat. das: 0 + 4 + 1 = 5. saya: 2 + 5 = 7. hajar: 3 + 8 = 11, 1 lekhne, 1 haat. das hajar: 3 + 7 + 1 = 11, 1 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 33204 + 78546 = 111750."
+ },
+ "s7001_032": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "495 - 139 = 356.",
+  "think": "thau anusar ek bata suru garchhu. ek: 5 bata 9 ghatdaina, 1 sapati: 15 - 9 = 6. das: 8 thiyo, 1 diyo, aba 8; 8 - 3 = 5. saya: 4 - 1 = 3. tyasaile 495 - 139 = 356. jaach: 356 + 139 = 495."
+ },
+ "s7001_036": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "927 - 821 = 106.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 - 1 = 6. das: 2 - 2 = 0. saya: 9 - 8 = 1. tyasaile 927 - 821 = 106. jaach: 106 + 821 = 927."
+ },
+ "s7001_040": {
+  "ok": true,
+  "sub": "arith-sub4",
+  "answer": "7522 - 3997 = 3525.",
+  "think": "sodheko: 7522 - 3997. thau anusar ek bata suru garchhu. ek: 2 bata 7 ghatdaina, 1 sapati: 12 - 7 = 5. das: 2 thiyo, 1 diyo, aba 1; 1 bata 9 ghatdaina, 1 sapati: 11 - 9 = 2. saya: 5 thiyo, 1 diyo, aba 4; 4 bata 9 ghatdaina, 1 sapati: 14 - 9 = 5. hajar: 7 thiyo, 1 diyo, aba 6; 6 - 3 = 3. tyasaile 7522 - 3997 = 3525. jaach: 3525 + 3997 = 7522."
+ },
+ "s7001_044": {
+  "ok": false,
+  "sub": "arith-sub4",
+  "answer": "9530 - 2029 = 7411.",
+  "think": "thau anusar ek bata suru garchhu. ek: 0 bata 9 ghatdaina, 1 sapati: 10 - 9 = 1. das: 2 thiyo, 1 diyo, aba 2; 2 bata 2 ghatdaina, 1 sapati: 12 - 2 = 10. saya: 5 thiyo, 1 diyo, aba 4; 4 - 0 = 4. hajar: 9 - 2 = 7. tyasaile 9530 - 2029 = 7411. jaach: 7411 + 2029 = 9530."
+ },
+ "s7001_048": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "77 x 6 = 462 hunchha.",
+  "think": "77 lai 6 le ank ank gari gunchhu (ek bata): 7 x 6 = 42, 2 lekhne, 4 haat; 7 x 6 + 4 = 46. tyasaile 77 x 6 = 462."
+ },
+ "s7001_052": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "86 x 6 = 516.",
+  "think": "86 lai 6 le ank ank gari gunchhu (ek bata): 6 x 6 = 36, 6 lekhne, 3 haat; 8 x 6 + 3 = 51. tyasaile 86 x 6 = 516."
+ },
+ "s7001_056": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "247 x 4 = 988.",
+  "think": "247 lai 4 le ank ank gari gunchhu (ek bata): 7 x 4 = 28, 8 lekhne, 2 haat; 4 x 4 + 2 = 18, 8 lekhne, 1 haat; 2 x 4 + 1 = 9. tyasaile 247 x 4 = 988."
+ },
+ "s7001_060": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "369 x 6 = 2214.",
+  "think": "369 lai 6 le ank ank gari gunchhu (ek bata): 9 x 6 = 54, 4 lekhne, 5 haat; 6 x 6 + 5 = 41, 1 lekhne, 4 haat; 3 x 6 + 4 = 22. tyasaile 369 x 6 = 2214."
+ },
+ "s7001_064": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "40 x 92 = 3680.",
+  "think": "92 ma 9 das ra 2 ek chhan. 40 x 2: 0 x 2 = 0; 4 x 2 = 8, tyasaile 40 x 2 = 80. 40 x 9: 0 x 9 = 0; 4 x 9 = 36, tyasaile 40 x 9 = 360, das ko thau ma bhayeko le 360 x 10 = 3600. aba jodchhu: ek: 0 + 0 = 0. das: 8 + 0 = 8. saya: 0 + 6 = 6. hajar: 0 + 3 = 3. tyasaile 40 x 92 = 80 + 3600 = 3680."
+ },
+ "s7001_068": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "33 x 19 = 627.",
+  "think": "19 ma 1 das ra 9 ek chhan. 33 x 9: 3 x 9 = 27, 7 lekhne, 2 haat; 3 x 9 + 2 = 29, tyasaile 33 x 9 = 297. 33 x 1: 3 x 1 = 3; 3 x 1 = 3, tyasaile 33 x 1 = 33, das ko thau ma bhayeko le 33 x 10 = 330. aba jodchhu: ek: 7 + 0 = 7. das: 9 + 3 = 12, 2 lekhne, 1 haat. saya: 2 + 3 + 1 = 6. tyasaile 33 x 19 = 297 + 330 = 627."
+ },
+ "s7001_072": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "911 x 30 = 27330.",
+  "think": "30 ma 3 das ra 0 ek chhan. 911 x 3: 1 x 3 = 3; 1 x 3 = 3; 9 x 3 = 27, tyasaile 911 x 3 = 2733, das ko thau ma bhayeko le 2733 x 10 = 27330. tyasaile 911 x 30 = 27330 = 27330."
+ },
+ "s7001_076": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "350 x 38 = 13300.",
+  "think": "38 ma 3 das ra 8 ek chhan. 350 x 8: 0 x 8 = 0; 5 x 8 = 40, 0 lekhne, 4 haat; 3 x 8 + 4 = 28, tyasaile 350 x 8 = 2800. 350 x 3: 0 x 3 = 0; 5 x 3 = 15, 5 lekhne, 1 haat; 3 x 3 + 1 = 10, tyasaile 350 x 3 = 1050, das ko thau ma bhayeko le 1050 x 10 = 10500. aba jodchhu: ek: 0 + 0 = 0. das: 0 + 0 = 0. saya: 8 + 5 = 13, 3 lekhne, 1 haat. hajar: 2 + 0 + 1 = 3. das hajar: 0 + 1 = 1. tyasaile 350 x 38 = 2800 + 10500 = 13300."
+ },
+ "s7001_080": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "jawaf 298 ho.",
+  "think": "lamo bhag, baya bata: 8 ma 3 2 palta: 3 x 2 = 6, baki 8 - 6 = 2. 29 ma 3 9 palta: 3 x 9 = 27, baki 29 - 27 = 2. 24 ma 3 8 palta: 3 x 8 = 24, baki 24 - 24 = 0. bhagfal 298. jaach: 3 x 298 = 894."
+ },
+ "s7001_084": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "76 / 4 = 19.",
+  "think": "lamo bhag, baya bata: 7 ma 4 1 palta: 4 x 1 = 4, baki 7 - 4 = 3. 36 ma 4 9 palta: 4 x 9 = 36, baki 36 - 36 = 0. bhagfal 19. jaach: 4 x 19 = 76."
+ },
+ "s7001_088": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "1375 / 5 = 275.",
+  "think": "lamo bhag, baya bata: 13 ma 5 2 palta: 5 x 2 = 10, baki 13 - 10 = 3. 37 ma 5 7 palta: 5 x 7 = 35, baki 37 - 35 = 2. 25 ma 5 5 palta: 5 x 5 = 25, baki 25 - 25 = 0. bhagfal 275. jaach: 5 x 275 = 1375."
+ },
+ "s7001_092": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "9748 / 4 = 2437.",
+  "think": "lamo bhag, baya bata: 9 ma 4 2 palta: 4 x 2 = 8, baki 9 - 8 = 1. 17 ma 4 4 palta: 4 x 4 = 16, baki 17 - 16 = 1. 14 ma 4 3 palta: 4 x 3 = 12, baki 14 - 12 = 2. 28 ma 4 7 palta: 4 x 7 = 28, baki 28 - 28 = 0. bhagfal 2437. jaach: 4 x 2437 = 9748."
+ },
+ "s7001_096": {
+  "ok": true,
+  "sub": "word",
+  "answer": "53 wata rukh bachyo.",
+  "think": "jamma: 5 x 12 = 60. bacheko: 60 - 7 = 53. jaach: 53 + 7 = 60, milyo"
+ },
+ "s7001_100": {
+  "ok": false,
+  "sub": "word",
+  "answer": "They are 294 each.",
+  "think": "6 x 7 = 42. rotte: 42 x 7 = 294."
+ },
+ "s7001_104": {
+  "ok": false,
+  "sub": "word",
+  "answer": "6 jana upasthit.",
+  "think": "6 x 49 = 294."
+ },
+ "s7001_108": {
+  "ok": false,
+  "sub": "word",
+  "answer": "chhora 30 barsha ko.",
+  "think": "chhori ko umer = 2 x 15 = 30. chhora: 30 - 30 = 0."
+ },
+ "s7001_112": {
+  "ok": true,
+  "sub": "word",
+  "answer": "aba 18 wata kalam chha.",
+  "think": "role: ek = 17, dui = 19, jamma = 42\nhisab: 17 + 19 = 36; 36 / 2 = 18\njaach: 18 x 2 = 36, milyo"
+ },
+ "s7001_116": {
+  "ok": false,
+  "sub": "word",
+  "answer": "100 rupiya kitab ko 300 rupiya tirnu parchha.",
+  "think": "kineko: 300 x 10 / 100 = 30. kitab: 2 x 300 = 600. tirne: 600 - 300 = 300."
+ },
+ "s7001_120": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "aru number 39 hunchha.",
+  "think": "niyam: har step ma 7 joda hunchha. step1: 11 + 7 = 18. step2: 18 + 7 = 25. step3: 25 + 7 = 32. aru: 32 + 7 = 39. jaach: 32 + 7 = 39, milyo"
+ },
+ "s7001_124": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "7000 meter hunchha.",
+  "think": "1 kilometer = 1000 meter. 7 x 1000 = 7000."
+ },
+ "s7001_128": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "3 ghanta ma 180 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 3 ghanta ma 3 x 60 = 180 minute."
+ },
+ "s7001_132": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "5 ghanta ma 300 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 5 ghanta ma 5 x 60 = 300 minute."
+ },
+ "s7001_136": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "3 kilometer ma 3000 meter hunchha.",
+  "think": "1 kilometer = 1000 meter. 3 x 1000 = 3000."
+ },
+ "s7001_140": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "2000 meter hunchha.",
+  "think": "1 kilometer = 1000 meter. 2 x 1000 = 2000."
+ },
+ "s7001_001": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "76 + 87 = 163.",
+  "think": "thau anusar ek bata suru garchhu. ek: 6 + 7 = 13, 3 lekhne, 1 haat. das: 7 + 8 + 1 = 16, 6 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 76 + 87 = 163."
+ },
+ "s7001_005": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "20 + 43 = 63 hunchha.",
+  "think": "thau anusar ek bata suru garchhu. ek: 0 + 3 = 3. das: 2 + 4 = 6. tyasaile 20 + 43 = 63."
+ },
+ "s7001_009": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "919 + 936 = 1855.",
+  "think": "thau anusar ek bata suru garchhu. ek: 9 + 6 = 15, 5 lekhne, 1 haat. das: 1 + 3 + 1 = 5. saya: 9 + 9 = 18, 8 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 919 + 936 = 1855."
+ },
+ "s7001_013": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "207 + 708 = 915.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 + 8 = 15, 5 lekhne, 1 haat. das: 0 + 0 + 1 = 1. saya: 2 + 7 = 9. tyasaile 207 + 708 = 915."
+ },
+ "s7001_017": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "6718 + 3526 = 10244.",
+  "think": "thau anusar ek bata suru garchhu. ek: 8 + 6 = 14, 4 lekhne, 1 haat. das: 1 + 2 + 1 = 4. saya: 7 + 5 = 12, 2 lekhne, 1 haat. hajar: 6 + 3 + 1 = 10, 0 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 6718 + 3526 = 10244."
+ },
+ "s7001_021": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "6725 + 1845 = 8570.",
+  "think": "thau anusar ek bata suru garchhu. ek: 5 + 5 = 10, 0 lekhne, 1 haat. das: 2 + 4 + 1 = 7. saya: 7 + 8 = 15, 5 lekhne, 1 haat. hajar: 6 + 1 + 1 = 8. tyasaile 6725 + 1845 = 8570."
+ },
+ "s7001_025": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "40517 + 70126 = 110643.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 + 6 = 13, 3 lekhne, 1 haat. das: 1 + 2 + 1 = 4. saya: 5 + 1 = 6. hajar: 0 + 0 = 0. das hajar: 4 + 7 = 11, 1 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 40517 + 70126 = 110643."
+ },
+ "s7001_029": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "jawaf 97060 ho.",
+  "think": "thau anusar ek bata suru garchhu. ek: 9 + 1 = 10, 0 lekhne, 1 haat. das: 7 + 8 + 1 = 16, 6 lekhne, 1 haat. saya: 0 + 9 + 1 = 10, 0 lekhne, 1 haat. hajar: 3 + 3 + 1 = 7. das hajar: 8 + 1 = 9. tyasaile 83079 + 13981 = 97060."
+ },
+ "s7001_033": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "616 - 568 = 48.",
+  "think": "thau anusar ek bata suru garchhu. ek: 6 bata 8 ghatdaina, 1 sapati: 16 - 8 = 8. das: 1 thiyo, 1 diyo, aba 0; 0 bata 6 ghatdaina, 1 sapati: 10 - 6 = 4. saya: 6 thiyo, 1 diyo, aba 5; 5 - 5 = 0. tyasaile 616 - 568 = 48. jaach: 48 + 568 = 616."
+ },
+ "s7001_037": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "404 - 337 = 67.",
+  "think": "thau anusar ek bata suru garchhu. ek: 4 bata 7 ghatdaina, 1 sapati: 14 - 7 = 7. das: 0 thiyo, 1 sapati diyo, aba 1 sapati liyera 9 - 3 = 6. saya: 4 thiyo, 1 diyo, aba 3; 3 - 3 = 0. tyasaile 404 - 337 = 67. jaach: 67 + 337 = 404."
+ },
+ "s7001_041": {
+  "ok": true,
+  "sub": "arith-sub4",
+  "answer": "jawaf 3106 ho.",
+  "think": "sodheko: 6274 - 3168. thau anusar ek bata suru garchhu. ek: 4 bata 8 ghatdaina, 1 sapati: 14 - 8 = 6. das: 7 thiyo, 1 diyo, aba 6; 6 - 6 = 0. saya: 2 - 1 = 1. hajar: 6 - 3 = 3. tyasaile 6274 - 3168 = 3106. jaach: 3106 + 3168 = 6274."
+ },
+ "s7001_045": {
+  "ok": true,
+  "sub": "arith-sub4",
+  "answer": "9758 - 4351 = 5407.",
+  "think": "thau anusar ek bata suru garchhu. ek: 8 - 1 = 7. das: 5 - 5 = 0. saya: 7 - 3 = 4. hajar: 9 - 4 = 5. tyasaile 9758 - 4351 = 5407. jaach: 5407 + 4351 = 9758."
+ },
+ "s7001_049": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "11 x 7 = 77.",
+  "think": "11 x 7 = 77."
+ },
+ "s7001_053": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "53 x 7 = 371 hunchha.",
+  "think": "53 lai 7 le ank ank gari gunchhu (ek bata): 3 x 7 = 21, 1 lekhne, 2 haat; 5 x 7 + 2 = 37. tyasaile 53 x 7 = 371."
+ },
+ "s7001_057": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "546 x 2 = 1092 hunchha.",
+  "think": "546 lai 2 le ank ank gari gunchhu (ek bata): 6 x 2 = 12, 2 lekhne, 1 haat; 4 x 2 + 1 = 9; 5 x 2 = 10. tyasaile 546 x 2 = 1092."
+ },
+ "s7001_061": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "109 x 5 = 545.",
+  "think": "109 lai 5 le ank ank gari gunchhu (ek bata): 9 x 5 = 45, 5 lekhne, 4 haat; 0 x 5 + 4 = 4; 1 x 5 = 5. tyasaile 109 x 5 = 545."
+ },
+ "s7001_065": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "38 x 84 = 3192.",
+  "think": "84 ma 8 das ra 4 ek chhan. 38 x 4: 8 x 4 = 32, 2 lekhne, 3 haat; 3 x 4 + 3 = 15, tyasaile 38 x 4 = 152. 38 x 8: 8 x 8 = 64, 4 lekhne, 6 haat; 3 x 8 + 6 = 30, tyasaile 38 x 8 = 304, das ko thau ma bhayeko le 304 x 10 = 3040. aba jodchhu: ek: 2 + 0 = 2. das: 5 + 4 = 9. saya: 1 + 0 = 1. hajar: 0 + 3 = 3. tyasaile 38 x 84 = 152 + 3040 = 3192."
+ },
+ "s7001_069": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "63 x 59 = 3717.",
+  "think": "59 ma 5 das ra 9 ek chhan. 63 x 9: 3 x 9 = 27, 7 lekhne, 2 haat; 6 x 9 + 2 = 56, tyasaile 63 x 9 = 567. 63 x 5: 3 x 5 = 15, 5 lekhne, 1 haat; 6 x 5 + 1 = 31, tyasaile 63 x 5 = 315, das ko thau ma bhayeko le 315 x 10 = 3150. aba jodchhu: ek: 7 + 0 = 7. das: 6 + 5 = 11, 1 lekhne, 1 haat. saya: 5 + 1 + 1 = 7. hajar: 0 + 3 = 3. tyasaile 63 x 59 = 567 + 3150 = 3717."
+ },
+ "s7001_073": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "355 x 45 = 15975.",
+  "think": "45 ma 4 das ra 5 ek chhan. 355 x 5: 5 x 5 = 25, 5 lekhne, 2 haat; 5 x 5 + 2 = 27, 7 lekhne, 2 haat; 3 x 5 + 2 = 17, tyasaile 355 x 5 = 1775. 355 x 4: 5 x 4 = 20, 0 lekhne, 2 haat; 5 x 4 + 2 = 22, 2 lekhne, 2 haat; 3 x 4 + 2 = 14, tyasaile 355 x 4 = 1420, das ko thau ma bhayeko le 1420 x 10 = 14200. aba jodchhu: ek: 5 + 0 = 5. das: 7 + 0 = 7. saya: 7 + 2 = 9. hajar: 1 + 4 = 5. das hajar: 0 + 1 = 1. tyasaile 355 x 45 = 1775 + 14200 = 15975."
+ },
+ "s7001_077": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "406 x 97 = 39382.",
+  "think": "97 ma 9 das ra 7 ek chhan. 406 x 7: 6 x 7 = 42, 2 lekhne, 4 haat; 0 x 7 + 4 = 4; 4 x 7 = 28, tyasaile 406 x 7 = 2842. 406 x 9: 6 x 9 = 54, 4 lekhne, 5 haat; 0 x 9 + 5 = 5; 4 x 9 = 36, tyasaile 406 x 9 = 3654, das ko thau ma bhayeko le 3654 x 10 = 36540. aba jodchhu: ek: 2 + 0 = 2. das: 4 + 4 = 8. saya: 8 + 5 = 13, 3 lekhne, 1 haat. hajar: 2 + 6 + 1 = 9. das hajar: 0 + 3 = 3. tyasaile 406 x 97 = 2842 + 36540 = 39382."
+ },
+ "s7001_081": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "jawaf 22 ho.",
+  "think": "lamo bhag, baya bata: 17 ma 8 2 palta: 8 x 2 = 16, baki 17 - 16 = 1. 16 ma 8 2 palta: 8 x 2 = 16, baki 16 - 16 = 0. bhagfal 22. jaach: 8 x 22 = 176."
+ },
+ "s7001_085": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "973 / 7 = 139 hunchha.",
+  "think": "7 le 973 ma kati palta pugchha bhanera hernu parchha. 7 x 139 = 973. tyasaile 973 / 7 = 139, kei baki rahadaina. jaach: 7 x 139 = 973, milyo."
+ },
+ "s7001_089": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "3006 / 9 = 334.",
+  "think": "lamo bhag, baya bata: 30 ma 9 3 palta: 9 x 3 = 27, baki 30 - 27 = 3. 30 ma 9 3 palta: 9 x 3 = 27, baki 30 - 27 = 3. 36 ma 9 4 palta: 9 x 4 = 36, baki 36 - 36 = 0. bhagfal 334. jaach: 9 x 334 = 3006."
+ },
+ "s7001_093": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "jawaf 998 ho.",
+  "think": "lamo bhag, baya bata: 69 ma 7 9 palta: 7 x 9 = 63, baki 69 - 63 = 6. 68 ma 7 9 palta: 7 x 9 = 63, baki 68 - 63 = 5. 56 ma 7 8 palta: 7 x 8 = 56, baki 56 - 56 = 0. bhagfal 998. jaach: 7 x 998 = 6986."
+ },
+ "s7001_097": {
+  "ok": false,
+  "sub": "word",
+  "answer": "100 rupiya kitab ko 300 rupiya tirnu parchha.",
+  "think": "kineko: 300 x 10 / 100 = 30. kitab: 2 x 300 = 600. tirne: 600 - 300 = 300."
+ },
+ "s7001_101": {
+  "ok": false,
+  "sub": "word",
+  "answer": "6 jana upasthit.",
+  "think": "36 - 30 = 6."
+ },
+ "s7001_105": {
+  "ok": false,
+  "sub": "word",
+  "answer": "3 mahina ma 70000 rupiya bachat hunchha.",
+  "think": "7 mahina: 1000 x 1000 = 70000 rupiya. 3 mahina ma 70000 rupiya hunchha, baki 3 mahina ma 70000 rupiya."
+ },
+ "s7001_109": {
+  "ok": false,
+  "sub": "word",
+  "answer": "The travel in total.",
+  "think": "3 hours = 30 km. 30 x 70 = 2100."
+ },
+ "s7001_113": {
+  "ok": true,
+  "sub": "word",
+  "answer": "25 wata rukh bachyo.",
+  "think": "jamma: 4 x 8 = 32. bacheko: 32 - 7 = 25. jaach: 25 + 7 = 32, milyo"
+ },
+ "s7001_117": {
+  "ok": false,
+  "sub": "word",
+  "answer": "The travel is 18 km.",
+  "think": "90 / 5 = 18."
+ },
+ "s7001_121": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "5 barsha pachhi ram 15 barsha ko hunchha.",
+  "think": "pahila ram ko ahile ko umer: 6 + 4 = 10 barsha. 5 barsha pachhi: 10 + 5 = 15 barsha."
+ },
+ "s7001_125": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "2 ghanta ma 120 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 2 ghanta ma 2 x 60 = 120 minute."
+ },
+ "s7001_129": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "5 barsha pachhi ram 20 barsha ko hunchha.",
+  "think": "pahila ram ko ahile ko umer: 12 + 3 = 15 barsha. 5 barsha pachhi: 15 + 5 = 20 barsha."
+ },
+ "s7001_133": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "5 barsha pachhi ram 25 barsha ko hunchha.",
+  "think": "pahila ram ko ahile ko umer: 15 + 5 = 20 barsha. 5 barsha pachhi: 20 + 5 = 25 barsha."
+ },
+ "s7001_137": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "7 ghanta ma 420 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 7 ghanta ma 7 x 60 = 420 minute."
+ },
+ "s7001_141": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "7 ghanta ma 420 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 7 ghanta ma 7 x 60 = 420 minute."
+ },
+ "s7001_002": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "77 + 41 = 118.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 + 1 = 8. das: 7 + 4 = 11, 1 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 77 + 41 = 118."
+ },
+ "s7001_006": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "51 + 20 = 71 hunchha.",
+  "think": "thau anusar ek bata suru garchhu. ek: 1 + 0 = 1. das: 5 + 2 = 7. tyasaile 51 + 20 = 71."
+ },
+ "s7001_010": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "336 + 558 = 894.",
+  "think": "thau anusar ek bata suru garchhu. ek: 6 + 8 = 14, 4 lekhne, 1 haat. das: 3 + 5 + 1 = 9. saya: 3 + 5 = 8. tyasaile 336 + 558 = 894."
+ },
+ "s7001_014": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "603 + 571 = 1174.",
+  "think": "thau anusar ek bata suru garchhu. ek: 3 + 1 = 4. das: 0 + 7 = 7. saya: 6 + 5 = 11, 1 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 603 + 571 = 1174."
+ },
+ "s7001_018": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "jawaf 9843 ho.",
+  "think": "thau anusar ek bata suru garchhu. ek: 5 + 8 = 13, 3 lekhne, 1 haat. das: 2 + 1 + 1 = 4. saya: 6 + 2 = 8. hajar: 1 + 8 = 9. tyasaile 1625 + 8218 = 9843."
+ },
+ "s7001_022": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "8378 + 5244 = 13622.",
+  "think": "thau anusar ek bata suru garchhu. ek: 8 + 4 = 12, 2 lekhne, 1 haat. das: 7 + 4 + 1 = 12, 2 lekhne, 1 haat. saya: 3 + 2 + 1 = 6. hajar: 8 + 5 = 13, 3 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 8378 + 5244 = 13622."
+ },
+ "s7001_026": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "68313 + 67183 = 135496.",
+  "think": "thau anusar ek bata suru garchhu. ek: 3 + 3 = 6. das: 1 + 8 = 9. saya: 3 + 1 = 4. hajar: 8 + 7 = 15, 5 lekhne, 1 haat. das hajar: 6 + 6 + 1 = 13, 3 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 68313 + 67183 = 135496."
+ },
+ "s7001_030": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "29118 + 18841 = 47959.",
+  "think": "thau anusar ek bata suru garchhu. ek: 8 + 1 = 9. das: 1 + 4 = 5. saya: 1 + 8 = 9. hajar: 9 + 8 = 17, 7 lekhne, 1 haat. das hajar: 2 + 1 + 1 = 4. tyasaile 29118 + 18841 = 47959."
+ },
+ "s7001_034": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "572 - 212 = 360.",
+  "think": "thau anusar ek bata suru garchhu. ek: 2 - 2 = 0. das: 7 - 1 = 6. saya: 5 - 2 = 3. tyasaile 572 - 212 = 360. jaach: 360 + 212 = 572."
+ },
+ "s7001_038": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "979 - 836 = 143.",
+  "think": "thau anusar ek bata suru garchhu. ek: 9 - 6 = 3. das: 7 - 3 = 4. saya: 9 - 8 = 1. tyasaile 979 - 836 = 143. jaach: 143 + 836 = 979."
+ },
+ "s7001_042": {
+  "ok": false,
+  "sub": "arith-sub4",
+  "answer": "9855 - 6136 = 3729.",
+  "think": "thau anusar ek bata suru garchhu. ek: 5 bata 6 ghatdaina, 1 sapati: 15 - 6 = 9. das: 5 - 3 = 2. saya: 8 - 1 = 7. hajar: 9 - 6 = 3. tyasaile 9855 - 6136 = 3729. jaach: 3729 + 6136 = 9855."
+ },
+ "s7001_046": {
+  "ok": true,
+  "sub": "arith-sub4",
+  "answer": "7803 - 6573 = 1230.",
+  "think": "thau anusar ek bata suru garchhu. ek: 3 - 3 = 0. das: 0 bata 7 ghatdaina, 1 sapati: 10 - 7 = 3. saya: 8 thiyo, 1 diyo, aba 7; 7 - 5 = 2. hajar: 7 - 6 = 1. tyasaile 7803 - 6573 = 1230. jaach: 1230 + 6573 = 7803."
+ },
+ "s7001_050": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "69 x 2 = 138.",
+  "think": "69 lai 2 le ank ank gari gunchhu (ek bata): 9 x 2 = 18, 8 lekhne, 1 haat; 6 x 2 + 1 = 13. tyasaile 69 x 2 = 138."
+ },
+ "s7001_054": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "75 x 9 = 675 hunchha.",
+  "think": "75 lai 9 le ank ank gari gunchhu (ek bata): 5 x 9 = 45, 5 lekhne, 4 haat; 7 x 9 + 4 = 67. tyasaile 75 x 9 = 675."
+ },
+ "s7001_058": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "552 x 4 = 2208 hunchha.",
+  "think": "552 lai 4 le ank ank gari gunchhu (ek bata): 2 x 4 = 8; 5 x 4 = 20, 0 lekhne, 2 haat; 5 x 4 + 2 = 22. tyasaile 552 x 4 = 2208."
+ },
+ "s7001_062": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "481 x 8 = 3848.",
+  "think": "481 lai 8 le ank ank gari gunchhu (ek bata): 1 x 8 = 8; 8 x 8 = 64, 4 lekhne, 6 haat; 4 x 8 + 6 = 38. tyasaile 481 x 8 = 3848."
+ },
+ "s7001_066": {
+  "ok": false,
+  "sub": "arith-mul2x2",
+  "answer": "24 x 16 = 336 hunchha.",
+  "think": "24 ma 1 das ra 4 ek chhan. 24 x 4: 4 x 4 = 16, 6 lekhne, 1 haat; 2 x 4 + 1 = 9, tyasaile 24 x 4 = 96. 24 x 1: 4 x 1 = 4; 2 x 1 = 2, tyasaile 24 x 1 = 24, das ko thau ma bhayeko le 24 x 10 = 240. aba jodchhu: ek: 6 + 0 = 6. das: 9 + 4 = 13, 3 lekhne, 1 haat. saya: 0 + 2 + 1 = 3. tyasaile 24 x 16 = 96 + 240 = 336."
+ },
+ "s7001_070": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "60 x 24 = 1440.",
+  "think": "24 ma 2 das ra 4 ek chhan. 60 x 4: 0 x 4 = 0; 6 x 4 = 24, tyasaile 60 x 4 = 240. 60 x 2: 0 x 2 = 0; 6 x 2 = 12, tyasaile 60 x 2 = 120, das ko thau ma bhayeko le 120 x 10 = 1200. aba jodchhu: ek: 0 + 0 = 0. das: 4 + 0 = 4. saya: 2 + 2 = 4. hajar: 0 + 1 = 1. tyasaile 60 x 24 = 240 + 1200 = 1440."
+ },
+ "s7001_074": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "476 x 23 = 10948.",
+  "think": "23 ma 2 das ra 3 ek chhan. 476 x 3: 6 x 3 = 18, 8 lekhne, 1 haat; 7 x 3 + 1 = 22, 2 lekhne, 2 haat; 4 x 3 + 2 = 14, tyasaile 476 x 3 = 1428. 476 x 2: 6 x 2 = 12, 2 lekhne, 1 haat; 7 x 2 + 1 = 15, 5 lekhne, 1 haat; 4 x 2 + 1 = 9, tyasaile 476 x 2 = 952, das ko thau ma bhayeko le 952 x 10 = 9520. aba jodchhu: ek: 8 + 0 = 8. das: 2 + 2 = 4. saya: 4 + 5 = 9. hajar: 1 + 9 = 10, 0 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 476 x 23 = 1428 + 9520 = 10948."
+ },
+ "s7001_078": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "460 x 72 = 33120.",
+  "think": "72 ma 7 das ra 2 ek chhan. 460 x 2: 0 x 2 = 0; 6 x 2 = 12, 2 lekhne, 1 haat; 4 x 2 + 1 = 9, tyasaile 460 x 2 = 920. 460 x 7: 0 x 7 = 0; 6 x 7 = 42, 2 lekhne, 4 haat; 4 x 7 + 4 = 32, tyasaile 460 x 7 = 3220, das ko thau ma bhayeko le 3220 x 10 = 32200. aba jodchhu: ek: 0 + 0 = 0. das: 2 + 0 = 2. saya: 9 + 2 = 11, 1 lekhne, 1 haat. hajar: 0 + 2 + 1 = 3. das hajar: 0 + 3 = 3. tyasaile 460 x 72 = 920 + 32200 = 33120."
+ },
+ "s7001_082": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "jawaf 187 ho.",
+  "think": "lamo bhag, baya bata: 5 ma 3 1 palta: 3 x 1 = 3, baki 5 - 3 = 2. 26 ma 3 8 palta: 3 x 8 = 24, baki 26 - 24 = 2. 21 ma 3 7 palta: 3 x 7 = 21, baki 21 - 21 = 0. bhagfal 187. jaach: 3 x 187 = 561."
+ },
+ "s7001_086": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "144 / 8 = 18.",
+  "think": "lamo bhag, baya bata: 14 ma 8 1 palta: 8 x 1 = 8, baki 14 - 8 = 6. 64 ma 8 8 palta: 8 x 8 = 64, baki 64 - 64 = 0. bhagfal 18. jaach: 8 x 18 = 144."
+ },
+ "s7001_090": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "570 / 5 = 114 hunchha.",
+  "think": "5 le 570 ma kati palta pugchha bhanera hernu parchha. 5 x 114 = 570. tyasaile 570 / 5 = 114, kei baki rahadaina. jaach: 5 x 114 = 570, milyo."
+ },
+ "s7001_094": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "jawaf 698 ho.",
+  "think": "lamo bhag, baya bata: 41 ma 6 6 palta: 6 x 6 = 36, baki 41 - 36 = 5. 58 ma 6 9 palta: 6 x 9 = 54, baki 58 - 54 = 4. 48 ma 6 8 palta: 6 x 8 = 48, baki 48 - 48 = 0. bhagfal 698. jaach: 6 x 698 = 4188."
+ },
+ "s7001_098": {
+  "ok": false,
+  "sub": "word",
+  "answer": "2 barsha ko umer 2 barsha ko.",
+  "think": "aadha: 46 / 4 = 11. 5 barsha: 11 / 5 = 2."
+ },
+ "s7001_102": {
+  "ok": false,
+  "sub": "word",
+  "answer": "200 rupiya chahinchha.",
+  "think": "kineko: 800 x 10 / 100 = 80. kitab: 2 x 800 = 1600. tirne: 1600 - 800 = 800."
+ },
+ "s7001_106": {
+  "ok": true,
+  "sub": "word",
+  "answer": "8 wata prati jana.",
+  "think": "role: ek = 6, dui = 10, jamma = 40\nhisab: 6 + 10 = 16; 16 / 2 = 8\njaach: 8 x 2 = 16, milyo"
+ },
+ "s7001_110": {
+  "ok": false,
+  "sub": "word",
+  "answer": "deepa ko 59600 rupiya bachat hunchha.",
+  "think": "mahina: 1000 x 56 = 56000. jamma: 56000 + 3600 = 59600."
+ },
+ "s7001_114": {
+  "ok": false,
+  "sub": "word",
+  "answer": "chhori ko umer 45 barsha le 45 barsha ko umer ma 45 barsha ko hunchha.",
+  "think": "50 - 5 = 45."
+ },
+ "s7001_118": {
+  "ok": false,
+  "sub": "word",
+  "answer": "chhori ko umer 36 barsha le 36 barsha ki.",
+  "think": "42 - 1 = 41. 41 - 5 = 36."
+ },
+ "s7001_122": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "5 barsha pachhi ram 21 barsha ko hunchha.",
+  "think": "pahila ram ko ahile ko umer: 9 + 7 = 16 barsha. 5 barsha pachhi: 16 + 5 = 21 barsha."
+ },
+ "s7001_126": {
+  "ok": false,
+  "sub": "reason",
+  "answer": "jamma 333 hunchha.",
+  "think": "9 + 36 = 45. 45 + 144 = 189. 189 + 144 = 333."
+ },
+ "s7001_130": {
+  "ok": false,
+  "sub": "reason",
+  "answer": "aru number 475 hunchha.",
+  "think": "niyam: har step ma 25 joda hunchha. step1: 17 + 25 = 42. step2: 425 + 25 = 450. aru: 450 + 25 = 475. jaach: 450 + 25 = 475, milyo"
+ },
+ "s7001_134": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "4 kilometer ma 4000 meter hunchha.",
+  "think": "ek kilometer ma 1000 meter hunchha. 4 kilometer ma 4 x 1000 = 4000 meter."
+ },
+ "s7001_138": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "4 kilometer ma 4000 meter hunchha.",
+  "think": "ek kilometer ma 1000 meter hunchha. 4 kilometer ma 4 x 1000 = 4000 meter."
+ },
+ "s7001_142": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "7 ghanta ma 420 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 7 ghanta ma 7 x 60 = 420 minute."
+ },
+ "s7001_003": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "19 + 15 = 34 hunchha.",
+  "think": "thau anusar ek bata suru garchhu. ek: 9 + 5 = 14, 4 lekhne, 1 haat. das: 1 + 1 + 1 = 3. tyasaile 19 + 15 = 34."
+ },
+ "s7001_007": {
+  "ok": true,
+  "sub": "arith-add2",
+  "answer": "17 + 67 = 84.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 + 7 = 14, 4 lekhne, 1 haat. das: 1 + 6 + 1 = 8. tyasaile 17 + 67 = 84."
+ },
+ "s7001_011": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "521 + 211 = 732.",
+  "think": "thau anusar ek bata suru garchhu. ek: 1 + 1 = 2. das: 2 + 1 = 3. saya: 5 + 2 = 7. tyasaile 521 + 211 = 732."
+ },
+ "s7001_015": {
+  "ok": true,
+  "sub": "arith-add3",
+  "answer": "171 + 636 = 807.",
+  "think": "thau anusar ek bata suru garchhu. ek: 1 + 6 = 7. das: 7 + 3 = 10, 0 lekhne, 1 haat. saya: 1 + 6 + 1 = 8. tyasaile 171 + 636 = 807."
+ },
+ "s7001_019": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "6260 + 5815 = 12075.",
+  "think": "thau anusar ek bata suru garchhu. ek: 0 + 5 = 5. das: 6 + 1 = 7. saya: 2 + 8 = 10, 0 lekhne, 1 haat. hajar: 6 + 5 + 1 = 12, 2 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 6260 + 5815 = 12075."
+ },
+ "s7001_023": {
+  "ok": true,
+  "sub": "arith-add4",
+  "answer": "8654 + 8826 = 17480.",
+  "think": "thau anusar ek bata suru garchhu. ek: 4 + 6 = 10, 0 lekhne, 1 haat. das: 5 + 2 + 1 = 8. saya: 6 + 8 = 14, 4 lekhne, 1 haat. hajar: 8 + 8 + 1 = 17, 7 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 8654 + 8826 = 17480."
+ },
+ "s7001_027": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "69406 + 17356 = 86762.",
+  "think": "thau anusar ek bata suru garchhu. ek: 6 + 6 = 12, 2 lekhne, 1 haat. das: 0 + 5 + 1 = 6. saya: 4 + 3 = 7. hajar: 9 + 7 = 16, 6 lekhne, 1 haat. das hajar: 6 + 1 + 1 = 8. tyasaile 69406 + 17356 = 86762."
+ },
+ "s7001_031": {
+  "ok": true,
+  "sub": "arith-add5",
+  "answer": "70283 + 72899 = 143182.",
+  "think": "thau anusar ek bata suru garchhu. ek: 3 + 9 = 12, 2 lekhne, 1 haat. das: 8 + 9 + 1 = 18, 8 lekhne, 1 haat. saya: 2 + 8 + 1 = 11, 1 lekhne, 1 haat. hajar: 0 + 2 + 1 = 3. das hajar: 7 + 7 = 14, 4 lekhne, 1 haat. bacheko haat 1 agadi lekhne. tyasaile 70283 + 72899 = 143182."
+ },
+ "s7001_035": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "887 - 830 = 57.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 - 0 = 7. das: 8 - 3 = 5. saya: 8 - 8 = 0. tyasaile 887 - 830 = 57. jaach: 57 + 830 = 887."
+ },
+ "s7001_039": {
+  "ok": true,
+  "sub": "arith-sub3",
+  "answer": "727 - 127 = 600.",
+  "think": "thau anusar ek bata suru garchhu. ek: 7 - 7 = 0. das: 2 - 2 = 0. saya: 7 - 1 = 6. tyasaile 727 - 127 = 600. jaach: 600 + 127 = 727."
+ },
+ "s7001_043": {
+  "ok": true,
+  "sub": "arith-sub4",
+  "answer": "9730 - 7255 = 2475.",
+  "think": "thau anusar ek bata suru garchhu. ek: 0 bata 5 ghatdaina, 1 sapati: 10 - 5 = 5. das: 2 thiyo, 1 diyo, aba 2; 2 bata 5 ghatdaina, 1 sapati: 12 - 5 = 7. saya: 7 thiyo, 1 diyo, aba 6; 6 - 2 = 4. hajar: 9 - 7 = 2. tyasaile 9730 - 7255 = 2475. jaach: 2475 + 7255 = 9730."
+ },
+ "s7001_047": {
+  "ok": true,
+  "sub": "arith-sub4",
+  "answer": "5161 - 3383 = 1778.",
+  "think": "thau anusar ek bata suru garchhu. ek: 1 bata 3 ghatdaina, 1 sapati: 11 - 3 = 8. das: 5 thiyo, 1 diyo, aba 5; 5 bata 8 ghatdaina, 1 sapati: 15 - 8 = 7. saya: 1 thiyo, 1 diyo, aba 0; 0 bata 3 ghatdaina, 1 sapati: 10 - 3 = 7. hajar: 5 thiyo, 1 diyo, aba 4; 4 - 3 = 1. tyasaile 5161 - 3383 = 1778. jaach: 1778 + 3383 = 5161."
+ },
+ "s7001_051": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "99 x 2 = 198 hunchha.",
+  "think": "99 lai 2 le ank ank gari gunchhu (ek bata): 9 x 2 = 18, 8 lekhne, 1 haat; 9 x 2 + 1 = 19. tyasaile 99 x 2 = 198."
+ },
+ "s7001_055": {
+  "ok": true,
+  "sub": "arith-mul2x1",
+  "answer": "70 x 2 = 140 hunchha.",
+  "think": "70 lai 2 le ank ank gari gunchhu (ek bata): 0 x 2 = 0; 7 x 2 = 14. tyasaile 70 x 2 = 140."
+ },
+ "s7001_059": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "768 x 7 = 5376.",
+  "think": "768 lai 7 le ank ank gari gunchhu (ek bata): 8 x 7 = 56, 6 lekhne, 5 haat; 6 x 7 + 5 = 47, 7 lekhne, 4 haat; 7 x 7 + 4 = 53. tyasaile 768 x 7 = 5376."
+ },
+ "s7001_063": {
+  "ok": true,
+  "sub": "arith-mul3x1",
+  "answer": "270 x 9 = 2430.",
+  "think": "270 lai 9 le ank ank gari gunchhu (ek bata): 0 x 9 = 0; 7 x 9 = 63, 3 lekhne, 6 haat; 2 x 9 + 6 = 24. tyasaile 270 x 9 = 2430."
+ },
+ "s7001_067": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "49 x 70 = 3430.",
+  "think": "70 ma 7 das ra 0 ek chhan. 49 x 7: 9 x 7 = 63, 3 lekhne, 6 haat; 4 x 7 + 6 = 34, tyasaile 49 x 7 = 343, das ko thau ma bhayeko le 343 x 10 = 3430. tyasaile 49 x 70 = 3430 = 3430."
+ },
+ "s7001_071": {
+  "ok": true,
+  "sub": "arith-mul2x2",
+  "answer": "jawaf 4959 ho.",
+  "think": "57 ma 5 das ra 7 ek chhan. 87 x 7: 7 x 7 = 49, 9 lekhne, 4 haat; 8 x 7 + 4 = 60, tyasaile 87 x 7 = 609. 87 x 5: 7 x 5 = 35, 5 lekhne, 3 haat; 8 x 5 + 3 = 43, tyasaile 87 x 5 = 435, das ko thau ma bhayeko le 435 x 10 = 4350. aba jodchhu: ek: 9 + 0 = 9. das: 0 + 5 = 5. saya: 6 + 3 = 9. hajar: 0 + 4 = 4. tyasaile 87 x 57 = 609 + 4350 = 4959."
+ },
+ "s7001_075": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "574 x 48 = 27552.",
+  "think": "48 ma 4 das ra 8 ek chhan. 574 x 8: 4 x 8 = 32, 2 lekhne, 3 haat; 7 x 8 + 3 = 59, 9 lekhne, 5 haat; 5 x 8 + 5 = 45, tyasaile 574 x 8 = 4592. 574 x 4: 4 x 4 = 16, 6 lekhne, 1 haat; 7 x 4 + 1 = 29, 9 lekhne, 2 haat; 5 x 4 + 2 = 22, tyasaile 574 x 4 = 2296, das ko thau ma bhayeko le 2296 x 10 = 22960. aba jodchhu: ek: 2 + 0 = 2. das: 9 + 6 = 15, 5 lekhne, 1 haat. saya: 5 + 9 + 1 = 15, 5 lekhne, 1 haat. hajar: 4 + 2 + 1 = 7. das hajar: 0 + 2 = 2. tyasaile 574 x 48 = 4592 + 22960 = 27552."
+ },
+ "s7001_079": {
+  "ok": true,
+  "sub": "arith-mul3x2",
+  "answer": "964 x 49 = 47236.",
+  "think": "49 ma 4 das ra 9 ek chhan. 964 x 9: 4 x 9 = 36, 6 lekhne, 3 haat; 6 x 9 + 3 = 57, 7 lekhne, 5 haat; 9 x 9 + 5 = 86, tyasaile 964 x 9 = 8676. 964 x 4: 4 x 4 = 16, 6 lekhne, 1 haat; 6 x 4 + 1 = 25, 5 lekhne, 2 haat; 9 x 4 + 2 = 38, tyasaile 964 x 4 = 3856, das ko thau ma bhayeko le 3856 x 10 = 38560. aba jodchhu: ek: 6 + 0 = 6. das: 7 + 6 = 13, 3 lekhne, 1 haat. saya: 6 + 5 + 1 = 12, 2 lekhne, 1 haat. hajar: 8 + 8 + 1 = 17, 7 lekhne, 1 haat. das hajar: 0 + 3 + 1 = 4. tyasaile 964 x 49 = 8676 + 38560 = 47236."
+ },
+ "s7001_083": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "40 / 2 = 20.",
+  "think": "40 / 2 = 20."
+ },
+ "s7001_087": {
+  "ok": true,
+  "sub": "arith-div3",
+  "answer": "888 / 8 = 111.",
+  "think": "lamo bhag, baya bata: 8 ma 8 1 palta: 8 x 1 = 8, baki 8 - 8 = 0. 8 ma 8 1 palta: 8 x 1 = 8, baki 8 - 8 = 0. 8 ma 8 1 palta: 8 x 1 = 8, baki 8 - 8 = 0. bhagfal 111. jaach: 8 x 111 = 888."
+ },
+ "s7001_091": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "2290 / 5 = 458.",
+  "think": "lamo bhag, baya bata: 22 ma 5 4 palta: 5 x 4 = 20, baki 22 - 20 = 2. 29 ma 5 5 palta: 5 x 5 = 25, baki 29 - 25 = 4. 40 ma 5 8 palta: 5 x 8 = 40, baki 40 - 40 = 0. bhagfal 458. jaach: 5 x 458 = 2290."
+ },
+ "s7001_095": {
+  "ok": true,
+  "sub": "arith-div4",
+  "answer": "jawaf 343 ho.",
+  "think": "lamo bhag, baya bata: 17 ma 5 3 palta: 5 x 3 = 15, baki 17 - 15 = 2. 21 ma 5 4 palta: 5 x 4 = 20, baki 21 - 20 = 1. 15 ma 5 3 palta: 5 x 3 = 15, baki 15 - 15 = 0. bhagfal 343. jaach: 5 x 343 = 1715."
+ },
+ "s7001_099": {
+  "ok": false,
+  "sub": "word",
+  "answer": "The travel is 10 km per hour.",
+  "think": "40 / 3 = 10."
+ },
+ "s7001_103": {
+  "ok": true,
+  "sub": "word",
+  "answer": "11 wata rukh baki chhan.",
+  "think": "jamma: 6 x 3 = 18. bacheko: 18 - 7 = 11. jaach: 11 + 7 = 18, milyo"
+ },
+ "s7001_107": {
+  "ok": false,
+  "sub": "word",
+  "answer": "1200 rupiya tirnu parchha.",
+  "think": "kineko: 600 x 10 / 100 = 60. kitab: 2 x 600 = 1200. tirne: 1200 - 600 = 600."
+ },
+ "s7001_111": {
+  "ok": false,
+  "sub": "word",
+  "answer": "3 mahina ma 7200 rupiya bachat hunchha.",
+  "think": "5 mahina = 24000. 3 x 2400 = 7200."
+ },
+ "s7001_115": {
+  "ok": false,
+  "sub": "word",
+  "answer": "1000 rupiya tirnu parchha.",
+  "think": "kineko: 700 x 10 / 100 = 70. kitab: 2 x 700 = 1400. tirne: 1400 - 700 = 700."
+ },
+ "s7001_119": {
+  "ok": false,
+  "sub": "word",
+  "answer": "chhori ko umer 45 barsha le 45 barsha ko umer ma 45 barsha ko hunchha.",
+  "think": "50 - 5 = 45."
+ },
+ "s7001_123": {
+  "ok": false,
+  "sub": "reason",
+  "answer": "144.",
+  "think": "6 x 24 = 144."
+ },
+ "s7001_127": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "7 ghanta ma 420 minute hunchha.",
+  "think": "ek ghanta ma 60 minute hunchha. 7 ghanta ma 7 x 60 = 420 minute."
+ },
+ "s7001_131": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "5 barsha pachhi ram 24 barsha ko hunchha.",
+  "think": "pahila ram ko ahile ko umer: 12 + 7 = 19 barsha. 5 barsha pachhi: 19 + 5 = 24 barsha."
+ },
+ "s7001_135": {
+  "ok": false,
+  "sub": "reason",
+  "answer": "aru number 87 hunchha.",
+  "think": "niyam: har step ma 22 joda hunchha. step1: 21 + 22 = 43. step2: 43 + 22 = 65. aru: 65 + 22 = 87. jaach: 65 + 22 = 87, milyo"
+ },
+ "s7001_139": {
+  "ok": false,
+  "sub": "reason",
+  "answer": "jamma 790 rupiya.",
+  "think": "10 + 60 = 70. 70 + 360 = 430. 430 + 360 = 790."
+ },
+ "s7001_143": {
+  "ok": true,
+  "sub": "reason",
+  "answer": "aru number 49 hunchha.",
+  "think": "niyam: har step ma 8 joda hunchha. step1: 17 + 8 = 25. step2: 25 + 8 = 33. step3: 33 + 8 = 41. aru: 41 + 8 = 49. jaach: 41 + 8 = 49, milyo"
+ }
+}
