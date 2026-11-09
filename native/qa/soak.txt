@@ -1,0 +1,68 @@
+# stress: Blood Moon raid, saves, all modals, far travel perf
+new 9
+give rod 1
+give sword_iron 1
+tp -8 -4
+set water -6 -4
+set water -5 -4
+set water -6 -3
+set water -5 -3
+sel 4
+mouse 290 135
+dir 1
+click
+wait 60
+shot fish_wait
+day 5
+time 20.8
+wait 100
+spawn soldier -2 2
+spawn archer -3 3
+spawn dog 1 2
+wait 500
+stat
+shot raid1
+wait 900
+shot raid2
+perf
+stat
+save
+load
+wait 30
+stat
+modal 6
+wait 2
+shot m_trade
+modal 7
+wait 2
+shot m_chest
+modal 5
+wait 2
+shot m_pause
+modal 9
+wait 2
+shot m_settings
+modal 10
+wait 2
+shot m_help
+modal 12
+wait 2
+shot m_dead
+modal 0
+time 12
+day 6
+tpv 1 0
+wait 120
+shot village2
+perf
+tp 600 600
+wait 120
+perf
+tp -900 300
+wait 120
+perf
+shot far
+tp 2000 -2000
+wait 120
+perf
+stat

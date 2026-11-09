@@ -82,7 +82,7 @@ struct Game {
   Ent* nearest(float x, float y, float r, const std::function<bool(Ent*)>& f) { Ent* b = nullptr; float bd = r * r; for (auto& e : ents) if (!e->dead && f(e.get())) { float d = dist2f(x, y, e->x, e->y); if (d < bd) { bd = d; b = e.get(); } } return b; }
   std::vector<Ent*> query(float x, float y, float r, const std::function<bool(Ent*)>& f) { std::vector<Ent*> o; float r2 = r * r; for (auto& e : ents) if (!e->dead && dist2f(x, y, e->x, e->y) < r2 && f(e.get())) o.push_back(e.get()); return o; }
   int ID(const char* s) { return itm(s); }
-  Nation& nation(Village* v) { std::string id = v->id(); auto it = nations.find(id); if (it == nations.end()) { Nation n; n.id = id; n.name = v->name; n.ruler = v->ruler; n.temper = v->temper; n.color = v->color; n.status = v->home ? "home" : "neutral"; n.rel = v->temper == "peaceful" || v->temper == "honest" ? 60 : v->temper == "warlike" ? 30 : 45; it = nations.emplace(id, n).first; } return it->second; }
+  Nation& nation(Village* v) { std::string id = v->id(); auto it = nations.find(id); if (it == nations.end()) { Nation n; n.id = id; n.name = v->name; n.ruler = v->ruler; n.temper = v->temper; n.color = v->color; n.status = v->home ? "home" : "neutral"; n.rel = v->temper == "peaceful" || v->temper == "honest" ? 60 : v->temper == "warlike" ? 30 : 45; auto sv = savedNations.find(id); if (sv != savedNations.end()) { n.status = sv->second.status; n.rel = sv->second.rel; n.met = sv->second.met; n.task = sv->second.task; n.taskN = sv->second.taskN; n.taskItem = sv->second.taskItem; } it = nations.emplace(id, n).first; } return it->second; }
   Village* villageById(const std::string& id) { for (auto& kv : world.villages) if (kv.second && kv.second->id() == id) return kv.second.get(); return nullptr; }
 
   /* ---------------- player inventory ---------------- */
@@ -529,7 +529,7 @@ struct Game {
     c = r.r<u32>(); world.saved.clear(); for (u32 i = 0; i < c && r.ok; i++) { i64 k = r.r<i64>(); u32 m = r.r<u32>(); auto& v = world.saved[k]; for (u32 j = 0; j < m && r.ok; j++) v.push_back(r.r<ModTile>()); }
     c = r.r<u32>(); world.chests.clear(); for (u32 i = 0; i < c && r.ok; i++) { i64 k = r.r<i64>(); u32 m = r.r<u32>(); auto& v = world.chests[k]; for (u32 j = 0; j < m && r.ok; j++) { Slot s; s.id = r.r<int>(); s.n = r.r<int>(); s.d = r.r<int>(); v.push_back(s); } }
     c = r.r<u32>(); for (u32 i = 0; i < c && r.ok; i++) { int type = r.r<int>(); std::string kind = r.s(), name = r.s(); float x = r.r<float>(), y = r.r<float>(), hp = r.r<float>(); bool arch = r.r<u8>(); Ent* e = nullptr; if (type == E_SOLDIER) { e = spawnSoldier(home(), x, y, arch, true); e->name = name; } else if (type == E_DOG || type == E_ANIMAL) { e = spawnAnimal(kind, x, y); e->owned = true; e->persist = true; } if (e) e->hp = hp; }
-    world.chunks.clear(); world.lastC = nullptr; camX = player->x; camY = player->y - 8; for (auto& kv : savedNations) nations[kv.first] = kv.second; activateVillages(); for (auto& kv : savedNations) { auto it = nations.find(kv.first); if (it != nations.end()) { it->second.status = kv.second.status; it->second.rel = kv.second.rel; it->second.met = kv.second.met; } }
+    world.chunks.clear(); world.lastC = nullptr; camX = player->x; camY = player->y - 8; activateVillages();
     modal = M_NONE; banner("Welcome back", fmt("Day %d", day)); return r.ok;
   }
   std::map<std::string, Nation> savedNations;
