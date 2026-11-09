@@ -1,4 +1,4 @@
-// Hanomi native — audio: procedural SFX bank + generative music (koto / shakuhachi / pad / taiko) + weather ambience. 44.1 kHz stereo.
+// Hanomi native - audio: procedural SFX bank + generative music (koto / shakuhachi / pad / taiko) + weather ambience. 44.1 kHz stereo.
 #pragma once
 #include "core.h"
 #include <mutex>

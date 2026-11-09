@@ -1,0 +1,15 @@
+new 777
+wait 60
+tpv 0
+wait 90
+shot village_clan
+talk chief
+wait 5
+shot chief
+spawn zombie
+spawn wolf
+spawn cow
+spawn soldier
+wait 60
+shot creatures
+perf

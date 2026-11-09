@@ -1,38 +1,31 @@
 # HANOMI — status tracker (read this first)
 
-Goal: (1) public `NikitHamal/hanomi` repo + GitHub Pages with the original web game, (2) a from-scratch native C++ Windows rebuild: lightweight, fast, better than the web original, properly rigged characters.
+Goal: public `NikitHamal/hanomi` repo + GitHub Pages web original (repo root) + a native C++ Windows rebuild that is **the same game, same sprites, same world**, only lighter and smoother.
 
-## Where things live
-| What | Where |
+## v2 (current) — 1:1 port of the web game
+V1 used invented procedural art and looked nothing like the web game. V2 is a faithful port:
+
+| Layer | How it matches the web game |
 |---|---|
-| Original web game (verbatim) | `hanomi/` in this repo; copy at `NikitHamal/hanomi` root (served by Pages: https://nikithamal.github.io/hanomi/) |
-| C++ rebuild | `hanomi-native/` here (branch `hanomi-native`); `native/` in `NikitHamal/hanomi` |
-| Windows download | GitHub Release `v0.1.0-native` on `NikitHamal/hanomi` (`hanomi.exe`) |
-| Build | `make -C hanomi-native win` (mingw-w64) / `make headless` (QA) |
-| QA scripts | `hanomi-native/qa/*.txt` run by the headless backend (screenshots + perf) |
+| Sprites (trees, crops, structures, icons, animals, dogs, banners, stalls, houses, HUD glyphs) | `tools/export_assets.mjs` runs the **original `js/art/*.js` + `shared/pixel-dog.js`** under Node with a canvas shim and packs 813 sprites into `native/res/assets.bin` (550 KB, LZ4) which is embedded in the exe. Houses are exported colour-independent with a class mask so nation colours apply at runtime. |
+| Terrain / walls / water glints | `terrain.h` = line-by-line port of `art/terrain.js` (same noise tables, jitter, voronoi cobble, turf lips, foam, ore walls). |
+| Characters | `chars.h` = port of `art/chars.js` (layered, sel-outlined 24x32 chibi; villager/soldier/zombie/player looks use the same seeds + RNG). |
+| World | `world.h` = port of `defs.js`, `items.js`, `world.js` (identical hash/noise/RNG => same world for a seed, same villages, same recipes). |
+| Rules | `game.h` + `logic.h` = port of `game.js`, `entities.js`, `player.js`, `fx.js` (villager routines, soldiers, zombies, Blood Moon, wolves, farming, fishing mini-game, mining, building, nations/war/ally/vassal, interiors, goals, shrines, treasure digging, tool swing arcs, bow/spear/torch props). |
+| Renderer | `render.h` = port of `render.js` (chunk layers, y-sorted drawables, shadows, dusk multiply, night light holes + warm glow + window glow, rain/snow, fish shadows, birds, petals, fireflies, koi pond). |
+| UI | `ui.h`/`ui2.h`: full-resolution HUD + panels using the original CSS palette, ink/wood frames and the **Pixelify Sans** font (stb_truetype, embedded). Minimap, hotbar, hearts/bowls, toasts, banner, bubbles, fishing bar, satchel+crafting, chest, market, dialogue, chief tasks, realm, map, journal, settings, title screen with koi pond. |
+| Audio | V1 synth (`audio.h`): SFX + generative music + ambience. |
 
-## Milestones
-- [x] M1 — `NikitHamal/hanomi` created (public), web game copied, Pages enabled (commit `2e59a91`)
-- [x] M2 — engine: software renderer, font, noise, world gen, chunk bake, live water, lighting, weather
-- [x] M3 — rigged characters (humanoid FK/IK + spring hair/scarf, 9-species quadruped rig, per-action poses)
-- [x] M4 — gameplay: farming, fishing mini-game, mining, building, crafting (all web recipes), combat, animals + breeding, dog + fetch, villages, clans (ally/war/vassal/tribute), army, Blood Moon raid, goals, shrines, koi, death satchel
-- [x] M5 — audio synth (SFX + generative music + ambience), save/load (`%APPDATA%\Hanomi\hanomi.sav`)
-- [x] M6 — UI/menus (koi-pond title, bag/crafting, trade, chest, dialogue, map, realm, journal, settings), Win32 exe, CI workflow
-- [ ] M7 — polish backlog (below)
+## Visual QA (HTML vs native, 1280x720)
+Reference shots from the web game were captured with headless Chromium (Playwright); native shots with `hanomi_headless` (`native/qa/*.txt`). World, villages, characters, dog, hats, houses, night lighting and panels match; remaining visible differences listed below.
 
-## Verified (headless Linux build; the Windows exe is cross-compiled and was NOT run on real Windows or Wine in this session)
-- 1440x810 window -> 480x270 logical, avg frame 2.4-3.6 ms CPU (software render), worst hitch ~25-40 ms on new-chunk generation
-- scripted runs: village day/night/rain, combat poses, 12 animals/enemies, Blood Moon raid (31+ entities), save/load round-trip, every menu, clan village + chief dialogue, far travel (2000 tiles) — no crashes
+## Known gaps / backlog
+- Koi pond is a simplified sim (shape, koi, lilies, ripples, feeding) — the 1685-line `koipond.js` is not ported.
+- Web audio engine (`audio.js`, 996 lines) is approximated by the V1 synth, not ported note-for-note.
+- Satchel UI: no category tabs/split-stack/durability tooltip yet; trade/chief dialogues are simplified.
+- Terrain chunk bake hitches (~40 ms) when entering new chunks; move to a worker thread.
+- Windows exe verified to build (mingw-w64 posix); only the Linux headless build was *run* in this sandbox.
 
-## Decisions / notes
-- No external libs: Win32 GDI + waveOut + XInput (LoadLibrary) -> ~0.8 MB exe.
-- Art is procedural (coherent palette, zero asset weight). HF dataset `Angais/pixel-art-atlas-1.4m` was **not evaluated or used**; could feed offline icon inspiration later (licence unchecked).
-- Windows headers define `IN`/`near`/`far`; main.cpp `#undef`s them after including windows.h.
-
-## Parity gaps / backlog vs web original
-- house interiors (enter houses) — not ported
-- treasure-dig mini-game (glinting soil is drawn but digging with a hoe is not wired)
-- chief tasks are simple fetch quests; fishing line has no physics
-- chunk-generation hitch on fast travel (move gen to a worker thread)
-- touch controls are n/a on desktop; gamepad is basic
-- Windows exe untested on real Windows (verify the first launch, audio device, fullscreen toggle)
+## Build
+`sh tools/export.sh` (regenerate sprites) · `make -C native win` (hanomi.exe) · `make -C native headless` (QA; `python3 tools/ppm2png.py shots/*.ppm`).
+Releases: https://github.com/NikitHamal/hanomi/releases

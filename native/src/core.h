@@ -1,4 +1,4 @@
-// Hanomi native — core: math, hashing/noise, colour, software framebuffer, pixel font.
+// Hanomi native - core: math, hashing/noise, colour, software framebuffer, pixel font.
 #pragma once
 #include <cstdint>
 #include <cstdarg>
@@ -15,6 +15,9 @@
 #include <array>
 #include <memory>
 #include <map>
+#include <set>
+#include <mutex>
+#include <queue>
 
 typedef uint32_t u32; typedef uint8_t u8; typedef uint16_t u16; typedef int64_t i64; typedef uint64_t u64;
 constexpr float PI = 3.14159265358979f, TAU = 6.28318530717958f;
@@ -34,10 +37,10 @@ inline int fmod_i(int a, int b) { int m = a % b; return m < 0 ? m + b : m; }
 struct RNG {
   u32 s;
   explicit RNG(u32 seed = 1) : s(seed) {}
-  float next() { s += 0x6D2B79F5u; u32 t = s; t = (t ^ (t >> 15)) * (1u | t); t = (t + ((t ^ (t >> 7)) * (61u | t))) ^ t; return ((t ^ (t >> 14))) / 4294967296.0f; }
-  float r(float a, float b) { return a + next() * (b - a); }
-  int i(int a, int b) { return a + (int)(next() * (b - a + 1)); }
-  bool chance(float p) { return next() < p; }
+  double next() { s += 0x6D2B79F5u; u32 t = s; t = (t ^ (t >> 15)) * (1u | t); t = (t + ((t ^ (t >> 7)) * (61u | t))) ^ t; return (double)(t ^ (t >> 14)) / 4294967296.0; }
+  double r(double a, double b) { return a + next() * (b - a); }
+  int i(int a, int b) { return (int)std::floor(a + next() * (b - a + 1)); }
+  bool chance(double p) { return next() < p; }
   template <class T> const T& pick(const std::vector<T>& v) { return v[(size_t)(next() * v.size()) % v.size()]; }
 };
 static RNG gRng(0xC0FFEEu);
@@ -49,19 +52,19 @@ inline u32 hash2i(int x, int y, u32 s = 0) {
   u32 h = (u32)x * 374761393u + (u32)y * 668265263u + s * 1442695041u;
   h = (h ^ (h >> 13)) * 1274126177u; h ^= h >> 16; return h;
 }
-inline float hash2(int x, int y, u32 s = 0) { return hash2i(x, y, s) / 4294967296.0f; }
-inline float vnoise(float x, float y, u32 s = 0) {
-  int ix = (int)std::floor(x), iy = (int)std::floor(y); float fx = x - ix, fy = y - iy, ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
-  float a = hash2(ix, iy, s), b = hash2(ix + 1, iy, s), c = hash2(ix, iy + 1, s), d = hash2(ix + 1, iy + 1, s);
+inline double hash2(int x, int y, u32 s = 0) { return hash2i(x, y, s) / 4294967296.0; }
+inline double vnoise(double x, double y, u32 s = 0) {
+  int ix = (int)std::floor(x), iy = (int)std::floor(y); double fx = x - ix, fy = y - iy, ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
+  double a = hash2(ix, iy, s), b = hash2(ix + 1, iy, s), c = hash2(ix, iy + 1, s), d = hash2(ix + 1, iy + 1, s);
   return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
 }
-inline float fbm(float x, float y, u32 s = 0, int o = 4) {
-  float t = 0, a = 0.5f, f = 1, n = 0;
-  for (int i = 0; i < o; i++) { t += a * vnoise(x * f, y * f, s + i * 17); n += a; a *= 0.5f; f *= 2.03f; }
+inline double fbm(double x, double y, u32 s = 0, int o = 4) {
+  double t = 0, a = 0.5, f = 1, n = 0;
+  for (int i = 0; i < o; i++) { t += a * vnoise(x * f, y * f, s + i * 17); n += a; a *= 0.5; f *= 2.03; }
   return t / n;
 }
 static const float BAY[16] = {0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5};
-inline float bayer(int x, int y) { return (BAY[((y & 3) << 2) | (x & 3)] + 0.5f) / 16.f; }
+inline double bayer(int x, int y) { return (BAY[((y & 3) << 2) | (x & 3)] + 0.5) / 16.0; }
 
 /* ---------- colour (0xAARRGGBB) ---------- */
 inline u32 RGB(int r, int g, int b, int a = 255) { return ((u32)clampi(a, 0, 255) << 24) | ((u32)clampi(r, 0, 255) << 16) | ((u32)clampi(g, 0, 255) << 8) | (u32)clampi(b, 0, 255); }

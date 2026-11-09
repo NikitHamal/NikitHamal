@@ -1,0 +1,26 @@
+wait 30
+shot title
+modal 17
+wait 3
+shot newworld
+new 12345
+wait 90
+shot world_day
+give coal 5
+tap TAB
+wait 5
+shot inventory
+tap TAB
+time 21.5
+wait 120
+shot world_night
+time 12
+rain 1
+wait 120
+shot world_rain
+rain 0
+tp 30 -10
+wait 60
+shot village_east
+perf
+stat
