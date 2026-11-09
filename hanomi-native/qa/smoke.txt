@@ -1,0 +1,65 @@
+# Hanomi headless QA script: screenshots + perf. Run: build/hanomi_headless qa/smoke.txt /app/shots
+wait 20
+shot title
+mouse 700 400
+new 1234
+wait 60
+stat
+shot village_day
+perf
+give sword_iron 1
+give spear 1
+give bow 1
+give arrow 20
+give rod 1
+give torch 4
+give hoe_wood 1
+give wheat_seeds 5
+give bread 3
+spawn zombie 3 0
+spawn zombie 4 2
+spawn cow -4 3
+spawn dog 2 2
+spawn chicken -2 -2
+wait 5
+sel 2
+key D 1
+wait 40
+key D 0
+shot walking
+sel 3
+mouse 800 400
+hold 1
+wait 12
+shot swing_mid
+hold 0
+wait 30
+shot after_swing
+tp 0 0
+time 22
+wait 30
+shot night
+rain 1
+time 12
+wait 90
+shot rain
+rain 0
+time 8
+modal 1
+wait 3
+shot inventory
+modal 0
+modal 2
+wait 3
+shot map
+modal 0
+modal 3
+wait 3
+shot realm
+modal 0
+modal 4
+wait 3
+shot goals
+modal 0
+perf
+stat
