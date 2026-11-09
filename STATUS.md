@@ -19,12 +19,22 @@ V1 used invented procedural art and looked nothing like the web game. V2 is a fa
 ## Visual QA (HTML vs native, 1280x720)
 Reference shots from the web game were captured with headless Chromium (Playwright); native shots with `hanomi_headless` (`native/qa/*.txt`). World, villages, characters, dog, hats, houses, night lighting and panels match; remaining visible differences listed below.
 
+## v3 (this session) — save system overhaul, "game not loading" fixed
+**Root cause:** `drawNew`/`drawLoad` ended with `if (modal == M_NONE) modal = M_TITLE`, which undid `startNewGame` / Load's `modal = M_NONE` in the same frame, so New / Continue / Load always bounced back to the title. Also a title click could fall through onto the widget of the panel it opened.
+**Fixes / new (native/src/saves.h, ui2.h):**
+- Multi-world saves: `%APPDATA%\Hanomi\worlds\*.hsav` (header metadata + body + end marker), atomic write via `.tmp`, `.bak` rollback, auto-recover from backup, corrupt/truncated detection, count sanity limits; legacy `hanomi.sav` is imported once. Interiors (`inside`, return points) are now saved.
+- World browser (title > Load / manage worlds): portrait, day, difficulty, seed, play time, last played; **Play, Rename, Copy, Delete (with confirm)**, scroll wheel/scrollbar; Continue = most recent playable world; error banner on failed loads.
+- Pause: Save reports failures; Save & quit works; autosave goes to the current world slot.
+- Windows: window is shown with a loading splash before init, save folder falls back to %TEMP% if APPDATA is unwritable, crash handler writes `crash.txt` + message box.
+- Verified: headless script `native/qa/ui_flow.txt` (new -> play -> pause -> save&quit -> continue -> load screen -> delete) **and the real cross-compiled hanomi.exe under Wine + Xvfb with real mouse clicks** (New world, Begin, Save&quit, Continue, Load list, Delete).
+
 ## Known gaps / backlog
 - Koi pond is a simplified sim (shape, koi, lilies, ripples, feeding) — the 1685-line `koipond.js` is not ported.
 - Web audio engine (`audio.js`, 996 lines) is approximated by the V1 synth, not ported note-for-note.
 - Satchel UI: no category tabs/split-stack/durability tooltip yet; trade/chief dialogues are simplified.
 - Terrain chunk bake hitches (~40 ms) when entering new chunks; move to a worker thread.
-- Windows exe verified to build (mingw-w64 posix); only the Linux headless build was *run* in this sandbox.
+- Windows exe now runs under Wine in CI-less QA; not yet tested on real Windows hardware.
+- Web reference screenshots were not re-captured in v3 (no Chromium in sandbox); v2 parity shots still apply.
 
 ## Build
 `sh tools/export.sh` (regenerate sprites) · `make -C native win` (hanomi.exe) · `make -C native headless` (QA; `python3 tools/ppm2png.py shots/*.ppm`).

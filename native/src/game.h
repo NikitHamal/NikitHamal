@@ -145,5 +145,5 @@ struct Game {
   int armyCap() { int v = 0; for (auto& kv : nations) if (kv.second.status == "vassal") v++; return 6 + v * 3; } bool recruit(bool archer, double ax, double ay); bool conquer(Village* v); bool goalOk(int i);
   bool made(const std::string& id) { return stats.made.count(id) > 0; } int hungerMax() { return 20; }
   /* ---- saving ---- */
-  std::string savePath, saveDir; bool saveGame(bool autos = false); bool loadGame(); bool hasSave = false; double autosaveT = 0, gl = 0, vs = 0, spT = 0, onsT = 0; bool onsMsg = false; double thumbT = 0; bool craftAt(const std::string& station, const std::string& out); bool canCraft(const Recipe& r); bool station(const std::string& st);
+  std::string savePath, saveDir; bool saveGame(bool autos = false); bool loadGame(); bool loadFile(const std::string& path); bool loadBuf(const std::string& buf); std::string loadErr; bool hasSave = false; double autosaveT = 0, gl = 0, vs = 0, spT = 0, onsT = 0; bool onsMsg = false; double thumbT = 0; bool craftAt(const std::string& station, const std::string& out); bool canCraft(const Recipe& r); bool station(const std::string& st);
 };

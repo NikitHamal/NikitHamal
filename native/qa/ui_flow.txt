@@ -1,0 +1,32 @@
+# Title -> New world -> play -> pause/save&quit -> Continue -> Load screen -> Delete
+wait 20
+click 640 294
+wait 3
+shot ui1_new
+click 850 577
+wait 120
+stat
+shot ui2_play
+tap ESC
+wait 3
+shot ui3_pause
+click 640 476
+wait 5
+shot ui4_title_with_save
+click 640 294
+wait 60
+stat
+shot ui5_continued
+tap ESC
+wait 2
+click 640 476
+wait 5
+click 640 410
+wait 5
+shot ui6_load
+click 960 190
+wait 3
+shot ui7_confirm
+click 520 412
+wait 5
+shot ui8_deleted
