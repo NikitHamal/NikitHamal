@@ -1,34 +1,38 @@
 # Nikit Hamal Portfolio Overhaul — Status & Architecture
 
 ## Overview
-Comprehensive overhaul of Nikit Hamal's personal website into an astonishing, clean, polished, artistic, ancient, philosophical, 2D pixel-art elevated digital sanctuary.
+Comprehensive overhaul of Nikit Hamal's personal portfolio into an astonishing, clean, polished, artistic, ancient, philosophical, 2D pixel-art elevated digital sanctuary.
 
 ### Core Aesthetic Pillars
 1. **Clean & High-Craft Editorial**:
-   - Modern typography pairing (Instrument Serif / Newsreader + Plus Jakarta Sans + JetBrains Mono).
-   - Crisp custom SVG arrows, subtle borders, generous whitespace, exquisite hierarchy.
-   - No cramped accordions or noisy game gimmicks that overpower content.
+   - Modern typography pairing: Instrument Serif (display/philosophical), Plus Jakarta Sans (clean readability), JetBrains Mono (systems/data).
+   - Crisp bespoke SVG arrows with hover micro-translation (`translate(3px, -3px)`), fine hairlines, and temple corner brackets.
+   - Spacious layout eliminating cramped accordions and overwhelming games.
 2. **Ancient & Philosophical Soul**:
-   - Highlights Nikit's essays on non-duality, self-observation, and conscious technology.
-   - Contemplative Himalayan / Zen aesthetic with warm parchment, ink, and obsidian themes.
-   - Meditative interactive thought streamer & essay excerpts.
+   - The Four Axioms (Advaita, Upadhi, Nirvichara, Kalyana) connecting software architecture and consciousness.
+   - Real philosophical quotations from Nikit's essays on non-duality and self-observation.
+   - Interactive slide-over essay reader drawer with excerpt previews and direct links to `/writings`.
 3. **Elevated 2D Pixel Art Craftsmanship**:
-   - Bespoke lightweight procedural 2D pixel-art Himalayan sanctuary canvas (glowing lantern, pagoda silhouette, koi pond ripple, interactive sky with constellations).
-   - Zero lag, silky smooth 60fps, responsive, ultra-optimized canvas rendering without massive memory overhead.
-   - Interactive pixel-art micro-badges and subtle retro-modern directional accents.
-4. **Engineering Showcase**:
-   - Featured artifacts: Nik 0.1 (in-browser WASM LLM), NEBians (100k+ students Android + Django), Lami Nepal (production app), AstroWeb (Vedic astrology engine).
-   - Interactive live Nik 0.1 neural preview terminal.
-   - Real-time local Kathmandu time, operational status, direct contact cards.
+   - Bespoke 60fps Himalayan Sanctuary canvas (`js/zen-canvas.js`): Machapuchare / sacred range silhouette, drifting clouds, glowing pagoda lantern, ancient pine/sakura tree with interactive falling blossoms, clear mountain spring with swimming koi fish, and meditating figure with rottie companion.
+   - 100% lightweight procedural canvas math with zero heavy asset lag. Pauses automatically off-screen.
+   - Tri-mood lighting (Dawn, Sunset, Night) synchronized with theme selection.
+4. **Engineering Showcase & Live Micro-Interactions**:
+   - **Nik 0.1**: Sub-10MB in-browser Romanized-Nepali LLM with interactive in-card terminal tester and link to `/chat`.
+   - **NEBians**: Flagship education app & Django backend for 100k+ students across Nepal.
+   - **Lami Nepal**: Production matrimonial platform with real-time FCM & chat.
+   - **AstroWeb**: Vedic astrology & ephemeris engine in SvelteKit & TypeScript.
+   - Live Kathmandu clock (NST, UTC+5:45), live availability pulse, one-click email copy with toast notification.
+   - Pure Web Audio harmonic singing bowl soundscape with accessible mute toggle.
 
-## Task Checklist
-- [x] Workspace bootstrap & git exploration
-- [x] Create `PORTFOLIO_STATUS.md`
-- [ ] Create branch `overhaul` and setup responsive multi-palette stylesheet
-- [ ] Craft refined editorial layout (`index.html`) replacing cluttered widgets with cohesive narrative
-- [ ] Implement lightweight 60fps Zen Himalayan Pixel Art interactive canvas (`js/zen-canvas.js`)
-- [ ] Implement interactive Nik 0.1 mini-terminal & essay reader drawer
-- [ ] Integrate soundscapes (subtle web audio chime) and theme engine (Parchment, Obsidian, Mist)
-- [ ] First commit & push to remote branch (`overhaul` & `main`) by step 10
+## Progress Checklist
+- [x] Universal workspace bootstrap & git config
+- [x] Create branch `overhaul`
+- [x] Initial commit & remote push verification (`overhaul` & `main`)
+- [x] Interactive 2D Pixel Art Himalayan Canvas (`js/zen-canvas.js`)
+- [x] Pure Web Audio Tibetan singing bowl sound engine (`js/zen-audio.js`)
+- [x] Master tri-mood responsive stylesheet (`css/overhaul.css`)
+- [x] Overhaul engine for live clock, theme toggles, essay drawer, Nik 0.1 mini-tester (`js/overhaul.js`)
+- [x] Clean editorial layout replacing cluttered accordions (`index.html`)
+- [ ] Milestone commit & push to remote branch (`overhaul` & `main`)
 - [ ] Visual QA screenshots (desktop 1440x900 & mobile 390x844) with native Read tool
-- [ ] Final polish, cleanup, and verification
+- [ ] Final polish, cleanup, and validation report
