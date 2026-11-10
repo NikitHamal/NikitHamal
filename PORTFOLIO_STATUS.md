@@ -49,8 +49,8 @@ An original, museum-grade, non-laggy, deeply philosophical and artistic 2D pixel
 
 ## Milestone Checklist
 - [x] **M1**: Workspace bootstrap, inspect git log & branches, create `PORTFOLIO_STATUS.md`, initial commit & push.
-- [ ] **M2**: Build master editorial + ancient philosophical stylesheet (`css/sanctuary.css`) with 4 atmospheric themes, custom arrow micro-interactions, and responsive grid.
-- [ ] **M3**: Build 60fps 2D pixel-art Himalayan Courtyard diorama, pixel botanical contribution garden, project device illustrations, and reflection pond (`js/sanctuary-canvas.js`).
-- [ ] **M4**: Build interactive application logic (`js/sanctuary-app.js`): live Nepal clock, 4-phase switcher, Childhood-vs-Present portrait drag slider, in-card Nik 0.1 live tester, essay filter & slide-over manuscript reader, and Web Audio singing-bowl chime.
-- [ ] **M5**: Assemble the overhauled `index.html` integrating all sections, SEO schema, painted portraits, and subpage links (`/writings`, `/chat`, `hanomi/`).
+- [x] **M2**: Build master editorial + ancient philosophical stylesheet (`css/sanctuary.css`) with 4 atmospheric themes, custom arrow micro-interactions, and responsive grid.
+- [x] **M3**: Build 60fps 2D pixel-art Himalayan Courtyard diorama, pixel botanical contribution garden, project device illustrations, and reflection pond (`js/sanctuary-canvas.js`).
+- [x] **M4**: Build interactive application logic (`js/sanctuary-app.js`): live Nepal clock, 4-phase switcher, Childhood-vs-Present portrait drag slider, in-card Nik 0.1 live tester, essay filter & slide-over manuscript reader, and Web Audio singing-bowl chime.
+- [x] **M5**: Assemble the overhauled `index.html` integrating all sections, SEO schema, painted portraits, and subpage links (`/writings`, `/chat`, `hanomi/`).
 - [ ] **M6**: Commit & push core overhaul, run headless Chromium visual QA (`1440x900` desktop & `390x844` mobile), inspect via native `Read`, polish, clean up `shots/`, and push final commit.
