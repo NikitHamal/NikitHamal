@@ -338,6 +338,36 @@
     const readout = $('#comparePercentReadout');
     if (!stage) return;
 
+    // Mount painted portraits + SVG eyes inside the comparator layers
+    stage.querySelectorAll('[data-painted]').forEach(async (el, idx) => {
+      const id = el.dataset.painted;
+      if (!id) return;
+      el.classList.add('painted');
+      el.textContent = '';
+      const img = new Image();
+      img.src = `assets/painted/${id}.webp`;
+      img.alt = el.dataset.alt || 'Nikit Hamal, painted portrait';
+      img.decoding = 'async';
+      img.draggable = false;
+      el.appendChild(img);
+      try {
+        const res = await fetch(`assets/painted/${id}-eyes.svg`);
+        if (res.ok) {
+          const svgRaw = await res.text();
+          const ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          ov.setAttribute('viewBox', '0 0 800 1000');
+          ov.setAttribute('class', 'painted-eyes');
+          ov.setAttribute('aria-hidden', 'true');
+          ov.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+          const sfx = `cmp-${id}-${idx}`;
+          ov.innerHTML = svgRaw
+            .replace(/id="([^"]+)"/g, `id="$1-${sfx}"`)
+            .replace(/url\(#([^)]+)\)/g, `url(#$1-${sfx})`);
+          el.appendChild(ov);
+        }
+      } catch (e) {}
+    });
+
     let dragging = false;
 
     function setSplit(pct) {

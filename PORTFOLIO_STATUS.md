@@ -53,4 +53,4 @@ An original, museum-grade, non-laggy, deeply philosophical and artistic 2D pixel
 - [x] **M3**: Build 60fps 2D pixel-art Himalayan Courtyard diorama, pixel botanical contribution garden, project device illustrations, and reflection pond (`js/sanctuary-canvas.js`).
 - [x] **M4**: Build interactive application logic (`js/sanctuary-app.js`): live Nepal clock, 4-phase switcher, Childhood-vs-Present portrait drag slider, in-card Nik 0.1 live tester, essay filter & slide-over manuscript reader, and Web Audio singing-bowl chime.
 - [x] **M5**: Assemble the overhauled `index.html` integrating all sections, SEO schema, painted portraits, and subpage links (`/writings`, `/chat`, `hanomi/`).
-- [ ] **M6**: Commit & push core overhaul, run headless Chromium visual QA (`1440x900` desktop & `390x844` mobile), inspect via native `Read`, polish, clean up `shots/`, and push final commit.
+- [x] **M6**: Commit & push core overhaul, run headless Chromium visual QA (`1440x900` desktop & `390x844` mobile), inspect via native `Read`, polish SVG eyes on Drag-to-Compare portraits & Nik 0.1 pixel attention visualizer, clean up `shots/`, and push final commit.

@@ -279,13 +279,16 @@
               <div class="diorama-controls">
                 <div class="diorama-action-group">
                   <button type="button" class="diorama-chip" onclick="window.SanctuaryDiorama && window.SanctuaryDiorama.kindle()">
-                    <span>🔥 Kindle Butter Lamp</span>
+                    <svg class="chip-svg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2 3.5 5 6 5 10a5 5 0 0 1-10 0c0-4 3-6.5 5-10Z"/></svg>
+                    <span>Kindle Lamp</span>
                   </button>
                   <button type="button" class="diorama-chip" onclick="window.SanctuaryDiorama && window.SanctuaryDiorama.wakeDog()">
-                    <span>🐕 Pet Rottie</span>
+                    <svg class="chip-svg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A4.2 4.2 0 0 1 12 7a4.2 4.2 0 0 1 7 3.5C19 15.6 12 20 12 20Z"/></svg>
+                    <span>Pet Rottie</span>
                   </button>
                   <button type="button" class="diorama-chip" onclick="window.SanctuaryDiorama && window.SanctuaryDiorama.releaseLantern()">
-                    <span>🏮 Release Lantern</span>
+                    <svg class="chip-svg-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="4" width="10" height="14" rx="3"/><path d="M9 18h6M12 18v3"/></svg>
+                    <span>Release Lantern</span>
                   </button>
                 </div>
                 <span class="diorama-status-readout" id="dioramaStatusText">Click sky, lamp, or Rottie</span>
@@ -433,8 +436,10 @@
             <div class="work-monograph__stage">
               <div class="stage-window-bar">
                 <span class="stage-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-                <span>nik-0.1.v12p.bin &middot; Interactive Reasoning Sandbox</span>
+                <span>nik-0.1.v12p.bin &middot; Hybrid Attention &amp; WASM-SIMD Kernel</span>
               </div>
+
+              <canvas id="nikCanvas" class="nik-pixel-strip" width="180" height="46" aria-label="2D pixel visualization of Nik 0.1 hybrid attention heads and WASM-SIMD registers"></canvas>
 
               <div class="nik-console">
                 <div class="nik-console__output" aria-live="polite">
@@ -736,14 +741,10 @@
           <!-- Left: Interactive Drag-to-Compare Portrait Split Frame -->
           <div class="compare-card">
             <div class="compare-stage" id="portraitCompareStage" style="--split: 50%;" role="slider" aria-label="Drag horizontally to compare childhood portrait and present portrait" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
-              <!-- Base Layer: Present Day (Now) -->
-              <div class="compare-layer compare-layer--after">
-                <img src="assets/painted/now.webp" alt="Illustrated portrait of Nikit today" loading="lazy" decoding="async" />
-              </div>
-              <!-- Clipped Top Layer: Childhood (Kid) -->
-              <div class="compare-layer compare-layer--before">
-                <img src="assets/painted/kid.webp" alt="Illustrated portrait of Nikit as a child" loading="lazy" decoding="async" />
-              </div>
+              <!-- Base Layer: Present Day (Now) with live SVG eyes -->
+              <div class="compare-layer compare-layer--after" data-painted="now" data-eager data-alt="Illustrated portrait of Nikit today"></div>
+              <!-- Clipped Top Layer: Childhood (Kid) with live SVG eyes -->
+              <div class="compare-layer compare-layer--before" data-painted="kid" data-eager data-alt="Illustrated portrait of Nikit as a child"></div>
               <span class="compare-tag compare-tag--left">Then &middot; Childhood</span>
               <span class="compare-tag compare-tag--right">Now &middot; Present</span>
               <div class="compare-divider" aria-hidden="true">

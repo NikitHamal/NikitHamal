@@ -639,8 +639,49 @@
   }
 
   // =========================================================================
-  // 4. PROJECT MONOGRAPH INTERACTIVE STAGES (NEBians, Lami Nepal, AstroWeb)
+  // 4. PROJECT MONOGRAPH INTERACTIVE STAGES (Nik 0.1, NEBians, Lami, AstroWeb)
   // =========================================================================
+  const nikCanvas = document.getElementById('nikCanvas');
+  const nikCtx = nikCanvas ? nikCanvas.getContext('2d') : null;
+  if (nikCanvas && nikCtx) {
+    nikCanvas.width = 180;
+    nikCanvas.height = 46;
+    nikCtx.imageSmoothingEnabled = false;
+    watchCanvas(nikCanvas);
+  }
+
+  function drawNikStage(t) {
+    if (!nikCtx || !visibleCanvases.has(nikCanvas)) return;
+    nikCtx.clearRect(0, 0, 180, 46);
+    pxRect(nikCtx, 0, 0, 180, 46, '#10131b');
+
+    // Left: 6x6 Hybrid Attention Head Matrix (x: 10..46, y: 5..41)
+    for (let r = 0; r < 6; r++) {
+      for (let c = 0; c < 6; c++) {
+        const wave = Math.sin(t * 0.005 + r * 0.8 + c * 0.6);
+        const col = c <= r
+          ? (wave > 0.3 ? '#e09f3e' : wave > -0.2 ? '#4d7ea8' : '#1e293b')
+          : '#161c28';
+        pxRect(nikCtx, 10 + c * 6, 5 + r * 6, 5, 5, col);
+      }
+    }
+
+    // Center: Diffusion Denoising Token Lanes (x: 56..126)
+    for (let lane = 0; lane < 4; lane++) {
+      const y = 7 + lane * 9;
+      pxRect(nikCtx, 56, y, 68, 5, '#19202e');
+      const head = Math.floor((t * 0.03 + lane * 17) % 62);
+      pxRect(nikCtx, 56 + head, y, 8, 5, lane % 2 === 0 ? '#56c288' : '#e09f3e');
+      pxRect(nikCtx, 56, y, Math.min(head, 62), 5, 'rgba(86, 194, 136, 0.25)');
+    }
+
+    // Right: WASM-SIMD 128-bit Register Bars (x: 134..170)
+    for (let b = 0; b < 6; b++) {
+      const h = 8 + Math.round((Math.sin(t * 0.006 + b * 1.1) + 1) * 13);
+      pxRect(nikCtx, 134 + b * 6, 40 - h, 4, h, b % 2 === 0 ? '#7aa2f7' : '#e09f3e');
+    }
+  }
+
   const projModes = { nebians: 0, lami: 0, astro: 0 };
   window.setProjectStageMode = function (proj, idx, btn) {
     projModes[proj] = idx;
@@ -969,6 +1010,7 @@
       drawSeal(now);
       drawHeroDiorama(now);
       drawGarden(now);
+      drawNikStage(now);
       drawNebiansStage(now);
       drawLamiStage(now);
       drawAstroStage(now);
