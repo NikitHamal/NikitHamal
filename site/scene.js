@@ -95,9 +95,9 @@
     return a;
   }
   const LAY = [
-    { key: 'far', top: ridge(3, 112, 62, 0.03, 1.5, [[108, 30, 17], [26, 14, 12]]), base: 112, snow: 1, fade: 0.95, k: 2 },
-    { key: 'mid', top: ridge(11, 126, 40, 0.045, 1.4, [[56, 10, 14]]), base: 126, snow: 0.55, fade: 0.9, k: 4 },
-    { key: 'near', top: ridge(29, 139, 26, 0.06, 1.3, [[122, 8, 12]]), base: 139, snow: 0, fade: 0.8, k: 7 },
+    { key: 'far', top: ridge(3, 112, 62, 0.03, 1.5, [[108, 30, 17], [26, 14, 12]]), base: 112, snow: 1, fade: 0.8, k: 2 },
+    { key: 'mid', top: ridge(11, 126, 40, 0.045, 1.4, [[56, 10, 14]]), base: 126, snow: 0.55, fade: 0.7, k: 4 },
+    { key: 'near', top: ridge(29, 139, 26, 0.06, 1.3, [[122, 8, 12]]), base: 139, snow: 0, fade: 0.5, k: 7 },
   ];
   LAY.forEach((L, li) => {
     L.sn = new Int8Array(N);
@@ -249,7 +249,7 @@
       const base = p[L.key];
       const litC = packr(mix(base, sunTint, 0.2)), shC = packr(shade2(base, 0.76)), crC = packr(shade2(base, 0.64));
       const snL = packr(p.snowLit), snS = packr(p.snowSh), snC = packr(mix(p.snowSh, base, 0.35));
-      const mist = packr(p.mist);
+      const mist = packr(mix(p.mist, base, 0.5));
       const fs = L.base - 14, fl = 34;
       for (let x = 0; x < W; x++) {
         const i = x + PAD - off;
@@ -265,7 +265,7 @@
           else col = L.cr[y * N + i] ? crC : lit ? litC : shC;
           if (y === top) col = lit ? (L.snow ? snL : litC) : col;
           const g = ((y - fs) / fl) * L.fade;
-          if (g > 0 && g > BAY[((y & 3) << 2) | (x & 3)]) col = mist;
+          if (g > 0) col = PX.bl(col, mist, g > 1 ? 1 : Math.round(g * 8) / 8);
           D[y * W + x] = col;
         }
       }

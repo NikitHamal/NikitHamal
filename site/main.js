@@ -57,7 +57,7 @@
   const archCol = $('.arch-col');
   function sizeAll() {
     if (archCol) {
-      const avail = Math.min(archCol.clientWidth - 22, innerHeight * 0.62 * 0.75);
+      const avail = Math.min(archCol.clientWidth - 22, innerHeight * 0.72 * 0.75);
       const cw = fit(144, Math.max(avail, 144), 4.2);
       archCol.style.setProperty('--arch-w', cw + 22 + 'px');
     }
@@ -129,19 +129,19 @@
     ['अहं ब्रह्मास्मि', 'i am the infinite'],
   ];
   const mEl = $('#mantra'), sk = $('#mkSk'), tr = $('#mkTr');
-  const chars = (el, text, base) => {
+  const chars = (el, text, base, words) => {
     el.textContent = '';
-    [...text].forEach((c, i) => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; s.style.setProperty('--cd', (base + Math.random() * 0.35).toFixed(2) + 's'); el.appendChild(s); });
+    (words ? text.split(' ').map((w, i, a) => (i < a.length - 1 ? w + ' ' : w)) : [...text]).forEach((c, i) => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; s.style.setProperty('--cd', (base + Math.random() * 0.35).toFixed(2) + 's'); el.appendChild(s); });
   };
   let mi = 0;
-  chars(sk, MANTRAS[0][0], 0); chars(tr, MANTRAS[0][1], 0.15);
+  chars(sk, MANTRAS[0][0], 0, true); chars(tr, MANTRAS[0][1], 0.15);
   if (!PX.reduced) setInterval(() => {
     if (document.hidden) return;
     mEl.classList.add('out');
     setTimeout(() => {
       mi = (mi + 1) % MANTRAS.length;
       mEl.classList.remove('out'); mEl.classList.add('pre');
-      chars(sk, MANTRAS[mi][0], 0); chars(tr, MANTRAS[mi][1], 0.15);
+      chars(sk, MANTRAS[mi][0], 0, true); chars(tr, MANTRAS[mi][1], 0.15);
       void mEl.offsetWidth;
       mEl.classList.remove('pre');
     }, 1000);

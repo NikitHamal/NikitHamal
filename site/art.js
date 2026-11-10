@@ -399,12 +399,12 @@
       const sa = Scene.sunA(c), ma = Scene.moonA(c);
       let sunx = -99, moonx = -99, sunY = 0, moonY = 0;
       const arcY = (a, h) => HOR - 6 - Math.sin(Math.PI * clamp(a, 0, 1)) * h;
-      if (ma > -0.1 && ma < 1.1) { moonx = lerp(W * 0.1, W * 0.9, ma); moonY = arcY(ma, 34); B.glow(moonx, moonY, 18, [175, 195, 255], 0.5); B.disc(moonx, moonY, 5, packr([236, 240, 255])); B.disc(moonx + 2, moonY - 1, 4, packr(mix(p.skyMid, p.skyTop, 0.5))); }
-      if (sa > -0.1 && sa < 1.1) { sunx = lerp(W * 0.1, W * 0.9, sa); sunY = arcY(sa, 36); B.glow(sunx, sunY, 28, mix(p.snowLit, [255, 200, 120], 0.5), 0.9); B.disc(sunx, sunY, 5, packr([255, 248, 224])); }
+      if (ma > -0.1 && ma < 1.1) { moonx = lerp(W * 0.1, W * 0.9, ma); moonY = arcY(ma, 27); B.glow(moonx, moonY, 18, [175, 195, 255], 0.5); B.disc(moonx, moonY, 5, packr([236, 240, 255])); B.disc(moonx + 2, moonY - 1, 4, packr(mix(p.skyMid, p.skyTop, 0.5))); }
+      if (sa > -0.1 && sa < 1.1) { sunx = lerp(W * 0.1, W * 0.9, sa); sunY = arcY(sa, 29); B.glow(sunx, sunY, 28, mix(p.snowLit, [255, 200, 120], 0.5), 0.9); B.disc(sunx, sunY, 5, packr([255, 248, 224])); }
       const rc = [p.far, p.mid, p.near];
       ridges.forEach((rg, l) => {
         const col = packr(rc[l]), lit = packr(mix(rc[l], p.snowLit, 0.18)), mist = packr(p.mist);
-        for (let x = 0; x < W; x++) for (let y = rg[x]; y < HOR; y++) { let cc = y === rg[x] ? lit : col; if (y > HOR - 9 && (y - HOR + 9) / 9 > BAY[((y & 3) << 2) | (x & 3)] * 1.2) cc = mist; D[y * W + x] = cc; }
+        for (let x = 0; x < W; x++) for (let y = rg[x]; y < HOR; y++) { let cc = y === rg[x] ? lit : col; if (y > HOR - 10) cc = PX.bl(cc, mist, Math.round(((y - HOR + 10) / 10) * 0.55 * 8) / 8); D[y * W + x] = cc; }
       });
       /* chorten on the shore */
       const sx = Math.round(W * 0.2), gy = HOR;

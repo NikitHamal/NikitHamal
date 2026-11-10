@@ -22,9 +22,13 @@ Other pages (`writings/`, `chat/`, `hanomi/`, `nik/`, ...) are untouched.
 
 ## Progress
 - [x] Plan, repo recon
-- [ ] Core build and first push
-- [ ] Visual QA at 1440x900 and 390x844, fixes
-- [ ] Final polish push
+- [x] Core build and first push
+- [x] Visual QA at 1440x900 and 390x844 (day, dawn, dusk, night), fixes: grapheme-safe mantra, banded fog instead of noisy dither, banded glows, tighter spacing, larger Devanagari numerals
+- [x] Interaction test: phase switch, mandala dissolve, lamp lake. No console errors, ~60fps
+- [x] Final polish push
+
+## To merge
+Open a PR from `portfolio/scriptorium` into `main` when happy. `index.html` is the only existing file replaced; old homepage assets (`css/styles.css`, `js/*.js`) are still in the repo and untouched.
 
 ## Notes
 - No build step: static HTML/CSS/JS for GitHub Pages.

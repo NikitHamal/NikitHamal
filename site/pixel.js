@@ -16,6 +16,13 @@
   PX.mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   // packed little-endian RGBA (alpha 255)
   PX.pack = (c) => (255 << 24) | ((c[2] & 255) << 16) | ((c[1] & 255) << 8) | (c[0] & 255);
+  // blend two packed colours, t in 0..1
+  PX.bl = (a, b, t) => {
+    if (t <= 0) return a;
+    if (t >= 1) return b;
+    const ar = a & 255, ag = (a >> 8) & 255, ab = (a >> 16) & 255, br = b & 255, bg = (b >> 8) & 255, bb = (b >> 16) & 255;
+    return (255 << 24) | (((ab + (bb - ab) * t) & 255) << 16) | (((ag + (bg - ag) * t) & 255) << 8) | ((ar + (br - ar) * t) & 255);
+  };
   PX.packr = (c) => PX.pack([Math.round(c[0]), Math.round(c[1]), Math.round(c[2])]);
   PX.shade = (c, k) => [c[0] * k, c[1] * k, c[2] * k];
 
@@ -98,8 +105,8 @@
         for (let x = x0; x <= x1; x++) {
           const d = Math.hypot(x - cx, y - cy) / R;
           if (d >= 1) continue;
-          const a = (1 - d) * (1 - d) * strength;
-          if (PX.dither(x, y, a)) this.mixpx(x, y, rgb[0], rgb[1], rgb[2], 0.55);
+          const q = Math.round((1 - d) * (1 - d) * strength * 10) / 10;
+          if (q > 0) this.mixpx(x, y, rgb[0], rgb[1], rgb[2], q * 0.5);
         }
     }
     line(x0, y0, x1, y1, c) {
