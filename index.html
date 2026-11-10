@@ -1,464 +1,359 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
-
+<html lang="en" data-phase="day">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <meta name="description"
-    content="Android App Developer & Full-Stack Engineer from Nepal. Writings, software, and contact." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Nikit Hamal — Android &amp; Full-Stack Developer, writer of quiet essays</title>
+  <meta name="description" content="Nikit Hamal is an Android and full-stack engineer from Nepal. Calm software, a tiny LLM, a pixel-art village game, and essays on non-duality." />
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Nikit Hamal" />
-  <meta name="theme-color" content="#faf9f6" />
-  <meta name="application-name" content="Nikit Hamal" />
-  <meta name="apple-mobile-web-app-title" content="Nikit Hamal" />
-
-  <!-- Open Graph / Facebook -->
+  <meta name="theme-color" content="#f3ecdc" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Nikit Hamal" />
   <meta property="og:url" content="https://nikit.is-a.dev/" />
-  <meta property="og:title" content="Nikit Hamal" />
-  <meta property="og:description"
-    content="Android App Developer & Full-Stack Engineer from Nepal. Writings, software, and contact." />
+  <meta property="og:title" content="Nikit Hamal — Android &amp; Full-Stack Developer" />
+  <meta property="og:description" content="Calm software, small odd machines, and essays at the edge of words." />
   <meta property="og:image" content="https://nikit.is-a.dev/assets/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://nikit.is-a.dev/" />
-  <meta name="twitter:title" content="Nikit Hamal" />
-  <meta name="twitter:description"
-    content="Android App Developer & Full-Stack Engineer from Nepal. Writings, software, and contact." />
-  <meta name="twitter:image" content="https://nikit.is-a.dev/assets/og-image.png" />
-  <title>Nikit Hamal — Android &amp; Full-Stack Developer</title>
-
-  <!-- Google Fonts: JetBrains Mono, Plus Jakarta Sans + display subsets below -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap"
-    rel="stylesheet">
-  <!-- homepage faces: Instrument Serif (name, letters-only subset) + Poppins for the section contents -->
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%20%26.-%27&display=swap" rel="stylesheet">
-
-  <!-- Favicon -->
+  <link rel="canonical" href="https://nikit.is-a.dev/" />
   <link rel="icon" type="image/svg+xml" href="assets/avatar-upright.svg" />
   <link rel="apple-touch-icon" href="assets/avatar-upright.svg" />
 
-  <!-- Canonical -->
-  <link rel="canonical" href="https://nikit.is-a.dev/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="site/site.css?v=1" />
 
-  <!-- Remix Icon -->
-  <link href="/css/remixicon.css?v=1" rel="stylesheet">
-
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="css/styles.css?v=18" />
-
-  <!-- Theme Init (prevent flash) -->
   <script>
-    (function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0e0e10':'#faf9f6')})();
-  </script>
-
-  <!-- JSON-LD WebSite & Person Schema (Google Search Site Name requirement) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Nikit Hamal",
-    "alternateName": ["Nikit Hamal Portfolio", "nikit.is-a.dev", "nikithamal"],
-    "url": "https://nikit.is-a.dev/"
-  }
+    (function () {
+      var d = document.documentElement, p = null;
+      try { p = localStorage.getItem('nh-phase'); } catch (e) {}
+      if (['dawn', 'day', 'dusk', 'night'].indexOf(p) < 0) {
+        var h = new Date().getHours() + new Date().getMinutes() / 60;
+        p = h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 19.5 ? 'dusk' : 'night';
+      }
+      d.dataset.phase = p;
+      d.classList.add('js');
+    })();
   </script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Nikit Hamal",
-    "jobTitle": "Android & Full-Stack Developer",
-    "url": "https://nikit.is-a.dev/",
-    "address": { "@type": "PostalAddress", "addressCountry": "NP" },
-    "sameAs": [
-      "https://consicalabs.com/",
-      "https://www.linkedin.com/in/nikithamal",
-      "https://twitter.com/nikithamal",
-      "https://github.com/NikitHamal",
-      "mailto:iamnikithamal@gmail.com"
-    ]
-  }
+    { "@context": "https://schema.org", "@type": "Person", "name": "Nikit Hamal", "jobTitle": "Android & Full-Stack Developer", "url": "https://nikit.is-a.dev/", "address": { "@type": "PostalAddress", "addressCountry": "NP" },
+      "sameAs": ["https://consicalabs.com/", "https://www.linkedin.com/in/nikithamal", "https://twitter.com/nikithamal", "https://github.com/NikitHamal"] }
   </script>
 </head>
 
-<body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
+<body id="top">
+  <!-- icon sprite: one stroke weight, round caps -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+      <symbol id="i-r" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+      <symbol id="i-d" viewBox="0 0 24 24"><path d="M12 4.5v15M6 13.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+      <symbol id="i-u" viewBox="0 0 24 24"><path d="M12 19.5v-15M6 10.5l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></symbol>
+      <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></symbol>
+    </defs>
+  </svg>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <a class="sr" href="#main">Skip to content</a>
 
-  <!-- Subtle page decor: micro sparkles + plus marks + mini blooms -->
-  <div class="decor" aria-hidden="true">
-    <svg class="decor-m" style="--dx:6%;--dy:16vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
-    <svg class="decor-m" style="--dx:92%;--dy:24vh;--s:1.15;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
-    <svg class="decor-m" style="--dx:90%;--dy:74vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
-    <svg class="decor-m" style="--dx:5%;--dy:86vh;--s:0.8;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M0,-9 Q0,0 9,0 Q0,0 0,9 Q0,0 -9,0 Q0,0 0,-9 Z" fill="currentColor" /></svg>
-    <svg class="decor-m" style="--dx:8%;--dy:64vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-    <svg class="decor-m" style="--dx:94%;--dy:52vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-5,0 H5 M0,-5 V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-    <svg class="decor-m" style="--dx:9%;--dy:40vh;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><g><circle cx="0" cy="-5.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="0" cy="0" r="2.4" class="bl-core" fill-opacity="0.7" /></g></svg>
-    <svg class="decor-m" style="--dx:93%;--dy:88vh;--s:0.85;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><g><circle cx="0" cy="-5.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-3.4" cy="4.7" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="-5.5" cy="-1.8" r="4.6" class="bl-petal" fill-opacity="0.3" stroke-width="1.1" stroke-opacity="0.5" /><circle cx="0" cy="0" r="2.4" class="bl-core" fill-opacity="0.7" /></g></svg>
-    <svg class="decor-m" style="--dx:4%;--dy:27vh;--s:0.85;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><circle cx="0" cy="0" r="7" stroke="currentColor" stroke-width="1.5" /></svg>
-    <svg class="decor-m" style="--dx:95%;--dy:63vh;--s:0.9;" viewBox="-12 -12 24 24" fill="none" aria-hidden="true"><path d="M-8,0 Q-4,-5 0,0 T8,0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
-  </div>
-
-  <div class="minimal-wrapper" id="main-content">
-    <!-- STICKY SITE HEADER -->
-    <header class="site-header">
-      <nav class="site-nav" aria-label="Primary">
-        <a href="/writings" class="site-nav-link">Writing</a>
-        <button type="button" class="site-nav-link site-nav-btn" id="navContact">Contact</button>
-        <span class="site-divider" aria-hidden="true"></span>
-        <span class="site-controls">
-          <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
-            <span class="theme-icon" aria-hidden="true"></span>
-          </button>
-        </span>
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="#top" aria-label="Nikit Hamal, top of page">
+        <span id="brandMark" aria-hidden="true"></span>
+        <span>Nikit <b>Hamal</b></span>
+      </a>
+      <nav class="links" aria-label="Primary">
+        <a href="#about"><span class="dev" aria-hidden="true">१</span>About</a>
+        <a href="#works"><span class="dev" aria-hidden="true">२</span>Works</a>
+        <a href="#writing"><span class="dev" aria-hidden="true">३</span>Writing</a>
+        <a href="#lab"><span class="dev" aria-hidden="true">४</span>Lab</a>
+        <a href="#contact"><span class="dev" aria-hidden="true">५</span>Contact</a>
       </nav>
-    </header>
-
-    <!-- PROFILE / HEADER -->
-    <header class="profile-header">
-      <div class="avatar-container" id="avatarContainer">
-        <div class="profile-avatar painted-avatar" id="avatarPainted" data-painted="now" data-eager data-alt="Nikit Hamal, painted" role="img" aria-label="Nikit Hamal, painted portrait"></div>
-      </div>
-
-      <div class="profile-name-row">
-        <h1 class="profile-name">Nikit Hamal</h1>
-        <pixel-dog width="260" scale="1.4" breed="rottie" home="40" start="sleep" sleep-after="20" aria-label="Interactive pixel-art dog. Click it to wake, wiggle over it to pet, drag to carry, double-click to send it home to sleep, click open space to throw a ball from there."></pixel-dog>
-      </div>
-
-      <p class="profile-bio">
-        Head of Operations at <a href="https://consicalabs.com/" target="_blank" rel="noopener" class="bio-link"><img src="assets/consica-logo.png" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">Consica Labs</a>. Android App Developer &amp; Full-Stack Engineer from Nepal. Building Android apps (<a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="bio-link"><img src="assets/neb-logo.svg" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">NEBians</a>, <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="bio-link"><img src="assets/lami-logo-32.png" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">Lami Nepal</a>), Django backends, SvelteKit web apps (<a href="https://astroweb.consicalabs.com/" target="_blank" rel="noopener" class="bio-link"><img src="assets/astroweb-logo.png" alt="" class="bio-inline-icon" width="18" height="18" loading="eager" decoding="async">AstroWeb</a>), and writing about philosophy.
-      </p>
-    </header>
-
-    <!-- ACCORDION SECTIONS LIST -->
-    <main class="accordion-list">
-
-      <!-- 1. ABOUT -->
-      <div class="accordion-item" data-accordion="about">
-        <button class="accordion-header" aria-expanded="false">
-          <span class="header-left">
-            <span class="accordion-prefix">&gt;</span>
-            <span class="accordion-title">ABOUT</span>
-          </span>
-          <span class="accordion-icon"><i class="ri-add-line"></i></span>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <p>
-              I'm Nikit Hamal. I specialize in native Android app development with Kotlin and Jetpack Compose, paired with robust Python/Django backend architectures and clean, responsive web frontends.
-            </p>
-            <p style="margin-top: 12px;">
-              Beyond software engineering and operations, I dedicate time to exploring non-duality, self-observation, and writing essays on philosophy, human connection, and consciousness.
-            </p>
-            <div class="skill-logos about-orbs">
-              <span class="skill-orb" title="Head of Operations at Consica Labs" aria-label="Head of Operations at Consica Labs"><img src="assets/consica-logo.png" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
-              <span class="skill-orb" title="Android" aria-label="Android"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
-              <span class="skill-orb" title="Kotlin" aria-label="Kotlin"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
-              <span class="skill-orb" title="Django" aria-label="Django"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="20" height="20" loading="lazy" decoding="async"></span>
-              <span class="skill-orb" title="Python" aria-label="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></span>
-              <span class="skill-orb" title="Philosophy" aria-label="Philosophy"><i class="ri-quill-pen-line"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. SKILLS & EXPERIENCE -->
-      <div class="accordion-item" data-accordion="portraits">
-        <button class="accordion-header" aria-expanded="false">
-          <span class="header-left">
-            <span class="accordion-prefix">&gt;</span>
-            <span class="accordion-title">PORTRAITS</span>
-          </span>
-          <span class="accordion-icon"><i class="ri-add-line"></i></span>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <div class="painted-grid" id="paintedGrid"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="accordion-item" data-accordion="skills">
-        <button class="accordion-header" aria-expanded="false">
-          <span class="header-left">
-            <span class="accordion-prefix">&gt;</span>
-            <span class="accordion-title">SKILLS &amp; EXPERIENCE</span>
-          </span>
-          <span class="accordion-icon"><i class="ri-add-line"></i></span>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <div class="skills-mini-grid">
-              <div class="skill-mini-group">
-                <div class="skill-stage" data-default="Android">
-                  <span class="skill-readout" aria-live="polite">Android</span>
-                  <div class="skill-logos">
-                    <button type="button" class="skill-orb" data-name="Android" aria-label="Android"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="Kotlin" aria-label="Kotlin"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="Jetpack Compose" aria-label="Jetpack Compose"><i class="ri-layout-masonry-line"></i></button>
-                    <button type="button" class="skill-orb" data-name="Flutter" aria-label="Flutter"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-mini-group">
-                <div class="skill-stage" data-default="Python">
-                  <span class="skill-readout" aria-live="polite">Python</span>
-                  <div class="skill-logos">
-                    <button type="button" class="skill-orb" data-name="Python" aria-label="Python"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="Django" aria-label="Django"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="Redis" aria-label="Redis"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="MySQL" aria-label="MySQL"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-mini-group">
-                <div class="skill-stage" data-default="JavaScript">
-                  <span class="skill-readout" aria-live="polite">JavaScript</span>
-                  <div class="skill-logos">
-                    <button type="button" class="skill-orb" data-name="JavaScript" aria-label="JavaScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="TypeScript" aria-label="TypeScript"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="SvelteKit" aria-label="SvelteKit"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="Tailwind CSS" aria-label="Tailwind CSS"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                  </div>
-                </div>
-              </div>
-              <div class="skill-mini-group">
-                <div class="skill-stage" data-default="Firebase">
-                  <span class="skill-readout" aria-live="polite">Firebase</span>
-                  <div class="skill-logos">
-                    <button type="button" class="skill-orb" data-name="Firebase" aria-label="Firebase"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="Pusher" aria-label="Pusher"><i class="ri-send-plane-line"></i></button>
-                    <button type="button" class="skill-orb" data-name="Git" aria-label="Git"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-plain.svg" alt="" width="20" height="20" loading="lazy" decoding="async"></button>
-                    <button type="button" class="skill-orb" data-name="GitHub" aria-label="GitHub"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" class="tag-icon-dark" width="20" height="20" loading="lazy" decoding="async"></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. SELECTED PROJECTS -->
-      <div class="accordion-item" data-accordion="projects">
-        <button class="accordion-header" aria-expanded="false">
-          <span class="header-left">
-            <span class="accordion-prefix">&gt;</span>
-            <span class="accordion-title">SIDE PROJECTS &amp; WORK</span>
-          </span>
-          <span class="accordion-icon"><i class="ri-add-line"></i></span>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <div class="project-cards">
-
-              <article class="project-card project-card-lami">
-                <div class="project-card-visual" aria-hidden="true">
-                  <span class="project-card-icon"><img src="assets/lami-logo-120.webp" alt="" loading="lazy" decoding="async"></span>
-                </div>
-                <div class="project-card-body">
-                  <h3 class="project-card-title">Lami Nepal</h3>
-                  <p class="project-card-desc">Matrimonial &amp; spiritual services app with real-time chat, FCM push notifications, Google sign-in, and full Nepali localization.</p>
-                  <div class="project-card-foot">
-                    <div class="project-stack">
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><i class="ri-send-plane-line"></i></span>
-                      <span class="project-stack-icon"><i class="ri-global-line"></i></span>
-                    </div>
-                    <a href="https://play.google.com/store/apps/details?id=com.laminepal.app&hl=en" target="_blank" rel="noopener" class="project-card-link">View Project <i class="ri-arrow-right-line"></i></a>
-                  </div>
-                </div>
-              </article>
-
-              <article class="project-card project-card-neb">
-                <div class="project-card-visual" aria-hidden="true">
-                  <span class="project-card-icon"><img src="assets/neb-logo.svg" alt="" loading="lazy" decoding="async"></span>
-                </div>
-                <div class="project-card-body">
-                  <h3 class="project-card-title">NEBians</h3>
-                  <p class="project-card-desc">Material 3 Android app + Django backend for Nepali NEB students. Study tools, AI chat arena, community forums, and result checker.</p>
-                  <div class="project-card-foot">
-                    <div class="project-stack">
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" class="tag-icon-dark" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><i class="ri-swap-line"></i></span>
-                    </div>
-                    <a href="https://nebians.consica.com.np/" target="_blank" rel="noopener" class="project-card-link">View Project <i class="ri-arrow-right-line"></i></a>
-                  </div>
-                </div>
-              </article>
-
-              <article class="project-card project-card-nik">
-                <div class="project-card-visual" aria-hidden="true">
-                  <span class="project-card-icon" style="font-family:var(--font-serif);font-style:italic;font-size:1.6rem;line-height:1">n</span>
-                </div>
-                <div class="project-card-body">
-                  <h3 class="project-card-title">Nik 0.1</h3>
-                  <p class="project-card-desc">A tiny romanized-Nepali LLM I built from scratch: own tokenizer, hybrid AR + diffusion transformer, WASM-SIMD kernel. Under 10 MB, it thinks before answering and runs entirely in your browser.</p>
-                  <div class="project-card-foot">
-                    <div class="project-stack">
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wasm/wasm-original.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                    </div>
-                    <a href="/chat" class="project-card-link">Chat with Nik <i class="ri-arrow-right-line"></i></a>
-                  </div>
-                </div>
-              </article>
-
-              <article class="project-card project-card-astro">
-                <div class="project-card-visual" aria-hidden="true">
-                  <span class="project-card-icon"><img src="assets/astroweb-logo.png" alt="" loading="lazy" decoding="async"></span>
-                </div>
-                <div class="project-card-body">
-                  <h3 class="project-card-title">AstroWeb</h3>
-                  <p class="project-card-desc">Free Vedic astrology web app with accurate Kundali, Dasha calculations, and astrological insights.</p>
-                  <div class="project-card-foot">
-                    <div class="project-stack">
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" width="15" height="15" loading="lazy" decoding="async"></span>
-                      <span class="project-stack-icon"><i class="ri-apps-2-line"></i></span>
-                    </div>
-                    <a href="https://astroweb.consicalabs.com/" target="_blank" rel="noopener" class="project-card-link">View Project <i class="ri-arrow-right-line"></i></a>
-                  </div>
-                </div>
-              </article>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. ESSAYS & WRITING -->
-      <div class="accordion-item" data-accordion="writing">
-        <button class="accordion-header" aria-expanded="false">
-          <span class="header-left">
-            <span class="accordion-prefix">&gt;</span>
-            <span class="accordion-title">ESSAYS &amp; WRITING</span>
-          </span>
-          <span class="accordion-icon"><i class="ri-add-line"></i></span>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <div id="writing-preview" class="writing-mini-list">
-              <!-- Dynamically loaded posts -->
-            </div>
-            <div style="margin-top: 18px;">
-              <a href="/writings" class="inline-more-link">View all essays on Writing page &rarr;</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. CONTACT -->
-      <div class="accordion-item" data-accordion="contact">
-        <button class="accordion-header" aria-expanded="false">
-          <span class="header-left">
-            <span class="accordion-prefix">&gt;</span>
-            <span class="accordion-title">CONTACT</span>
-          </span>
-          <span class="accordion-icon"><i class="ri-add-line"></i></span>
-        </button>
-        <div class="accordion-body">
-          <div class="accordion-inner">
-            <div class="contact-rows">
-              <a class="contact-row" href="mailto:iamnikithamal@gmail.com">
-                <span class="contact-orb"><i class="ri-mail-line"></i></span>
-                <span class="contact-meta"><strong>Email</strong><span>iamnikithamal@gmail.com</span></span>
-                <i class="ri-arrow-right-up-line contact-go"></i>
-              </a>
-              <a class="contact-row" href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">
-                <span class="contact-orb"><i class="ri-linkedin-line"></i></span>
-                <span class="contact-meta"><strong>LinkedIn</strong><span>linkedin.com/in/nikithamal</span></span>
-                <i class="ri-arrow-right-up-line contact-go"></i>
-              </a>
-              <a class="contact-row" href="https://twitter.com/nikithamal" target="_blank" rel="noopener">
-                <span class="contact-orb"><i class="ri-twitter-x-line"></i></span>
-                <span class="contact-meta"><strong>X</strong><span>@nikithamal</span></span>
-                <i class="ri-arrow-right-up-line contact-go"></i>
-              </a>
-              <a class="contact-row" href="https://github.com/NikitHamal" target="_blank" rel="noopener">
-                <span class="contact-orb"><i class="ri-github-line"></i></span>
-                <span class="contact-meta"><strong>GitHub</strong><span>github.com/NikitHamal</span></span>
-                <i class="ri-arrow-right-up-line contact-go"></i>
-              </a>
-              <a class="contact-row" href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener">
-                <span class="contact-orb"><i class="ri-whatsapp-line"></i></span>
-                <span class="contact-meta"><strong>WhatsApp</strong><span>+977 9765324034</span></span>
-                <i class="ri-arrow-right-up-line contact-go"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </main>
-
-    <!-- FOOTER LINKS -->
-    <footer class="minimal-footer">
-      <div class="footer-links">
-        <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener">Twitter</a>
-        <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/NikitHamal" target="_blank" rel="noopener">GitHub</a>
-        <a href="/writings">Writing</a>
-        <a href="mailto:iamnikithamal@gmail.com">Email</a>
-      </div>
-    </footer>
+      <div class="phases" id="phases" role="radiogroup" aria-label="Time of day"></div>
+      <button class="menu" id="menu" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><i></i></button>
+    </div>
+  </header>
+  <div class="sheet" id="sheet" aria-hidden="true">
+    <a href="#about"><span class="dev">१</span>About</a>
+    <a href="#works"><span class="dev">२</span>Works</a>
+    <a href="#writing"><span class="dev">३</span>Writing</a>
+    <a href="#lab"><span class="dev">४</span>The <em>lab</em></a>
+    <a href="#contact"><span class="dev">५</span>Contact</a>
   </div>
 
-  <!-- KOI POND -->
-  <section class="pond-section" aria-label="Interactive koi pond">
-    <div class="pond-head">
-      <span class="pond-prefix">&gt;</span>
-      <span class="pond-title">POND</span>
-      <a class="pond-play" href="hanomi/">play hanomi &rarr;</a>
-      <button type="button" class="pond-dive" aria-label="Dive into the koi pond">dive in <span aria-hidden="true">↓</span></button>
-      <span class="pond-hint" title="click to feed · drag to ripple · keys 1–4 / R / T / F / M">click to feed &middot; drag to ripple</span>
-    </div>
-    <div class="pond-frame" id="pond">
-      <canvas id="pond-c"></canvas>
-      <canvas id="pond-bar"></canvas>
-      <button type="button" class="pond-up" aria-label="Back up to the site"><span aria-hidden="true">↑</span> back up</button>
-    </div>
-  </section>
+  <main id="main">
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow mono">
+            <span class="live"><i class="dot"></i>Nepal · <span id="clock">--:--</span> NPT</span>
+            <span>Android · Full-stack · Essays</span>
+          </p>
+          <h1 class="name"><span class="l1">Nikit</span><span class="l2">Hamal</span></h1>
+          <div class="mantra" id="mantra" aria-live="off">
+            <span class="sk" id="mkSk">नेति नेति</span>
+            <span class="tr mono" id="mkTr">not this, not this</span>
+          </div>
+          <p class="lede">
+            I build <b>Android apps and backends</b> that feel calm, tiny machines that think in the browser, and
+            write essays about the one thing that cannot be built.
+          </p>
+          <div class="cta">
+            <a class="btn fill" href="#works">See the work <span class="arw down" aria-hidden="true"><svg><use href="#i-d" /></svg><svg><use href="#i-d" /></svg></span></a>
+            <a class="btn ghost" href="/writings">Read the essays <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+          </div>
+          <div class="now">
+            <div><span class="mono">Now</span><span>Head of Operations, <a href="https://consicalabs.com/" target="_blank" rel="noopener">Consica Labs</a></span></div>
+            <div><span class="mono">Building</span><span><a href="/chat">Nik</a>, a tiny LLM for romanized Nepali</span></div>
+          </div>
+        </div>
 
-  <!-- Painted portraits, fullscreen -->
-  <dialog id="paintedDialog" class="painted-dialog" aria-label="Painted portraits">
-    <button class="painted-close" data-close aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <button class="painted-nav painted-prev" aria-label="Previous painting"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="painted-stage"></div>
-    <button class="painted-nav painted-next" aria-label="Next painting"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    <div class="painted-dots"></div>
-  </dialog>
+        <figure class="arch-col">
+          <div class="arch" id="arch">
+            <svg class="orn" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 1 17 9 9 17 1 9Z" fill="none" stroke="currentColor" stroke-width="1.2" /><path d="M9 5.5 12.5 9 9 12.5 5.5 9Z" fill="currentColor" /></svg>
+            <div class="arch-in"><canvas id="sceneCanvas" role="img" aria-label="Pixel-art Himalayan landscape with a stupa, prayer flags and a meditating figure. It changes with the time of day."></canvas></div>
+          </div>
+          <figcaption class="cap"><span class="mono">Plate I</span><span id="plateCap">Noon — nothing hides, nothing is found.</span></figcaption>
+        </figure>
+      </div>
+      <a class="cue mono" href="#about"><span class="arw down" aria-hidden="true"><svg><use href="#i-d" /></svg><svg><use href="#i-d" /></svg></span>Scroll</a>
+    </section>
 
-  <script src="js/config.js"></script>
-  <script src="js/painted.js?v=6" defer></script>
-  <script src="js/pixel-dog.js?v=23" defer></script>
-  <script>
-    // Koi pond lives in the footer: only download/build it (≈30 MB of buffers) when it's about to scroll into view.
-    (function () {
-      var el = document.getElementById('pond'), go = function () { if (go.done) return; go.done = 1; var s = document.createElement('script'); s.src = 'js/pond.js?v=8'; document.body.appendChild(s); };
-      if (!el || !('IntersectionObserver' in window)) return go();
-      // wait for the page to settle (writings render async and push the pond down) before watching
-      var watch = function () { new IntersectionObserver(function (e, o) { if (e[0].isIntersecting) { o.disconnect(); go(); } }, { rootMargin: '1200px 0px' }).observe(el); };
-      addEventListener('load', function () { setTimeout(watch, 1200); });
-    })();
-  </script>
-  <script defer src="js/card-visuals.js"></script>
-  <script defer src="js/pixel-cards.js?v=2"></script>
-  <script defer src="js/link-previews.js?v=2"></script>
-  <script defer src="js/pixel-sky.js?v=10"></script>
-  <script defer src="js/sound.js?v=3"></script>
-  <script defer src="js/pixel-footer.js?v=3"></script>
-  <script defer src="js/motion.js?v=6"></script>
-  <script defer src="js/app.js?v=2"></script>
+    <!-- ===== ABOUT ===== -->
+    <section class="sec" id="about">
+      <div class="wrap">
+        <div class="rule" aria-hidden="true"><span id="lotus1"></span></div>
+        <div class="sec-head">
+          <div class="sec-meta"><span class="dev" aria-hidden="true">१</span><span class="mono">About</span></div>
+          <h2 class="sec-title" data-split>Who is it that <em>asks?</em></h2>
+        </div>
+        <div class="about">
+          <div class="about-art" data-reveal>
+            <div class="mandala-wrap" tabindex="0" role="button" aria-label="Dissolve this mandala and let a new one form">
+              <canvas id="mandala"></canvas>
+            </div>
+            <div class="mand-cap">
+              <span class="mono">Mandala <span id="mandalaCap">No. 0000</span></span>
+              <p>Drawn fresh from today’s date. Touch it, and watch it fall apart. Nothing here is meant to stay.</p>
+            </div>
+          </div>
+          <div class="about-text" data-reveal>
+            <p class="first">I’m Nikit Hamal. I specialise in native Android development with Kotlin and Jetpack Compose, paired with robust Python and Django backends and clean, responsive web frontends.</p>
+            <p>Beyond engineering and operations, I spend my time exploring non-duality and self-observation, and writing essays on philosophy, human connection and consciousness.</p>
+            <dl class="facts">
+              <div><dt class="mono">Based</dt><dd>Nepal, on Nepal time</dd></div>
+              <div><dt class="mono">Day work</dt><dd>Head of Operations at <a href="https://consicalabs.com/" target="_blank" rel="noopener">Consica Labs</a></dd></div>
+              <div><dt class="mono">Builds</dt><dd>Android, Django, Svelte, small neural nets</dd></div>
+              <div><dt class="mono">Writes about</dt><dd>Love, God, the self, and why none of them are separate</dd></div>
+            </dl>
+            <div class="portrait">
+              <div class="pf"><img src="assets/nikit-216.webp" alt="Portrait of Nikit Hamal" width="216" height="216" loading="lazy" decoding="async" /></div>
+              <p>The one asking, photographed somewhere between the hills and the river.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WORKS ===== -->
+    <section class="sec" id="works">
+      <div class="wrap">
+        <div class="rule" aria-hidden="true"><span id="lotus2"></span></div>
+        <div class="sec-head">
+          <div class="sec-meta"><span class="dev" aria-hidden="true">२</span><span class="mono">Selected works</span></div>
+          <h2 class="sec-title" data-split>Small machines, <em>made with care.</em></h2>
+        </div>
+        <div class="works">
+          <article class="work" data-reveal>
+            <div class="matte"><canvas data-plate="nik" aria-hidden="true"></canvas></div>
+            <div class="work-body">
+              <div class="work-top"><span class="dev" aria-hidden="true">०१</span><span class="mono" style="color:var(--mute)">2026 · Research</span></div>
+              <h3>Nik 0.1</h3>
+              <p>A tiny romanized-Nepali LLM built from scratch: its own tokenizer, a hybrid autoregressive and diffusion transformer, and a WASM-SIMD kernel. Under 10&nbsp;MB, it thinks before it answers and runs entirely in your browser.</p>
+              <ul class="tags"><li>PyTorch</li><li>WebAssembly</li><li>JavaScript</li></ul>
+              <a class="more stretch" href="/chat">Chat with Nik <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            </div>
+          </article>
+          <article class="work" data-reveal style="--d:.08s">
+            <div class="matte"><canvas data-plate="lami" aria-hidden="true"></canvas></div>
+            <div class="work-body">
+              <div class="work-top"><span class="dev" aria-hidden="true">०२</span><img src="assets/lami-logo-120.webp" alt="" width="26" height="26" loading="lazy" /></div>
+              <h3>Lami Nepal</h3>
+              <p>A matrimonial and spiritual services app with real-time chat, FCM push notifications, Google sign-in and full Nepali localisation.</p>
+              <ul class="tags"><li>Flutter</li><li>Firebase</li></ul>
+              <a class="more stretch" href="https://play.google.com/store/apps/details?id=com.laminepal.app&amp;hl=en" target="_blank" rel="noopener">View on Google Play <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            </div>
+          </article>
+          <article class="work" data-reveal>
+            <div class="matte"><canvas data-plate="nebians" aria-hidden="true"></canvas></div>
+            <div class="work-body">
+              <div class="work-top"><span class="dev" aria-hidden="true">०३</span><img src="assets/neb-logo.svg" alt="" width="26" height="26" loading="lazy" /></div>
+              <h3>NEBians</h3>
+              <p>A Material 3 Android app with a Django backend for Nepali NEB students: study tools, an AI chat arena, community forums and a result checker.</p>
+              <ul class="tags"><li>Kotlin</li><li>Android</li><li>Django</li></ul>
+              <a class="more stretch" href="https://nebians.consica.com.np/" target="_blank" rel="noopener">Visit NEBians <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            </div>
+          </article>
+          <article class="work" data-reveal style="--d:.08s">
+            <div class="matte"><canvas data-plate="astro" aria-hidden="true"></canvas></div>
+            <div class="work-body">
+              <div class="work-top"><span class="dev" aria-hidden="true">०४</span><img src="assets/astroweb-logo.png" alt="" width="26" height="26" loading="lazy" /></div>
+              <h3>AstroWeb</h3>
+              <p>A free Vedic astrology web app with accurate Kundali and Dasha calculations, and astrological insights.</p>
+              <ul class="tags"><li>Svelte</li><li>TypeScript</li></ul>
+              <a class="more stretch" href="https://astroweb.consicalabs.com/" target="_blank" rel="noopener">Open AstroWeb <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            </div>
+          </article>
+        </div>
+
+        <div class="craft" style="margin-top:clamp(56px,8vw,110px)" data-reveal>
+          <div><span class="mono">Mobile</span><h3>In the hand</h3>
+            <ul class="tools">
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-plain.svg" alt="" loading="lazy" /></span>Android</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-plain.svg" alt="" loading="lazy" /></span>Kotlin</li>
+              <li><span class="tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 20 7v10l-8 4.5L4 17V7z" fill="#4285f4" /><path d="M12 7.5 16 9.8v4.4L12 16.5 8 14.2V9.8z" fill="#f6f0e2" /></svg></span>Jetpack Compose</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-plain.svg" alt="" loading="lazy" /></span>Flutter</li>
+            </ul></div>
+          <div><span class="mono">Backend</span><h3>Under the floor</h3>
+            <ul class="tools">
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-plain.svg" alt="" loading="lazy" /></span>Python</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" alt="" loading="lazy" /></span>Django</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-plain.svg" alt="" loading="lazy" /></span>Redis</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="" loading="lazy" /></span>MySQL</li>
+            </ul></div>
+          <div><span class="mono">Web</span><h3>On the page</h3>
+            <ul class="tools">
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-plain.svg" alt="" loading="lazy" /></span>JavaScript</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-plain.svg" alt="" loading="lazy" /></span>TypeScript</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" alt="" loading="lazy" /></span>Svelte</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="" loading="lazy" /></span>Tailwind CSS</li>
+            </ul></div>
+          <div><span class="mono">Craft</span><h3>Around it all</h3>
+            <ul class="tools">
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="" loading="lazy" /></span>Firebase</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-plain.svg" alt="" loading="lazy" /></span>Git</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" loading="lazy" /></span>GitHub</li>
+              <li><span class="tile"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="" loading="lazy" /></span>PyTorch</li>
+            </ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WRITING ===== -->
+    <section class="sec" id="writing">
+      <div class="wrap">
+        <div class="rule" aria-hidden="true"><span id="lotus3"></span></div>
+        <div class="sec-head">
+          <div class="sec-meta"><span class="dev" aria-hidden="true">३</span><span class="mono">Writing</span></div>
+          <h2 class="sec-title" data-split>Essays at the edge <em>of words.</em></h2>
+        </div>
+        <figure class="epigraph" data-reveal>
+          <blockquote>“God and the Ocean are the same; they both are, and they both are not.”</blockquote>
+          <a class="mono" href="/writings/god-and-the-ocean">God and The Ocean <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+        </figure>
+        <div class="essays" id="essays" data-reveal>
+<!--ESSAYS-->
+          <a class="essay first" href="/writings/the-lie-of-being-yourself"><time class="mono" datetime="2026-09-22T12:00:00-08:00">Sep 2026</time><h3>The lie of “being yourself”</h3><span class="meta mono">Essay · 14 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>You say, “I just want to be myself.” What do you mean by that? Which self are you talking about? The one who was laughing with someone yesterday, or the one who doesn't w…</p></div></a>
+          <a class="essay" href="/writings/the-wrong-guy-trying-to-wake-up"><time class="mono" datetime="2026-02-14T15:05:00-08:00">Feb 2026</time><h3>The Wrong Guy Trying to Wake Up</h3><span class="meta mono">Essay · 13 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>Look at a dog chasing its tail. Really look. It is one of the most common things you have ever seen and yet there is something philosophically devastating about it. The dog sees the tail. The dog want…</p></div></a>
+          <a class="essay" href="/writings/you-never-trusted-anyone-2"><time class="mono" datetime="2026-01-23T21:23:00-08:00">Jan 2026</time><h3>You never trusted anyone (2)</h3><span class="meta mono">Essay · 6 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>You say you
+want trust, but what you really want is security. Trust can only exist where
+there is uncertainty, but security is the demand to remove uncertainty. If
+there is certainty, there's no need…</p></div></a>
+          <a class="essay" href="/writings/how-to-be-happy-2"><time class="mono" datetime="2026-01-01T01:33:00-08:00">Jan 2026</time><h3>How to be happy (2)</h3><span class="meta mono">Essay · 5 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>Here, happiness is different from pleasure. Pleasure is something we seek to fill our emptiness, our boredom, to escape from pain and the rest. Happiness is the state of being when we are complete in…</p></div></a>
+          <a class="essay" href="/writings/unity-is-a-lie"><time class="mono" datetime="2025-10-02T22:15:00-07:00">Oct 2025</time><h3>Unity is a lie</h3><span class="meta mono">Essay · 4 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>Unity is nothing but a pretense. Whether it is a nation, a community, or a religion, true unity can never come. Leave aside nations, religions, and communities—there is not even unity with</p></div></a>
+          <a class="essay" href="/writings/take-me-as-i-am"><time class="mono" datetime="2025-02-27T02:42:00-08:00">Feb 2025</time><h3>Take me as I am</h3><span class="meta mono">Reflection · 1 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>Take me as I am, whatever I may be. Whatever I do, whatever I am, is the ultimate reality. No comparison and idealisation can change the ultimate reality. You may go on comparing and inventing infinit…</p></div></a>
+          <a class="essay" href="/writings/where-is-god"><time class="mono" datetime="2025-02-27T02:41:00-08:00">Feb 2025</time><h3>Where is God?</h3><span class="meta mono">Reflection · 1 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>God is neither in, nor out. God is neither above, nor below. God is neither time, nor the timeless. God is neither finite, nor the infinite. God is neither anywhere, nor nowhere. For god to be either…</p></div></a>
+          <a class="essay" href="/writings/effort-clouds-effortless"><time class="mono" datetime="2025-02-27T02:40:00-08:00">Feb 2025</time><h3>Effort clouds effortless</h3><span class="meta mono">Reflection · 1 min<span class="arw" aria-hidden="true"><svg><use href="#i-ur"/></svg><svg><use href="#i-ur"/></svg></span></span><div class="ex"><p>Effort clouds effortless. Focus clouds attention. Choice clouds choice-less. Known clouds unknown. Conscious clouds unconscious. When the real is clouded by unreal, you are living in maya—illusion—, i…</p></div></a>
+<!--/ESSAYS-->
+        </div>
+        <div class="all"><a class="btn fill" href="/writings">All 27 essays <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a></div>
+      </div>
+    </section>
+
+    <!-- ===== LAB ===== -->
+    <section class="sec" id="lab">
+      <div class="wrap">
+        <div class="rule" aria-hidden="true"><span id="lotus4"></span></div>
+        <div class="sec-head">
+          <div class="sec-meta"><span class="dev" aria-hidden="true">४</span><span class="mono">The lab</span></div>
+          <h2 class="sec-title" data-split>Playgrounds &amp; <em>odd experiments.</em></h2>
+        </div>
+        <div class="lab">
+          <article class="work big" data-reveal>
+            <div class="matte"><canvas data-plate="hanomi" aria-hidden="true"></canvas></div>
+            <div class="work-body">
+              <div class="work-top"><span class="mono" style="color:var(--accent)">Playable</span><span class="mono" style="color:var(--mute)">2D pixel art</span></div>
+              <h3>Hanomi</h3>
+              <p>A cozy open-world village survival game under sakura trees. Farm, fish, mine, rear animals, raise an army, ally or conquer neighbouring clans, and defend your village from the Blood Moon.</p>
+              <ul class="tags"><li>Canvas</li><li>Pixel art</li><li>Survival</li></ul>
+              <a class="more stretch" href="/hanomi/">Play Hanomi <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            </div>
+          </article>
+          <a class="mini" href="/decide" data-reveal style="--d:.08s">
+            <span class="mono">Experiment</span>
+            <h3>Nik-Decide <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></h3>
+            <p>A 5.4M-parameter, non-autoregressive decision model built from scratch. One pass, a typed answer and a confidence, fully in your browser.</p>
+          </a>
+          <a class="mini" href="/lab/" data-reveal style="--d:.16s">
+            <span class="mono">Live</span>
+            <h3>Training lab <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></h3>
+            <p>Live status of Nik’s training, as it learns to speak romanized Nepali.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="sec" id="contact">
+      <div class="wrap">
+        <div class="rule" aria-hidden="true"><span id="lotus5"></span></div>
+        <div class="sec-head">
+          <div class="sec-meta"><span class="dev" aria-hidden="true">५</span><span class="mono">Contact</span></div>
+          <h2 class="sr">Contact</h2>
+        </div>
+        <div class="contact">
+          <div data-reveal>
+            <p class="shout">Let’s build something <em>true.</em></p>
+            <div class="mail">
+              <a class="big" href="mailto:iamnikithamal@gmail.com">iamnikithamal@gmail.com <span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+              <button class="copy" id="copy" type="button"><svg class="ico"><use href="#i-copy" /></svg><span>Copy</span></button>
+            </div>
+          </div>
+          <div class="chan" data-reveal style="--d:.1s">
+            <a href="https://www.linkedin.com/in/nikithamal" target="_blank" rel="noopener"><span class="mono">LinkedIn</span><span>linkedin.com/in/nikithamal</span><span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            <a href="https://twitter.com/nikithamal" target="_blank" rel="noopener"><span class="mono">X</span><span>@nikithamal</span><span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            <a href="https://github.com/NikitHamal" target="_blank" rel="noopener"><span class="mono">GitHub</span><span>github.com/NikitHamal</span><span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+            <a href="https://wa.me/9779765324034?text=Hi%20Nikit!" target="_blank" rel="noopener"><span class="mono">WhatsApp</span><span>+977 976 532 4034</span><span class="arw" aria-hidden="true"><svg><use href="#i-ur" /></svg><svg><use href="#i-ur" /></svg></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER: the lake ===== -->
+  <footer class="foot">
+    <div class="wrap lake-head">
+      <h2>Light a lamp for <br />whatever you’re carrying.</h2>
+      <p class="mono">Tap the water · lamps lit <b id="lampCount">0</b></p>
+    </div>
+    <div class="lake" id="lake"><canvas id="lakeCanvas" role="img" aria-label="A pixel-art lake at the foot of the mountains. Tap the water to float a butter lamp."></canvas></div>
+    <div class="wrap base">
+      <span class="sk" lang="sa">असतो मा सद्गमय</span>
+      <span>© <span id="year">2026</span> Nikit Hamal · Lead me from the unreal to the real</span>
+      <nav aria-label="Footer">
+        <a href="/writings">Writing</a><a href="/hanomi/">Hanomi</a><a href="/chat">Nik</a>
+        <a class="top" href="#top">Top <span class="arw" aria-hidden="true"><svg><use href="#i-u" /></svg><svg><use href="#i-u" /></svg></span></a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="site/pixel.js?v=1"></script>
+  <script src="site/scene.js?v=1"></script>
+  <script src="site/art.js?v=1"></script>
+  <script src="site/main.js?v=1"></script>
 </body>
-
 </html>
